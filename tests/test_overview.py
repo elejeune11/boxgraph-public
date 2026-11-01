@@ -171,3 +171,40 @@ def test_a_case_study_can_show_a_refinement_a_family_and_an_open_question(syn, t
     assert f["kind"] == "family" and [m["key"] for m in f["models"]] == ["toy/decay", "toy2/lifetime"]
     assert all(m["name"] and m["source"] for m in f["models"])
     assert qq["kind"] == "question" and qq["text"] == q["text"]
+
+
+def test_the_full_graph_has_every_source_and_model_joined_by_what_was_tested(syn):
+    """The full view has every source and every model; each model hangs from its source, and every tested relation joins its two models."""
+    from boxgraph.overview import full_graph
+
+    g = full_graph(overview_data(syn), syn)
+    ids = {n["id"] for n in g["nodes"]}
+    models = {f"{sid}/{m}" for sid, p in syn["papers"].items() for m in p["models"]}
+    assert ids == set(syn["papers"]) | models
+    member = {(e["a"], e["b"]) for e in g["edges"] if e["kind"] == "member"}
+    assert member == {(m.split("/")[0], m) for m in models}
+    rel = [e for e in g["edges"] if e["kind"] == "relation"]
+    assert len(rel) == len({(r["a"], r["b"], r["kind"], r["status"]) for r in syn["relations"]})
+    assert all(e["a"] in ids and e["b"] in ids for e in g["edges"])
+
+
+def test_the_full_layout_keeps_every_node_on_the_canvas_whatever_the_order(syn):
+    """The full view's layout places every node on the canvas, and the same Synthesis in another order gives the same layout."""
+    from boxgraph.overview import full_graph, full_layout
+
+    pos = full_layout(full_graph(overview_data(syn), syn), width=900, height=600)
+    assert all(0 <= p["x"] <= 900 and 0 <= p["y"] <= 600 for p in pos.values())
+    shuffled = copy.deepcopy(syn)
+    shuffled["papers"] = dict(reversed(list(shuffled["papers"].items())))
+    shuffled["relations"] = list(reversed(shuffled["relations"]))
+    assert full_layout(full_graph(overview_data(shuffled), shuffled), width=900, height=600) == pos
+
+
+def test_the_page_offers_both_views_and_no_family_highlight(syn, tmp_path):
+    """The page embeds the full view and the sources view, with a position for every node of each, and no longer highlights families under the graph."""
+    page = render_overview(syn, tmp_path, title="T").read_text()
+    d = embedded(page)
+    assert {n["id"] for n in d["full"]["nodes"]} == set(d["full"]["positions"])
+    assert set(d["positions"]) == set(syn["papers"])
+    assert 'id="view-full"' in page and 'id="view-sources"' in page
+    assert "Families of models" not in page

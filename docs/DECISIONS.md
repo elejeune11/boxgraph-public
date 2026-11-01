@@ -377,8 +377,14 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   their models (solid, counted by status), values one takes from the other and checked
   (dashed, counted as agree / differ), one model run on the other's inputs (dotted).
   A relation inside one source is not drawn. Selecting a source shows its models around
-  it, with a line to each source a model is related to. Families are listed under the
-  graph and highlight their sources.
+  it, with a line to each source a model is related to.
+- **A second view, everything at once** (the default): every source and every model,
+  each model joined to its source, every tested relation drawn between its two models
+  (coloured by status), and the cited values and cross-paper runs between sources. It is
+  dense on purpose: it shows how much was tested. Its layout is computed by the build
+  (Fruchterman-Reingold, 400 steps from a fixed start, with a pull to the centre, then
+  scaled to the canvas). Families are no longer highlighted under the graph; the case
+  study on the Bell rate law shows one.
 - **The layout is computed by the build, deterministically**: x is fixed by year; y
   comes from 400 steps of a fixed force model (sources repel, linked sources attract,
   a weak pull to the middle) from a golden-ratio start, then no overlap within a column.

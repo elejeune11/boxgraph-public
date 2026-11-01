@@ -199,6 +199,83 @@ def layout(data: dict, width: float = 1000, height: float = 520, margin: float =
     return {s["id"]: {"x": round(x[s["id"]], 1), "y": round(y[s["id"]], 1), "r": r[s["id"]]} for s in srcs}
 
 
+def full_graph(data: dict, syn: dict) -> dict:
+    """The full view: every source and every model, each model hanging from its source; every tested
+    relation between two models; and, between sources, the checked cited values and cross-paper runs."""
+    srcs = {s["id"]: s for s in data["sources"]}
+    nodes = [{"id": sid, "type": "source", "kind": s["kind"]} for sid, s in sorted(srcs.items())]
+    edges = []
+    for sid, s in sorted(srcs.items()):
+        for m in s["models"]:
+            mid = f"{sid}/{m['id']}"
+            nodes.append({"id": mid, "type": "model", "source": sid, "name": m.get("name"), "role": m.get("role")})
+            edges.append({"kind": "member", "a": sid, "b": mid})
+    ids = {n["id"] for n in nodes}
+    rels = sorted({(r["a"], r["b"], r["kind"], r["status"]) for r in syn["relations"]
+                   if r["a"] in ids and r["b"] in ids})
+    edges += [{"kind": "relation", "a": a, "b": b, "relation": k, "status": st} for a, b, k, st in rels]
+    for lk in data["links"]:
+        if lk["kind"] in ("cited", "cross_check"):
+            edges.append({k: lk[k] for k in lk if k in ("kind", "a", "b", "agree", "differ", "unjudged", "verdicts")})
+    nodes.sort(key=lambda n: n["id"])
+    edges.sort(key=lambda e: (e["kind"], e["a"], e["b"], e.get("relation", ""), e.get("status", "")))
+    return {"nodes": nodes, "edges": edges}
+
+
+def full_layout(g: dict, width: float = 1000, height: float = 640, margin: float = 24) -> dict:
+    """Positions for the full view, deterministic: sources start on an ellipse in id order, models
+    around their source; then a fixed number of force steps (every node repels every other, edges pull
+    their ends together, a model most strongly to its source) spreads them out."""
+    import numpy as np
+
+    ids = [n["id"] for n in g["nodes"]]
+    if not ids:
+        return {}
+    k = {i: n for n, i in enumerate(ids)}
+    node = {n["id"]: n for n in g["nodes"]}
+    srcs = [n["id"] for n in g["nodes"] if n["type"] == "source"]
+    pos = np.zeros((len(ids), 2))
+    order = sorted(srcs)
+    for j, s in enumerate(order):  # sources on a wide ellipse, in id order
+        a = 2 * math.pi * j / max(len(order), 1)
+        pos[k[s]] = (width / 2 + 0.38 * width * math.cos(a), height / 2 + 0.36 * height * math.sin(a))
+    count = defaultdict(int)
+    for n in g["nodes"]:
+        if n["type"] == "model":
+            c = count[n["source"]]
+            count[n["source"]] += 1
+            a = 2.399963 * c  # golden angle
+            rr = 14 + 7 * math.sqrt(c)
+            pos[k[n["id"]]] = pos[k[n["source"]]] + (rr * math.cos(a), rr * math.sin(a))
+    ea = np.array([k[e["a"]] for e in g["edges"]], dtype=int)
+    eb = np.array([k[e["b"]] for e in g["edges"]], dtype=int)
+    w = np.array([3.0 if e["kind"] == "member" else 0.6 if e["kind"] == "relation" else 0.3 for e in g["edges"]])
+    kk = 0.85 * math.sqrt((width - 2 * margin) * (height - 2 * margin) / len(ids))  # Fruchterman-Reingold
+    temp0 = width / 10
+    centre = np.array([width / 2, height / 2])
+    steps = 400
+    for it in range(steps):
+        d = pos[:, None, :] - pos[None, :, :]
+        dist = np.sqrt((d ** 2).sum(-1)) + 0.01
+        disp = (d / dist[..., None] * (kk * kk / dist)[..., None]).sum(1)
+        if len(ea):
+            v = pos[ea] - pos[eb]
+            ln = np.sqrt((v ** 2).sum(-1)) + 0.01
+            pull = (v / ln[:, None]) * (w * ln * ln / kk)[:, None]
+            np.add.at(disp, ea, -pull)
+            np.add.at(disp, eb, pull)
+        disp += 3.0 * (centre - pos)  # keeps loosely joined groups from drifting apart
+        temp = temp0 * (1 - it / steps) + 0.5
+        ln = np.sqrt((disp ** 2).sum(-1)) + 1e-9
+        pos += disp / ln[:, None] * np.minimum(ln, temp)[:, None]
+    lo, hi = pos.min(0), pos.max(0)  # unbounded while it runs; scaled to the canvas at the end
+    span = np.maximum(hi - lo, 1e-9)
+    side = 4 * margin  # room for a source's label beside it
+    pos = np.array([side, margin]) + (pos - lo) / span * np.array([width - 2 * side, height - 2 * margin])
+    rad = {i: (7.0 if node[i]["type"] == "source" else 3.0) for i in ids}
+    return {i: {"x": round(float(pos[k[i], 0]), 1), "y": round(float(pos[k[i], 1]), 1), "r": rad[i]} for i in ids}
+
+
 def _evidence(syn: dict, ref: str, outdir: Path, case: str) -> dict:
     kind, _, key = (part.strip() for part in ref.partition(":"))
     if kind not in EVIDENCE or not key:
@@ -301,6 +378,8 @@ def render_overview(syn: dict, outdir: str | Path, title: str = "Synthesis overv
     content = content or {}
     data = overview_data(syn)
     data["positions"] = layout(data)
+    data["full"] = full_graph(data, syn)
+    data["full"]["positions"] = full_layout(data["full"])
     data["case_studies"] = _case_studies(syn, content, outdir)
     data["intro"] = content.get("intro") or []
     data["links_out"] = content.get("links") or []
@@ -369,7 +448,6 @@ section { display: grid; gap: 16px; min-width: 0; }
 .lk.cross_check { stroke: var(--accent); stroke-dasharray: 1 4; }
 .nd { cursor: pointer; }
 .nd .shape { fill: var(--panel); stroke: var(--ink); stroke-width: 1.5; transition: stroke-width .15s; }
-.nd .fam { fill: none; stroke: var(--accent); stroke-width: 3; opacity: 0; }
 .nd text.lb { font-size: 11.5px; fill: var(--ink); font-weight: 500; pointer-events: none; }
 .nd:hover .shape, .nd.on .shape { stroke-width: 3; }
 .nd:focus { outline: none; }
@@ -380,10 +458,19 @@ section { display: grid; gap: 16px; min-width: 0; }
 .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); align-items: center; }
 .legend span { display: inline-flex; gap: 7px; align-items: center; }
 .legend svg { overflow: visible; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { font: inherit; font-size: 13px; border: 1px solid var(--rule); background: var(--panel); color: var(--ink);
-  border-radius: 999px; padding: 4px 12px; cursor: pointer; }
-.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.graphhead { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; overflow: hidden; background: var(--panel); }
+.seg button { font: inherit; font-size: 13px; border: 0; background: transparent; color: var(--ink); padding: 5px 14px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
+.mb { stroke: var(--rule); stroke-width: 0.8; }
+.rl { stroke-width: 1.1; opacity: .8; }
+.rl.st-verified { stroke: var(--link); }
+.rl.st-not_verified, .rl.st-refuted { stroke: var(--off); }
+.rl.st-unverifiable { stroke: var(--none); stroke-dasharray: 3 3; }
+.nd.md .shape { fill: var(--accent); stroke: none; }
+.nd.md:hover .shape, .nd.md.on .shape { stroke: var(--ink); stroke-width: 1.5; }
+.mdkey { fill: var(--accent); }
 .panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 18px; display: grid; gap: 12px;
   min-width: 0; align-content: start; }
 .panel h3 { font-size: 17px; }
@@ -513,7 +600,7 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       else if (s.kind === "dataset") shape = '<path class="shape" d="M' + p.x + " " + (p.y - r) + " L" + (p.x + r) + " " + p.y + " L" + p.x + " " + (p.y + r) + " L" + (p.x - r) + " " + p.y + ' Z"/>';
       else shape = '<circle class="shape" cx="' + p.x + '" cy="' + p.y + '" r="' + r + '"/>';
       g.push('<g class="nd" tabindex="0" role="button" data-id="' + esc(s.id) + '" aria-label="' + esc(short(s)) + '">' +
-             '<circle class="fam" cx="' + p.x + '" cy="' + p.y + '" r="' + (r + 5) + '"/>' + shape +
+             shape +
              '<text class="lb" x="' + p.x + '" y="' + (p.y + r + 14) + '" text-anchor="middle">' + esc(short(s)) + "</text></g>");
     });
     g.push("</svg>");
@@ -545,60 +632,126 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       (from ? '<div><div class="eyebrow">Takes checked values from</div><div>' + from + "</div></div>" : "") +
       '<a href="#source-' + esc(s.id) + '">Open the full view of this source</a>';
   }
+  var VIEW = "full";
+  try { var saved = localStorage.getItem("overview-view"); if (saved === "full" || saved === "sources") VIEW = saved; } catch (e) {}
+  function shapeFor(kind, x, y, r) {
+    if (kind === "software") return '<rect class="shape" x="' + (x - r * 0.86) + '" y="' + (y - r * 0.86) + '" width="' + (r * 1.72) + '" height="' + (r * 1.72) + '" rx="2"/>';
+    if (kind === "dataset") return '<path class="shape" d="M' + x + " " + (y - r) + " L" + (x + r) + " " + y + " L" + x + " " + (y + r) + " L" + (x - r) + " " + y + ' Z"/>';
+    return '<circle class="shape" cx="' + x + '" cy="' + y + '" r="' + r + '"/>';
+  }
+  function fullGraph() {
+    var F = D.full, P = F.positions, W = 1000, H = 640, N = {};
+    F.nodes.forEach(function (n) { N[n.id] = n; });
+    var g = ['<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Every source and model, joined by everything that was tested between them">'];
+    F.edges.forEach(function (e) {
+      var a = P[e.a], b = P[e.b]; if (!a || !b) return;
+      var cls = e.kind === "member" ? "mb" : e.kind === "relation" ? "rl st-" + e.status : "lk " + e.kind;
+      var tip = e.kind === "relation" ? e.a + " " + (relName[e.relation] || e.relation) + " " + e.b + " (" + (statusName[e.status] || e.status) + ")"
+        : e.kind === "member" ? "" : linkText(e);
+      g.push('<line class="' + cls + '" data-a="' + esc(e.a) + '" data-b="' + esc(e.b) + '" x1="' + a.x + '" y1="' + a.y + '" x2="' + b.x + '" y2="' + b.y + '">' + (tip ? "<title>" + esc(tip) + "</title>" : "") + "</line>");
+    });
+    F.nodes.forEach(function (n) {
+      var p = P[n.id];
+      if (n.type === "model") {
+        g.push('<g class="nd md" tabindex="0" role="button" data-id="' + esc(n.id) + '" aria-label="' + esc(n.name || n.id) + '"><circle class="shape" cx="' + p.x + '" cy="' + p.y + '" r="' + p.r + '"/><title>' + esc((n.name || n.id) + " (" + short(S[n.source]) + ")") + "</title></g>");
+      }
+    });
+    F.nodes.forEach(function (n) {
+      var p = P[n.id];
+      if (n.type === "source") {
+        g.push('<g class="nd" tabindex="0" role="button" data-id="' + esc(n.id) + '" aria-label="' + esc(short(S[n.id])) + '">' + shapeFor(n.kind, p.x, p.y, p.r) +
+               '<text class="lb" x="' + p.x + '" y="' + (p.y - p.r - 5) + '" text-anchor="middle">' + esc(short(S[n.id])) + "</text></g>");
+      }
+    });
+    g.push("</svg>");
+    return g.join("");
+  }
+  function modelPanel(id) {
+    var sid = id.split("/")[0], mid = id.split("/").slice(1).join("/"), s = S[sid];
+    var m = s.models.filter(function (x) { return x.id === mid; })[0] || {relations: []};
+    var rels = D.full.edges.filter(function (e) { return e.kind === "relation" && (e.a === id || e.b === id); });
+    return '<div class="eyebrow">Model · ' + esc(m.role || "") + "</div><h3>" + esc(m.name || mid) + "</h3>" +
+      '<div class="muted">From <a href="#source-' + esc(sid) + '">' + esc(short(s)) + '</a> · <span class="mono">' + esc(mid) + "</span></div>" +
+      (rels.length ? '<div><div class="eyebrow">Relations tested</div><ul>' + rels.map(function (e) {
+        var other = e.a === id ? e.b : e.a, dir = e.a === id ? (relName[e.relation] || e.relation) : (relName[e.relation] || e.relation) + " (from the other side)";
+        return "<li>" + esc(dir) + ' <span class="mono">' + esc(other) + "</span> · " + esc(statusName[e.status] || e.status) + "</li>"; }).join("") + "</ul></div>"
+        : '<p class="muted">No relation to another model was tested.</p>');
+  }
   function select(id) {
     var svg = app.querySelector(".canvas svg"); if (!svg) return;
     var near = {}; near[id] = 1;
-    svg.querySelectorAll(".lk").forEach(function (e) {
+    svg.querySelectorAll("[data-a]").forEach(function (e) {
       var on = e.dataset.a === id || e.dataset.b === id;
       if (on) { near[e.dataset.a] = 1; near[e.dataset.b] = 1; }
       e.classList.toggle("dim", !on);
     });
+    if (VIEW === "full" && S[id]) {  // a source: its models, and what they are related to
+      svg.querySelectorAll("[data-a]").forEach(function (e) {
+        if (e.dataset.a === id || e.dataset.b === id) return;
+        var mine = e.dataset.a.split("/")[0] === id || e.dataset.b.split("/")[0] === id;
+        if (mine) { near[e.dataset.a] = 1; near[e.dataset.b] = 1; e.classList.remove("dim"); }
+      });
+    }
     svg.querySelectorAll(".nd").forEach(function (e) {
       e.classList.toggle("dim", !near[e.dataset.id]); e.classList.toggle("on", e.dataset.id === id);
-      e.querySelector(".fam").style.opacity = 0;
     });
-    // the selected source opens into its models
-    var P = D.positions, p = P[id], s = S[id], sats = svg.querySelector("#sats"), out = [];
-    var ms = s.models, n = ms.length;
-    ms.forEach(function (m, i) {
-      var a = -Math.PI / 2 + 2 * Math.PI * i / Math.max(n, 1), R = p.r + 16;
-      var mx = p.x + R * Math.cos(a), my = p.y + R * Math.sin(a);
-      m.relations.forEach(function (r) { var q = P[r.other.split("/")[0]]; if (q) out.push('<path class="satl" d="M' + mx.toFixed(1) + " " + my.toFixed(1) + " L" + q.x + " " + q.y + '"><title>' + esc(m.name + " — " + (relName[r.kind] || r.kind) + " — " + r.other + " (" + (statusName[r.status] || r.status) + ")") + "</title></path>"); });
-      out.push('<circle class="sat" cx="' + mx.toFixed(1) + '" cy="' + my.toFixed(1) + '" r="3.2"><title>' + esc(m.name || m.id) + "</title></circle>");
-    });
-    sats.innerHTML = out.join("");
-    app.querySelector(".panel").innerHTML = panelFor(id);
-    app.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
-  }
-  function family(i) {
-    var f = D.families[i], svg = app.querySelector(".canvas svg"), on = {};
-    f.sources.forEach(function (s) { on[s] = 1; });
-    svg.querySelector("#sats").innerHTML = "";
-    svg.querySelectorAll(".nd").forEach(function (e) {
-      e.classList.toggle("dim", !on[e.dataset.id]); e.classList.remove("on");
-      e.querySelector(".fam").style.opacity = on[e.dataset.id] ? 1 : 0;
-    });
-    svg.querySelectorAll(".lk").forEach(function (e) { e.classList.toggle("dim", !(on[e.dataset.a] && on[e.dataset.b] && e.classList.contains("relation"))); });
-    app.querySelector(".panel").innerHTML = '<div class="eyebrow">A family of models</div><h3>' + f.models.length + " models that were tested to be one model</h3>" +
-      "<p>Each pair of these models was tested and found to give the same output under a mapping of their symbols and parameters. They come from " + f.sources.length + " sources.</p><ul>" +
-      f.models.map(function (m) { var s = S[m.split("/")[0]], md = s && s.models.filter(function (x) { return x.id === m.split("/")[1]; })[0];
-        return "<li><b>" + esc(short(s)) + "</b>: " + esc(md ? md.name : m) + "</li>"; }).join("") + "</ul>";
-    app.querySelectorAll(".chip").forEach(function (c, j) { c.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+    var sats = svg.querySelector("#sats");
+    if (sats && S[id]) {  // the sources view: the selected source opens into its models
+      var P = D.positions, p = P[id], s = S[id], out = [], ms = s.models, n = ms.length;
+      ms.forEach(function (m, i) {
+        var a = -Math.PI / 2 + 2 * Math.PI * i / Math.max(n, 1), R = p.r + 16;
+        var mx = p.x + R * Math.cos(a), my = p.y + R * Math.sin(a);
+        m.relations.forEach(function (r) { var q = P[r.other.split("/")[0]]; if (q) out.push('<path class="satl" d="M' + mx.toFixed(1) + " " + my.toFixed(1) + " L" + q.x + " " + q.y + '"><title>' + esc(m.name + " — " + (relName[r.kind] || r.kind) + " — " + r.other + " (" + (statusName[r.status] || r.status) + ")") + "</title></path>"); });
+        out.push('<circle class="sat" cx="' + mx.toFixed(1) + '" cy="' + my.toFixed(1) + '" r="3.2"><title>' + esc(m.name || m.id) + "</title></circle>");
+      });
+      sats.innerHTML = out.join("");
+    }
+    app.querySelector(".panel").innerHTML = S[id] ? panelFor(id) : modelPanel(id);
   }
   function clearSel() {
     var svg = app.querySelector(".canvas svg");
     svg.querySelectorAll(".dim").forEach(function (e) { e.classList.remove("dim"); });
-    svg.querySelectorAll(".nd").forEach(function (e) { e.classList.remove("on"); e.querySelector(".fam").style.opacity = 0; });
-    svg.querySelector("#sats").innerHTML = "";
+    svg.querySelectorAll(".nd").forEach(function (e) { e.classList.remove("on"); });
+    var sats = svg.querySelector("#sats"); if (sats) sats.innerHTML = "";
     app.querySelector(".panel").innerHTML = defaultPanel();
-    app.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
   }
   function defaultPanel() {
-    var nl = D.links.length;
+    if (VIEW === "full") {
+      var nm = D.full.nodes.filter(function (n) { return n.type === "model"; }).length;
+      var nr = D.full.edges.filter(function (e) { return e.kind === "relation"; }).length;
+      return '<div class="eyebrow">How to read this</div>' +
+        "<p>Everything at once: " + D.sources.length + " sources (larger marks) and their " + nm + " models (small dots), each model joined to its source by a faint line.</p>" +
+        "<p>The " + nr + " relations tested between models are drawn between their dots: verified (dark), not verified or refuted (red), or not testable (grey). Between sources, dashed lines are values one takes from another, checked; dotted lines are a model run on another source's inputs.</p>" +
+        "<p>Select a source or a model to follow its connections.</p>";
+    }
     return '<div class="eyebrow">How to read this</div>' +
       "<p>Each mark is a source: a paper (circle), the code released with one (square), or its source data (diamond). Sources are placed by year, left to right.</p>" +
       "<p>Lines join sources where something was tested between them: a relation between their models (solid), a value one takes from the other, checked against it (dashed), or one model run on the other's inputs (dotted). Thicker lines carry more checks.</p>" +
-      "<p>Select a source to see what connects it, and its models around it. " + nl + " links in all.</p>";
+      "<p>Select a source to see what connects it, and its models around it. " + D.links.length + " links in all.</p>";
+  }
+  function legend() {
+    var line = function (cls, w) { return '<svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" class="' + cls + '" stroke-width="' + w + '"/></svg>'; };
+    if (VIEW === "full") return '<span><svg width="12" height="10"><circle cx="6" cy="5" r="3" class="mdkey"/></svg>a model</span>' +
+      "<span>" + line("mb", 1) + "model of a source</span><span>" + line("rl st-verified", 1.5) + "relation verified</span>" +
+      "<span>" + line("rl st-not_verified", 1.5) + "not verified or refuted</span><span>" + line("rl st-unverifiable", 1.5) + "not testable</span>" +
+      "<span>" + line("lk cited", 2) + "values taken and checked</span><span>" + line("lk cross_check", 2) + "a model run on another's inputs</span>";
+    return "<span>" + line("lk relation", 2) + "model relations tested</span><span>" + line("lk cited", 2) + "values taken and checked</span><span>" + line("lk cross_check", 2) + "a model run on another's inputs</span>";
+  }
+  function renderGraph() {
+    app.querySelector(".canvas").innerHTML = VIEW === "full" ? fullGraph() : graph();
+    app.querySelector(".panel").innerHTML = defaultPanel();
+    app.querySelector(".legend").innerHTML = legend();
+    ["full", "sources"].forEach(function (v) { app.querySelector("#view-" + v).setAttribute("aria-pressed", VIEW === v ? "true" : "false"); });
+    app.querySelectorAll(".canvas .nd").forEach(function (e) {
+      e.addEventListener("click", function () { select(e.dataset.id); });
+      e.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(e.dataset.id); } });
+    });
+    app.querySelector(".canvas svg").addEventListener("click", function (ev) { if (ev.target.tagName === "svg") clearSel(); });
+  }
+  function setView(v) {
+    VIEW = v;
+    try { localStorage.setItem("overview-view", v); } catch (e) {}
+    renderGraph();
   }
 
   // ---------- views ----------
@@ -611,7 +764,6 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       return '<a class="case" href="#case-' + esc(c.id) + '">' + (c.teaches ? '<div class="teaches">' + esc(c.teaches) + "</div>" : "") +
         "<h3>" + esc(c.title) + "</h3><p class=\"muted\">" + esc(c.summary) + "</p></a>"; }).join("")
       : '<div class="pending">Case studies will appear here.</div>';
-    var fams = D.families.map(function (f, i) { return '<button type="button" class="chip" id="fam-' + i + '" aria-pressed="false">Family ' + (i + 1) + ": " + f.models.length + " models, " + f.sources.length + " sources</button>"; }).join("");
     var rows = D.sources.map(function (s) {
       return '<tr class="go" data-href="#source-' + esc(s.id) + '"><td><a href="#source-' + esc(s.id) + '">' + esc(short(s)) + '</a><div class="muted">' + esc(s.title) + "</div></td>" +
         "<td>" + esc(kindName[s.kind] || s.kind) + '</td><td class="num">' + s.models.length + '</td><td class="num">' + s.verdicts.length + "</td><td>" + bar(s.checked) + "</td></tr>"; }).join("");
@@ -619,24 +771,19 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
     app.innerHTML =
       '<header class="head"><div class="eyebrow">' + nArt + " papers · " + nOther + " sources of code and data · " + D.links.length + " tested links</div>" +
       "<h1>" + esc(D.title) + '</h1><div class="lede">' + lead + "</div></header>" +
-      '<section aria-labelledby="g-h"><h2 id="g-h" class="eyebrow" style="font-family:var(--body);font-size:12px">The sources and what was tested between them</h2>' +
-      '<div class="figure"><div class="canvas">' + graph() + '</div><aside class="panel" aria-live="polite">' + defaultPanel() + "</aside></div>" +
-      '<div class="legend"><span><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" class="lk relation" stroke-width="2"/></svg>model relations tested</span>' +
-      '<span><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" class="lk cited" stroke-width="2"/></svg>values taken and checked</span>' +
-      '<span><svg width="26" height="10"><line x1="0" y1="5" x2="26" y2="5" class="lk cross_check" stroke-width="2"/></svg>a model run on another\'s inputs</span></div>' +
-      (fams ? '<div class="chips" aria-label="Families of models">' + fams + "</div>" : "") + "</section>" +
+      '<section aria-labelledby="g-h"><div class="graphhead"><h2 id="g-h" class="eyebrow" style="font-family:var(--body);font-size:12px">What was tested, and between what</h2>' +
+      '<div class="seg" role="group" aria-label="View"><button type="button" id="view-full" aria-pressed="false">Everything</button><button type="button" id="view-sources" aria-pressed="false">Sources only</button></div></div>' +
+      '<div class="figure"><div class="canvas"></div><aside class="panel" aria-live="polite"></aside></div>' +
+      '<div class="legend"></div></section>' +
       (more ? '<section aria-labelledby="a-h"><h2 id="a-h">How the review works</h2><div class="lede plain">' + more + "</div></section>" : "") +
       '<section aria-labelledby="c-h"><h2 id="c-h">Case studies</h2><p class="muted" style="max-width:70ch">Each one follows a single thread from what a paper prints to what the record finds.</p><div class="cases">' + cases + "</div></section>" +
       '<section aria-labelledby="s-h"><h2 id="s-h">The sources</h2>' + KEY +
       '<div class="tbl"><table><thead><tr><th>Source</th><th>Kind</th><th class="num">Models</th><th class="num">Comparisons</th><th>Verdicts</th></tr></thead><tbody>' + rows + "</tbody></table></div></section>" +
       "<footer><div>A verdict is computed at the precision the value was printed with. It says whether a result follows from its stated inputs, not whether it is right about the world.</div>" +
       (outl ? "<div>" + outl + "</div>" : "") + "</footer>";
-    app.querySelectorAll(".nd").forEach(function (e) {
-      e.addEventListener("click", function () { select(e.dataset.id); });
-      e.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(e.dataset.id); } });
-    });
-    app.querySelector(".canvas svg").addEventListener("click", function (ev) { if (ev.target.tagName === "svg") clearSel(); });
-    app.querySelectorAll(".chip").forEach(function (c, i) { c.addEventListener("click", function () { family(i); }); });
+    app.querySelector("#view-full").addEventListener("click", function () { setView("full"); });
+    app.querySelector("#view-sources").addEventListener("click", function () { setView("sources"); });
+    renderGraph();
     app.querySelectorAll("tr.go").forEach(function (tr) { tr.addEventListener("click", function (ev) { if (ev.target.tagName !== "A") location.hash = tr.dataset.href; }); });
   }
 
