@@ -1,0 +1,213 @@
+- id: q_cycle_end
+  kind: choice
+  about: [mean_field_sls, mean_field_elastic, mean_field_maxwell2]
+  text: >-
+    The mean-field ODE has no state in which "all clutches break": Pb only falls towards zero. The paper
+    does not say when a cycle ends. The record ends it when Pb falls below 1/nc (fewer than one engaged
+    clutch) after its peak, or where the solver stops in the finite-time rupture cascade; a cycle not
+    ended by t_max = 2000 s is a stable adhesion. Refinement ref_break_fig1b varies the threshold.
+  citation: {page: 3, quote: "Finally, at t = tlife (i.e., the binding lifetime for a FA marked in", where: text}
+- id: q_reinforcement_rule
+  kind: unstated_model
+  about: [mean_field_sls, mean_field_elastic, mean_field_maxwell2]
+  text: >-
+    The reinforcement rule is ron = ron0 (1 + alpha (Fa - Fcr)), "updated in the next FA lifetime cycle"
+    (SI p. 11). Whether the increase compounds over cycles (the integrin density keeps growing) or is
+    recomputed from ron0 each cycle is not stated; neither is how Fa, "the average FA force", is
+    averaged (over time, over engaged clutches, the per-clutch or the total force). The record takes a
+    compounding increase and the time average of the ensemble clutch force kc (xc - xs); the
+    compounding reading is the one under which the lifetime "would gradually increase and even
+    diverge" (p. 3). With a non-compounding rule the stiff elastic substrates do not saturate at 120 nm/s.
+  citation: {page: 11, quote: "which will then be updated", where: text}
+- id: q_cycle_initial_state
+  kind: choice
+  about: [mean_field_sls, mean_field_maxwell2]
+  text: >-
+    Each cycle starts with all clutches free and the substrate (spring and dashpots) at rest. The paper
+    does not say whether the dashpot keeps its displacement from one cycle to the next; on a slowly
+    relaxing substrate (tau_s longer than a cycle) this changes what the next cycle senses.
+- id: q_nstart_ensemble
+  kind: choice
+  about: [mean_field_sls]
+  text: >-
+    In Eqs. S5-S7 the ensemble clutch moves with the flow from t = 0 even while Pb is near zero, so its
+    stretch xc - xs is set by the substrate response, not by when clutches bound. The record integrates
+    the equations as printed, starting from Pb = 1e-9 (a setting) because it integrates ln Pb.
+- id: q_fig2b_high_eta
+  kind: unexplained_difference
+  about: [cmp_fig2b_ka2, vs_fig2b_ka2]
+  text: >-
+    For ka = 2, kl = 0.1 pN/nm at high viscosity Fig. 2B shows ~118 nm/s, the saturated value; the
+    record's run settles near 100 nm/s, with Fa held at Fcr by the reinforcement feedback. The rigid
+    limit (initial stiffness ka + kl = 2.1 pN/nm) of the elastic run is where the record's Fig. 1B
+    curve is still rising, while the paper's Fig. 1B is already near 110 nm/s at 2 pN/nm: the
+    difference follows the reinforcement rule and the cycle settings (q_reinforcement_rule,
+    q_cycle_initial_state), not a misreading of the figure.
+- id: q_fig1b_threshold
+  kind: unexplained_difference
+  about: [cmp_fig1b_reinf, vs_fig1b_reinf]
+  text: >-
+    Below 1 pN/nm the record's Fig. 1B values follow the printed curve; the jump to saturation happens
+    at a higher stiffness in the record than in the paper, where Fig. 1B marks reinforcement as
+    beginning at ~1 pN/nm and SI p. 13 says Fcr = 3 pN "determines the rigidity (∼1 pN/nm)" at which it
+    begins. In the record Fa reaches 3 pN only near 1.5 pN/nm, so the paper's Fa is larger than the
+    record's time average by roughly a fifth at 1 pN/nm.
+  citation: {page: 13, quote: "determines the rigidity (∼1 pN/nm) at which the integrin density", where: text}
+- id: q_fb_two_values
+  kind: choice
+  about: [Fb_tableS1, Fb_meanfield]
+  text: >-
+    Table S1 gives Fb = 2 pN; the SI text gives 1.3 pN for the mean-field solution and 2 pN for KMC.
+    The record's mean-field runs use 1.3 pN.
+  citation: {page: 13, quote: "1.3 pN for the analytical solution generalized by mean-field", where: text}
+- id: q_tau_l_symbol
+  kind: possible_error
+  about: [lifetime_timescale]
+  text: >-
+    tau_l is written Fm Nm/(vu kl) in the text (p. 5, SI p. 12), Fm Nm/(vp kl) in the Fig. 1A and S8A
+    drawings, and Fs/(v0 kl) in the Fig. 1 caption. vu = Vp = 120 nm/s in Table S1, so the numbers are
+    the same; the symbols are not.
+  citation: {page: 3, quote: "FA lifetime scale ðτl = Fs =v0 kl Þ", where: "Fig. 1 caption"}
+- id: q_tau_l_range
+  kind: unexplained_difference
+  about: [tau_l_at_kl_low, tau_l_at_kl_high, lifetime_timescale]
+  text: >-
+    The paper prints a tau_l range of 10^-1 s to 10^3 s (p. 8, "range of 10−1 s to 103 s"). A range of
+    bare powers of ten cannot be entered as a printed value the build can read, so it is not a datum;
+    the record produces tau_l = Fm Nm/(vu kl) at the two ends of the Table S1 stiffness range (runs
+    run_tau_l_low, run_tau_l_high, added inputs) for a reader to set beside it. The paper does not say
+    which stiffnesses its range corresponds to.
+  citation: {page: 8, quote: "range of 10−1 s to 103 s", where: text}
+- id: q_modulus_conversion
+  kind: possible_error
+  about: [boussinesq_eq_s9, k_1pNnm, R_contact]
+  text: >-
+    Eq. S9 relates the spring constant to the Young's modulus E (k ≈ 2RE = rE), while the relaxation
+    analysis converts with the relaxation modulus G(t): k(t) ≈ G(t) r (SI p. 12). If G is a shear modulus,
+    E = 3G at nu = 0.5 and the two conversions differ by a factor of 3; the paper uses "1 pN/nm = 1 kPa"
+    for both.
+  citation: {page: 12, quote: "the relaxed stiffness can be calculated as", where: text}
+- id: q_gel_params
+  kind: unstated_input
+  about: [vs_PA_effective, vs_PA_multiple, vs_HA_effective, vs_HA_multiple]
+  text: >-
+    The substrate parameters behind Figs. 4-6 and S8B/C (effective ka, kl, eta of each gel, and the peak
+    heights and timescales used for the multiple-timescale runs) are shown only as markers on heat maps
+    and as spectra; they are not printed as numbers, so 97.2, 101.1, 74.6 and 75.4 nm/s cannot be rerun.
+- id: q_area_model
+  kind: unstated_input
+  about: [mean_field_sls]
+  text: >-
+    The predicted spreading areas (Figs. 4D, 5D, 6E, S5C) come from Rss = R0 + Vs tau_ss with tau_ss
+    "chosen" per cell type (Table S1 gives 100 s to 400 s); the values used for each figure are not
+    printed, and the scaling factor SF = 0.3 enters the alginate case. Not rerun.
+  citation: {page: 11, quote: "timescale τss (i.e., Rss = R0 + Vs · τss)", where: text}
+- id: q_figS4_levels
+  kind: unstated_input
+  about: [mean_field_sls]
+  text: >-
+    The Fig. S4 tables print representative speeds (55, 70, 75, 85, ~120 nm/s) at "low, medium, and high"
+    levels of kl and eta; the levels are not given as numbers, so the tables are not rerun.
+- id: q_fig_reading_cover
+  kind: reading
+  about: [vs_fig2b_ka01, vs_fig2b_ka05, vs_figS8d_ka2_05, vs_figS8d_ka2_1, vs_figS8d_ka2_2]
+  text: >-
+    Where the series of Fig. 2B and Fig. S8D lie on top of each other (low viscosity / short tau_s2), the
+    markers underneath are hidden and are not read; those series are compared only where they separate.
+# added by the audit
+- id: q_audit_unread_results
+  kind: reading
+  about: [mean_field_sls]
+  text: >-
+    (Audit.) Several plotted results the paper says the mean-field model produces, at parameters the
+    paper prints, are not compared yet: Fig. 3A (p. 5; Vs vs tau_s/tau_b for kl = 10^-2, 10^-1, 10^0
+    pN/nm at a fixed initial stiffness ka + kl = 1.1 pN/nm, legend and caption), the dash-dotted time
+    averages of Fig. 3C (p. 5; ka = 1, kl = 0.1 pN/nm, eta = 10^-2, 10^0, 10^2 pN s/nm) and of Fig. 1D
+    (p. 3; ka = 1, kl = 0.1, eta = 1, i.e. the run run_fig1_params, whose Vs, t_life and Fa are produced
+    but compared with nothing), and Fig. S3D (p. 16; no reinforcement, kl = 0.1 pN/nm, four ka). Fig. 3A
+    needs a model port in tau_s/tau_b (eta = (tau_s/tau_b) ka / ron0, a choice of tau_b = 1/ron0). The
+    first reader left them "not read in this pass"; the audit could not render figure crops in its
+    session and did not add readings. By eye, the Fig. 1D Vs line and the Fig. 3C green (eta = 10^0)
+    line, at the same substrate parameters, do not sit at quite the same height; a reading would say
+    whether the difference exceeds the reading precision.
+  citation: {page: 5, quote: "fixed initial stiffness ka + kl = 1.1 pN/nm", where: "Fig. 3 caption"}
+- id: q_eq_s9_symbol
+  kind: possible_error
+  about: [boussinesq_eq_s9]
+  text: >-
+    (Audit.) Eq. S9 names the substrate spring constant kc, the symbol the paper uses everywhere else
+    (Table S1, Eq. S5) for the clutch stiffness (5 pN/nm). From the surrounding text it is the substrate
+    stiffness k; the record's model keeps the printed symbol in `equation` and outputs it as
+    substrate_stiffness.
+  citation: {page: 12, quote: "the spring constant of substrate", where: "Eq. S9"}
+# added by the figure-reading pass (2026-11-01)
+- id: q_fig1d_fig3c_means
+  kind: reading
+  about: [vs_fig1d_mean, vs_fig3c_means]
+  text: >-
+    (Figures.) Fig. 1D and the green trace of Fig. 3C are at the same substrate parameters (ka = 1,
+    kl = 0.1 pN/nm, eta = 1 pN s/nm; kl of Fig. 3C from the cross in Fig. 3B). Their dash-dotted means
+    read 80.4 [79.3, 81.6] and 82.6 [81.0, 84.1] nm/s: the intervals overlap, so the two figures are
+    consistent at the precision of the reading. The Fig. 3C dash-dotted lines are drawn slightly
+    tilted (about 1 nm/s over their length); the tilt is in the interval.
+  citation: {page: 5, quote: "with dash- dotted lines representing the time average", where: "Fig. 3C caption"}
+- id: q_figS8_bars_text
+  kind: reading
+  about: [vs_figS8b_bars, vs_figS8c_bars, vs_PA_effective, vs_PA_multiple, vs_HA_effective, vs_HA_multiple]
+  text: >-
+    (Figures.) The Fig. S8B-C bars of the effective and multiple-timescale runs read 96.9 [96.2, 97.6]
+    and 101.2 [100.5, 101.9] (PA), 74.5 [73.8, 75.3] and 75.7 [74.7, 76.7] nm/s (HA), consistent with
+    the values printed on p. 13 (97.2, 101.1, 74.6, 75.4). The build cannot compare a figure reading
+    (a table) with a printed scalar, so this check is stated here, not computed.
+- id: q_figS8_crosses
+  kind: unstated_input
+  about: [H_figS8b_cross, H_figS8c_cross, vs_PA_multiple, vs_HA_multiple]
+  text: >-
+    (Figures.) The crosses of Fig. S8B-C (right) give the timescales and spectrum heights chosen for the
+    multiple-timescale runs (four for PA, seven for HA; figures.yaml). The paper does not say how a
+    spectrum height H(tau_i) becomes the stiffness ka,i of a Maxwell element (nor kl), so the runs
+    behind 101.1 and 75.4 nm/s still cannot be rerun.
+  citation: {page: 19, quote: "The chosen multiple timescales are shown with crosses", where: "Fig. S8 caption"}
+- id: q_fig3c_green_mean
+  kind: unexplained_difference
+  about: [cmp_fig3c_means, cmp_fig1d_mean, vs_fig3c_means, vs_fig1d_mean]
+  text: >-
+    (Figures.) At ka = 1, kl = 0.1 pN/nm, eta = 1 pN s/nm the record's run gives a mean speed of 77.7
+    nm/s, below the Fig. 3C green mean (82.6 [81.0, 84.1], not reproduced) and the Fig. 1D mean (80.4
+    [79.3, 81.6], close). The red (eta = 10^-2) mean is reproduced and the black (eta = 10^2) one is
+    close (74.0 vs 71.6). Fig. 3A at the neighbouring kl = 0.1, ka = 1.0 is reproduced over the whole
+    tau_s/tau_b range, so the difference is confined to the full-cycle mean of these traces; it is of
+    the size the cycle and reinforcement choices change (q_cycle_end, q_reinforcement_rule).
+- id: q_threshold_figS1a_S7
+  kind: unexplained_difference
+  about: [cmp_figS1a_ode, cmp_figS7_model]
+  text: >-
+    (Figures.) The ODE curve of Fig. S1A and the model curve of Fig. S7 are the reinforced elastic curve
+    of Fig. 1B. The record reproduces them below 1 pN/nm and on the 120 nm/s plateau, but not between
+    about 1.2 and 2 pN/nm, where the paper's curve has already risen (S1A: 80.2 and 109.0 at 1.27 and
+    2.07 pN/nm, record 71.8 and 94.8; S7: 79.0 and 87.4 at 1.2 and 1.5 pN/nm, record 72.7 and 74.6):
+    the same threshold shift as q_fig1b_threshold, now seen in three figures.
+- id: q_figS3d_ka10_floor
+  kind: unexplained_difference
+  about: [cmp_figS3d_ka10]
+  text: >-
+    (Figures.) For ka = 10 pN/nm without reinforcement, Fig. S3D shows about 3 nm/s above the drop; the
+    record's run gives about 5 nm/s (close, not reproduced). Fig. 3A, and S3D for ka = 0.1, 0.5 and 2,
+    are reproduced, so the difference is confined to this nearly stalled regime, where the speed comes
+    from a few very short cycles and depends on when a cycle is ended (q_cycle_end).
+- id: q_boxplot_meaning
+  kind: reading
+  about: [area_fig4d_box, area_fig4d_whiskers, area_fig5d_box, area_fig5d_whiskers]
+  text: >-
+    (Figures.) Figs. 4D and 5D are box plots, but the captions do not say what the box, the line and
+    the whiskers are (by convention median, quartiles and 1.5 IQR, with outliers as circles). The record
+    reads the line as the value and gives the box and the whiskers as two separate intervals.
+- id: q_vp_two_values
+  kind: unexplained_difference
+  about: [Vp_tableS1, Vp_figS2]
+  text: >-
+    (Audit.) The Fig. S2 caption gives Vp = 40 nm/s for the spreading-area simulations (Fig. S2E),
+    while Table S1 gives Vp = 120 nm/s and SI p. 3 says all parameters other than the spreading
+    timescale, relaxation timescales and stiffnesses "are kept constant for all simulations". The paper
+    does not say why Fig. S2 uses another value. No model in the record uses Vp_figS2.
+  citation: {page: 13, quote: "of the other parameters are kept constant for all simulations", where: text}

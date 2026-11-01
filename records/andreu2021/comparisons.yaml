@@ -1,0 +1,60 @@
+# deformation speed at the cell edge
+- {id: cmp_speed_p2, purpose: reproduction, computed: speed_p2_pred, printed: speed_p2,
+   note: "the printed ~60 nm/s carries no precision: recorded without a verdict"}
+- {id: cmp_speed_p5_low, purpose: reproduction, computed: speed_p5_low_pred, printed: speed_range_p5,
+   note: "10% at 1 Hz should give the lower end of the printed 2–8 µm/s"}
+- {id: cmp_speed_p5_high, purpose: reproduction, computed: speed_p5_high_pred, printed: speed_range_p5,
+   note: "20% at 2 Hz should give the upper end of the printed 2–8 µm/s"}
+
+# Supplementary Table 1, row 1 (stretch): each end is a bare order of magnitude, so no verdict (audit)
+- {id: cmp_supp1_deformation_low, purpose: reproduction, computed: deformation_supp1_low_pred, printed: deformation_lo_supp1}
+- {id: cmp_supp1_deformation_high, purpose: reproduction, computed: deformation_supp1_high_pred, printed: deformation_hi_supp1}
+- {id: cmp_supp1_defrate_low, purpose: reproduction, computed: defrate_supp1_low_pred, printed: defrate_lo_supp1}
+- {id: cmp_supp1_defrate_high, purpose: reproduction, computed: defrate_supp1_high_pred, printed: defrate_hi_supp1}
+- {id: cmp_supp1_load_low, purpose: reproduction, computed: load_supp1_low_pred, printed: load_lo_supp1}
+- {id: cmp_supp1_load_high, purpose: reproduction, computed: load_supp1_high_pred, printed: load_hi_supp1}
+- {id: cmp_supp1_loadrate_low, purpose: reproduction, computed: loadrate_supp1_low_pred, printed: loadrate_lo_supp1}
+- {id: cmp_supp1_loadrate_high, purpose: reproduction, computed: loadrate_supp1_high_pred, printed: loadrate_hi_supp1}
+
+# Fig. 2e model lines, every input as printed
+- {id: cmp_fig2e_2p5_printed, purpose: reproduction, computed: len_2p5_printed_pred, printed: fig2e_model_2p5}
+- {id: cmp_fig2e_5_printed, purpose: reproduction, computed: len_5_printed_pred, printed: fig2e_model_5}
+- {id: cmp_fig2e_10_printed, purpose: reproduction, computed: len_10_printed_pred, printed: fig2e_model_10}
+- {id: cmp_fig2e_20_printed, purpose: reproduction, computed: len_20_printed_pred, printed: fig2e_model_20}
+# Fig. 2e model lines, k_sub = 1 pN/nm as in the authors' code
+- {id: cmp_fig2e_2p5_ksub_code, purpose: reproduction, computed: len_2p5_ksub_code_pred, printed: fig2e_model_2p5}
+- {id: cmp_fig2e_5_ksub_code, purpose: reproduction, computed: len_5_ksub_code_pred, printed: fig2e_model_5}
+- {id: cmp_fig2e_10_ksub_code, purpose: reproduction, computed: len_10_ksub_code_pred, printed: fig2e_model_10}
+- {id: cmp_fig2e_20_ksub_code, purpose: reproduction, computed: len_20_ksub_code_pred, printed: fig2e_model_20}
+
+# ---- second figure pass ----------------------------------------------------------------------------
+# Validation: the clutch model (the same runs as the Fig. 2e reproductions, swept at 0.125-2 Hz) against
+# the measured paxillin adhesion lengths of Fig. 1e-h (mean ± s.e.m.), which Fig. 2e overlays by eye.
+- {id: val_fig1e_pax_printed, purpose: validation, computed: len_2p5_printed_pred, printed: fig1e_pax_tri}
+- {id: val_fig1f_pax_printed, purpose: validation, computed: len_5_printed_pred, printed: fig1f_pax_tri}
+- {id: val_fig1g_pax_printed, purpose: validation, computed: len_10_printed_pred, printed: fig1g_pax_tri}
+- {id: val_fig1h_pax_printed, purpose: validation, computed: len_20_printed_pred, printed: fig1h_pax_tri}
+- {id: val_fig1e_pax_ksub_code, purpose: validation, computed: len_2p5_ksub_code_pred, printed: fig1e_pax_tri}
+- {id: val_fig1f_pax_ksub_code, purpose: validation, computed: len_5_ksub_code_pred, printed: fig1f_pax_tri}
+- {id: val_fig1g_pax_ksub_code, purpose: validation, computed: len_10_ksub_code_pred, printed: fig1g_pax_tri}
+- {id: val_fig1h_pax_ksub_code, purpose: validation, computed: len_20_ksub_code_pred, printed: fig1h_pax_tri}
+# Validation of the paper's own model output: the black model lines of Fig. 2e (read in the first pass)
+# against the measured paxillin lengths they are overlaid on (p. 5: "the model largely reproduced
+# observed experimental trends").
+- {id: val_fig2e_line_vs_fig1e, purpose: validation, computed: fig2e_model_2p5, printed: fig1e_pax_tri}
+- {id: val_fig2e_line_vs_fig1f, purpose: validation, computed: fig2e_model_5, printed: fig1f_pax_tri}
+- {id: val_fig2e_line_vs_fig1g, purpose: validation, computed: fig2e_model_10, printed: fig1g_pax_tri}
+- {id: val_fig2e_line_vs_fig1h, purpose: validation, computed: fig2e_model_20, printed: fig1h_pax_tri}
+# Consistency: the same measurements plotted twice, and a plotted measurement against its printed value.
+- {id: cmp_fig4n_fig3g_0p25hz, purpose: consistency, computed: fig4n_ctrl, printed: fig3g_0p25hz,
+   note: "the control beads at 0.25 Hz (n=21) appear in both Fig. 3g and Fig. 4n"}
+- {id: cmp_fig4o_fig3g_4hz, purpose: consistency, computed: fig4o_ctrl, printed: fig3g_4hz,
+   note: "the control beads at 4 Hz (n=27) appear in both Fig. 3g and Fig. 4o"}
+- {id: cmp_figS2b_slopes, purpose: consistency, computed: figS2_slopes_printed, printed: figS2b_rate_tri,
+   note: "the plotted stretch rates of Supplementary Fig. 2b against the slopes printed in its example traces (2c-g)"}
+
+# two printings of the same parameter
+- {id: cmp_Fact_methods_table, purpose: consistency, computed: Fact_methods, printed: Fact_table}
+- {id: cmp_Fact_results_table, purpose: consistency, computed: Fact_table, printed: Fact_results,
+   note: "'about 140 pN' carries no precision: recorded without a verdict"}
+- {id: cmp_dadd_text_table, purpose: consistency, computed: dadd_text, printed: dadd_table}

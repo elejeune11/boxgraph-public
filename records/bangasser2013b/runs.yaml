@@ -1,0 +1,163 @@
+# ==== clutch-ensemble ODEs: cycle time against r (Supplement p. 14, Fig. S2E) ================
+- id: run_cycle_r1
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S2E_added, r: r_S2E_low}
+  outputs: {t_cycle: tcycle_r1_pred, v_mean: vmean_r1_pred}
+- id: run_cycle_r3
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S2E_added, r: r_S2E_high}
+  outputs: {t_cycle: tcycle_r3_pred, v_mean: vmean_r3_pred}
+
+# ==== Fig. 2: base set on 0.1 pN/nm, r = 2 ===================================================
+- id: run_cycle_fig2
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_fig2, r: r_fig2}
+  outputs: {t_cycle: tcycle_fig2_pred, v_mean: vmean_fig2_pred}
+- id: run_tc_fig2_mid
+  model: clutch_ensemble_timecourse
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_fig2, r: r_fig2}
+  sweep: {t: xs_fig2c_ode}
+  outputs: {xs: xs_fig2_pred, Fc: Fc_fig2_pred, vf: vf_fig2_pred}
+- id: run_tc_fig2_Pb
+  model: clutch_ensemble_timecourse
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_fig2, r: r_fig2}
+  sweep: {t: Pb_fig2b_ode}
+  outputs: {Pb: Pb_fig2_pred}
+
+# ==== Fig. S2F: ODE cycle time against stiffness, r = 2 =======================================
+- id: run_cycle_S2F_r2
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_S2F_2}
+  sweep: {ks: tcycle_figS2f_r2}
+  outputs: {t_cycle: tcycle_S2F_r2_pred}
+
+# ==== Fig. 4B: ODE optimum stiffness at nm = nc = 25 and 3600, r = 3 ==========================
+- id: run_opt_ode_n25
+  model: clutch_ensemble_optimum
+  inputs: {nm: n_fig4_low_m, Fm: Fm_base, vu: vu_base, nc: n_fig4_low_c, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_fig4}
+  outputs: {ks_opt: ksopt_ode_n25_pred}
+- id: run_opt_ode_n3600
+  model: clutch_ensemble_optimum
+  inputs: {nm: n_fig4_high_m, Fm: Fm_base, vu: vu_base, nc: n_fig4_high_c, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_fig4}
+  outputs: {ks_opt: ksopt_ode_n3600_pred}
+
+# ==== Eq. 30 at nm = nc = 25 and 3600 (the Fig. 4 end points) =================================
+- id: run_eq30_n25
+  model: optimum_eq30
+  inputs: {Fm: Fm_base, nm: n_fig4_low_m, kon: kon_base, vu: vu_base, nc: n_fig4_low_c, eps: eps_choice}
+  outputs: {ks_opt: ksopt_eq30_n25_pred}
+- id: run_eq30_n3600
+  model: optimum_eq30
+  inputs: {Fm: Fm_base, nm: n_fig4_high_m, kon: kon_base, vu: vu_base, nc: n_fig4_high_c, eps: eps_choice}
+  outputs: {ks_opt: ksopt_eq30_n3600_pred}
+
+# ==== Discussion, p. 9 ========================================================================
+- id: run_log_factor
+  model: log_cycle_factor
+  inputs: {eps: eps_choice, m: eps_multiplier_added}
+  outputs: {L: L_pred, fold: L_fold_pred}
+- id: run_motors_for_traction
+  model: motors_for_traction
+  inputs: {F: traction_order, Fm: Fm_order}
+  outputs: {n: n_traction_pred}
+- id: run_eq31_factors
+  model: eq31_factors
+  inputs: {Fm: Fm_order, vu: vu_order, n: n_order}
+  outputs: {ratio: Fm_vu_pred, nfac: nfac_pred}
+- id: run_eq31_coefficient
+  model: eq31_coefficient
+  inputs: {ratio: Fm_vu_subst, nfac: nfac_subst, L: L_subst}
+  outputs: {C: coef_eq31_pred}
+- id: run_eq31_rates
+  model: eq31_rates
+  inputs: {C: coef_eq31, q: kon_koff_ratio}
+  sweep: {ks: kon_range_text}
+  outputs: {kon: kon_range_pred, koff: koff_range_pred}
+
+# ==== Fig. S1: single clutch, one motor, base set otherwise, at the end of the plotted time ===
+- id: run_single_S1
+  model: single_clutch_ode
+  inputs: {nm: nm_S1, Fm: Fm_base, vu: vu_base, nc: nc_S1, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S1, t: t_S1_late}
+  outputs: {pb: pb_S1_pred, xs: xs_S1_pred, Fc: Fc_S1_pred, koff_i: koff_S1_pred}
+- id: run_single_S1_alt
+  model: single_clutch_ode
+  inputs: {nm: nm_S1, Fm: Fm_base, vu: vu_base, nc: nc_S1, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S1_alt_added, t: t_S1_late}
+  outputs: {pb: pb_S1alt_pred, xs: xs_S1alt_pred, Fc: Fc_S1alt_pred, koff_i: koff_S1alt_pred}
+  note: "κs = 0.01 pN/nm instead of the printed 0.1, to test the reading in q_figS1_stiffness"
+
+# ==== runs on the calibrated figure readings (figures.yaml) ===================================
+# Fig. 2 and Fig. 6(a): time of the ODE failure (base set on 0.1 pN/nm), indexed by r = 2
+- id: run_cyc_fig2_drop
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_fig2}
+  sweep: {r: fig2b_drop_cal}
+  outputs: {t_cycle: tcyc_fig2_drop_pred, v_mean: vmean_fig2_drop_pred}
+# Fig. S2E: time of the ODE failure for r = 1, 2, 3 (stiffness not stated: ks_S2E_added)
+- id: run_cyc_S2E_drops
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S2E_added}
+  sweep: {r: figS2e_drops_cal}
+  outputs: {t_cycle: tcyc_S2E_drops_pred, v_mean: vmean_S2E_drops_pred}
+# Fig. 2(b-f) and 6(a): the ODE state over the cycle
+- id: run_tc_fig2_cal
+  model: clutch_ensemble_timecourse
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_fig2, r: r_fig2}
+  sweep: {t: fig2b_ode_cal}
+  outputs: {Pb: Pb_fig2cal_pred, xs: xs_fig2cal_pred, Fc: Fc_fig2cal_pred, vf: vf_fig2cal_pred, koff_mean: koff_fig2cal_pred}
+# Fig. S2E: fraction bound for r = 1, 2, 3
+- id: run_tc_S2E_r1
+  model: clutch_ensemble_timecourse
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S2E_added, r: r_S2E_low}
+  sweep: {t: figS2e_r1_cal}
+  outputs: {Pb: Pb_S2E_r1_pred, xs: xs_S2E_r1_pred, Fc: Fc_S2E_r1_pred, vf: vf_S2E_r1_pred, koff_mean: koff_S2E_r1_pred}
+- id: run_tc_S2E_r2
+  model: clutch_ensemble_timecourse
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S2E_added, r: r_fig2}
+  sweep: {t: figS2e_r2_cal}
+  outputs: {Pb: Pb_S2E_r2_pred, xs: xs_S2E_r2_pred, Fc: Fc_S2E_r2_pred, vf: vf_S2E_r2_pred, koff_mean: koff_S2E_r2_pred}
+- id: run_tc_S2E_r3
+  model: clutch_ensemble_timecourse
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S2E_added, r: r_S2E_high}
+  sweep: {t: figS2e_r3_cal}
+  outputs: {Pb: Pb_S2E_r3_pred, xs: xs_S2E_r3_pred, Fc: Fc_S2E_r3_pred, vf: vf_S2E_r3_pred, koff_mean: koff_S2E_r3_pred}
+# Fig. S1(b-f): single clutch, on the stated 0.1 pN/nm and on the added 0.01 pN/nm
+- id: run_single_S1_cal
+  model: single_clutch_ode
+  inputs: {nm: nm_S1, Fm: Fm_base, vu: vu_base, nc: nc_S1, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S1}
+  sweep: {t: figS1b_ode_cal}
+  outputs: {pb: pb_S1cal_pred, xs: xs_S1cal_pred, Fc: Fc_S1cal_pred, vf: vf_S1cal_pred, koff_i: koff_S1cal_pred}
+- id: run_single_S1alt_cal
+  model: single_clutch_ode
+  inputs: {nm: nm_S1, Fm: Fm_base, vu: vu_base, nc: nc_S1, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_S1_alt_added}
+  sweep: {t: figS1b_ode_cal}
+  outputs: {pb: pb_S1altcal_pred, xs: xs_S1altcal_pred, Fc: Fc_S1altcal_pred, vf: vf_S1altcal_pred, koff_i: koff_S1altcal_pred}
+  note: "κs = 0.01 pN/nm instead of the printed 0.1 (q_figS1_stiffness)"
+# Fig. 4(b): cycle-mean flow against stiffness, nm = nc = 25 and 3600, r = 3
+- id: run_cyc_fig4b_n25
+  model: clutch_ensemble_cycle
+  inputs: {nm: n_fig4_low_m, Fm: Fm_base, vu: vu_base, nc: n_fig4_low_c, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_fig4}
+  sweep: {ks: fig4b_n25_cal}
+  outputs: {t_cycle: tcyc_fig4b_n25_pred, v_mean: vmean_fig4b_n25_pred}
+- id: run_cyc_fig4b_n3600
+  model: clutch_ensemble_cycle
+  inputs: {nm: n_fig4_high_m, Fm: Fm_base, vu: vu_base, nc: n_fig4_high_c, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_fig4}
+  sweep: {ks: fig4b_n3600_cal}
+  outputs: {t_cycle: tcyc_fig4b_n3600_pred, v_mean: vmean_fig4b_n3600_pred}
+# Fig. S2F: cycle time against stiffness for r = 3, 2, 1, 0.3
+- id: run_cyc_S2F_r3
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_S2E_high}
+  sweep: {ks: figS2f_r3_cal}
+  outputs: {t_cycle: tcyc_S2F_r3_pred, v_mean: vmean_S2F_r3_pred}
+- id: run_cyc_S2F_r2
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_S2F_2}
+  sweep: {ks: figS2f_r2_cal}
+  outputs: {t_cycle: tcyc_S2F_r2_pred, v_mean: vmean_S2F_r2_pred}
+- id: run_cyc_S2F_r1
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, r: r_S2E_low}
+  sweep: {ks: figS2f_r1_cal}
+  outputs: {t_cycle: tcyc_S2F_r1_pred, v_mean: vmean_S2F_r1_pred}
+# r = 0.3 is not run: Eqs. 8-12 and 19 with the record's failure criterion reach no failure before
+# t_max at r = 0.3 (the run errs), although the paper plots finite cycle times (q_S2F_r03).

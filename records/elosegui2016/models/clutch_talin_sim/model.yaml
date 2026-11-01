@@ -1,0 +1,49 @@
+id: clutch_talin_sim
+name: stochastic molecular clutch model with talin unfolding, refolding and vinculin reinforcement (Supplementary Note)
+role: model
+stated: {page: 23, quote: "adapting a Monte Carlo simulation approach previously described", where: "Supplementary Note (PDF pp. 23-25), Supplementary Table 1, Fig. 3c"}
+described_from: elosegui2014
+equation: >-
+  nm myosin motors (force Fm each) pull an actin filament at v = va (1 - F/(nm Fm)); nf fibronectin
+  molecules bind through talin-integrin clutches (springs kc) at kon = kont dint and unbind at koff(f), a
+  catch bond (sum of two exponentials, times 0.9, increased below 1 pN); per bound clutch the talin
+  unfolding rate kunf(FR f) (slip bond) competes with koff; if unfolding comes first within the time step,
+  vinculin binds (kvin) or talin refolds (kfold(FR f)); vinculin binding adds dadd to dint, unbinding before
+  unfolding or vinculin binding removes dadd, never below basal dint; fibronectin molecules sit in parallel on
+  a spring ksub; force balance gives F; time steps of 5 ms to 100 s; F and ksub converted to traction and
+  Young's modulus with the adhesion radius ra
+inputs:
+  E:      {quantity: substrate_rigidity, unit: kPa}
+  nf:     {quantity: n_fibronectin, unit: dimensionless}
+  kont:   {quantity: integrin_binding_rate_intrinsic, unit: um^2/s}
+  dint:   {quantity: integrin_density, unit: 1/um^2}
+  dadd:   {quantity: integrin_density_increment, unit: 1/um^2}
+  FR:     {quantity: talin_force_fraction, unit: dimensionless}
+  nm:     {quantity: n_myosin, unit: dimensionless}
+  Fm:     {quantity: myosin_stall_force, unit: pN}
+  vu:     {quantity: myosin_unloaded_speed, unit: nm/s}
+  kc:     {quantity: clutch_stiffness, unit: nN/nm}
+  ra:     {quantity: adhesion_radius, unit: nm}
+  koff_scale: {quantity: koff_scaling_factor, unit: dimensionless}
+  koff_a: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_b: {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  koff_c: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_d: {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  koff_g: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_fend: {quantity: low_force_term_vanishing_force, unit: pN}
+  ln_kunf0: {quantity: ln_unfolding_rate_zero_force, unit: dimensionless}
+  kunf_b: {quantity: unfolding_force_coefficient, unit: 1/pN}
+  ln_kfold0: {quantity: ln_refolding_rate_zero_force, unit: dimensionless}
+  kfold_b: {quantity: refolding_force_coefficient, unit: 1/pN}
+  kvin:   {quantity: vinculin_binding_rate, unit: 1/s}
+  ksub_factor: {quantity: ksub_geometry_factor, unit: dimensionless}
+outputs:
+  traction:   {quantity: cell_traction, unit: Pa, description: "time-averaged force on the substrate over the run, divided by pi ra^2"}
+  actin_flow: {quantity: actin_retrograde_flow, unit: nm/s, description: "time-averaged actin speed over the run"}
+  dint_mean:  {quantity: integrin_density, unit: 1/um^2, description: "time-averaged integrin density over the run"}
+settings:
+  dt: 0.005        # s, printed: "time steps of 5 ms" (p. 23)
+  t_total: 100.0   # s, printed: "until a total of 100 s" (p. 23)
+  seed: 1
+stochastic: true
+from_words: true

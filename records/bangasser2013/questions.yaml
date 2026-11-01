@@ -1,0 +1,310 @@
+- id: q_sim_length
+  kind: choice
+  about: [motor_clutch_ssa, run_fig2_nc50, run_fig7a, run_fig7a_minus_clutch, run_fig7a_minus_motor, ref_t_fig2_nc50, ref_t_fig7a_minus_clutch]
+  text: >-
+    The paper does not print how long each simulation ran, whether an initial transient was
+    discarded, or how many runs were averaged. The record simulates 1000 s per point (100 s for the
+    2000-clutch runs of Fig. 7A, to keep each call short), averages over the whole run, and repeats
+    each run with 5 seeds. The simulated time is refined (ref_t_fig2_nc50, ref_t_fig7a_minus_clutch).
+
+- id: q_ssa_details
+  kind: reading
+  about: [motor_clutch_ssa]
+  text: >-
+    The SSA is given as eight steps in words (Supporting Material). Details taken from Chan and Odde
+    2008 (ref. 15) or read from the steps: a newly bound clutch starts unstretched at the substrate
+    position; the flow of step 5 uses the substrate deformation before the step-7 force balance and
+    moves engaged clutches over the event time just elapsed; off-rates are held fixed between events
+    (first-reaction method, Eq. 1). The force balance and force-velocity law are not written in this
+    paper; they are Chan and Odde's Eqs. 3-5.
+  citation: {page: 14, quote: "Advance engaged clutch positions by the product of the F-actin retrograde flow rate", where: "Supporting Material, step 6"}
+
+- id: q_optimum_search
+  kind: choice
+  about: [optimal_stiffness, run_opt_base, run_opt_kon_x025, run_opt_kon_x05, run_opt_kon_x2, run_opt_kon_x4, run_S_kon, ref_grid_opt_base]
+  text: >-
+    The paper does not say how the optimal stiffness was located (grid of κsub, simulated time,
+    smoothing). The record scans 0.001-100 pN/nm at 4 points per decade and fits a parabola in
+    log κsub through the lowest point and its neighbours, for each seed; S uses the mean optimum
+    over seeds. The grid density is refined (ref_grid_opt_base). Only S for kon is recomputed from
+    simulations; the other printed S values are compared only with each other and with the text.
+
+- id: q_cycle_definition
+  kind: unstated_model
+  about: [motor_clutch_ssa, run_fig6d, cmp_tcycle_fig6d]
+  text: >-
+    The load-and-fail cycle time of Fig. 6C-D is not defined beyond the substrate trajectories of
+    Fig. 6C. The record counts one cycle each time the last engaged clutch lets go (the substrate
+    returns to zero), and divides the simulated time by that count. On stiff substrates this counts
+    frequent single-clutch releases as cycles.
+
+- id: q_tbinding
+  kind: unexplained_difference
+  about: [binding_time_eq10, run_tbinding, cmp_tbinding_fig6d, tbinding_fig6d]
+  text: >-
+    Eq. 10 with the base set (nc = 50, kon = 0.3 /s) gives a binding time about twice the dashed
+    'Binding Time' line of Fig. 6D, which lies near 7 s by eye (the line is close to the bottom of
+    the plot, not near 15 s). The plotted line would follow from Eq. 10 with a larger kon or fewer
+    clutches (Chan and Odde's kon = 1 /s with nc = 75 also gives a value near the plotted one), or the
+    figure may use another definition. The crossing of this line with the cycle-time curve is the
+    paper's explanation of the optimum, so which binding time was plotted matters for that claim.
+  citation: {page: 8, printed_page: "588", quote: "can be calculated analytically", where: "Eq. 10 and Fig. 6D"}
+
+- id: q_fig6b_axis_unit
+  kind: possible_error
+  about: [kens_fig6b]
+  text: >-
+    The right axis of Fig. 6B, which carries the ensemble clutch stiffness and the substrate spring
+    constant, is labelled 'Spring constant (nm/s)'. A spring constant is a force per length; the
+    record reads the axis in pN/nm, the unit of the bottom axis that the dashed substrate line
+    reproduces one to one.
+  citation: {page: 7, printed_page: "587", quote: "upper limit of stiffness sensing occurs when the", where: "Fig. 6B, right axis label"}
+
+- id: q_text_motor_list
+  kind: possible_error
+  about: [S_nm_3b]
+  text: >-
+    The text lists the motor parameters as '(Fm, nc, vu)' (p. 4); nc is a clutch parameter (Table 1),
+    and nm, the number of motors, is missing from the list. Probably nm was meant.
+  citation: {page: 4, printed_page: "584", quote: "although increasing the values of motor parameters", where: text}
+
+- id: q_log_base
+  kind: reading
+  about: [range_eq2, sr_eq4]
+  text: >-
+    Eqs. 2 and 4 write 'log' without a base. The record reads base 10, as the paper interprets R as
+    'the maximum allowable order of magnitude change' and SR as an order-of-magnitude change, and
+    because the printed R values follow from the Fig. S2 limits in base 10.
+
+- id: q_lifetime_from_rate
+  kind: unstated_model
+  about: [catch_slip_eq9, run_fig7c_lifetime]
+  text: >-
+    Fig. 7C plots the catch-slip model as a bond lifetime against force, fitted to the lifetimes of
+    Kong et al.; the paper does not write how a lifetime follows from Eq. 9. The record takes the
+    mean lifetime under constant force as 1/koff*.
+
+- id: q_eye_readings
+  kind: reading
+  about: [v_fig2c_nc50, F_fig2b_nc50, v_fig2c_nc100, F_fig2b_nc100, v_fig2c_nc5, v_fig2c_nc300, F_fig2b_nc300, ksopt_fig2_base, v_figS1a_present, kens_fig6b, tcycle_fig6d, tbinding_fig6d, F_fig7a, F_fig7a_minus_clutch, F_fig7a_minus_motor, tau_fig7c]
+  text: >-
+    The model's printed results are plotted only. In this reading the figure tools (page rendering at
+    high resolution, calibrated readings by code) could not be run, so these values were read by eye
+    from the 110 dpi page images and recorded as approximate. They get no verdict; their comparisons
+    keep the differences. A calibrated reading of Figs. 2B-C, 6B, 6D, 7A and 7C would turn them into
+    checks with verdicts.
+
+- id: q_sr_rounding
+  kind: unexplained_difference
+  about: [cmp_SR_kon, cmp_SR_nc, cmp_SR_koff, cmp_SR_Fb_koff]
+  text: >-
+    Four printed SR values miss S x R of the printed S and R by one unit in the last digit (verdict
+    'close'): kon, nc and koff in Fig. 3B, and Fb-koff in Fig. 5C. The printed S and R are rounded,
+    so SR was presumably computed from unrounded values; with R recomputed from the Fig. S2 limits
+    the Fb-koff product rounds to the printed 4.5. Not a sign of an error, but the printed tables
+    are not exactly reproducible from each other.
+
+- id: q_stall_transient
+  kind: numerics
+  about: [run_fig2_nc300, cmp_fig2c_nc300, cmp_fig2b_nc300]
+  text: >-
+    For the stalled system (nc = 300) on the softest substrate (0.01 pN/nm), the run starts from an
+    unloaded substrate and needs a long time to load it to the motors' stall force; averaged over the
+    1000 s run, the mean flow stays near 10 nm/s and the traction near 92 pN, while Fig. 2 shows
+    about 1 nm/s and 100 pN. Whether the paper discarded an initial transient is not stated
+    (q_sim_length); the stiffer points agree with the figure.
+
+- id: q_tables_from_image
+  kind: reading
+  about: [S_kon_3b, S_nm_5a, S_kon_koff_5a, R_kon_koff_5b, SR_kon_koff_5c, S_kc_5a]
+  text: >-
+    The S, R and SR tables of Fig. 3B and Fig. 5A-C are images with no extracted text; their numbers
+    were read from the 110 dpi page images (they are legible there). The Fig. S2 limits have extracted
+    text and agree with the image.
+
+# ---- added in the audit (see audit.md) ---------------------------------------------------------
+- id: q_fig5_full_reading
+  kind: reading
+  about: [S_Fm_nc_5a, R_vu_kon_5b, SR_Fb_kon_5c, SR_koff_Fm_5c, SR_koff_nm_5c, R_kon_Fb_5b, R_kon_nc_5b]
+  text: >-
+    The audit entered every Fig. 5A-C cell (51 more pairs and the diagonals), read from the 110 dpi
+    page image of p. 6 because the figure tools could not be run in the audit either. The digits
+    are legible and the three tables agree with each other and with Fig. S2 to the last digit in
+    almost every cell, which supports the reading; but a one-unit misreading of a last digit (e.g.
+    0.66 vs 0.67 in Fig. 5B row vu, column kon, where the Fig. S2 limits give 0.669) cannot be
+    excluded. A calibrated rendering of p. 6 would settle the cells whose comparison is not
+    'reproduced'.
+
+- id: q_opposite_direction_convention
+  kind: reading
+  about: [S_Fm_nc_5a, S_nm_nc_5a, cup_Fm_nc, clo_Fm_nc, cup_nm_nc, clo_nm_nc]
+  text: >-
+    Below the diagonal (opposite directions, Eqs. 7-8) the paper does not say which parameter of a
+    pair is multiplied by c and which is divided. Rows Fm and nm are otherwise nearly identical in
+    Figs. 5A and S2, but in column nc they differ: Fm-nc has S = -1.6 with limits 2.7 / 0.67, while
+    nm-nc has S = +1.6 with limits 1.5 / 0.37, i.e. the reciprocal limits and the opposite sign of S.
+    This is what one gets if c multiplies nc in one cell and Fm (or nm) in the other, so the
+    convention seems not to be the same in every cell. R and SR are unaffected in size, but the
+    sign of S and SR below the diagonal cannot be interpreted without the convention.
+  citation: {page: 3, printed_page: "583", quote: "base value of one parameter was multiplied by the constant c", where: "Eqs. 7-8; Fig. 5A and Fig. S2, row Fm and row nm, column nc"}
+
+- id: q_kc_rounding
+  kind: unexplained_difference
+  about: [S_kc_3b, SR_kc_3b, S_kc_5a, SR_kc_5c, cns_S_kc_5a, cns_SR_kc_5c]
+  text: >-
+    For κc alone, Fig. 3B prints S = 0.0 and SR = 0.0, while the same single-parameter cells of
+    Fig. 5A and 5C print -0.02 and -0.05. -0.05 lies exactly on the edge of what 0.0 allows at one
+    decimal (cns_SR_kc_5c passes only at that boundary), and S x R = -0.02 x 3.0 = -0.06, not the
+    -0.05 of Fig. 5C. Probably unrounded values underlie all three; not a sign of an error.
+
+- id: q_sr_pair_rounding
+  kind: unexplained_difference
+  about: [cmp_SR_Fb_kon, cmp_SR_kc_Fm, cmp_SR_kc_nm, cmp_SR_koff_Fm, cmp_SR_kon_kc, cmp_SR_kc_kon, cmp_SR_Fm_kc, cmp_SR_nm_kc, cmp_SR_koff_kc]
+  text: >-
+    Across Fig. 5, S x R of the printed S (5A) and R (5B) misses the printed SR (5C) in four cells
+    by more than one unit of its last digit: Fb-kon (0.05 x 4.4 = 0.22 vs 0.20), koff-Fm
+    (-0.05 x 4.4 = -0.22 vs -0.20), κc-Fm and κc-nm (-0.61 x 1.2 = -0.73 vs -0.75), and in about a
+    dozen more by up to one unit. Every miss goes away with less-rounded inputs: S = 0.045 (still
+    printed 0.05) gives 0.20 and -0.20, and R from the Fig. S2 limits (1.24 for κc-Fm) gives
+    -0.76. So SR was computed from unrounded S and R; the printed tables cannot be reproduced
+    from each other exactly where S has one significant digit or R has two. The R values of
+    Fig. 5B agree with the Fig. S2 limits in every cell (eight only 'close', e.g. vu-kon 0.669 vs 0.66).
+
+- id: q_koff_text_slip
+  kind: possible_error
+  about: [S_koff_3b]
+  text: >-
+    The Supporting Material says 'An increase in koff is similar to an increase in kon in that it
+    causes a decrease in the average number of clutches bound', while it says on the previous page
+    that an increase in kon causes an increase in the number of clutches bound. Probably 'a decrease
+    in kon' was meant. The printed S values (kon +1.4, koff -0.4) agree with the intended sense.
+  citation: {page: 16, quote: "is similar to an increase in k on in that", where: "Supporting Material, Clutch unloaded off-rate"}
+
+- id: q_sm_equation_number
+  kind: possible_error
+  about: [motor_clutch_ssa]
+  text: >-
+    Step 2 of the Supporting Material algorithm determines event times '(see Eq. 2)'; the event-time
+    equation is Eq. 1 of the article, and Eq. 2 is the range R. The Supporting Material has no
+    numbered equations of its own. The record reads Eq. 1, as the model does.
+  citation: {page: 14, quote: "Determine event times based on clutch on- and off-rates (see Eq. 2)", where: "Supporting Material, step 2"}
+
+- id: q_measured_points_not_read
+  kind: reading
+  about: [tau_fig7c, v_figS1a_present]
+  text: >-
+    Audit disagreement with the scope (not changed): two panels plot measured points with error
+    bars that the record does not enter: Fig. 7C left (Kong et al.'s integrin lifetimes, to which
+    the catch-slip model of Eq. 9 was fitted) and Fig. S1B (Chan and Odde's neuron flow rates, to
+    which the new base set was fitted). The guide asks for every plotted measurement; Eq. 9 with the
+    Table S1 fit could be validated against the Fig. 7C points directly (no unit conversion is
+    needed there). Both are data from other papers re-plotted here, which is presumably why the first
+    reader left them out; reading them needs the figure tools.
+  citation: {page: 8, printed_page: "588", quote: "A catch-slip bond model was fit to integrin catch bond data", where: "Fig. 7C left; Fig. S1B (p. 20)"}
+
+# ==== SECOND FIGURE PASS (2026-10-31): questions raised or settled by the calibrated readings ====
+- id: q_tbinding_calibrated
+  kind: unexplained_difference
+  about: [tbinding_fig6d_read, run_tbinding_fig6d_read, cmp_tbinding_fig6d_read, q_tbinding]
+  text: >-
+    The calibrated reading settles the reading side of q_tbinding: the dashed 'Binding Time' line of
+    Fig. 6D lies at 6.4 s (95% interval about 5.7 to 7.1 s, from the right-axis ticks 0-70 s and the
+    line's thickness), between the first reader's 7 s and the auditor's 5.8 s by eye. Eq. 10 with the
+    base set (nc = 50, kon = 0.3 /s) gives H_50/kon = 15.0 s, 2.3 times the plotted value, so the
+    difference is not a reading error. The plotted line is near Eq. 10 with kon = 0.7 /s, or with
+    nc = 75 and kon = 1 /s (Chan and Odde's set, 4.9 s); which set Fig. 6 uses is not stated.
+  citation: {page: 7, printed_page: "587", quote: "The optimal stiffness occurs when the clutch", where: "Fig. 6D, red dashed line"}
+
+- id: q_measured_points_read
+  kind: reading
+  about: [tau_kong_fig7c, v_figS1b_measured, q_measured_points_not_read]
+  text: >-
+    The measured points the audit found missing (q_measured_points_not_read) are now read with their
+    error bars: Kong et al.'s twelve lifetimes in Fig. 7C (tau_kong_fig7c, compared with Eq. 9 in
+    cmp_fig7c_kong) and Chan and Odde's six flow rates in Fig. S1B (v_figS1b_measured). Neither
+    legend says what the error bars are (recorded as 'unstated'). Two Fig. 7C points touch (about
+    4 and 5 pN); the lower bar end of the first lies behind the second marker and is read where the
+    dark run ends, so it may be short. The Fig. S1B points are against Young's modulus; no model run
+    is compared with them because the modulus-to-spring-constant conversion is not given.
+  citation: {page: 8, printed_page: "588", quote: "A catch-slip bond model was fit to integrin catch bond data", where: "Fig. 7C left; Fig. S1B (p. 20)"}
+
+- id: q_fig1_bar_assignment
+  kind: reading
+  about: [migration_fig1a_smc, migration_fig1a_nih3t3, traction_fig1b_t24, traction_fig1b_baec]
+  text: >-
+    In Fig. 1 several points of different cell types lie close together and their error bars overlap
+    (Fig. 1A near 20-50 kPa and 0.35; Fig. 1B near 5-7 kPa and 0.7). The reading assigns to each point
+    the dark vertical line through its centre; where two bars run side by side, which bar belongs to
+    which point cannot be told from the figure, and some bar ends read there may belong to the
+    neighbour. No legend says what the error bars are. The values are normalized to each data set's
+    maximum, so they are not the original measurements of refs. 2, 4, 7, 10, 11, 12 and 15.
+  citation: {page: 2, printed_page: "582", quote: "Experimental evidence for shifting stiffness optima", where: "Fig. 1A-B"}
+
+- id: q_fig4_intermediate_series
+  kind: unstated_input
+  about: [v_fig4a_s2, v_fig4a_s3, v_fig4a_s4, v_fig4a_s5, F_fig4b_s2, F_fig4b_s3, F_fig4b_s4, F_fig4b_s5, v_fig4c_s2, v_fig4c_s3, F_fig4d_s2, F_fig4d_s3]
+  text: >-
+    Fig. 4 labels only the first and last curve of each panel (nm = nc = 50 and 1600 in A-B; kon = 0.3,
+    koff = 0.1 /s and kon = 3, koff = 1 /s in C-D). The parameter values of the four (A-B) and two
+    (C-D) curves between them are not printed (a doubling series 100, 200, 400, 800 would fit A-B, and
+    the caption of Fig. 5D says kon/koff is kept at 3), so only the end curves are simulated. The
+    intermediate curves are recorded as plotted.
+  citation: {page: 5, printed_page: "585", quote: "The minimum in F-actin retrograde flow shifts with coordinate changes", where: "Fig. 4"}
+
+- id: q_fig7c_right_model
+  kind: unstated_model
+  about: [v_fig7c_right_s1, v_fig7c_right_s2, v_fig7c_right_s3, v_fig7c_right_s4, v_fig7c_right_s5, v_fig7c_right_s6]
+  text: >-
+    Fig. 7C right shows six flow curves of the motor-clutch model with catch-slip clutches (Eq. 9
+    in place of the slip bond), for nm = nc from 10 (first label) to 300 (last label). The four values
+    between are not printed, and the other parameters are presumably the Table S1 column Fig. 7C,
+    which leaves nm and nc blank. The record has no catch-slip version of motor_clutch_ssa, so the six
+    curves are recorded for a later model to be compared with.
+  citation: {page: 8, printed_page: "588", quote: "into the motor-clutch model to produce qualitatively similar results to the", where: "Fig. 7C right"}
+
+- id: q_fig3a_hidden_curves
+  kind: reading
+  about: [v_fig3a_Fb_x01, v_fig3a_Fb_x3, v_fig3a_Fm_x01, v_fig3a_nm_x01, v_fig3a_kc_x03, v_fig3a_kc_x1, v_fig3a_kc_x3]
+  text: >-
+    In Fig. 3A curves of the same panel overlap where they reach the stalled (0) or free-flowing
+    (about 120 nm/s) limits, or where they coincide (κc panel at low stiffness). Only the visible
+    parts are read. Two curves are hidden over the whole panel and are not read: nc at 3 times its base
+    (150 clutches, stalled under the 10-times curve) and nm at 3 times (free flowing under the
+    10-times curve). Fb at 3 times is visible only near 100 pN/nm and is read there only.
+  citation: {page: 5, printed_page: "585", quote: "Plots are shown for 0.1, 0.3, 1, 3, and 10 times the base parameter value", where: "Fig. 3A"}
+
+- id: q_fig4_short_runs
+  kind: choice
+  about: [run_fig4a_s6, run_fig4b_s6]
+  text: >-
+    The nm = nc = 1600 curves of Fig. 4A-B are simulated for 100 s per point instead of the 1000 s
+    used elsewhere: at 1000 s, ten points and five seeds of 1600 clutches exceed the build's time limit
+    for one run. 100 s spans about 15-20 load-and-fail cycles near the optimum (cycle time about 6 s);
+    the paper does not state its simulated time (q_sim_length). This run is not refined.
+  citation: {page: 5, printed_page: "585", quote: "The minimum in F-actin retrograde flow shifts with coordinate changes", where: "Fig. 4A-B"}
+
+- id: q_second_pass_differences
+  kind: unexplained_difference
+  about: [cmp_fig2b_nc300_read, cmp_fig2c_nc300_read, cmp_fig3a_kon_x10, cmp_fig3a_nc_x10, cmp_fig3a_Fb_x10, cmp_fig3a_koff_x01, cmp_fig4a_s6, cmp_fig4b_s6, cmp_fig4c_s4, cmp_fig4d_s4, cmp_fig7c_fit_read, cmp_fig7c_kong, q_stall_transient]
+  text: >-
+    Of the 68 comparisons against calibrated readings, 45 reproduce, 10 are close and 13 do not.
+    I re-checked each reading on its overlay; the readings sit on the curves. The differences fall
+    into four groups.
+    (1) Stalled curves at the softest stiffness: Fig. 2B-C nc = 300, Fig. 3A kon x10, nc x10 and
+    Fb x10 at 0.01 pN/nm, and Fig. 4A-B nm = nc = 1600 at 0.1 pN/nm. Only the first point or two
+    differ. The simulation, averaged over the whole run, still carries the loading transient: about
+    10 nm/s instead of 0-1 nm/s, worse for the 100 s runs of q_fig4_short_runs. This is
+    q_stall_transient again, not a reading error.
+    (2) Fig. 3A koff x0.1 at 3 pN/nm (14 vs 0.3 nm/s) lies on a near-vertical jump. A shift of the
+    jump by under 0.1 decade explains it.
+    (3) Fig. 4C-D, kon = 3, koff = 1 /s: above about 5 pN/nm the simulation gives 72.5-73 nm/s
+    and 39 pN, while the figure shows 75.6-76.7 nm/s and 36-37 pN. That is 3-4 nm/s and about
+    3 pN outside the reading intervals; the base-set curves of the same panels reproduce.
+    (4) Eq. 9 with the Table S1 parameters (koff = 0.004 /s, Fb = 8 pN, koff,c = 10 /s, Fc = 8 pN)
+    peaks at 1/(2 sqrt(0.004 x 10)) = 2.50 s at 31 pN, while the plotted fit peaks at 2.30 s.
+    Between 25 and 32 pN the plotted curve is about 8% lower than the printed parameters give,
+    perhaps because they are rounded. Against Kong et al.'s points, Eq. 9 misses the three
+    lowest-force points (1.26, 1.03 and 0.68 s at 4-9 pN, against 0.17-0.30 s): the catch-slip fit
+    does not describe the low-force lifetimes. That is a fit_quality finding, consistent with the
+    plotted curve.
+  citation: {page: 8, printed_page: "588", quote: "A catch-slip bond model was fit to integrin catch bond data", where: "Figs. 2-4, 7C"}

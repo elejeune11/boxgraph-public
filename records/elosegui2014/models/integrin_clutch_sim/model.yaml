@@ -1,0 +1,28 @@
+id: integrin_clutch_sim
+name: stochastic integrin-FN molecular clutch model with two competing integrin types and reinforcement
+role: model
+stated: {page: 4, printed_page: "634", quote: "we developed a model that expands on", where: "text; Fig. 3; Methods; Supplementary Methods"}
+equation: >
+  In words (p. 3-6, Fig. 3): myosin pulls actin rearward at speed va; FN molecules on a linear elastic
+  substrate bind integrins of two types with kon_i = kont_i * dint_i; unbinding follows the FN-a5b1
+  koff/force catch-bond curve of ref. 12 times a scaling factor; each time the force on a bond exceeds
+  a threshold before breakage, dint increases by a given amount; transmitted force slows actin flow.
+  The equations and parameters are in the Supplementary Methods and Supplementary Table 1.
+inputs:
+  E: {quantity: substrate_stiffness, unit: kPa}
+  kon_fold: {quantity: effective_binding_rate_ratio, unit: dimensionless, description: "kon of the second integrin type relative to a5b1"}
+  koff_fold: {quantity: unbinding_rate_ratio, unit: dimensionless, description: "koff scaling of the second integrin type relative to a5b1"}
+outputs:
+  traction: {quantity: cell_traction, unit: Pa}
+  flow: {quantity: actin_flow_speed, unit: nm/s}
+  density: {quantity: integrin_density_au, unit: dimensionless}
+settings: {seed: null}   # the paper's numerical settings are in the unreadable SI; the seed is not stated
+described_from: chan2008
+from_words: false
+runnable: false
+not_runnable_reason: >
+  The model's equations, its parameter values (Supplementary Table 1 and Note 5) and its numerical
+  scheme are given only in the Supplementary Information, PDF pages 8-34, which in this copy of the
+  PDF carry no text and render blank. The article's description in words (p. 3-6) does not give the
+  motor, clutch, substrate or reinforcement parameters, so the model cannot be made runnable from it.
+stochastic: true

@@ -1,0 +1,24 @@
+id: clutch_ensemble_cycle
+name: clutch-ensemble master-equation ODEs over one load-and-fail cycle (Eqs. 8-12, 19)
+role: model
+stated: {page: 4, printed_page: "452", quote: "neously using the MATLAB ODE solver ode15s for", where: "Eqs. 8-12 and 19"}
+equation: >-
+  dPb/dt = (1 - Pb) kon - Pb <k*off>;  <Fc> = κc(<xc> - <xs>);  <xs> = κc nc <xc>/(κs + nc κc);
+  <vf> = vu (1 - κs <xs>/(nm Fm));  d<xc>/dt = (1 - Pb) d<xs>/dt + Pb <vf>;
+  <k*off> = (1 - Pb) koff + Pb koff (1 - <Fc>/(r Pb Fb))^-r
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  r:    {quantity: gamma_shape_parameter, unit: dimensionless}
+outputs:
+  t_cycle: {quantity: load_fail_cycle_time, unit: s, description: "time at which r Pb Fb - <Fc> falls to g_fail (the abrupt failure)"}
+  v_mean:  {quantity: cycle_mean_flow_rate, unit: nm/s, description: "<vf> averaged over [0, t_cycle]"}
+settings: {rtol: 1.0e-8, atol: 1.0e-12, g_fail: 1.0e-3, t_max: 1.0e5}
+stochastic: false

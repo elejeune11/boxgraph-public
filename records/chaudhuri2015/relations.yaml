@@ -1,0 +1,126 @@
+# Relations between this paper's models and those of other records. Numbers in each model's port units.
+#
+# Relations to bangasser2013 (ref. 20 = sref-8):
+- id: rel_catch_slip_to_bell_off_rate
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: chaudhuri2015/bell_off_rate
+  mapping: {koff: "koff", Fclutch: "F", Frup: "Fb"}
+  output_map: {koff_star: koff_star}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.01, 1], Fb: [1, 10], koffc: [0.001, 1], Fc: [1, 10]}
+  # the numeric limit stops at koffc ~ 1e-8 1/s, leaving a relative residual up to koffc/koff ~ 1e-6
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    Chaudhuri's clutch off-rate (Supp. Note 1) is the Bell slip bond koff e^(Fclutch/Frup), cited to Bell
+    (sref-5), not to Bangasser. Bangasser's Eq. 9 adds a catch term koff,c exp(-Fi/Fc) and says its first
+    term is identical to the Bell model. With no catch term (koffc -> 0), Eq. 9 is Chaudhuri's off-rate,
+    with Bangasser's clutch force Fi as Fclutch and the characteristic rupture force Fb as Frup.
+  assumptions:
+    - "Bangasser's Fb and Chaudhuri's Frup are the same parameter of the same law (both 2 pN in their parameter tables), and Fi is the force on one clutch in both"
+# Stated but not entered: Supp. Note 1, p. 21 ("By directly prescribing the number of molecular clutches
+# and treating the substrate as collection of independent simple springs ... the presence of a 'stiffness
+# optimum' that is mediated by clutch number as reported in Bangasser and Odde8 is recreated"), relating
+# chaudhuri2015/clutch_springs_nolattice to bangasser2013/motor_clutch_ssa. It is a claim that qualitative
+# regimes (stiffness optimum, load-and-fail, frictional slippage, stalled state) recur, not that the two
+# models give the same numbers, and no relation kind tests a qualitative recurrence: the models differ in
+# substrate (one spring per clutch in series against one substrate spring shared by all clutches), in
+# output (spreading speed vu - v_retrograde against the retrograde flow v_retro) and in algorithm (fixed
+# step against Gillespie SSA). An approximated_by on these ports would compare different quantities.
+# Nor is a relation entered for the lattice model ("Following a recent model of filopodial protrusion19,20",
+# p. 2): chaudhuri2015/lattice_spreading is not runnable.
+#
+# Relations to bangasser2013b (Bangasser and Odde 2013, Cell. Mol. Bioeng., the master-equation paper).
+# This paper does not cite it: its ref. 20 and sref-8 are Bangasser, Rosenfeld and Odde 2013 (Biophys. J.,
+# record bangasser2013). So no relation is stated, and only the one below is proposed.
+- id: rel_b13b_eq5_same_as_bell_off_rate
+  kind: same_as
+  a: bangasser2013b/clutch_offrate_eq5
+  b: chaudhuri2015/bell_off_rate
+  mapping: {koff: "koff", Fclutch: "Fc", Frup: "Fb"}
+  output_map: {koff_star: koff_i}
+  regime: {koff: [0.001, 10], Fc: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers compute the clutch off-rate with the Bell model: Bangasser and Odde's Eq. 5,
+    k*off,i = koff exp(Fc,i/Fb), and this paper's Supp. Note 1, k*off = koff e^(Fclutch/Frup), cited to
+    Bell (sref-5). They are the same exponential law, with the force on one clutch and a characteristic
+    rupture force; units 1/s and pN on both sides.
+  assumptions:
+    - "Bangasser and Odde's Fb and this paper's Frup are the same parameter of the same law (both 2 pN in the papers' parameter tables), and Fc,i and Fclutch are the force on one clutch (correspondences of quantities, not merged)"
+# No relation is entered between chaudhuri2015/clutch_springs_nolattice and
+# bangasser2013b/clutch_ensemble_cycle, although both take motor, clutch and stiffness parameters to a
+# velocity. (1) The outputs are different quantities: v_spread = vu - v_retrograde, a spreading speed,
+# against <vf>, the retrograde flow averaged over one load-and-fail cycle; output_map cannot convert one to
+# the other. (2) The substrates differ: here each clutch pulls its own substrate spring in series, while
+# the ensemble ODEs load all clutches on one shared substrate spring (Eq. 10); only at nc = 1 do they
+# coincide, where a mean-field ensemble ODE is not meant to hold. (3) The ODE's off-rate is the gamma
+# closure of Eq. 19 with a shape r that has no counterpart here, and its output is one cycle from the
+# unbound state, against a time average over 12 s. No limit or closure stated in either paper takes one to
+# the other, so an approximated_by would compare unlike quantities under an unfounded tolerance.
+#
+# Relations to bell1978 (sref-5):
+- id: rel_bell_loaded_rate_same_as_bell_off_rate
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: chaudhuri2015/bell_off_rate
+  # 1 dyne = 1e7 pN; kT/gamma in eV/nm is 160.2176634 pN
+  mapping: {koff: "k_minus", Fclutch: "1e7*f", Frup: "160.2176634*kT/gamma"}
+  output_map: {koff_star: k_minus_F}
+  regime: {k_minus: [0.01, 10], gamma: [0.1, 1], f: [0, 2.0e-6], kT: [0.025, 0.027]}
+  provenance: stated
+  citation: {page: 18, printed_page: "11", quote: "undergo force-dependent dissociation as per the Bell model5 given by", where: "Supp. Note 1"}
+  assumptions:
+    - "Bell's force per closed bond F/Nb is the force on one clutch, Fclutch (correspondence of quantities, not merged)"
+    - "Chaudhuri's rupture force per bond Frup stands for Bell's kT/gamma; Bell does not print this combination as a parameter"
+#
+# Relations to chan2008 (ref. 19 = sref-1):
+- id: rel_chan_lattice_derived_from_motor_clutch
+  kind: derived_from
+  a: chan2008/motor_clutch
+  b: chaudhuri2015/lattice_spreading
+  # Chan's Table S1 counts vu, Fm and Fb negative (retrograde motion along -x); this paper prints them
+  # positive. Fstall = nm Fm is Chan's Eq. 4. The lattice's own inputs (L0, E1, E2, eta1, eta2, rho) have no
+  # counterpart in Chan's model, which has one substrate spring ksub instead of a lattice: they are left
+  # out of the mapping, so the mapping is partial.
+  mapping: {kon: "kon", koff: "koff", Frup: "-Fb", vu: "-vu", Fstall: "-nm*Fm", kclutch: "kc"}
+  steps:
+    - "replace the single substrate spring ksub (Eq. 5) by a 2D lattice of nodes joined by Hookean springs or Burgers elements (Supp. Eq. 2)"
+    - "make clutches available only at ligands on the top-row nodes, at a given ligand density, as the cell edge spreads"
+    - "read the spreading velocity as vu - v_retrograde, with v_retrograde from the summed clutch forces (Supp. Eq. 1)"
+  regime: {nm: [10, 200], Fm: [-3, -1], vu: [-200, -80], nc: [1, 200], kon: [0.1, 10], koff: [0.01, 1],
+           Fb: [-3, -1], kc: [1, 10], ksub: [0.01, 100]}
+  provenance: stated
+  citation: {page: 18, printed_page: "11", quote: "building upon the framework of a previous model by Chan and Odde", where: "Supp. Note 1, Model Assumptions"}
+  assumptions:
+    - "the 'framework' built upon is Chan and Odde's stochastic motor-clutch model (SOM Eqs. 1-5); the paper names the model, not its equations"
+    - "the steps are this paper's description of what the lattice model adds (Supp. Note 1, p. 2: 'Following a recent model of filopodial protrusion19,20 ... but additionally incorporated substrate stress relaxation and cell adhesion ligand density'), not a derivation that can be applied; chaudhuri2015/lattice_spreading is not runnable, so the relation is unverifiable and the paper's words stand as the evidence"
+- id: rel_chan_off_rate_same_as_bell_off_rate
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: chaudhuri2015/bell_off_rate
+  mapping: {koff: "koff", Fclutch: "Fclutch", Frup: "Fb"}
+  output_map: {koff_star: koff_star}
+  regime: {koff: [0.001, 10], Fclutch: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers compute the clutch off-rate with the Bell model, both citing Bell (Chan ref. S5, this paper
+    sref-5), and this paper builds its model on Chan and Odde's (Supp. Note 1). Chan's Eq. 1,
+    koff* = koff e^(Fclutch/Fb), and this paper's k*off = koff e^(Fclutch/Frup) are the same law with the
+    same symbols; units 1/s and pN on both sides. The regime is in positive forces: Chan's Table S1 prints
+    Fclutch and Fb both negative, which leaves their ratio unchanged.
+  assumptions:
+    - "Chan's characteristic bond rupture force Fb and this paper's rupture force per bond Frup are the same parameter of the same law (-2 pN and 2 pN in the two parameter tables, by opposite sign conventions), and both Fclutch are the force on one clutch (correspondences of quantities, not merged)"
+# No relation is entered between chaudhuri2015/clutch_springs_nolattice and chan2008/motor_clutch, although
+# both take motor, clutch and stiffness parameters to a velocity and this paper builds on Chan and Odde.
+# (1) The outputs are different quantities: v_spread = vu - v_retrograde, a spreading speed, against
+# Chan's time-averaged retrograde flow v_retro; output_map cannot convert one into the other. (2) The
+# substrates differ: here each clutch pulls its own substrate spring in series, while Chan loads all
+# engaged clutches on one shared substrate spring (Eq. 5); they coincide only at nc = 1. (3) The paper
+# states only that qualitative regimes recur (p. 21, citing Bangasser and Odde), not that the numbers
+# agree, and no stated limit takes one model to the other, so an approximated_by would need an unfounded
+# tolerance between two different stochastic algorithms.
+# Nor is a relation entered between chaudhuri2015/retrograde_flow_eq1 and Chan's Eq. 3
+# (vfilament = vu (1 - ksub xsub / Fstall)): Chan's Eq. 3 is not a separate model in chan2008, only a step
+# inside chan2008/motor_clutch, and this paper does not state the two equations are the same.

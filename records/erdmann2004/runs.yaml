@@ -1,0 +1,180 @@
+- id: run_force_scale
+  model: force_scale
+  inputs: {xb: xb_typical, T: T_typical}
+  outputs: {Fb: Fb_pred}
+- id: run_leakage
+  model: leakage_eq5
+  inputs: {gamma: gamma_fig3a}
+  sweep: {N0: a_leakage}
+  outputs: {a: a_leakage_pred}
+- id: run_decay_rate
+  model: decay_rate_eq1
+  inputs: {gamma: gamma_fig3a, f: f_fig3a}
+  sweep: {N0: a_numerical}
+  outputs: {a: a_decay_pred}
+  note: "The paper fits Monte Carlo trajectories; this run takes the slowest eigenvalue of Eq. 1 instead (q_decay_method)."
+- id: run_critical_force
+  model: critical_force
+  inputs: {gamma: gamma_fc}
+  outputs: {fc_over_N0: fc_over_N0_pred}
+- id: run_integrin
+  model: rebinding_from_critical_force
+  inputs: {Fc: Fc_set, Fb: Fb_integrin, N0: N0_1e4, k0: k0_integrin}
+  outputs: {gamma: gamma_integrin_calc, kon: kon_integrin_calc}
+- id: run_size_gamma1
+  model: cluster_size_eq8
+  inputs: {T: T_one_day, gamma: gamma_1, k0: k0_1Hz}
+  outputs: {N0: N0_gamma1_calc}
+- id: run_lifetime_gamma01
+  model: lifetime_eq8
+  inputs: {N0: N0_20, gamma: gamma_01, k0: k0_1Hz}
+  outputs: {T: T_gamma01_calc}
+- id: run_size_gamma01
+  model: cluster_size_eq8
+  inputs: {T: T_one_day, gamma: gamma_01, k0: k0_1Hz}
+  outputs: {N0: N0_gamma01_calc}
+- id: run_size_no_rebinding
+  model: cluster_size_harmonic
+  inputs: {T: T_one_day, k0: k0_1Hz, Gamma: Gamma_euler}
+  outputs: {N0: N0_no_rebinding_calc}
+  note: "The printed ~10^40000 is not a datum (q_10_40000); this output, log10 N0, has nothing to be compared with."
+
+# ---- Figure runs: each sweeps the x positions of a calibrated figure reading -----------
+# Fig. 2
+- id: run_fig2a_p0
+  model: state_probability_eq5
+  inputs: {N0: N0_fig2, gamma: gamma_fig2a, i: i_p0}
+  sweep: {tau: p0_fig2a}
+  outputs: {p: p0_fig2a_pred}
+- id: run_fig2b_p5
+  model: state_probability_eq5
+  inputs: {N0: N0_fig2, gamma: gamma_fig2b, i: i_p5}
+  sweep: {tau: p5_fig2b}
+  outputs: {p: p5_fig2b_pred}
+- id: run_fig2c_p0
+  model: state_probability_eq1
+  inputs: {N0: N0_fig2, gamma: gamma_fig2b, f: f_fig2b, i: i_p0}
+  sweep: {tau: p0_fig2c}
+  outputs: {p: p0_fig2c_pred}
+  note: "Panel (c) is \"Same\" as (b) with an absorbing boundary, so gamma and f are the panel (b) values. Exact solution of Eq. 1 against the paper's Monte Carlo estimate (q_fig_mc_exact)."
+- id: run_fig2c_p5
+  model: state_probability_eq1
+  inputs: {N0: N0_fig2, gamma: gamma_fig2b, f: f_fig2b, i: i_p5}
+  sweep: {tau: p5_fig2c}
+  outputs: {p: p5_fig2c_pred}
+  note: "As run_fig2c_p0."
+- id: run_fig2d_p0_eq6
+  model: state_probability_eq6
+  inputs: {N0: N0_fig2, f: f_fig2d, i: i_p0}
+  sweep: {tau: p0_fig2d}
+  outputs: {p: p0_fig2d_eq6_pred}
+  note: "Eq. 6 exactly as printed (see q_eq6_exponent)."
+- id: run_fig2d_p0_eq1
+  model: state_probability_eq1
+  inputs: {N0: N0_fig2, gamma: gamma_fig2d, f: f_fig2d, i: i_p0}
+  sweep: {tau: p0_fig2d}
+  outputs: {p: p0_fig2d_eq1_pred}
+  note: "The master equation Eq. 1 that Eq. 6 is stated to solve for gamma = 0, solved exactly."
+# Fig. 3(a)
+- id: run_fig3a_N15
+  model: mean_bonds_eq1
+  inputs: {N0: N0_fig3a_15, gamma: gamma_fig3a, f_over_N0: f_over_N0_fig3a}
+  sweep: {tau: N_fig3a_N15}
+  outputs: {N: N_fig3a_N15_pred}
+- id: run_fig3a_N10
+  model: mean_bonds_eq1
+  inputs: {N0: N0_fig3a_10, gamma: gamma_fig3a, f_over_N0: f_over_N0_fig3a}
+  sweep: {tau: N_fig3a_N10}
+  outputs: {N: N_fig3a_N10_pred}
+- id: run_fig3a_N5
+  model: mean_bonds_eq1
+  inputs: {N0: N0_fig3a_5, gamma: gamma_fig3a, f_over_N0: f_over_N0_fig3a}
+  sweep: {tau: N_fig3a_N5}
+  outputs: {N: N_fig3a_N5_pred}
+- id: run_fig3a_N2
+  model: mean_bonds_eq1
+  inputs: {N0: N0_fig3a_2, gamma: gamma_fig3a, f_over_N0: f_over_N0_fig3a}
+  sweep: {tau: N_fig3a_N2}
+  outputs: {N: N_fig3a_N2_pred}
+- id: run_fig3a_N1
+  model: mean_bonds_eq1
+  inputs: {N0: N0_fig3a_1, gamma: gamma_fig3a, f_over_N0: f_over_N0_fig3a}
+  sweep: {tau: N_fig3a_N1}
+  outputs: {N: N_fig3a_N1_pred}
+# Fig. 3(d)
+- id: run_fig3d_stoch_N10
+  model: mean_bonds_eq1
+  inputs: {N0: N0_fig3d_10, gamma: gamma_fig3d, f_over_N0: f_over_N0_fig3d}
+  sweep: {tau: N_fig3d_stoch_N10}
+  outputs: {N: N_fig3d_stoch_N10_pred}
+- id: run_fig3d_stoch_N5
+  model: mean_bonds_eq1
+  inputs: {N0: N0_fig3d_5, gamma: gamma_fig3d, f_over_N0: f_over_N0_fig3d}
+  sweep: {tau: N_fig3d_stoch_N5}
+  outputs: {N: N_fig3d_stoch_N5_pred}
+- id: run_fig3d_det_N10
+  model: deterministic_eq4
+  inputs: {N0: N0_fig3d_10, gamma: gamma_fig3d, f_over_N0: f_over_N0_fig3d}
+  settings: {rtol: 1.0e-10}
+  sweep: {tau: N_fig3d_det_N10}
+  outputs: {N: N_fig3d_det_N10_pred}
+  note: "The paper does not state its integration scheme; rtol is the reader's choice, far below the reading precision."
+- id: run_fig3d_det_N5
+  model: deterministic_eq4
+  inputs: {N0: N0_fig3d_5, gamma: gamma_fig3d, f_over_N0: f_over_N0_fig3d}
+  settings: {rtol: 1.0e-10}
+  sweep: {tau: N_fig3d_det_N5}
+  outputs: {N: N_fig3d_det_N5_pred}
+  note: "As run_fig3d_det_N10."
+# Fig. 4(a)
+- id: run_fig4a_N10000
+  model: lifetime_adjoint_dimensionless
+  inputs: {N0: N0_fig4a_10000, gamma: gamma_fig4a}
+  sweep: {f_over_N0: T_fig4a_N10000}
+  outputs: {T: T_fig4a_N10000_pred}
+- id: run_fig4a_N1000
+  model: lifetime_adjoint_dimensionless
+  inputs: {N0: N0_fig4a_1000, gamma: gamma_fig4a}
+  sweep: {f_over_N0: T_fig4a_N1000}
+  outputs: {T: T_fig4a_N1000_pred}
+- id: run_fig4a_N100
+  model: lifetime_adjoint_dimensionless
+  inputs: {N0: N0_fig4a_100, gamma: gamma_fig4a}
+  sweep: {f_over_N0: T_fig4a_N100}
+  outputs: {T: T_fig4a_N100_pred}
+- id: run_fig4a_N10
+  model: lifetime_adjoint_dimensionless
+  inputs: {N0: N0_fig4a_10, gamma: gamma_fig4a}
+  sweep: {f_over_N0: T_fig4a_N10}
+  outputs: {T: T_fig4a_N10_pred}
+- id: run_fig4a_N1
+  model: lifetime_adjoint_dimensionless
+  inputs: {N0: N0_fig4a_1, gamma: gamma_fig4a}
+  sweep: {f_over_N0: T_fig4a_N1}
+  outputs: {T: T_fig4a_N1_pred}
+- id: run_fig4a_approx
+  model: lifetime_approx_fig4a
+  inputs: {}
+  sweep: {f_over_N0: T_fig4a_approx}
+  outputs: {T: T_fig4a_approx_pred}
+# Fig. 4(b)
+- id: run_fig4b_g10
+  model: lifetime_eq8_dimensionless
+  inputs: {gamma: gamma_fig4b_10}
+  sweep: {N0: T_fig4b_g10}
+  outputs: {T: T_fig4b_g10_pred}
+- id: run_fig4b_g1
+  model: lifetime_eq8_dimensionless
+  inputs: {gamma: gamma_fig4b_1}
+  sweep: {N0: T_fig4b_g1}
+  outputs: {T: T_fig4b_g1_pred}
+- id: run_fig4b_g01
+  model: lifetime_eq8_dimensionless
+  inputs: {gamma: gamma_fig4b_01}
+  sweep: {N0: T_fig4b_g01}
+  outputs: {T: T_fig4b_g01_pred}
+- id: run_fig4b_g0
+  model: lifetime_eq8_dimensionless
+  inputs: {gamma: gamma_fig4b_0}
+  sweep: {N0: T_fig4b_g0}
+  outputs: {T: T_fig4b_g0_pred}

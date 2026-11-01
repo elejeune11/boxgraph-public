@@ -1,0 +1,34 @@
+id: mean_field_elastic
+name: mean-field motor-clutch model with reinforcement on a purely elastic substrate (Fig. 1B)
+role: model
+stated: {page: 3, quote: "First, we consider purely elastic substrates, where our model", where: "p. 3 Results; Fig. 1B"}
+equation: >-
+  Eqs. S3, S5-S8 with the substrate a spring: Fs = ks xs; dPb/dt = (1 - Pb) ron - Pb roff0 exp(Fc/Fb);
+  dxc/dt = vu (1 - Fs/(nm Fm)); ron = ron0 (1 + alpha (Fa - Fcr)) once Fa > Fcr; Vs = Vp - xc/t_total
+inputs:
+  nm:    {quantity: motor_number, unit: dimensionless}
+  Fm:    {quantity: motor_stall_force, unit: pN}
+  Fcr:   {quantity: reinforcement_threshold_force, unit: pN}
+  nc:    {quantity: clutch_number, unit: dimensionless}
+  Fb:    {quantity: clutch_rupture_force, unit: pN}
+  ron0:  {quantity: clutch_on_rate, unit: 1/s}
+  roff0: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  kc:    {quantity: clutch_stiffness, unit: pN/nm}
+  vu:    {quantity: unloaded_flow_velocity, unit: nm/s}
+  Vp:    {quantity: polymerization_speed, unit: nm/s}
+  alpha: {quantity: reinforcement_sensitivity, unit: 1/pN}
+  ks:    {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  Vs: {quantity: spreading_speed, unit: nm/s}
+settings:
+  n_cycles: 10
+  break_fraction: 0.013333333333333334
+  t_max: 2000.0
+  cumulative: 1
+  fa_weighted: 0
+  p_start: 1.0e-9
+  rtol: 1.0e-7
+  max_step: 1.0
+  n_avg: 2000
+stochastic: false
+built_from: [mean_field_sls]

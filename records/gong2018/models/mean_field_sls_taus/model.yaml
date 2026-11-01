@@ -1,0 +1,36 @@
+id: mean_field_sls_taus
+name: mean-field motor-clutch model on a standard linear solid, parametrized by tau_s/tau_b at a fixed initial stiffness (Fig. 3A)
+role: model
+stated: {page: 5, quote: "speed plotted as a function of τs =τb for three different values of kl", where: "Fig. 3A caption; tau_s = eta/ka and tau_b = 1/ron on p. 5"}
+equation: >-
+  mean_field_sls with ka = (ka + kl) - kl at the fixed initial stiffness ka + kl, and eta = ka tau_s
+  with tau_s = (tau_s/tau_b) tau_b, tau_s = eta/ka (p. 5), tau_b = 1/ron (p. 5) taken at ron = ron0
+inputs:
+  nm:    {quantity: motor_number, unit: dimensionless}
+  Fm:    {quantity: motor_stall_force, unit: pN}
+  Fcr:   {quantity: reinforcement_threshold_force, unit: pN}
+  nc:    {quantity: clutch_number, unit: dimensionless}
+  Fb:    {quantity: clutch_rupture_force, unit: pN}
+  ron0:  {quantity: clutch_on_rate, unit: 1/s}
+  roff0: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  kc:    {quantity: clutch_stiffness, unit: pN/nm}
+  vu:    {quantity: unloaded_flow_velocity, unit: nm/s}
+  Vp:    {quantity: polymerization_speed, unit: nm/s}
+  alpha: {quantity: reinforcement_sensitivity, unit: 1/pN}
+  k0:    {quantity: initial_substrate_stiffness, unit: pN/nm}
+  kl:    {quantity: long_term_stiffness, unit: pN/nm}
+  ratio: {quantity: timescale_ratio_s_b, unit: dimensionless}
+outputs:
+  Vs: {quantity: spreading_speed, unit: nm/s}
+settings:
+  n_cycles: 10
+  break_fraction: 0.013333333333333334
+  t_max: 2000.0
+  cumulative: 1
+  fa_weighted: 0
+  p_start: 1.0e-9
+  rtol: 1.0e-7
+  max_step: 1.0
+  n_avg: 2000
+stochastic: false
+built_from: [mean_field_sls]

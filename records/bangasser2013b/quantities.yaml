@@ -1,0 +1,43 @@
+# ---- motor-clutch parameters (Table S1) ----
+- {id: n_motors, name: number of myosin motors in the motor-clutch module, dimension: dimensionless, description: "nm"}
+- {id: motor_stall_force, name: stall force of a single myosin motor, dimension: "[force]", description: "Fm"}
+- {id: unloaded_motor_velocity, name: unloaded velocity of the myosin motors, dimension: "[length]/[time]", description: "vu"}
+- {id: n_clutches, name: number of molecular clutches in the module, dimension: dimensionless, description: "nc"}
+- {id: clutch_on_rate, name: on-rate constant of clutch binding, dimension: "1/[time]", description: "kon"}
+- {id: clutch_off_rate_unloaded, name: unloaded off-rate constant of a clutch, dimension: "1/[time]", description: "koff"}
+- {id: bond_rupture_force, name: characteristic clutch bond rupture force, dimension: "[force]", description: "Fb"}
+- {id: clutch_stiffness, name: spring constant of one molecular clutch, dimension: "[force]/[length]", description: "κc"}
+- {id: substrate_stiffness, name: spring constant of the compliant substrate, dimension: "[force]/[length]", description: "κs, κsub"}
+
+# ---- the mean-field closure and the analytical optimum ----
+- {id: gamma_shape_parameter, name: shape parameter r of the gamma distribution assumed for the forces on bound clutches, dimension: dimensionless, description: "r in Eqs. 14-19"}
+- {id: cycle_end_fraction, name: "fraction ε of the maximal substrate position left when a cycle is taken to end", dimension: dimensionless, description: "ε in Eqs. 27-31"}
+- {id: log_cycle_factor, name: "the factor ln(1/ε) of Eqs. 28-31", dimension: dimensionless}
+- {id: log_cycle_factor_fold_change, name: "factor by which ln(1/ε) changes when ε is changed", dimension: dimensionless}
+- {id: epsilon_multiplier, name: "factor by which ε is changed", dimension: dimensionless}
+- {id: motor_force_velocity_ratio, name: "motor stall force divided by unloaded motor velocity, Fm/vu", dimension: "[force]*[time]/[length]", description: "first factor of Eq. 31"}
+- {id: motor_number_log_factor, name: "n/ln(n), the second factor of Eq. 31 (n = nm ≈ nc)", dimension: dimensionless}
+- {id: optimum_stiffness_per_on_rate, name: "optimum substrate stiffness divided by the clutch on-rate, κs,opt/kon", dimension: "[force]*[time]/[length]", description: "the coefficient of kon in Eq. 31"}
+- {id: on_off_rate_ratio, name: "ratio kon/koff of clutch on-rate to unloaded off-rate", dimension: dimensionless}
+- {id: traction_force, name: "traction force a cell exerts through its motor-clutch modules", dimension: "[force]", description: "p. 9, 'traction force on the order of 1000 pN'"}
+- {id: number_of_motors_and_clutches, name: "n, the number of motors and of clutches when they are taken equal (nm ≈ nc)", dimension: dimensionless, description: "n in Eqs. 31-32"}
+
+# ---- model outputs ----
+- {id: ensemble_binding_time, name: "expected time for all nc clutches to bind, tbind", dimension: "[time]", description: "Eqs. 20, 22, 23"}
+- {id: optimal_substrate_stiffness, name: substrate stiffness at which traction is maximal (actin flow minimal), dimension: "[force]/[length]", description: "κs,opt"}
+- {id: load_fail_cycle_time, name: duration of one motor-clutch load-and-fail cycle, dimension: "[time]", description: "tcycle; in the ODE solution, the time of the abrupt failure"}
+- {id: cycle_mean_flow_rate, name: F-actin retrograde flow rate averaged over a load-and-fail cycle, dimension: "[length]/[time]", description: "the y axis of Fig. 4"}
+- {id: time, name: time since the start of a load-and-fail cycle, dimension: "[time]"}
+- {id: fraction_clutches_bound, name: "mean fraction of clutches bound, Pb", dimension: dimensionless, description: "Fig. 2B, S2E"}
+- {id: substrate_position, name: "mean substrate position (deformation), <xs>", dimension: "[length]", description: "Fig. 2C, S1C"}
+- {id: mean_clutch_force, name: "mean force per clutch over all clutches, <Fc>", dimension: "[force]", description: "Fig. 2D, S1D"}
+- {id: actin_flow_velocity, name: "instantaneous F-actin retrograde flow velocity, vf", dimension: "[length]/[time]", description: "Fig. 2E, S1E"}
+- {id: mean_clutch_off_rate, name: "mean clutch off-rate <k*off> (single clutch: koff,i)", dimension: "1/[time]", description: "Fig. 2F, S1F"}
+- {id: clutch_bound_probability, name: "probability that a single clutch is bound, pb", dimension: dimensionless, description: "Fig. S1B"}
+
+# ---- added with the calibrated figure readings ----
+- {id: clutch_force, name: "force on one bound clutch (the variable of the clutch-force distribution)", dimension: "[force]", description: "x axis of Fig. 3(c)"}
+- {id: normalized_frequency, name: "frequency of a clutch force, normalized as plotted (distribution of clutch forces)", dimension: dimensionless, description: "y axis of Fig. 3(c)"}
+- {id: computation_time, name: "computer run time of a simulation or ODE solution of one motor-clutch cycle", dimension: "[time]", description: "Fig. 6(b)"}
+- {id: gamma_constraint_margin, name: "r Pb Fb - <Fc>, the margin of the gamma-closure constraint", dimension: "[force]", description: "Fig. S2B-C; must stay positive"}
+- {id: minimum_gamma_shape_parameter, name: "smallest r for which the cycle-averaged r Pb Fb - <Fc> stays above zero", dimension: dimensionless, description: "Fig. S2D"}

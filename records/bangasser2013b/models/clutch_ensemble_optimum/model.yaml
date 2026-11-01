@@ -1,0 +1,22 @@
+id: clutch_ensemble_optimum
+name: optimum substrate stiffness of the clutch-ensemble ODEs (minimum cycle-mean actin flow)
+role: model
+stated: {page: 7, printed_page: "455", quote: "The ODE solutions also produce an", where: "Fig. 4B legend"}
+equation: >-
+  κs,opt = argmin over κs of the cycle-mean actin flow of Eqs. 8-12, 19 ('optimum stiffness
+  (characterized by the minimum actin flow rate)', Fig. 4 legend)
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  r:    {quantity: gamma_shape_parameter, unit: dimensionless}
+outputs:
+  ks_opt: {quantity: optimal_substrate_stiffness, unit: pN/nm}
+settings: {ks_min: 0.01, ks_max: 10000, points_per_decade: 8, log10_xtol: 1.0e-4, rtol: 1.0e-8, atol: 1.0e-12, g_fail: 1.0e-3, t_max: 1.0e5}
+built_from: [clutch_ensemble_cycle]
+stochastic: false

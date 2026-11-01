@@ -1,0 +1,25 @@
+id: motor_clutch_E
+name: motor-clutch model run against a gel's Young's modulus, κsub from Eq. 13
+role: model
+stated: {page: 25, printed_page: "SOM p. 18", quote: "In order to test how well our model predictions of F-actin", where: "Eq. 13 with Eqs. 1-5; Fig. 3D, Fig. S1"}
+equation: "κsub = πEδ/(1+υ) (Eq. 13), then the motor-clutch model of Eqs. 1-5"
+inputs:
+  E:    {quantity: substrate_modulus, unit: Pa}
+  L:    {quantity: ksub_length_scale, unit: nm}
+  nu:   {quantity: poisson_ratio, unit: dimensionless}
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+outputs:
+  v_retro: {quantity: retrograde_flow_rate, unit: nm/s}
+  F_mean:  {quantity: mean_traction_force, unit: pN}
+  F_max:   {quantity: peak_filopodial_force, unit: pN}
+  ksub:    {quantity: substrate_stiffness, unit: pN/nm}
+settings: {dt: 0.005, t_total: 300.0, seed: 1}
+built_from: [ksub_eq13, motor_clutch]
+stochastic: true

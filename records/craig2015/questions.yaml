@@ -1,0 +1,270 @@
+- id: q_fig4def_lambda
+  kind: possible_error
+  about: [d_fig4f_peak, d_fig4f_peak_F0, d_fig4c_peak_F0, cmp_fig4f_vs_fig4c_F0, cmp_fig4f_peak]
+  text: >
+    The Fig. 4 caption gives lambda = 3 for all panels "unless otherwise stated", and (d)-(f) are "Same as
+    (a)-(c), except ... b = 0". At F = 0 the myosin terms vanish, so the F = 0 points of Fig. 4(c) and
+    Fig. 4(f) should coincide; they do not (Fig. 4(f) puts the F = 0 peak much closer to the leading edge,
+    and the F = 0 flow curve of Fig. 4(d) falls off faster than that of Fig. 4(a)). The Fig. 4(f) value at
+    F = 0 lies near the lambda = 1 point of supplemental figure 2(a), which suggests panels (d)-(f) were
+    computed with a lower lambda than the caption states.
+  citation: {page: 10, quote: "as a function of F. (d)–(f) Same as (a)–(c), except", where: "Fig. 4 caption"}
+- id: q_adhesion_bc
+  kind: possible_error
+  about: [clutch_profile, d_figS2c_lam1, d_figS2c_lam2, d_figS2c_lam3, d_figS2c_lam4]
+  text: >
+    The paper states the boundary condition Nadh(0) = 0 (p. 6), but the traction curves of Fig. 4(e) and
+    supplemental figure 2(c) and the adhesion density of supplemental figure 2(e) start from a non-zero
+    value at x = 0, as if Nadh(0) followed the bulk expression exp(-V~/v*) with V~ = 1. The record's model
+    applies the stated condition; at x = 0 only T~ is affected, and no reading is taken at x = 0.
+  citation: {page: 6, quote: "condition Nadh (0) = 0. The parameter β characterizes", where: text}
+- id: q_numerics_scheme
+  kind: numerics
+  about: [clutch_profile, clutch_peak]
+  text: >
+    The paper solves the time-dependent equations with explicit time stepping and first-order upwind
+    advection on 40 segments until steady state (p. 8), but does not give the time step, the stopping
+    criterion, the difference used for dM/dx in the myosin force and adhesion terms, or how the traction
+    peak is located (grid node or interpolated). The record solves the steady equations of the same
+    upwind discretisation directly, uses central differences for dM/dx (setting dM_scheme) and the grid
+    node of largest traction (setting peak); both are run settings and can be changed.
+  citation: {page: 8, quote: "40 equal segments, and the time steps were set sufﬁ-", where: "Section 2.2"}
+- id: q_neumann_choice
+  kind: choice
+  about: [clutch_profile, clutch_peak, cmp_figS2b_lam4, cmp_figS2c_lam1, cmp_figS2c_lam3]
+  text: >
+    How the far-end condition dV/dx(L) = 0 is discretised is not stated. The record first used a
+    second-order ghost node, which put the plotted flow and traction near x = 8 um below the curves of
+    supplemental figure 2(b), (c); a first-order condition (V at the last node equal to V at the one before)
+    matches those tails much better, so it was chosen after comparing with the figures and is the setting
+    `neumann: first_order`. Both schemes tend to the same limit as the grid is refined (refinement
+    ref_figS2b_lam3), so the plotted tail values depend on the paper's numerics, not on the model.
+  citation: {page: 6, quote: "L = 8 μm from the leading edge", where: text}
+- id: q_S4a_numerics
+  kind: numerics
+  about: [cmp_figS4a_peak, cmp_figS4a_peak_bwd, ref_figS4a_peak, ref_figS4a_peak_bwd, d_figS4a_peak]
+  text: >
+    At the paper's 40-segment grid the traction-peak locations of supplemental figure 4(a) depend on how
+    dM/dx is differenced. With central differences the computed peaks lie 0.3-0.7 um closer to the leading
+    edge than the plotted ones for b >= 40; with backward differences they agree with the figure up to
+    b = 130, but at b = 140-150 that scheme gives an unphysical steady state (negative flow at the peak,
+    since 1 + b F dM/dx can turn negative). Refined grids settle on values between the two. The plotted
+    curve at large b therefore reflects the paper's discretisation rather than Eqs. 5-9 alone.
+- id: q_hill_curve
+  kind: possible_error
+  about: [Fk_fit, Vmax_fit, d_figS1c_fit, cmp_hill_curve]
+  text: >
+    The fit curve drawn in supplemental figure 1(c) lies above Eq. 11 evaluated with the printed
+    Vmax = 6.6 nm/s and Fk = 23 nN at every force read (by much more than the reading precision at low
+    force). The drawn curve is consistent with the same Vmax and a smaller Fk; either the printed Fk or the
+    drawn curve does not correspond to the stated fit.
+  citation: {page: 17, quote: "Fk=23nN). (d) Model fit (black line)", where: "Supplemental figure 1 caption"}
+- id: q_hill_points
+  kind: overstated_claim
+  about: [cmp_hill_points, d_figS1c_points]
+  text: >
+    Eq. 11 with the printed fit parameters passes through three of the four measured points but not the
+    lowest-force point (10 uM Y-27632), where the measured flow is far below the curve. The text does say the
+    flow is unchanged "for all but the highest concentrations" (p. 11); the caption still calls the curve a fit
+    to all four points.
+  citation: {page: 11, quote: "but the highest concentrations of Y-27632 compound", where: "Section 3.4"}
+- id: q_S2c_near_edge
+  kind: unexplained_difference
+  about: [cmp_figS2c_lam1, cmp_figS2c_lam3, cmp_figS2c_lam4]
+  text: >
+    The traction curves of supplemental figure 2(c) reproduce at their peaks (height v*/e, as the paper states,
+    at the right place) but lie a few percent above the model near the leading edge (x <= 1 um) and, for
+    lambda = 1, in the far tail. With F = b = 0 the model reduces to lambda V'' = exp(-V/v*) V, so only the
+    discretisation, the treatment of x = 0 (question q_adhesion_bc) or an unconverged time-stepping can
+    account for it.
+- id: q_fig3_parameters
+  kind: unstated_input
+  about: [clutch_profile]
+  text: >
+    The model fits of Fig. 3 (blebbistatin, control, CA-Rho Ptk1 cells) are described only qualitatively
+    ("increasing F", "a lower effective viscosity lambda" for blebbistatin); the parameter values used for
+    the three fits are not printed, so the Fig. 3 model curves are not checked in this record.
+  citation: {page: 8, quote: "tuning the myosin strength parameter", where: "Section 3.1"}
+- id: q_S1de_scales
+  kind: unstated_input
+  about: [clutch_profile, run_profile_S1_end]
+  text: >
+    The U2OS model fit of supplemental figure 1(d), (e) gives the dimensionless parameters but plots
+    dimensional flow (nm/s) and traction (Pa); the scales V0 and T0 used are not stated, so the fit curves
+    cannot be compared with the model.
+  citation: {page: 17, quote: "Parameters: λ=50, γ=1000, v*=100, b=1.5, F=300", where: "Supplemental figure 1 caption"}
+- id: q_eq10_derivation
+  kind: reading
+  about: [uniform_flow_eq10, cmp_eq10_vs_full]
+  text: >
+    Eq. 10 follows from Eq. 9 with T~ = F~myo = F only if exp(-V~/v*) is close to 1 (V0 << V*) and
+    dM~/dx~ is close to 1 in the lamella; the second condition is not stated. The comparison
+    cmp_eq10_vs_full shows how far Eq. 10 is from the full model at the paper's own U2OS fit parameters.
+  citation: {page: 10, quote: "steady-state traction distribution (equation (9)) yields", where: "Eq. 10"}
+- id: q_L0_two_values
+  kind: reading
+  about: [L0_model, L0_eps]
+  text: >
+    L0 is fixed at 1 um in the rescaling of the main text (p. 7) but is called the lamellipodial length and
+    set to 2 um in the estimate of epsilon in Appendix D (p. 14). The record keeps both as printed.
+  citation: {page: 14, quote: "parameter ε ~ 0.02 μm s−1 / 0.1 s−1 × 2 μm ~ 0.1", where: "Appendix D"}
+- id: q_viscosity_units
+  kind: reading
+  about: [viscosity_printed, tension_viscosity]
+  text: >
+    The Discussion predicts "a viscosity value of mu ~ 10^3 pN s um^-2", with the units of a bulk viscosity,
+    while mu in Eq. 1 is the viscosity times the lamellipodial thickness (p. 8). The record reads the printed
+    value as a bulk viscosity and divides by the thickness (~1 um), which does not change the number.
+  citation: {page: 12, quote: "to predict a viscosity value of μ ∼ 103 pN s μm−2", where: Discussion}
+- id: q_discussion_inputs
+  kind: unstated_input
+  about: [width_added, gradient_added, tension_printed, viscosity_printed]
+  text: >
+    The membrane tension (~60 pN/um) and viscosity (~10^3 pN s um^-2) of the Discussion are computed from a
+    traction stress, a lamellipodial width and a flow-rate gradient "measured in [14]" that are not printed.
+    The record uses T0 = 20 pN/um^2 (p. 8) and adds the width and the gradient, with alternatives.
+  citation: {page: 12, quote: "The traction stress, lamellipodial width and the ﬂow", where: Discussion}
+- id: q_displacement_speed
+  kind: choice
+  about: [run_displacement, disp_printed]
+  text: >
+    Appendix D's "actin network displacement is but 0.1 um" over 10 s does not say which flow speed it uses;
+    the record uses the "characteristic rate of the actin flow is ten nm per second" of p. 5. The same
+    appendix uses 0.02 um/s in its estimate of epsilon, which would give twice the displacement.
+  citation: {page: 14, quote: "On the relevant time scale of 10 s, the actin", where: "Appendix D"}
+- id: q_lambda_estimate_V0
+  kind: choice
+  about: [run_lambda_estimate, run_width]
+  text: >
+    The estimate T0 L0^2 / V0 ~ 10^3 pN s um^-1 (p. 8) does not name V0; the record uses the ~20 nm/s
+    leading-edge flow of Ptk1 cells printed on the same page.
+  citation: {page: 8, quote: "T0 L 02 /V0 ~ 103 pN s μm−1", where: text}
+- id: q_error_bars_model
+  kind: reading
+  about: [d_fig4c_peak, d_fig4f_peak, d_figS2a_peak, d_figS4a_peak]
+  text: >
+    The traction-peak locations of Fig. 4(c), (f) and supplemental figures 2(a), 4(a) are model results
+    but carry error bars of about +/- 0.2 um that no caption explains (perhaps the grid spacing, 8 um / 40).
+    The readings use them as the printed interval, which makes these comparisons lenient.
+
+# ---- added by the audit ----------------------------------------------------------------------------------
+- id: q_fmyo_analytic
+  kind: possible_error
+  about: [uniform_flow_eq10, clutch_profile]
+  text: >
+    Section 3.3 (p. 10) gives, for slow uniform flow, M~ = 1 - exp(-x~/(gamma V~)) from Eq. 7 and "the resulting
+    myosin contractile force" F~myo = F exp(-x~/(gamma V~)). By Eq. 6, F~myo = F dM~/dx~ =
+    (F / (gamma V~)) exp(-x~/(gamma V~)); the printed expression lacks the factor 1/(gamma V~). The same
+    paragraph's "T~ = F~myo ~ F" (used for Eq. 10) also needs dM~/dx~ ~ 1, which this M~ does not give for
+    gamma >> 1 (see q_eq10_derivation). No printed number depends on it.
+  citation: {page: 10, quote: "and the resulting myosin con-", where: "Section 3.3"}
+- id: q_fig4f_vs_S4a
+  kind: possible_error
+  about: [d_fig4f_peak, d_figS4a_peak, cmp_fig4f_peak, cmp_figS4a_peak]
+  text: >
+    A second check on q_fig4def_lambda. Supplemental figure 4(a) at b = 0 and Fig. 4(f) at F = 1 are, by their
+    captions, the same model at the same parameters (lambda = 3, F = 1, b = 0, v* = 0.3, gamma = 1000). The
+    plotted peaks differ: about 4.3 um in supplemental figure 4(a), about 2.3 um in Fig. 4(f). The record's
+    model (40 segments) gives 4.2 um at lambda = 3 and 2.4 um at lambda = 1. So supplemental figure 4(a)
+    agrees with the captioned lambda = 3 and Fig. 4(f) does not, which again suggests that panels (d)-(f) used
+    a lower lambda than the caption states. (The two readings are indexed by different quantities, b and F, so
+    the build cannot compare them directly.)
+  citation: {page: 18, quote: "parameters are: λ=3, F=1, v*=0.3 and γ=1000", where: "Supplemental figure 4 caption"}
+- id: q_S3_vstar
+  kind: possible_error
+  about: [clutch_profile]
+  text: >
+    The caption of supplemental figure 3 gives v* = 3 ("F=b=0, v*=3, gamma=1000"), whereas every other
+    figure of the paper and the text (v* ~ 0.3, p. 7) use v* = 0.3 for the Ptk1 regime. This may be a misprint
+    for 0.3. Supplemental figure 3 is not read in this record, so no comparison depends on it.
+  citation: {page: 18, quote: "Unless otherwise stated, parameters are: F=b=0, v*=3, γ=1000", where: "Supplemental figure 3 caption"}
+- id: q_audit_vstar_over_e
+  kind: reading
+  about: [cmp_figS2c_lam1, cmp_figS2c_lam3, cmp_figS2c_lam4]
+  text: >
+    Question q_S2c_near_edge says the traction peaks have "height v*/e, as the paper states". The paper
+    (Appendix A.2, p. 12) states only that T~ = exp(-V~/v*) V~ is maximal for V~ = v*; the height v*/e follows
+    from that but is not printed. The claim that is printed is now compared as cmp_vpeak_b0_text.
+  citation: {page: 12, quote: "maximal for V˜ = v * independent of other system", where: "Appendix A.2"}
+- id: q_S3_figure_vstar
+  kind: possible_error
+  about: [d_figS3a_V, d_figS3a_T, cmp_figS3a_T, cmp_figS3a_T_alt, cmp_figS3a_T_vs_figS2c_lam1, cmp_figS3a_V_vs_figS2b_lam1, q_S3_vstar]
+  text: >
+    Added by the figure pass, on q_S3_vstar. Supplemental figure 3(a), now read, bears on whether its
+    captioned v* = 3 is a misprint. With F = b = 0 the traction is T~ = exp(-V~/v*) V~ (Eq. 9), at most v*/e
+    (about 1.1 for v* = 3, 0.11 for v* = 0.3). The drawn traction peaks at about 0.11 near x ~ 2 um, which is
+    also the height and place of the lambda = 1 traction curve of supplemental figure 2(c) (F = b = 0, v* =
+    0.3, gamma = 1000), and the drawn flow looks like the lambda = 1 curve of supplemental figure 2(b). So the
+    figure looks as if it was drawn with v* = 0.3 (and lambda = 1, which its caption does not give), not with
+    the captioned v* = 3. The record compares the figure both with runs at the printed v* = 3 (lambda added
+    as 3) and with runs at the added v* = 0.3, lambda = 1, and directly with the supplemental figure 2 curves.
+    The myosin panels (b), (c) are run at the printed v* = 3 only; with F = 0 their myosin depends on the flow,
+    so they inherit the same doubt.
+  citation: {page: 18, quote: "Unless otherwise stated, parameters are: F=b=0, v*=3, γ=1000", where: "Supplemental figure 3 caption"}
+- id: q_fig4gh_vstar
+  kind: unstated_input
+  about: [vstar_large_added]
+  text: >
+    Fig. 4(g), (h) are computed "by setting v* >> 1" (p. 10) without the value. The record uses v* = 1000;
+    once v* is well above the largest V~ (1) the result no longer depends on it, but a value near 1-10 would
+    still weaken adhesion near the leading edge.
+  citation: {page: 10, quote: "the leading edge, in the absence of actin-ﬂow-dependent adhesion weakening", where: "Fig. 4 caption"}
+- id: q_S3_lambda
+  kind: unstated_input
+  about: [lam_S3_added]
+  text: >
+    The caption of supplemental figure 3 (p. 18) does not give lambda. The record runs it with the added
+    lambda = 3 (the default of Fig. 4 and supplemental figure 4) and, in the alternative runs, lambda = 1
+    (see q_S3_figure_vstar).
+  citation: {page: 18, quote: "Unless otherwise stated, parameters are: F=b=0, v*=3, γ=1000", where: "Supplemental figure 3 caption"}
+- id: q_fig2d_binning
+  kind: reading
+  about: [d_fig2d_paxillin, d_fig2d_myosin]
+  text: >
+    The two bar charts of Fig. 2(d) are binned differently: the paxillin bars are centred at 0.25, 0.75, ...,
+    7.75 um, the myosin bars at 0, 0.5, ..., 7.5 um (the first half cut by the axis). The caption does not say
+    how the intensities were binned; the readings index each bar by its drawn centre.
+  citation: {page: 4, quote: "Intensity as a function of distance from the leading edge for the sample cells in (c)", where: "Fig. 2(d)"}
+- id: q_fig3_markers
+  kind: reading
+  about: [d_fig3a_adh, d_fig3b_adh, d_fig3c_adh]
+  text: >
+    The caption of Fig. 3 calls the adhesion-density markers "squares" and the myosin markers "whiskers"; the
+    figure draws the adhesion density as filled round dots and the myosin density as light 'x' glyphs on a
+    grey line with a dark dash beside each. The record reads the filled dots as the adhesion density and does
+    not read the myosin series (which mark is the value is not said).
+  citation: {page: 9, quote: "density (whiskers) and adhesion density (squares) (right) for a blebbistatin-treated cell", where: "Fig. 3 caption"}
+- id: q_fig4de_profiles_lambda
+  kind: possible_error
+  about: [q_fig4def_lambda, cmp_fig4d_F0, cmp_fig4d_F0_lam1, cmp_fig4e_F0, cmp_fig4e_F0_lam1, lam_fig4def_alt]
+  text: >
+    Added by the figure pass: the profiles of Fig. 4(d), (e), now read, settle much of q_fig4def_lambda.
+    With the captioned lambda = 3 none of the twelve flow and traction curves is reproduced at any read
+    position; with lambda = 1 (added, lam_fig4def_alt) the curves for F = 0, 4, 6, 8 are reproduced or close
+    at nearly every position, and those for F = 2 and 10 over part of their length. The flow at F = 0 of Fig.
+    4(d) also equals the lambda = 1 flow of supplemental figure 2(b) (F = b = 0, v* = 0.3). So panels (d)-(f)
+    appear to have been computed with lambda = 1, not the lambda = 3 that the caption states for all of Fig. 4.
+  citation: {page: 10, quote: "Unless otherwise stated, parameters are: λ = 3, b = 15,", where: "Fig. 4 caption"}
+- id: q_S2d_myosin_offset
+  kind: numerics
+  about: [cmp_figS2d_lam1, cmp_figS2d_lam2, cmp_figS2d_lam3, cmp_figS2d_lam4, cmp_figS2e_lam1, cmp_figS2e_lam2, cmp_figS2e_lam3]
+  text: >
+    The myosin density of supplemental figure 2(d) is not reproduced although the flow and traction of
+    panels (b), (c) at the same parameters are: the model's myosin lies slightly below the drawn curves
+    everywhere (e.g. lambda = 2: 0.006 against 0.0096 at x = 0.5 um, 0.229 against 0.234 at 7.5 um), as if
+    shifted by a fraction of a grid cell. With F = 0 the myosin does not act back on the flow, so the
+    difference lies in how the steady myosin equation M~ = 1 - gamma d(V~ M~)/dx~ is discretised (upwind
+    direction, where M~ is stored on the grid), which the paper does not describe (see q_numerics_scheme).
+    The adhesion density of panel (e) is close but often just outside the reading intervals, the same way.
+  citation: {page: 8, quote: "40 equal segments, and the time steps were set", where: "Methods"}
+- id: q_S4_profiles_large_b
+  kind: numerics
+  about: [cmp_figS4c_b100, cmp_figS4c_b80, cmp_figS4f_b100, cmp_figS4i_T, q_S4a_numerics]
+  text: >
+    At large b the profiles of supplemental figure 4(c)-(f), (h), (i) are not reproduced while those at
+    small b are close: for b = 100 the model's traction peaks at about 0.74 at x ~ 3.5 um, the drawn one
+    at about 0.68 at x ~ 4 um (read at x = 0.5, 1, ...). The peak sharpens with b until it spans one or two
+    of the 40 grid cells, so its height and place depend on the unstated discretisation, as q_S4a_numerics
+    found for the peak positions of supplemental figure 4(a). The traction curve of panel (i) (b = 100) is
+    the b = 100 curve of panel (c): the two are read independently and agree.
+  citation: {page: 18, quote: "parameters are: λ=3, F=1, v*=0.3 and γ=1000", where: "Supplemental figure 4 caption"}

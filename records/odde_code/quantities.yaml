@@ -1,0 +1,25 @@
+# Parameters of the motor-clutch model, in the code's units (comments of motorclutch1_1.m and
+# motorclutch2_3.m). The code's sign convention makes retrograde motion, forces and positions negative.
+- {id: n_motors, name: number of myosin motors, dimension: dimensionless, description: "nm"}
+- {id: motor_stall_force, name: stall force of one myosin motor, dimension: "[force]", description: "Fm; negative in the code"}
+- {id: unloaded_motor_velocity, name: unloaded velocity of the myosin motors, dimension: "[length]/[time]", description: "vu; negative in the code"}
+- {id: n_clutches, name: number of molecular clutches, dimension: dimensionless, description: "nc"}
+- {id: clutch_on_rate, name: on-rate constant of clutch binding, dimension: "1/[time]", description: "kon"}
+- {id: clutch_off_rate_unloaded, name: unloaded off-rate constant of a clutch, dimension: "1/[time]", description: "koff"}
+- {id: bond_rupture_force, name: characteristic clutch bond rupture force, dimension: "[force]", description: "Fb; negative in the code"}
+- {id: clutch_stiffness, name: spring constant of one molecular clutch, dimension: "[force]/[length]", description: "Kc"}
+- {id: substrate_stiffness, name: spring constant of the compliant substrate, dimension: "[force]/[length]", description: "Ksub; the x axis of the code's sweep and of the papers' figures"}
+- {id: feedback_gain, name: gain of the force feedback on the bond rupture force, dimension: dimensionless, description: "gain; enters koff exp(Fc/(Fb + gain Fc)); 0 in both scripts"}
+- {id: event_count, name: number of events simulated in one run, dimension: dimensionless, description: "events (motorclutch2_3.m), eventlimit (motorclutch1_1.m)"}
+- {id: initial_time_step, name: time increment used for the initial state, dimension: "[time]", description: "dt = 0.005 s before the event loop; moves no clutch, since none is engaged at t = 0"}
+- {id: stiffness_sweep_bound, name: end of the code's stiffness sweep, dimension: "[force]/[length]", description: "logspace(-2,2,10): 10 stiffnesses from 10^-2 to 10^2 pN/nm"}
+# model outputs (motorclutch2_3.m lines 142-155)
+- {id: retrograde_flow_rate, name: time-averaged F-actin retrograde flow rate, dimension: "[length]/[time]", description: "retro"}
+- {id: mean_traction_force, name: time-averaged traction force on the substrate, dimension: "[force]", description: "-avtrac, as the code plots it"}
+- {id: failure_frequency, name: number of failure events per unit time, dimension: "1/[time]", description: "failfreq"}
+- {id: load_fail_cycle_time, name: mean time between failure events, dimension: "[time]", description: "cyct: mean of diff(t(subpos==0))"}
+- {id: engaged_clutch_number, name: time-averaged number of engaged clutches, dimension: dimensionless, description: "avnumcon"}
+- {id: ensemble_clutch_stiffness, name: "ensemble clutch stiffness: clutch spring constant times the mean number of engaged clutches", dimension: "[force]/[length]", description: "Bangasser 2013's definition (p. 7); not computed by the code"}
+- {id: mean_clutch_tension, name: time-averaged mean tension of the engaged clutches, dimension: "[force]", description: "-avFc"}
+- {id: simulated_time, name: simulated time reached after the events of one run, dimension: "[time]", description: "t(events+1)"}
+- {id: optimal_substrate_stiffness, name: substrate stiffness at which the mean retrograde flow is least, dimension: "[force]/[length]"}

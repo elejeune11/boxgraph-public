@@ -1,0 +1,211 @@
+- id: q_rate_laws
+  kind: unstated_input
+  about: [clutch_talin_sim, clutch_no_talin_sim, koff_a_added, koff_b_added, koff_c_added, koff_d_added, ln_kunf0_added, kunf_b_added, ln_kfold0_added, kfold_b_added]
+  text: >
+    Supplementary Table 1 gives the integrin off-rate only as "Catch bond" and the talin unfolding and
+    refolding rates only as "Slip bond"; the Supplementary Note gives their functional forms in words (sum of
+    two exponentials fitted to the Kong et al. 2009 fibronectin-α5β1 Mn2+ data; single exponentials fitted to
+    Yao et al. 2014) but no coefficients. Every model result rests on these laws. The record takes them from
+    the same laboratory's 2021 released code (record andreu2021_code), whose paper says these come from this
+    paper; the code also carries a commented-out second fit of the catch bond (16.67, -1.945e11, 0.001442,
+    1.356e11), not run here. The Matlab code of this paper is 'available on request' (p. 11) and was not seen.
+  citation: {page: 19, printed_page: "SI 8", quote: "Integrin unbinding rate Catch bond", where: Supplementary Table 1}
+- id: q_low_force_koff
+  kind: unstated_input
+  about: [koff_g_added, koff_fend_added, low_force_note]
+  text: >
+    The note says unbinding rates were "further increased" below 1 pN with respect to experimental values,
+    without saying by how much or in what form. The record adds the 'cm' term of the 2021 code
+    (1000 /s at zero force, falling to 10% at 0.15 pN) and runs the alternative of no increase (g = 0); the
+    paper says the change "only increased the slope at low rigidities".
+  citation: {page: 24, quote: "integrin-Fn bonds at very low forces (< 1 pN)", where: Supplementary Note}
+- id: q_vinculin_rate
+  kind: unstated_input
+  about: [kvin_added, clutch_talin_sim]
+  text: >
+    The vinculin binding rate k_vin is named in the Supplementary Note but given no value anywhere (it is not
+    in Supplementary Table 1). Added: 1000 /s (vinculin nearly always wins over refolding, as in the 2021
+    code where unfolding reinforces at once); alternative 10 /s.
+  citation: {page: 24, quote: "force-independent binding rate kvin", where: Supplementary Note}
+- id: q_ksub_conversion
+  kind: unstated_input
+  about: [ksub_factor_added, clutch_talin_sim, clutch_no_talin_sim]
+  text: >
+    k_sub and F are converted to Young's modulus and traction "by assuming a given adhesion radius ra as
+    described previously" (refs. 1, 2 of the note), with no formula in this paper. Added: traction = F/(π ra²)
+    and k_sub = (4π/9) E ra; alternative k_sub = π E ra. The conversion shifts every model curve along the
+    rigidity axis, so it bears on every comparison against a plotted line.
+  citation: {page: 23, quote: "by assuming a given adhesion radius ra as described previously", where: Supplementary Note}
+- id: q_step_algorithm
+  kind: choice
+  about: [clutch_talin_sim, clutch_no_talin_sim]
+  text: >
+    The note describes the time step only in words. Choices made in the record: binding is drawn before
+    unbinding within a step and a clutch bound in a step is first tested in the next; forces are those at the
+    end of the previous step; a clutch whose talin bound vinculin stays bound and does not unfold again; a
+    clutch that unbinds after its talin bound vinculin does not lower d_int; d_int has no upper bound (none is
+    stated, unlike the later 2021 model which has d_max); the actin speed uses the substrate force of the
+    previous step. Time averages are taken over the whole 100 s including the start (the note does not say
+    whether a transient is discarded).
+  citation: {page: 24, quote: "If unfolding time was shorter than unbinding time", where: Supplementary Note}
+- id: q_no_talin_model
+  kind: unstated_model
+  about: [clutch_no_talin_sim]
+  text: >
+    The predictions "without talin unfolding" (Fig. 3d,e blue lines, Fig. 6 dashed lines) are not described
+    separately. The record runs the same clutch model with unfolding switched off, so integrin density stays
+    basal, following p. 4 ('In the absence of talin unfolding, integrins are not recruited, but force is still
+    assumed to be transmitted').
+  citation: {page: 4, printed_page: "543", quote: "In the absence of talin unfolding, integrins are", where: text}
+- id: q_sensitivity_procedure
+  kind: choice
+  about: [threshold_sensitivity, S_nf_table, S_kont_table, S_nm_table, S_dadd_table, S_FR_table, threshold_increase_note]
+  text: >
+    The sensitivity S is defined (p. 25) but the parameter values around the fit, the rigidity grid and
+    whether the 10% density increase is judged on the time-averaged or the final density are not given.
+    Added: factors 0.5, 1 and 2 on the parameter, 13 log-spaced moduli from 0.3 to 30 kPa, time-averaged
+    density, first upward crossing interpolated in log E.
+  citation: {page: 25, quote: "kthreshold was calculated for p values around the optimal fitted values", where: Supplementary Note}
+- id: q_sensitivity_sign
+  kind: unexplained_difference
+  about: [cmp_S_nf, cmp_S_kont, S_nf_table, S_kont_table]
+  text: >
+    In the record's model the threshold rigidity falls as nf or kont increase (S about -1.0 for both, mean of
+    three seeds), while Supplementary Table 1 prints +1.66 and +1.49 and the text argues that fewer clutches
+    lower the threshold (p. 6). In the record's model each vinculin-binding event adds d_add to a single
+    density, so more bound clutches mean more reinforcement events; the paper's code may scale reinforcement
+    differently (per clutch, or per adhesion area). The build's verdicts on cmp_S_* report the outcome.
+  citation: {page: 6, printed_page: "545", quote: "contractility is distributed among fewer clutches, triggering talin", where: text}
+- id: q_talin_line_high_rigidity
+  kind: unexplained_difference
+  about: [cmp_fig3d_talin, cmp_fig3e_talin, cmp_fig6a_talin, cmp_fig6b_talin, cmp_fig6c_talin, cmp_fig6d_talin, cmp_fig6e_talin, cmp_fig6f_talin]
+  text: >
+    The record's model with talin unfolding follows the plotted solid lines up to a few kPa but departs from
+    them above the threshold: it overshoots at the stiffest end (Fig. 3d, 40 kPa: about 138 Pa against 126 Pa
+    read; Fig. 6b, c similar) and misses the plateaux of Fig. 6a, e, f around 7-20 kPa. The no-talin model
+    reproduces every plotted no-talin line read (Fig. 3d,e, Fig. 6a-i), and the talin lines of the blebbistatin
+    panels (Fig. 6g-i) reproduce. The likely cause is reinforcement as made runnable here (q_step_algorithm:
+    d_int has no upper bound, the vinculin rate is added), not a misprint; it is left as found.
+- id: q_dt_numerics
+  kind: numerics
+  about: [ref_dt_talin, ref_dt_notalin, ref_dt_S_nf, dt_note]
+  text: >
+    Halving and quartering the printed 5 ms time step moves the time-averaged traction by more than the
+    added 5% tolerance, for both models, and moves S for nf by more than 0.2: at the paper's own step the
+    results belong partly to the numerics (each clutch is tested once per step while its unbinding rate can
+    exceed 1/dt at low force). Lengthening the run (100 s to 400 s) does not move them.
+- id: q_threshold_rigidity
+  kind: unexplained_difference
+  about: [val_threshold, threshold_measured_text]
+  text: >
+    The record's model reaches a 10% rise in integrin density at about 2 kPa, while the measured forces
+    diverge above 5 kPa (p. 2) and the model lines of Fig. 3d separate near 5 kPa. The threshold depends on how
+    the density is judged (time average here; q_sensitivity_procedure) and on the added inputs.
+- id: q_rate_labels
+  kind: possible_error
+  about: [clutch_talin_sim]
+  text: >
+    Supplementary Table 1 labels Kfold "Talin unfolding rate" and Kunfold "Talin refolding rate": the symbols
+    and their meanings are swapped with respect to the note (kunf unfolding, kfold refolding).
+  citation: {page: 19, printed_page: "SI 8", quote: "Talin unfolding rate Slip bond", where: Supplementary Table 1}
+- id: q_kc_unit
+  kind: reading
+  about: [kc_table]
+  text: >
+    The clutch spring constant is printed as 1 nN/nm (1000 pN/nm), far stiffer than the 5 pN/nm of Chan and
+    Odde 2008 that the clutch model is adapted from. It is used as printed; with springs this stiff, almost
+    all of a clutch's load comes from the substrate side.
+  citation: {page: 19, printed_page: "SI 8", quote: "Clutch spring constant 1 nN/nm", where: Supplementary Table 1}
+- id: q_fig6k_legend
+  kind: possible_error
+  about: []
+  text: >
+    The legend of Fig. 6k reads "50 mM" for the highest GPen dose, which the caption and panel f give as
+    0.50 mM. Not used in the record (YAP data are left out).
+  citation: {page: 7, printed_page: "546", quote: "100 µg ml–1 50 mM 50 µM", where: Fig. 6k legend}
+- id: q_hidden_points
+  kind: reading
+  about: [fig3d_control, fig3e_control, fig6e_control, fig6f_control, fig6g_control, fig6h_control, fig6i_control]
+  text: >
+    Some control points are covered by the talin 2 shRNA marker drawn on top of them (e.g. Fig. 3d at 0.6
+    and 2.4 kPa, Fig. 3e at 4.7 kPa, several in Fig. 6f-i) and are not read; the readings hold only the
+    points whose markers could be found.
+- id: q_dashed_hidden
+  kind: reading
+  about: [fig6b_model_notalin, fig6c_model_notalin, fig6d_model_notalin, fig6e_model_notalin, fig6f_model_notalin, fig6g_model_notalin, fig6h_model_notalin]
+  text: >
+    In most Fig. 6 panels the dashed (no talin) line merges with markers and bars where it leaves the solid
+    line, so its first separate dash lies well to the right of the divergence; positions left of that dash are
+    not read (the solid line reading covers the range where the two coincide).
+- id: q_fig3_vs_fig6b
+  kind: reading
+  about: [fig3d_model_talin, fig6b_model_talin]
+  text: >
+    Fig. 6b (reference condition) and Fig. 3d show the same model with the same parameters; both are read and
+    compared with the model separately.
+- id: q_audit_fig3a_left_out
+  kind: reading
+  about: [ln_kunf0_added, kunf_b_added, ln_kfold0_added, kfold_b_added, talin_unfolding_force_wt]
+  text: >
+    Audit (second reader): figures.md leaves Fig. 3a out because its points feed no model run. Fig. 3a holds
+    measured data (FN-αvβ3 lifetimes with s.e.m. bars, measured in this paper) and the blue line of talin
+    unfolding times from ref. 25, plus a dashed "Threshold" force; the reading guide asks for every plotted
+    measurement to be read. The blue line is also the only plotted check of the added unfolding law
+    (1/k_unf against force; the note says k_unf was fitted to the ref. 25 data), and the αvβ3 lifetimes are what
+    the note says an equivalent k_off fit could use. Suggest reading Fig. 3a and validating 1/k_unf(f) against
+    the blue line. Not done in this audit (the figure tools could not be run).
+  citation: {page: 4, printed_page: "543", quote: "The blue line shows previously measured average unfolding times of talin", where: "Fig. 3a caption"}
+- id: q_audit_rate_law_alternatives
+  kind: reading
+  about: [koff_a_added, koff_b_added, koff_c_added, koff_d_added, ln_kunf0_added, kunf_b_added, ln_kfold0_added, kfold_b_added]
+  text: >
+    Audit (second reader): the catch-bond and talin rate-law coefficients are added without alternatives
+    (validator warnings), though every model verdict rests on them. The second catch-bond fit carried in the
+    2021 code (16.67 /s, -0.1945 /pN, 0.001442 /s, 0.1356 /pN; q_rate_laws) is a real joint alternative and
+    could be run once as a set; for the talin laws, any pair keeping the 5 pN crossing (p. 5) but with other
+    slopes would test how much the verdicts depend on the 2021 values. Left to the first reader's scope.
+  citation: {page: 19, printed_page: "SI 8", quote: "Integrin unbinding rate Catch bond", where: Supplementary Table 1}
+- id: q_audit_gpen_threshold
+  kind: reading
+  about: [S_kont_table, S_dadd_table, kont_fig6f, dadd_fig6f, kont_table, dadd_table]
+  text: >
+    Audit (second reader): the text says GPen gives "no major change in the threshold rigidity for
+    reinforcement" (p. 7) while kont and dadd are both lowered (Fig. 6d-f caption). With the printed
+    sensitivities (S_kont 1.49, S_dadd -0.83) the two shifts roughly cancel, so the printed table and text are
+    consistent with each other; the record does not compare this, and with the record's model (S_kont of the
+    opposite sign, q_sensitivity_sign) the two shifts would add instead. A threshold run at the Fig. 6f
+    parameters against the reference would test the claim directly.
+  citation: {page: 7, printed_page: "546", quote: "but no major change in the threshold rigidity for reinforcement", where: text}
+- id: q_hidden_points_second_pass
+  kind: reading
+  about: [fig1a_control, fig1a_shrna, fig1c_control, fig1c_shrna, fig1e_shrna, fig4a_rod, fig4b_fl, fig4b_head, fig4c_fl, fig4c_rod, fig4c_head, fig5c_shrna, fig6k_gpen015, fig6l_bleb5, fig6l_bleb15, figs2_l325r_5kpa, figs2_l325r_29kpa]
+  text: >
+    Second pass: where the series of a panel overlap (the low-rigidity points of Fig. 1, 4b, 5b, 6j-l; the
+    dense scatter of Supplementary Fig. 2), markers lying under another series' marker are read only when
+    both their bar caps are visible (value: the caps' midpoint) or at least half of the marker is visible
+    (value: the best template fit, with a widened interval); the rest are not read. These readings hold
+    fewer points than the caption's n lists; a reader comparing at a missing rigidity must go back to the page.
+- id: q_fig3a_unfolding_fit
+  kind: unexplained_difference
+  about: [fit_fig3a_unfolding, fig3a_unfolding, ln_kunf0_added, kunf_b_added, talin_unfolding_time]
+  text: >
+    The Supplementary Note says k_unf was fitted to the ref. 25 unfolding data, plotted as the blue line of
+    Fig. 3a. With the record's added slip-bond law (andreu2021_code: ln k_unf0 = -7.573, 1.786 /pN), 1/k_unf
+    is about half the plotted unfolding time between 3.5 and 4.5 pN (3.75, 2.40, 0.98, 0.63 s against about
+    6.9, 4.8, 1.5, 1.2 s read at 3.5, 3.75, 4.25, 4.5 pN) and agrees only within the wide intervals at 4 and
+    5 pN. Either the 2016 fit differs from the 2021 code's coefficients (they are not printed here,
+    q_rate_laws), or the plotted line is not 1/k_unf of a single exponential. A factor of two in k_unf moves
+    the unfolding/refolding crossing by only about 0.2 pN but shifts every talin-model line. This reading
+    also settles q_audit_fig3a_left_out: Fig. 3a is now read.
+  citation: {page: 4, printed_page: "543", quote: "previously measured average unfolding times", where: "Fig. 3a caption"}
+- id: q_replotted_means
+  kind: reading
+  about: [figs2_control_29kpa, figs2_shrna_5kpa, figs2_shrna_29kpa, fig1a_control, fig1a_shrna, fig4e_shrna]
+  text: >
+    The Supplementary Fig. 2 means of untransfected control and talin 2 shRNA cells coincide with the Fig. 1a
+    points and the Fig. 4e shRNA bars at the same rigidities (e.g. control at 29 kPa: 137.7 vs 137.4 Pa;
+    shRNA at 5 kPa: 83.3 vs 83.2 vs 83.0 Pa), and the cell numbers agree (control at 29 kPa n = 12 and shRNA
+    at 5 kPa n = 34 in both Fig. 1a and Supplementary Fig. 2; n = 34 for the first shRNA bar of Fig. 4e).
+    The same measurements appear to be re-plotted, so their validations against the clutch models are not
+    independent of the Fig. 1a/3d ones.
+  citation: {page: 13, printed_page: "SI 2", quote: "Note that in figure 1, talin 1 Head L325R data represent", where: "Supplementary Fig. 2 caption"}

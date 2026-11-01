@@ -1,0 +1,22 @@
+# What a correct reading of the synthetic paper must find. Pages are PDF pages.
+paper: synth_kinetics
+title: Rates of a Unimolecular Reaction and its Diffusion Limit
+expect:
+  - id: misprint_k
+    what: "k printed as 9.6 x 10^-1 s^-1; Eq. 1 with the printed A, Ea, T gives 9.5 x 10^-2"
+    finding: not_reproduced
+    page: 1
+  - id: half_life_reproduces
+    what: "t1/2 = 7.3 s follows from Eq. 2 with the k Eq. 1 actually gives (not the printed k)"
+    verdict_reproduced_on_page: 1
+    note: "Using the printed k instead gives 0.72 s: a reader may compare either way; both are honest."
+  - id: unstated_radius
+    what: "R* is not stated; 1 nm reproduces kD"
+    question_kind: unstated_input
+    page: 2
+  - id: radius_matters
+    what: "an alternative R* (e.g. 0.5 nm) flips the kD verdict"
+    finding: depends_on_added_input
+    page: 2
+must_not:
+  - "the printed k is corrected anywhere in data.yaml"

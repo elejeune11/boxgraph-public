@@ -1,0 +1,36 @@
+# Relations this paper states about its models.
+# Elosegui-Artola et al. build their integrin-FN clutch model on the motor-clutch model of refs 7 (Chan and
+# Odde 2008) and 20 (Bangasser et al. 2013). The relation to Bangasser's SSA is stated in words only; the
+# integrin model's equations are in an unreadable SI, so the relation cannot be tested.
+- id: rel_integrin_clutch_from_bangasser_ssa
+  kind: derived_from
+  a: bangasser2013/motor_clutch_ssa
+  b: elosegui2014/integrin_clutch_sim
+  steps:
+    - "the clutches are modelled as FN molecules on the substrate, binding and unbinding integrins (Supplementary Note 3)"
+    - "the binding rate is the effective rate kon = kont dint, and two integrin types with different kon compete for each FN molecule"
+    - "unbinding follows the FN-a5b1 koff/force catch-bond curve of ref. 12 (FN-avb6: the same curve with a changed scaling factor), in place of the slip bond"
+    - "reinforcement is added: integrin density increases when the force on a bond exceeds a threshold before it breaks"
+  provenance: stated
+  citation: {page: 4, printed_page: "634", quote: "we developed a model that expands on", where: "text, citing refs 7 and 20"}
+  assumptions:
+    - "the paper says (p. 4) that the catch-bond assumption is not essential and that the same qualitative results can be obtained with the slip bonds of refs 7 and 20"
+    - "the paper describes the earlier model (p. 2-3) as not relating the clutches to specific molecular bonds and not including reinforcement"
+# The same statement names ref. 7, Chan and Odde 2008 (record chan2008). Chan's SOM model has one clutch
+# type with a slip bond (Eq. 1) and no reinforcement; Elosegui's integrin model is not runnable, so this
+# relation too can only stand on the paper's words.
+- id: rel_integrin_clutch_from_chan_motor_clutch
+  kind: derived_from
+  a: chan2008/motor_clutch
+  b: elosegui2014/integrin_clutch_sim
+  steps:
+    - "the clutches are modelled as FN molecules on the substrate, binding and unbinding integrins (Supplementary Note 3)"
+    - "the binding rate is the effective rate kon = kont dint, and two integrin types with different kon compete for each FN molecule"
+    - "unbinding follows the FN-a5b1 koff/force catch-bond curve of ref. 12 (FN-avb6: the same curve with a changed scaling factor), in place of the slip bond koff* = koff exp(Fclutch/Fb)"
+    - "reinforcement is added: integrin density increases when the force on a bond exceeds a threshold before it breaks"
+  provenance: stated
+  citation: {page: 4, printed_page: "634", quote: "we developed a model that expands on", where: "text, citing refs 7 and 20"}
+  assumptions:
+    - "the paper says (p. 4) that the catch-bond assumption is not essential and that the same qualitative results can be obtained with the slip bonds of refs 7 and 20"
+    - "the paper describes the earlier model (p. 2-3), citing refs 7 and 20, as not relating the clutches to specific molecular bonds and not including reinforcement"
+    - "Chan's substrate stiffness is a spring constant in pN/nm; Elosegui's is a Young's modulus in kPa: different quantities, and the paper gives no conversion in the readable text"

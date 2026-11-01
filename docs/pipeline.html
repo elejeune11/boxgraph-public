@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BoxGraph Pipeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; wide diagrams scroll inside their own frames. Agent steps tinted, code steps plain, files dashed. */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #1b2230; --muted: #5d6676; --line: #8a93a3;
+  --agent: #2f5fb3; --agent-fill: #e6eefb; --code-fill: #eef0f3; --ok: #2e7d4f; --warn: #a3501c;
+  --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161d; --panel: #1a2029; --fg: #e3e7ee; --muted: #9aa3b2; --line: #6d7687;
+  --agent: #8fb4ff; --agent-fill: #1d2c47; --code-fill: #232a35; --ok: #6fcf97; --warn: #f0a070; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161d; --panel: #1a2029; --fg: #e3e7ee; --muted: #9aa3b2; --line: #6d7687;
+  --agent: #8fb4ff; --agent-fill: #1d2c47; --code-fill: #232a35; --ok: #6fcf97; --warn: #f0a070; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55; }
+main { max-width: 1080px; margin: 0 auto; padding-block: 40px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px; }
+header { display: grid; gap: 8px; max-width: 68ch; }
+h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+h2 { font-size: 19px; font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.lede { color: var(--muted); font-size: 16px; }
+section { display: grid; gap: 14px; min-width: 0; }
+.prose { max-width: 68ch; display: grid; gap: 10px; }
+code, .mono { font-family: var(--mono); font-size: 0.88em; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.sw { width: 22px; height: 14px; border-radius: 3px; border: 1.5px solid var(--line); display: inline-block; }
+.sw.agent { background: var(--agent-fill); border-color: var(--agent); }
+.sw.code { background: var(--code-fill); }
+.sw.file { background: transparent; border-style: dashed; }
+.sw.plan { background: transparent; border-style: dashed; border-color: var(--warn); }
+figure { margin: 0; display: grid; gap: 10px; min-width: 0; }
+.frame { background: var(--panel); border: 1px solid color-mix(in srgb, var(--line) 35%, transparent); border-radius: 10px;
+  padding: 16px; overflow-x: auto; }
+.frame svg { display: block; height: auto; }
+figcaption { font-size: 13.5px; color: var(--muted); max-width: 80ch; }
+svg text { font-family: var(--sans); fill: var(--fg); font-size: 12.5px; }
+svg .t { font-weight: 600; font-size: 13px; }
+svg .s { fill: var(--muted); font-size: 11px; }
+svg .m { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+svg .lab { fill: var(--muted); font-size: 11px; font-style: italic; }
+svg .agent { fill: var(--agent-fill); stroke: var(--agent); stroke-width: 1.5; }
+svg .code { fill: var(--code-fill); stroke: var(--line); stroke-width: 1.2; }
+svg .file { fill: none; stroke: var(--line); stroke-width: 1.2; stroke-dasharray: 5 4; }
+svg .lane { fill: none; stroke: var(--line); stroke-opacity: 0.45; stroke-width: 1; }
+svg .plan { fill: none; stroke: var(--warn); stroke-width: 1.4; stroke-dasharray: 6 4; }
+svg .wire { fill: none; stroke: var(--fg); stroke-width: 1.3; }
+svg .wire.soft { stroke: var(--line); }
+svg .wire.ok { stroke: var(--ok); }
+svg .wire.warn { stroke: var(--warn); }
+svg .wire.dash { stroke-dasharray: 5 4; }
+svg .head { fill: var(--fg); }
+svg .head.soft { fill: var(--line); }
+svg .head.ok { fill: var(--ok); }
+svg .head.warn { fill: var(--warn); }
+svg .okt { fill: var(--ok); font-weight: 600; }
+svg .warnt { fill: var(--warn); font-weight: 600; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tablewrap { overflow-x: auto; }
+th, td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--line) 30%, transparent); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+.cmds { display: grid; gap: 6px; }
+.cmds div { background: var(--panel); border: 1px solid color-mix(in srgb, var(--line) 30%, transparent); border-radius: 6px;
+  padding: 8px 12px; font-family: var(--mono); font-size: 13px; overflow-x: auto; white-space: nowrap; }
+.cmds span { color: var(--muted); }
+.note { border-left: 3px solid var(--warn); padding: 4px 0 4px 12px; color: var(--fg); max-width: 76ch; font-size: 14px; }
+@media (max-width: 600px) { h1 { font-size: 24px; } main { gap: 32px; padding-block: 24px 48px; } }
+</style>
+</head><body>
+
+<main>
+  <header>
+    <h1>BoxGraph Pipeline</h1>
+    <p class="lede">How a PDF becomes a checked record and joins the Synthesis: what runs, in what order, what each step must pass, and what is kept.</p>
+  </header>
+
+  <section>
+    <h2>From upload to Synthesis</h2>
+    <div class="legend" aria-hidden="true">
+      <span><i class="sw agent"></i>agent job, checked by a gate</span>
+      <span><i class="sw code"></i>plain code, no agent</span>
+      <span><i class="sw file"></i>file</span>
+    </div>
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 1480 570" width="1480" role="img" aria-label="Pipeline flow. pipeline.add registers a paper in papers.yaml and copies its PDF into corpus; pipeline.attach does the same for a paper's released code or data. run_papers checks the list and ingests each PDF into text and page images. Each paper then goes through read, audit and digitize agents in its own lane, up to three agents at once; released code or data is only read, after its paper's read. When a record's steps have all passed, the pairs step picks which records to relate: one cites the other, a model is built from the other, the list asks for it, or it is a paper's code or data; a shared model shape alone is only listed. One relate agent runs per pair, locking both records. The build then runs every model and writes the report, figure check and explorer. Every passed job is recorded in completed.yaml, so it is never run again.">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker>
+            <marker id="ahs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head soft"/></marker>
+            <marker id="ahok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head ok"/></marker>
+          </defs>
+
+          <!-- column titles -->
+          <text x="76" y="40" text-anchor="middle" class="s">YOU</text>
+          <text x="266" y="40" text-anchor="middle" class="s">CORPUS</text>
+          <text x="461" y="40" text-anchor="middle" class="s">run_papers</text>
+          <text x="756" y="40" text-anchor="middle" class="s">PER PAPER · UP TO 3 AGENTS AT ONCE</text>
+          <text x="1066" y="40" text-anchor="middle" class="s">AFTER READING</text>
+          <text x="1236" y="40" text-anchor="middle" class="s">PER PAIR</text>
+          <text x="1398" y="40" text-anchor="middle" class="s">OUTPUT</text>
+
+          <!-- add -->
+          <rect x="16" y="226" width="120" height="88" rx="6" class="code"/>
+          <text x="76" y="249" text-anchor="middle" class="t">pipeline.add</text>
+          <text x="76" y="265" text-anchor="middle" class="s">a paper</text>
+          <text x="76" y="289" text-anchor="middle" class="t">pipeline.attach</text>
+          <text x="76" y="305" text-anchor="middle" class="s">its code or data</text>
+
+          <!-- corpus files -->
+          <rect x="196" y="180" width="140" height="56" rx="6" class="file"/>
+          <text x="266" y="203" text-anchor="middle" class="t">papers.yaml</text>
+          <text x="266" y="221" text-anchor="middle" class="s">id · pages · note</text>
+          <rect x="196" y="304" width="140" height="56" rx="6" class="file"/>
+          <text x="266" y="323" text-anchor="middle" class="t">corpus/</text>
+          <text x="266" y="339" text-anchor="middle" class="s">PDFs · code · data</text>
+          <text x="266" y="353" text-anchor="middle" class="s">never committed</text>
+
+          <path d="M136 262 H160 V208 H192" class="wire" marker-end="url(#ah)"/>
+          <text x="156" y="218" text-anchor="end" class="lab">registers</text>
+          <path d="M136 278 H160 V332 H192" class="wire" marker-end="url(#ah)"/>
+          <text x="156" y="330" text-anchor="end" class="lab">copies files</text>
+
+          <!-- check + ingest -->
+          <rect x="396" y="226" width="130" height="88" rx="6" class="code"/>
+          <text x="461" y="250" text-anchor="middle" class="t">check + ingest</text>
+          <text x="461" y="268" text-anchor="middle" class="s">stops on a bad entry</text>
+          <text x="461" y="284" text-anchor="middle" class="s">writes page text</text>
+          <text x="461" y="299" text-anchor="middle" class="s">and page images</text>
+          <path d="M336 208 H366 V256 H392" class="wire" marker-end="url(#ah)"/>
+          <path d="M336 332 H366 V284 H392" class="wire" marker-end="url(#ah)"/>
+
+          <!-- lanes -->
+          <rect x="566" y="88" width="380" height="104" rx="8" class="lane"/>
+          <rect x="566" y="218" width="380" height="104" rx="8" class="lane"/>
+          <rect x="566" y="348" width="380" height="104" rx="8" class="lane"/>
+          <text x="578" y="104" class="m">paper A</text>
+          <text x="578" y="234" class="m">paper B</text>
+          <text x="578" y="364" class="m">code or data of paper A</text>
+
+          <path d="M526 270 H546 V140 H578" class="wire" marker-end="url(#ah)"/>
+          <path d="M546 270 H578" class="wire" marker-end="url(#ah)"/>
+          <path d="M546 270 V400 H578" class="wire" marker-end="url(#ah)"/>
+
+          <g>
+            <rect x="582" y="112" width="104" height="56" rx="6" class="agent"/>
+            <text x="634" y="135" text-anchor="middle" class="t">read</text>
+            <text x="634" y="153" text-anchor="middle" class="s">gate: validate</text>
+            <rect x="706" y="112" width="104" height="56" rx="6" class="agent"/>
+            <text x="758" y="135" text-anchor="middle" class="t">audit</text>
+            <text x="758" y="153" text-anchor="middle" class="s">+ audit.md</text>
+            <rect x="830" y="112" width="100" height="56" rx="6" class="agent"/>
+            <text x="880" y="135" text-anchor="middle" class="t">digitize</text>
+            <text x="880" y="153" text-anchor="middle" class="s">+ figures.md</text>
+            <path d="M686 140 H702" class="wire" marker-end="url(#ah)"/>
+            <path d="M810 140 H826" class="wire" marker-end="url(#ah)"/>
+          </g>
+          <g>
+            <rect x="582" y="242" width="104" height="56" rx="6" class="agent"/>
+            <text x="634" y="265" text-anchor="middle" class="t">read</text>
+            <text x="634" y="283" text-anchor="middle" class="s">gate: validate</text>
+            <rect x="706" y="242" width="104" height="56" rx="6" class="agent"/>
+            <text x="758" y="265" text-anchor="middle" class="t">audit</text>
+            <text x="758" y="283" text-anchor="middle" class="s">+ audit.md</text>
+            <rect x="830" y="242" width="100" height="56" rx="6" class="agent"/>
+            <text x="880" y="265" text-anchor="middle" class="t">digitize</text>
+            <text x="880" y="283" text-anchor="middle" class="s">+ figures.md</text>
+            <path d="M686 270 H702" class="wire" marker-end="url(#ah)"/>
+            <path d="M810 270 H826" class="wire" marker-end="url(#ah)"/>
+          </g>
+          <g>
+            <rect x="582" y="372" width="104" height="56" rx="6" class="agent"/>
+            <text x="634" y="395" text-anchor="middle" class="t">read</text>
+            <text x="634" y="413" text-anchor="middle" class="s">gate: validate</text>
+            <text x="826" y="388" text-anchor="middle" class="lab">waits for paper A's read</text>
+            <text x="826" y="420" text-anchor="middle" class="lab">no audit or figure step</text>
+          </g>
+
+          <!-- lanes join -->
+          <path d="M930 140 H966 V400 H690" class="wire"/>
+          <path d="M966 270 H992" class="wire" marker-end="url(#ah)"/>
+          <text x="972" y="128" class="lab">records whose steps</text>
+          <text x="972" y="142" class="lab">all passed</text>
+
+          <!-- candidate pairs -->
+          <rect x="996" y="226" width="140" height="88" rx="6" class="code"/>
+          <text x="1066" y="250" text-anchor="middle" class="t">pairs</text>
+          <text x="1066" y="268" text-anchor="middle" class="s">cites · built from</text>
+          <text x="1066" y="284" text-anchor="middle" class="s">relate_with · its paper</text>
+          <text x="1066" y="299" text-anchor="middle" class="lab">shape alone: listed</text>
+
+          <!-- relate -->
+          <rect x="1176" y="186" width="120" height="68" rx="6" class="agent"/>
+          <text x="1236" y="208" text-anchor="middle" class="t">relate A + B</text>
+          <text x="1236" y="226" text-anchor="middle" class="s">locks A and B</text>
+          <text x="1236" y="242" text-anchor="middle" class="s">gate: relations test</text>
+          <rect x="1176" y="286" width="120" height="68" rx="6" class="agent"/>
+          <text x="1236" y="308" text-anchor="middle" class="t">relate A + C</text>
+          <text x="1236" y="326" text-anchor="middle" class="s">locks A and C</text>
+          <text x="1236" y="342" text-anchor="middle" class="s">gate: relations test</text>
+          <path d="M1136 262 H1156 V220 H1172" class="wire" marker-end="url(#ah)"/>
+          <path d="M1136 278 H1156 V320 H1172" class="wire" marker-end="url(#ah)"/>
+          <text x="1236" y="176" text-anchor="middle" class="lab">one job per flagged pair</text>
+
+          <!-- build -->
+          <rect x="1336" y="218" width="124" height="104" rx="6" class="code"/>
+          <text x="1398" y="242" text-anchor="middle" class="t">build</text>
+          <text x="1398" y="261" text-anchor="middle" class="s">runs every model</text>
+          <text x="1398" y="278" text-anchor="middle" class="s">report.html</text>
+          <text x="1398" y="294" text-anchor="middle" class="s">figures.html</text>
+          <text x="1398" y="310" text-anchor="middle" class="s">explorer.html</text>
+          <path d="M1296 220 H1316 V258 H1332" class="wire" marker-end="url(#ah)"/>
+          <path d="M1296 320 H1316 V282 H1332" class="wire" marker-end="url(#ah)"/>
+
+          <!-- ledger -->
+          <rect x="566" y="500" width="730" height="48" rx="6" class="file"/>
+          <text x="931" y="520" text-anchor="middle" class="t">pipeline/completed.yaml</text>
+          <text x="931" y="538" text-anchor="middle" class="s">committed ledger of passed jobs · every later run, on any machine, skips them</text>
+          <path d="M756 452 V496" class="wire ok" marker-end="url(#ahok)"/>
+          <text x="764" y="480" class="okt" style="font-size:11px">passed</text>
+          <path d="M1236 354 V496" class="wire ok" marker-end="url(#ahok)"/>
+          <text x="1244" y="480" class="okt" style="font-size:11px">passed</text>
+        </svg>
+      </div>
+      <figcaption>One command, <code>python -m pipeline.run_papers</code>, runs everything after the upload. Inside a lane each step waits for the one before it. Lanes run side by side, at most three agents at once. Pairs are chosen only after reading, because the signs of a relation come from the records: one cites the other, a model is built from the other, the corpus list asks for it, or one is the other's code or data. A shared model shape alone is a weak sign, so such a pair is listed for a person, not related. Released code or data is only read, once its paper's read has passed. Relate jobs that share a paper take turns, since each locks both of its records. The build is plain code: it runs every model, so every verdict is recomputed rather than stored.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Where BoxGraph, ModelAtlas and the Synthesis fit</h2>
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 1090 496" width="1090" role="img" aria-label="Three layers. In the pipeline, read, audit and digitize agents write record files, and relate agents write relations.yaml. BoxGraph's validate checks the record files and sends pass or retry back to the agents. ModelAtlas's test_relation tests relations.yaml and sends pass or retry back to the relate agents, running models through BoxGraph's engine. The build step calls the Synthesis, which loads every record, tests every relation through ModelAtlas, recomputes every verdict through BoxGraph, and writes the report, figure check and explorer.">
+          <defs>
+            <marker id="dh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker>
+            <marker id="dhok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head ok"/></marker>
+          </defs>
+
+          <!-- layer bands -->
+          <rect x="120" y="20" width="960" height="108" rx="8" class="lane"/>
+          <text x="132" y="38" class="m">pipeline/ · runs the agents, owns no rules</text>
+          <text x="712" y="186" class="m">both in records/&lt;id&gt;/</text>
+          <rect x="120" y="318" width="960" height="122" rx="8" class="lane"/>
+          <text x="132" y="336" class="m">boxgraph/ · the rules, generic code with nothing about any field</text>
+
+          <!-- row 1: pipeline -->
+          <rect x="140" y="50" width="220" height="62" rx="6" class="agent"/>
+          <text x="250" y="75" text-anchor="middle" class="t">read · audit · digitize</text>
+          <text x="250" y="94" text-anchor="middle" class="s">agents, one lane per paper</text>
+          <rect x="500" y="50" width="200" height="62" rx="6" class="agent"/>
+          <text x="600" y="75" text-anchor="middle" class="t">relate</text>
+          <text x="600" y="94" text-anchor="middle" class="s">agent, one per pair</text>
+          <rect x="860" y="50" width="200" height="62" rx="6" class="code"/>
+          <text x="960" y="75" text-anchor="middle" class="t">build step</text>
+          <text x="960" y="94" text-anchor="middle" class="s">plain code, no agent</text>
+
+          <!-- row 2: files -->
+          <rect x="140" y="172" width="220" height="86" rx="6" class="file"/>
+          <text x="250" y="196" text-anchor="middle" class="t">the record</text>
+          <text x="250" y="215" text-anchor="middle" class="s">sources · data with quotes</text>
+          <text x="250" y="231" text-anchor="middle" class="s">models · runs · comparisons</text>
+          <text x="250" y="247" text-anchor="middle" class="s">figure readings · questions</text>
+          <rect x="500" y="172" width="200" height="86" rx="6" class="file"/>
+          <text x="600" y="196" text-anchor="middle" class="t">relations.yaml</text>
+          <text x="600" y="215" text-anchor="middle" class="s">kind · mapping · regime</text>
+          <text x="600" y="231" text-anchor="middle" class="s">stated or proposed</text>
+          <text x="600" y="247" text-anchor="middle" class="s">no status written</text>
+          <rect x="940" y="172" width="130" height="86" rx="6" class="file"/>
+          <text x="1005" y="196" text-anchor="middle" class="t">build/</text>
+          <text x="1005" y="215" text-anchor="middle" class="s">report.html</text>
+          <text x="1005" y="231" text-anchor="middle" class="s">figures.html</text>
+          <text x="1005" y="247" text-anchor="middle" class="s">explorer.html</text>
+
+          <!-- row 3: boxgraph -->
+          <rect x="140" y="348" width="220" height="80" rx="6" class="code"/>
+          <text x="250" y="372" text-anchor="middle" class="t">BoxGraph</text>
+          <text x="250" y="391" text-anchor="middle" class="s">validate · engine</text>
+          <text x="250" y="407" text-anchor="middle" class="s">precision · figure readings</text>
+          <rect x="500" y="348" width="200" height="80" rx="6" class="code"/>
+          <text x="600" y="372" text-anchor="middle" class="t">ModelAtlas</text>
+          <text x="600" y="391" text-anchor="middle" class="s">test_relation</text>
+          <text x="600" y="407" text-anchor="middle" class="s">families</text>
+          <rect x="860" y="348" width="200" height="80" rx="6" class="code"/>
+          <text x="960" y="372" text-anchor="middle" class="t">Synthesis</text>
+          <text x="960" y="391" text-anchor="middle" class="s">verdicts · cross-paper checks</text>
+          <text x="960" y="407" text-anchor="middle" class="s">findings · references</text>
+
+          <!-- agents write -->
+          <path d="M250 112 V168" class="wire" marker-end="url(#dh)"/>
+          <text x="258" y="146" class="lab">writes</text>
+          <path d="M600 112 V168" class="wire" marker-end="url(#dh)"/>
+          <text x="608" y="146" class="lab">writes</text>
+
+          <!-- gates -->
+          <path d="M250 258 V344" class="wire" marker-end="url(#dh)"/>
+          <text x="258" y="296" class="lab">checked by validate</text>
+          <path d="M600 258 V344" class="wire" marker-end="url(#dh)"/>
+          <text x="608" y="296" class="lab">tested by boxgraph relations</text>
+          <path d="M140 388 H100 V81 H136" class="wire ok" marker-end="url(#dhok)"/>
+          <text x="94" y="226" text-anchor="end" class="okt" style="font-size:11px">gate:</text>
+          <text x="94" y="241" text-anchor="end" class="s">pass or</text>
+          <text x="94" y="255" text-anchor="end" class="s">retry</text>
+          <path d="M500 388 H470 V81 H496" class="wire ok" marker-end="url(#dhok)"/>
+          <text x="464" y="226" text-anchor="end" class="okt" style="font-size:11px">gate:</text>
+          <text x="464" y="241" text-anchor="end" class="s">pass or</text>
+          <text x="464" y="255" text-anchor="end" class="s">retry</text>
+
+          <!-- boxgraph internals -->
+          <path d="M500 400 H364" class="wire" marker-end="url(#dh)"/>
+          <text x="432" y="420" text-anchor="middle" class="lab">runs models</text>
+          <path d="M860 400 H704" class="wire" marker-end="url(#dh)"/>
+          <text x="790" y="420" text-anchor="middle" class="lab">tests every relation</text>
+          <path d="M960 428 V466 H250 V432" class="wire" marker-end="url(#dh)"/>
+          <text x="600" y="484" text-anchor="middle" class="lab">recomputes every verdict, at the printed precision</text>
+
+          <!-- build -->
+          <path d="M900 112 V344" class="wire" marker-end="url(#dh)"/>
+          <text x="894" y="150" text-anchor="end" class="lab">boxgraph build</text>
+          <path d="M700 215 H780 V362 H856" class="wire soft" marker-end="url(#ahs)"/>
+          <text x="786" y="300" class="lab">loads every</text>
+          <text x="786" y="314" class="lab">sound record</text>
+          <path d="M1005 348 V262" class="wire" marker-end="url(#dh)"/>
+          <text x="1013" y="300" class="lab">writes</text>
+        </svg>
+      </div>
+      <figcaption>Agents only ever write files in <code>records/&lt;id&gt;/</code>. Every judgement is made by code in <code>boxgraph/</code>. BoxGraph decides whether a record is sound and is the gate for read, audit and digitize. ModelAtlas decides whether a relation holds and is the gate for relate. The Synthesis is rebuilt from all the records every time, using both. No verdict, relation status or family is ever written into a record, so adding a paper in any order gives the same Synthesis.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>One agent job, start to finish</h2>
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 880 320" width="880" role="img" aria-label="Life of one agent job. It waits for the step before it and for its locks, then an agent runs in its own session with limited tools and a budget cap. A gate then checks the files the agent wrote, and scans the project for files written outside its record. If the gate passes, the job is recorded in completed.yaml. If it fails, the errors are sent back into the same session and the agent tries again; after two or three failed tries the job is parked for a person. If the run is stopped, the next run resumes the same session.">
+          <defs>
+            <marker id="bh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker>
+            <marker id="bhok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head ok"/></marker>
+            <marker id="bhw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head warn"/></marker>
+          </defs>
+
+          <rect x="216" y="20" width="178" height="48" rx="6" class="code"/>
+          <text x="305" y="40" text-anchor="middle" class="t">run stopped and restarted</text>
+          <text x="305" y="57" text-anchor="middle" class="s">e.g. the 2-hour task limit</text>
+          <path d="M305 68 V118" class="wire" marker-end="url(#bh)"/>
+          <text x="313" y="98" class="lab">resumes the same session</text>
+
+          <rect x="20" y="122" width="160" height="72" rx="6" class="code"/>
+          <text x="100" y="145" text-anchor="middle" class="t">waiting</text>
+          <text x="100" y="163" text-anchor="middle" class="s">for the step before</text>
+          <text x="100" y="179" text-anchor="middle" class="s">and for its locks</text>
+
+          <rect x="216" y="122" width="178" height="72" rx="6" class="agent"/>
+          <text x="305" y="145" text-anchor="middle" class="t">agent works</text>
+          <text x="305" y="163" text-anchor="middle" class="s">own session, own tools</text>
+          <text x="305" y="179" text-anchor="middle" class="s">turn and $ caps</text>
+
+          <rect x="436" y="122" width="150" height="72" rx="6" class="code"/>
+          <text x="511" y="141" text-anchor="middle" class="t">gate</text>
+          <text x="511" y="159" text-anchor="middle" class="s">validate + write scan</text>
+          <text x="511" y="174" text-anchor="middle" class="s">checks the files,</text>
+          <text x="511" y="188" text-anchor="middle" class="s">not the agent's words</text>
+
+          <rect x="660" y="122" width="200" height="72" rx="6" class="file"/>
+          <text x="760" y="152" text-anchor="middle" class="okt">passed</text>
+          <text x="760" y="172" text-anchor="middle" class="s">added to completed.yaml</text>
+
+          <path d="M180 158 H212" class="wire" marker-end="url(#bh)"/>
+          <path d="M394 158 H432" class="wire" marker-end="url(#bh)"/>
+          <path d="M586 158 H656" class="wire ok" marker-end="url(#bhok)"/>
+          <text x="621" y="150" text-anchor="middle" class="okt" style="font-size:11px">sound</text>
+
+          <path d="M480 194 V232 H305 V198" class="wire warn" marker-end="url(#bhw)"/>
+          <text x="392" y="250" text-anchor="middle" class="warnt" style="font-size:11px">fails: errors sent back</text>
+          <text x="392" y="265" text-anchor="middle" class="s">into the same session</text>
+
+          <rect x="660" y="248" width="200" height="56" rx="6" class="file" style="stroke: var(--warn)"/>
+          <text x="760" y="271" text-anchor="middle" class="warnt">parked for a person</text>
+          <text x="760" y="289" text-anchor="middle" class="s">see --status and the logs</text>
+          <path d="M550 194 V276 H656" class="wire warn" marker-end="url(#bhw)"/>
+          <text x="558" y="230" class="s">still failing after</text>
+          <text x="558" y="244" class="s">3 tries (read)</text>
+          <text x="558" y="258" class="s">or 2 (others)</text>
+        </svg>
+      </div>
+      <figcaption>The orchestrator trusts only the files and the gate. Every gate runs <code>boxgraph validate</code> on the record, with a shared cache so a retry does not rerun every simulation. Audit and digitize must also have written their log (<code>audit.md</code>, <code>figures.md</code>). A relate gate validates both records with their models run, then tests their relations. After every attempt the project is also scanned: a file changed outside the job's record, or page content or released code or data written into it, fails the attempt and is named to the agent. A step starts only when the step before it has passed.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Code and data as sources</h2>
+    <figure>
+      <div class="frame">
+        <svg viewBox="0 0 1100 300" width="1100" role="img" aria-label="Code and data as sources, as built. pipeline.attach copies a paper's released code or data into corpus, never committed, and registers it in papers.yaml as kind software or dataset with the papers it belongs to. After its papers' reads, one read agent writes a record of its own: values cited by file and lines or by sheet and cells, the files pinned by a digest of their contents, and a model that runs the code or a Python port of it. A relate job for each paper and its code or data links them by cited values and relations. The build runs the code in a sandbox (origin run), checks every cited value, and compares the paper's figure readings with the data at each shared x.">
+          <defs>
+            <marker id="ch" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker>
+          </defs>
+          <rect x="16" y="52" width="180" height="56" rx="6" class="code"/>
+          <text x="106" y="75" text-anchor="middle" class="t">pipeline.attach</text>
+          <text x="106" y="93" text-anchor="middle" class="s">zip, folder or .xlsx · --papers</text>
+
+          <rect x="256" y="16" width="180" height="56" rx="6" class="file"/>
+          <text x="346" y="39" text-anchor="middle" class="t">papers.yaml</text>
+          <text x="346" y="57" text-anchor="middle" class="s">kind: software | dataset</text>
+
+          <rect x="256" y="92" width="180" height="56" rx="6" class="file"/>
+          <text x="346" y="115" text-anchor="middle" class="t">corpus/code · corpus/data</text>
+          <text x="346" y="133" text-anchor="middle" class="s">never committed</text>
+
+          <path d="M196 70 H222 V44 H252" class="wire" marker-end="url(#ch)"/>
+          <text x="218" y="36" text-anchor="end" class="lab">registers</text>
+          <path d="M196 90 H222 V120 H252" class="wire" marker-end="url(#ch)"/>
+          <text x="218" y="138" text-anchor="end" class="lab">copies</text>
+
+          <rect x="16" y="196" width="180" height="56" rx="6" class="agent"/>
+          <text x="106" y="219" text-anchor="middle" class="t">read: paper</text>
+          <text x="106" y="237" text-anchor="middle" class="s">then audit, digitize</text>
+
+          <rect x="496" y="150" width="200" height="102" rx="6" class="agent"/>
+          <text x="596" y="172" text-anchor="middle" class="t">read: code or data</text>
+          <text x="596" y="190" text-anchor="middle" class="s">a record of its own</text>
+          <text x="596" y="205" text-anchor="middle" class="s">cited by file + lines,</text>
+          <text x="596" y="220" text-anchor="middle" class="s">or sheet + cells</text>
+          <text x="596" y="235" text-anchor="middle" class="s">pinned: sha256 of the files</text>
+
+          <path d="M436 44 H466 V172 H492" class="wire" marker-end="url(#ch)"/>
+          <path d="M436 120 H466" class="wire"/>
+          <path d="M196 224 H492" class="wire" marker-end="url(#ch)"/>
+          <text x="344" y="216" text-anchor="middle" class="lab">waits for its papers' reads</text>
+
+          <rect x="746" y="150" width="160" height="102" rx="6" class="agent"/>
+          <text x="826" y="172" text-anchor="middle" class="t">relate paper + it</text>
+          <text x="826" y="190" text-anchor="middle" class="s">cited values:</text>
+          <text x="826" y="205" text-anchor="middle" class="s">paper ↔ code or data</text>
+          <text x="826" y="220" text-anchor="middle" class="s">same_as if the code</text>
+          <text x="826" y="235" text-anchor="middle" class="s">is the paper's model</text>
+
+          <rect x="956" y="150" width="128" height="102" rx="6" class="code"/>
+          <text x="1020" y="172" text-anchor="middle" class="t">build</text>
+          <text x="1020" y="190" text-anchor="middle" class="s">runs the code,</text>
+          <text x="1020" y="205" text-anchor="middle" class="s">sandboxed (run)</text>
+          <text x="1020" y="220" text-anchor="middle" class="s">checks cited values</text>
+          <text x="1020" y="235" text-anchor="middle" class="s">figure vs data at x</text>
+
+          <path d="M696 201 H742" class="wire" marker-end="url(#ch)"/>
+          <path d="M906 201 H952" class="wire" marker-end="url(#ch)"/>
+          <path d="M106 252 V282 H826 V256" class="wire" marker-end="url(#ch)"/>
+          <text x="466" y="276" text-anchor="middle" class="lab">after all of the paper's steps</text>
+        </svg>
+      </div>
+      <figcaption>A paper's released code and its source data are sources with records of their own, so one lab's code can serve several papers. They are read only after the papers they belong to. A value in them is cited where it is written, and the files are pinned by a digest of their contents. Code in Python is run as released; other code is ported to Python by the reader, and the port is the reader's own model. The link to the paper is tested like any other: a value the paper prints against the one in its code or data, and the paper's figures against the data they plot. Neither the code nor the data is ever committed.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>What is kept</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Where</th><th>What</th><th>In git</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">pipeline/papers.yaml</td><td>The corpus list: id, file, page range, note, relate_with</td><td>yes</td></tr>
+          <tr><td class="mono">records/&lt;id&gt;/</td><td>Models (YAML + <code>model.py</code>), data with short locating quotes, figure-reading code, relations, questions</td><td>yes</td></tr>
+          <tr><td class="mono">pipeline/completed.yaml</td><td>Every passed job, with date and cost</td><td>yes</td></tr>
+          <tr><td class="mono">corpus/</td><td>The PDFs, released code and source data</td><td>no, copyright</td></tr>
+          <tr><td class="mono">records/&lt;id&gt;/text, pages, figwork</td><td>Page text, page images, figure crops</td><td>no, copyright</td></tr>
+          <tr><td class="mono">pipeline_state/</td><td>This machine's job state and agent logs, used to resume a stopped run</td><td>no</td></tr>
+          <tr><td class="mono">build/</td><td>Synthesis, report, figure check, explorer, model cache</td><td>no, rebuilt</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Commands</h2>
+    <div class="cmds">
+      <div>python -m pipeline.add paper.pdf --id smith2015 <span>[--pages 1-12] [--note "…"] [--relate-with bell1978]</span></div>
+      <div>python -m pipeline.attach code.zip --id smith_code --kind software --papers smith2015 <span># or a data file with --kind dataset</span></div>
+      <div>python -m pipeline.run_papers --plan <span># what would run, with budget caps</span></div>
+      <div>python -m pipeline.run_papers <span>[--papers smith2015] [--concurrency 3]</span></div>
+      <div>python -m pipeline.run_papers --status <span># state of every job on this machine</span></div>
+      <div>python -m pipeline.run_papers --reset read:smith2015 <span># release a parked job after looking at it</span></div>
+    </div>
+  </section>
+</main>
+
+</body></html>

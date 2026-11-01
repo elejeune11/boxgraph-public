@@ -1,0 +1,15 @@
+id: detach_time_fig8
+name: dimensionless time to detach a cell under force, numerical solution of Eq. 17 (Fig. 8)
+role: model
+stated: {page: 7, printed_page: "624", quote: "Values of t* were computed nu-", where: "Fig. 8 caption"}
+equation: "dNb/dt = k+(N1 - Nb)N2 - k- Nb exp(gamma F/kT Nb), Nb(0) = KN2 N1/(1 + KN2), gamma = r0; plotted as log10 t* against f*, with t* = k- t and f* = f r0/kT ln(KN2)"
+built_from: [detach_time_eq17]
+inputs:
+  f_star: {quantity: force_dimensionless, unit: dimensionless, description: "f* = f r0/kT ln(KN2)"}
+  KN2: {quantity: KN2_product, unit: dimensionless}
+outputs:
+  log10_t_star: {quantity: log10_dimensionless_detachment_time, unit: dimensionless, description: "log10 of t* = k- t"}
+settings:
+  rtol: 1.0e-8      # added: the paper gives no numerical settings
+  n_stop: 0.01      # added: Nb/N1 at which the cell is counted as detached
+  n_grid: 20001     # added: grid on which the absence of an equilibrium is checked

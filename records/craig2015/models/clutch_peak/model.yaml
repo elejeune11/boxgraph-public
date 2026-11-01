@@ -1,0 +1,22 @@
+id: clutch_peak
+name: location of the traction peak and the flow speed there, from the steady state of Eqs. 5-9
+role: model
+stated: {page: 10, quote: "Position of traction peak in mm (black dots) and actin flow speed (in units of", where: "Fig. 4(c) caption; Eqs. 5-9 p. 7"}
+equation: "x_peak = argmax_x T~(x);  v_peak = V~(x_peak) / v*   (T~, V~ from Eqs. 5-9)"
+inputs:
+  lam: {quantity: viscosity_parameter, unit: dimensionless}
+  F: {quantity: myosin_strength_parameter, unit: dimensionless}
+  b: {quantity: strengthening_parameter, unit: dimensionless}
+  vstar: {quantity: flow_weakening_parameter, unit: dimensionless}
+  gamma: {quantity: myosin_detachment_parameter, unit: dimensionless}
+outputs:
+  x_peak: {quantity: traction_peak_location, unit: um}
+  v_peak: {quantity: peak_flow_over_vstar, unit: dimensionless}
+settings:
+  n_segments: 40
+  L: 8.0
+  dM_scheme: central
+  neumann: first_order  # added: see clutch_profile and question q_neumann_choice
+  peak: node            # added: the peak is the grid node of largest traction (question q_numerics_scheme)
+built_from: [clutch_profile]
+stochastic: false

@@ -1,0 +1,392 @@
+# ==== surface plasmon resonance: fitted rates of purified integrins to FN7-10 (Fig. 2a table) ====
+# The table heads its columns "Kont (M-1 s-1 x 10^5)" and "Koff (s-1 x 10^2)". Both are entered with the
+# header's multiplier read the same way (value x 10^n in the stated unit); see q_koff_column_multiplier.
+# Every comparison in this record uses only ratios within one column, so the multiplier cancels.
+- id: kont_a5b1
+  quantity: true_binding_rate
+  unit: M^-1*s^-1
+  origin: fitted
+  printed: "7.724 x 10^5"
+  citation: {page: 3, printed_page: "633", quote: "Integrin Kont (M−1 s−1 × 105) Koff (s−1 × 102)", where: "Fig. 2a table, row a5b1"}
+  note: "printed as 7.724 in a column headed (M^-1 s^-1 x 10^5); fitted with a 1:1 Langmuir binding model (p. 6)"
+- id: kont_avb6
+  quantity: true_binding_rate
+  unit: M^-1*s^-1
+  origin: fitted
+  printed: "3.893 x 10^5"
+  citation: {page: 3, printed_page: "633", quote: "Integrin Kont (M−1 s−1 × 105) Koff (s−1 × 102)", where: "Fig. 2a table, row avb6"}
+  note: "printed as 3.893 in a column headed (M^-1 s^-1 x 10^5)"
+- id: koff_a5b1
+  quantity: unbinding_rate
+  unit: 1/s
+  origin: fitted
+  printed: "0.4944 x 10^2"
+  citation: {page: 3, printed_page: "633", quote: "Integrin Kont (M−1 s−1 × 105) Koff (s−1 × 102)", where: "Fig. 2a table, row a5b1"}
+  note: "printed as 0.4944 in a column headed (s^-1 x 10^2)"
+- id: koff_avb6
+  quantity: unbinding_rate
+  unit: 1/s
+  origin: fitted
+  printed: "15.06 x 10^2"
+  citation: {page: 3, printed_page: "633", quote: "Integrin Kont (M−1 s−1 × 105) Koff (s−1 × 102)", where: "Fig. 2a table, row avb6"}
+  note: "printed as 15.06 in a column headed (s^-1 x 10^2)"
+
+# ==== arithmetic the paper states on those values (p. 2) =========================================
+- id: kont_ratio_half
+  quantity: true_binding_rate_ratio
+  unit: dimensionless
+  origin: derived
+  printed: "0.5"
+  citation: {page: 2, printed_page: "632", quote: "by only half, kon in myo β6 cells was thus predicted", where: text}
+  note: "'As kont decreased by only half': kont(avb6) is half of kont(a5b1)"
+- id: density_ratio_fivefold
+  quantity: integrin_density_ratio
+  unit: dimensionless
+  origin: measured
+  printed: "5"
+  citation: {page: 2, printed_page: "632", quote: "integrin densities, which were fivefold higher for αv β6", where: "text; Fig. 2b"}
+  conditions: {}
+  note: "'fivefold higher for avb6 than for a5b1 (Fig. 2b and Supplementary Fig. 5)', in myo b6 cells"
+
+# ==== the clutch model's parameter changes from a5b1 to avb6 (p. 6) ==============================
+- id: kon_fold_model
+  quantity: effective_binding_rate_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {page: 6, printed_page: "636", quote: "increasing only kon (fivefold) and", where: text}
+  note: "the avb6 model differs from the a5b1 model only by kon x5 and koff x3, 'matching thus the trends in bond dynamics between a5b1 and avb6 measured in Fig. 2'"
+- id: koff_fold_model
+  quantity: unbinding_rate_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "3"
+  citation: {page: 6, printed_page: "636", quote: "koff (threefold), matching thus the trends in bond dynamics", where: text}
+  note: "a factor on the scaling of the FN-a5b1 koff/force catch-bond curve (p. 4)"
+- id: catch_bond_min_force
+  quantity: catch_bond_optimal_force
+  unit: pN
+  origin: reported
+  printed: "~30"
+  citation: {page: 4, printed_page: "634", quote: "force of about 30 pN. To allow for possible differences", where: text}
+  from_source: kong2009
+  note: "'presenting a maximum stability (minimum koff) at a force of about 30 pN', from the FN-a5b1 single-molecule measurements of ref. 12"
+
+# ==== printed predictions of the clutch model (not runnable here) ================================
+- id: density_onset_a5b1_pred
+  quantity: substrate_stiffness
+  unit: kPa
+  origin: predicted
+  printed: "14"
+  citation: {page: 6, printed_page: "636", quote: "14 kPa for α5 β1 , and 29 kPa for αv β6", where: "text; Fig. 3d, Fig. 4c"}
+  note: "stiffness at which the model predicts the onset of the third (reinforcement) regime and the sharp rise of a5b1 density; the paper says measured densities rose sharply at this same point"
+- id: density_onset_avb6_pred
+  quantity: substrate_stiffness
+  unit: kPa
+  origin: predicted
+  printed: "29"
+  citation: {page: 6, printed_page: "636", quote: "14 kPa for α5 β1 , and 29 kPa for αv β6", where: "text; Fig. 4c"}
+  note: "as density_onset_a5b1_pred, for avb6"
+- id: traction_peak_avb6_measured
+  quantity: substrate_stiffness
+  unit: kPa
+  origin: measured
+  printed: "5"
+  citation: {page: 6, printed_page: "636", quote: "the traction peak moved to malignant rigidities (5 kPa", where: "text; Fig. 4g"}
+  note: "stiffness of the traction peak of myo b6 cells bound through avb6 (a5b1 blocked); the paper says the model captured it"
+
+# ==== read from figures (calibrated readings in figures.yaml; method in figures/_kit.py) ====
+- id: traction_ctrl_fig1b
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f1b_ctrl
+  citation: {page: 2, where: "Fig. 1b", quote: "Average forces as a function of rigidity for myo ctrl cells (red) and"}
+  note: "myo ctrl cells (red), per gel"
+- id: traction_b6_fig1b
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f1b_b6
+  citation: {page: 2, where: "Fig. 1b", quote: "Average forces as a function of rigidity for myo ctrl cells (red) and"}
+  note: "myo b6 cells (blue), per gel"
+- id: traction_ctrl_ab_fig1c
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f1c_ctrl_ab
+  citation: {page: 2, where: "Fig. 1c", quote: "Average forces for both cell types after blocking"}
+  note: "myo ctrl + avb6 blocking ab (red)"
+- id: traction_b6_ab_fig1c
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f1c_b6_ab
+  citation: {page: 2, where: "Fig. 1c", quote: "Average forces for both cell types after blocking"}
+  note: "myo b6 + avb6 blocking ab (blue)"
+- id: spr_a5b1_264nM
+  quantity: spr_response
+  unit: dimensionless
+  origin: measured
+  figure: f2a_a5b1_264
+  citation: {page: 3, where: "Fig. 2a", quote: "Data for 264 nM are marked in bold in both cases"}
+  note: "SPR response (RU) of 264 nM a5b1 on FN7-10 vs time; injection from about 30 s to 90 s"
+- id: spr_avb6_264nM
+  quantity: spr_response
+  unit: dimensionless
+  origin: measured
+  figure: f2a_avb6_264
+  citation: {page: 3, where: "Fig. 2a", quote: "Data for 264 nM are marked in bold in both cases"}
+  note: "SPR response (RU) of avb6, the bold salmon curve ending at the '264 nM' label (see q_fig2a_two_bold)"
+- id: integrins_a5b1_ctrl_fig2b
+  quantity: integrin_membrane_density
+  unit: 1/um^2
+  origin: measured
+  figure: f2b_a5b1_ctrl
+  citation: {page: 3, where: "Fig. 2b", quote: "Integrin densities on the membrane for both cell types"}
+  note: "a5b1 in myo ctrl cells; the axis is printed 'Integrins (um2)' (q_fig2b_axis_unit)"
+- id: integrins_a5b1_b6_fig2b
+  quantity: integrin_membrane_density
+  unit: 1/um^2
+  origin: measured
+  figure: f2b_a5b1_b6
+  citation: {page: 3, where: "Fig. 2b", quote: "Integrin densities on the membrane for both cell types"}
+  note: "a5b1 in myo b6 cells"
+- id: integrins_avb6_b6_fig2b
+  quantity: integrin_membrane_density
+  unit: 1/um^2
+  origin: measured
+  figure: f2b_avb6_b6
+  citation: {page: 3, where: "Fig. 2b", quote: "Integrin densities on the membrane for both cell types"}
+  note: "avb6 in myo b6 cells"
+- id: detachment_time_fig2c
+  quantity: bead_detachment_time
+  unit: s
+  origin: measured
+  figure: f2c_detach
+  citation: {page: 3, where: "Fig. 2c", quote: "Time required to detach beads from myo ctrl or myo"}
+  note: "conditions 1, 2, 5, 6, 7 of the eight in the reading's `what`; 3, 4 and 8 have no bar drawn"
+- id: b1_recruitment_fig2e
+  quantity: integrin_recruitment
+  unit: dimensionless
+  origin: measured
+  figure: f2e_b1
+  citation: {page: 3, where: "Fig. 2e", quote: "Corresponding quantification of integrin recruitment to beads"}
+  note: "b1 recruitment to FN beads, conditions 1-4"
+- id: b6_recruitment_fig2g
+  quantity: integrin_recruitment
+  unit: dimensionless
+  origin: measured
+  figure: f2g_b6
+  citation: {page: 3, where: "Fig. 2g", quote: "integrins and blocking α5 β1 integrins instead of the reverse"}
+  note: "b6 recruitment to FN beads, conditions 1-4"
+- id: traction_model_fig3c
+  quantity: cell_traction
+  unit: Pa
+  origin: predicted
+  figure: f3c_model
+  citation: {page: 4, where: "Fig. 3c", quote: "integrin densities (d), and actin speeds (e) predicted by the model"}
+  note: "model curve; wide intervals: the x labels are not on one log scale"
+- id: density_model_fig3d
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: predicted
+  figure: f3d_model
+  citation: {page: 4, where: "Fig. 3d", quote: "integrin densities (d), and actin speeds (e) predicted by the model"}
+  note: "model curve"
+- id: flow_model_fig3e
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: predicted
+  figure: f3e_model
+  citation: {page: 4, where: "Fig. 3e", quote: "integrin densities (d), and actin speeds (e) predicted by the model"}
+  note: "model curve"
+- id: traction_a5b1_ctrl_fig4d
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f4d_filled
+  citation: {page: 5, where: "Fig. 4d", quote: "quantifications of average cell traction forces"}
+  note: "a5b1-mediated: myo ctrl (filled)"
+- id: traction_a5b1_b6ab_fig4d
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f4d_open
+  citation: {page: 5, where: "Fig. 4d", quote: "quantifications of average cell traction forces"}
+  note: "a5b1-mediated: myo b6 + avb6 ab (open)"
+- id: traction_a5b1_model_fig4d
+  quantity: cell_traction
+  unit: Pa
+  origin: predicted
+  figure: f4d_line
+  citation: {page: 5, where: "Fig. 4d", quote: "Lines indicate model predictions"}
+  note: "model line for a5b1, at the gels"
+- id: flow_a5b1_fig4e
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: measured
+  figure: f4e_pts
+  citation: {page: 5, where: "Fig. 4e", quote: "actin rearward flows"}
+  note: "a5b1-mediated"
+- id: flow_a5b1_model_fig4e
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: predicted
+  figure: f4e_line
+  citation: {page: 5, where: "Fig. 4e", quote: "Lines indicate model predictions"}
+  note: "model line for a5b1"
+- id: density_a5b1_ctrl_fig4f
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: measured
+  figure: f4f_filled
+  citation: {page: 5, where: "Fig. 4f", quote: "integrin densities in adhesions"}
+  note: "a5b1-mediated: myo ctrl (filled)"
+- id: density_a5b1_b6ab_fig4f
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: measured
+  figure: f4f_open
+  citation: {page: 5, where: "Fig. 4f", quote: "integrin densities in adhesions"}
+  note: "a5b1-mediated: myo b6 + avb6 ab (open)"
+- id: density_a5b1_model_fig4f
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: predicted
+  figure: f4f_line
+  citation: {page: 5, where: "Fig. 4f", quote: "Lines indicate model predictions"}
+  note: "model line for a5b1"
+- id: traction_avb6_fig4g
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f4g_pts
+  citation: {page: 5, where: "Fig. 4g", quote: "quantifications of average cell traction forces"}
+  note: "avb6-mediated: myo b6 + a5b1 ab"
+- id: traction_avb6_model_fig4g
+  quantity: cell_traction
+  unit: Pa
+  origin: predicted
+  figure: f4g_line
+  citation: {page: 5, where: "Fig. 4g", quote: "Lines indicate model predictions"}
+  note: "model line for avb6"
+- id: flow_avb6_fig4h
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: measured
+  figure: f4h_pts
+  citation: {page: 5, where: "Fig. 4h", quote: "actin rearward flows"}
+  note: "avb6-mediated"
+- id: flow_avb6_model_fig4h
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: predicted
+  figure: f4h_line
+  citation: {page: 5, where: "Fig. 4h", quote: "Lines indicate model predictions"}
+  note: "model line for avb6"
+- id: density_avb6_fig4i
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: measured
+  figure: f4i_pts
+  citation: {page: 5, where: "Fig. 4i", quote: "integrin densities in adhesions"}
+  note: "avb6-mediated"
+- id: density_avb6_model_fig4i
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: predicted
+  figure: f4i_line
+  citation: {page: 5, where: "Fig. 4i", quote: "Lines indicate model predictions"}
+  note: "model line for avb6"
+- id: traction_both_fig4j
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f4j_pts
+  citation: {page: 5, where: "Fig. 4j", quote: "quantifications of average cell traction forces"}
+  note: "both integrins: myo b6, no ab"
+- id: traction_both_model_fig4j
+  quantity: cell_traction
+  unit: Pa
+  origin: predicted
+  figure: f4j_line
+  citation: {page: 5, where: "Fig. 4j", quote: "Lines indicate model predictions"}
+  note: "model line, both integrins"
+- id: flow_both_fig4k
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: measured
+  figure: f4k_pts
+  citation: {page: 5, where: "Fig. 4k", quote: "actin rearward flows"}
+  note: "both integrins"
+- id: flow_both_model_fig4k
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: predicted
+  figure: f4k_line
+  citation: {page: 5, where: "Fig. 4k", quote: "Lines indicate model predictions"}
+  note: "model line, both integrins"
+- id: density_b1_both_fig4l
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: measured
+  figure: f4l_b1
+  citation: {page: 5, where: "Fig. 4l", quote: "blue and orange symbols correspond"}
+  note: "b1 density, both integrins (blue)"
+- id: density_b6_both_fig4l
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: measured
+  figure: f4l_b6
+  citation: {page: 5, where: "Fig. 4l", quote: "blue and orange symbols correspond"}
+  note: "b6 density, both integrins (orange); the 5 kPa circle is hidden"
+- id: density_b1_both_model_fig4l
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: predicted
+  figure: f4l_b1_line
+  citation: {page: 5, where: "Fig. 4l", quote: "Lines indicate model predictions"}
+  note: "model line for b1 (blue), both integrins"
+- id: density_b6_both_model_fig4l
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: predicted
+  figure: f4l_b6_line
+  citation: {page: 5, where: "Fig. 4l", quote: "Lines indicate model predictions"}
+  note: "model line for b6 (orange), both integrins; read only where it is not under the blue line"
+- id: density_b6_both_hi_fig4l
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: measured
+  figure: f4l_b6_hi
+  citation: {page: 5, where: "Fig. 4l", quote: "blue and orange symbols correspond"}
+  note: "the same orange circles as density_b6_both_fig4l, at 14 and 29 kPa only, to meet the orange model line"
+- id: traction_ctrl_fig1b_sub
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f1b_ctrl_sub
+  citation: {page: 2, where: "Fig. 1b", quote: "Average forces as a function of rigidity for myo ctrl cells (red) and"}
+  note: "the same red circles as traction_ctrl_fig1b, at the gels where Fig. 4d shows its filled circle"
+- id: traction_a5b1_b6ab_fig4d_sub
+  quantity: cell_traction
+  unit: Pa
+  origin: measured
+  figure: f4d_open_sub
+  citation: {page: 5, where: "Fig. 4d", quote: "quantifications of average cell traction forces"}
+  note: "the same open circles as traction_a5b1_b6ab_fig4d, at the gels where Fig. 1c shows its blue circle"
+- id: traction_a5b1_model_ctrl_fig4d
+  quantity: cell_traction
+  unit: Pa
+  origin: predicted
+  figure: f4d_line_ctrl
+  citation: {page: 5, where: "Fig. 4d", quote: "Lines indicate model predictions"}
+  note: "model line for a5b1, at the columns of the visible filled circles"
+- id: density_a5b1_model_ctrl_fig4f
+  quantity: integrin_density_au
+  unit: dimensionless
+  origin: predicted
+  figure: f4f_line_ctrl
+  citation: {page: 5, where: "Fig. 4f", quote: "Lines indicate model predictions"}
+  note: "model line for a5b1, at the columns of the visible filled circles"

@@ -1,0 +1,180 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units.
+# a: the released code (ported), b: the paper's Methods model (andreu2021).
+- id: rel_methods_approximates_code
+  kind: approximated_by
+  a: andreu2021_code/cmstretchg_port
+  b: andreu2021/clutch_stretch_sim
+  mapping:
+    A: "A"
+    fr: "fr"
+    nf: "nc"
+    kon_i: "kont1"
+    kc: "kc*1e3"                 # N/m -> pN/nm
+    ksub: "ksub*1e3"             # N/m -> pN/nm
+    FR: "pt"
+    dmin: "dint1"                # the code starts at dint1 and keeps the density above it
+    dmax: "mr"
+    dadd: "intadd"
+    Fact: "Fbreaking*1e12"       # N -> pN
+    koff_a: "koff_a"
+    koff_b: "koff_b*1e-12"       # 1/N -> 1/pN
+    koff_c: "koff_c"
+    koff_d: "koff_d*1e-12"       # 1/N -> 1/pN
+    ln_kunf0: "ln_kunf0"
+    kunf_b: "kunf_b*1e-12"       # 1/N -> 1/pN
+    len0: "(bl - yap_at_zero_length)*length_per_yap"
+    len_scale: "sc*length_per_yap"
+  output_map: {d_mean: mdint1}
+  regime:
+    A: [1.5, 3.0]                # the four amplitudes of stretchscriptg.m and Supplementary Table 4
+    fr: [0.125, 2.0]             # the frequencies of the Fig. 2e model lines
+    nc: [1200, 1200]
+    dint1: [300, 300]
+    kont1: [2.11e-4, 2.11e-4]
+    kc: [1.0, 1.0]
+    ksub: [1.0e-3, 1.0e-3]
+    pt: [0.073, 0.073]
+    mr: [1200, 1200]
+    intadd: [24, 24]
+    Fbreaking: [1.42e-10, 1.42e-10]
+    koff_a: [11.27, 11.27]
+    koff_b: [-1.601e11, -1.601e11]
+    koff_c: [0.0008882, 0.0008882]
+    koff_d: [1.225e11, 1.225e11]
+    pt_table: [0.073, 0.073]
+    ln_kunf0_table: [-7.573, -7.573]
+    kunf_b_table: [1.786e12, 1.786e12]
+    cm_a: [11.27, 11.27]
+    cm_b: [-1.601e11, -1.601e11]
+    cm_c: [0.0008882, 0.0008882]
+    cm_d: [1.225e11, 1.225e11]
+    cm_g: [1000, 1000]
+    cm_fend: [1.5e-13, 1.5e-13]
+    ln_kunf0: [-7.573, -7.573]
+    kunf_b: [1.786e12, 1.786e12]
+    ln_kfold0: [13.07, 13.07]
+    kfold_b: [-2.288e12, -2.288e12]
+    bl: [1.2, 1.2]
+    sc: [1.4, 1.4]
+    a: [1.7e-6, 1.7e-6]
+    yap_at_zero_length: [1.0, 1.0]
+    length_per_yap: [3.0, 3.0]
+  tolerance: 0.02
+  assumptions:
+    - "every parameter but A and fr held at the code's values (stretchscriptg.m, koffcb.m, cmstretchg.m)"
+    - "each model run once per point at its own seed; Python random numbers in both"
+    - "the comparison is on the time-averaged integrin density, before either model's scaling to the plot axis"
+  provenance: proposed
+  reason: >-
+    The paper says its 'Custom scripts used in the manuscript are uploaded as supplementary material
+    (Supplementary Software 1)' (andreu2021 p. 11), and the code names the paper as its source
+    (stretchscriptg.m line 1), but neither says how the Methods description (pp. 10-11, Eqs. 4-6) relates to
+    the code. The Methods model is the code without three things the paper does not describe: talin
+    refolding at exp(13.07) exp(-2.288e12 pt |F|), the 'cm' off-rate above 150 pN, and the rate-table
+    cut-off of 1e-100 rather than 1e-70. No limit of the code's parameters removes the 'cm' variant, so this
+    is an approximation, not a reduction. Tolerance 2%: twice the seed-to-seed spread of one 1000 s run of
+    either model (under 1% at four probe points of the regime) and about twice the precision with which
+    the paper's Fig. 2e lines are read (about 0.04 um on the length axis, about 1% of the density).
+# a: the released code's loading-rate-corrected rates (ported), b: Bell's loaded reverse rate (bell1978).
+- id: rel_code_unfolding_slow_loading_bell
+  kind: approximated_by
+  a: andreu2021_code/lr_rate_port
+  b: bell1978/loaded_reverse_rate
+  mapping:
+    k_minus: "exp(ln_kunf0)"                        # 1/s
+    kT: "0.0267"                                    # eV/particle, about 310 K; only gamma/kT matters
+    gamma: "kunf_b*pt*0.0267*1.602176634e-10"       # nm: gamma 1e-7 f / (1.602176634e-12 kT) = kunf_b pt Fb
+    f: "floor(Fb*1e12 + 0.5)*1e-12*1e5"             # N -> dyne, at the 1 pN grid force the port uses (line 43)
+  output_map: {k_minus_F: k_unf}
+  regime:
+    L: [1.0e-20, 1.0e-18]          # N/s: so slow that pm(L, Fb) is below the cut-off at every Fb of the regime
+    Fb: [2.0e-11, 1.5e-10]         # N: up to the largest starting force of the tables (line 16)
+    koff_a: [11.27, 11.27]         # the unbinding coefficients do not enter k_unf; held at the code's values
+    koff_b: [-1.601e11, -1.601e11]
+    koff_c: [0.0008882, 0.0008882]
+    koff_d: [1.225e11, 1.225e11]
+    ln_kunf0: [-9.0, -6.0]         # around the code's -7.573
+    kunf_b: [1.0e12, 2.0e12]       # 1/N, around the code's 1.786e12
+    pt: [0.05, 0.1]                # around the code's 0.073
+  tolerance: 1.0e-6
+  assumptions:
+    - "kT fixed at 0.0267 eV in the mapping: Bell's law depends on gamma and kT only through gamma/kT, so the code's coefficient kunf_b pt is carried by gamma"
+    - "the comparison is at the 1 pN grid force at which the port evaluates the rate"
+  provenance: proposed
+  reason: >-
+    Neither source names the other. The code's starting rate for talin unfolding, exp(-7.573)
+    exp(1.786e12 pt |F|) ('loading rate script.m' line 28, cmstretchg.m line 104), has the form of Bell's
+    replacement for the reverse rate constant under force, k_ exp(gamma F/kT Nb) (bell1978 p. 623), with
+    k_ = exp(ln_kunf0) and gamma/kT = kunf_b pt per newton. The ported model returns the rate corrected for
+    the loading rate L, which becomes that uncorrected rate as L -> 0: once the density pm(L, Fb) of the
+    event force falls below the cut-off, line 47 returns k(Fb) itself. This is a reduction in L -> 0, but the
+    numeric limit test approaches 0 only down to about 1e-8 N/s, where the correction is still large (the
+    limit is reached only for L much smaller than the integral of k up to Fb, about 1e-14 to 1e-9 N/s here),
+    so it is entered as an approximation measured over a regime of slow loading where the code's cut-off
+    branch applies. Tolerance 1e-6: there the two should agree to rounding.
+# a: the released code's loading-rate-corrected rates (ported), b: Erdmann and Schwarz's single-bond rate (erdmann2004).
+- id: rel_code_unfolding_slow_loading_erdmann
+  kind: approximated_by
+  a: andreu2021_code/lr_rate_port
+  b: erdmann2004/single_bond_rate
+  mapping:
+    k0: "exp(ln_kunf0)"                     # 1/s
+    F: "floor(Fb*1e12 + 0.5)"               # N -> pN, at the 1 pN grid force the port uses (line 43)
+    i: "1"                                  # the code's rate is per talin molecule: one bond carries the force
+    Fb: "1e12/(kunf_b*pt)"                  # pN: F/Fb = kunf_b pt |F| with F in N
+  output_map: {k: k_unf}
+  regime:
+    L: [1.0e-20, 1.0e-18]          # N/s: so slow that pm(L, Fb) is below the cut-off at every Fb of the regime
+    Fb: [2.0e-11, 1.5e-10]         # N: up to the largest starting force of the tables (line 16)
+    koff_a: [11.27, 11.27]         # the unbinding coefficients do not enter k_unf; held at the code's values
+    koff_b: [-1.601e11, -1.601e11]
+    koff_c: [0.0008882, 0.0008882]
+    koff_d: [1.225e11, 1.225e11]
+    ln_kunf0: [-9.0, -6.0]         # around the code's -7.573
+    kunf_b: [1.0e12, 2.0e12]       # 1/N, around the code's 1.786e12
+    pt: [0.05, 0.1]                # around the code's 0.073
+  tolerance: 1.0e-6
+  assumptions:
+    - "Erdmann's force scale Fb = kB T/xb is carried by the code's coefficient: Fb = 1/(kunf_b pt), in pN"
+    - "i = 1: the code applies the unfolding rate to one talin under the force pt |F| of its clutch"
+    - "the comparison is at the 1 pN grid force at which the port evaluates the rate"
+  provenance: proposed
+  reason: >-
+    Neither source names the other (the code has no references, and erdmann2004 predates it). The code's
+    starting rate for talin unfolding, exp(-7.573) exp(1.786e12 pt |F|) ('loading rate script.m' line 28,
+    cmstretchg.m line 104), has the form of Erdmann and Schwarz's single-bond rate k = k0 e^{F/iFb}
+    (erdmann2004 p. 1) for one closed bond, with k0 = exp(ln_kunf0) and 1/Fb = kunf_b pt per newton. The
+    ported model returns the rate corrected for the loading rate L, which equals that uncorrected rate
+    where the density pm(L, Fb) of the event force falls below the cut-off (line 47); the numeric limit
+    L -> 0 does not reach that branch, so, as for rel_code_unfolding_slow_loading_bell, this is entered as
+    an approximation over a regime of slow loading where the cut-off branch applies. Tolerance 1e-6: there
+    the two should agree to rounding. The pair suggested by shape (lr_rate_port and
+    rebinding_from_critical_force) is not related: the latter solves fc = N0 plog(gamma/e) for gamma.
+# a: Chan and Odde's motor-clutch model (chan2008), b: the released code's stretch clutch model (ported).
+- id: rel_code_from_chan_odde
+  kind: derived_from
+  a: chan2008/motor_clutch
+  b: andreu2021_code/cmstretchg_port
+  mapping:
+    nc: "nc"                     # number of clutches (the code: fibronectin molecules)
+    kc: "kc*1e-3"                # pN/nm -> N/m
+    ksub: "ksub*1e-3"            # pN/nm -> N/m
+    koff_a: "koff"               # with koff_c = 0 the code's a exp(b|F|) + c exp(d|F|) is Chan's Eq. 1
+    koff_b: "1e12/Abs(Fb)"       # 1/pN -> 1/N; Chan prints Fb and the clutch tension both negative
+    koff_c: "0"
+    koff_d: "0"
+  steps:
+    - "the flow between cytoskeleton and substrate is not given by actomyosin contractility (Eqs. 3-4) but by an externally applied cyclic stretch of frequency fr and amplitude A"
+    - "the off-rate under force is the integrin-fibronectin catch bond of Kong et al., corrected for the loading rate, in place of the Bell law of Eq. 1"
+    - "three force-sensitive events: integrin-fibronectin unbinding, talin unfolding and actin filament breakage; unbinding and breakage disengage the clutch, unfolding recruits integrins"
+    - "binding at kont1 times the integrin density in place of a constant kon"
+  provenance: stated
+  citation:
+    file: cmstretchg.m
+    lines: "3-11"
+    quote: "according to the model of Chan and Odde (Science, 2008)"
+    where: "header comment"
+  assumptions:
+    - "the steps are the code's words (cmstretchg.m lines 3-11), not operations that can be applied to Chan's model, so the relation is expected to be unverifiable"
+    - "the mapping gives only the inputs both models have; the code's other inputs (A, fr, integrin density and reinforcement, talin and actin parameters, the YAP scaling) have no counterpart in Chan's model, and Chan's motor inputs (nm, Fm, vu) none in the code"
+    - "kon of Chan corresponds to kont1 dint1 of the code, which no mapping of single inputs expresses"

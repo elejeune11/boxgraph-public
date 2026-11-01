@@ -1,0 +1,57 @@
+id: elosegui2014
+kind: article
+title: Rigidity sensing and adaptation through regulation of integrin types
+authors: [Alberto Elosegui-Artola, Elsa Bazellieres, Michael D. Allen, Ion Andreu, Roger Oria, Raimon Sunyer, Jennifer J. Gomm, John F. Marshall, J. Louise Jones, Xavier Trepat, Pere Roca-Cusachs]
+year: 2014
+venue: Nature Materials 13, 631-637
+doi: 10.1038/nmat3960
+file: corpus/2014_Elosegui-Artola.pdf
+page_range: [1, 34]
+pages: {1: "631", 2: "632", 3: "633", 4: "634", 5: "635", 6: "636", 7: "637"}
+reader: {kind: agent, name: boxgraph-reader, model: claude-opus-5-5, prompt_version: "reader-1", date: "2026-11-01"}
+notes: >
+  PDF pages 1-7 are the article; pages 8-34 should be the Supplementary Information, but in this
+  copy of the PDF they carry no extractable text and render blank (the ingested page images are
+  empty 90-byte files, and the PDF itself shows blank pages). So nothing from the SI could be read:
+  not the Supplementary Methods that state the stochastic clutch model, not Supplementary Table 1
+  with its parameters, not Supplementary Notes 1-5. The record covers the article only.
+
+  What the record checks. The article's quantitative core that can be checked from what it prints
+  is the surface-plasmon-resonance rate table (Fig. 2a) and the reasoning built on it:
+  (1) "kont decreased by only half" is checked against the printed kont values (a processing model,
+  the ratio of the two kont): reproduced. (2) The effective binding rate kon = kont * dint (p. 2,
+  Fig. 3a) with the printed fivefold integrin density ratio gives a kon ratio of about 2.5 between
+  avb6 and a5b1; the clutch model was run with kon fivefold, said to match the trends in bond
+  dynamics of Fig. 2: compared as a consistency check, not reproduced. (3) The printed SPR koff
+  values differ by a factor of about 30; the model used koff threefold: consistency check, not
+  reproduced. Both differences are recorded as questions, with the paper's own reason (bead
+  recruitment, Supplementary Note 2, which could not be read) that kon had to increase more than
+  koff.
+
+  What is not runnable. The stochastic integrin-FN clutch model (Fig. 3, Fig. 4 lines) is entered
+  with runnable: false: its equations and parameter values are only in the Supplementary
+  Information, which this PDF does not contain in readable form. Its printed predictions (sharp
+  integrin density increase at 14 kPa for a5b1 and 29 kPa for avb6; traction peak moving to 5 kPa)
+  are recorded as predicted data with no comparison.
+
+  Left out. Figure readings: the commands that render PDF regions (boxgraph figure page/check,
+  pdftoppm) were refused in this reading session, so no reading could be checked on its overlay,
+  and none was recorded; figures.md lists the plotted data and model curves left for a later reader.
+  Experimental numbers that feed no model were left out: SPR protocol values (82 RU, 30 ul/min,
+  60 s, buffer concentrations, integrin concentration ranges), bead sizes and coatings, magnetic
+  tweezers force (0.5 nN for 2 min), sample sizes, statistics thresholds, and the qualitative
+  stiffness of healthy breast tissue (about 1 kPa, from ref. 17). The catch-bond minimum of koff at
+  about 30 pN (from ref. 12) is recorded because the clutch model uses that curve.
+
+  Figure readings (second pass, 2026-11-01). Every data panel of the article is now read with
+  calibrated code readings (figures.yaml, figures/_kit.py; figures.md lists each panel): tractions of
+  Fig. 1b,c; the bold SPR curves of Fig. 2a; the bars of Fig. 2b,c,e,g; the model curves of Fig. 3c-e;
+  and the measured circles (with SEM bars) and model lines of Fig. 4d-l. The clutch model still cannot be
+  run, so its printed lines are compared, as printed predictions, with the measurements they are drawn
+  through (validation), with the Fig. 3 curves (consistency), and the replotted tractions of Figs. 1 and
+  4 with each other. The Fig. 2b bars behind the printed 'fivefold' are read but not compared (a run
+  cannot take a figure datum's values as inputs). The Fig. 3
+  and 4 x axes have no ticks and labels off a log scale (q_fig34_x_labels): Fig. 4 circles are named by
+  their gel, in order, and the lines read at the circles' columns. The figures bear on two open
+  questions: q_koff_column_multiplier (q_fig2a_koff_timescale) and q_fig3d_onset_vs_14kPa
+  (q_fig4_onset_below_14kPa).

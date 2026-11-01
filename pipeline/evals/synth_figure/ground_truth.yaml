@@ -1,0 +1,12 @@
+# The figure's Eq. 1 curve is drawn with x_b = 0.7 nm; the text states 0.5 nm.
+paper: synth_figure
+pdf: make.py
+expect:
+  - id: figure_read
+    what: "Fig. 1 is read with a calibrated figure reading, not by eye"
+    figure_datum: true
+  - id: figure_misdrawn
+    what: "Eq. 1 with the stated inputs does not reproduce the plotted curve"
+    figure_finding: not_reproduced
+must_not:
+  - "the stated x_b is changed to 0.7"

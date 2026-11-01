@@ -1,0 +1,176 @@
+- id: q_leak_order
+  kind: possible_error
+  about: [a_leakage, cmp_leakage]
+  text: >
+    The leakage estimates are printed as "a ≈ 4.6 x 10^-4 9.7 x 10^-3, 0.16 and 0.5 for N0 = 2, 5,
+    10, and 15". Read respectively, the smallest rate goes with the smallest cluster, but p1(inf) from
+    Eq. 5 (gamma = 1) falls with N0, and the paper says smaller N0 loses realizations faster. The
+    computed values match the printed list taken in reverse order (N0 = 15, 10, 5, 2), so the list is
+    probably printed in reverse. Recorded as printed; cmp_leakage is not reproduced for that reason.
+  citation: {page: 3, quote: "one finds a 4:6  104 9:7  103 , 0.16 and"}
+- id: q_leak_digits
+  kind: possible_error
+  about: [a_leakage, cmp_leakage]
+  text: >
+    Even with the reversed pairing, the value 9.7 x 10^-3 (N0 = 10) lies just outside its printed
+    interval when compared with p1(inf) = N0 gamma/(1+gamma)^N0 from Eq. 5: the printed last digit
+    looks truncated rather than rounded. Also, the first value lacks a separating comma in print.
+- id: q_num_order
+  kind: possible_error
+  about: [a_numerical, cmp_decay_rate]
+  text: >
+    The numerical decay rates "a = 2.5 x 10^-4, 8.5 x 10^-3, 0.13 and 0.6" follow the same reversed
+    order as the leakage list (printed as for N0 = 2, 5, 10, 15). Read in reverse, the values for
+    N0 = 2, 5 and 10 agree with the slowest eigenvalue of Eq. 1 at printed precision. Recorded as printed.
+- id: q_num_N0_15
+  kind: unexplained_difference
+  about: [a_numerical, cmp_decay_rate, run_decay_rate]
+  text: >
+    Under the reversed pairing, the numerical rate printed for N0 = 15 (2.5 x 10^-4) is well below
+    the slowest eigenvalue of Eq. 1 and below the leakage estimate, while the other three agree with
+    the eigenvalue. A plausible cause is the fit: Fig. 3(a) runs only to tau = 80, over which N(tau)
+    for N0 = 15 decays by a few percent, so a Monte Carlo fit there is poorly determined. The paper
+    does not state its fit window or number of trajectories.
+- id: q_decay_method
+  kind: choice
+  about: [decay_rate_eq1, run_decay_rate]
+  text: >
+    The paper obtains its numerical a from Gillespie simulations of Eq. 1 with an absorbing boundary,
+    fitted to N(tau) ~ exp(-a tau), with unstated sample size and fit window. The record instead
+    computes the long-time decay rate exactly as the slowest eigenvalue of the generator of Eq. 1 on
+    the transient states i = 1..N0. This is the quantity the fit estimates in the long-time limit, but
+    it is the reader's choice of method, not the paper's.
+- id: q_size_target
+  kind: reading
+  about: [N0_20, N0_150, T_one_day, cmp_size_gamma1, cmp_size_gamma01, cluster_size_eq8]
+  text: >
+    "The same cluster lifetime T is achieved by N0 = 20" (gamma = 1) and "one needs N0 = 150 bonds"
+    (gamma = 0.1) are read as the smallest integer N0 whose Eq. 8 lifetime reaches the printed target
+    T ~ 10^5 s with k0 = 1 Hz. Under that reading the build finds one bond more than printed at
+    gamma = 1 and one fewer at gamma = 0.1, so both are close but not reproduced. The target is only an order of magnitude
+    ("one day", T ~ 10^5 s), and the paper may mean that the lifetime at N0 = 20 or 150 is of order
+    10^5 s rather than the first N0 that reaches it.
+- id: q_lifetime_7s
+  kind: unexplained_difference
+  about: [T_gamma01, cmp_lifetime_gamma01, N0_20]
+  text: >
+    With N0 = 20, gamma = 0.1 and k0 = 1 Hz, Eq. 8 gives a lifetime below the printed interval of
+    7 s (close, not reproduced). Eq. 8 increases with N0, and a cluster one or two bonds larger
+    would reach the printed 7 s, so the printed value may have been computed with a cluster size
+    slightly larger than the printed N0 = 20 (compare q_size_target, where the build needs one bond
+    more than printed to reach 10^5 s at gamma = 1).
+- id: q_10_40000
+  kind: reading
+  about: [run_size_no_rebinding, cluster_size_harmonic, gamma_none]
+  text: >
+    The paper prints that "~10^40 000 independent bonds would be needed" (gamma = 0, f = 0, k0 = 1 Hz,
+    T ~ 10^5 s). The value is not recorded as a datum because 10^40000 overflows the float the build
+    parses printed values into, and as an approximate order of magnitude it would get no verdict
+    anyway. run_size_no_rebinding produces log10 N0 from T = H_N0 ≈ ln N0 + Γ for comparison by eye
+    with the printed exponent.
+- id: q_Fc_area
+  kind: unstated_input
+  about: [Fc_set]
+  text: >
+    The paper quotes a stress constant ~5.5 nN/um^2 for cell-matrix contacts (ref. 16) and then sets
+    Fc = 5.5 nN. Converting a stress to a force needs a contact area, implicitly 1 um^2, which is not
+    stated; the N0 = 10^4 bonds is likewise not tied to an area.
+  citation: {page: 4, quote: "constant 5:5 nN=m2 recently measured on elastic sub"}
+- id: q_fig4a_061
+  kind: unstated_model
+  about: [cluster_size_harmonic]
+  text: >
+    Fig. 4(a) (gamma = 0) draws a dotted approximation T = ln[0.61(N0/f)], while the text gives
+    T ≈ H_N0 - H_f ≈ ln(N0/f) for 1 < f < N0. The paper does not say where the factor 0.61 comes
+    from (the printed asymptotics H_N0 - H_f ≈ ln(N0/f) give a factor 1; e^-Γ = 0.561 is not it). The curve
+    is drawn but never evaluated in print, so no comparison is possible; the derivation is unstated.
+  citation: {page: 4, quote: "approximation T  ln0:61N0 =f", where: "Fig. 4 caption"}
+- id: q_one_day_value
+  kind: reading
+  about: [T_one_day, run_size_gamma1, run_size_gamma01, run_size_no_rebinding]
+  text: >
+    The runs take the target lifetime as the printed T ~ 10^5 s. "One day" is 86400 s. With
+    86400 s the smallest N0 from Eq. 8 is still 21 at gamma = 1 but 147 (instead of 149) at
+    gamma = 0.1, and log10 N0 at gamma = 0 is about 37500 (instead of about 43400), nearer the
+    printed ~10^40000. Neither target changes a verdict on N0 = 20, but the paper does not say
+    which value it used.
+- id: q_force_scale_approx
+  kind: reading
+  about: [Fb_typical, cmp_force_scale]
+  text: >
+    Fb ~ 4 pN from xb ~ 1 nm and T ~ 300 K is printed as an approximation, so cmp_force_scale has no
+    verdict by design; the computed kB T/xb is consistent with it by eye.
+- id: q_stochastic_vs_bell
+  kind: unexplained_difference
+  about: [rel_stochastic_bell, lifetime_adjoint]
+  text: >
+    The paper calls its model "a stochastic version of the Bell model" (p. 1). Tested as
+    lifetime_adjoint approximated by Bell's deterministic detach time (bell1978/detach_time_eq17) for
+    large clusters well above the critical force, the maximum relative error is 0.63, against an
+    added tolerance of 0.1. The rescaled equations are the same (Erdmann's Eq. 4 in n = N/N0 is Bell's
+    Eq. 17 with gamma = KN2, f/N0 = r0 F/kT N1). A likely cause, not tested separately, is the initial
+    condition: Bell starts from the zero-force equilibrium n0 = KN2/(1 + KN2), Erdmann from all N0 bonds
+    closed. Far above the critical force, the time is spent mostly near n = 1, so the offset scales it by
+    roughly exp(-(f/N0)/gamma). The paper itself says the two descriptions differ (p. 3).
+  citation: {page: 3, quote: "This shows that stochastic and deterministic results differ"}
+- id: q_fig3a_order
+  kind: possible_error
+  about: [a_leakage, a_numerical, N_fig3a_N10, N_fig3a_N5, N_fig3a_N2, cmp_fig3a_N10, cmp_fig3a_N5]
+  text: >
+    The calibrated reading of Fig. 3(a) (the figure the decay rates are taken from) settles the pairing
+    questioned in q_leak_order and q_num_order. Read off the plotted lines, N(tau) for N0 = 2 falls by a
+    factor of about 380 between tau = 4 and 14 (a ≈ 0.59), for N0 = 5 by about 600 between tau = 20 and 70
+    (a ≈ 0.13), and for N0 = 10 only from about 4.5 to 2.8 between tau = 10 and 70 (a ≈ 0.008). These are
+    the printed numerical rates 0.6, 0.13 and 8.5 x 10^-3 in reverse order, not the printed pairing
+    (2.5 x 10^-4 for N0 = 2, ..., 0.6 for N0 = 15). The lines are identified as N0 = 1, 2, 5, 10, 15 from
+    lower to upper as the caption states, and each agrees with the exact mean of Eq. 1 for its N0
+    (cmp_fig3a_*). The figure cannot settle q_num_N0_15: over tau = 10 to 70, rates of 2.5 x 10^-4 and
+    4 x 10^-4 change log10 N by 0.007 and 0.011, under one pixel (0.021 in log10 N).
+  citation: {page: 3, quote: "15 (lower to upper lines). (b) Four typical simulation", where: "Fig. 3 caption"}
+- id: q_eq6_exponent
+  kind: possible_error
+  about: [state_probability_eq6, cmp_fig2d_p0_eq6, cmp_fig2d_p0_eq1, p0_fig2d]
+  text: >
+    As printed, Eq. 6 places e^{-r(j)tau} inside the braces of the product over k = i..N0, k != j, so read
+    literally the exponential is raised to the power N0 - i. Taken that way, Eq. 6 gives p0(tau) = 1 to
+    printed precision at every tau of Fig. 2(d), which the caption says follows from Eq. 6, while the
+    plotted p0 rises from 0 to about 0.94 (cmp_fig2d_p0_eq6, not reproduced). The exact solution of the
+    master equation Eq. 1 for gamma = 0, f = 50 reproduces the plotted p0 (cmp_fig2d_p0_eq1), and so does
+    Eq. 6 with the exponential written once per term j (outside the product); for i = N0 - 1 (p9) the two
+    readings coincide. The printed typesetting of Eq. 6 is probably a misplaced bracket; the intended
+    formula is the standard pure-death solution.
+  citation: {page: 3, quote: "to construct pi from pi1 , for   0 we find", where: "Eq. 6"}
+- id: q_fig_mc_exact
+  kind: choice
+  about: [state_probability_eq1, mean_bonds_eq1, run_fig2c_p0, run_fig2c_p5, run_fig3a_N15, run_fig3a_N10, run_fig3a_N5, run_fig3a_N2, run_fig3a_N1, run_fig3d_stoch_N10, run_fig3d_stoch_N5]
+  text: >
+    Figs. 2(c), 3(a) and the solid lines of 3(d) are Monte Carlo (Gillespie) results with an unstated
+    number of trajectories. The record compares them with the exact solution of the same linear master
+    equation Eq. 1 (matrix exponential), which is what the simulations estimate. This is the reader's
+    choice of method, as in q_decay_method; a curve that disagrees could reflect sampling noise in the
+    paper's simulation rather than an inconsistency.
+- id: q_fig_reading_close
+  kind: reading
+  about: [cmp_fig2a_p0, cmp_fig2c_p0, cmp_fig3a_N5, cmp_fig3d_det_N10]
+  text: >
+    These comparisons are "close" at one or two points: the computed value lies within about one pixel
+    of the reading but just outside the interval the reading supports (half the line width for a curve,
+    half the blob height for a dash read as a marker). At all other points of the same curves the
+    computed value is inside the interval. A sub-pixel offset of a printed line (or, for Monte Carlo
+    curves, sampling noise) is enough to explain it.
+- id: q_fig_code_pass
+  kind: reading
+  about: [cmp_fig2a_p0, cmp_fig2c_p0, cmp_fig3d_det_N10, cmp_fig3a_N5, cmp_fig3a_N2, N_fig3a_N15, a_numerical]
+  text: >
+    The second figure pass reads each curve with its own code at 1800-2000 dpi (figures.md, "Second
+    pass"); intervals are about four times narrower than the 300 dpi readings'. With them cmp_fig2a_p0,
+    cmp_fig2c_p0 and cmp_fig3d_det_N10 are reproduced at every point, so the near-misses that
+    q_fig_reading_close describes for those three were resolution and calibration, not the curves. For
+    Fig. 3(d), the old calibration also placed log N = 1 about 19 px (at 2000 dpi) below the top frame.
+    The minor ticks of that log axis, at log10 2 ... 9, put it on the frame. Two points remain "close": the
+    last point of each fast-decaying Monte Carlo line in Fig. 3(a) (N0 = 5 at tau = 70 and N0 = 2 at
+    tau = 14, where N is about 4 x 10^-4 and the plotted line is visibly noisy), consistent with sampling
+    noise (q_fig_mc_exact). For q_num_N0_15 the finer reading of the N0 = 15 line drops from 7.41 to 7.22
+    between tau = 10 and 70, a ≈ 4 x 10^-4. That leans towards the slowest eigenvalue rather than the
+    printed 2.5 x 10^-4, but the two rates differ by about 1.3 px over that range, within each point's
+    interval, so the figure still does not settle it.

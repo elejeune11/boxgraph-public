@@ -1,0 +1,516 @@
+- id: run_fig3d_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig3d_model_talin_data}
+  outputs: {traction: fig3d_talin_line_pred}
+- id: run_fig3d_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig3d_control_data}
+  outputs: {traction: fig3d_talin_at_control_pred}
+- id: run_fig3d_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig3d_model_notalin_data}
+  outputs: {traction: fig3d_notalin_line_pred}
+- id: run_fig3d_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig3d_shrna_data}
+  outputs: {traction: fig3d_notalin_at_shrna_pred}
+- id: run_fig3e_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig3e_model_talin_data}
+  outputs: {actin_flow: fig3e_talin_line_pred}
+- id: run_fig3e_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig3e_control_data}
+  outputs: {actin_flow: fig3e_talin_at_control_pred}
+- id: run_fig3e_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig3e_model_notalin_data}
+  outputs: {actin_flow: fig3e_notalin_line_pred}
+- id: run_fig3e_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig3e_shrna_data}
+  outputs: {actin_flow: fig3e_notalin_at_shrna_pred}
+- id: run_fig6a_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_fig6a, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6a_model_talin_data}
+  outputs: {traction: fig6a_talin_line_pred}
+  replicates: 3
+- id: run_fig6a_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_fig6a, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6a_control_data}
+  outputs: {traction: fig6a_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6a_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_fig6a, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6a_model_notalin_data}
+  outputs: {traction: fig6a_notalin_line_pred}
+  replicates: 3
+- id: run_fig6a_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_fig6a, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6a_shrna_data}
+  outputs: {traction: fig6a_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6b_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_fig6b, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6b_model_talin_data}
+  outputs: {traction: fig6b_talin_line_pred}
+  replicates: 3
+- id: run_fig6b_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_fig6b, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6b_control_data}
+  outputs: {traction: fig6b_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6b_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_fig6b, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6b_model_notalin_data}
+  outputs: {traction: fig6b_notalin_line_pred}
+  replicates: 3
+- id: run_fig6b_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_fig6b, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6b_shrna_data}
+  outputs: {traction: fig6b_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6c_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_fig6c, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6c_model_talin_data}
+  outputs: {traction: fig6c_talin_line_pred}
+  replicates: 3
+- id: run_fig6c_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_fig6c, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6c_control_data}
+  outputs: {traction: fig6c_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6c_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_fig6c, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6c_model_notalin_data}
+  outputs: {traction: fig6c_notalin_line_pred}
+  replicates: 3
+- id: run_fig6c_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_fig6c, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6c_shrna_data}
+  outputs: {traction: fig6c_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6d_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6d, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_fig6d, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6d_model_talin_data}
+  outputs: {traction: fig6d_talin_line_pred}
+  replicates: 3
+- id: run_fig6d_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6d, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_fig6d, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6d_control_data}
+  outputs: {traction: fig6d_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6d_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6d, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6d_model_notalin_data}
+  outputs: {traction: fig6d_notalin_line_pred}
+  replicates: 3
+- id: run_fig6d_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6d, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6d_shrna_data}
+  outputs: {traction: fig6d_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6e_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6e, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_fig6e, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6e_model_talin_data}
+  outputs: {traction: fig6e_talin_line_pred}
+  replicates: 3
+- id: run_fig6e_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6e, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_fig6e, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6e_control_data}
+  outputs: {traction: fig6e_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6e_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6e, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6e_model_notalin_data}
+  outputs: {traction: fig6e_notalin_line_pred}
+  replicates: 3
+- id: run_fig6e_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6e, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6e_shrna_data}
+  outputs: {traction: fig6e_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6f_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6f, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_fig6f, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6f_model_talin_data}
+  outputs: {traction: fig6f_talin_line_pred}
+  replicates: 3
+- id: run_fig6f_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6f, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_fig6f, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6f_control_data}
+  outputs: {traction: fig6f_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6f_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6f, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6f_model_notalin_data}
+  outputs: {traction: fig6f_notalin_line_pred}
+  replicates: 3
+- id: run_fig6f_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_fig6f, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6f_shrna_data}
+  outputs: {traction: fig6f_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6g_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6g, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6g_model_talin_data}
+  outputs: {traction: fig6g_talin_line_pred}
+  replicates: 3
+- id: run_fig6g_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6g, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6g_control_data}
+  outputs: {traction: fig6g_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6g_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6g, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6g_model_notalin_data}
+  outputs: {traction: fig6g_notalin_line_pred}
+  replicates: 3
+- id: run_fig6g_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6g, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6g_shrna_data}
+  outputs: {traction: fig6g_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6h_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6h, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6h_model_talin_data}
+  outputs: {traction: fig6h_talin_line_pred}
+  replicates: 3
+- id: run_fig6h_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6h, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6h_control_data}
+  outputs: {traction: fig6h_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6h_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6h, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6h_model_notalin_data}
+  outputs: {traction: fig6h_notalin_line_pred}
+  replicates: 3
+- id: run_fig6h_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6h, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6h_shrna_data}
+  outputs: {traction: fig6h_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_fig6i_talin_line
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6i, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6i_model_talin_data}
+  outputs: {traction: fig6i_talin_line_pred}
+  replicates: 3
+- id: run_fig6i_talin_at_control
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6i, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig6i_control_data}
+  outputs: {traction: fig6i_talin_at_control_pred}
+  replicates: 3
+- id: run_fig6i_notalin_line
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6i, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6i_model_notalin_data}
+  outputs: {traction: fig6i_notalin_line_pred}
+  replicates: 3
+- id: run_fig6i_notalin_at_shrna
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_fig6i, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig6i_shrna_data}
+  outputs: {traction: fig6i_notalin_at_shrna_pred}
+  replicates: 3
+- id: run_S_nf
+  model: threshold_sensitivity
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added, increase: threshold_increase_note}
+  settings: {param: nf}
+  outputs: {S: S_nf_pred, E_threshold: E_threshold_pred}
+  replicates: 3
+  note: "S for nf: the threshold at nf x 0.5, 1 and 2 (factors not printed; added, q_sensitivity_procedure)"
+- id: run_S_kont
+  model: threshold_sensitivity
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added, increase: threshold_increase_note}
+  settings: {param: kont}
+  outputs: {S: S_kont_pred}
+  replicates: 3
+  note: "S for kont: the threshold at kont x 0.5, 1 and 2 (factors not printed; added, q_sensitivity_procedure)"
+- id: run_S_nm
+  model: threshold_sensitivity
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added, increase: threshold_increase_note}
+  settings: {param: nm}
+  outputs: {S: S_nm_pred}
+  replicates: 3
+  note: "S for nm: the threshold at nm x 0.5, 1 and 2 (factors not printed; added, q_sensitivity_procedure)"
+- id: run_S_dadd
+  model: threshold_sensitivity
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added, increase: threshold_increase_note}
+  settings: {param: dadd}
+  outputs: {S: S_dadd_pred}
+  replicates: 3
+  note: "S for dadd: the threshold at dadd x 0.5, 1 and 2 (factors not printed; added, q_sensitivity_procedure)"
+- id: run_S_FR
+  model: threshold_sensitivity
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added, increase: threshold_increase_note}
+  settings: {param: FR}
+  outputs: {S: S_FR_pred}
+  replicates: 3
+  note: "S for FR: the threshold at FR x 0.5, 1 and 2 (factors not printed; added, q_sensitivity_procedure)"
+- id: run_refine_talin_29kPa
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table, E: E_gel_29p45,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  outputs: {traction: traction_talin_29kPa_pred}
+- id: run_refine_notalin_4p7kPa
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, E: E_gel_4p71,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  outputs: {traction: traction_notalin_4p7kPa_pred}
+- id: run_unfold_crossing
+  model: unfold_refold_crossing
+  inputs: {ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added}
+  outputs: {f_cross: f_cross_pred}
+
+# ---- Second pass: runs on the measurements read from figures ----
+- id: run_fig3a_unfolding_time
+  model: talin_unfolding_time
+  inputs: {ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added}
+  sweep: {f: fig3a_unfolding_data}
+  outputs: {t: fig3a_unfolding_time_pred}
+- id: run_fig1a_control_talin
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: fig1a_control_data}
+  outputs: {traction: fig1a_control_talin_pred}
+- id: run_fig1a_shrna_notalin
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: fig1a_shrna_data}
+  outputs: {traction: fig1a_shrna_notalin_pred}
+- id: run_figs2_control_5kpa_talin
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: figs2_control_5kpa_data}
+  outputs: {traction: figs2_control_5kpa_talin_pred}
+- id: run_figs2_control_29kpa_talin
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: figs2_control_29kpa_data}
+  outputs: {traction: figs2_control_29kpa_talin_pred}
+- id: run_figs2_shrna_5kpa_notalin
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: figs2_shrna_5kpa_data}
+  outputs: {traction: figs2_shrna_5kpa_notalin_pred}
+- id: run_figs2_shrna_29kpa_notalin
+  model: clutch_no_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added}
+  sweep: {E: figs2_shrna_29kpa_data}
+  outputs: {traction: figs2_shrna_29kpa_notalin_pred}

@@ -1,0 +1,182 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units.
+# Chan's Table S1 signs (Fm, vu, Fb negative: retrograde is -x) are flipped to Elosegui's positive magnitudes.
+- id: rel_chan_clutch_slip_limit
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: elosegui2016/clutch_no_talin_sim
+  mapping:
+    nm: "nm"
+    Fm: "-Fm"
+    vu: "-vu"
+    nf: "nc"
+    kont: "kon"
+    dint: "1"
+    kc: "kc/1000"
+    E: "ksub"
+    ra: "1000"
+    ksub_factor: "1"
+    koff_scale: "1"
+    koff_a: "koff"
+    koff_b: "-1/Fb"
+    koff_c: "0"
+    koff_d: "0"
+    koff_g: "0"
+    koff_fend: "1"
+  output_map: {actin_flow: v_retro}
+  regime: {nm: [50, 100], Fm: [-2.5, -1.5], vu: [-150, -90], nc: [50, 100], kon: [0.5, 2], koff: [0.05, 0.2],
+           Fb: [-2.5, -1.5], kc: [1, 10], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    Elosegui-Artola et al. say that without talin unfolding their simulation "recapitulate[s] the fundamental
+    prediction of the clutch model4" (ref. 4 = Chan and Odde 2008; p. 4) and that force transmission in
+    talin-depleted cells "fully abides by the clutch model first proposed eight years ago4,32,33" (p. 8), but
+    they state no mapping between the two models. Both are the same Monte Carlo scheme: motors with a linear
+    force-velocity law (stall nm Fm), clutch springs kc binding at kon and dragged by the filament, a substrate
+    spring ksub, and force balance for the substrate position. The two differ in the off-rate law (Bell slip bond
+    in Chan; catch bond in Elosegui) and in how ksub and kon are parametrised (ksub = c E ra, kon = kont dint).
+    With the catch bond reduced to its first exponential (koff_c = koff_g = 0, koff_b = 1/|Fb|), dint = 1,
+    c = 1 and ra = 1000 nm, so that ksub = E in pN/nm, Elosegui's model without talin becomes Chan's model.
+    What is left is the order of the steps within a time step, the floor v >= 0, the run length (100 s against
+    300 s) and the random streams, so the two mean retrograde flows should agree only approximately.
+  assumptions:
+    - "the catch bond is restricted to a single Bell exponential; with the printed catch-bond parameters the two models differ by design"
+    - "tolerance 0.1 (added): the scatter of a single 100-300 s stochastic run of the mean flow, not stated by either paper"
+    - "only the flow output is compared; Elosegui's traction is a stress (Pa) and Chan's F_mean a force (pN)"
+    - >-
+      both run at their papers' dt = 5 ms. Chan's step (as entered) loads the clutches against the substrate position
+      from before the filament moved, adding about kc v dt (~3 pN at Table S1 values) to each clutch force; Elosegui's
+      step recomputes the substrate position after the move. A scratch check at Table S1 values found the mean flows
+      differ up to ~3x at ksub 0.1-1 pN/nm at dt = 5 ms, but within ~4-9% at dt = 0.625 ms, so the gap is the time
+      step of the two schemes, not the mapping
+# Relations to Bangasser, Rosenfeld and Odde 2013 (ref-32 = sn-ref-8). Bangasser signs are positive, as Elosegui's.
+- id: rel_threshold_sensitivity_from_bangasser
+  kind: derived_from
+  a: bangasser2013/sensitivity_eq3
+  b: elosegui2016/threshold_sensitivity
+  steps:
+    - "S = d log k / d log p, taken as the slope of a linear fit to log k against log p for p around the base value (Bangasser's Eq. 3 approach)"
+    - "Bangasser's optimal substrate stiffness κs,opt is replaced by the threshold substrate spring constant k_threshold at which the integrin density has increased by 10% over baseline"
+  provenance: stated
+  citation: {page: 25, quote: "The sensitivity S was calculated following a previously described approach", where: "Supplementary Note, sensitivity S (ref. 8 = Bangasser et al. 2013)"}
+  assumptions:
+    - "the relation is of the procedure only: Bangasser's S is the sensitivity of the optimal stiffness, Elosegui's of the talin-unfolding threshold, two different quantities"
+    - "the p values differ: Bangasser uses 0.25- to 4-fold changes, Elosegui says only 'p values around the optimal fitted values'"
+- id: rel_bangasser_ssa_approximated_by_no_talin
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: elosegui2016/clutch_no_talin_sim
+  mapping:
+    nm: "nm"
+    Fm: "Fm"
+    vu: "vu"
+    nf: "nc"
+    kont: "kon"
+    dint: "1"
+    kc: "kc/1000"
+    E: "ksub"
+    ra: "1000"
+    ksub_factor: "1"
+    koff_scale: "1"
+    koff_a: "koff"
+    koff_b: "1/Fb"
+    koff_c: "0"
+    koff_d: "0"
+    koff_g: "0"
+    koff_fend: "1"
+  output_map: {actin_flow: v_retro}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.2, 0.4], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.6, 1.0], ksub: [0.01, 100]}
+  tolerance: 0.15
+  provenance: proposed
+  reason: >-
+    Elosegui-Artola et al. cite Bangasser et al. 2013 (ref. 32) for the clutch model whose predictions their
+    talin-depleted cells follow: force transmission "fully abides by the clutch model first proposed eight years
+    ago4,32,33" (p. 8), and "the rigidity corresponding to peak force transmission in depleted cells is also
+    determined by force loading32,33" (p. 6). They state no mapping. Both are the motor-clutch model: nm motors
+    with a linear force-velocity law (stall nm Fm), nc clutch springs kc binding at kon and dragged by the filament,
+    a substrate spring ksub, and force balance for the substrate position computed after the filament moves.
+    Elosegui's model without talin unfolding differs in the off-rate (a catch bond against Bangasser's Bell slip
+    bond), in how kon and ksub are parametrised (kon = kont dint, ksub = c E ra) and in the scheme (fixed 5 ms
+    steps for 100 s against Bangasser's variable-step Gillespie SSA for 1000 s). With the catch bond reduced to
+    its first exponential (koff_c = koff_g = 0, koff_b = 1/Fb), dint = 1, c = 1 and ra = 1000 nm, so that
+    ksub = E in pN/nm, the two compute the same model by different stochastic schemes, so their mean flows
+    should agree only approximately.
+  assumptions:
+    - "the catch bond is restricted to a single Bell exponential; with the printed catch-bond parameters the two models differ by design"
+    - "regime around Bangasser's Table 1 (nm = nc = 50, kon = 0.3 1/s, koff = 0.1 1/s, Fb = 2 pN, kc = 0.8 pN/nm), where a 5 ms step moves a clutch by about 0.5 pN of load, small against Fb"
+    - >-
+      tolerance 0.15 (added, not stated by either paper): the scatter of single runs of the mean flow. A scratch
+      check at the regime's slowest-flow sample (v ~ 35 nm/s, nc ~ 58, ksub ~ 0.27 pN/nm) found single runs over
+      seeds 1-5 spanning 34.2-36.6 nm/s (SSA, 1000 s) and 34.9-38.9 nm/s (Elosegui, 100 s), pairwise up to ~12%
+      apart, while their seed means differ by ~3%; at Bangasser's Table 1 values over ksub 0.01-100 pN/nm the
+      seed-averaged flows agree within ~3%, the fixed 5 ms step giving Elosegui's flow ~2-3% lower at high ksub
+    - "only the flow output is compared; Elosegui's traction is a stress (Pa) and Bangasser's F_mean a force (pN)"
+# Relations to Bangasser and Odde 2013 (ref-33, record bangasser2013b), the master-equation (ODE) treatment of
+# the motor-clutch model. This paper cites it only for the clutch-model predictions ("predicted to regulate force
+# transmission32,33", p. 6; "the clutch model first proposed eight years ago4,32,33", p. 8) and takes no value
+# from it; it states no relation between the models. Bangasser and Odde's signs are positive, as Elosegui's.
+- id: rel_bangasser_ode_approximated_by_no_talin
+  kind: approximated_by
+  a: bangasser2013b/clutch_ensemble_cycle
+  b: elosegui2016/clutch_no_talin_sim
+  mapping:
+    nm: "nm"
+    Fm: "Fm"
+    vu: "vu"
+    nf: "nc"
+    kont: "kon"
+    dint: "1"
+    kc: "kc/1000"
+    E: "ks"
+    ra: "1000"
+    ksub_factor: "1"
+    koff_scale: "1"
+    koff_a: "koff"
+    koff_b: "1/Fb"
+    koff_c: "0"
+    koff_d: "0"
+    koff_g: "0"
+    koff_fend: "1"
+  output_map: {actin_flow: v_mean}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.2, 0.4], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.6, 1.0], ks: [0.01, 100], r: [2, 2]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    Bangasser and Odde's ensemble ODEs (Eqs. 8-12 with the gamma closure Eq. 19) are a mean-field description of
+    the stochastic motor-clutch model; Elosegui-Artola et al.'s simulation without talin unfolding is that
+    stochastic model with a catch-bond off-rate and kon = kont dint, ksub = c E ra. With the catch bond reduced to
+    its first exponential (koff_c = koff_g = 0, koff_b = 1/Fb, Bangasser and Odde's Bell off-rate Eq. 5), dint = 1,
+    c = 1 and ra = 1000 nm (so that ksub in pN/nm equals E), both describe the same clutch ensemble, one by a
+    moment closure and one by Monte Carlo, so the ODE's cycle-mean retrograde flow should approximate the
+    simulation's run-averaged actin flow. Elosegui cites ref. 33 for the clutch-model predictions its
+    talin-depleted cells follow (p. 6, p. 8) but states no mapping.
+  assumptions:
+    - "the catch bond is restricted to a single Bell exponential; with the printed catch-bond parameters the two models differ by design"
+    - "r = 2, the closure Bangasser and Odde use in Fig. 2; regime around Bangasser, Rosenfeld and Odde's Table 1 (nm = nc = 50, kon = 0.3 1/s, koff = 0.1 1/s, Fb = 2 pN, kc = 0.8 pN/nm), where a 5 ms step moves a clutch by about 0.5 pN of load, small against Fb"
+    - "the ODE's flow averaged over one load-and-fail cycle and the simulation's actin speed averaged over a 100 s run both stand for the mean retrograde flow (a correspondence of quantities: cycle_mean_flow_rate and actin_retrograde_flow)"
+    - >-
+      tolerance 0.25 (added, as for Bangasser and Odde's own ODE-MC relations; neither paper states one). A scratch
+      check at Table 1 values over ksub 0.01-100 pN/nm, seeds 1-3, found the ODE 12-15% below the simulation at
+      ksub <= 0.01 pN/nm and 12-15% above it at ksub >= 1 pN/nm, within ~3% near the minimum (0.1-0.3 pN/nm).
+      Across the whole regime the test finds the gap larger (up to ~40%: ODE 48 against 79 nm/s at ksub 0.013 pN/nm,
+      Fb 2.35 pN, kon 0.37 1/s; ODE ~30% above at ksub 1-25 pN/nm); a scratch rerun of the test's samples gave the same
+      numbers, so the gap is the closure, not the mapping, and the relation is left not verified at this tolerance
+    - "only the flow output is compared; Elosegui's traction is a stress (Pa), and the ODE's cycle time has no counterpart in Elosegui's outputs"
+# Relations to Elosegui-Artola et al. 2014 (ref-5 = sn-ref-1 = st1-ref-4, record elosegui2014).
+- id: rel_talin_clutch_from_elosegui2014
+  kind: derived_from
+  a: elosegui2014/integrin_clutch_sim
+  b: elosegui2016/clutch_talin_sim
+  steps:
+    - "take the Monte Carlo clutch simulation of ref. 5 (motors, fibronectin-integrin clutches binding at kon = kont dint and unbinding by a catch bond, a substrate spring, force balance, traction and Young's modulus from an adhesion radius)"
+    - "add, for each bound clutch, talin unfolding and refolding under force, and vinculin binding after unfolding"
+    - "make integrin recruitment (dint increased by dadd) follow vinculin binding to unfolded talin, in place of ref. 5's force-threshold reinforcement"
+  provenance: stated
+  citation: {page: 4, printed_page: "543", quote: "to couple talin unfolding to a clutch model5", where: "main text, 'we developed a computational approach to couple talin unfolding to a clutch model5' (ref. 5 = Elosegui-Artola et al. 2014)"}
+  assumptions:
+    - "the Supplementary Note says the same: 'The computational model was developed by adapting a Monte Carlo simulation approach previously described in detail1' and 'in this work we specifically introduced the modelling of talin unfolding and refolding, and vinculin binding' (p. 23; SN ref. 1 = Elosegui-Artola et al. 2014)"
+    - "the third step is this record's reading of the two descriptions, not a sentence of the paper: the 2014 model reinforces when the force on a bond exceeds a threshold, the 2016 model when talin unfolds and vinculin binds"
+    - "the 2014 model also has two competing integrin types (kon_fold, koff_fold); the 2016 model has one, so no mapping of inputs is given"
+    - "unverifiable: elosegui2014/integrin_clutch_sim cannot be run (its equations are only in the Supplementary Information, blank in that record's PDF), and the steps are given in words"

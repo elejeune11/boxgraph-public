@@ -1,0 +1,77 @@
+# Port to Python of cmstretchg.m lines 50-191 with stretchscriptg.m lines 54 and 56.
+id: cmstretchg_port
+name: "the code's stochastic clutch model under cyclic stretch, cmstretchg.m with sig = 'tr' (Python port)"
+role: model
+stated: {file: cmstretchg.m, lines: "2", quote: "function [mf,mv,mnb1,mdint1] = cmstretchg(A,fr,nc,dint1,kont1,kint,kunf,kfol,kact,Lk,fstart,kc,ksub,pt,mr,intadd,ion,sig)"}
+built_from: [lr_rate_port]
+# Notes (the schema has no notes field for a model):
+#   Ports cmstretchg.m lines 50-191 (the 'tr' signal of line 69) and the scaling of stretchscriptg.m lines
+#   54 (bl + (mdint1/dint1 - 1) sc) and 56 (mf/(3.14159 a^2)). The rate tables kint and kunf of kofflr.mat
+#   are rebuilt by the port of 'loading rate script.m' (lr_rate_port), at the cut-off that reproduces the
+#   shipped file (1e-100, not the 1e-70 written on line 44: q_table_cutoff); kact is inf from Fbreaking on
+#   (lines 63-67); kfol is not used (cmstretchg.m computes refolding itself, line 97). Line by line, except:
+#   the code draws a binding time for each unbound clutch (line 122) and takes the least; the port draws
+#   that least time as one exponential of their summed rate and binds a clutch chosen uniformly among them,
+#   which has the same distribution. Random numbers are Python's, not MATLAB's, so single runs differ from
+#   MATLAB's; their distribution does not. The output adhesion_length carries the YAP-axis value across
+#   the twin axes of Fig. 2e (added inputs), which the code does not do.
+equation: >-
+  Gillespie loop to t = 1000 s: vf = 2 A fr sign(sin(2 pi fr t)); L = |vf| ksub / n_bound; per bound clutch
+  k_off = kint(L, F), k_unf = kunf(L, F) if folded, k_fold = exp(13.07) exp(-2.288e12 pt |F|) if unfolded,
+  break at once if folded and F >= Fbreaking; above 150 pN koffcb 'cm' and the unfolding slip law; binding
+  kont1 dint1 per unbound clutch; unfolding adds intadd, unbinding while folded and breaking remove it,
+  dint1 in [dint1(0), mr]; bound clutches move vf dt, xsub = kc sum xc / (ksub + n_bound kc);
+  output time averages; YAP = bl + (mdint1/dint1 - 1) sc
+inputs:
+  A:        {quantity: stretch_amplitude, unit: um}
+  fr:       {quantity: stretch_frequency, unit: Hz}
+  nc:       {quantity: n_fibronectin, unit: dimensionless}
+  dint1:    {quantity: integrin_density, unit: 1/um^2}
+  kont1:    {quantity: integrin_binding_rate_intrinsic, unit: um^2/s}
+  kc:       {quantity: clutch_stiffness, unit: N/m}
+  ksub:     {quantity: substrate_stiffness, unit: N/m}
+  pt:       {quantity: talin_force_fraction, unit: dimensionless}
+  mr:       {quantity: integrin_density, unit: 1/um^2}
+  intadd:   {quantity: integrin_density_increment, unit: 1/um^2}
+  Fbreaking: {quantity: actin_breaking_force, unit: N}
+  koff_a:   {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_b:   {quantity: catch_bond_force_coefficient, unit: 1/N}
+  koff_c:   {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_d:   {quantity: catch_bond_force_coefficient, unit: 1/N}
+  pt_table: {quantity: talin_force_fraction, unit: dimensionless}
+  ln_kunf0_table: {quantity: ln_unfolding_rate_zero_force, unit: dimensionless}
+  kunf_b_table: {quantity: unfolding_force_coefficient, unit: 1/N}
+  cm_a:     {quantity: catch_bond_prefactor, unit: 1/s}
+  cm_b:     {quantity: catch_bond_force_coefficient, unit: 1/N}
+  cm_c:     {quantity: catch_bond_prefactor, unit: 1/s}
+  cm_d:     {quantity: catch_bond_force_coefficient, unit: 1/N}
+  cm_g:     {quantity: custom_term_prefactor, unit: 1/s}
+  cm_fend:  {quantity: custom_term_vanishing_force, unit: N}
+  ln_kunf0: {quantity: ln_unfolding_rate_zero_force, unit: dimensionless}
+  kunf_b:   {quantity: unfolding_force_coefficient, unit: 1/N}
+  ln_kfold0: {quantity: ln_refolding_rate_zero_force, unit: dimensionless}
+  kfold_b:  {quantity: refolding_force_coefficient, unit: 1/N}
+  bl:       {quantity: yap_baseline_offset, unit: dimensionless}
+  sc:       {quantity: yap_scaling_slope, unit: dimensionless}
+  a:        {quantity: adhesion_radius, unit: m}
+  yap_at_zero_length: {quantity: yap_axis_at_zero_length, unit: dimensionless}
+  length_per_yap: {quantity: length_per_yap_unit, unit: um}
+outputs:
+  mdint1:   {quantity: integrin_density, unit: 1/um^2, description: "time average of the integrin density (line 191)"}
+  yap_scaled: {quantity: yap_ratio, unit: dimensionless, description: "bl + (mdint1/dint1 - 1) sc (stretchscriptg.m line 54)"}
+  adhesion_length: {quantity: adhesion_length, unit: um, description: "(yap_scaled - yap_at_zero_length) length_per_yap: the YAP value on the adhesion-length axis of Fig. 2e"}
+  mf:       {quantity: mean_substrate_force, unit: N, description: "time average of the force on the substrate (line 188)"}
+  P:        {quantity: mean_traction, unit: Pa, description: "mf/(3.14159 a^2) (stretchscriptg.m line 56)"}
+  mnb1:     {quantity: mean_bound_clutches, unit: dimensionless, description: "time average of the number of bound clutches (line 190)"}
+settings:
+  t_total: 1000.0      # s, cmstretchg.m line 63
+  seed: 1
+  # grids of the rate tables, 'loading rate script.m' lines 12-16
+  step: 1.0e-14
+  steps: 1.0e-12
+  f_max: 2.0e-10
+  fstart_max: 1.5e-10
+  L_min: 1.0e-12
+  L_octaves: 16
+  p_floor: 1.0e-100    # reproduces the shipped kofflr.mat; line 44 says 1e-70 (q_table_cutoff)
+stochastic: true

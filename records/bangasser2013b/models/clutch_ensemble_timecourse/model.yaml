@@ -1,0 +1,27 @@
+id: clutch_ensemble_timecourse
+name: clutch-ensemble master-equation ODEs, state at time t of a load-and-fail cycle (Eqs. 8-12, 19)
+role: model
+stated: {page: 4, printed_page: "452", quote: "neously using the MATLAB ODE solver ode15s for", where: "Eqs. 8-12 and 19"}
+equation: >-
+  as clutch_ensemble_cycle; after the failure 'all quantities return to their initial values'
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  r:    {quantity: gamma_shape_parameter, unit: dimensionless}
+  t:    {quantity: time, unit: s}
+outputs:
+  Pb:        {quantity: fraction_clutches_bound, unit: dimensionless}
+  xs:        {quantity: substrate_position, unit: nm}
+  Fc:        {quantity: mean_clutch_force, unit: pN}
+  vf:        {quantity: actin_flow_velocity, unit: nm/s}
+  koff_mean: {quantity: mean_clutch_off_rate, unit: 1/s}
+settings: {rtol: 1.0e-8, atol: 1.0e-12, g_fail: 1.0e-3, t_max: 1.0e5}
+built_from: [clutch_ensemble_cycle]
+stochastic: false

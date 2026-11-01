@@ -1,0 +1,69 @@
+- id: cmp_kont_half
+  purpose: reproduction
+  computed: kont_ratio_pred
+  printed: kont_ratio_half
+  note: "the paper's 'kont decreased by only half' against the ratio of its own printed kont values"
+- id: cmp_kon_fivefold
+  purpose: consistency
+  computed: kon_ratio_pred
+  printed: kon_fold_model
+  conditions_ok: >
+    The paper sets the clutch model's kon ratio (fivefold) as 'matching thus the trends in bond dynamics
+    between a5b1 and avb6 measured in Fig. 2'; the measured counterpart it gives is kon = kont * dint with the
+    SPR kont (Fig. 2a) and the fivefold density ratio (Fig. 2b), so the two are the same ratio by the paper's
+    own account, though one is a model setting and the other comes from measurements.
+- id: cmp_koff_threefold
+  purpose: consistency
+  computed: koff_ratio_spr
+  printed: koff_fold_model
+  conditions_ok: >
+    The paper sets the clutch model's koff ratio (threefold) as matching the trends in bond dynamics measured in
+    Fig. 2, whose koff values are those of the SPR table. The SPR koff is for purified integrins at zero force in
+    Mn2+ buffer; the model's factor scales a whole koff/force curve. Compared because the paper itself ties them.
+
+# ==== figure readings ====
+# model lines against the measurements they are drawn through (Fig. 4)
+- {id: cmp_fig4d_line_ctrl, purpose: validation, computed: traction_a5b1_model_ctrl_fig4d, printed: traction_a5b1_ctrl_fig4d}
+- {id: cmp_fig4d_line_b6ab, purpose: validation, computed: traction_a5b1_model_fig4d, printed: traction_a5b1_b6ab_fig4d}
+- {id: cmp_fig4e_line, purpose: validation, computed: flow_a5b1_model_fig4e, printed: flow_a5b1_fig4e}
+- {id: cmp_fig4f_line_ctrl, purpose: validation, computed: density_a5b1_model_ctrl_fig4f, printed: density_a5b1_ctrl_fig4f}
+- {id: cmp_fig4f_line_b6ab, purpose: validation, computed: density_a5b1_model_fig4f, printed: density_a5b1_b6ab_fig4f}
+- {id: cmp_fig4g_line, purpose: validation, computed: traction_avb6_model_fig4g, printed: traction_avb6_fig4g}
+- {id: cmp_fig4h_line, purpose: validation, computed: flow_avb6_model_fig4h, printed: flow_avb6_fig4h}
+- {id: cmp_fig4i_line, purpose: validation, computed: density_avb6_model_fig4i, printed: density_avb6_fig4i}
+- {id: cmp_fig4j_line, purpose: validation, computed: traction_both_model_fig4j, printed: traction_both_fig4j}
+- {id: cmp_fig4k_line, purpose: validation, computed: flow_both_model_fig4k, printed: flow_both_fig4k}
+- {id: cmp_fig4l_b1_line, purpose: validation, computed: density_b1_both_model_fig4l, printed: density_b1_both_fig4l}
+- {id: cmp_fig4l_b6_line, purpose: validation, computed: density_b6_both_model_fig4l, printed: density_b6_both_hi_fig4l}
+# the same measurements plotted twice (Fig. 1 and Fig. 4)
+- id: cmp_fig1b_ctrl_fig4d
+  purpose: consistency
+  computed: traction_ctrl_fig1b_sub
+  printed: traction_a5b1_ctrl_fig4d
+  note: "myo ctrl tractions: Fig. 1b (red) and Fig. 4d (filled), the same cells by the captions"
+- id: cmp_fig4d_b6ab_fig1c
+  purpose: consistency
+  computed: traction_a5b1_b6ab_fig4d_sub
+  printed: traction_b6_ab_fig1c
+  note: "myo b6 + avb6 ab tractions: Fig. 4d (open) and Fig. 1c (blue)"
+- id: cmp_fig1b_b6_fig4j
+  purpose: consistency
+  computed: traction_b6_fig1b
+  printed: traction_both_fig4j
+  note: "myo b6 tractions without ab: Fig. 1b (blue) and Fig. 4j"
+# the model curves of Fig. 3 and the a5b1 lines of Fig. 4
+- id: cmp_fig4d_fig3c
+  purpose: consistency
+  computed: traction_a5b1_model_fig4d
+  printed: traction_model_fig3c
+  conditions_ok: "Fig. 3c-e show the model's predictions without naming an integrin; the Fig. 4d-f lines are the model for a5b1 and have the same shapes, so the two are compared as one prediction printed twice"
+- id: cmp_fig4f_fig3d
+  purpose: consistency
+  computed: density_a5b1_model_fig4f
+  printed: density_model_fig3d
+  conditions_ok: "as cmp_fig4d_fig3c"
+- id: cmp_fig4e_fig3e
+  purpose: consistency
+  computed: flow_a5b1_model_fig4e
+  printed: flow_model_fig3e
+  conditions_ok: "as cmp_fig4d_fig3c"

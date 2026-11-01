@@ -1,0 +1,254 @@
+# ---- p. 620: antibody-hapten encounter in solution and on membranes
+- id: run_encounter_solution
+  model: encounter_solution
+  inputs: {DsA: Ds_A_antibody, DsB: Ds_B_hapten, RAB: RAB_075}
+  outputs: {d_plus_s: d_plus_s_pred, d_minus_s: d_minus_s_pred, Kd_s: Kd_s_pred}
+- id: run_encounter_membrane_p620
+  model: encounter_membrane
+  inputs: {Dm_sum: Dm_sum_p3, RAB: RAB_075}
+  outputs: {d_plus_m: d_plus_m_pred, d_minus_m: d_minus_m_pred}
+# ---- p. 621: k+m at one-tenth the diffusion limit, and the maximum bond formation rate
+- id: run_Dm_sum_p621
+  model: sum_membrane_diffusion
+  inputs: {DmA: Dm_receptor, DmB: Dm_receptor}
+  outputs: {Dm_sum: Dm_sum_p621}
+- id: run_encounter_membrane_p621
+  model: encounter_membrane
+  inputs: {Dm_sum: Dm_sum_p621, RAB: RAB_075}
+  outputs: {d_plus_m: d_plus_m_p621, d_minus_m: d_minus_m_p621}
+  note: RAB does not enter d+m (Eq. 5); RAB_075 only fills the port for d-m, which is not used here
+- id: run_kplus_p621
+  model: kplus_fraction
+  inputs: {d_plus_m: d_plus_m_p621, fraction: fraction_one_tenth}
+  outputs: {k_plus_m: kplus_m_pred}
+- id: run_area_lymphocyte
+  model: sphere_area
+  inputs: {r: radius_lymphocyte}
+  outputs: {area: area_lymphocyte_pred}
+- id: run_density_1e5
+  model: receptor_density
+  inputs: {n: receptors_1e5, area: area_lymphocyte}
+  outputs: {N: density_1e5_pred}
+- id: run_density_1e3
+  model: receptor_density
+  inputs: {n: determinants_1e3, area: area_lymphocyte}
+  outputs: {N: density_1e3_pred}
+- id: run_density_1e7
+  model: receptor_density
+  inputs: {n: determinants_1e7, area: area_lymphocyte}
+  outputs: {N: density_1e7_pred}
+- id: run_rate_1e5
+  model: max_bond_rate_eq13
+  inputs: {k_plus_m: kplus_m_um, N1: density_500, N2: density_500}
+  outputs: {rate: rate_1e5_pred}
+- id: run_rate_1e3
+  model: max_bond_rate_eq13
+  inputs: {k_plus_m: kplus_m_um, N1: density_1e3_pred, N2: density_1e3_pred}
+  outputs: {rate: rate_1e3_pred}
+- id: run_rate_1e7
+  model: max_bond_rate_eq13
+  inputs: {k_plus_m: kplus_m_um, N1: density_1e7_pred, N2: density_1e7_pred}
+  outputs: {rate: rate_1e7_pred}
+# ---- p. 622: rupture force (Eq. 15), tau0, kT, harmonic period
+- id: run_f0_r0_1nm
+  model: rupture_force_eq15
+  inputs: {E0: E0_antibody, r0: r0_cleft}
+  outputs: {f0: f0_r0_1nm_pred}
+- id: run_f0_r0_05nm
+  model: rupture_force_eq15
+  inputs: {E0: E0_antibody, r0: r0_estimate}
+  outputs: {f0: f0_r0_05nm_pred}
+- id: run_f0_covalent
+  model: rupture_force_eq15
+  inputs: {E0: E0_covalent, r0: r0_covalent}
+  outputs: {f0: f0_covalent_pred}
+- id: run_tau0
+  model: tau0_from_eq16
+  inputs: {tau_f0: tau_f0, E0: E0_antibody, kT: kT_printed}
+  outputs: {tau0: tau0_pred}
+- id: run_kT_37C
+  model: kT_boltzmann
+  inputs: {T: T_37C}
+  outputs: {kT: kT_pred}
+- id: run_tau_h
+  model: harmonic_period
+  inputs: {r0: r0_estimate, E0: E0_antibody, m: m_hapten}
+  outputs: {tau_h: tau_h_pred}
+# ---- p. 623: Table 2 and the critical force
+- id: run_table2_tau
+  model: lifetime_eq16
+  inputs: {tau0: tau0_printed, E0: E0_antibody, gamma: r0_estimate, kT: kT_printed}
+  sweep: {f: log_tau_table2}
+  outputs: {tau: log_tau_table2_pred}
+- id: run_table2_t_eq17
+  model: detach_time_eq17
+  inputs: {k_minus: k_minus_table2, KN2: KN2_table2, r0: r0_estimate, kT: kT_printed}
+  sweep: {f: log_t_table2}
+  outputs: {t: log_t_table2_eq17}
+- id: run_table2_t_eq22_exact
+  model: detach_time_eq22_exact
+  inputs: {k_minus: k_minus_table2, r0: r0_estimate, kT: kT_printed}
+  sweep: {f: log_t_table2}
+  outputs: {t: log_t_table2_eq22_exact}
+- id: run_table2_t_eq22_approx
+  model: detach_time_eq22_approx
+  inputs: {k_minus: k_minus_table2, r0: r0_estimate, kT: kT_printed}
+  sweep: {f: log_t_table2}
+  outputs: {t: log_t_table2_eq22_approx}
+- id: run_fc_table2
+  model: critical_force_eq19_20
+  inputs: {kT: kT_printed, r0: r0_estimate, KN2: KN2_table2}
+  outputs: {fc: fc_table2_pred, alpha_c: alpha_c_table2}
+- id: run_fc_exact_1e3
+  model: critical_force_eq19_20
+  inputs: {kT: kT_printed, r0: r0_estimate, KN2: KN2_1e3}
+  outputs: {fc: fc_exact_1e3_pred, alpha_c: alpha_c_1e3}
+- id: run_fc_eq21_1e3
+  model: critical_force_eq21
+  inputs: {kT: kT_printed, r0: r0_estimate, KN2: KN2_1e3}
+  outputs: {force_scale: force_scale_pred, log_coefficient: log_coefficient_pred, fc: fc_eq21_1e3_pred}
+- id: run_Km_note45
+  model: Km_from_Ks
+  inputs: {Ks: Ks_1e6, RAB: RAB_1nm}
+  outputs: {Km: Km_note45}
+- id: run_KN2_note45
+  model: KN2_product
+  inputs: {Km: Km_note45, N2: N2_1e3}
+  outputs: {KN2: KN2_note45_pred}
+# ---- p. 624: forces on cells
+- id: run_stokes
+  model: stokes_drag_eq23
+  inputs: {eta: eta_water, r: r_cell_stokes}
+  outputs: {drag: drag_pred}
+- id: run_eq24_shaking
+  model: bonds_to_hold_eq24
+  inputs: {drag: drag_coefficient_printed, fc: fc_representative, v: v_shaking}
+  outputs: {Nb_per_v: bonds_per_velocity_pred, Nb: bonds_shaking_pred}
+- id: run_inertial
+  model: peak_inertial_force
+  inputs: {nu: freq_fiber, A: amplitude_fiber, m: mass_lymphocyte}
+  outputs: {a: accel_fiber_pred, F: force_inertial_pred}
+- id: run_bonds_inertial
+  model: bonds_equivalent_force
+  inputs: {F: force_inertial, fc: fc_representative}
+  outputs: {n: bonds_inertial_pred}
+- id: run_bonds_adhesive
+  model: bonds_equivalent_force
+  inputs: {F: force_adhesive, fc: fc_representative}
+  outputs: {n: bonds_adhesive_pred}
+- id: run_bonds_muscle
+  model: bonds_equivalent_stress
+  inputs: {sigma: muscle_strength_dyne, fc: fc_representative}
+  outputs: {n: bonds_muscle_pred}
+- id: run_pressure_cell
+  model: laplace_pressure
+  inputs: {gamma: surface_tension_cell, R: R_cell_tension}
+  outputs: {P: pressure_cell_pred}
+- id: run_pressure_microvillus
+  model: laplace_pressure
+  inputs: {gamma: surface_tension_cell, R: R_microvillus}
+  outputs: {P: pressure_microvillus_pred}
+- id: run_bonds_pressure_cell
+  model: bonds_equivalent_stress
+  inputs: {sigma: pressure_cell, fc: fc_representative}
+  outputs: {n: bonds_pressure_cell_pred}
+# ---- p. 625: forces to extract molecules from the membrane (Eq. 15)
+- id: run_f_glycophorin
+  model: rupture_force_eq15
+  inputs: {E0: barrier_glycophorin_eV, r0: bilayer_thickness}
+  outputs: {f0: f_glycophorin_pred}
+- id: run_f_ganglioside
+  model: rupture_force_eq15
+  inputs: {E0: G_ganglioside, r0: d_ganglioside}
+  outputs: {f0: f_ganglioside_pred}
+- id: run_v_shaking
+  model: peak_velocity_shaking
+  inputs: {nu: freq_shaking, A: amplitude_shaking}
+  outputs: {v: v_shaking_pred}
+# ---- p. 626: fiber binding rate and lipid plug
+- id: run_rate_fiber
+  model: max_bond_rate_eq13
+  inputs: {k_plus_m: kplus_m_fiber, N1: N1_fiber, N2: N2_fiber}
+  outputs: {rate: rate_fiber_pred}
+- id: run_plug
+  model: plug_force
+  inputs: {sigma: sigma_lipid, r: r_plug}
+  outputs: {f_per_r: plug_force_per_radius_pred, f: f_plug_pred}
+# ---- added in audit
+- id: run_force_ratio
+  model: force_ratio
+  inputs: {f0: f0_r0_05nm, fc: fc_eq21_printed}
+  outputs: {ratio: force_ratio_pred}
+- id: run_pressure_radius
+  model: laplace_pressure_radius
+  inputs: {gamma: surface_tension_cell}
+  outputs: {PR: pressure_radius_pred}
+- id: run_bonds_pressure_microvillus
+  model: bonds_equivalent_stress
+  inputs: {sigma: pressure_microvillus, fc: fc_representative}
+  outputs: {n: bonds_pressure_microvillus_pred}
+- id: run_bonds_fiber_cell
+  model: bonds_in_contact
+  inputs: {N: bond_density_fiber_max, A: contact_area_fiber}
+  outputs: {n: bonds_fiber_cell_pred}
+- id: run_t_grazing
+  model: travel_time
+  inputs: {d: diameter_cell_grazing, v: v_grazing}
+  outputs: {t: t_grazing_pred}
+- id: run_rate_per_N1_fiber
+  model: max_bond_rate_per_N1
+  inputs: {k_plus_m: kplus_m_fiber, N2: N2_fiber}
+  outputs: {rate_per_N1: rate_per_N1_fiber_pred}
+- id: run_rate_fiber_N1_low
+  model: max_bond_rate_eq13
+  inputs: {k_plus_m: kplus_m_fiber, N1: N1_fiber_low, N2: N2_fiber}
+  outputs: {rate: rate_fiber_N1_low_pred}
+- id: run_area_duration_N1_1e4
+  model: contact_area_duration
+  inputs: {Nb: bonds_shaking, rate: rate_fiber}
+  outputs: {At: area_duration_N1_1e4_pred}
+- id: run_area_duration_N1_1e2
+  model: contact_area_duration
+  inputs: {Nb: bonds_shaking, rate: rate_fiber_N1_low_pred}
+  outputs: {At: area_duration_N1_1e2_pred}
+# ---- p. 624: Fig. 8, Eq. 17 solved numerically and Eq. 22, at the f* positions read off each curve
+- id: run_fig8_KL300
+  model: detach_time_fig8
+  inputs: {KN2: KL_300_fig8}
+  sweep: {f_star: log_tstar_fig8_KL300}
+  outputs: {log10_t_star: log_tstar_fig8_KL300_eq17}
+- id: run_fig8_KL1000
+  model: detach_time_fig8
+  inputs: {KN2: KL_1000_fig8}
+  sweep: {f_star: log_tstar_fig8_KL1000}
+  outputs: {log10_t_star: log_tstar_fig8_KL1000_eq17}
+- id: run_fig8_KL3000
+  model: detach_time_fig8
+  inputs: {KN2: KL_3000_fig8}
+  sweep: {f_star: log_tstar_fig8_KL3000}
+  outputs: {log10_t_star: log_tstar_fig8_KL3000_eq17}
+- id: run_fig8_KL1e4
+  model: detach_time_fig8
+  inputs: {KN2: KL_1e4_fig8}
+  sweep: {f_star: log_tstar_fig8_KL1e4}
+  outputs: {log10_t_star: log_tstar_fig8_KL1e4_eq17}
+- id: run_fig8_eq22_KL300
+  model: detach_time_eq22_fig8
+  inputs: {KN2: KL_300_fig8}
+  sweep: {f_star: log_tstar_fig8_KL300}
+  outputs: {log10_t_star: log_tstar_fig8_KL300_eq22}
+- id: run_fig8_eq22_KL1000
+  model: detach_time_eq22_fig8
+  inputs: {KN2: KL_1000_fig8}
+  sweep: {f_star: log_tstar_fig8_KL1000}
+  outputs: {log10_t_star: log_tstar_fig8_KL1000_eq22}
+- id: run_fig8_eq22_KL3000
+  model: detach_time_eq22_fig8
+  inputs: {KN2: KL_3000_fig8}
+  sweep: {f_star: log_tstar_fig8_KL3000}
+  outputs: {log10_t_star: log_tstar_fig8_KL3000_eq22}
+- id: run_fig8_eq22_KL1e4
+  model: detach_time_eq22_fig8
+  inputs: {KN2: KL_1e4_fig8}
+  sweep: {f_star: log_tstar_fig8_KL1e4}
+  outputs: {log10_t_star: log_tstar_fig8_KL1e4_eq22}

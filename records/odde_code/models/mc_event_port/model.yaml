@@ -1,0 +1,54 @@
+# Port to Python (our code) of motorclutch2_3.m lines 42-155: one pass of the stiffness loop, i.e. the
+# initial state (lines 62-77), the event loop (lines 80-141) and the summary statistics (lines 142-155).
+# The loop is the same as motorclutch1_1.m lines 41-120 (which only skips the averages and runs
+# eventlimit - 1 events); a run of the 1_1 configuration sets events = 9999 and timestep_initial = 0.005.
+# Notes (the schema has no notes field for a model):
+#   Line by line, including the code's order of updates: the event time of each free clutch and of each
+#   engaged clutch is drawn from the forces of the previous step (one rand per clutch); after the event,
+#   the traction Ftrac and the flow vf are computed from the substrate position before the event
+#   (lines 119-120), all engaged clutches - the one that just bound included - move by vf dt (line 122),
+#   then xsub is updated (line 123) and the free clutches follow it (line 127). Averages weight vel, Ft,
+#   numcon by the timestep of the event that ends each interval (lines 144-151), divided by t(events+1).
+#   cyctime = diff(t(subpos==0)) uses exact equality with zero, as the code does (xsub is exactly 0 when
+#   no clutch is engaged). Random numbers are numpy's, seeded; MATLAB's stream cannot be reproduced.
+#   Not ported: the plots (lines 157-166), and velcv, rebcyc, avcough, avtime, avsubpos (computed by the
+#   code but not plotted and printed by no paper). Outputs F_trac (-avtrac, as the code plots it, line
+#   164), Fc_mean (-avFc) and k_ens (Kc avnumcon, Bangasser 2013's definition, not in the code) turn
+#   the code's negative signs into the papers' positive ones.
+id: mc_event_port
+name: "the code's event-stepping (Gillespie) motor-clutch model, motorclutch2_3.m (Python port)"
+role: model
+stated: {file: motorclutch2_3.m, lines: "5-6", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}
+described_from: chan2008
+equation: >-
+  per event: tbind = -log(rand)/kon for each free clutch; tunbind = -log(rand)/(koff exp(Fc/(Fb + gain Fc)))
+  for each engaged clutch; the least time is executed (bind if dtbind < dtunbind, else unbind);
+  Ftrac = Ksub xsub; vf = vu (1 - Ksub xsub/(nm Fm)); xc(eng) += vf dt; xsub = Kc sum xc(eng)/(Ksub + n_eng Kc);
+  xc(free) = xsub; Fc = Kc (xc - xsub); retro = sum(vel timestep)/t_end; avtrac = sum(Ft timestep)/t_end;
+  failfreq = (#(numcon==0) - 1)/t_end; cyct = mean(diff(t(subpos==0)))
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  Kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  gain: {quantity: feedback_gain, unit: dimensionless}
+  Ksub: {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  v_retro:   {quantity: retrograde_flow_rate, unit: nm/s, description: "retro, line 144: time-weighted mean of -vf"}
+  F_trac:    {quantity: mean_traction_force, unit: pN, description: "-avtrac, lines 149 and 164: time-weighted mean of -Ksub xsub"}
+  fail_freq: {quantity: failure_frequency, unit: 1/s, description: "failfreq, line 145"}
+  t_cycle:   {quantity: load_fail_cycle_time, unit: s, description: "cyct, lines 142 and 153: mean time between states with no engaged clutch"}
+  n_eng:     {quantity: engaged_clutch_number, unit: dimensionless, description: "avnumcon, line 146"}
+  k_ens:     {quantity: ensemble_clutch_stiffness, unit: pN/nm, description: "Kc avnumcon (not in the code; Bangasser 2013 p. 7)"}
+  Fc_mean:   {quantity: mean_clutch_tension, unit: pN, description: "-avFc, line 151"}
+  t_total:   {quantity: simulated_time, unit: s, description: "t(events+1)"}
+settings:
+  events: 100000          # motorclutch2_3.m line 26
+  seed: 1                 # ours: MATLAB's rand is unseeded in the code (q_seed)
+  dt_initial: 0.005       # line 66 (moves no clutch: none engaged at t = 0)
+  timestep_initial: 0.0   # line 77 (motorclutch1_1.m line 59 stores 0.005)
+stochastic: true

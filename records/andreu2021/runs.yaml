@@ -1,0 +1,104 @@
+# ---- deformation speed at the cell edge (p. 2, p. 5) -------------------------------------------------
+- id: run_speed_p2
+  model: edge_speed
+  inputs: {eps: stretch_2p5_p2, D: diameter_p2, f: freq_0p125_p2}
+  outputs: {v: speed_p2_pred}
+- id: run_speed_p5_low
+  model: edge_speed
+  inputs: {eps: stretch_10_p5, D: diameter_p5, f: freq_1_p5}
+  outputs: {v: speed_p5_low_pred}
+  note: "the lower corner of '10–20% stretch between 1 and 2 Hz'"
+- id: run_speed_p5_high
+  model: edge_speed
+  inputs: {eps: stretch_20_p5, D: diameter_p5, f: freq_2_p5}
+  outputs: {v: speed_p5_high_pred}
+  note: "the upper corner of '10–20% stretch between 1 and 2 Hz'"
+
+# ---- Supplementary Table 1, row 1 (stretch): the lowest and highest conditions of Fig. 1 (audit) ------
+- id: run_supp1_low
+  model: supp_table1_edge
+  inputs: {eps: stretch_2p5_fig1, R: radius_supp1, f: freq_0p125_table4, k: stiffness_supp1}
+  outputs: {A: deformation_supp1_low_pred, v: defrate_supp1_low_pred, F: load_supp1_low_pred, Fdot: loadrate_supp1_low_pred}
+  note: "2.5% stretch at 0.125 Hz, the mildest condition"
+- id: run_supp1_high
+  model: supp_table1_edge
+  inputs: {eps: stretch_20_fig1, R: radius_supp1, f: freq_2_table4, k: stiffness_supp1}
+  outputs: {A: deformation_supp1_high_pred, v: defrate_supp1_high_pred, F: load_supp1_high_pred, Fdot: loadrate_supp1_high_pred}
+  note: "20% stretch at 2 Hz, the strongest condition"
+
+# ---- Fig. 2e: clutch model, every input as printed (k_sub = 1 µN/nm, Supplementary Table 4) ---------
+- id: run_fig2e_2p5_printed
+  model: clutch_stretch_sim
+  inputs: {A: A_2p5, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_table, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_2p5}
+  replicates: 3
+  outputs: {adhesion_length: len_2p5_printed_pred, d_mean: d_2p5_printed_pred}
+  note: "rate laws, scaling and numerical grids added from Supplementary Software 1 (see added.yaml and model settings)"
+- id: run_fig2e_5_printed
+  model: clutch_stretch_sim
+  inputs: {A: A_5, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_table, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_5}
+  replicates: 3
+  outputs: {adhesion_length: len_5_printed_pred, d_mean: d_5_printed_pred}
+- id: run_fig2e_10_printed
+  model: clutch_stretch_sim
+  inputs: {A: A_10, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_table, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_10}
+  replicates: 3
+  outputs: {adhesion_length: len_10_printed_pred, d_mean: d_10_printed_pred}
+- id: run_fig2e_20_printed
+  model: clutch_stretch_sim
+  inputs: {A: A_20, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_table, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_20}
+  replicates: 3
+  outputs: {adhesion_length: len_20_printed_pred, d_mean: d_20_printed_pred}
+
+# ---- Fig. 2e: the same, with k_sub = 1 pN/nm as in Supplementary Software 1 (q_ksub_unit) -----------
+- id: run_fig2e_2p5_ksub_code
+  model: clutch_stretch_sim
+  inputs: {A: A_2p5, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_code_added, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_2p5}
+  replicates: 3
+  outputs: {adhesion_length: len_2p5_ksub_code_pred, d_mean: d_2p5_ksub_code_pred}
+- id: run_fig2e_5_ksub_code
+  model: clutch_stretch_sim
+  inputs: {A: A_5, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_code_added, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_5}
+  replicates: 3
+  outputs: {adhesion_length: len_5_ksub_code_pred, d_mean: d_5_ksub_code_pred}
+- id: run_fig2e_10_ksub_code
+  model: clutch_stretch_sim
+  inputs: {A: A_10, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_code_added, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_10}
+  replicates: 3
+  outputs: {adhesion_length: len_10_ksub_code_pred, d_mean: d_10_ksub_code_pred}
+- id: run_fig2e_20_ksub_code
+  model: clutch_stretch_sim
+  inputs: {A: A_20, nf: nf_table, kon_i: kon_i_table, kc: kc_table, ksub: ksub_code_added, FR: FR_table,
+           dmin: dmin_table, dmax: dmax_table, dadd: dadd_table, Fact: Fact_table,
+           koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added, koff_d: koff_d_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, len0: len0_added, len_scale: len_scale_added}
+  sweep: {fr: fig2e_model_20}
+  replicates: 3
+  outputs: {adhesion_length: len_20_ksub_code_pred, d_mean: d_20_ksub_code_pred}

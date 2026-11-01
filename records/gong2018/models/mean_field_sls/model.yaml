@@ -1,0 +1,39 @@
+id: mean_field_sls
+name: mean-field (ensemble clutch) motor-clutch model with reinforcement on a standard linear solid substrate (Eqs. S3-S8, Eq. 2/S4)
+role: model
+stated: {page: 11, quote: "then the governing equations of the system (Eqs. 1–5)", where: "Eqs. S3-S8 (SI pp. 11), Eq. 2 (p. 2), reinforcement p. 2 and SI p. 11"}
+equation: >-
+  dPb/dt = (1 - Pb) ron - Pb roff (S3); (ka + kl) eta dxs/dt + ka kl xs = ka Fs + eta dFs/dt (S4);
+  Fs = kc nc Pb (xc - xs) (S5); dxc/dt = vu (1 - Fs/(nm Fm)) (S6, S7); <roff> = roff0 exp(Fc/Fb);
+  ron = ron0 (1 + alpha (Fa - Fcr)) once Fa > Fcr, updated in the next FA lifetime cycle;
+  Vf = xc / t_total (S8); Vs = Vp - Vf (Eq. 6)
+inputs:
+  nm:    {quantity: motor_number, unit: dimensionless}
+  Fm:    {quantity: motor_stall_force, unit: pN}
+  Fcr:   {quantity: reinforcement_threshold_force, unit: pN}
+  nc:    {quantity: clutch_number, unit: dimensionless}
+  Fb:    {quantity: clutch_rupture_force, unit: pN}
+  ron0:  {quantity: clutch_on_rate, unit: 1/s}
+  roff0: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  kc:    {quantity: clutch_stiffness, unit: pN/nm}
+  vu:    {quantity: unloaded_flow_velocity, unit: nm/s}
+  Vp:    {quantity: polymerization_speed, unit: nm/s}
+  alpha: {quantity: reinforcement_sensitivity, unit: 1/pN}
+  ka:    {quantity: additional_stiffness, unit: pN/nm}
+  kl:    {quantity: long_term_stiffness, unit: pN/nm}
+  eta:   {quantity: substrate_viscosity, unit: pN*s/nm}
+outputs:
+  Vs:     {quantity: spreading_speed, unit: nm/s, description: "Vp - xc/t_total of the last cycle"}
+  t_life: {quantity: fa_lifetime, unit: s, description: "duration of the last cycle (t_max for a stable adhesion)"}
+  Fa:     {quantity: mean_clutch_force, unit: pN, description: "time average of the ensemble clutch force kc (xc - xs) over the last cycle"}
+settings:
+  n_cycles: 10          # paper: "At least 10 life cycles are simulated" (SI p. 11)
+  break_fraction: 0.013333333333333334   # reader's choice: the cycle ends when Pb < 1/nc (fewer than one clutch engaged)
+  t_max: 2000.0         # reader's choice: a cycle not ended by then is a stable (divergent) adhesion
+  cumulative: 1         # reader's choice: reinforcement compounds cycle to cycle (1) or restarts from ron0 (0)
+  fa_weighted: 0        # reader's choice: Fa as the plain time average (0) or weighted by Pb (1)
+  p_start: 1.0e-9       # numerical: Pb at the start of a cycle (Pb is integrated as ln Pb)
+  rtol: 1.0e-7          # numerical: solver tolerance (scipy Radau; the paper used MATLAB)
+  max_step: 1.0         # numerical: largest solver step, s
+  n_avg: 2000           # numerical: points of the dense output used for the average of Fc
+stochastic: false

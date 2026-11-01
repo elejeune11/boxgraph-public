@@ -1,0 +1,49 @@
+id: threshold_sensitivity
+name: threshold rigidity for talin unfolding and its sensitivity S to one parameter (Supplementary Note, p. 25)
+role: model
+stated: {page: 25, quote: "S was taken as the slope of a linear fit to the plot", where: "Supplementary Note, sensitivity S"}
+built_from: [clutch_talin_sim]
+from_words: true
+equation: >-
+  S = d log k_threshold / d log p; k_threshold the substrate spring constant (rigidity) at which integrin
+  density increased by 10% with respect to baseline; k_threshold computed for p around the fitted values,
+  plotted against p in log-log scale, S the slope of a linear fit
+inputs:
+  nf:     {quantity: n_fibronectin, unit: dimensionless}
+  kont:   {quantity: integrin_binding_rate_intrinsic, unit: um^2/s}
+  dint:   {quantity: integrin_density, unit: 1/um^2}
+  dadd:   {quantity: integrin_density_increment, unit: 1/um^2}
+  FR:     {quantity: talin_force_fraction, unit: dimensionless}
+  nm:     {quantity: n_myosin, unit: dimensionless}
+  Fm:     {quantity: myosin_stall_force, unit: pN}
+  vu:     {quantity: myosin_unloaded_speed, unit: nm/s}
+  kc:     {quantity: clutch_stiffness, unit: nN/nm}
+  ra:     {quantity: adhesion_radius, unit: nm}
+  koff_scale: {quantity: koff_scaling_factor, unit: dimensionless}
+  koff_a: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_b: {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  koff_c: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_d: {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  koff_g: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_fend: {quantity: low_force_term_vanishing_force, unit: pN}
+  ln_kunf0: {quantity: ln_unfolding_rate_zero_force, unit: dimensionless}
+  kunf_b: {quantity: unfolding_force_coefficient, unit: 1/pN}
+  ln_kfold0: {quantity: ln_refolding_rate_zero_force, unit: dimensionless}
+  kfold_b: {quantity: refolding_force_coefficient, unit: 1/pN}
+  kvin:   {quantity: vinculin_binding_rate, unit: 1/s}
+  ksub_factor: {quantity: ksub_geometry_factor, unit: dimensionless}
+  increase: {quantity: threshold_density_increase, unit: dimensionless}
+outputs:
+  S:           {quantity: threshold_sensitivity, unit: dimensionless}
+  E_threshold: {quantity: threshold_rigidity, unit: kPa, description: "threshold rigidity at the unscaled parameters, as a Young's modulus"}
+settings:
+  dt: 0.005        # s, printed (p. 23)
+  t_total: 100.0   # s, printed (p. 23)
+  seed: 1
+  # not printed (added; q_sensitivity_procedure):
+  param: nf        # which input S is taken for; each run sets it
+  factors: [0.5, 1.0, 2.0]
+  E_min: 0.3       # kPa, grid of Young's moduli on which the threshold is located
+  E_max: 30.0
+  n_grid: 13
+stochastic: true

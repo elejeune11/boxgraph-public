@@ -1,0 +1,210 @@
+- id: q_table2_t_misprint
+  kind: possible_error
+  about: [log_t_table2, cmp_table2_t_eq17, cmp_table2_t_eq22_exact, cmp_table2_t_eq22_approx]
+  text: >
+    Table 2 prints log10 t = -14.7 at a force of 4 x 10^-6 dyne per bond. That entry breaks the
+    otherwise steady decrease of the column (-6, -7.1, -8.2, -9.3 at 6-12 x 10^-6 dyne), and
+    log10 t cannot be smaller at 4 than at 6 x 10^-6 dyne. With the paper's parameters,
+    Eq. 17 solved numerically (KN2 = 300, k- = 100 /s) gives -4.70, and Eq. 22 gives -4.77
+    (E1 form) or -4.78 (approximate form). The printed value may be a misprint of -4.7. It is
+    recorded as printed.
+  citation: {page: 6, printed_page: "623", quote: "eters in the text; t, time to separate cells sub-", where: Table 2}
+- id: q_table2_KN2
+  kind: unstated_input
+  about: [KN2_table2, fc_table2, log_t_table2, cmp_fc_table2]
+  text: >
+    Table 2 does not state the KN2 behind its critical force (2.98 x 10^-6 dyne per bond) or
+    its detachment times. The record takes KN2 = 300, the lowest curve in Fig. 8. With it,
+    the exact root of Eq. 20 gives fc = 2.973 x 10^-6 dyne (close, not reproduced, at the
+    printed precision). Taking the printed rounded coefficient 8.6 x 10^-7 dyne for kT/r0
+    instead of 0.0268 eV / 0.5 nm = 8.588 x 10^-7 dyne would give 2.977 x 10^-6, which is
+    reproduced. KN2 = 1000, 3000 or 10^4 gives a critical force well away from 2.98 x 10^-6.
+  citation: {page: 6, printed_page: "623", quote: "ject to the force. The critical force is 2.98 x", where: Table 2 caption}
+- id: q_table2_k_minus
+  kind: unstated_input
+  about: [k_minus_table2, log_t_table2]
+  text: >
+    The detachment times t of Table 2 scale as 1/k-, but the table does not state k-. The
+    record uses k- = 1/tau(f = 0) = 100 /s, following the identification on p. 622. With it,
+    the rows at 6-12 x 10^-6 dyne reproduce. A k- ten times larger or smaller shifts every
+    log10 t by 1 and they no longer do.
+- id: q_table2_t_method
+  kind: reading
+  about: [log_t_table2, detach_time_eq17, detach_time_eq22_exact, detach_time_eq22_approx]
+  text: >
+    The paper does not say whether the t column of Table 2 comes from the numerical solution
+    of Eq. 17 (which it says was computed, for Fig. 8) or from Eq. 22. All three are run.
+    Eq. 17 with KN2 = 300 reproduces all four rows other than the -14.7 entry. Both forms of
+    Eq. 22 give -9.24 at 12 x 10^-6 dyne, against the printed -9.3 (close).
+- id: q_eq17_numerics
+  kind: numerics
+  about: [detach_time_eq17, ref_eq17_n_stop, ref_eq17_rtol]
+  text: >
+    The paper gives no numerical settings for its solutions of Eq. 17. The record computes
+    the time for Nb/N1 to fall from its Eq. 18 value to n_stop = 0.01 as a quadrature of
+    Eq. 17 (rtol 1e-8). Both the cut-off n_stop and the tolerance were refined; t changes by
+    less than 1e-14 relative, so the Table 2 times belong to the model, not the numerics.
+- id: q_kT
+  kind: unexplained_difference
+  about: [kT_printed, cmp_kT]
+  text: >
+    The paper prints kT = 0.0268 eV at T = 37 degC. The Boltzmann constant times 310.15 K
+    gives 0.02673 eV, just outside the printed precision (close). 0.0268 eV corresponds to
+    about 311 K. The difference is small, and every downstream use takes the printed 0.0268.
+  citation: {page: 5, printed_page: "622", quote: "eV, and kT = 0.0268 eV (T = 37°C),", where: text}
+- id: q_tau_h_formula
+  kind: reading
+  about: [harmonic_period]
+  text: >
+    The oscillator period reads "tau_h ≈ 2π r0 (E0 m)^-1/2" in the OCR, and the page image
+    at hand does not show a division sign clearly. (E0 m)^-1/2 has the wrong dimension for a
+    time. The model uses the only dimensionally consistent reading, 2π r0 (E0/m)^-1/2. A
+    higher-resolution look at p. 622 should settle the reading.
+  citation: {page: 5, printed_page: "622", quote: "pared with the period of a harmonic os-", where: text}
+- id: q_tau_h_value
+  kind: unexplained_difference
+  about: [tau_h_printed, cmp_tau_h]
+  text: >
+    With r0 = 0.5 nm, E0 = 0.37 eV and m = 200 daltons, 2π r0 (m/E0)^1/2 gives
+    7.4 x 10^-12 s, against the printed ≈ 5 x 10^-12 s (no verdict, because the paper prints
+    "≈"). A harmonic potential of depth E0 at distance r0 (spring constant 2E0/r0^2) would
+    give 2π r0 (m/2E0)^1/2 = 5.3 x 10^-12 s, which matches the printed value. The paper does
+    not state which fit it used. Either way the paper's conclusion, that tau_h is much smaller
+    than tau0, holds.
+- id: q_Ks_symbol
+  kind: reading
+  about: [Kd_s, cmp_Kd_s]
+  text: >
+    On p. 620 the value "Ks ≈ 1 M^-1" follows d+s and d-s directly, and d+s/d-s ≈ 1 M^-1, so
+    it is read as the encounter equilibrium constant Kd^s of Eq. 4. The subscript d is not
+    visible in the scan. Elsewhere K^s denotes the overall solution equilibrium constant
+    (≈ 10^6 M^-1 on p. 622).
+  citation: {page: 3, printed_page: "620", quote: "sec-1, and Ks 1M-1. However the reac-", where: text}
+- id: q_v_shaking
+  kind: unexplained_difference
+  about: [v_shaking, cmp_v_shaking, peak_velocity_shaking]
+  text: >
+    The peak fluid velocity of ≈ 20 cm/sec is said to follow from shaking at 80 cycles per
+    minute with amplitude ≈ 4 cm, but the paper does not state how. Simple harmonic motion
+    with 4 cm as the amplitude gives 2π nu A = 33.5 cm/s. With 4 cm as the peak-to-peak
+    excursion it gives 16.8 cm/s. Either way the paper's "about 300 bonds" (Eq. 24 with
+    20 cm/s gives 265) stays of the same order.
+  citation: {page: 8, printed_page: "625", quote: "lows that the peak fluid velocity relative", where: text}
+- id: q_inertial_model
+  kind: choice
+  about: [peak_inertial_force, peak_velocity_shaking]
+  text: >
+    The peak acceleration of a plucked fiber (p. 624) and the peak fluid velocity of a shaken
+    medium (p. 625) are given only as results ("It follows that ..."). The record reads both
+    as simple harmonic motion, a = (2π nu)^2 A and v = 2π nu A.
+- id: q_muscle_units
+  kind: reading
+  about: [muscle_strength_kg]
+  text: >
+    The tensile strength of muscle is printed as "4 kg/cm2", read here as kilogram-force per
+    square centimeter. With that reading it matches the paper's own conversion to
+    4 x 10^-2 dyne/um^2 (3.92 x 10^-2).
+- id: q_eq21_approximation
+  kind: reading
+  about: [critical_force_eq21, cmp_fc_exact_1e3, cmp_fc_eq21_1e3]
+  text: >
+    For KN2 = 10^3 the approximate Eq. 21 (alpha_c ≈ 0.7 ln KN2) gives fc = 4.15 x 10^-6
+    dyne, while the exact root of Eq. 20 gives 3.80 x 10^-6 dyne. Both are consistent with
+    the printed "fc ≈ 4 x 10^-6", which has no stated precision. At this KN2 the approximation
+    overestimates alpha_c by about 9%.
+- id: q_fig5_model
+  kind: unstated_model
+  about: [bridging_fig5, reduction_low, reduction_high]
+  text: >
+    The Fig. 5 bridging model is described only by its receptor configurations; its kinetic
+    equations are said to be published elsewhere (ref. 42). The predicted reductions of the
+    equilibrium number of bonds by factors of 10^6 and 10^8 at 0.001 and 0.01 M free sugar
+    (K = 10^6 M^-1) therefore cannot be checked from this paper.
+  citation: {page: 4, printed_page: "621", quote: "equations will be published elsewhere", where: text}
+# ---- added in audit
+- id: q_area_duration_model
+  kind: unstated_model
+  about: [contact_area_duration, area_duration_N1_1e4, area_duration_N1_1e2]
+  text: >
+    The paper states that a collision whose product of contact area and duration exceeds
+    3 um^2 msec (N1 ~ 10^4 um^-2), or ~300 um^2 msec (N1 ~ 10^2 um^-2), has a good chance of
+    leading to adhesion, but not how these follow. The audit reads them as the ~300 bonds
+    needed to stay bound (p. 625) divided by the maximum bond formation rate (10^2 and
+    1 um^-2 msec^-1), which gives exactly 3 and 300. The paper does not say this is the
+    calculation.
+  citation: {page: 9, printed_page: "626", quote: "product of contact area and duration ex-", where: text}
+- id: q_fig5_reduction_reading
+  kind: reading
+  about: [bridging_fig5, reduction_low, reduction_high]
+  text: >
+    Audit observation, not a model: the printed reductions 10^6 and 10^8 at 0.001 and
+    0.01 M free sugar with K = 10^6 M^-1 equal (1 + K c)^2 = (1 + 10^3)^2 and (1 + 10^4)^2
+    to the printed precision, as if each of the two sites of a bivalent bridge were blocked
+    independently by the competing sugar. The paper does not state this, so the Fig. 5 model
+    stays not runnable and the two values stay uncompared.
+  citation: {page: 9, printed_page: "626", quote: "of 106 and 108, respectively, so that re-", where: text}
+- id: q_eq24_sign
+  kind: reading
+  about: [bonds_per_velocity_printed, cmp_bonds_per_velocity]
+  text: >
+    Eq. 24 on p. 624 reads "N_v ≈ 5.3 x 10^-5 v/f_c ≈ 13 v" in the page image; the OCR renders
+    both ≈ as "=" (as it does for "mass = 3 x 10-tO g is = 3 X 10-3" two columns over, where
+    the image shows ≈). The audit changed the printed value from "13" to "≈ 13", so the
+    comparison now gets no verdict. The image available is low resolution; a sharper look
+    should confirm the sign.
+  citation: {page: 7, printed_page: "624", quote: "Nt, = 5.3 x 10-5 v /h = 13 v", where: Eq. 24}
+- id: q_tau_h_model_as_printed
+  kind: reading
+  about: [harmonic_period, q_tau_h_formula]
+  text: >
+    The audit reads the p. 622 formula in the page image the same way as the first reader,
+    "τh ≈ 2πr0(E0m)^-1/2". The model implements 2π r0 (E0/m)^-1/2 instead, which is not the
+    equation as printed. The printed form is not a time and cannot be run, so the choice is
+    left as made; it should be revisited if a sharper scan shows "E0/m".
+# ---- added with the calibrated Fig. 8 readings
+- id: q_fig8_table2_misprint
+  kind: reading
+  about: [log_t_table2, log_tstar_fig8_KL300, q_table2_t_misprint, q_table2_KN2]
+  text: >
+    Fig. 8 bears on q_table2_t_misprint. The Table 2 row at 4 x 10^-6 dyne has
+    r0 f/kT = 4.66 (r0 = 0.5 nm, kT = 0.0268 eV), so f* = 0.82 if KN2 = 300. The calibrated
+    reading of the KL=300 curve gives log10 t* = -2.73 at f* = 0.8 and -3.33 at f* = 1.0, about
+    -2.78 at f* = 0.82. That is log10 t ≈ -4.8 for k- = 100 /s, near -4.7 and far from the
+    printed -14.7. No curve in Fig. 8 gets below log10 t* = -5 for f* ≤ 1, and for KN2 = 10^4
+    f* = 0.51, which is below critical. So the printed -14.7 would need a k- of about 10^12 /s,
+    or a force well outside the range of the row. The figure cannot separate KN2 from k-,
+    because each moves log10 t by a shift, so it does not settle q_table2_KN2 by itself.
+  citation: {page: 7, printed_page: "624", quote: "Fig. 8. The time for detachment,", where: "Fig. 8"}
+- id: q_fig8_low_force
+  kind: unexplained_difference
+  about: [cmp_fig8_KL300_eq17, cmp_fig8_KL1000_eq17, cmp_fig8_KL3000_eq17, cmp_fig8_KL1e4_eq17, fig8_KL300]
+  text: >
+    At f* = 0.8 all four curves of Fig. 8 lie 0.06 to 0.09 in log10 t* below the record's
+    numerical solution of Eq. 17 (close, not reproduced). Eq. 22 lies within the reading
+    there. The difference is about 3 px on the page. It may come from the paper's
+    numerics (it gives no settings; the record's cut-off and tolerance are refined and do not
+    matter), or from the drawing. The x calibration uses the ticks 1.0, 2, 3 and 4. The
+    printed .6 and .8 ticks lie 3 and 6 px right of that linear scale, so the artwork is not
+    exactly linear below f* = 1. Readings there carry more uncertainty than their intervals
+    show. Reading at the printed .8 tick would move the values further down, away from Eq. 17,
+    so the calibration does not explain the difference.
+  citation: {page: 7, printed_page: "624", quote: "Values of t* were computed nu-", where: "Fig. 8"}
+# ---- added with the second (own-code, 900 dpi) Fig. 8 readings
+- id: q_fig8_code_reading
+  kind: unexplained_difference
+  about: [fig8_KL300_code, fig8_KL1000_code, fig8_KL3000_code, fig8_KL1e4_code, cmp_fig8_KL3000_eq17, cmp_fig8_KL3000_eq22, cmp_fig8_KL300_eq17, q_fig8_low_force, q_fig8_table2_misprint]
+  text: >
+    The own-code readings at 900 dpi calibrate y on all 17 unit ticks (misfit 2.8 px, about
+    0.025 in log10 t*) and x on the ticks 1.0-4 (misfit 1.7 px); their intervals are about
+    +-0.065, against +-0.09 to +-0.12 for the 300 dpi readings. With these intervals, most
+    points still lie within 0.06 of Eq. 17 and Eq. 22, but the KL=3000 curve at f* = 1.0 and
+    1.5 lies about 0.12 and 0.09 below both, and KL=300 at f* = 1.0-2.5 lies 0.04-0.07 below
+    both. Eq. 17 and Eq. 22 agree with each other to 0.01 at these points, so the paper's
+    numerics cannot explain it; the drawing can: 0.12 is about 14 px at 900 dpi, or 0.35 mm on
+    the printed figure. The interval covers reading error only, not the accuracy with which the
+    1978 curves were drawn. The second reading confirms q_fig8_low_force (at f* = 0.8 all four
+    curves lie 0.065-0.089 below Eq. 17 and within 0.03 of Eq. 22) and the f* = 0.8 value of
+    KL=300 used in q_fig8_table2_misprint (-2.727 against -2.733). The x ticks .6 and .8 sit
+    4.5 and 12.6 px (at 900 dpi; 1.5 and 4.2 px at 300 dpi) right of the linear scale of
+    1.0-4, as the first pass found.
+  citation: {page: 7, printed_page: "624", quote: "Values of t* were computed nu-", where: "Fig. 8"}

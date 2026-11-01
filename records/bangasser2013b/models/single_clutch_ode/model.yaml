@@ -1,0 +1,26 @@
+id: single_clutch_ode
+name: single-clutch master-equation ODEs (Eqs. 1, 2, 4-7), state at time t
+role: model
+stated: {page: 3, printed_page: "451", quote: "for the time course behavior of a single clutch", where: "Eqs. 1, 2, 4-7"}
+equation: >-
+  dpb,i/dt = (1 - pb,i) kon - pb,i k*off,i;  Fc,i = κc (xc,i - xs);  xs = κc Σ xc,i/(κs + nc κc);
+  k*off,i = koff exp(Fc,i/Fb);  vf = vu (1 - κs xs/(nm Fm));  dxc,i/dt = (1 - pb,i) dxs/dt + pb,i vf
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  t:    {quantity: time, unit: s}
+outputs:
+  pb:     {quantity: clutch_bound_probability, unit: dimensionless}
+  xs:     {quantity: substrate_position, unit: nm}
+  Fc:     {quantity: mean_clutch_force, unit: pN}
+  vf:     {quantity: actin_flow_velocity, unit: nm/s}
+  koff_i: {quantity: mean_clutch_off_rate, unit: 1/s}
+settings: {rtol: 1.0e-8, atol: 1.0e-12}
+stochastic: false

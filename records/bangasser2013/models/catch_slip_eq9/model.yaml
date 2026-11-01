@@ -1,0 +1,15 @@
+id: catch_slip_eq9
+name: catch-slip off-rate of a clutch bond (Eq. 9) and the bond lifetime it implies
+role: model
+stated: {page: 3, printed_page: "583", quote: "modeled as the sum of two exponentials", where: "Eq. 9"}
+equation: "koff,i* = koff exp(Fi/Fb) + koff,c exp(-Fi/Fc); lifetime = 1/koff,i*"
+inputs:
+  F:     {quantity: clutch_force, unit: pN}
+  koff:  {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:    {quantity: bond_rupture_force, unit: pN}
+  koffc: {quantity: catch_off_rate_unloaded, unit: 1/s}
+  Fc:    {quantity: catch_force, unit: pN}
+outputs:
+  koff_star: {quantity: clutch_off_rate_loaded, unit: 1/s}
+  tau:       {quantity: bond_lifetime, unit: s, description: "mean lifetime under constant force, 1/koff*; the paper fits Eq. 9 to lifetimes (Fig. 7C) without writing this step"}
+from_words: true

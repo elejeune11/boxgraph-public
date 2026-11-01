@@ -1,0 +1,204 @@
+# Relations between this paper's models and those of Bangasser, Rosenfeld and Odde 2013 (ref. 1,
+# record bangasser2013). Numbers in each model's port units (pN, nm, s).
+#
+# The Monte Carlo (MC) motor-clutch simulation this paper compares its ODEs with is the Gillespie SSA
+# of ref. 1 ("Gillespie Stochastic Simulation Algorithm1,14", p. 2), on the base set of Table S1
+# (= Chan and Odde's set). The MC runs are pinned at the conditions the paper compares at, because
+# the SSA is expensive and the paper states the comparison only there.
+- id: rel_ssa_cycle_time_approximated_by_ode
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub", r: "2"}
+  output_map: {t_cycle: t_cycle}
+  regime: {nm: [75, 75], Fm: [2, 2], vu: [120, 120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: stated
+  citation: {page: 5, printed_page: "453", quote: "The ensemble clutch equations show good", where: "Results, first section; Fig. 2 (base set, κsub = 0.1 pN/nm, r = 2)"}
+  assumptions:
+    - "the paper's MC is ref. 1's Gillespie SSA (p. 2); the ODE is Eqs. 8-12 with the gamma closure Eq. 19 at r = 2, as in Fig. 2"
+    - "pinned at the Fig. 2 conditions: Table S1 base set, κsub = 0.1 pN/nm (Fig. 2 legend)"
+    - "the SSA cycle time is bangasser2013's reader's definition (run time over the number of complete failures); the ODE cycle time is the time of the abrupt failure"
+    - "tolerance 0.25 is the relator's choice: the paper says 'good agreement' and that the ODE results 'vary slightly from the MC results'"
+- id: rel_ssa_flow_approximated_by_ode
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub", r: "2"}
+  output_map: {v_mean: v_retro}
+  regime: {nm: [75, 75], Fm: [2, 2], vu: [120, 120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: stated
+  citation: {page: 5, printed_page: "453", quote: "The ensemble clutch equations show good", where: "Results, first section; Fig. 2 (base set, κsub = 0.1 pN/nm, r = 2)"}
+  assumptions:
+    - "the SSA's time-averaged flow over a long run and the ODE's flow averaged over one cycle both stand for the mean retrograde flow (a correspondence of quantities: retrograde_flow_rate and cycle_mean_flow_rate)"
+    - "pinned at the Fig. 2 conditions: Table S1 base set, κsub = 0.1 pN/nm, r = 2"
+    - "tolerance 0.25 is the relator's choice, as for the cycle time"
+- id: rel_mc_optimum_approximated_by_ode_optimum
+  kind: approximated_by
+  a: bangasser2013/optimal_stiffness
+  b: bangasser2013b/clutch_ensemble_optimum
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", r: "3"}
+  output_map: {ks_opt: ks_opt}
+  regime: {nm: [25, 25], Fm: [2, 2], vu: [120, 120], nc: [25, 25], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5]}
+  tolerance: 0.5
+  provenance: stated
+  citation: {page: 5, printed_page: "453", quote: "shown in Fig. 4, the ODE solution captures this", where: "Results, 'Clutch Ensemble Equations Show Shift in Stiffness Optimum'; Fig. 4"}
+  assumptions:
+    - "the optimum of ref. 1's MC (minimum of the time-averaged flow over κsub) is approximated by the minimum of the ODE cycle-mean flow at r = 3 (Fig. 4 legend)"
+    - "pinned at nm = nc = 25 with the Table S1 base set otherwise, the lower end of Fig. 4; the nm = nc = 3600 end needs SSA runs too long for a relation test"
+    - "the paper itself says the ODE optimum is 'shifted slightly higher' and prints 0.4 (MC) against 1 pN/nm (ODE) at nm = nc = 25; tolerance 0.5 (a factor of 2) is the relator's choice for 'approximately quantitatively'"
+- id: rel_binding_time_approximated_by_eq22
+  kind: approximated_by
+  a: bangasser2013/binding_time_eq10
+  b: bangasser2013b/tbind_eq22
+  mapping: {nc: "floor(nc + 1/2)", kon: "kon"}
+  output_map: {tbind: tbinding}
+  regime: {nc: [20, 5000], kon: [0.1, 1000]}
+  tolerance: 0.01
+  provenance: stated
+  citation: {page: 4, printed_page: "452", quote: "Therefore, for high nc, we can approximate this limit as", where: "Eqs. 20-22; Eq. 20 introduced with 'As previously shown,1'"}
+  assumptions:
+    - "this paper's Eq. 20, the sum the optimum argument of ref. 1 rests on, is ref. 1's Eq. 10; Eq. 22 replaces the harmonic sum by ln(nc) + c 'for high nc'"
+    - "both sides take nc as a whole number (Eq. 10's model rounds it)"
+    - "'high nc' is taken as nc >= 20 and tolerance 0.01 is the relator's choice"
+- id: rel_binding_time_approximated_by_eq23
+  kind: approximated_by
+  a: bangasser2013/binding_time_eq10
+  b: bangasser2013b/tbind_eq23
+  mapping: {nc: "floor(nc + 1/2)", kon: "kon"}
+  output_map: {tbind: tbinding}
+  regime: {nc: [100, 5000], kon: [0.1, 1000]}
+  tolerance: 0.15
+  provenance: stated
+  citation: {page: 4, printed_page: "452", quote: "simplification by dropping c to obtain Eq. (23).", where: "Eq. 23, the binding time Eq. 30 rests on"}
+  assumptions:
+    - "Eq. 23 drops Euler's constant from Eq. 22 because 'for high nc, ln(nc) >> c'; the neglected part is c/H(nc), about 11% at nc = 100 and 7% at nc = 3600"
+    - "'high nc' is taken as nc >= 100 and tolerance 0.15 is the relator's choice"
+- id: rel_eq30_from_binding_time
+  kind: derived_from
+  a: bangasser2013/binding_time_eq10
+  b: bangasser2013b/optimum_eq30
+  steps:
+    - "the optimum stiffness occurs when the cycle time equals the time for all nc clutches to bind (ref. 1), the binding time being ref. 1's Eq. 10 (this paper's Eq. 20)"
+    - "the harmonic sum is replaced by ln(nc) + c for high nc (Eq. 22), and c is dropped (Eq. 23)"
+    - "the cycle time Eq. 28, from the substrate loading Eqs. 24-27 with the cycle ending at (1 - ε) of the maximal deformation, is set equal to Eq. 23 (Eq. 29) and solved for κs,opt"
+  provenance: stated
+  citation: {page: 4, printed_page: "452", quote: "traction occurs when the cycle time equals the amount", where: "Derivation of an Analytical Expression for Optimum Stiffness, Eqs. 20-30"}
+  assumptions:
+    - "the derivation brings in inputs Eq. 10 does not have (Fm, nm, vu, ε) through the cycle time of Eq. 28; the steps are kept in words, so the relation cannot be tested symbolically"
+
+# Relations to Bell 1978 (ref. 3, record bell1978). Bell's rate form is the replacement of k- in his
+# Eq. 12 by k- exp(γF/kT Nb) (p. 623), entered as bell1978/loaded_reverse_rate (dyne, nm, eV).
+# Fb = kT/γ: 1 eV/nm = 1.602176634e-12 erg / 1e-7 cm = 160.2176634 pN; 1 dyne = 1e7 pN.
+- id: rel_eq5_same_as_bell_rate
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: bangasser2013b/clutch_offrate_eq5
+  mapping: {koff: "k_minus", Fc: "1e7*f", Fb: "160.2176634*kT/gamma"}
+  output_map: {koff_i: k_minus_F}
+  regime: {k_minus: [0.001, 10], gamma: [0.1, 1], f: [1.0e-8, 1.0e-6], kT: [0.024, 0.027]}
+  provenance: stated
+  citation: {page: 2, printed_page: "450", quote: "Bell model3 in Eq. (5) where koff is the clutch unloaded", where: "Eq. 5"}
+  assumptions:
+    - "Bell's force per closed bond F/Nb stands for the force on one bound clutch Fc,i, and his k- for the unloaded clutch off-rate koff (correspondences of quantities, not merged)"
+    - "Bell writes the force scale as kT/γ; Eq. 5 lumps it into one characteristic rupture force Fb"
+    - "clutch_offrate_eq5 is a helper model for Eq. 5, which the record otherwise uses only inside single_clutch_ode"
+# No relation is entered between clutch_ensemble_cycle and bell1978/detach_time_eq17, although both
+# give a time from a force and rates: Bell's Eq. 17 holds a constant total force on a bond population
+# with an exponential off-rate, while the clutch ensemble is loaded by motors through a substrate spring
+# with a gamma-closure mean off-rate (Eq. 19); no stated limit takes one to the other.
+
+# Relations to Chan and Odde 2008 (ref. 6, record chan2008). Chan's model counts retrograde motion and
+# force negative (Table S1: Fm = -2 pN, vu = -120 nm/s, Fb = -2 pN); this paper counts them positive,
+# hence the minus signs in the mappings. Units pN, nm, s on both sides.
+- id: rel_chan_mc_flow_approximated_by_ensemble_ode
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ks: "ksub", r: "2"}
+  output_map: {v_mean: v_retro}
+  regime: {nm: [75, 75], Fm: [-2, -2], vu: [-120, -120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [-2, -2], kc: [5, 5], ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: stated
+  citation: {page: 1, printed_page: "449", quote: "treatment of an ordinary differential equation (ODE) description of the stochastic motor-clutch model", where: "Introduction; the stochastic model is the one 'presented by Chan and Odde6'"}
+  assumptions:
+    - "the 'stochastic motor-clutch model' the ODEs describe is the one 'presented by Chan and Odde6' (same paragraph, p. 1); the Results (p. 5) say the ensemble equations 'show good agreement with the MC simulations for many clutches.1,6'"
+    - "Chan's fixed-time-step MC (dt = 0.005 s, 300 s) is run at the Fig. 2 conditions: the Table S1 base set (Chan's own) with κsub = 0.1 pN/nm; the ODE uses the gamma closure at r = 2, as in Fig. 2"
+    - "the MC's time-averaged retrograde flow over many cycles and the ODE's flow averaged over one load-and-fail cycle both stand for the mean retrograde flow (a correspondence of quantities: retrograde_flow_rate and cycle_mean_flow_rate)"
+    - "tolerance 0.25 is the relator's choice, as for the relation to ref. 1's SSA; the paper says the ODE is 'not as accurate as the stochastic output'"
+- id: rel_chan_offrate_same_as_eq5
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: bangasser2013b/clutch_offrate_eq5
+  mapping: {koff: "koff", Fc: "Fclutch", Fb: "Fb"}
+  output_map: {koff_i: koff_star}
+  regime: {koff: [0.001, 10], Fclutch: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    This paper says Chan and Odde's clutches 'unbind according to a force-dependent Bell model' (p. 1)
+    and calculates its own clutch off-rate 'through the Bell model' in Eq. 5; Chan's Eq. 1 and Eq. 5 are
+    the same exponential in the same symbols. The regime takes positive forces; with Chan's negative
+    Fclutch and Fb the ratio, and so the rate, is unchanged.
+# No relation is entered between single_clutch_ode and chan2008/motor_clutch, although the Supplement
+# (p. 12) validates the single-clutch ODEs against 'a fixed time step Monte Carlo model6' with one clutch
+# and one motor: that comparison is of time courses conditional on the cycle lasting (Figs. S1B-F),
+# which chan2008/motor_clutch, giving only run averages, does not output.
+
+# Relations to the released event-stepping code (record odde_code: motorclutch2_3.m, ported as
+# odde_code/mc_event_port and odde_code/optimum_port). This paper never names the code; it says its MC
+# is the 'Gillespie Stochastic Simulation Algorithm1,14' of ref. 1 (p. 2), and the code is a Gillespie
+# (event-stepping) motor-clutch simulation released with ref. 1. So these relations are proposed, not
+# stated. The code counts retrograde motion and force negative (vu, Fm, Fb < 0); this paper counts them
+# positive, hence the minus signs. Units pN, nm, s on both sides. The code's gain term is held at 0,
+# which makes its off-rate this paper's Eq. 5. Pinned at the conditions the paper compares MC with ODE.
+- id: rel_code_cycle_time_approximated_by_ode
+  kind: approximated_by
+  a: odde_code/mc_event_port
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "Kc", ks: "Ksub", r: "2"}
+  output_map: {t_cycle: t_cycle}
+  regime: {nm: [75, 75], Fm: [-2, -2], vu: [-120, -120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [-2, -2], Kc: [5, 5], gain: [0, 0], Ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    The paper compares its clutch-ensemble ODEs (Eqs. 8-12, 19; r = 2 in Fig. 2) with 'the MC
+    simulations for many clutches' (p. 5), its MC being ref. 1's Gillespie algorithm (p. 2). The code is
+    a Gillespie motor-clutch simulation released with ref. 1, so the ODE is proposed to approximate it
+    as it approximates the paper's MC: at the Fig. 2 conditions (Table S1 base set, κsub = 0.1 pN/nm).
+  assumptions:
+    - "the code is taken to be the MC algorithm of ref. 1 that this paper uses; the paper does not say so"
+    - "the code's cycle time is the mean time between states with no engaged clutch over 1e5 events; the ODE cycle time is the time of the abrupt failure of one cycle from the unbound state (a correspondence of quantities)"
+    - "gain = 0 makes the code's off-rate koff exp(Fc/Fb), this paper's Eq. 5"
+    - "tolerance 0.25 is the relator's choice, as for the relations to ref. 1's SSA"
+- id: rel_code_flow_approximated_by_ode
+  kind: approximated_by
+  a: odde_code/mc_event_port
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "Kc", ks: "Ksub", r: "2"}
+  output_map: {v_mean: v_retro}
+  regime: {nm: [75, 75], Fm: [-2, -2], vu: [-120, -120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [-2, -2], Kc: [5, 5], gain: [0, 0], Ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    As for rel_code_cycle_time_approximated_by_ode: the paper's ODEs approximate its Gillespie MC
+    (p. 5), and the code is a Gillespie motor-clutch simulation released with ref. 1. Both report the
+    retrograde flow as a positive speed (the code's retro is the time-weighted mean of -vf).
+  assumptions:
+    - "the code is taken to be the MC algorithm of ref. 1 that this paper uses; the paper does not say so"
+    - "the code's time-averaged flow over 1e5 events and the ODE's flow averaged over one load-and-fail cycle both stand for the mean retrograde flow (a correspondence of quantities: retrograde_flow_rate and cycle_mean_flow_rate)"
+    - "tolerance 0.25 is the relator's choice, as for the relations to ref. 1's SSA"
+# No relation is entered between odde_code/optimum_port and clutch_ensemble_optimum, although Fig. 4
+# compares the MC optimum with the ODE optimum (r = 3): a proposed approximated_by at nm = nc = 25 was
+# tried (2026-11-01) and was unverifiable only because optimum_port (10 runs of 1e5 events at its own
+# settings) exceeded the relation test's 900 s limit. The odde_code record compares that optimum with
+# the paper's printed 0.4 pN/nm directly (ksopt_mc_n25_b13b).
+
+# Relations to Gardel et al. 2008 (ref. 13, record gardel2008): none entered (checked 2026-11-01).
+# This paper cites ref. 13 once, among refs. 6, 8, 13, 34 for "vu is on the order of 0.1 µm/s" (p. 9);
+# it states no relation between its models and Gardel's. Gardel's models (switch_speed_claim,
+# switch_speed_by_condition) are the claim, made in words, that maximal traction occurs at one threshold
+# F-actin speed Vc. None of this paper's models outputs the flow speed at maximal traction, so no
+# mapping would make a testable relation, and none is proposed. The datum vu_order has no from_source,
+# and Gardel prints measured F-actin flow speeds, not an unloaded motor velocity, so cited.yaml has no
+# link to gardel2008.

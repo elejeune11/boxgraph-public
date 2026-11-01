@@ -1,0 +1,13 @@
+# The paper's simulation runs with time steps of 5 ms for 100 s (Supplementary Note, p. 23) and reports
+# time-averaged traction; both settings are refined on one point of each model (the gel moduli of
+# Supplementary Table 2 nearest the force peak without talin and the stiffest gel with talin).
+- {id: ref_dt_talin, run: run_refine_talin_29kPa, setting: dt, factors: [1, 2, 4], mode: divide, output: traction,
+   tolerance: "5%", tolerance_basis: "added: the Fig. 3d model line is read to about +-1.5 Pa of ~120 Pa, and the figure's own lines are no smoother than a few per cent; 5% separates a numerical effect from that", tolerance_added: true}
+- {id: ref_t_talin, run: run_refine_talin_29kPa, setting: t_total, factors: [1, 2, 4], mode: multiply, output: traction,
+   tolerance: "5%", tolerance_basis: "added: as ref_dt_talin; the time average includes the start-up transient, so it can drift as the run is lengthened", tolerance_added: true}
+- {id: ref_dt_notalin, run: run_refine_notalin_4p7kPa, setting: dt, factors: [1, 2, 4], mode: divide, output: traction,
+   tolerance: "5%", tolerance_basis: "added: as ref_dt_talin", tolerance_added: true}
+- {id: ref_dt_S_nf, run: run_S_nf, setting: dt, factors: [1, 2], mode: divide, output: S,
+   tolerance: "0.2", tolerance_basis: "added: absolute, in units of S; about a tenth of the printed S values, and coarse enough for a slope fitted to three stochastic thresholds (only two levels: each costs 39 simulations per seed)", tolerance_added: true}
+- {id: ref_t_notalin, run: run_refine_notalin_4p7kPa, setting: t_total, factors: [1, 2, 4], mode: multiply, output: traction,
+   tolerance: "5%", tolerance_basis: "added: as ref_t_talin", tolerance_added: true}

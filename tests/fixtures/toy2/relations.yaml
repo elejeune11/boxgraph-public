@@ -1,0 +1,108 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_same
+  kind: same_as
+  a: toy/decay
+  b: toy2/lifetime
+  mapping: {tau0: "1000/k0", f: "F", fb: "kT/xb"}
+  output_map: {tau: t}
+  regime: {k0: [0.01, 10], F: [0, 20], xb: [0.1, 2], kT: [4.0, 4.3]}
+  provenance: stated
+  citation: {page: 1, quote: "our law is Bell's in other variables"}
+- id: rel_wrong
+  kind: same_as
+  a: toy/decay
+  b: toy2/wrongsign
+  mapping: {tau0: "1/k0", f: "F", fb: "kT/xb"}
+  regime: {k0: [0.01, 10], F: [1, 20], xb: [0.1, 2], kT: [4.0, 4.3]}
+  provenance: stated
+  citation: {page: 1, quote: "the same as Bell's"}
+- id: rel_factor
+  kind: same_as
+  a: toy/decay
+  b: toy2/lifetime
+  mapping: {tau0: "2000/k0", f: "F", fb: "kT/xb"}
+  regime: {k0: [0.01, 10], F: [0, 20], xb: [0.1, 2], kT: [4.0, 4.3]}
+  provenance: proposed
+  reason: a deliberately wrong mapping, off by a factor of two
+- id: rel_limit
+  kind: reduces_to
+  a: toy/decay
+  b: toy2/zeroforce
+  mapping: {k0: "k0"}
+  limit: {F: "0"}
+  regime: {k0: [0.01, 10], F: [0, 20], xb: [0.1, 2], kT: [4.0, 4.3]}
+  provenance: proposed
+  reason: at zero force the exponential is one
+- id: rel_derived
+  kind: derived_from
+  a: toy/decay
+  b: toy2/zeroforce
+  mapping: {k0: "k0"}
+  steps: ["subs: F = 0"]
+  provenance: proposed
+  reason: setting F = 0 in Eq. 1
+- id: rel_derived_words
+  kind: derived_from
+  a: toy/decay
+  b: toy2/zeroforce
+  mapping: {k0: "k0"}
+  steps: ["by a physical argument about the transition state"]
+  provenance: stated
+  citation: {page: 1, quote: "follows from transition-state theory"}
+- id: rel_approx
+  kind: approximated_by
+  a: toy/decay
+  b: toy2/linear
+  mapping: {tau0: "1/k0", f: "F", fb: "kT/xb"}
+  regime: {k0: [0.01, 10], F: [0, 0.4], xb: [0.1, 0.5], kT: [4.0, 4.3]}
+  tolerance: 0.01
+  provenance: proposed
+  reason: first-order expansion for small force
+- id: rel_scales
+  kind: scales_as
+  a: toy/decay
+  b: toy2/zeroforce
+  mapping: {k0: "k0"}
+  regime: {k0: [0.01, 10], F: [0, 20], xb: [0.1, 2], kT: [4.0, 4.3]}
+  provenance: proposed
+  reason: both scale as 1/k0
+- id: rel_plain
+  kind: same_as
+  a: toy2/ratio_a
+  b: toy2/ratio_b
+  mapping: {r: "k0"}
+  regime: {k0: [0.01, 10]}
+  provenance: proposed
+  reason: two reciprocals
+- id: rel_scales_from_zero
+  kind: scales_as
+  a: toy/decay
+  b: toy2/wrongsign
+  mapping: {tau0: "1/k0", f: "F", fb: "kT/xb"}
+  regime: {k0: [0, 10], F: [0, 20], xb: [0.1, 2], kT: [4.0, 4.3]}
+  provenance: proposed
+  reason: test fixture; opposite force dependence, with regimes that start at zero
+- id: rel_scales_nothing_shared
+  kind: scales_as
+  a: toy/decay
+  b: toy2/zeroforce
+  mapping: {k0: "3"}
+  regime: {k0: [0.01, 10], F: [0, 20], xb: [0.1, 2], kT: [4.0, 4.3]}
+  provenance: proposed
+  reason: test fixture; the mapping shares no variable, so there is nothing to compare
+- id: rel_liar
+  kind: same_as
+  a: toy2/zeroforce
+  b: toy2/liar
+  mapping: {k0: "k0"}
+  regime: {k0: [0.01, 10]}
+  provenance: proposed
+  reason: test fixture; the symbolic forms agree but the code that runs does not
+- id: rel_lambert
+  kind: same_as
+  a: toy2/lambert
+  b: toy2/lambert
+  mapping: {k0: "k0"}
+  regime: {k0: [0.1, 10]}
+  provenance: proposed
+  reason: test fixture; a symbolic form with a special function

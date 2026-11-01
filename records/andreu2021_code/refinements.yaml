@@ -1,0 +1,8 @@
+# The Gillespie simulation has no time step; its numerical setting is the simulated time (1000 s,
+# cmstretchg.m line 63), over which the density is averaged. Refined on one case (10% stretch); the others
+# share the code and settings, and each refinement re-runs a whole sweep.
+- {id: ref_t_10, run: run_10, setting: t_total, factors: [1, 2, 4], mode: multiply, output: adhesion_length,
+   tolerance: "0.05", tolerance_basis: "added: about the half-width of the readings of the Fig. 2e lines (0.03-0.05 µm)", tolerance_added: true}
+# The force step of the integration grid of the rate correction ('loading rate script.m' line 12).
+- {id: ref_step_kint, run: run_kint_F0, setting: step, factors: [1, 2, 4], mode: divide, output: k_off,
+   tolerance: "0.1%", tolerance_basis: "added: well below the sampling noise of the simulation that uses the rates", tolerance_added: true}

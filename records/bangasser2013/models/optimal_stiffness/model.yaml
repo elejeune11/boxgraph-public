@@ -1,0 +1,24 @@
+id: optimal_stiffness
+name: optimal substrate stiffness of the motor-clutch model (minimum of retrograde flow over κsub)
+role: model
+stated: {page: 3, printed_page: "583", quote: "The optimal stiffness, defined as the substrate", where: "text, p. 3; used in Eqs. 3-4"}
+equation: >-
+  κs,opt = the substrate stiffness at which traction force is maximal, equivalently at which F-actin
+  retrograde flow is minimal; here: motor_clutch_ssa on a log-spaced κsub grid, minimum located by a
+  parabola in log10 κsub through the lowest grid point and its neighbours (the paper does not say how
+  it located the minimum)
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+outputs:
+  ks_opt: {quantity: optimal_substrate_stiffness, unit: pN/nm}
+  v_min:  {quantity: retrograde_flow_rate, unit: nm/s, description: "the lowest flow on the grid"}
+settings: {ksub_min: 0.001, ksub_max: 100.0, per_decade: 4, t_total: 1000.0, seed: 1}
+stochastic: true
+built_from: [motor_clutch_ssa]

@@ -1,0 +1,24 @@
+id: clutch_springs_nolattice
+name: motor-clutch model with the lattice removed, independent substrate springs (Supp. Fig. 1d)
+role: model
+stated: {page: 21, printed_page: "14", quote: "By directly prescribing the number of molecular clutches and treating the substrate", where: "Supplemental Model Characterization; Supp. Fig. 1d"}
+equation: >-
+  koff* = koff e^(Fclutch/Frup) (Bell model, Supp. Note 1);
+  v_retrograde = vu (1 - sum_clutch Fclutch / Fstall) (Supp. Eq. 1); v_spread = vu - v_retrograde;
+  "treating the substrate as collection of independent simple springs, each connected to a clutch,
+  instead of a lattice"; clutches bind at kon; average spreading speed reported as the mean of five runs
+inputs:
+  nc:      {quantity: n_clutches, unit: dimensionless}
+  kon:     {quantity: clutch_on_rate, unit: 1/s}
+  koff:    {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Frup:    {quantity: bond_rupture_force, unit: pN}
+  vu:      {quantity: unloaded_motor_velocity, unit: nm/s}
+  Fstall:  {quantity: stall_force, unit: pN}
+  kclutch: {quantity: clutch_stiffness, unit: pN/nm}
+  ksub:    {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  v_spread: {quantity: spreading_speed, unit: nm/s, description: "v_spread averaged over the simulated time"}
+settings: {dt: 0.0002, t_total: 12.0, seed: 1}
+built_from: [bell_off_rate, retrograde_flow_eq1]
+from_words: true
+stochastic: true

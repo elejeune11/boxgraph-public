@@ -1,0 +1,29 @@
+"""Fig. 2(d) (PDF p. 6): the vertical segment of the blue ODE line (the abrupt failure that ends the cycle); the reading's x is the ODE's r (2, p. 5), its y the segment's position on the time axis.
+
+Read by the shared code in _fig.py (calibration from the tick marks matched to the
+printed labels below; see that file's docstring for the method and intervals).
+The hash pins _fig.py: if it changes, this reading must be re-checked.
+"""
+import hashlib
+import importlib.util
+from pathlib import Path
+
+SHARED = Path(__file__).with_name("_fig.py")
+SHARED_SHA256 = "208eb26904aa875ef138d7d51f48841cce4eb9e0ed67f333a48281771866738e"
+
+SPEC = {'drop_from': 0.2,
+ 'drop_to': 1.4,
+ 'kind': 'drops',
+ 'others': [(215, 52, 38), (20, 20, 20), (255, 255, 255)],
+ 'series': [(40, 70, 165)],
+ 'x': {'labels': [0, 20, 40]},
+ 'y': {'labels': [2, 1.5, 1, 0.5, 0], 'scale': 'linear'}}
+
+
+def read(image, at):
+    if hashlib.sha256(SHARED.read_bytes()).hexdigest() != SHARED_SHA256:
+        raise RuntimeError("_fig.py changed; re-check this reading and update SHARED_SHA256")
+    spec = importlib.util.spec_from_file_location("bangasser2013b_fig", SHARED)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.read_spec(image, at, SPEC)

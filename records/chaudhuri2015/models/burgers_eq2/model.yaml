@@ -1,0 +1,20 @@
+id: burgers_eq2
+name: Burgers-model stress-strain relation of a substrate linkage (Supp. Eq. 2)
+role: model
+stated: {page: 19, printed_page: "12", quote: "In the Burgers model, stress and strain are related by", where: "Supp. Eq. 2"}
+equation: "σ + (η1/E1 + η1/E2 + η2/E2) dσ/dt + (η2/E2) d²σ/dt² = (η1²η2/(E1E2)) (dε/dt)(d²ε/dt²)   (2)"
+described_from: sref-6
+inputs:
+  E1:   {quantity: linkage_stiffness_element, unit: pN/nm}
+  E2:   {quantity: linkage_stiffness_element, unit: pN/nm}
+  eta1: {quantity: linkage_damping_element, unit: pN*s}
+  eta2: {quantity: linkage_damping_element, unit: pN*s}
+outputs:
+  sigma: {quantity: linkage_stress, unit: pN/nm, description: "σ, the stress sustained in the linkage, under an imposed strain history ε(t); in the units of E·ε with the strain ε dimensionless"}
+runnable: false
+not_runnable_reason: >-
+  As printed, Eq. 2 is dimensionally inconsistent: the right side is a product of the strain rate and
+  the strain acceleration times η1²η2/(E1E2), which cannot have the units of the stress σ on the left,
+  and the d²σ/dt² term has coefficient η2/E2 (a time) where a time squared is needed. It cannot be
+  solved as printed without changing it, and no printed result rests on Eq. 2 alone: it is used only
+  inside the lattice model, which is not runnable either.

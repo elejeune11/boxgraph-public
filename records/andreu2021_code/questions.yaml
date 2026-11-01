@@ -1,0 +1,151 @@
+- id: q_ksub_unit
+  kind: possible_error
+  about: [ksub_code]
+  text: >-
+    The code sets ksub = 1e-3 N/m (1 pN/nm); the paper's Supplementary Table 4 prints the substrate spring
+    constant as 1 µN/nm (1000 N/m), a million times more. The code's value is the one the comment of
+    cmstretchg.m line 31 also uses as a scale (0.1e-3 N/m default) and the one the paper's own Methods
+    point to (the lower range of ref. 20, a 0.5 kPa gel), so the table's unit is the likelier misprint.
+    The build's cited-value check shows the difference (paper record: q_ksub_unit).
+  citation: {file: stretchscriptg.m, lines: "16", quote: "ksub = 1e-3;"}
+- id: q_table_cutoff
+  kind: unexplained_difference
+  about: [cmp_kint_L1_written, cmp_kunf_L1_written, cmp_kint_L1_cut100, cmp_kunf_L1_cut100, kint_mat_L1, kunf_mat_L1]
+  text: >-
+    'loading rate script.m' (line 44) takes the uncorrected rate wherever the density pm at the starting
+    force is below 1e-70. The shipped tables in kofflr.mat, which stretchscriptg.m loads, do not follow that
+    cut-off: in each row 2-4 cells next to the switch were computed with the corrected branch where pm is
+    between about 1e-70 and 1e-100 (up to 2.3% above the uncorrected rate). With a cut-off of 1e-100 the
+    port reproduces every one of the 2 x 33 x 151 cells of kint and kunf to 1e-9 (checked outside the build
+    while reading); the record compares rows of both tables at both cut-offs. So the tables were made by a
+    version of the script with another cut-off than the one released. The record's simulation uses 1e-100,
+    i.e. the tables the code actually loads. The effect on the stretch results is small, since only cells
+    at forces where the event is very fast are affected.
+  citation: {file: loading rate script.m, lines: "44", quote: "if pm(j,indstart) < 1e-70;"}
+- id: q_refolding
+  kind: unstated_model
+  about: [ln_kfold0_code, kfold_b_code, cmstretchg_port]
+  text: >-
+    cmstretchg.m lets an unfolded talin refold at kf = exp(13.07) exp(-2.288e12 pt |F|) (line 97; about
+    4.7e5 /s at zero force), although its own header says talin refolding "was not explicitly considered in
+    this implementation, setting the array to zero" (lines 24-26) - the array kfol is zero and unused, but
+    line 97 computes refolding regardless. The paper describes three events per clutch and no refolding, and
+    prints no refolding rate. A refolded clutch can unfold again (adding intadd again) and, being folded, can
+    lose intadd on unbinding or break. The port follows the code.
+  citation: {file: cmstretchg.m, lines: "97", quote: "kf = 1.*exp(13.07).*exp(-2.288e12.*abs(Fc).*pt); % k refolding in each clutch"}
+- id: q_intadd_comment
+  kind: choice
+  about: [intadd_code]
+  text: >-
+    intadd = 24 carries the comment "At 1000 s: 4 at 100 s: 24", which pairs 24 with 100 s runs, yet
+    cmstretchg.m runs to 1000 s (line 63; a commented "% 200" sits beside it) and the paper prints both
+    24 /µm2 and 1000 s. The code as released uses 24 with 1000 s, as the paper says; the comment suggests
+    the value was tuned for shorter runs.
+  citation: {file: stretchscriptg.m, lines: "21", quote: "intadd = 24; % At 1000 s: 4 at 100 s: 24"}
+- id: q_scaling
+  kind: unstated_input
+  about: [bl_code, sc_code, cmstretchg_port]
+  text: >-
+    The code scales the mean integrin density to its plots by bl + (mdint1/dint1 - 1) sc with bl = 1.2,
+    sc = 1.4 ("to scale results to experimental data"), hand-set constants the paper does not print (it
+    says only that model values "were scaled between the minimum and maximum experimental length values").
+    The code plots the scaled values against the YAP ratios (yem), not against adhesion lengths.
+  citation: {file: stretchscriptg.m, lines: "25-26", quote: "bl = 1.2; % Baseline value to scale results to experimental data (1.2)"}
+- id: q_twin_axes
+  kind: unstated_input
+  about: [yap_at_zero_length_added, length_per_yap_added, cmp_fig2e_2p5, cmp_fig2e_5, cmp_fig2e_10, cmp_fig2e_20]
+  text: >-
+    To compare the code's output with the paper's Fig. 2e lines, read on the adhesion-length axis, the
+    record maps the YAP axis (1.0-2.0) onto the adhesion-length axis (0-3 µm) of the figure's twin axes.
+    The map is read from the figure (paper record), not from the code; no alternative was run, since an
+    error in reading the axis labels would be a whole tick and obvious.
+  citation: {none: "the code does not draw the adhesion-length axis"}
+- id: q_ion_cm
+  kind: choice
+  about: [cm_g_code, cm_fend_code, cm_a_code, cm_b_code, cm_c_code, cm_d_code, mn_a_code]
+  text: >-
+    stretchscriptg.m passes ion = 'cm' ("Custom curve to fit data"), which adds 1000 exp(-h F) to the 'mn'
+    off-rate, a term that falls to 0.1 /s by 0.15 pN. It is used only for clutch forces above the 150 pN end
+    of the tables, where it is zero, so it has no effect; the tables themselves come from case 'mn'
+    ('loading rate script.m' line 10). Above 150 pN the code also uses the uncorrected unfolding rate and
+    breaks any folded clutch. None of this is in the paper, which gives the off-rate only as "Catch bond".
+  citation: {file: stretchscriptg.m, lines: "15", quote: "ion = 'cm';"}
+- id: q_alternative_values
+  kind: choice
+  about: [mr_code, a_code, kont1_code, mn_a_code, mn_b_code, mn_c_code, mn_d_code]
+  text: >-
+    Comments beside several values give other values tried: mr "680 seems to work well" (the code uses
+    1200, as the paper), a 1500e-9, kont1 3.33e-4, and the off-rate coefficients 16.67, -1.945e11, 0.001442,
+    1.356e11. The code as released uses the first-written values, which are those the paper prints where it
+    prints them.
+  citation: {file: stretchscriptg.m, lines: "13", quote: "mr = 1200;  % Maximum integrin density for each integrin. 680 seems to work well."}
+- id: q_unused
+  kind: reading
+  about: [cmstretchg_port]
+  text: >-
+    Some values in the code are not used: kof1 = 0.9 and E = 9 ksub/(4 pi a) in stretchscriptg.m (lines
+    18-19), the array kfol of kofflr.mat (zero), the argument fstart of cmstretchg, and the 'sq' signal. The
+    record does not enter them.
+  citation: {file: stretchscriptg.m, lines: "18-19", quote: "kof1 = 0.9;"}
+- id: q_unbinding_rate_commented
+  kind: reading
+  about: [ln_kunf0_lr_code, kunf_b_lr_code, lr_rate_port]
+  text: >-
+    In 'loading rate script.m' both starting rates are on commented-out lines (28-29), "uncomment desired
+    event"; as released the script does not run. Which line was active for which table is inferred from the
+    tables themselves, which the port reproduces with line 29 for kint and line 28 for kunf.
+  citation: {file: loading rate script.m, lines: "25-29", quote: "%Specify here the starting koff (uncomment desired"}
+- id: q_loading_rate
+  kind: unstated_model
+  about: [cmstretchg_port]
+  text: >-
+    In the simulation every bound clutch looks its rates up at L = |vf| ksub / n_bound (cmstretchg.m line
+    82), the substrate's loading rate shared among the bound clutches, at the nearest grid L and the
+    nearest whole pN of force. The paper does not say this (paper record: q_loading_rate_in_sim).
+  citation: {file: cmstretchg.m, lines: "82", quote: "L = abs(vf).*ksub./sum(bound);"}
+- id: q_port_sampling
+  kind: choice
+  about: [cmstretchg_port, run_2p5, run_5, run_10, run_20, run_2p5_exp, run_5_exp, run_10_exp, run_20_exp]
+  text: >-
+    The port cannot reproduce MATLAB's random stream, so each point is the mean of 3 seeds of the full
+    1000 s run (the code makes one run per point and does not average). The binding time of the unbound
+    clutches is drawn as one exponential of their summed rate instead of one per clutch (same distribution).
+  citation: {file: cmstretchg.m, lines: "121-129", quote: "teventub = -log(rand(nc,1))./k;"}
+- id: q_frequencies
+  kind: reading
+  about: [run_2p5, run_2p5_exp, yap_exp_2p5]
+  text: >-
+    stretchscriptg.m simulates fr = 0.125 x 2^(0:0.5:5) Hz (11 frequencies, 0.125-4 Hz) and plots them with
+    the experimental points at fre = 0, 0.125, 0.25, 0.5, 1, 2, 5.6569 Hz; fre = 0 (unstretched) and 5.6569 Hz
+    are outside that grid. The record runs the port at the frequencies of the paper's lines and at fre.
+  citation: {file: stretchscriptg.m, lines: "23", quote: "fr = 0.125*2.^(0:0.5:5); % Frequency of movement in Hz."}
+- id: q_table_step
+  kind: numerics
+  about: [ref_step_kint, run_kint_F0, lr_rate_port]
+  text: >-
+    Refining the force step of the rate correction (1e-14 N, line 12) by 2 and 4 moves the corrected
+    unbinding rate at zero starting force and 1 pN/s from 11.132 to 11.114 and 11.110 /s (0.2%), more than
+    the 0.1% tolerance the record declared; at higher loading rates it moves by less than 1e-5. The shipped
+    tables carry this discretisation error at the lowest loading rates; it is far below the sampling noise
+    of the simulation that uses them.
+  citation: {file: loading rate script.m, lines: "12", quote: "step = 1e-14; % force step, in force range (N)"}
+- id: q_validation
+  kind: unexplained_difference
+  about: [val_yap_2p5, val_yap_5, val_yap_10, val_yap_20, val_length_2p5, val_length_5, val_length_10, val_length_20]
+  text: >-
+    Against the measurements the code ships, the code's model is close to the YAP ratios at 10% stretch
+    and not reproduced at the other stretches: it misses in particular the unstretched control (model
+    1.20 by construction, bl), the rise at low frequency at 2.5% and 5%, and the high value at 5.66 Hz.
+    Against the adhesion lengths (pem) it is not reproduced at any stretch, mostly lower; the code scales
+    its output only against the YAP ratios (q_scaling). The paper says only that the model "largely
+    reproduced observed experimental trends".
+  citation: {file: stretchscriptg.m, lines: "54", quote: "mdint25norm = bl + ((mdint25./dint1)-1).*sc;"}
+- id: q_error_arrays
+  kind: reading
+  about: [yap_exp_2p5, yap_exp_5, yap_exp_10, yap_exp_20, length_exp_2p5, length_exp_5, length_exp_10, length_exp_20]
+  text: >-
+    experimental data.mat gives means (yem, pem) and errors (yee, pee) without saying what the errors are;
+    the record treats them as the printed uncertainty. pem/pee are not used by the scripts and carry no
+    unit; they are taken as adhesion lengths in µm because their values fall on the adhesion-length axis
+    of Fig. 2e. Both are said to come from the paper's source data (record andreu2021_data, not yet read).
+  citation: {file: stretchscriptg.m, lines: "63", quote: "errorbar(fre,yem(expstretch,:), yee(expstretch,:),'.b');"}

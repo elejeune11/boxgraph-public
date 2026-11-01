@@ -1,0 +1,172 @@
+- id: q_ksub_unit
+  kind: possible_error
+  about: [ksub_table, ksub_code_added, cmp_fig2e_2p5_printed, cmp_fig2e_5_printed, cmp_fig2e_10_printed, cmp_fig2e_20_printed]
+  text: >-
+    Supplementary Table 4 prints the substrate spring constant as 1 µN/nm (1000 N/m), a thousand times
+    stiffer than one clutch (1 nN/nm) and a million times the value in the authors' code (ksub = 1e-3 N/m,
+    i.e. 1 pN/nm). The Methods say ksub was taken from the lower range of ref. 20, matching a 0.5 kPa gel,
+    which points to the pN/nm scale. With the printed value the clutch force passes Fact within the first
+    moments of every engagement, so no reinforcement can occur; the record runs Fig. 2e both with the
+    printed value and with the code's value, and compares both.
+  citation: {page: 23, quote: "Substrate spring constant 1 µN/nm", where: Supplementary Table 4}
+- id: q_rate_laws
+  kind: unstated_input
+  about: [koff_a_added, koff_b_added, koff_c_added, koff_d_added, ln_kunf0_added, kunf_b_added]
+  text: >-
+    The paper gives the integrin off-rate only as "Catch bond" and the talin unfolding rate only as
+    "Slip bond" (Supplementary Table 4, from ref. 20); neither functional form nor parameters are printed.
+    The record takes them from Supplementary Software 1: k_off(F) = a exp(bF) + c exp(dF) with the 'mn'
+    coefficients, k_unf(F) = exp(-7.573) exp(1.786e12 FR F). The code's 'cm' variant, used there only above
+    150 pN, adds a term that vanishes beyond 0.15 pN and is identical there.
+  citation: {page: 23, quote: "Integrin unbinding rate Catch bond", where: Supplementary Table 4}
+- id: q_scaling
+  kind: unstated_input
+  about: [len0_added, len_scale_added, fig2e_model_2p5, fig2e_model_5, fig2e_model_10, fig2e_model_20]
+  text: >-
+    The model lines of Fig. 2e are integrin densities "scaled between the minimum and maximum experimental
+    length values", with no numbers given. The record uses the affine map of the authors' code
+    (bl = 1.2, sc = 1.4 on the YAP axis, i.e. 0.6 µm and 4.2 µm on the adhesion-length axis). In the code
+    that map is plotted against the YAP ratios (yem), not against the adhesion lengths the text names; in
+    the figure both axes coincide, so the line is the same.
+  citation: {page: 11, quote: "model values were scaled between the", where: "Methods, Model output"}
+- id: q_lifetime_baseline
+  kind: reading
+  about: [clutch_stretch_sim]
+  text: >-
+    For a force ramp starting from a baseline Fb the paper says only that p(F < Fb, L) = 0 and that p is
+    renormalised; it defines the lifetime as Fm/L for a ramp from zero. The record takes the lifetime from
+    Fb as (Fm - Fb)/L, so k' = L/(Fm - Fb), as the authors' code does; read literally (k' = L/Fm), the
+    corrected rates at high baseline force would be much lower.
+  citation: {page: 10, quote: "one can readily calculate the lifetime of the event as Fm/L", where: "Methods, after Eq. 6"}
+- id: q_loading_rate_in_sim
+  kind: unstated_model
+  about: [clutch_stretch_sim]
+  text: >-
+    The paper does not say which loading rate L each clutch's corrected rates are looked up at during the
+    simulation. The record uses L = |v| ksub / n_bound for every bound clutch (the substrate's loading
+    rate shared among the bound clutches), as the authors' code does, with the rate taken at the nearest
+    grid values of L and of the clutch force.
+  citation: {page: 10, quote: "we corrected the different rates to take into", where: "Methods, item 4"}
+- id: q_refolding
+  kind: unexplained_difference
+  about: [clutch_stretch_sim, cmp_fig2e_2p5_ksub_code, cmp_fig2e_5_ksub_code, cmp_fig2e_10_ksub_code, cmp_fig2e_20_ksub_code]
+  text: >-
+    The paper describes three events per clutch (unbinding, talin unfolding, actin breaking) and no talin
+    refolding; the record's model follows the paper. The authors' code (cmstretchg.m) also lets an unfolded
+    talin refold at kf = exp(13.07) exp(-2.288e12 FR |F|), very fast at low force, after which the clutch can
+    unfold again (adding d_add again) or break. Any difference between the record's runs and the Fig. 2e
+    lines may come partly from this, and from the code's step-ordering details; the andreu2021_code record
+    runs the code itself.
+  citation: {page: 10, quote: "First, we introduced a third event (apart from integrin unbinding and talin", where: "Methods, item 1"}
+- id: q_rate_tables
+  kind: choice
+  about: [clutch_stretch_sim]
+  text: >-
+    Numerical choices of the loading-rate correction are not printed: the force grid of Eqs. 5-6
+    (0.01 pN up to 200 pN), the baseline-force grid (1 pN up to 150 pN), the loading-rate grid
+    (1 pN/s x 2^(0:0.5:16)), the cut-off below which p is treated as zero (1e-70), and the use of
+    uncorrected rates above 150 pN. The record takes them from Supplementary Software 1 ('loading rate
+    script.m'). They are not refined, because in a stochastic model any change of grid changes every
+    trajectory and a refinement would mostly measure sampling noise.
+  citation: {none: "the paper prints no numerical setting of the rate correction"}
+- id: q_gillespie_scheme
+  kind: choice
+  about: [clutch_stretch_sim]
+  text: >-
+    The paper draws a waiting time for every possible event of every clutch and executes the first. The
+    record draws the time of the first event from the total rate and picks the event in proportion to its
+    rate, which has the same distribution and is faster. Breaking (rate infinite above Fact) happens with
+    zero waiting time, the lowest-index clutch first, as in the authors' code. Each run averages 3 seeds.
+  citation: {page: 10, quote: "we calculated stochastically the time at", where: "Methods, item 3"}
+- id: q_fig2e_x
+  kind: reading
+  about: [fig2e_model_2p5, fig2e_model_5, fig2e_model_10, fig2e_model_20]
+  text: >-
+    The frequencies at which the model was simulated are not printed (Supplementary Table 4: 0.125 Hz - 2 Hz;
+    the code uses 0.125 x 2^(0:0.5:5) Hz). In every panel the drawn line continues left of 0.125 Hz, across
+    the axis break into the Ns region, and right to the end of the axis beyond 2 Hz, so it is a smoothed or
+    extended curve rather than points at the labelled frequencies. The record reads it at the five labelled
+    frequencies only.
+  citation: {page: 23, quote: "0.125 Hz – 2 Hz Experimental values", where: Supplementary Table 4}
+- id: q_amplitude_claim
+  kind: overstated_claim
+  about: [A_2p5, A_5, A_10, A_20]
+  text: >-
+    The amplitudes A = 1.5-3 µm are said to be "of the order of the expected amplitudes of relative
+    movements of cells ~20 µm in diameter being stretched by 2.5–20%". With the paper's own edge estimate
+    (stretch x 10 µm radius, Supplementary Table 1 note i) those movements are 0.25-2 µm, so the fitted A at
+    low stretch is several times the estimate; the paper notes that the fitted range is narrower but not
+    that it is shifted.
+  citation: {page: 10, quote: "provided good ﬁts at values ranging from 1.5 to 3 µm. These values are of the", where: "Methods, Model parameters"}
+- id: q_validation_not_read
+  kind: choice
+  about: [fig2e_model_2p5, fig2e_model_5, fig2e_model_10, fig2e_model_20]
+  text: >-
+    The paper judges the model by overlaying it on the measured YAP ratios and paxillin adhesion lengths
+    (Fig. 2e, "largely reproduced observed experimental trends"). Those points were not read from the
+    figure (they overlap each other and are given in the authors' source data, record andreu2021_data),
+    so no validation comparison is made in this record.
+  citation: {page: 5, quote: "the model largely reproduced observed experi", where: text}
+# ---- added by the audit ---------------------------------------------------------------------------
+- id: q_supp1_load
+  kind: unstated_model
+  about: [supp_table1_edge, load_lo_supp1, load_hi_supp1]
+  text: >-
+    In Supplementary Table 1 the Load column of the stretch row carries note (ii), which states only how
+    loading rates were computed (deformation rate x ~2 nN/µm). The audit takes the load as the same
+    stiffness times the deformation of note (i); the paper does not say so.
+  citation: {page: 20, quote: "Loading rates calculated from deformation rates taking stiffness", where: "Supplementary Table 1, note (ii)"}
+- id: q_supp1_order_ranges
+  kind: reading
+  about: [deformation_lo_supp1, defrate_lo_supp1, load_lo_supp1, loadrate_hi_supp1]
+  text: >-
+    The stretch row of Supplementary Table 1 prints ranges of bare powers of ten, recorded end by end and
+    compared without verdict. Taken literally as intervals, the paper's own edge estimate falls outside
+    some of them: at 2.5% and 0.125 Hz the deformation rate is 0.0625 µm/s (below 10^-1, and the paper's
+    own "~60 nm/s" on p. 2), the load 0.5 nN (below 10^0); at 20% and 2 Hz the loading rate is 16 nN/s
+    (above 10^1). Each is within the same order of magnitude, which is all the table claims.
+  citation: {page: 20, quote: "we provide only orders of magnitude for", where: "Supplementary Table 1 caption"}
+- id: q_supp1_per_area
+  kind: unstated_input
+  about: [radius_supp1]
+  text: >-
+    The per-area columns of the stretch row (10^0 - 10^1 pN/µm2 and 10^0 - 10^2 pN/µm2/s) divide by an
+    adhesion area "estimated from an average 10 µm cell radius" with adhesions in an edge band of ~2 µm;
+    the paper does not say how the area follows from these (annulus pi(10^2 - 8^2) = 113 µm2, or strip
+    2 pi 10 x 2 = 126 µm2, or another). Not compared by the audit.
+  citation: {page: 20, quote: "Cell spreading areas were also estimated from an", where: "Supplementary Table 1, note (iii)"}
+# ---- added by the second figure pass -----------------------------------------------------------------
+- id: q_fig1_points_read
+  kind: reading
+  about: [q_validation_not_read, fig1e_pax_tri, fig1f_pax_tri, fig1g_pax_tri, fig1h_pax_tri]
+  text: >-
+    The measured points that Fig. 2e overlays on the model (Fig. 2e says they are "from Fig. 1") are now read
+    by code from Fig. 1e-h, where they are drawn without the shading and the model line: YAP (blue) and
+    paxillin (red) means with their s.e.m. bars, the triangular-signal points separately from Ns and Sq.
+    Where a red point lies partly behind a blue one its centre interval spans every place it could be, and
+    a bar end hidden behind the other series is taken as the mirror of its visible end, with the outer
+    interval covering the hidden span. The comparisons val_fig1*_pax_* (clutch model runs) and
+    val_fig2e_line_vs_fig1* (the paper's own plotted lines) are the validation q_validation_not_read left out.
+  citation: {page: 4, quote: "Model predictions (black line) overlaid on experimental YAP and paxillin results", where: "Fig. 2e caption"}
+- id: q_fig2e_line_vs_data
+  kind: unexplained_difference
+  about: [val_fig2e_line_vs_fig1e, val_fig2e_line_vs_fig1f, val_fig2e_line_vs_fig1g, val_fig2e_line_vs_fig1h, q_scaling]
+  text: >-
+    Read against the measured paxillin lengths of Fig. 1e-h, the paper's own model lines of Fig. 2e lie
+    outside the s.e.m. bars at several frequencies: at 10% stretch the line gives about 0.81, 1.20 and 2.12 µm
+    at 0.25, 0.5 and 1 Hz where the measured means are about 1.13, 1.79 and 2.54 µm; at 2.5% the line is
+    about 0.69 µm at 0.125 Hz against about 1.12 µm measured. Only the 20% panel is close at every frequency.
+    The measured lengths span about 0.70 µm (Ns, 5%) to 2.54 µm (10%, 1 Hz), while the lines span about
+    0.69 to 2.12 µm, so the scaling "between the minimum and maximum experimental length values" reaches the
+    measured minimum but not the measured maximum. The paper claims trends ("largely reproduced observed
+    experimental trends"), not values, and does not discuss the size of these departures.
+  citation: {page: 5, quote: "the model largely reproduced observed experi", where: text}
+- id: q_printed_ksub_flat
+  kind: reading
+  about: [q_ksub_unit, val_fig1e_pax_printed, val_fig1f_pax_printed, val_fig1g_pax_printed, val_fig1h_pax_printed]
+  text: >-
+    Run with k_sub as printed (1 µN/nm), the record's clutch model gives 0.60 µm at every frequency and
+    stretch (no reinforcement), so all four validations against Fig. 1e-h fail at almost every point; with
+    k_sub = 1 pN/nm (the code's value) the 20% panel comes close and the others partly. The measured data
+    thus side with the code's value, as q_ksub_unit argues from the Fig. 2e lines.
+  citation: {page: 23, quote: "Substrate spring constant 1 µN/nm", where: Supplementary Table 4}

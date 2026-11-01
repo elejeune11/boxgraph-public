@@ -1,0 +1,117 @@
+# ---- 'loading rate script.m': the port against entries of the shipped kofflr.mat ------------------
+- id: run_kint_L1
+  model: lr_rate_port
+  inputs: {L: L_first_code, koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           ln_kunf0: ln_kunf0_lr_code, kunf_b: kunf_b_lr_code, pt: pt_lr_code}
+  sweep: {Fb: kint_mat_L1}
+  outputs: {k_off: kint_L1_port}
+  note: "the script as written (cut-off 1e-70, line 44)"
+- id: run_kint_L1_cut100
+  model: lr_rate_port
+  inputs: {L: L_first_code, koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           ln_kunf0: ln_kunf0_lr_code, kunf_b: kunf_b_lr_code, pt: pt_lr_code}
+  sweep: {Fb: kint_mat_L1}
+  settings: {p_floor: 1.0e-100}
+  outputs: {k_off: kint_L1_port_cut100}
+  note: "cut-off 1e-100 instead of line 44's 1e-70 (q_table_cutoff)"
+- id: run_kunf_L1
+  model: lr_rate_port
+  inputs: {L: L_first_code, koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           ln_kunf0: ln_kunf0_lr_code, kunf_b: kunf_b_lr_code, pt: pt_lr_code}
+  sweep: {Fb: kunf_mat_L1}
+  outputs: {k_unf: kunf_L1_port_written}
+  note: "the script as written (cut-off 1e-70, line 44)"
+- id: run_kunf_L1_cut100
+  model: lr_rate_port
+  inputs: {L: L_first_code, koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           ln_kunf0: ln_kunf0_lr_code, kunf_b: kunf_b_lr_code, pt: pt_lr_code}
+  sweep: {Fb: kunf_mat_L1}
+  settings: {p_floor: 1.0e-100}
+  outputs: {k_unf: kunf_L1_port_cut100}
+  note: "cut-off 1e-100 instead of line 44's 1e-70 (q_table_cutoff)"
+- id: run_kint_F0
+  model: lr_rate_port
+  inputs: {Fb: fstart_first_code, koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           ln_kunf0: ln_kunf0_lr_code, kunf_b: kunf_b_lr_code, pt: pt_lr_code}
+  sweep: {L: kint_mat_F0}
+  outputs: {k_off: kint_F0_port}
+
+# ---- stretchscriptg.m: the four stretch cases, at the frequencies of the paper's Fig. 2e lines ------
+- id: run_2p5
+  model: cmstretchg_port
+  inputs: &common_2p5 {A: Am_2p5_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: fig2e_model_2p5}
+  replicates: 3
+  outputs: {adhesion_length: len_2p5_port, yap_scaled: yap_2p5_port}
+- id: run_5
+  model: cmstretchg_port
+  inputs: &common_5 {A: Am_5_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: fig2e_model_5}
+  replicates: 3
+  outputs: {adhesion_length: len_5_port, yap_scaled: yap_5_port}
+- id: run_10
+  model: cmstretchg_port
+  inputs: &common_10 {A: Am_10_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: fig2e_model_10}
+  replicates: 3
+  outputs: {adhesion_length: len_10_port, yap_scaled: yap_10_port}
+- id: run_20
+  model: cmstretchg_port
+  inputs: &common_20 {A: Am_20_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: fig2e_model_20}
+  replicates: 3
+  outputs: {adhesion_length: len_20_port, yap_scaled: yap_20_port}
+
+# ---- the same cases at the frequencies of experimental data.mat (fre), as stretchscriptg.m plots them --
+- id: run_2p5_exp
+  model: cmstretchg_port
+  inputs: *common_2p5
+  sweep: {fr: yap_exp_2p5}
+  replicates: 3
+  outputs: {yap_scaled: yap_2p5_port_fre, adhesion_length: len_2p5_port_fre}
+- id: run_5_exp
+  model: cmstretchg_port
+  inputs: *common_5
+  sweep: {fr: yap_exp_5}
+  replicates: 3
+  outputs: {yap_scaled: yap_5_port_fre, adhesion_length: len_5_port_fre}
+- id: run_10_exp
+  model: cmstretchg_port
+  inputs: *common_10
+  sweep: {fr: yap_exp_10}
+  replicates: 3
+  outputs: {yap_scaled: yap_10_port_fre, adhesion_length: len_10_port_fre}
+- id: run_20_exp
+  model: cmstretchg_port
+  inputs: *common_20
+  sweep: {fr: yap_exp_20}
+  replicates: 3
+  outputs: {yap_scaled: yap_20_port_fre, adhesion_length: len_20_port_fre}

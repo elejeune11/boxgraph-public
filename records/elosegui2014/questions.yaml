@@ -1,0 +1,150 @@
+- id: q_si_unreadable
+  kind: unstated_model
+  about: [integrin_clutch_sim, density_onset_a5b1_pred, density_onset_avb6_pred, traction_peak_avb6_measured]
+  text: >
+    The clutch model's equations, parameters (Supplementary Table 1, Note 5) and numerical scheme are in the
+    Supplementary Information, PDF pages 8-34, which carry no text and render blank in this copy of the PDF.
+    The model is entered as not runnable, and its printed predictions (onsets at 14 and 29 kPa, traction peak
+    at 5 kPa, the model lines of Fig. 3c-e and Fig. 4d-l) cannot be checked from this record. A reading from a
+    complete copy of the SI should make it runnable.
+  citation: {page: 7, printed_page: "637", quote: "the stochastic modelling of traction-force generation are described", where: "Supplementary methods paragraph"}
+- id: q_koff_column_multiplier
+  kind: possible_error
+  about: [koff_a5b1, koff_avb6, kont_a5b1, kont_avb6]
+  text: >
+    The Fig. 2a table heads its columns 'Kont (M-1 s-1 x 10^5)' and 'Koff (s-1 x 10^2)'. Read the same way
+    for both columns (value x 10^n), kont is 7.724e5 and 3.893e5 M^-1 s^-1, plausible, but koff is 49.44 and
+    1506 s^-1, implausibly fast for bonds whose dissociation is followed over 60 s in Fig. 2a. If instead the
+    koff column shows koff x 10^2, koff is 4.944e-3 and 0.1506 s^-1. The header is ambiguous or uses opposite
+    conventions in its two columns. The record enters both literally; every comparison uses ratios within a
+    column, where the multiplier cancels.
+  citation: {page: 3, printed_page: "633", quote: "Integrin Kont (M−1 s−1 × 105) Koff (s−1 × 102)", where: "Fig. 2a table"}
+- id: q_kon_fivefold
+  kind: unexplained_difference
+  about: [cmp_kon_fivefold, kon_fold_model, kon_ratio_pred]
+  text: >
+    With the paper's own kon = kont * dint, its printed kont values (ratio 0.504) and its fivefold density ratio,
+    kon(avb6)/kon(a5b1) is about 2.5, but the clutch model was run with kon fivefold, said to match the trends
+    measured in Fig. 2. The paper also argues from bead recruitment (Fig. 2d-g, Supplementary Note 2, unreadable
+    here) that kon had to increase even more than koff; with the SPR koff ratio of about 30 that would need a kon
+    ratio above 30, while the model's own koff ratio is 3. The fivefold kon matches neither the kont*dint estimate
+    nor the 'more than koff' argument with the SPR values; it agrees only with 'more than the model's own koff'.
+  citation: {page: 2, printed_page: "632", quote: "indicating that kon had to increase", where: text}
+- id: q_koff_threefold
+  kind: unexplained_difference
+  about: [cmp_koff_threefold, koff_fold_model, koff_ratio_spr]
+  text: >
+    The SPR koff values give koff(avb6)/koff(a5b1) of about 30 (15.06 / 0.4944), described as 'strongly
+    increased'; the clutch model raises koff only threefold and calls this 'matching thus the trends in bond
+    dynamics ... measured in Fig. 2'. The match is in direction only, not in magnitude (a factor of ten apart).
+    The paper does not say why the model's factor is 3 (the SI, which may, is unreadable here).
+  citation: {page: 6, printed_page: "636", quote: "koff (threefold), matching thus the trends in bond dynamics", where: text}
+- id: q_kon_dimension
+  kind: reading
+  about: [kon_eff_ratio]
+  text: >
+    kon = kont * dint is not dimensionally homogeneous as printed: kont is in M^-1 s^-1 (a 3D rate constant),
+    dint is an areal density (integrins per um^2, Fig. 2b), and kon in a clutch model is a rate in s^-1. A
+    conversion factor (a binding volume or reach) is implied but not stated. The record uses the relation only
+    as a ratio between two integrin types, where that factor cancels if it is the same for both.
+  citation: {page: 2, printed_page: "632", quote: "defining an effective binding rate kon as kon", where: text}
+- id: q_onsets_only_said
+  kind: overstated_claim
+  about: [density_onset_a5b1_pred, density_onset_avb6_pred]
+  text: >
+    'Integrin densities increased sharply at the points predicted by the model: 14 kPa for a5b1, and 29 kPa for
+    avb6' -- the measured stiffness values are those of the gels used (Fig. 4c shows 5, 14 and 29 kPa), so the
+    agreement is at the resolution of the stiffness series, not a measured onset. Not checkable here without
+    the model (q_si_unreadable) and without figure readings.
+  citation: {page: 6, printed_page: "636", quote: "14 kPa for α5 β1 , and 29 kPa for αv β6", where: text}
+- id: q_no_figure_readings
+  kind: choice
+  about: [integrin_clutch_sim, density_ratio_fivefold]
+  text: >
+    No figure was read: the commands that render PDF regions for figure readings were refused in this reading
+    session, so no reading could be checked on its overlay. The fivefold density ratio (Fig. 2b), the traction,
+    actin flow and integrin density data and model lines (Fig. 1b,c; Fig. 3c-e; Fig. 4d-l), detachment times
+    (Fig. 2c) and recruitment (Fig. 2e,g) are left for a later reader; figures.md lists them.
+- id: q_fig3a_dint_label
+  kind: possible_error
+  about: [kon_eff_ratio, integrin_clutch_sim]
+  text: >
+    (Audit.) In the Fig. 3a drawing the PDF text layer gives the two labels as 'kon1 = kont1·dint2' and
+    'kon2 = kont2·dint2': both use dint2. The caption ('true binding rates (kont1, kont2) multiplied by integrin
+    densities on the membrane (dint1, dint2)') and p. 2 ('kon = kont · dint') pair each kont with its own
+    density, so the kon1 label reads as a misprint of dint1. The page image at the available resolution is too
+    small to confirm the subscript by eye (PDF rendering commands were refused in the audit session too). The
+    record's kon_eff_ratio follows the caption and the p. 2 text, not the label.
+  citation: {page: 4, printed_page: "634", quote: "multiplied by integrin densities on the membrane", where: "Fig. 3a and caption"}
+- id: q_fig3d_onset_vs_14kPa
+  kind: reading
+  about: [density_onset_a5b1_pred]
+  text: >
+    (Audit.) density_onset_a5b1_pred cites Fig. 3d for the a5b1 onset at 14 kPa. By eye (no verdict), the
+    model curve of Fig. 3d starts its sharp rise at the second dashed regime boundary, which sits close to the
+    10 kPa tick, not at 14 kPa. The 14 kPa of the text is also the stiffness of a gel used (Fig. 4c), so the
+    printed '14 kPa' may be the first gel above a model onset nearer 10 kPa rather than the model's own onset.
+    A figure reading of Fig. 3d (and of the model lines in Fig. 4f,i) would settle where the model puts it.
+  citation: {page: 4, printed_page: "634", quote: "integrin densities (d), and actin speeds (e) predicted by the model", where: "Fig. 3d"}
+- id: q_fig2a_koff_timescale
+  kind: reading
+  about: [koff_a5b1, koff_avb6, spr_a5b1_264nM, spr_avb6_264nM]
+  text: >
+    (Figure reading.) Bears on q_koff_column_multiplier. In the dissociation phase of Fig. 2a (after the
+    injection ends near 90 s), the bold curves read in spr_a5b1_264nM and spr_avb6_264nM fall over tens of
+    seconds: by about a fifth for a5b1 and by more than half for avb6 between 100 and 130 s. A 1:1
+    dissociation at koff = 49.44 or 1506 s^-1 (the header read literally) would empty the surface within a
+    fraction of a second, so the plotted curves are not what those values describe; their decay is of the
+    order of 1e-2 s^-1 (a5b1) and a few 1e-2 s^-1 (avb6), closer to the koff column read as value x 10^-2
+    (4.944e-3 and 0.1506 s^-1). This is a reading of the figure, not a fit: the paper's fit also has an
+    association phase and may include mass transport.
+  citation: {page: 3, printed_page: "633", quote: "Data for 264 nM are marked in bold in both cases", where: "Fig. 2a"}
+- id: q_fig2a_two_bold
+  kind: reading
+  about: [spr_avb6_264nM]
+  text: >
+    (Figure reading.) The caption says the 264 nM data are bold 'in both cases', but Fig. 2a has two bold
+    salmon (avb6) curves, peaking near 60 and near 34 RU. The record reads the lower one, which ends next
+    to the salmon '264 nM' label; the upper may be the highest avb6 concentration (527 nM) drawn bold by
+    mistake.
+  citation: {page: 3, printed_page: "633", quote: "Data for 264 nM are marked in bold in both cases", where: "Fig. 2a"}
+- id: q_fig2b_axis_unit
+  kind: possible_error
+  about: [integrins_a5b1_ctrl_fig2b, integrins_a5b1_b6_fig2b, integrins_avb6_b6_fig2b]
+  text: >
+    (Figure reading.) The Fig. 2b axis is printed 'Integrins (um2)'; a membrane density must be per um^2
+    (p. 2 calls it the density of integrins on the cell membrane). The record takes the values as per um^2.
+  citation: {page: 3, printed_page: "633", quote: "Integrin densities on the membrane for both cell types", where: "Fig. 2b"}
+- id: q_fig34_x_labels
+  kind: reading
+  about: [traction_model_fig3c, density_model_fig3d, flow_model_fig3e, density_onset_a5b1_pred]
+  text: >
+    (Figure reading.) The x axes of Figs. 3c-e and 4d-i have no tick marks, and the printed labels 0.1, 1,
+    10, 100 do not lie on one log scale: in Fig. 3 their centres miss the best log fit by about 59 px at
+    1200 dpi (about 0.1 decade), with '1' and '10' set at the two dashed regime lines; in Fig. 4d-i the '1'
+    and '10' labels sit left of the dashed lines. In Fig. 4j-l, whose axis has ticks at 0.1 and 100, the
+    dashed lines fall (by eye) where 1 and 10 kPa lie on that scale, and the measured circles sit at the
+    gel stiffnesses of Fig. 1a. The readings of Fig. 4 therefore name each circle by its gel (in order) and
+    read the model lines at the circles' columns; the Fig. 3 readings use the label centres and widen their
+    intervals by twice the misfit. Where exactly the model's regimes change (in kPa) cannot be read more
+    precisely than this.
+  citation: {page: 4, printed_page: "634", quote: "The three regimes (separated by dashed lines) are", where: "Fig. 3c-e"}
+- id: q_fig4_onset_below_14kPa
+  kind: reading
+  about: [density_onset_a5b1_pred, density_a5b1_model_fig4f, density_model_fig3d]
+  text: >
+    (Figure reading.) Bears on q_fig3d_onset_vs_14kPa. Read at the plotted 5 and 14 kPa circles, the a5b1
+    model line of Fig. 4f (density_a5b1_model_fig4f) is near 1 at 5 kPa and already about 4 at 14 kPa,
+    close to the measured 14 kPa circles; the Fig. 3d curve (density_model_fig3d) likewise has risen well
+    above 1 by 14 kPa. So in the figures the model's sharp rise starts between the 5 and 14 kPa gels, at
+    the second dashed line, not at 14 kPa; the text's '14 kPa' reads as the first gel above the onset.
+  citation: {page: 6, printed_page: "636", quote: "14 kPa for α5 β1 , and 29 kPa for αv β6", where: "text; Fig. 4f"}
+- id: q_fig4_hidden_points
+  kind: choice
+  about: [traction_a5b1_ctrl_fig4d, density_a5b1_ctrl_fig4f, density_b6_both_fig4l, traction_b6_ab_fig1c]
+  text: >
+    (Figure reading.) Points wholly or mostly hidden under another marker are not read: in Fig. 4d the
+    filled circles at 0.25, 2.8 and 5 kPa (under open circles), in Fig. 4f the filled ones at 0.25 and 5
+    kPa, in Fig. 4l the orange one at 5 kPa, in Fig. 1c the blue one at 0.7 kPa. Comparisons with them use
+    readings at the gels that are visible. Error bars that do not leave their marker are reported as at
+    most the marker.

@@ -1,0 +1,39 @@
+id: lattice_spreading
+name: stochastic lattice-spring model of cell spreading on elastic or Burgers-model substrates (Supp. Note 1)
+role: model
+stated: {page: 18, printed_page: "11", quote: "Stochastic lattice spring model of cell spreading as a function of", where: "Supp. Note 1; Supp. Fig. 1a,b"}
+equation: >-
+  2D lattice of mass nodes joined by Hookean springs (elastic) or Burgers elements (Supp. Eq. 2);
+  ligands available on top-row nodes by ligand density; clutches bind at kon as the front passes a
+  ligand; strain v dt imposed on the substrate through the clutches; Eq. 2 discretized by backward
+  Euler; node equations of motion solved by an implicit Beeman scheme; clutch forces from kclutch;
+  dissociation by the Bell model; v_retrograde from Supp. Eq. 1; spread area = π (distance spread in
+  60,000 time steps)²; dt = 0.2 ms
+built_from: [bell_off_rate, retrograde_flow_eq1, burgers_eq2]
+inputs:
+  kon:     {quantity: clutch_on_rate, unit: 1/s}
+  koff:    {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Frup:    {quantity: bond_rupture_force, unit: pN}
+  vu:      {quantity: unloaded_motor_velocity, unit: nm/s}
+  Fstall:  {quantity: stall_force, unit: pN}
+  kclutch: {quantity: clutch_stiffness, unit: pN/nm}
+  L0:      {quantity: initial_adhered_length, unit: um}
+  E1:      {quantity: linkage_stiffness_element, unit: pN/nm}
+  E2:      {quantity: linkage_stiffness_element, unit: pN/nm}
+  eta1:    {quantity: linkage_damping_element, unit: pN*s}
+  eta2:    {quantity: linkage_damping_element, unit: pN*s}
+  rho:     {quantity: ligand_line_density, unit: 1/nm}
+outputs:
+  v_spread: {quantity: spreading_speed, unit: nm/s}
+settings: {dt: 0.0002, n_steps: 60000, seed: 1}
+from_words: true
+stochastic: true
+runnable: false
+not_runnable_reason: >-
+  The paper does not state what is needed to build the lattice: its size and node count, the node
+  spacing and node mass, the boundary conditions (the bottom row appears fixed in Supp. Fig. 1a), how
+  ligands at a given density are placed on top-row nodes, how the imposed strain v dt is shared among
+  bound clutches and nodes, the Beeman scheme's parameters, and the damping-coefficient values and units
+  actually used (see the questions). Its stress relation, Supp. Eq. 2, is not usable as printed. The
+  MATLAB code is not published. Fig. 1b-d, Fig. 5b, Supp. Fig. 1c,e,f and Supp. Fig. 2 rest on it and
+  cannot be checked.

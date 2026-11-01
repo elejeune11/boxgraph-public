@@ -1,0 +1,138 @@
+- id: q_threshold_vs_vts
+  kind: unexplained_difference
+  about: [v_switch_threshold, v_ts_mean, cmp_threshold_vs_vts]
+  text: >
+    The Abstract puts the switch at a threshold F-actin speed of 8-10 nm/s, but the mean F-actin speed at
+    the time of peak stress in single FAs is printed as 12.7 ± 3 nm/s (Fig. 3 E). The threshold range lies
+    below the mean and overlaps its ± interval only at its upper end (9.7-10 nm/s). The paper does not say
+    how the 8-10 nm/s figure was obtained from Fig. 3 E, Fig. 4 D or Fig. 5 G.
+  citation: {page: 4, quote: "Mean of v(ts) = 12.7 ± 3 nm/s", where: "Fig. 3 E caption"}
+- id: q_threshold_midpoint
+  kind: choice
+  about: [run_switch_claim, v_switch_threshold]
+  text: >
+    The threshold is printed as a range and the run takes its midpoint, 9 nm/s. At 10 nm/s the comparison
+    with 12.7 ± 3 nm/s would be reproduced; at 8 nm/s it would be close. The verdict of cmp_threshold_vs_vts
+    depends on where in the printed range the threshold lies.
+- id: q_threshold_procedure
+  kind: unstated_model
+  about: [switch_speed_claim, v_switch_threshold]
+  text: >
+    How the threshold speed Vc is computed is not stated. Candidate measurements in the paper are the speed
+    at ts (Fig. 3 E,F), the speed at the >95% stresses (Figs. 1 G, 4 D) and the bounds vs and vw of the
+    inverse and direct correlation ranges (Fig. 5 G, Fig. S3 E,F), which are bounds of ranges, not one
+    speed.
+  citation: {page: 5, quote: "maximal stresses were always associated with a similar", where: text}
+- id: q_ts_definition
+  kind: reading
+  about: [v_ts_mean, ts_mean, sigma_ts_mean]
+  text: >
+    ts is defined two ways: in the text as the time of peak stress, estimated as the mean of the top quantile
+    of the stresses measured for each FA (p. 4), and in the Fig. 3 D caption as the time when traction
+    stress exceeds 75% of its maximum. The record treats v(ts) as a speed at peak traction.
+  citation: {page: 4, quote: "the dashed line indicates 75% of maximum stress", where: "Fig. 3 D caption"}
+- id: q_substrate_modulus
+  kind: reading
+  about: [substrate_modulus_range, G_control_carac, G_blebbistatin, G_carho]
+  text: >
+    The substrates are "compliant (1.5-6 kPa)" on p. 2 without naming the modulus; the Methods give shear
+    moduli G' of ~1,500, 2,800 and ~5,400 Pa, which match the range if it is the shear modulus. A Young's
+    modulus would be about three times G'. Recorded as two quantities.
+- id: q_figures_not_read
+  kind: reading
+  about: [v_ts_mean, ts_mean, sigma_ts_mean, switch_speed_claim]
+  text: >
+    No figure was read: the figure-rendering commands were refused by the permission settings of the
+    session that built this record. The plotted measurements are therefore missing, among them those that
+    test the threshold claim directly: the speed at maximal traction per condition with its standard
+    deviation (Fig. 4 D, right), vs and vw per condition (Fig. 5 G) and the 26 single-FA points of Fig. 3 E,F.
+    A later reading should add them and compare Fig. 4 D with switch_speed_claim.
+- id: q_fig5_error_bars
+  kind: reading
+  about: [switch_speed_claim]
+  text: >
+    The error bars of Fig. 5 E-G are not identified (the legend says only that data reflect a mean of
+    >1,000 data points for n = 3 cells); those of Fig. 4 D are standard deviations.
+  citation: {page: 6, quote: "a mean of >1,000 data points for n = 3 cells", where: "Fig. 5 legend"}
+
+# --- added by the audit (second reading) ---
+- id: q_vts_before_peak
+  kind: reading
+  about: [v_ts_mean, cmp_threshold_vs_vts, switch_speed_claim]
+  text: >
+    The Fig. 3 D caption defines ts as the time when traction stress first exceeds 75% of its maximum
+    (the arrow sits on the rising part of the stress trace), so v(ts) is the speed while the FA is still
+    strengthening, before its peak. In the strengthening phase speed falls as stress rises (p. 3), so
+    v(ts) would be expected to lie above the speed at maximal traction. Comparing the threshold Vc with
+    v(ts) as like for like (cmp_threshold_vs_vts) may not be apt; the difference recorded in
+    q_threshold_vs_vts may follow from this definition rather than from an inconsistency.
+  citation: {page: 4, quote: "the arrow indicates time (ts) when traction stress exceeds this threshold", where: "Fig. 3 D caption"}
+- id: q_not_significant_untested
+  kind: overstated_claim
+  about: [switch_speed_claim, v_switch_threshold]
+  text: >
+    The claim that vs and vw "were not significantly altered" across perturbations (p. 5), on which the
+    Abstract's perturbation-independent threshold rests, names no statistical test, and Fig. 5 G has n = 3
+    cells per condition with error bars that are not identified (q_fig5_error_bars). Read by eye (no
+    verdict), vs (about 10-12.5 nm/s) lies above vw (about 6-8.5 nm/s) in every condition, so the printed
+    8-10 nm/s threshold falls between the two bounds rather than at either.
+  citation: {page: 5, quote: "Remarkably, vs and vw were not significantly altered", where: text}
+- id: q_supplement_units
+  kind: possible_error
+  about: [G_blebbistatin]
+  text: >
+    The Fig. S1 legend (p. 8) gives "50 mM blebbistatin", while the main text, Methods, Fig. S3 legend and
+    the Fig. S1 panel label give 50 μM. The Fig. S2 legend (p. 9) defines the lamellipodium as points within
+    "2.7 mm" of the cell edge and FAs as "2.7-8 μm" away. Both look like μ printed as m (the page images show
+    "mM" and "mm"); recorded as printed, not corrected. Neither value feeds a model.
+  citation: {page: 8, quote: "cells treated with 50 mM blebbistatin", where: "Fig. S1 legend"}
+- id: q_fig_s3_va
+  kind: possible_error
+  about: [r_high_speed_typical]
+  text: >
+    The Fig. S3 legend says a linear regression "was calculated for all data with vACT > va"; va is not
+    defined anywhere in the paper. From context it is probably vs (the speed that bounds the inverse
+    range), but that is not stated.
+  citation: {page: 10, quote: "was calculated for all data with vACT > va", where: "Fig. S3 legend"}
+
+# --- added with the calibrated figure readings (figures.yaml, figures.md) ---
+- id: q_fig4d_read
+  kind: reading
+  about: [q_figures_not_read, fig4d_speed_data, fig4d_distance_data, cmp_threshold_vs_fig4d, switch_speed_by_condition]
+  text: >
+    The figures are now read with calibrated readings (figures.yaml), which answers the gap that
+    q_figures_not_read records. Fig. 4 D right (F-actin speed at maximal traction, mean and SD per
+    condition) is compared with the threshold claim run per condition (cmp_threshold_vs_fig4d,
+    validation). Fig. 5 G (vs and vw per condition, q_not_significant_untested) is read as fig5g_vs
+    and fig5g_vw, and the 26-FA points of Fig. 3 E, F as fig3e_points and fig3f_points.
+  citation: {page: 5, quote: "mean (squares) and standard deviation (error bars)", where: "Fig. 4 D legend"}
+- id: q_fig3ef_point_count
+  kind: reading
+  about: [fig3e_points_data, fig3f_points_data, v_ts_mean, ts_mean, sigma_ts_mean]
+  text: >
+    The caption says the data of Fig. 3 E and F are from 26 FAs, but the two panels do not show the
+    same number of points: Fig. 3 F shows 32 separate dots, and Fig. 3 E shows 27 marker positions
+    (one stack at about 2 min may hide more). Each FA should give one point in each panel. The means
+    and standard deviations of the points read from each panel agree with the printed means of the
+    caption (12.7 ± 3 nm/s, 3 ± 2 min, 65 ± 28 Pa) to within the reading, so the points plotted are
+    probably the ones averaged; the count of 26 is then not that of the points plotted.
+  citation: {page: 4, quote: "Data in E and F are from 26 FAs in four cells", where: "Fig. 3 caption"}
+- id: q_fig3f_axis_zero
+  kind: possible_error
+  about: [fig3f_points_data]
+  text: >
+    The x axis of Fig. 3 F (traction stress at ts) carries a "0" at the left frame edge and no "20",
+    but the left edge does not lie on the regular grid of the ticks labelled 40-120: by the ticks it
+    sits near 22 Pa. The reading uses the ticks; the mean and SD of the points read this way match the
+    printed 65 ± 28 Pa, and reading the left edge as 0 would not. The "0" label looks misplaced.
+  citation: {page: 4, quote: "Mean of ␴(ts) = 65 ±", where: "Fig. 3 F"}
+- id: q_figS2d_axis_ends
+  kind: possible_error
+  about: [figS2d_points_data]
+  text: >
+    In Fig. S2 D the axes are labelled only "0" and "1", with the "1" labels at the top and right frame
+    edges, but the evenly spaced ticks put those edges 5.5 tick steps from 0. With ticks of 0.2 the
+    points normalized to exactly 1 (several in each direction) fall on the fifth tick, and the edges are
+    at 1.1. The reading takes the ticks as 0.2 (an added reading choice); read with the "1" labels, all
+    values would be about 10% higher and none would reach 1.
+  citation: {page: 9, quote: "were normalized relative to their maximum values for each FA", where: "Fig. S2 legend"}

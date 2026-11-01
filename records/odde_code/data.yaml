@@ -1,0 +1,347 @@
+# ---- motorclutch2_3.m: the parameters of the stiffness sweep (lines 16-27) --------------------------
+# Every value equals Bangasser et al. 2013's base set (Table 1). The code writes vu, Fm and Fb negative
+# (retrograde negative), the paper positive: those three are linked in cited.yaml with negated: true.
+- id: nm_23
+  quantity: n_motors
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: motorclutch2_3.m, lines: "16", quote: "nm=50; %number of myosin motors"}
+  from_source: bangasser2013
+  from_datum: nm_base
+- id: Fm_23
+  quantity: motor_stall_force
+  unit: pN
+  origin: reported
+  printed: "-2"
+  citation: {file: motorclutch2_3.m, lines: "17", quote: "Fm=-2; %motor stall force in pN"}
+  from_source: bangasser2013
+- id: vu_23
+  quantity: unloaded_motor_velocity
+  unit: nm/s
+  origin: reported
+  printed: "-120"
+  citation: {file: motorclutch2_3.m, lines: "18", quote: "vu=-120; %unloaded motor velocity in nm/s"}
+  from_source: bangasser2013
+- id: nc_23
+  quantity: n_clutches
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: motorclutch2_3.m, lines: "19", quote: "nc=50; %number of molecular clutches"}
+  from_source: bangasser2013
+  from_datum: nc_base
+- id: kon_23
+  quantity: clutch_on_rate
+  unit: 1/s
+  origin: reported
+  printed: "0.3"
+  citation: {file: motorclutch2_3.m, lines: "20", quote: "kon=0.3; %On rate constant in 1/s"}
+  from_source: bangasser2013
+  from_datum: kon_base
+- id: koff_23
+  quantity: clutch_off_rate_unloaded
+  unit: 1/s
+  origin: reported
+  printed: "0.1"
+  citation: {file: motorclutch2_3.m, lines: "21", quote: "koff=0.1; %Off rate constant in 1/s"}
+  from_source: bangasser2013
+  from_datum: koff_base
+- id: Fb_23
+  quantity: bond_rupture_force
+  unit: pN
+  origin: reported
+  printed: "-2"
+  citation: {file: motorclutch2_3.m, lines: "22", quote: "Fb=-2; %Bond rupture force in pN"}
+  from_source: bangasser2013
+- id: Kc_23
+  quantity: clutch_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "0.8"
+  citation: {file: motorclutch2_3.m, lines: "23", quote: "Kc=0.8; %Clutch spring constant in pN/nm"}
+  from_source: bangasser2013
+  from_datum: kc_base
+- id: gain_23
+  quantity: feedback_gain
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: motorclutch2_3.m, lines: "24", quote: "gain=0; %gain of feedback loop"}
+  note: "not in any of the papers (q_gain)"
+- id: events_23
+  quantity: event_count
+  unit: dimensionless
+  origin: reported
+  printed: "1 x 10^5"
+  citation: {file: motorclutch2_3.m, lines: "26", quote: "events=1e5; %number of events to simulate"}
+  note: "the setting `events` of the port; the papers give simulated times, not event counts (q_run_length)"
+- id: ksub_min_23
+  quantity: stiffness_sweep_bound
+  unit: pN/nm
+  origin: reported
+  printed: "10^-2"
+  citation: {file: motorclutch2_3.m, lines: "27", quote: "stiffness=logspace(-2,2,10); %define stiffness vector"}
+  note: "logspace(-2,2,10) runs from 10^-2; the unit is that of Ksub (line 44 comment); the setting ksub_min of optimum_port"
+- id: ksub_max_23
+  quantity: stiffness_sweep_bound
+  unit: pN/nm
+  origin: reported
+  printed: "10^2"
+  citation: {file: motorclutch2_3.m, lines: "27", quote: "stiffness=logspace(-2,2,10); %define stiffness vector"}
+  note: "logspace(-2,2,10) runs to 10^2 in 10 points; the settings ksub_max and n_points of optimum_port"
+
+# ---- motorclutch1_1.m: one dynamic run (lines 15-26, 43) -----------------------------------------
+# A mixed set: kon = 1 1/s, vu, Fm, Fb and koff as Chan and Odde's Table S1 (same sign convention),
+# but nm = nc = 50 and Kc = 0.8 pN/nm as Bangasser et al.'s base set (q_mixed_set_1_1).
+- id: nm_11
+  quantity: n_motors
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: motorclutch1_1.m, lines: "15", quote: "nm=50; %number of myosin motors"}
+  from_source: bangasser2013
+  from_datum: nm_base
+- id: Fm_11
+  quantity: motor_stall_force
+  unit: pN
+  origin: reported
+  printed: "-2"
+  citation: {file: motorclutch1_1.m, lines: "16", quote: "Fm=-2; %motor stall force in pN"}
+  from_source: chan2008
+  from_datum: Fm_S1
+- id: vu_11
+  quantity: unloaded_motor_velocity
+  unit: nm/s
+  origin: reported
+  printed: "-120"
+  citation: {file: motorclutch1_1.m, lines: "17", quote: "vu=-120; %unloaded motor velocity in nm/s"}
+  from_source: chan2008
+  from_datum: vu_S1
+- id: nc_11
+  quantity: n_clutches
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: motorclutch1_1.m, lines: "18", quote: "nc=50; %number of molecular clutches"}
+  from_source: bangasser2013
+  from_datum: nc_base
+- id: kon_11
+  quantity: clutch_on_rate
+  unit: 1/s
+  origin: reported
+  printed: "1"
+  citation: {file: motorclutch1_1.m, lines: "19", quote: "kon=1; %On rate constant in 1/s"}
+  from_source: chan2008
+  from_datum: kon_S1
+- id: koff_11
+  quantity: clutch_off_rate_unloaded
+  unit: 1/s
+  origin: reported
+  printed: "0.1"
+  citation: {file: motorclutch1_1.m, lines: "20", quote: "koff=0.1; %Off rate constant in 1/s"}
+  from_source: chan2008
+  from_datum: koff_S1
+- id: Fb_11
+  quantity: bond_rupture_force
+  unit: pN
+  origin: reported
+  printed: "-2"
+  citation: {file: motorclutch1_1.m, lines: "21", quote: "Fb=-2; %Bond rupture force in pN"}
+  from_source: chan2008
+  from_datum: Fb_S1
+- id: Kc_11
+  quantity: clutch_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "0.8"
+  citation: {file: motorclutch1_1.m, lines: "22", quote: "Kc=0.8; %Clutch spring constant in pN/nm"}
+  from_source: bangasser2013
+  from_datum: kc_base
+- id: Ksub_11
+  quantity: substrate_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "1"
+  citation: {file: motorclutch1_1.m, lines: "23", quote: "Ksub=1; %Substrate spring constant in pN/nm"}
+- id: gain_11
+  quantity: feedback_gain
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: motorclutch1_1.m, lines: "24", quote: "gain=0; %gain of feedback loop"}
+- id: eventlimit_11
+  quantity: event_count
+  unit: dimensionless
+  origin: reported
+  printed: "1 x 10^4"
+  citation: {file: motorclutch1_1.m, lines: "26", quote: "eventlimit=1e4; %maximum number of events to simulate"}
+  note: "the loop 'for i=2:eventlimit' (line 65) executes eventlimit - 1 = 9999 events"
+- id: dt_initial_11
+  quantity: initial_time_step
+  unit: s
+  origin: reported
+  printed: "0.005"
+  citation: {file: motorclutch1_1.m, lines: "43", quote: "dt=0.005;"}
+  note: "used only before the loop, where no clutch is engaged, and stored as timestep(1) (line 59); motorclutch2_3.m writes the same 0.005 on line 66 and stores timestep(1)=0 (line 77)"
+
+# ---- parameter values copied from the papers' records, to run the code's model at their sets ------
+# Chan and Odde 2008, Table S1 (PDF p. 56): the four values that differ from the code. The others
+# (Fm, vu, Fb, koff) are the code's own values in motorclutch1_1.m, which equal Table S1's.
+- id: nm_chan
+  quantity: n_motors
+  unit: dimensionless
+  origin: reported
+  printed: "75"
+  citation: {none: "copied from the paper's record chan2008 (nm_S1, Table S1, PDF p. 56); not in the code"}
+  from_source: chan2008
+  from_datum: nm_S1
+- id: nc_chan
+  quantity: n_clutches
+  unit: dimensionless
+  origin: reported
+  printed: "75"
+  citation: {none: "copied from the paper's record chan2008 (nc_S1, Table S1, PDF p. 56); not in the code"}
+  from_source: chan2008
+  from_datum: nc_S1
+- id: kon_chan
+  quantity: clutch_on_rate
+  unit: 1/s
+  origin: reported
+  printed: "1"
+  citation: {none: "copied from the paper's record chan2008 (kon_S1, Table S1, PDF p. 56)"}
+  from_source: chan2008
+  from_datum: kon_S1
+- id: kc_chan
+  quantity: clutch_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "5"
+  citation: {none: "copied from the paper's record chan2008 (kc_S1, Table S1, PDF p. 56); not in the code"}
+  from_source: chan2008
+  from_datum: kc_S1
+# Bangasser and Odde 2013, Fig. 4A legend (PDF p. 7): nm = nc = 25, the base set (Chan's) otherwise.
+- id: nm_25
+  quantity: n_motors
+  unit: dimensionless
+  origin: reported
+  printed: "25"
+  citation: {none: "copied from the paper's record bangasser2013b (n_fig4_low_m, Fig. 4 legend, PDF p. 7)"}
+  from_source: bangasser2013b
+  from_datum: n_fig4_low_m
+- id: nc_25
+  quantity: n_clutches
+  unit: dimensionless
+  origin: reported
+  printed: "25"
+  citation: {none: "copied from the paper's record bangasser2013b (n_fig4_low_c, Fig. 4 legend, PDF p. 7)"}
+  from_source: bangasser2013b
+  from_datum: n_fig4_low_c
+
+# ---- the papers' printed results for this model, copied from their records -----------------------
+# Each figure value is the calibrated code reading of the paper's record, written as its centre ± the
+# larger half-width of its 95% interval, rounded to 2 decimals; the build checks each copy against
+# that reading.
+# Bangasser et al. 2013, base set (= motorclutch2_3.m), Gillespie algorithm
+- id: F_fig2b_b13
+  quantity: mean_traction_force
+  unit: pN
+  origin: predicted
+  citation: {none: "copied from the paper's record bangasser2013 (F_fig2b_nc50_read: Fig. 2B, blue line nc = 50, PDF p. 4)"}
+  from_source: bangasser2013
+  from_datum: F_fig2b_nc50_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.01", "0.03", "0.1", "0.13", "0.3", "1", "3", "10", "100"],
+          values: ["28.79 ± 0.80", "32.84 ± 1.19", "38.54 ± 0.99", "38.74 ± 0.99", "32.01 ± 1.73", "16.12 ± 1.42", "11.46 ± 0.80", "10.03 ± 0.80", "9.32 ± 0.80"]}
+- id: v_fig2c_b13
+  quantity: retrograde_flow_rate
+  unit: nm/s
+  origin: predicted
+  citation: {none: "copied from the paper's record bangasser2013 (v_fig2c_nc50_read: Fig. 2C, blue line nc = 50, PDF p. 4)"}
+  from_source: bangasser2013
+  from_datum: v_fig2c_nc50_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.01", "0.03", "0.1", "0.13", "0.3", "1", "3", "10", "100"],
+          values: ["85.31 ± 1.00", "80.48 ± 1.55", "73.68 ± 1.28", "73.60 ± 1.28", "81.58 ± 2.25", "100.42 ± 1.69", "106.10 ± 1.55", "108.04 ± 1.00", "108.95 ± 1.28"]}
+- id: tcycle_fig6d_b13
+  quantity: load_fail_cycle_time
+  unit: s
+  origin: predicted
+  citation: {none: "copied from the paper's record bangasser2013 (tcycle_fig6d_read: Fig. 6D, red line Cycle Time, PDF p. 7)"}
+  from_source: bangasser2013
+  from_datum: tcycle_fig6d_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.01", "0.02", "0.03", "0.05", "0.1", "0.13", "0.2", "0.3", "1", "10"],
+          values: ["57.73 ± 2.46", "33.80 ± 5.43", "24.42 ± 4.32", "16.12 ± 3.00", "9.65 ± 0.87", "6.76 ± 1.59", "4.18 ± 1.77", "2.28 ± 1.67", "0.51 ± 0.77", "0.28 ± 0.77"]}
+- id: kens_fig6b_b13
+  quantity: ensemble_clutch_stiffness
+  unit: pN/nm
+  origin: predicted
+  citation: {none: "copied from the paper's record bangasser2013 (kens_fig6b_read: Fig. 6B, Ensemble Clutch Stiffness, PDF p. 7)"}
+  from_source: bangasser2013
+  from_datum: kens_fig6b_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.01", "0.03", "0.1", "0.3", "1", "10", "100"],
+          values: ["23.73 ± 2.89", "21.81 ± 1.79", "16.71 ± 1.81", "8.82 ± 1.44", "3.31 ± 0.49", "1.86 ± 0.23", "1.76 ± 0.14"]}
+- id: ksopt_fig2c_b13
+  quantity: optimal_substrate_stiffness
+  unit: pN/nm
+  origin: predicted
+  citation: {none: "copied from the paper's record bangasser2013 (ksopt_fig2c_read: Fig. 2C, dashed blue line, PDF p. 4)"}
+  from_source: bangasser2013
+  from_datum: ksopt_fig2c_read
+  note: "the reading is indexed by the number of clutches the legend gives each dashed line; only nc = 50 (the base set) is copied"
+  table: {index_quantity: n_clutches, index_unit: dimensionless, index: ["50"], values: ["0.137 ± 0.007"]}
+# Bangasser et al. 2013, Fig. S1A: Chan and Odde's parameters under the Gillespie algorithm
+- id: v_figS1a_b13
+  quantity: retrograde_flow_rate
+  unit: nm/s
+  origin: predicted
+  citation: {none: "copied from the paper's record bangasser2013 (v_figS1a_present_read: Fig. S1A, blue line Present study, PDF p. 20)"}
+  from_source: bangasser2013
+  from_datum: v_figS1a_present_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.1", "0.2", "0.5", "1", "2", "5", "10", "20", "50", "100"],
+          values: ["46.58 ± 1.01", "41.92 ± 1.17", "33.79 ± 1.21", "28.99 ± 1.17", "42.21 ± 2.56", "91.07 ± 2.00", "103.41 ± 1.17", "106.92 ± 1.13", "108.61 ± 1.07", "109.23 ± 1.07"]}
+# Chan and Odde 2008, Fig. 1D: Table S1 parameters under the paper's time-stepped Monte Carlo
+- id: v_fig1d_c08
+  quantity: retrograde_flow_rate
+  unit: nm/s
+  origin: predicted
+  citation: {none: "copied from the paper's record chan2008 (v_fig1d_read: Fig. 1D, solid line, PDF p. 3)"}
+  from_source: chan2008
+  from_datum: v_fig1d_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.5", "1", "2", "3", "5", "10", "20", "50", "70"],
+          values: ["76.48 ± 0.45", "87.42 ± 0.53", "99.31 ± 0.51", "103.51 ± 0.45", "106.92 ± 0.47", "108.92 ± 0.40", "109.99 ± 0.42", "110.52 ± 0.40", "110.66 ± 0.40"]}
+- id: v_fig1d_soft_c08
+  quantity: retrograde_flow_rate
+  unit: nm/s
+  origin: predicted
+  citation: {none: "copied from the paper's record chan2008 (v_fig1d_soft_read: Fig. 1D, solid line, 0.12-0.3 pN/nm, PDF p. 3)"}
+  from_source: chan2008
+  from_datum: v_fig1d_soft_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.12", "0.15", "0.2", "0.25", "0.3"],
+          values: ["82.15 ± 0.55", "80.62 ± 0.62", "77.81 ± 0.45", "77.28 ± 0.48", "76.08 ± 0.46"]}
+- id: F_fig1d_soft_c08
+  quantity: mean_traction_force
+  unit: pN
+  origin: predicted
+  citation: {none: "copied from the paper's record chan2008 (F_fig1d_soft_read: Fig. 1D, dashed line, 0.13-0.7 pN/nm, PDF p. 3)"}
+  from_source: chan2008
+  from_datum: F_fig1d_soft_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["0.13", "0.15", "0.2", "0.22", "0.25", "0.3", "0.35", "0.4", "0.45", "0.5", "0.6", "0.7"],
+          values: ["47.41 ± 0.44", "48.80 ± 0.44", "52.28 ± 0.31", "52.35 ± 0.23", "52.89 ± 0.56", "54.52 ± 0.39", "54.67 ± 0.41", "54.36 ± 0.23", "54.36 ± 0.42", "54.05 ± 0.41", "51.50 ± 0.46", "48.49 ± 0.44"]}
+- id: F_fig1d_stiff_c08
+  quantity: mean_traction_force
+  unit: pN
+  origin: predicted
+  citation: {none: "copied from the paper's record chan2008 (F_fig1d_stiff_read: Fig. 1D, dashed line, 5-80 pN/nm, PDF p. 3)"}
+  from_source: chan2008
+  from_datum: F_fig1d_stiff_read
+  table: {index_quantity: substrate_stiffness, index_unit: pN/nm, index: ["5", "6", "7", "8", "10", "15", "20", "25", "30", "40", "50", "60", "70", "80"],
+          values: ["16.53 ± 0.41", "15.60 ± 0.50", "14.98 ± 0.39", "14.59 ± 0.35", "14.05 ± 0.41", "13.13 ± 0.26", "12.74 ± 0.31", "12.59 ± 0.31", "12.36 ± 0.23", "12.20 ± 0.39", "11.97 ± 0.33", "11.97 ± 0.35", "11.97 ± 0.34", "11.74 ± 0.39"]}
+# Bangasser and Odde 2013, Fig. 4A legend: the Monte Carlo optimum at nm = nc = 25
+- id: ksopt_mc_n25_b13b
+  quantity: optimal_substrate_stiffness
+  unit: pN/nm
+  origin: predicted
+  printed: "0.4"
+  citation: {none: "copied from the paper's record bangasser2013b (ksopt_mc_n25: Fig. 4A legend, PDF p. 7)"}
+  from_source: bangasser2013b
+  from_datum: ksopt_mc_n25
+  note: "the Monte Carlo motor-clutch model at nm = nc = 25 and Chan and Odde's set otherwise"

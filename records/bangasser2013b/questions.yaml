@@ -1,0 +1,255 @@
+- id: q_vu_unit
+  kind: possible_error
+  about: [vu_base]
+  text: >-
+    Table S1 prints the motor unloaded velocity as '120 pN/nm', the unit of a spring constant. The
+    record enters it as 120 nm/s: the flow of Fig. 2E starts at 120 nm/s, and ref. 6 gives vu in nm/s.
+  citation: {page: 18, quote: "Motor unloaded velocity vu 120 pN/nm", where: Table S1}
+
+- id: q_tcycle_r
+  kind: unexplained_difference
+  about: [cmp_tcycle_r1, cmp_tcycle_r3, tcycle_r1_text, tcycle_r3_text, ks_S2E_added]
+  text: >-
+    The supplement says raising r from 1 to 3 lengthens the ODE cycle from 15 s to 73 s. Eqs. 8-12 and 19,
+    on the base set at κs = 0.1 pN/nm (the stiffness of Figs. 2, S1 and S2A-C; S2E states none), give
+    shorter cycles for both r. The refinements show the numerics do not cause this. The ratio of the
+    two printed times (4.9) is not that of the run either, so no single stiffness fits both values
+    exactly. The run for Fig. 2 (r = 2) also fails a little earlier than the blue line of Fig. 2B
+    (read by eye near 28 s). Possible causes: a different stiffness for S2E, unstated ode15s
+    settings, or a different initial state or failure criterion (q_ode_failure, q_ode_initial_state).
+  citation: {page: 14, quote: "cycle time from 15 s to 73 s", where: text}
+
+- id: q_ode_opt_3600
+  kind: unexplained_difference
+  about: [cmp_ksopt_ode_n3600, cmp_ksopt_ode_n25, ksopt_ode_n3600]
+  text: >-
+    Fig. 4B: the ODE optimum is printed as 1 pN/nm at nm = nc = 25 and 200 pN/nm at 3600 (r = 3).
+    The record's ODE optimum (the minimum of the cycle-averaged flow, q_ode_mean_flow) reproduces the
+    value at 25. At 3600 it falls well below 200, even if 200 is read with one significant figure. It
+    does not move under grid or tolerance refinement. The paper's flow curves (Fig. 4B) may have been
+    sampled on a coarse stiffness grid, or the ODE flow may have been averaged differently.
+  citation: {page: 7, printed_page: "455", quote: "change in motors and clutches, the optimum shifts from 1 to 200 pN/nm", where: "Fig. 4B legend"}
+
+- id: q_ode_mean_flow
+  kind: choice
+  about: [clutch_ensemble_optimum, clutch_ensemble_cycle]
+  text: >-
+    The paper does not say how the actin flow of the ODE solution (Fig. 4B) is averaged. The ODE
+    describes one load-and-fail cycle and stops at the failure (Figs. 2B, S2E). The record averages
+    <vf> over [0, t_cycle] and takes the optimum at the minimum of that average (the Fig. 4 legend
+    says the optimum is 'characterized by the minimum actin flow rate'). Other definitions, such as
+    adding a rebinding phase after failure or weighting by time, could move the optimum.
+  citation: {page: 7, printed_page: "455", quote: "The ODE solutions also produce an", where: "Fig. 4B legend"}
+
+- id: q_ode_failure
+  kind: numerics
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum]
+  text: >-
+    Eq. 19 diverges when <Fc> reaches r Pb Fb (the constraint of p. 4), which is where the ODE solution
+    fails abruptly (Figs. 2B, 2F). The paper does not say how ode15s handled this point or how the
+    end of the cycle was detected. The record ends the cycle when r Pb Fb - <Fc> first falls to
+    g_fail = 1e-3 pN after rising above it. The refinements over g_fail and rtol show that the cycle
+    time does not depend on either.
+  citation: {page: 4, printed_page: "452", quote: "neously using the MATLAB ODE solver ode15s for", where: text}
+
+- id: q_ode_initial_state
+  kind: unstated_input
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode]
+  text: >-
+    The initial state of the ODEs is stated only for the single clutch ('initially set in the unbound
+    state', p. 12). The record starts every cycle from Pb = 0 and <xc> = <xs> = 0, which is how the
+    ODE lines of Figs. 2B-E and S1B-E begin.
+  citation: {page: 12, quote: "initially set in the unbound state and stochastically binds", where: text}
+
+- id: q_figS1_stiffness
+  kind: possible_error
+  about: [xs_figS1c_ode, cmp_xs_S1, cmp_xs_S1_alt, ks_S1, ks_S1_alt_added]
+  text: >-
+    The Fig. S1 legend gives κsub = 0.1 pN/nm for the single-clutch system (one motor, one clutch).
+    That system stalls when κs xs = nm Fm = 2 pN, which Fig. S1D shows (clutch force 2 pN). At 0.1 pN/nm
+    the stall position is therefore 20 nm, but Fig. S1C levels off at 200 nm, which corresponds to
+    0.01 pN/nm. The run on the stated value and the run on the added 0.01 pN/nm show the difference.
+    The slow rise of S1C-E over about 5 s also fits 0.01 better. Fig. S1B, S1D and S1F do not depend
+    on κs at steady state and agree with both runs. Either the legend or the plotted stiffness is
+    misprinted.
+  citation: {page: 16, quote: "presented is for the base parameter values on κsub = 0.1 pN/nm", where: "Fig. S1 legend"}
+
+- id: q_S2F_stiff
+  kind: unexplained_difference
+  about: [cmp_tcycle_S2F_r2, tcycle_figS2f_r2]
+  text: >-
+    Fig. S2F, r = 2, read by eye: the ODE cycle time is about 30 s at 0.1 pN/nm and about 0.07 s at
+    100 pN/nm. The run of Eqs. 8-12 and 19 agrees roughly at 0.1 pN/nm but fails about five times faster
+    at 100 pN/nm. Only a calibrated reading can tell how large the difference is (q_eye_readings).
+  citation: {page: 17, quote: "is compared to ODE solution cycle times using different values of r", where: "Fig. S2F legend"}
+
+- id: q_eq30_vs_mc
+  kind: unexplained_difference
+  about: [cmp_eq30_vs_mc_n25, cmp_eq30_vs_mc_n3600, cmp_eq30_vs_ode_n25]
+  text: >-
+    The paper says Eq. 30 agrees 'very well' with the Monte Carlo optimum (Fig. 5). At the two Fig. 4 end
+    points (base set, nm = nc = 25 and 3600, ε = 0.01) Eq. 30 lies within a factor of about 1.5 of the
+    printed Monte Carlo optima (0.4 and 50 pN/nm), above at 25 and below at 3600. That is good agreement
+    on a log scale, not at the printed precision. At 25, Eq. 30 lands almost on the record's ODE optimum.
+    Fig. 5 itself (3D surfaces) was not read.
+  citation: {page: 6, printed_page: "454", quote: "show very good agreement with the MC output", where: text}
+
+- id: q_eye_readings
+  kind: reading
+  about: [tfail_fig2b_ode, xs_fig2c_ode, Fc_fig2d_ode, vf_fig2e_ode, Pb_fig2b_ode, pb_figS1b_ode, xs_figS1c_ode, Fc_figS1d_ode, koff_figS1f_ode, tcycle_figS2f_r2]
+  text: >-
+    The figure tools (page rendering by `boxgraph figure`, pdftoppm) were refused by this session's
+    permission mode. The plotted ODE values were read by eye from the 110 dpi page images and carry no
+    verdict. A calibrated reading by code of Figs. 2B-F, 4B, S1B-F, S2E and S2F would give these
+    comparisons verdicts.
+  citation: {none: "about the reading session, not the paper"}
+
+- id: q_audit_ode_vs_mc_slightly
+  kind: overstated_claim
+  about: [ksopt_ode_n25, ksopt_ode_n3600, ksopt_mc_n25, ksopt_mc_n3600, cmp_ode_vs_mc_n25, cmp_ode_vs_mc_n3600]
+  text: >-
+    (Audit.) The text calls the ODE optimum 'shifted slightly higher' than the Monte Carlo one (p. 5),
+    and the Fig. 4 legend says the ODE 'may slightly over-predict the optimum stiffness' (p. 7). The
+    paper's own printed optima are 1 against 0.4 pN/nm (n = 25) and 200 against 50 pN/nm (n = 3600),
+    factors of 2.5 and 4. Whether that counts as 'slightly' is left open.
+  citation: {page: 7, printed_page: "455", quote: "slightly over-predict the optimum stiffness", where: "Fig. 4 legend"}
+
+- id: q_audit_fig2b_vs_S2E
+  kind: unexplained_difference
+  about: [tfail_fig2b_ode, ks_S2E_added, q_tcycle_r]
+  text: >-
+    (Audit, read by eye.) The r = 2 ODE line of Fig. S2E (p. 20) drops near 31-32 s, while the ODE line
+    of Fig. 2B (p. 6, base set on 0.1 pN/nm, r = 2) drops near 28 s. If S2E is on the base set at 0.1
+    pN/nm (ks_S2E_added), the two figures should agree. A calibrated reading of both panels would show
+    whether the difference is real. If it is, S2E may use other conditions, which bears on q_tcycle_r.
+  citation: {page: 17, quote: "solution increases the motor-clutch cycle time, here indicated by an abrupt drop", where: "Fig. S2E legend"}
+
+- id: q_audit_vu_unit_reading
+  kind: reading
+  about: [vu_base, q_vu_unit]
+  text: >-
+    (Audit, disagreement with the first reading, not changed.) Table S1 prints vu as '120 pN/nm'. The
+    record enters the datum in nm/s. The value is printed, but the unit is the reader's interpretation,
+    so strictly it is an assumption. It could instead sit in added.yaml (vu = 120 nm/s, basis Fig. 2E
+    and ref. 6), with data.yaml keeping only the printed entry. No verdict depends on choosing another
+    velocity unit: 120 nm/s is the only reading that fits Fig. 2E.
+  citation: {page: 18, quote: "Motor unloaded velocity vu 120 pN/nm", where: Table S1}
+
+- id: q_audit_t_S1_late
+  kind: reading
+  about: [t_S1_late, run_single_S1, run_single_S1_alt]
+  text: >-
+    (Audit, disagreement with the first reading, not changed.) t_S1_late = 20 s is the last tick
+    label of Fig. S1B-F. The paper does not give it as an input. It is the reader's choice of where to
+    read the plateau, so it would sit more naturally in added.yaml. Any time past about 12 s gives the
+    same steady values, so no comparison depends on it.
+  citation: {page: 19, quote: "Time (s)", where: "Fig. S1"}
+
+- id: q_eps_choice
+  kind: choice
+  about: [eps_choice, optimum_eq30]
+  text: >-
+    ε, the fraction of the maximal substrate position at which a cycle is taken to end, is 'somewhat
+    arbitrary' (p. 5). The paper chooses 0.01 for Eq. 30, and the discussion (p. 9) notes that a 10-fold
+    change of ε changes ln(1/ε) about 2-fold, so Eq. 30 scales with that choice.
+  citation: {page: 5, printed_page: "453", quote: "For our case we chose e = 0.01", where: text}
+
+# ---- added with the calibrated figure readings (figures.yaml, figures.md) ----
+- id: q_cal_tfail_fig2
+  kind: unexplained_difference
+  about: [cmp_tfail_fig2b_cal, cmp_tfail_fig2c_cal, cmp_tfail_fig2d_cal, cmp_tfail_fig2e_cal, cmp_tfail_fig6a_cal, q_tcycle_r, q_eye_readings]
+  text: >-
+    Calibrated readings of the vertical failure stroke of the blue ODE line put the end of the base-set
+    cycle (0.1 pN/nm, r = 2) at 28.1-28.2 s in Figs. 2(b), 2(c), 2(d), 2(e) and 6(a). The five readings
+    agree with each other within about 0.3 s. Eqs. 8-12 and 19 in the record fail at 25.7 s. So the
+    difference first seen by eye (q_tcycle_r, tfail_fig2b_ode) is real: about 10%, far beyond the
+    reading precision.
+  citation: {page: 6, printed_page: "454", quote: "ODE solution is shown as solid blue lines", where: "Fig. 2 legend"}
+
+- id: q_cal_fig2b_vs_S2E
+  kind: unexplained_difference
+  about: [cmp_tfail_S2E_cal, figS2e_drops_cal, fig2b_drop_cal, q_audit_fig2b_vs_S2E, q_tcycle_r, ks_S2E_added]
+  text: >-
+    Answers q_audit_fig2b_vs_S2E. The r = 2 ODE line of Fig. S2E drops at 32.1 s (95% interval 30.7-33.5),
+    while the Fig. 2(b) line drops at 28.2 s (27.9-28.5). The difference is real, so S2E was not computed
+    on the same conditions as Fig. 2, or not with the same code. The calibrated S2E drops for r = 1 and
+    r = 3 (15.2 s and 73.4 s) agree with the printed 15 s and 73 s of the text (p. 14). The record's
+    cycle times on the added 0.1 pN/nm (12.3, 25.7 and 55.1 s) are all about 0.75-0.8 times the S2E
+    times, a near-uniform slowing of the plotted ODE. That points to a different stiffness or parameter
+    for S2E, rather than a different r-dependence.
+  citation: {page: 17, quote: "solution increases the motor-clutch cycle time, here indicated by an abrupt drop", where: "Fig. S2E legend"}
+
+- id: q_cal_ode_curves_fig2
+  kind: unexplained_difference
+  about: [cmp_xs_fig2_cal, cmp_Fc_fig2_cal, cmp_vf_fig2_cal, cmp_Pb_fig2_cal, cmp_koff_fig2_cal, fig2c_mc_cal, fig2d_mc_cal, fig2e_mc_cal]
+  text: >-
+    Over the whole cycle, the calibrated blue ODE curves of Fig. 2 load more slowly than Eqs. 8-12 and 19
+    run by the record. Against the run, the substrate position and clutch force lie about 10% lower and
+    the flow about 8 nm/s higher, at every time read. Pb is close until 10 s and higher thereafter. The
+    off-rate (2f) agrees within its wider log-axis reading. During loading, the paper's own red Monte Carlo
+    mean lies on the record's ODE run instead (at 10 s: <xs> 827 against 826 nm, <Fc> 1.10 against
+    1.10 pN, vf 54.1 against 53.9 nm/s). So the plotted ODE curve differs from the printed equations on
+    the printed parameters by more than the reading precision. Possible causes: an unstated parameter,
+    initial state or solver setting in the authors' computation, or a difference between the printed
+    and the coded equations.
+  citation: {page: 6, printed_page: "454", quote: "ODE solution is shown as solid blue lines", where: "Fig. 2 legend"}
+
+- id: q_cal_fig4b
+  kind: unexplained_difference
+  about: [cmp_vmean_fig4b_n25_cal, cmp_vmean_fig4b_n3600_cal, cmp_ksopt_ode_n25, cmp_ksopt_ode_n3600, q_ode_opt_3600, q_ode_mean_flow]
+  text: >-
+    The calibrated Fig. 4(b) curves bear on q_ode_opt_3600 and q_ode_mean_flow. For nm = nc = 25 the
+    plotted ODE flow is lowest near 1 pN/nm (18.3 nm/s) and is still 38.7 nm/s at 3 pN/nm. The record's
+    cycle-mean flow is lowest near 0.3-0.6 pN/nm and is already 55 nm/s at 1 pN/nm. So the record's
+    'reproduced' 0.6 pN/nm (against the printed 1) does not follow the plotted curve. For 3600 the record
+    matches the plotted curve from 0.3 to 3 pN/nm but rises about a decade too early: 112 against
+    26 nm/s at 300 pN/nm. The plotted curve is still low at 100-300 pN/nm, which fits the printed optimum
+    of 200 pN/nm. The figure therefore supports the paper's printed optima. The difference lies in the
+    record's flow measure or its model run, not in the paper's text.
+  citation: {page: 7, printed_page: "455", quote: "The ODE solutions also produce an", where: "Fig. 4B legend"}
+
+- id: q_cal_S1
+  kind: unexplained_difference
+  about: [cmp_xs_S1_cal, cmp_xs_S1alt_cal, cmp_vf_S1_cal, cmp_vf_S1alt_cal, cmp_Fc_S1_cal, cmp_koff_S1_cal, q_figS1_stiffness]
+  text: >-
+    The calibrated Fig. S1C plateau is 195-202 nm, which confirms the reading behind q_figS1_stiffness
+    (200 nm needs κs = 0.01 pN/nm for one motor). The transient matches neither run, though. On the
+    stated 0.1 pN/nm the single-clutch ODEs stall within about 1 s (flow 0.5 nm/s at 1 s, Fc = 2 pN at
+    once). On the added 0.01 pN/nm they still rise and decay faster than plotted (at 1 s: xs 89 against
+    49 nm, vf 66 against 90 nm/s). The plotted ODE takes about 8-10 s to settle. The steady values (pb
+    0.79, Fc 2 pN, koff 0.27 /s) agree. Some unstated input of Fig. S1 (stiffness or another parameter)
+    differs from both.
+  citation: {page: 16, quote: "presented is for the base parameter values on κsub = 0.1 pN/nm", where: "Fig. S1 legend"}
+
+- id: q_cal_S2F
+  kind: unexplained_difference
+  about: [cmp_tcyc_S2F_r1_cal, cmp_tcyc_S2F_r2_cal, cmp_tcyc_S2F_r3_cal, cmp_ode_vs_mc_S2F_cal, q_S2F_stiff]
+  text: >-
+    Answers q_S2F_stiff with calibrated readings. For r = 1, 2 and 3, the record's ODE cycle times are
+    close to the plotted ones up to 1 pN/nm (about 20% shorter). From 3 pN/nm up they are 5 to 70 times
+    shorter: for r = 2, 0.108 against 2.4 s at 3 pN/nm and 0.0137 against 0.065 s at 100 pN/nm. The
+    plotted ODE curves fall smoothly over the whole range. The record's runs drop steeply between 1 and
+    3 pN/nm, as the paper's Monte Carlo curve does (grey, 0.50 s at 3 pN/nm). The legend's claim that
+    r = 2 matches the Monte Carlo time below 1 pN/nm holds for the record's run too (25.7 against
+    27.6 s at 0.1 pN/nm).
+  citation: {page: 17, quote: "is compared to ODE solution cycle times using different values of r", where: "Fig. S2F legend"}
+
+- id: q_S2F_r03
+  kind: numerics
+  about: [figS2f_r03_cal, r_S2F_03, clutch_ensemble_cycle, q_ode_failure]
+  text: >-
+    Fig. S2F plots finite ODE cycle times for r = 0.3. With the record's failure criterion (r Pb Fb - <Fc>
+    falling to g_fail), Eqs. 8-12 and 19 reach no failure before t_max at r = 0.3, so the curve is not
+    run. With r < 1 the divergence of Eq. 19 is weak, and the solution may settle before the margin
+    reaches g_fail. The paper's way of detecting the end of a cycle (q_ode_failure) must differ there.
+  citation: {page: 17, quote: "matches better to values of r between 0.3 and", where: "Fig. S2F legend"}
+
+- id: q_cal_readings_raster
+  kind: reading
+  about: [figS1c_ode, figS1c_mc, figS2e_drops, figS2c_r1, figS2c_r2, figS2c_r3]
+  text: >-
+    (Reading.) The supplementary figures are Excel rasters, not vector art, so their tick marks fit the
+    printed labels to 2-10 px at 1200 dpi (S2E x: 9.4 px, about 0.4 s). Fig. S1C labels only 0 and 20 on
+    its time axis, so that calibration is exact by construction and its misfit is unknown. The intervals
+    include the misfit, but S1C's time calibration rests on two ticks only.
+  citation: {page: 19, quote: "Time (s)", where: "Fig. S1"}

@@ -1,0 +1,36 @@
+id: clutch_no_talin_sim
+name: the clutch model without talin unfolding (talin-depleted cells; Fig. 3d,e blue lines, Fig. 6 dashed lines)
+role: model
+stated: {page: 4, printed_page: "543", quote: "If talin unfolding is not considered, we recapitulate the", where: "text and Fig. 3d caption ('model predictions with/without talin unfolding')"}
+built_from: [clutch_talin_sim]
+from_words: true
+equation: >-
+  clutch_talin_sim with no talin unfolding: integrins bind (kont dint) and unbind (catch bond koff) and
+  transmit force; 'In the absence of talin unfolding, integrins are not recruited, but force is still assumed
+  to be transmitted' (p. 4), so dint stays at its basal value
+inputs:
+  E:      {quantity: substrate_rigidity, unit: kPa}
+  nf:     {quantity: n_fibronectin, unit: dimensionless}
+  kont:   {quantity: integrin_binding_rate_intrinsic, unit: um^2/s}
+  dint:   {quantity: integrin_density, unit: 1/um^2}
+  nm:     {quantity: n_myosin, unit: dimensionless}
+  Fm:     {quantity: myosin_stall_force, unit: pN}
+  vu:     {quantity: myosin_unloaded_speed, unit: nm/s}
+  kc:     {quantity: clutch_stiffness, unit: nN/nm}
+  ra:     {quantity: adhesion_radius, unit: nm}
+  koff_scale: {quantity: koff_scaling_factor, unit: dimensionless}
+  koff_a: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_b: {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  koff_c: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_d: {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  koff_g: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_fend: {quantity: low_force_term_vanishing_force, unit: pN}
+  ksub_factor: {quantity: ksub_geometry_factor, unit: dimensionless}
+outputs:
+  traction:   {quantity: cell_traction, unit: Pa, description: "time-averaged force on the substrate over the run, divided by pi ra^2"}
+  actin_flow: {quantity: actin_retrograde_flow, unit: nm/s, description: "time-averaged actin speed over the run"}
+settings:
+  dt: 0.005        # s, printed (p. 23)
+  t_total: 100.0   # s, printed (p. 23)
+  seed: 1
+stochastic: true

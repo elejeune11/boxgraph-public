@@ -1,0 +1,16 @@
+id: lambda_estimate
+name: estimate of the dimensionless viscosity lambda from published data (Section 2.2)
+role: model
+stated: {page: 8, quote: "tude of the parameter λ can actually be estimated from", where: "text, Section 2.2; definition of lambda p. 7"}
+equation: "lambda = (1/T0)(mu V0 / L0^2);  mu = (measured viscosity) x (lamellipodial thickness);  drag scale = T0 L0^2 / V0"
+inputs:
+  T0: {quantity: traction_stress_scale, unit: pN/um^2}
+  L0: {quantity: length_scale, unit: um}
+  V0: {quantity: leading_edge_flow_speed, unit: um/s}
+  eta: {quantity: actin_network_viscosity, unit: pN*s/um^2}
+  h: {quantity: lamellipodium_thickness, unit: um}
+outputs:
+  drag: {quantity: drag_scale, unit: pN*s/um}
+  lam: {quantity: viscosity_parameter, unit: dimensionless}
+from_words: true
+stochastic: false

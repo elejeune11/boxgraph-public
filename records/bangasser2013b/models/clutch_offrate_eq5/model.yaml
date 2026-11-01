@@ -1,0 +1,15 @@
+id: clutch_offrate_eq5
+name: force-dependent off-rate of one clutch, the Bell model (Eq. 5)
+role: model
+stated: {page: 2, printed_page: "450", quote: "The clutch oﬀ-rate (koff;i ) is calculated through the", where: "Eq. 5"}
+equation: "k*off,i = koff exp(Fc,i/Fb)"
+inputs:
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fc:   {quantity: clutch_force, unit: pN}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+outputs:
+  koff_i: {quantity: mean_clutch_off_rate, unit: 1/s, description: "koff,i of the ith clutch"}
+settings: {}
+stochastic: false
+# Helper model for the relation this paper states to Bell (1978) ("calculated through the Bell
+# model3 in Eq. (5)"); Eq. 5 is otherwise used only inside single_clutch_ode.

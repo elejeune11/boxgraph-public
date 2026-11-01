@@ -1,0 +1,36 @@
+# Port to Python of 'loading rate script.m' lines 10-57 with koffcb.m lines 25-37 (case 'mn').
+id: lr_rate_port
+name: "rates corrected for the loading rate, as 'loading rate script.m' computes them (Python port)"
+role: model
+stated: {file: loading rate script.m, lines: "31-57", quote: "pm(j,i) = exp((-1/L(j)).*trapz(koff(1:i)).*step).*koff(i)./L(j);"}
+# Notes (the schema has no notes field for a model):
+#   Ports 'loading rate script.m' lines 10-57 (the probability density pm of the event force under a ramp
+#   of loading rate L, its truncation at the starting force and renormalisation, the mean event force fu,
+#   and ku = L/(fu - fstart)) with the two starting rates of lines 28-29: koffcb.m case 'mn' (lines 25-37)
+#   for integrin unbinding, exp(-7.573) exp(1.786e12 |F| pt) for talin unfolding. The script runs for one
+#   event at a time (the other line commented out by hand); the port computes both at each call.
+equation: >-
+  pm(L, F) = k(F)/L exp(-1/L int_0^F k dF); ku(L, Fs) = L/(fu - Fs), fu = int_Fs F pm dF / int_Fs pm dF,
+  or ku = k(Fs) where pm(L, Fs) < cut-off; k_off(F) = a exp(bF) + c exp(dF); k_unf(F) = exp(-7.573) exp(1.786e12 pt F)
+inputs:
+  L:      {quantity: loading_rate, unit: N/s}
+  Fb:     {quantity: clutch_force, unit: N}
+  koff_a: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_b: {quantity: catch_bond_force_coefficient, unit: 1/N}
+  koff_c: {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_d: {quantity: catch_bond_force_coefficient, unit: 1/N}
+  ln_kunf0: {quantity: ln_unfolding_rate_zero_force, unit: dimensionless}
+  kunf_b: {quantity: unfolding_force_coefficient, unit: 1/N}
+  pt:     {quantity: talin_force_fraction, unit: dimensionless}
+outputs:
+  k_off:  {quantity: corrected_unbinding_rate, unit: 1/s}
+  k_unf:  {quantity: corrected_unfolding_rate, unit: 1/s}
+settings:
+  step: 1.0e-14        # N, line 12
+  steps: 1.0e-12       # N, line 13
+  f_max: 2.0e-10       # N, line 15 (f = 0:step:200e-12)
+  fstart_max: 1.5e-10  # N, line 16
+  L_min: 1.0e-12       # N/s, line 14
+  L_octaves: 16        # line 14, L = L_min 2.^(0:0.5:16)
+  p_floor: 1.0e-70     # line 44
+stochastic: false

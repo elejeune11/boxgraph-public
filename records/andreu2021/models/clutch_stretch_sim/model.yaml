@@ -1,0 +1,50 @@
+id: clutch_stretch_sim
+name: stochastic clutch model under imposed cyclic stretch, with loading-rate-corrected rates (Methods, Eqs. 4-6)
+role: model
+stated: {page: 10, printed_page: "10", quote: "The computational clutch model was developed", where: "Methods, Computational clutch model (pp. 10-11), Eqs. 4-6, Supplementary Table 4"}
+equation: >-
+  nf clutches; an unbound one binds at k_on = k_ont d_int; a bound one unbinds at k_off(F) (catch bond),
+  its talin unfolds at k_unf(FR F) (slip bond), and its actin breaks instantaneously when F > F_act (only
+  while talin is folded); unfolding adds d_add to d_int, unbinding or breaking before unfolding removes
+  d_add, d_int kept in [d_min, d_max]; Gillespie algorithm, one event per step; at the end of each step
+  bound clutches move at |v| = 2Af with sign changing every half cycle, F_sub = k_sub k_c sum x_i /
+  (k_sub + n_bound k_c) (Eq. 4); rates corrected for the loading rate L:
+  p(F,L) = k(F)/L exp(-int_0^F k dF/L) (Eq. 5), F_m = int F p(F) dF (Eq. 6), k' = L/F_m, with p = 0 below
+  the baseline force F_b and renormalised; runs of 1000 s, output the time average of d_int, scaled
+  between the minimum and maximum experimental adhesion lengths (p. 11).
+inputs:
+  A:        {quantity: stretch_amplitude, unit: um}
+  fr:       {quantity: stretch_frequency, unit: Hz}
+  nf:       {quantity: n_fibronectin, unit: dimensionless}
+  kon_i:    {quantity: integrin_binding_rate_intrinsic, unit: um^2/s}
+  kc:       {quantity: clutch_stiffness, unit: pN/nm}
+  ksub:     {quantity: substrate_stiffness, unit: pN/nm}
+  FR:       {quantity: talin_force_fraction, unit: dimensionless}
+  dmin:     {quantity: integrin_density, unit: 1/um^2}
+  dmax:     {quantity: integrin_density, unit: 1/um^2}
+  dadd:     {quantity: integrin_density_increment, unit: 1/um^2}
+  Fact:     {quantity: actin_breaking_force, unit: pN}
+  koff_a:   {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_b:   {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  koff_c:   {quantity: catch_bond_prefactor, unit: 1/s}
+  koff_d:   {quantity: catch_bond_force_coefficient, unit: 1/pN}
+  ln_kunf0: {quantity: ln_unfolding_rate_zero_force, unit: dimensionless}
+  kunf_b:   {quantity: unfolding_force_coefficient, unit: 1/pN}
+  len0:     {quantity: length_scale_offset, unit: um}
+  len_scale: {quantity: length_scale_slope, unit: um}
+outputs:
+  d_mean:   {quantity: integrin_density, unit: 1/um^2, description: "time average of d_int over the run (p. 10, Model output)"}
+  adhesion_length: {quantity: adhesion_length, unit: um, description: "len0 + len_scale (d_mean/d_min - 1): the scaling to the adhesion-length axis of Fig. 2e"}
+settings:
+  t_total: 1000.0     # printed: "Model simulations were run for 1000 s" (p. 10)
+  seed: 1
+  # Not printed (added, from Supplementary Software 1, 'loading rate script.m'; q_rate_tables):
+  df: 0.01            # pN, force step of the integration grid of Eqs. 5-6
+  f_max: 200.0        # pN, upper end of that grid
+  dfstart: 1.0        # pN, step of the baseline-force grid of the corrected rates
+  fstart_max: 150.0   # pN, above it rates are taken uncorrected, and actin breaks if folded
+  L_min: 1.0          # pN/s, lowest loading rate of the grid
+  L_octaves: 16.0     # grid L_min * 2^(0:0.5:L_octaves)
+  p_floor: 1.0e-70    # where p(F_b, L) underflows below this, k' = k(F_b)
+stochastic: true
+from_words: true

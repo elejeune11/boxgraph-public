@@ -1,0 +1,226 @@
+- id: q_eq2_form
+  kind: possible_error
+  about: [burgers_eq2]
+  text: >-
+    Supp. Eq. 2 as printed is not the usual four-element Burgers relation and is dimensionally
+    inconsistent: its right side is the product (dε/dt)(d²ε/dt²) with coefficient η1²η2/(E1E2), and the
+    d²σ/dt² term has coefficient η2/E2. The common textbook form has coefficient η1η2/(E1E2) on d²σ/dt²
+    and a right side η1 dε/dt + (η1η2/E2) d²ε/dt². Under a constant strain rate the printed form has a
+    zero right side, so it would give no loading at all in the simulated tensile test of Supp. Fig. 1f.
+    Whether the code used the printed or another form is not known; the equation is recorded as printed.
+  citation: {page: 19, printed_page: "12", quote: "In the Burgers model, stress and strain are related by", where: "Supp. Eq. 2"}
+- id: q_eta_names
+  kind: possible_error
+  about: [burgers_eq2, lattice_spreading]
+  text: >-
+    The damping coefficients are named inconsistently. Supp. Note 1 calls η1 the Maxwell element damping
+    coefficient and η2 the Voigt one, and so does the Fig. 5 caption (η1 as Maxwell). The Fig. 1 caption
+    calls η1 the Voigt damping coefficient and η2 the Maxwell damping coefficient.
+  citation: {page: 3, printed_page: "3", quote: "Voigt damping coefficient, Z1, was", where: "Fig. 1 caption"}
+- id: q_eta_values_units
+  kind: possible_error
+  about: [eta1_range_table, eta2_range_table, lattice_spreading]
+  text: >-
+    The damping values used for Fig. 1c (η1 = 5 x 10^-13, η2 = 1 x 10^-13) and Fig. 5b (η1 = 1 x 10^-12,
+    5 x 10^-13, 1 x 10^-13) are printed without units, and lie far outside the range 0.01-100 pN s given
+    for η1 and η2 in Supp. Table 2. Supp. Table 2 also gives damping in pN s, while a dashpot in series
+    or parallel with a spring of stiffness in pN nm^-1 would need pN s nm^-1. These values were not put
+    in data.yaml because no unit is printed for them.
+  citation: {page: 6, printed_page: "6", quote: "stress-relaxing substrates with the indicated Burger’s model Maxwell damping", where: "Fig. 5 caption"}
+- id: q_lattice_unstated
+  kind: unstated_model
+  about: [lattice_spreading]
+  text: >-
+    The lattice-spring model behind all the paper's spreading predictions (Fig. 1b-d, Fig. 5b,
+    Supp. Fig. 1c,e,f, Supp. Fig. 2) cannot be rebuilt from the text: lattice size, node spacing, node
+    mass, boundary conditions, ligand placement, how the imposed strain is applied and shared, the
+    Beeman scheme's parameters and the damping values and units in use are not stated, and the MATLAB
+    code is not published. None of these results is checked in this record.
+- id: q_maxwell_limit
+  kind: reading
+  about: [lattice_spreading]
+  text: >-
+    For the Maxwell limit the "Voigt spring constant was held at 10e30" and the damping coefficient at 1,
+    with no units. "10e30" may mean 10^30 or 10 x 10^30 (MATLAB notation 1e31); either way it is
+    effectively rigid.
+  citation: {page: 20, printed_page: "13", quote: "the Voigt spring constant was held at 10e30", where: text}
+- id: q_s1d_xaxis
+  kind: reading
+  about: [s1d_nc5, s1d_nc25, s1d_nc50, s1d_nc100, s1d_nc1000]
+  text: >-
+    The x axis of Supp. Fig. 1d carries the printed labels 10^-2, 1 and 10^2, but its evenly spaced
+    major tick marks (with log minor ticks between them) put 10^-2 about 0.3 decade to the right of
+    where the label "10^-2" is printed, at the left end of the axis. The label "1" sits on a tick. The
+    readings are calibrated on the ticks with "1" on its tick, so the axis runs from about 0.005 to
+    about 88 pN/nm. If instead the end labels mark the axis ends (0.01 to 100 pN/nm), every stiffness
+    would shift, by up to a factor of 2 at the left end; the verdicts at the low-stiffness end depend on
+    this.
+  citation: {page: 9, printed_page: "2", quote: "Average spreading velocity as a function of substrate stiffness if lattice is removed", where: "Supp. Fig. 1d"}
+- id: q_s1d_duration
+  kind: choice
+  about: [run_s1d_nc5, run_s1d_nc25, run_s1d_nc50, run_s1d_nc100, run_s1d_nc1000, clutch_springs_nolattice]
+  text: >-
+    The simulated time behind each point of Supp. Fig. 1d is not stated. The record uses 12 s
+    (60,000 steps of 0.2 ms, the paper's run length for spreading area), and runs each curve again
+    with 1 s, the run length of Supp. Fig. 1c. Because all clutches start unbound and kon = 1 s^-1,
+    the average speed over a short run includes the start-up and depends on this choice.
+- id: q_s1d_difference
+  kind: unexplained_difference
+  about: [cmp_s1d_nc50, cmp_s1d_nc100, clutch_springs_nolattice]
+  text: >-
+    In trial runs while building this record, the lattice-free model on the Supp. Table 2 parameters
+    gave the shapes of Supp. Fig. 1d for nC = 5, 25 and 1000 (low speeds falling with stiffness, and a
+    near-stalled flow at about 120 nm/s). It gave lower speeds than plotted for nC = 50 above about
+    0.3 pN/nm (e.g. about 30 against about 78 nm/s at 1 pN/nm). For nC = 100 above about 1 pN/nm it
+    gave about 20-40 nm/s where the figure stays near 118 nm/s. The plotted nC = 100 curve looks like a
+    run that stays stalled once enough clutches are bound. Unstated rules may decide which state a run
+    ends in: initial binding, run length, clipping of v_retrograde (q_s1d_rules, q_s1d_duration). The
+    verdicts are computed by the build.
+- id: q_s1d_rules
+  kind: unstated_model
+  about: [clutch_springs_nolattice]
+  text: >-
+    The lattice-free variant is described in one sentence. The record makes these choices: the clutch
+    spring and its own substrate spring act in series (effective stiffness kclutch ksub/(kclutch+ksub));
+    all clutches start unbound; a newly bound clutch starts unstretched; every bound pair is stretched
+    by v_retrograde dt each step; binding and unbinding are tested once per step with probabilities
+    1-exp(-k dt); v_retrograde from Supp. Eq. 1 is not clipped at zero, so v_spread can briefly exceed vu
+    when the clutch forces exceed Fstall; the reported speed is the time average of v_spread over the run.
+    In particular, whether the run starts with clutches bound would change the high-stiffness branch
+    of the nC=100 curve, which the paper shows staying near vu.
+# added by the audit
+- id: q_ligand_density_measures
+  kind: possible_error
+  about: [ligand_density_range_table, fig1_lig_6, fig1_lig_56, fig1_lig_100, fig1_lig_225, fig1_lig_400, s1e_ligand_density]
+  text: >-
+    Supp. Table 2 gives the ligand density used in the simulations as a line density, 0.004-0.02
+    ligands nm^-1 (and Supp. Fig. 1e uses 0.02 ligands/nm), while the curves of Fig. 1b-d are labelled
+    with area densities 6, 56, 100, 225 and 400 lig um^-2. The paper does not say how one maps to the
+    other. If the area density is the square of the line density, 400, 225 and 100 lig um^-2 are
+    0.02, 0.015 and 0.01 nm^-1, and 56 is about 0.0075 nm^-1, but 6 lig um^-2 would be about
+    0.0024 nm^-1, below the printed range of Supp. Table 2.
+  citation: {page: 17, printed_page: "10", quote: "0.004-0.02 ligands nm-1 Comisar, et al.7", where: "Supp. Table 2; Fig. 1b-d labels"}
+- id: q_experimental_scope
+  kind: reading
+  about: []
+  text: >-
+    Audit disagreement with the first reading's scope: the guide asks for every plot of measured data
+    to be read (origin measured) whether or not a model in the record predicts it, but the
+    experimental data of Fig. 2a-c, Fig. 3b,c, Fig. 4, Supp. Table 1 and Supp. Figs. 3-5 were left out
+    because no model in this record uses them. They are not read in the audit either; a later reading
+    could add them as measured data for validation by models of other papers.
+- id: q_s1d_xaxis_audit
+  kind: reading
+  about: [s1d_nc5, s1d_nc25, s1d_nc50, s1d_nc100, s1d_nc1000, q_s1d_xaxis]
+  text: >-
+    Audit note on Supp. Fig. 1d: at page resolution the label "1" sits slightly right of the midpoint
+    between the printed end labels "10^-2" and "10^2", consistent with the first reader's finding that
+    the end labels are not on the axis's major ticks. The audit could not re-render the panel to check
+    the tick positions, so the readings rest on the first reader's tick calibration; the alternative
+    calibration (end labels at the axis ends, 0.01 to 100 pN/nm) has no run in the record, and the
+    low-stiffness verdicts should be read with q_s1d_xaxis in mind.
+# added by the figure reading (second pass)
+- id: q_s1d_xaxis_rerendered
+  kind: reading
+  about: [q_s1d_xaxis, q_s1d_xaxis_audit, s1d_nc5, s1d_nc25, s1d_nc50, s1d_nc100, s1d_nc1000]
+  text: >-
+    Re-rendered at 1000 dpi, the x axis of Supp. Fig. 1d shows four long ticks about 350 px (at that
+    dpi, scaled) apart, with short ticks between them at the log positions of 2, 3, ... 9 within each
+    interval, and the label "1" centred on the third long tick. So the ticks form a consistent log10
+    axis with "1" on a tick, as the first reader calibrated. The axis line runs about 0.3 decade
+    beyond the first long tick on the left and about 0.94 decade beyond the last one on the right, so
+    the end labels "10^-2" and "10^2" cannot both be at the axis ends and on this tick scale. This
+    supports the tick calibration; it does not say which of the two the authors meant.
+  citation: {page: 9, printed_page: "2", quote: "Average spreading velocity as a function of substrate stiffness if lattice is removed", where: "Supp. Fig. 1d"}
+- id: q_fig3bc_same_bars
+  kind: possible_error
+  about: [fig3b_relax, fig3c_relax, fig3b_elastic, fig3c_elastic]
+  text: >-
+    The three red (stress-relaxing) bars of Fig. 3c read the same as the three red bars of Fig. 3b,
+    means and error bars alike (about 625, 857, 954 um^2 against 629, 861, 957 um^2, with error-bar
+    ends within 2 um^2 of each other). Fig. 3b's red bars are for initial moduli 1.4, 3.4 and 9 kPa
+    at RGD 150 uM; Fig. 3c's are for 1.4 kPa at RGD 150, 750 and 1,500 uM. Only the first bar of each
+    shares a condition (1.4 kPa, 150 uM), and the first grey bars agree as they should (482 and
+    484 um^2). The second and third red bars of the two panels should not be equal, unless the same
+    data were plotted twice. The grey bars of the two panels differ, as expected.
+  citation: {page: 4, printed_page: "4", quote: "Quantiﬁcation of the cell-spreading area as a function of RGD ligand density", where: "Fig. 3b,c"}
+- id: q_fig1c_ylabels
+  kind: possible_error
+  about: [fig1c_400, fig1c_225, fig1c_100, fig1c_56, fig1c_6]
+  text: >-
+    The y labels of Fig. 1c (0, 0.5, 1.5, 2.0, 3.5 nm^2 x 10^4) are not evenly spaced for a linear
+    axis: the gap from 0 to 0.5 is about 240 px per unit (at 1200 dpi) while 0.5 to 1.5 is about 450 px
+    per unit. They sit beside the left ends of the curves, as if placed by hand at the curves' starts.
+    No linear axis passes within about 60 px of all of them; the readings fit a straight line through
+    all five and carry that misfit (about 0.15 x 10^4 nm^2) in every interval.
+  citation: {page: 3, printed_page: "3", quote: "Simulation results for the cell-spreading area on substrates with stress relaxation", where: "Fig. 1c"}
+- id: q_fig1d_ylabels
+  kind: possible_error
+  about: [fig1d_400, fig1d_225, fig1d_100, fig1d_56, fig1d_6]
+  text: >-
+    In Fig. 1d the labels "3.0", "0" and "-4.0" are equally spaced on the page although they span 3
+    and 4 units, so they cannot all be right on a linear axis. The readings use "3.0" and "0" (with the
+    zero line drawn across the panel) and carry the offset between the label centres and the drawn
+    lines (24 px). On this scale the bottom label "-4.0" sits at about -3.1. Fig. 1d is described as
+    the difference of Fig. 1c and Fig. 1b; by eye, Fig. 1c minus Fig. 1b at 10 pN/nm is about -3.4 for
+    6 lig um^-2 (read here as -3.1) and about -3.9 for 56 lig um^-2 (read here as -2.9), so neither
+    calibration of the lower half makes all curves agree. The difference was not checked by the
+    build, because a run cannot take a curve's values as inputs.
+  citation: {page: 3, printed_page: "3", quote: "Difference in the cell-spreading area for cells on substrates with stress relaxation", where: "Fig. 1d"}
+- id: q_fig1_xlabels
+  kind: reading
+  about: [fig1b_400, fig1b_225, fig1b_56, fig1b_6, fig1d_400, fig1d_225, fig1d_100, fig1d_56, fig1d_6]
+  text: >-
+    Fig. 1b-d have no tick marks; the x axes are calibrated on the centres of the printed labels 0.01,
+    0.1, 1 and 10. In Fig. 1c these lie on a straight log scale within 2 px, but in Fig. 1b and Fig. 1d
+    the label "1" (and "10") are 30-34 px (about 0.05 decade) off the line through the others. The
+    readings carry this misfit, which widens the intervals where the curves are steep.
+  citation: {page: 3, printed_page: "3", quote: "initial substrate stiffness and adhesion ligand density", where: "Fig. 1b,d"}
+- id: q_figs2_left_out
+  kind: reading
+  about: [lattice_spreading]
+  text: >-
+    Supp. Fig. 2a-f (Voigt and Maxwell limits) are not read. Their axes have no tick marks, and their y
+    labels are placed beside the curves rather than on a scale: in Supp. Fig. 2a the labels 0, 1.0, 1.5,
+    4.0 and 5.0 are about 38, 82, 54 and 43 px per unit apart (at page resolution), and in Supp.
+    Fig. 2b "1.0" sits where the 0 and 5.0 labels put about 1.6. No calibration would give values worth
+    checking. The curves are also close shades of one colour in an embedded bitmap.
+  citation: {page: 10, printed_page: "3", quote: "Simulations using Voigt and Maxwell element limits", where: "Supp. Fig. 2"}
+- id: q_ligand_density_from_s2
+  kind: reading
+  about: [q_ligand_density_measures, fig1_lig_6, fig1_lig_56, fig1_lig_225, fig1_lig_400, ligand_density_range_table]
+  text: >-
+    Supp. Fig. 2 labels the same four curves with line densities 0.02, 0.015, 0.0075 and 0.0025 lig
+    nm^-1, where Fig. 1b-d use 400, 225, 56 and 6 lig um^-2. The squares of the line densities are 400,
+    225, 56.25 and 6.25 um^-2, so the figures support the mapping q_ligand_density_measures proposes
+    (area density = line density squared), and the 6 lig um^-2 curve was run at 0.0025 lig nm^-1,
+    below the 0.004-0.02 range of Supp. Table 2.
+  citation: {page: 10, printed_page: "3", quote: "Dependence of cell spreading area as a function of ligand density", where: "Supp. Fig. 2a-d curve labels"}
+- id: q_eta_names_s2
+  kind: reading
+  about: [q_eta_names]
+  text: >-
+    The Supp. Fig. 2 caption calls eta1 the Voigt dashpot value (panel e) and eta2 the Maxwell dashpot
+    value (panel f), as the Fig. 1 caption does, while Supp. Note 1 and the Fig. 5 caption call eta1
+    the Maxwell damping coefficient. So Fig. 5b's curves, labelled by eta1 and described as Maxwell
+    damping, may be labelled with the other element's coefficient.
+  citation: {page: 11, printed_page: "4", quote: "of stiffness and the Voigt dashpot value", where: "Supp. Fig. 2 caption (e)"}
+- id: q_spread_area_scale
+  kind: unexplained_difference
+  about: [fig1b_400, fig1c_400, fig3b_elastic, fig3c_relax, cell_spread_area]
+  text: >-
+    The model's spread areas (Fig. 1b,c) are printed in nm^2 x 10^4, so they lie between 0 and about
+    4.4 x 10^4 nm^2 (0.044 um^2), while the measured cell spreading areas (Figs. 3-4, Supp. Figs. 4-5)
+    are 300-1,500 um^2, more than 10^4 times larger. The paper compares the two only in their trends.
+    Either the model's areas are not on the same scale as a cell's area, or the axis unit is
+    misprinted; the record keeps both under one quantity, so a direct comparison would show this gap.
+  citation: {page: 3, printed_page: "3", quote: "Simulation results for the cell-spreading area on elastic substrates", where: "Fig. 1b axis label"}
+- id: q_fig2a_which_gels
+  kind: reading
+  about: [fig2a_ionic, fig2a_covalent, figs3a_ion_3p4, cmp_fig2a_ionic_s3a]
+  text: >-
+    Fig. 2a does not say which ionic and covalent gels its two lines are. Its ionic line ends near
+    0.28 at 1000 s, like the 3.4 kPa ionic line of Supp. Fig. 3a; its covalent line ends near 0.90,
+    near the 1.4 and 3.4 kPa covalent lines there (which could not be read apart). The comparison
+    cmp_fig2a_ionic_s3a tests the first identification.
+  citation: {page: 3, printed_page: "3", quote: "Stress relaxation of covalently and ionically crosslinked alginate gels", where: "Fig. 2a"}

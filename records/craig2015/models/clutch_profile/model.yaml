@@ -1,0 +1,24 @@
+id: clutch_profile
+name: steady-state actin flow and traction profiles of the adhesion-clutch model (Eqs. 5-9)
+role: model
+stated: {page: 7, quote: "The model equations can be expressed in the fol-", where: "Eqs. 5-9"}
+equation: >
+  lambda d2V~/dx~2 = T~(x) - F~myo(x);  F~myo = F dM~/dx~;  M~ = 1 - gamma d(V~ M~)/dx~;
+  N~adh = (1 + b F dM~/dx~) exp(-V~/v*);  T~ = (1 + b F dM~/dx~) exp(-V~/v*) V~;
+  boundary conditions V(0) = V0, dV/dx(L) = 0 at L = 8 um, M(0) = 0, Nadh(0) = 0 (p. 5-6)
+inputs:
+  lam: {quantity: viscosity_parameter, unit: dimensionless}
+  F: {quantity: myosin_strength_parameter, unit: dimensionless}
+  b: {quantity: strengthening_parameter, unit: dimensionless}
+  vstar: {quantity: flow_weakening_parameter, unit: dimensionless}
+  gamma: {quantity: myosin_detachment_parameter, unit: dimensionless}
+  x: {quantity: distance_from_leading_edge, unit: um, description: "where the profile is reported (L0 = 1 um, so x~ = x / um)"}
+outputs:
+  V: {quantity: scaled_flow_speed, unit: dimensionless}
+  T: {quantity: scaled_traction, unit: dimensionless}
+settings:
+  n_segments: 40        # "The spatial domain was divided into 40 equal segments" (p. 8)
+  L: 8.0                # domain length in um, "L = 8 um" (p. 6)
+  dM_scheme: central    # added: the paper does not say how dM/dx is differenced (question q_numerics_scheme)
+  neumann: first_order  # added: dV/dx(L) = 0 as V_N = V_(N-1) (question q_neumann_choice)
+stochastic: false

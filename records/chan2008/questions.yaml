@@ -1,0 +1,222 @@
+- id: q_time_step
+  kind: reading
+  about: [motor_clutch, motor_clutch_E]
+  text: >-
+    The simulation time step is printed three ways: "5-10 ms" (SOM p. 4), "60,000 time steps
+    (300 s)", which is 5 ms (SOM p. 5), and "the simulation time step (10 ms)" (SOM p. 14). The
+    record uses 5 ms, the only value consistent with 60,000 steps in 300 s, and refines dt.
+  citation: {page: 12, printed_page: "SOM p. 5", quote: "The simulation is allowed to run for 60,000", where: text}
+- id: q_dt_dependence
+  kind: numerics
+  about: [motor_clutch, run_v_260, run_fig1d, ref_dt_260, ref_dt_fig1d, val_v_260, val_v_260_fine, cmp_fig1d, cmp_fig1d_fine]
+  text: >-
+    On soft substrates the simulated retrograde flow depends strongly on the time step. With Table S1
+    parameters at κsub = 0.17 pN/nm (260 Pa), mean flow is about 114 nm/s at dt = 10 ms, about 76 at
+    5 ms, 52 at 2.5 ms, 47 at 1.25 ms and about 45 at 0.625 ms and below; seed scatter is about 2 nm/s.
+    At κsub = 1 pN/nm it falls from about 83 (5 ms) to about 30 nm/s. On stiff substrates (κsub ≈ 38
+    pN/nm) it moves only from 109 to 107. At 5 ms the per-step stretch of a lone clutch
+    (κc |vu| dt ≈ 3 pN) exceeds |Fb| = 2 pN. The paper's curves (Fig. 1D, S1) and its agreement with
+    experiment (Fig. 3, 78 ± 4 nm/s at 260 Pa) match this record's 5 ms results. At a settled step the
+    soft-substrate flow is far slower than the measured mean, and the minimum of Fig. 1D deepens.
+    This holds for the record's implementation of the stepping rules; the paper does not state
+    them in full (q_binding_rule), and a different scheme could move differently with dt. As
+    printed, though, the soft-substrate predictions belong to the numerics.
+  citation: {page: 11, printed_page: "SOM p. 4", quote: "For each time step in the Monte Carlo simulation (5-10 ms)", where: text}
+- id: q_eq13_delta
+  kind: reading
+  about: [L_eq13_added, Delta_fit, delta_text, ksub_eq13]
+  text: >-
+    The fit parameter Δ = 277 nm corrects the κsub of Eq. 13, but the paper does not say how
+    (replace δ, add to δ, or something else). Every run against a gel modulus depends on this. The
+    record takes Δ in place of δ and runs δ + Δ = 427 nm and δ = 150 nm as alternatives.
+    Fig. 1D (κsub in pN/nm) and Fig. S1A (E in kPa) seem to show the same simulation with
+    its minimum near 0.3-0.4 in both units. That suggests about 1 pN/nm per kPa, closer to
+    δ + Δ (1.03) than to Δ (0.67) or δ (0.36).
+  citation: {page: 25, printed_page: "SOM p. 18", quote: "we introduce a fitting parameter, Δ, to account for our underestimate", where: text}
+- id: q_nu_eq13
+  kind: unstated_input
+  about: [run_ksub_260, ksub_eq13, cerruti_force_eq11]
+  text: >-
+    Eqs. 10-13 use the gel's Poisson ratio υ without giving its value there. The record uses υ = 0.3,
+    the value the paper states for the same hydrogels in the Hertz analysis (Eq. 8).
+- id: q_binding_rule
+  kind: unstated_model
+  about: [motor_clutch]
+  text: >-
+    The stepping rules are not stated in full. Where a newly engaged clutch attaches, how rates
+    become per-step probabilities, and the initial state are left open. The record assumes:
+    a clutch engages unstretched at xsub, probabilities are 1 - exp(-k dt), and all clutches start
+    unbound with xsub = 0. Eq. 3 is applied without clamping the velocity.
+- id: q_statistics
+  kind: unstated_model
+  about: [motor_clutch, run_fig1d, run_v_260]
+  text: >-
+    "The simulation is allowed to run for 60,000 time steps (300 s) to ensure the simulation has
+    reached steady-state before statistics are calculated" does not say over what window the
+    statistics are taken. It also does not say how many independent runs make each plotted point
+    or which seed was used. The record averages over the whole 300 s of one run with seed 1.
+- id: q_single_run_noise
+  kind: numerics
+  about: [run_fig1d, run_figS1A_koff01, run_figS1A_koff003, run_v_260]
+  text: >-
+    Each plotted point rests on stochastic simulation. With one 300 s run per point, run-to-run
+    scatter can be several nm/s near the load-and-fail/slippage transition. The jagged red curve
+    of Fig. S1A between 2 and 6 kPa shows such scatter in the paper too. The refinements show
+    how much the result moves with dt and with run length.
+- id: q_fig3c_labels
+  kind: possible_error
+  about: [v_fig3c_260, v_fig3c_57k]
+  text: >-
+    The Fig. 3C caption reads "stiff substrate (purple): E = 260-Pa PAG ... soft substrate (red):
+    E = 57-kPa PAG". That swaps stiff and soft relative to the moduli and to the rest of the paper.
+    The record ties each mean to the modulus in the panel legend (purple 260 Pa, red 57 kPa).
+  citation: {page: 4, printed_page: "1689", quote: "substrates [stiff substrate (purple): ? = 260-Pa PAG", where: "Fig. 3C caption"}
+- id: q_T_sign
+  kind: reading
+  about: [T_max_text, T_max_fig]
+  text: >-
+    The maximal filopodial force is printed as 110 ± 25 pN in the text and as <T> = -110 ± 25 pN
+    in Fig. S10D. The sign follows the model's convention that retrograde is negative x. The model
+    is compared with the figure's signed value.
+- id: q_tmax_definition
+  kind: choice
+  about: [val_tmax, E_trace_added, run_tmax]
+  text: >-
+    The printed <T> is the mean over 18 traces of each trace's maximum force, taken on gels whose
+    stiffness is not given. The record compares it with the largest force in one simulated 300 s
+    run on a 730 Pa gel (alternatives 260 and 1300 Pa). nm was set by hand to match <T>, so this is
+    a check of that tuning, not an independent validation.
+- id: q_s12_within_5pct
+  kind: overstated_claim
+  about: [s12_measured, cmp_s12]
+  text: >-
+    Fig. S12F says measured velocity agrees with simulated velocity "to within 5%". The printed
+    pair 100 vs 106 ± 2 nm/s is 6% apart. Every measured mean lies above its simulated value and
+    outside its printed SEM.
+  citation: {page: 55, printed_page: "SOM p. 48", quote: "shows agreement to the actual simulated velocity to within 5%", where: "Fig. S12 caption"}
+- id: q_eq11_inputs
+  kind: unstated_input
+  about: [cerruti_force_eq11, T_max_text, T_max_fig, delta_text]
+  text: >-
+    <T> = 110 ± 25 pN and δ = 150 ± 30 nm come from Eqs. 11-12 applied to 18 bead traces. The
+    per-trace inputs (E, U1, U2, L) are not printed, so the model is recorded but cannot be run
+    on the paper's inputs.
+- id: q_vpoly
+  kind: unstated_input
+  about: [motor_clutch]
+  text: >-
+    Eq. 6 (vedge = vpoly + vfilament) needs vpoly, which is not in Table S1. Only Movie S1 gives
+    vpoly = 70 nm/s, for an altered parameter set. No printed result rests on Eq. 6, so it is not
+    modelled.
+  citation: {page: 57, printed_page: "SOM p. 50", quote: "vpoly=70 nm/s, vu=-100 nm/s, nm=20, nc=20", where: "Movie S1 legend"}
+- id: q_figure_parameters
+  kind: reading
+  about: [v_fig1d, v_figS1A_koff01, run_fig1d]
+  text: >-
+    The paper does not say which parameter set produced Fig. 1. Movie S1 uses altered parameters.
+    The record assumes Table S1 for Fig. 1D, Fig. 3D and Fig. S1, apart from the koff and nc changes
+    the Fig. S1 legends name. The Fig. 1D stiff-substrate plateau near 110 nm/s fits vu = -120 nm/s,
+    not the altered -100 nm/s.
+- id: q_figure_readings
+  kind: reading
+  about: [v_fig1d, v_figS1A_koff01, v_figS1A_koff03, v_figS1A_koff003, v_figS1B_nc45, v_figS1C_nc145]
+  text: >-
+    The simulated curves are printed only as figures. Values were read by the record's reader off
+    the page images at decade ticks, roughly to ±3 nm/s for Fig. S1 (gridded) and ±5 nm/s for
+    Fig. 1D (small, no grid). They are recorded as approximate, so they get no verdict. Their
+    differences are kept.
+- id: q_signs
+  kind: reading
+  about: [Fm_S1, Fb_S1, vu_S1]
+  text: >-
+    Table S1 prints Fm = -2 pN, Fb = -2 pN and vu = -120 nm/s, while the cited sources give positive
+    magnitudes. Read as the model's convention that retrograde motion is negative x. With these
+    signs, Eqs. 1-5 are self-consistent: clutch tension is negative, so Fclutch/Fb > 0 and the
+    off rate grows under load. The values are used as printed.
+- id: q_cycle_time
+  kind: reading
+  about: [motor_clutch]
+  text: >-
+    The main text says load-and-fail cycles have "protracted periods (~ 10 to 100 s)". An
+    approximate range cannot be recorded as a printed value with its "~" kept. This prediction and
+    the "abrupt change around 1 kPa" are not compared.
+  citation: {page: 5, printed_page: "1690", quote: "characterized by protracted periods (~ 10 to 100 s)", where: text}
+- id: q_U_strain
+  kind: reading
+  about: [cerruti_force_eq11, ksub_eq13, bead_displacement]
+  text: >-
+    Eqs. 10-12 call U, U1 and U2 the "strain" of the substrate at a marker bead. For T in Eq. 10
+    (πEδU/(1+υ)) to be a force, U must be a length, and Fig. S10A draws U as the bead's displacement
+    from its unloaded position. The record reads U as a displacement in nm. Eq. 13 (κsub = T/U) rests
+    on the same reading.
+  citation: {page: 24, printed_page: "SOM p. 17", quote: "U is the strain of the substrate at the location of the marker bead", where: "below Eq. 10"}
+- id: q_fig3d_not_compared
+  kind: reading
+  about: [L_eq13_added, Delta_fit, q_eq13_delta, motor_clutch_E]
+  text: >-
+    Audit disagreement with the first reader's scope. The record leaves out the dashed simulation curve
+    of Fig. 3D (mean retrograde flow against E in kPa). That curve is the only printed model output
+    that the paper says uses Δ = 277 nm ("Using this fitting parameter (Δ=277 nm) ... (p=0.09; Fig 3d)").
+    So it is the one place where the readings of how Δ enters Eq. 13 (L_eq13_added: Δ, δ + Δ or δ)
+    could be tested against the paper itself. The record's Fig. S1 comparisons are with curves that
+    the paper does not tie to Δ. The audit could not read Fig. 3D reliably at page-image resolution
+    (axis 60-120 nm/s, 0.1-100 kPa, panel about 200 px wide). A higher-resolution reading should add it.
+  citation: {page: 4, printed_page: "1689", quote: "statistically consistent with model predictions", where: "Fig. 3D"}
+- id: q_fig_same_curve
+  kind: reading
+  about: [fig1d_flow, figS1A_koff01, fig3d_sim_rise, fig3d_sim_upper, L_eq13_added, q_eq13_delta, q_fig3d_not_compared]
+  text: >-
+    Added in the figure reading. The calibrated readings of Fig. 1D (flow against κsub in pN/nm),
+    Fig. S1A (black line, against E in kPa) and Fig. 3D (dashed simulation, against E in kPa) agree
+    within their reading intervals at the same numbers on x (1, 2 and 5; and 1.5 for S1A and 3D).
+    So the three figures plot one simulated curve, with κsub in pN/nm numerically equal to E in kPa.
+    Through Eq. 13 with υ = 0.3, that is a length of 1.3/π µm. That is near δ + Δ (427 nm) and far
+    from Δ (277 nm) or δ (150 nm). It may also be a plain unit relabelling (1 pN/nm per kPa)
+    rather than any reading of Eq. 13. The paper says only that Fig. 3D uses Δ = 277 nm. The
+    comparisons cmp_fig3d_sim_* and cmp_figS1A_*_read, with the build's alternatives of
+    L_eq13_added, show which reading reproduces the plotted curves.
+  citation: {page: 25, printed_page: "SOM p. 18", quote: "Using this fitting parameter (Δ=277 nm), we find that our", where: text}
+- id: q_ref_S56_source
+  kind: reading
+  about: [ref-S56]
+  text: >-
+    Reference S56 is linked to the record erdmann2004, but S56 is printed as Erdmann and Schwarz,
+    J. Chem. Phys. 121, 8997 (2004), while erdmann2004 is their Phys. Rev. Lett. 92, 108102 (2004).
+    The two papers treat the same stochastic cluster model, but they are different works. The
+    comparison in the SOM ("similar Bell model assumptions", normal force on all bonds, rebinding with
+    no load) is with S56 and S57, not with the record's paper. So no stated relation between
+    chan2008 and erdmann2004 is entered. The proposed relation rel_erdmann_off_rate compares only the
+    two papers' Bell off-rates.
+  citation: {page: 31, quote: "single bonds working in adhesion clusters using similar Bell model assumptions"}
+# added in the second figure pass (2026-10-31)
+- id: q_fig3c_counts
+  kind: reading
+  about: [hist_fig3c_260, hist_fig3c_57k, v_fig3c_260, v_fig3c_57k]
+  text: >-
+    Read bar by bar (hist_fig3c_260), the blue (260 Pa) bar heights of Fig. 3C come in whole
+    multiples of 1/95. So the caption's n = 95 does belong to the 260 Pa gel, as the caption pairs
+    them, and only its words "stiff" and "soft" are swapped (q_fig3c_labels). Each histogram's bars
+    sum to 1 within the reading. Taking each bin at its centre (label minus 5 nm/s, Excel's
+    upper-edge labels), the bars' means agree with the printed in-panel means (78 and 105 nm/s).
+    Neither check is recorded as a comparison, because the record has no model for histogram
+    moments.
+  citation: {page: 4, printed_page: "1689", quote: "n = 95; soft substrate (red): ? = 57-kPa PAG, n = 258", where: "Fig. 3C caption"}
+- id: q_figS8C_vs_fig3
+  kind: unexplained_difference
+  about: [v_figS8C_gfp, v_fig3c_260, v_fig3d_exp_sem]
+  text: >-
+    Fig. S8C plots GFP-actin transfected filopodia on 260 Pa gels with n = 77 and a mean read near
+    84 nm/s, while Fig. 3C gives 78 ± 4 nm/s (sem) with n = 95 on the same gel for transfected
+    neurons. The SOM does not say whether S8C is a subset or a separate set of measurements. At
+    24 kPa, S8C's transfected bar (n = 122) can be set beside the Fig. 3D orange point. The error
+    bars of S8C and S5D are not described (error_bars: unstated).
+  citation: {page: 51, printed_page: "SOM p. 44", quote: "Mean retrograde flow rates on soft versus stiff PAG", where: "Fig. S8C"}
+- id: q_failure_frequency_model
+  kind: unstated_model
+  about: [failures_figS5D]
+  text: >-
+    The SOM says the measured failure frequency (Fig. S5D) rises with stiffness "as predicted by the
+    model", but no simulated failure frequency is printed or plotted, and the record's motor_clutch
+    model has no failure-count output. The measured frequencies are recorded as figure readings with
+    their error bars, so that a model giving failure rates can be validated against them.
+  citation: {page: 21, printed_page: "SOM p. 14", quote: "frequency of failures as a function of stiffness. As predicted by the model", where: text}

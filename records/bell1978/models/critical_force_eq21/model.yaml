@@ -1,0 +1,14 @@
+id: critical_force_eq21
+name: approximate critical force per potential bond (Eq. 21)
+role: model
+stated: {page: 6, printed_page: "623", quote: "For a large range of KN2 , lre = 0.7", where: "Eq. 21"}
+equation: "alpha_c ≈ 0.7 ln(KN2); fc = (kT/r0) alpha_c ≈ 0.7 (kT/r0) ln(KN2), printed as fc = 8.6 x 10^-7 alpha_c ≈ 6.0 x 10^-7 ln(KN2) dynes per bond"
+built_from: [critical_force_eq19_20]
+inputs:
+  kT: {quantity: thermal_energy, unit: eV/particle}
+  r0: {quantity: barrier_range, unit: nm}
+  KN2: {quantity: KN2_product, unit: dimensionless}
+outputs:
+  force_scale: {quantity: thermal_force_scale, unit: dyne, description: "kT/r0, the coefficient of alpha_c"}
+  log_coefficient: {quantity: critical_force_log_coefficient, unit: dyne, description: "0.7 kT/r0, the coefficient of ln(KN2)"}
+  fc: {quantity: critical_force_per_bond, unit: dyne}

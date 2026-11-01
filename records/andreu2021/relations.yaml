@@ -1,0 +1,44 @@
+# Relations this paper states about its models.
+- id: rel_stretch_sim_gillespie_from_bangasser
+  kind: derived_from
+  a: bangasser2013/motor_clutch_ssa
+  b: andreu2021/clutch_stretch_sim
+  steps:
+    - "the fixed time step simulation of the authors' previous clutch model is replaced by the Gillespie algorithm of ref. 79: for each step the time of every possible event of every clutch is drawn from its rate, and only the first event is executed"
+  provenance: stated
+  citation: {page: 10, printed_page: "10", quote: "but by a Gillespie algorithm79 which only executes one event per", where: "Methods, Computational clutch model, item 3"}
+  assumptions:
+    - "the relation is in the simulation algorithm only: the clutch model itself (catch bonds, talin unfolding, reinforcement, imposed stretch speed) comes from ref. 20, not from Bangasser's motor-clutch model"
+    - "the record's model.py draws the next event from the total rate (direct method), which has the same distribution as Bangasser's first-reaction method"
+- id: rel_edge_speed_scales_as_bell_shaking
+  kind: scales_as
+  a: andreu2021/edge_speed
+  b: bell1978/peak_velocity_shaking
+  mapping: {nu: "f", A: "eps*D/2*1e-4"}
+  regime: {eps: [0.01, 0.2], D: [10, 100], f: [0.01, 10]}
+  provenance: proposed
+  reason: >-
+    Both are the peak speed of a periodic displacement of amplitude A at frequency f, so both are
+    proportional to amplitude times frequency. They are not the same model: Andreu's stretch is a
+    triangular wave (|v| = 2Af, constant speed), Bell's shaking is read as simple harmonic motion
+    (v = 2 pi nu A, peak speed), so with the amplitude mapped as the edge displacement (eps x D/2,
+    um -> cm) the two differ by a constant factor of pi; and the quantities differ (cell-edge
+    deformation speed vs fluid velocity relative to fibers). Neither paper cites the other; the
+    form is a plain product, so this records only the shared kinematic scaling.
+- id: rel_stretch_sim_derived_from_elosegui_clutch
+  kind: derived_from
+  a: elosegui2016/clutch_talin_sim
+  b: andreu2021/clutch_stretch_sim
+  steps:
+    - "a third event is added to each clutch: actin breaking, instantaneous above a threshold force Fact, allowed only while talin has not unfolded, with the effect of integrin unbinding (clutch disengages, integrin density drops)"
+    - "the actin speed is no longer driven by myosin (v = vu (1 - F/(nm Fm))) but imposed by the triangular stretch: |v| = 2Af, its sign changing every half cycle"
+    - "the fixed time step is replaced by a Gillespie algorithm that executes one event per step"
+    - "the unbinding and unfolding rates are corrected for the loading rate (Eqs. 5-6, k' = L/Fm, from a baseline force Fb)"
+    - "a maximum integrin density dmax is introduced (in the previous model growth stopped when actomyosin flow stalled); dadd is changed; ksub set to the lower range of the previous work"
+  provenance: stated
+  citation: {page: 10, printed_page: "10", quote: "by adapting a previously described stochastic simulation, which we implemented to", where: "Methods, Computational clutch model (pp. 10-11)"}
+  assumptions:
+    - "the 'previously described stochastic simulation ... to understand cell response to substrate rigidity' is ref. 20 (Elosegui-Artola et al. 2016), which the sentence cites"
+    - "the steps are given in words (Methods p. 10, items 1-4 and Model parameters); neither model has a symbolic form, so they cannot be applied"
+    - "Andreu's summary of the previous model omits talin refolding and vinculin binding: in its model unfolding itself is the reinforcement event, whereas Elosegui's unfolding leads to reinforcement only if vinculin binds before talin refolds; Andreu does not state this as a modification"
+    - "the two models share n_fibronectin, kont, kc, FR, dint/dmin and dadd as ports; Andreu takes nf, kont, kc, FR and dmin from ref. 20 (cited.yaml)"

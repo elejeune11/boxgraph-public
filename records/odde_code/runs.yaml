@@ -1,0 +1,71 @@
+# ---- motorclutch2_3.m as written (= Bangasser et al. 2013's base set) -------------------------------
+# One mc_event_port run per stiffness of each copied figure reading, at the code's 1e5 events.
+- id: run_b13_fig2
+  model: mc_event_port
+  inputs: &code23 {nm: nm_23, Fm: Fm_23, vu: vu_23, nc: nc_23, kon: kon_23, koff: koff_23, Fb: Fb_23, Kc: Kc_23, gain: gain_23}
+  sweep: {Ksub: F_fig2b_b13}
+  outputs: {v_retro: v_b13_fig2_port, F_trac: F_b13_fig2_port}
+  note: "the stiffnesses of the Fig. 2B reading, which are also those of the Fig. 2C reading"
+- id: run_b13_fig6d
+  model: mc_event_port
+  inputs: *code23
+  sweep: {Ksub: tcycle_fig6d_b13}
+  outputs: {t_cycle: tcycle_b13_port}
+- id: run_b13_fig6b
+  model: mc_event_port
+  inputs: *code23
+  sweep: {Ksub: kens_fig6b_b13}
+  outputs: {k_ens: kens_b13_port}
+  note: "k_ens = Kc avnumcon is Bangasser 2013's definition; the code computes avnumcon (line 146) but not k_ens"
+- id: run_b13_opt
+  model: optimum_port
+  inputs: {nm: nm_23, Fm: Fm_23, vu: vu_23, kon: kon_23, koff: koff_23, Fb: Fb_23, Kc: Kc_23, gain: gain_23}
+  sweep: {nc: ksopt_fig2c_b13}
+  outputs: {ks_opt: ksopt_b13_port}
+  note: "nc takes the one index value of the copied reading, 50 (= nc_23)"
+
+# ---- the code's model at Chan and Odde's Table S1 set ---------------------------------------------
+# nm, nc, kon, Kc copied from chan2008; Fm, vu, Fb, koff the code's own (motorclutch1_1.m), equal to Table S1.
+- id: run_chan_S1a
+  model: mc_event_port
+  inputs: &chan {nm: nm_chan, Fm: Fm_11, vu: vu_11, nc: nc_chan, kon: kon_chan, koff: koff_11, Fb: Fb_11, Kc: kc_chan, gain: gain_23}
+  sweep: {Ksub: v_figS1a_b13}
+  outputs: {v_retro: v_chan_S1a_port}
+- id: run_chan_1d
+  model: mc_event_port
+  inputs: *chan
+  sweep: {Ksub: v_fig1d_c08}
+  replicates: 3
+  outputs: {v_retro: v_chan_1d_port}
+- id: run_chan_1d_soft
+  model: mc_event_port
+  inputs: *chan
+  sweep: {Ksub: v_fig1d_soft_c08}
+  replicates: 3
+  outputs: {v_retro: v_chan_1d_soft_port}
+- id: run_chan_1d_Fsoft
+  model: mc_event_port
+  inputs: *chan
+  sweep: {Ksub: F_fig1d_soft_c08}
+  replicates: 3
+  outputs: {F_trac: F_chan_1d_soft_port}
+- id: run_chan_1d_Fstiff
+  model: mc_event_port
+  inputs: *chan
+  sweep: {Ksub: F_fig1d_stiff_c08}
+  replicates: 3
+  outputs: {F_trac: F_chan_1d_stiff_port}
+
+# ---- the code's sweep at Bangasser and Odde 2013's Fig. 4A set (nm = nc = 25, Chan's set otherwise) --
+- id: run_n25_opt
+  model: optimum_port
+  inputs: {nm: nm_25, Fm: Fm_11, vu: vu_11, nc: nc_25, kon: kon_chan, koff: koff_11, Fb: Fb_11, Kc: kc_chan, gain: gain_23}
+  outputs: {ks_opt: ksopt_n25_port}
+
+# ---- motorclutch1_1.m as written: one dynamic run -------------------------------------------------
+- id: run_11
+  model: mc_event_port
+  inputs: {nm: nm_11, Fm: Fm_11, vu: vu_11, nc: nc_11, kon: kon_11, koff: koff_11, Fb: Fb_11, Kc: Kc_11, gain: gain_11, Ksub: Ksub_11}
+  settings: {events: 9999, timestep_initial: 0.005}
+  outputs: {v_retro: v_11_port, t_cycle: tcycle_11_port}
+  note: "eventlimit = 1e4 gives 9999 events (line 65); timestep(1) = dt = 0.005 (line 59). No paper prints a result of this mixed set (q_mixed_set_1_1)"

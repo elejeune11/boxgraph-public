@@ -1,0 +1,223 @@
+# Relations to Elosegui-Artola et al. 2014 (ref-21 = Table S1 ref. 3 = SI ref. 4, record elosegui2014).
+- id: rel_reinforcement_from_elosegui2014
+  kind: derived_from
+  a: elosegui2014/integrin_clutch_sim
+  b: gong2018/mean_field_sls
+  steps:
+    - "take the clutch reinforcement of ref. 21: integrin density, and so the binding rate kon = kont dint, increases when the force on a clutch exceeds a threshold"
+    - "replace the fixed number of integrins added at each reinforcement event by a portion increase linear in force: ron = ron0 (1 + alpha (Fa - Fcr)) once the average FA force Fa over a lifetime cycle exceeds Fcr, updated in the next cycle"
+    - "apply it to a mean-field (ensemble clutch) motor-clutch model with one integrin type on a standard linear solid substrate"
+  provenance: stated
+  citation: {page: 2, quote: "model developed by Elosegui-Artola et al. (21) that describes", where: "main text p. 2 (ref. 21 = Elosegui-Artola et al. 2014)"}
+  assumptions:
+    - "the SI says the same: 'the clutch reinforcement mechanism (4) was implemented. Here, instead of using integrins added for each reinforcement event (4) that is affected by the simulation time step interval and number, we assume that the reinforcement extent is linearly related to the clutch force' (p. 11; SI ref. 4 = Elosegui-Artola et al. 2014)"
+    - "the relation is of the reinforcement rule only: the rest of gong2018's model (ensemble clutch, Bell off-rate, viscoelastic substrate) follows Bangasser and Odde and Chan and Odde (refs. 15-17), not ref. 21; elosegui2014 uses a catch bond and two integrin types"
+    - "the threshold is not the same quantity: gong2018's Fcr (3 pN) is a lifetime-averaged ensemble force, said to be smaller than the threshold clutch force reported in refs. 4 and 11 of the SI because the maximum force is diluted in the average (p. 13)"
+    - "gong2018/mean_field_elastic is built from mean_field_sls and carries the same reinforcement rule"
+    - "no mapping of inputs is given: elosegui2014's model ports (E, kon_fold, koff_fold) do not correspond to gong2018's"
+    - "unverifiable: elosegui2014/integrin_clutch_sim cannot be run (its equations are only in the Supplementary Information, blank in that record's PDF), and the steps are given in words"
+#
+# Relations to chaudhuri2015 (ref. 4): none entered.
+# The paper states no relation between its models and ref. 4's. It uses ref. 4 as experimental data
+# (Fig. 6D, reprinted; linked in cited.yaml) and contrasts the approach: "Rather than using a stochastic
+# lattice model (4), we combined the motor-clutch model with a simple standard linear viscoelastic
+# substrate" (p. 7). That names a different model, not a derivation; chaudhuri2015/lattice_spreading is
+# not runnable in any case. (The SI's "adapted from a previous study (4)", p. 13, is SI ref. 4 =
+# Elosegui-Artola et al. 2014, not Chaudhuri.)
+# Nor is one proposed between gong2018/mean_field_elastic and chaudhuri2015/clutch_springs_nolattice,
+# although both take motor, clutch and substrate-stiffness parameters to a spreading speed:
+# (1) the substrates differ: Chaudhuri gives each clutch its own substrate spring ksub in series, while
+# Gong loads the whole bound ensemble on one spring ks (Fs = kc nc Pb (xc - xs) = ks xs). No constant map
+# between ks and ksub exists: the shared spring seen by bound clutches would be nc Pb ksub, which changes
+# with Pb through each cycle, and Chaudhuri's newly bound clutches start unstretched while Gong's share
+# one stretch. (2) The outputs are computed differently: Chaudhuri averages vu - v_retrograde over 12 s of
+# a fixed-step stochastic run; Gong takes Vp - xc/t over the last of ten load-and-fail cycles of an ODE.
+# They agree in definition only with Vp = vu. (3) Gong adds reinforcement (ron grows once Fa > Fcr); it
+# could be switched off (alpha = 0), but Chaudhuri has no counterpart for Fcr or alpha. No limit or
+# closure stated in either paper takes one model to the other, so an approximated_by would need an
+# unfounded tolerance between a mean-field ODE and a different stochastic algorithm. Gong compares its
+# own ODE with its own KMC simulation (Fig. S1A), not with ref. 4's model.
+# Nor is a relation entered for the off-rate: Gong's <roff> = roff0 exp(Fc/Fb) has the same form as
+# chaudhuri2015/bell_off_rate, but it is a step inside mean_field_sls, not a separate model here.
+#
+# Relations to bangasser2013 (ref. 17, Bangasser, Rosenfeld & Odde 2013, Biophys J).
+# Stated: none. Ref. 17 is cited once, in a group: "the well-known motor-clutch model (15–17) was
+# developed" (p. 1). The mean-field approach is credited to SI ref. 3 (p. 11: "by applying the mean-field
+# theory (3)"), which is Bangasser & Odde 2013, Cell Mol Bioeng (bangasser2013b), not this record; the
+# Table S1 values Gong takes from "ref. 1" are also bangasser2013b's (ref-S1-1), so cited.yaml gets no link
+# to bangasser2013.
+# Not entered: bangasser2013/catch_slip_eq9 against mean_field_sls. Gong's off-rate roff0 exp(Fc/Fb) is
+# the slip term of Eq. 9, but it is a step inside the ODE model, not a model of its own here; the full model
+# returns spreading speed, lifetime and mean force, none of them an off-rate.
+# Not entered: the flow speed of motor_clutch_ssa against mean_field_sls. With ka = 0 and alpha = 0 Gong's
+# model is the ensemble-clutch version of Bangasser's, and a probe at Table 1's base set gave -Vs (Vp = 0)
+# within 3-13% of v_retro at ksub = 0.01, 1, 100 pN/nm. But Gong's only speed output is Vs = Vp - Vf, so
+# with Vp = 0 it is -Vf: the mapping cannot match its sign without a helper model, and no paper states the
+# relation in a form that calls for one.
+- id: rel_ssa_cycle_approx_mean_field
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: gong2018/mean_field_sls
+  mapping: {nm: "nm", Fm: "Fm", Fcr: "Fb", nc: "nc", Fb: "Fb", ron0: "kon", roff0: "koff", kc: "kc", vu: "vu",
+            Vp: "0", alpha: "0", ka: "0", kl: "ksub", eta: "1"}
+  output_map: {t_life: t_cycle}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    Gong's mean-field model averages all clutches into one ensemble clutch of stiffness kc nc Pb (SI p. 11)
+    of the motor-clutch model of refs. 15-17, and loads it on one substrate spring as Bangasser's SSA loads
+    its engaged clutches on ksub. With no Maxwell arm (ka = 0, so kl is the substrate stiffness) and no
+    reinforcement (alpha = 0), the ODE is the mean-field closure of Bangasser's stochastic scheme: same linear
+    force-velocity motors, Bell slip-bond off-rate koff exp(F/Fb), constant on-rate. Its cycle duration
+    is then the mean-field counterpart of Bangasser's load-and-fail cycle time.
+  assumptions:
+    - "Gong's Fcr, eta and Vp do not enter t_life when alpha = 0 and ka = 0; they are mapped to placeholders"
+    - "the two cycle times are defined by each record's reader: Bangasser's SSA divides the run time by the number of times the last engaged clutch let go; Gong's ODE ends a cycle when Pb falls below 1/nc and reports the last of ten cycles"
+    - "regime: +-20% around Bangasser's Table 1 base set (nm = nc = 50, kon = 0.3 /s, koff = 0.1 /s, Fb = Fm = 2 pN, kc = 0.8 pN/nm, vu = 120 nm/s), over the stiffness range of Fig. 2 (0.01-100 pN/nm)"
+    - "tolerance 0.1 is the relator's choice, as in bangasser2013's relations to odde_code; neither paper states how close a mean-field cycle should be to a stochastic one"
+  # Relator's probe (base set, seed 1): t_cycle 62.5, 0.57, 0.36 s against t_life 88.2, 0.40, 0.145 s at
+  # ksub = 0.01, 1, 100 pN/nm.
+#
+# Relations to bangasser2013b (ref. 16 = Table S1 ref. 1 = SI ref. 3, Bangasser & Odde 2013, Cell Mol
+# Bioeng). SI ref. 3 has no entry in references.yaml; it is the same work as ref-16 (SI reference list, PDF p. 13).
+# Gong cites it for three things: the mean-field approach (SI p. 11), the binding-time estimate (SI p. 2)
+# and the proportionality of FA lifetime to tau_l (p. 8). Numbers in each model's port units (pN, nm, s).
+- id: rel_tbind_estimate_same_as_eq23
+  kind: same_as
+  a: bangasser2013b/tbind_eq23
+  b: gong2018/tbind_estimate
+  mapping: {Nc: "nc", ron: "kon"}
+  output_map: {tbind: tbind}
+  regime: {nc: [10, 5000], kon: [0.1, 100]}
+  provenance: stated
+  citation: {page: 12, quote: "clutches become engaged) as tbind ≈ lnðNc Þ=ron (3)", where: "SI p. 2 (SI ref. 3 = Bangasser & Odde 2013)"}
+  assumptions:
+    - "Gong's Nc and ron (the unreinforced binding rate) stand for Bangasser's nc and kon (correspondences of quantities, not merged)"
+    - "tbind_estimate is a helper model for the estimate, which Gong states in words only; Bangasser's Eq. 23 is the same form, reached from Eq. 22 by dropping Euler's constant for high nc"
+- id: rel_cycle_time_scales_as_tau_l
+  kind: scales_as
+  a: bangasser2013b/clutch_ensemble_cycle
+  b: gong2018/lifetime_timescale
+  mapping: {Fm: "Fm", Nm: "nm", vu: "vu", kl: "ks"}
+  output_map: {tau_l: t_cycle}
+  regime: {nm: [75, 90], Fm: [2, 2.4], vu: [100, 140], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1],
+           Fb: [2, 2], kc: [5, 5], ks: [0.01, 0.1], r: [2, 2]}
+  provenance: stated
+  citation: {page: 8, quote: "the FA lifetime is proportional to its lifetime timescale", where: "main text p. 8, 'tau_l (16)'; ref. 16 = Bangasser & Odde 2013"}
+  assumptions:
+    - "Gong attributes 'the FA lifetime is proportional to its lifetime timescale, tau_l' to ref. 16, whose model of the FA lifetime is the clutch-ensemble cycle; tau_l = Fm Nm/(vu kl) is Bangasser's Eq. 28 cycle time Fm nm ln(1/eps)/(vu ks) without the constant factor, the substrate spring ks standing for Gong's long-term stiffness kl (a correspondence of quantities)"
+    - "Gong qualifies it: 'When reinforcement does not take effect'; Bangasser's model has no reinforcement"
+    - "regime: Bangasser's Table S1 base set with r = 2 (Fig. 2), nm and Fm raised by up to 20% from the base set (with less motor force than nm Fm = 150 pN the ODE stalls and never fails, so there is no cycle), vu varied +-17%, and ks over the soft substrates 0.01-0.1 pN/nm where the cycle is a slow load-and-fail (the Fig. 2 value is 0.1); the unmapped inputs are pinned, as tau_l has no counterpart for them"
+    - "the test asks the log-slopes in Fm, nm, vu and ks to match those of tau_l (1, 1, -1, -1); 'proportional' in the paper is approximate, so not_verified would say how far the ODE cycle is from exact proportionality"
+- id: rel_mean_field_from_ensemble_equations
+  kind: derived_from
+  a: bangasser2013b/clutch_ensemble_cycle
+  b: gong2018/mean_field_sls
+  steps:
+    - "apply the mean-field theory of ref. 3: interpret Pb, xc and Fc as the average binding probability, displacement and force of any clutch, so all clutches act as one ensemble clutch of stiffness kc nc Pb (Eqs. S3, S5-S7)"
+    - "take the mean off-rate as <roff> = roff0 exp(Fc/Fb), with Fb = 1.3 pN, in place of ref. 3's gamma-distribution closure"
+    - "replace the elastic substrate spring by a standard linear solid (Eq. S4), and add the reinforcement ron = ron0 (1 + alpha (Fa - Fcr)) and the spreading speed Vs = Vp - xc/t_total (Eq. S8)"
+  provenance: stated
+  citation: {page: 11, quote: "by applying the mean-field theory (3), we", where: "SI p. 1, Mean-Field Analysis (SI ref. 3 = Bangasser & Odde 2013)"}
+  assumptions:
+    - "SI ref. 3 is Bangasser & Odde 2013 (SI reference list, p. 13), the source of the clutch-ensemble equations (bangasser2013b Eqs. 8-12, 19)"
+    - "the steps are given in words and both models are ODE integrations with no symbolic form, so the relation cannot be tested: the paper's words stand"
+    - "the two ensemble closures differ: in Bangasser's Eq. 12 newly bound clutches join at the substrate position (<xc> averages over bound and unbound clutches), while Gong's bound ensemble moves as one with the flow; Gong's Bell mean off-rate is not Bangasser's Eq. 19 in any limit of r, because Eq. 19 keeps a (1 - Pb) koff term"
+    - "gong2018/mean_field_elastic is built from mean_field_sls and rests on the same equations"
+# Not entered: Gong's 'an optimum ECM stiffness ... when the cluster binding time equals its lifetime (3)'
+# (SI p. 2) is bangasser2013b's Eq. 29-30 argument, but Gong has no model of that optimum.
+# Not entered: an approximated_by between clutch_ensemble_cycle and mean_field_sls outputs. Both are
+# mean-field ODEs of one motor-clutch model, but their closures differ (see the derived_from above), Gong
+# uses Fb = 1.3 pN and ends a cycle at Pb < 1/nc over ten cycles while Bangasser's ends at the abrupt
+# failure of one; no paper states how close they should be, so a tolerance would be unfounded.
+# Not entered: binding_timescale (tau_b = 1/ron) against tbind_eq23: Gong says only tbind ∝ tau_b, which is
+# the helper relation above with ln(Nc) as the constant.
+#
+# Relations to bell1978 (ref. 27, Bell 1978, Science). Gong cites it once, for the off-rate law (p. 2).
+# Numbers in each model's port units: Bell's f in dyne (1 dyne = 1e7 pN), gamma in nm, kT in eV
+# (1 eV/nm = 160.2176634 pN); Gong's forces in pN.
+- id: rel_bell_off_rate_same_as_loaded_reverse_rate
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: gong2018/bell_off_rate
+  mapping: {roff0: "k_minus", Fc: "1e7*f", Fb: "160.2176634*kT/gamma"}
+  output_map: {roff: k_minus_F}
+  regime: {k_minus: [0.01, 10], gamma: [0.1, 1], f: [0, 2.0e-6], kT: [0.025, 0.027]}
+  provenance: stated
+  citation: {page: 2, quote: "Using a Bell model (27), the dissociation rate", where: "main text p. 2 (ref. 27 = Bell 1978)"}
+  assumptions:
+    - "Gong's characteristic force Fb stands for Bell's kT/gamma, its clutch force Fc for Bell's force per closed bond F/Nb and its roff0 for Bell's k- (correspondences of quantities, not merged); Gong takes Fb as a parameter (1.3 or 2 pN) and never derives it from a barrier range"
+    - "gong2018/bell_off_rate is a helper model: the law is a step inside mean_field_sls (and mean_field_elastic), applied there to the ensemble clutch force as <roff> = roff0 exp(Fc/Fb)"
+    - "regime: Bell's range of barrier distances (gamma ~ r0 of a few Angstrom), kT about 37 degC, and clutch forces 0-20 pN"
+# Not entered: bell1978/detach_time_eq17 against gong2018/mean_field_sls. Both integrate a bond-number
+# equation of the form dN/dt = on-rate (unbound) - off-rate (bound) exp(force per bond / force scale),
+# but Bell holds the total force F constant and shares it among the closed bonds (force per bond F/Nb
+# grows as bonds break), while Gong's ensemble force kc nc Pb (xc - xs) is built up by motors pulling
+# against a viscoelastic substrate and starts each cycle at zero. No limit of Gong's inputs gives a
+# constant total load, the outputs differ (Bell's time to detach from the equilibrium bond number,
+# Gong's load-and-fail cycle duration and spreading speed), and Gong does not relate its ODE to
+# Bell's Eq. 17; an approximated_by would need an unfounded tolerance.
+# Not entered: bell1978/lifetime_eq16 against bell_off_rate: Eq. 16 is the lifetime 1/k- of the same law,
+# already covered by loaded_reverse_rate, and Gong cites Bell only for the rate.
+#
+# Relations to chan2008 (ref. 15 = Table S1 ref. 2 = SI ref. 6, Chan & Odde 2008, Science).
+# Numbers in each model's port units: Chan's E in Pa and length in nm, Gong's E in kPa and R in um.
+- id: rel_mean_field_from_chan_motor_clutch
+  kind: derived_from
+  a: chan2008/motor_clutch
+  b: gong2018/mean_field_sls
+  steps:
+    - "adopt the canonical motor-clutch model of ref. 15: clutches bind at ron and unbind at roff0 exp(Fc/Fb) (Bell), each engaged clutch a spring kc, motors slow the flow by the Hill relation Vf = vu (1 - Fs/(Nm Fm)) (Eqs. 1-5)"
+    - "average all clutches into one ensemble clutch of stiffness kc nc Pb (mean-field, SI ref. 3) in place of the stochastic simulation"
+    - "replace the elastic substrate spring by a standard linear solid (Eq. 2), add the reinforcement ron = ron0 (1 + alpha (Fa - Fcr)) and the spreading speed Vs = Vp - Vf (Eq. 6)"
+  provenance: stated
+  citation: {page: 2, quote: "The canonical motor-clutch model (15), as schematically", where: "main text p. 2, Model Description (ref. 15 = Chan & Odde 2008)"}
+  assumptions:
+    - "the Hill relation of Eq. 4 is also credited to ref. 15 ('through the Hill relation (15)', p. 2), and the KMC method Gong runs alongside the ODE to ref. 15 ('can be simulated by a KMC method (15)', p. 2)"
+    - "Gong's Fc, Fs, Nm, Fm, vu, nc, ron0, roff0, Fb, kc stand for Chan's Fclutch, -kappa_sub x_sub, nm, Fm, vu, nc, kon, koff, Fb, kappa_clutch (correspondences of quantities, not merged)"
+    - "unverifiable as a derivation: the steps are in words and both models are numerical (a stochastic simulation and an ODE integration) with no symbolic form; gong2018/mean_field_elastic is built from mean_field_sls and rests on the same steps"
+- id: rel_bell_off_rate_same_as_chan_eq1
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: gong2018/bell_off_rate
+  mapping: {roff0: "koff", Fc: "Fclutch", Fb: "Fb"}
+  output_map: {roff: koff_star}
+  regime: {koff: [0.01, 10], Fclutch: [0.1, 20], Fb: [1, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers take the loaded clutch off-rate from Bell (Chan SOM Eq. 1, ref. S5; Gong p. 2, ref. 27) in
+    the same variables: unloaded off-rate times exp(clutch force / characteristic force). Gong cites Bell,
+    not Chan, for the law, so the relation is proposed, though Gong's model is the motor-clutch model of
+    ref. 15 that contains Chan's Eq. 1.
+  assumptions:
+    - "regime in positive forces; Chan's Table S1 prints Fclutch and Fb both negative, which leaves their ratio unchanged; Gong counts both positive"
+- id: rel_boussinesq_scales_as_chan_ksub
+  kind: scales_as
+  a: chan2008/ksub_eq13
+  b: gong2018/boussinesq_eq_s9
+  mapping: {R: "L/1000", E: "E/1000", nu: "0.5"}
+  output_map: {k: ksub}
+  regime: {E: [100, 100000], L: [50, 1000], nu: [0.3, 0.5]}
+  provenance: proposed
+  reason: >-
+    Both convert a Young's modulus into a substrate spring constant through a length: Chan's 1-D Cerruti
+    estimate kappa_sub = pi E delta / (1 + nu) (Eq. 13) and Gong's Boussinesq contact stiffness
+    kc = 4 pi R E / (7 (1 + nu)(1 - 0.86 nu)) (Eq. S9). Both are proportional to the modulus and to the
+    length, so they scale alike in E and in the length.
+  assumptions:
+    - "the claim is the scaling in E and length only: the Poisson-ratio factors differ (1/(1+nu) against 1/((1+nu)(1-0.86 nu))), so Gong's nu is held at its stated 0.5 (SI p. 2) and not mapped to Chan's nu"
+    - "the lengths are different quantities: Chan's delta is the distance from a tangential point force to a marker bead (about 150 nm, chan2008 PDF p. 24), Gong's R the radius of a circular normal contact (0.5 um); Gong cites the Boussinesq solution to its SI ref. 7, not to Chan"
+    - "not entered as same_as or approximated_by: at nu = 0.5 and R = delta the two prefactors happen to agree within 0.3% (pi/1.5 against 4 pi/(7 x 1.5 x 0.57)), but they rest on different load cases, and the agreement falls off fast as nu leaves 0.5 (7% at nu = 0.45), so a tolerance would be unfounded"
+# Not entered: an approximated_by between chan2008/motor_clutch and gong2018/mean_field_elastic (or
+# mean_field_sls). Chan's outputs are the time-averaged retrograde flow, mean traction and peak force of a
+# stochastic run; Gong's are Vs = Vp - xc/t_total, the cycle lifetime and the mean ensemble clutch force.
+# With Vp = 0, Vs is -Vf, of the opposite sign to Chan's v_retro, so no mapping gives the flow without a
+# helper model; Gong's Fa is a per-clutch force, Chan's F_mean the substrate traction. Gong compares its
+# ODE with its own KMC (Fig. 1C-D, Fig. S1A), not with Chan's simulation, and uses Fb = 1.3 pN in the ODE
+# against 2 pN in the KMC, so no tolerance is stated or founded.
+# Not entered: 'Similar to the case of a pure elastic substrate (6)' (SI p. 2; SI ref. 6 = Chan & Odde)
+# introduces Gong's cycle analysis (tbind, tlife, tau_l); chan2008 has no model of these timescales.
+# cited.yaml: no link to chan2008. Gong's Table S1 values give sources (1, 2) and are recorded from
+# ref-S1-1 (Bangasser & Odde 2013), already linked; no datum names ref-15 or ref-S1-2 as its source.

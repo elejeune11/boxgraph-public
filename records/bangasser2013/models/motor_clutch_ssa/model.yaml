@@ -1,0 +1,30 @@
+id: motor_clutch_ssa
+name: stochastic motor-clutch model simulated with the Gillespie SSA (Eq. 1 and the Supporting Material algorithm)
+role: model
+stated: {page: 14, quote: "The model simulation algorithm from Chan and Odde(1) was updated", where: "Supporting Material, Model Simulation Algorithm (steps 1-8); Eq. 1 (p. 2)"}
+equation: >-
+  t_event,i = -ln(URN_i)/k_i (Eq. 1), k_i = kon for a free clutch and koff* = koff exp(F_i/Fb) for an
+  engaged clutch (Bell slip bond, p. 2 and Eq. 9 first term), F_i = κc (x_i - x_sub); the event with the
+  shortest t_event,i is executed and time advances by it; v_f = vu (1 - κsub x_sub/(nm Fm)) (linear
+  force-velocity, ref. 15); engaged clutches advance by v_f Δt; x_sub from the force balance on the
+  substrate and clutch springs, x_sub = κc Σ x_i/(κsub + n_eng κc) (ref. 15)
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ksub: {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  v_retro: {quantity: retrograde_flow_rate, unit: nm/s, description: "time average of the F-actin flow v_f over the run"}
+  F_mean:  {quantity: mean_traction_force, unit: pN, description: "time average of κsub x_sub over the run"}
+  n_eng:   {quantity: engaged_clutch_number, unit: dimensionless, description: "time average of the number of engaged clutches"}
+  k_ens:   {quantity: ensemble_clutch_stiffness, unit: pN/nm, description: "κc times the mean number of engaged clutches (definition, p. 7)"}
+  t_cycle: {quantity: load_fail_cycle_time, unit: s, description: "run time divided by the number of times the last engaged clutch let go (reader's definition of a cycle)"}
+settings: {t_total: 1000.0, seed: 1}
+stochastic: true
+from_words: true
+described_from: chan2008

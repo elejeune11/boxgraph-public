@@ -1,0 +1,12 @@
+# The event-stepping simulation has no time step; its numerical setting is the run length, events
+# (1e5, motorclutch2_3.m line 26), over which every average is taken. Refined on the base set (Fig. 2
+# stiffnesses); the other runs share the code and the setting.
+- {id: ref_events_b13_v, run: run_b13_fig2, setting: events, factors: [1, 2, 4], mode: multiply, output: v_retro,
+   tolerance: "1.5", tolerance_basis: "added: about the half-width of the readings of Fig. 2C (1.0-2.3 nm/s)", tolerance_added: true}
+- {id: ref_events_b13_F, run: run_b13_fig2, setting: events, factors: [1, 2, 4], mode: multiply, output: F_trac,
+   tolerance: "1.0", tolerance_basis: "added: about the half-width of the readings of Fig. 2B (0.8-1.7 pN)", tolerance_added: true}
+# The stiffness grid on which the optimum is located (logspace(-2,2,10), line 27; the location is ours).
+- {id: ref_grid_b13, run: run_b13_opt, setting: n_points, factors: [1, 2, 4], mode: multiply, output: ks_opt,
+   tolerance: "0.007", tolerance_basis: "added: the half-width of the reading of the Fig. 2C dashed line it is compared with", tolerance_added: true}
+- {id: ref_grid_n25,run: run_n25_opt, setting: n_points, factors: [1, 2, 4], mode: multiply, output: ks_opt,
+   tolerance: "0.05", tolerance_basis: "added: half the last printed digit of the 0.4 pN/nm it is compared with", tolerance_added: true}

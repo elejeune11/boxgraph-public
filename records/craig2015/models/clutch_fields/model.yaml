@@ -1,0 +1,27 @@
+id: clutch_fields
+name: steady-state myosin density, adhesion density, myosin force and viscous force of the adhesion-clutch model (Eqs. 5-9)
+role: model
+stated: {page: 7, quote: "The model equations can be expressed in the fol-", where: "Eqs. 5-9"}
+equation: >
+  M~ = 1 - gamma d(V~ M~)/dx~;  F~myo = F dM~/dx~;  N~adh = (1 + b F dM~/dx~) exp(-V~/v*);
+  lambda d2V~/dx~2 = T~ - F~myo (the internal viscous force);  V~ from Eqs. 5-9 as in clutch_profile
+inputs:
+  lam: {quantity: viscosity_parameter, unit: dimensionless}
+  F: {quantity: myosin_strength_parameter, unit: dimensionless}
+  b: {quantity: strengthening_parameter, unit: dimensionless}
+  vstar: {quantity: flow_weakening_parameter, unit: dimensionless}
+  gamma: {quantity: myosin_detachment_parameter, unit: dimensionless}
+  x: {quantity: distance_from_leading_edge, unit: um, description: "where the field is reported (L0 = 1 um, so x~ = x / um)"}
+outputs:
+  M: {quantity: scaled_myosin_density, unit: dimensionless}
+  dM: {quantity: scaled_myosin_gradient, unit: dimensionless}
+  N: {quantity: scaled_adhesion_density, unit: dimensionless}
+  Fmyo: {quantity: scaled_myosin_force, unit: dimensionless}
+  Fvisc: {quantity: scaled_viscous_force, unit: dimensionless}
+settings:
+  n_segments: 40
+  L: 8.0
+  dM_scheme: central    # added: see clutch_profile (question q_numerics_scheme)
+  neumann: first_order  # added: see clutch_profile (question q_neumann_choice)
+built_from: [clutch_profile]
+stochastic: false

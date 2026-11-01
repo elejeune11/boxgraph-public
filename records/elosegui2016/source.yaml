@@ -1,0 +1,46 @@
+id: elosegui2016
+kind: article
+title: Mechanical regulation of a molecular clutch defines force transmission and transduction in response to matrix rigidity
+authors: [Alberto Elosegui-Artola, Roger Oria, Yunfeng Chen, Anita Kosmalska, Carlos Pérez-González, Natalia Castro,
+  Cheng Zhu, Xavier Trepat, Pere Roca-Cusachs]
+year: 2016
+venue: Nature Cell Biology 18, 540-548
+doi: 10.1038/ncb3336
+file: corpus/2016_Elosegui-Artola.pdf
+page_range: [1, 26]
+pages: {1: "540", 2: "541", 3: "542", 4: "543", 5: "544", 6: "545", 7: "546", 8: "547", 9: "548",
+  12: "SI 1", 13: "SI 2", 14: "SI 3", 15: "SI 4", 16: "SI 5", 17: "SI 6", 18: "SI 7", 19: "SI 8", 20: "SI 9",
+  21: "SI 10", 22: "SI 11"}
+reader: {kind: agent, name: boxgraph-reader, model: claude-opus-5-5, prompt_version: "reader-1", date: "2026-11-01"}
+notes: >
+  PDF pp. 1-9 are the article, 10-11 the Methods, 12-26 the Supplementary Information (Supplementary Table 1,
+  the model parameters, on p. 19; the Supplementary Note, the clutch model, on pp. 23-26).
+  In scope: the stochastic clutch model with talin unfolding (Supplementary Note), made runnable from its
+  words (clutch_talin_sim), and the same model without unfolding (clutch_no_talin_sim), which produce the
+  model lines of Fig. 3d (traction), Fig. 3e (actin flow) and Fig. 6a-i (nine treatments, each with the
+  parameters printed in the Fig. 6 caption); the threshold sensitivities S of Supplementary Table 1
+  (threshold_sensitivity, p. 25); the unfolding/refolding crossing (5 pN, p. 5) as a check of the added talin
+  rate laws; and two consistency checks (FR 7.3% vs 0.073; nf 1200 in Fig. 6b vs the table).
+  The paper prints no coefficients of the catch-bond and talin rate laws, no vinculin binding rate, no
+  formula converting k_sub to Young's modulus and no size of its low-force off-rate increase: these are added,
+  mostly from the same laboratory's released 2021 code (record andreu2021_code), and labelled (q_rate_laws,
+  q_vinculin_rate, q_ksub_conversion, q_low_force_koff). The step algorithm is a reading of the note's words
+  (q_step_algorithm). All plotted lines and data are read by the record's own code (figures.md).
+  Findings: the no-talin model reproduces every plotted no-talin line read (11 panels); the talin model
+  reproduces Fig. 6g-i and the low-rigidity part of the other talin lines but departs from them above the
+  threshold (q_talin_line_high_rigidity); none of the five printed sensitivities is reproduced, and S for nf
+  and kont comes out with the opposite sign (q_sensitivity_sign); the model's threshold (about 2 kPa) is below
+  the measured 5 kPa; the printed 5 ms step is not converged (q_dt_numerics). Against the measured traction
+  and flow, the talin model is close for most control series and the no-talin model is mostly not reproduced
+  for the shRNA series. Alternatives of the added k_sub conversion and low-force off-rate change many
+  verdicts; the vinculin rate changes few.
+  A second figure pass (figures/_gen.py, figures/_panels.py; figures.md) read every other plotted
+  measurement: Fig. 1a (L325R, detection level), 1c, 1e, 2a, 2c, 3a, 4a-c, 4e-f, 5a-c, 5e-f, 6j-l and
+  Supplementary Figs. 1b, 2, 3a-b, 4a, 4c, 4e, 5a-c and 6 (86 readings), as data for later models; the
+  Fig. 1a and Supplementary Fig. 2 tractions are validated against the clutch models, and the Fig. 3a
+  unfolding-time line against 1/k_unf of the added slip-bond law (talin_unfolding_time), which comes out about
+  half the plotted times (q_fig3a_unfolding_fit).
+  Left out: the 95% confidence intervals of Supplementary Table 1 (they need the raw data and the Jacobian
+  of the authors' fit); sigmoid fit lines and micrographs (figures.md); Supplementary
+  Table 2 except the two gel moduli used for refinement; Supplementary Table 3 (sample sizes and p values).
+  The files figures/_stub.py and figures/_fig3d.py are leftovers of the reading, not used by any reading.

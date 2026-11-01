@@ -1,0 +1,235 @@
+# κsub from Eq. 13 for the two Fig. 3C gels
+- id: run_ksub_260
+  model: ksub_eq13
+  inputs: {E: E_260, L: L_eq13_added, nu: nu_gel}
+  outputs: {ksub: ksub_260_pred}
+  note: "υ in Eq. 13 is not given a value; the hydrogel's υ = 0.3 stated with Eq. 8 is used"
+- id: run_ksub_57k
+  model: ksub_eq13
+  inputs: {E: E_57k, L: L_eq13_added, nu: nu_gel}
+  outputs: {ksub: ksub_57k_pred}
+
+# Fig. 1D: mean retrograde flow against κsub, Table S1 parameters
+- id: run_fig1d
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: v_fig1d}
+  outputs: {v_retro: v_fig1d_pred, F_mean: Fmean_fig1d_pred, F_max: Fmax_fig1d_pred}
+  note: "one 300 s run per stiffness at dt = 5 ms, seed 1; statistics over the whole run"
+
+# Fig. S1: mean retrograde flow against gel modulus
+- id: run_figS1A_koff01
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1A_koff01}
+  outputs: {v_retro: v_figS1A_koff01_pred, F_mean: Fmean_figS1A_koff01_pred, F_max: Fmax_figS1A_koff01_pred, ksub: ksub_figS1_pred}
+- id: run_figS1A_koff03
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1_x3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1A_koff03}
+  outputs: {v_retro: v_figS1A_koff03_pred, F_mean: Fmean_figS1A_koff03_pred, F_max: Fmax_figS1A_koff03_pred, ksub: ksub_figS1A_koff03_pred}
+- id: run_figS1A_koff003
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1_div3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1A_koff003}
+  outputs: {v_retro: v_figS1A_koff003_pred, F_mean: Fmean_figS1A_koff003_pred, F_max: Fmax_figS1A_koff003_pred, ksub: ksub_figS1A_koff003_pred}
+- id: run_figS1B_nc45
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1B, kon: kon_S1, koff: koff_S1_div3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1B_nc45}
+  outputs: {v_retro: v_figS1B_nc45_pred, F_mean: Fmean_figS1B_nc45_pred, F_max: Fmax_figS1B_nc45_pred, ksub: ksub_figS1B_pred}
+- id: run_figS1C_nc145
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1C, kon: kon_S1, koff: koff_S1_x3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1C_nc145}
+  outputs: {v_retro: v_figS1C_nc145_pred, F_mean: Fmean_figS1C_nc145_pred, F_max: Fmax_figS1C_nc145_pred, ksub: ksub_figS1C_pred}
+
+# Fig. 3C gels: retrograde flow on 260 Pa and 57 kPa PAGs
+- id: run_v_260
+  model: motor_clutch_E
+  inputs: {E: E_260, L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  outputs: {v_retro: v_260_pred, F_mean: Fmean_260_pred, F_max: Fmax_260_pred, ksub: ksub_260_run}
+- id: run_v_57k
+  model: motor_clutch_E
+  inputs: {E: E_57k, L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  outputs: {v_retro: v_57k_pred, F_mean: Fmean_57k_pred, F_max: Fmax_57k_pred, ksub: ksub_57k_run}
+
+# The same, at the time step where the refinements settle (dt / 8 = 0.625 ms)
+- id: run_fig1d_fine
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: v_fig1d}
+  settings: {dt: 0.000625}
+  outputs: {v_retro: v_fig1d_fine_pred, F_mean: Fmean_fig1d_fine_pred, F_max: Fmax_fig1d_fine_pred}
+  note: "added choice: dt = 0.625 ms, the paper's 5 ms divided by 8, where ref_dt_260 and ref_dt_fig1d settle"
+- id: run_v_260_fine
+  model: motor_clutch_E
+  inputs: {E: E_260, L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  settings: {dt: 0.000625}
+  outputs: {v_retro: v_260_fine_pred, F_mean: Fmean_260_fine_pred, F_max: Fmax_260_fine_pred, ksub: ksub_260_fine_run}
+  note: "added choice: dt = 0.625 ms, where ref_dt_260 settles"
+- id: run_v_57k_fine
+  model: motor_clutch_E
+  inputs: {E: E_57k, L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  settings: {dt: 0.000625}
+  outputs: {v_retro: v_57k_fine_pred, F_mean: Fmean_57k_fine_pred, F_max: Fmax_57k_fine_pred, ksub: ksub_57k_fine_run}
+  note: "added choice: dt = 0.625 ms, where ref_dt_57k settles"
+
+# Fig. S10: the largest traction force the model reaches, against the measured <T>
+- id: run_tmax
+  model: motor_clutch_E
+  inputs: {E: E_trace_added, L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  outputs: {v_retro: v_trace_pred, F_mean: Fmean_trace_pred, F_max: Fmax_trace_pred, ksub: ksub_trace_run}
+  note: "F_max is the largest |κsub xsub| over one 300 s run; the printed <T> is a mean over 18 traces of each trace's maximum"
+
+# ---- runs at the x positions of the calibrated figure readings (figures.yaml) ---------------
+# Fig. 1D flow and traction, Table S1 parameters, the paper's dt = 5 ms
+- id: run_fig1d_read
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: v_fig1d_read}
+  outputs: {v_retro: v_fig1d_read_pred, F_mean: Fmean_fig1d_read_pred, F_max: Fmax_fig1d_read_pred}
+- id: run_fig1d_soft_read
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: v_fig1d_soft_read}
+  outputs: {v_retro: v_fig1d_soft_read_pred, F_mean: Fmean_fig1d_soft_read_pred, F_max: Fmax_fig1d_soft_read_pred}
+- id: run_fig1d_F_soft
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: F_fig1d_soft_read}
+  outputs: {v_retro: v_fig1d_F_soft_pred, F_mean: F_fig1d_soft_pred, F_max: Fmax_fig1d_F_soft_pred}
+- id: run_fig1d_F_band
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: F_fig1d_band_read}
+  outputs: {v_retro: v_fig1d_F_band_pred, F_mean: F_fig1d_band_pred, F_max: Fmax_fig1d_F_band_pred}
+- id: run_fig1d_F_band2
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: F_fig1d_band2_read}
+  outputs: {v_retro: v_fig1d_F_band2_pred, F_mean: F_fig1d_band2_pred, F_max: Fmax_fig1d_F_band2_pred}
+- id: run_fig1d_F_stiff
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: F_fig1d_stiff_read}
+  outputs: {v_retro: v_fig1d_F_stiff_pred, F_mean: F_fig1d_stiff_pred, F_max: Fmax_fig1d_F_stiff_pred}
+# the same flow readings at the settled step (dt / 8)
+- id: run_fig1d_read_fine
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: v_fig1d_read}
+  settings: {dt: 0.000625}
+  outputs: {v_retro: v_fig1d_read_fine_pred, F_mean: Fmean_fig1d_read_fine_pred, F_max: Fmax_fig1d_read_fine_pred}
+  note: "added choice: dt = 0.625 ms, where ref_dt_260 and ref_dt_fig1d settle"
+- id: run_fig1d_soft_read_fine
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {ksub: v_fig1d_soft_read}
+  settings: {dt: 0.000625}
+  outputs: {v_retro: v_fig1d_soft_read_fine_pred, F_mean: Fmean_fig1d_soft_read_fine_pred, F_max: Fmax_fig1d_soft_read_fine_pred}
+  note: "added choice: dt = 0.625 ms"
+
+# Fig. 3D: simulation and measured means against E, κsub from Eq. 13 with L_eq13_added
+- id: run_fig3d_sim_rise
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_sim_rise}
+  outputs: {v_retro: v_fig3d_sim_rise_pred, F_mean: Fmean_fig3d_sim_rise_pred, F_max: Fmax_fig3d_sim_rise_pred, ksub: ksub_fig3d_sim_rise_run}
+- id: run_fig3d_sim_upper
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_sim_upper}
+  outputs: {v_retro: v_fig3d_sim_upper_pred, F_mean: Fmean_fig3d_sim_upper_pred, F_max: Fmax_fig3d_sim_upper_pred, ksub: ksub_fig3d_sim_upper_run}
+- id: run_fig3d_sim_stiff
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_sim_stiff}
+  outputs: {v_retro: v_fig3d_sim_stiff_pred, F_mean: Fmean_fig3d_sim_stiff_pred, F_max: Fmax_fig3d_sim_stiff_pred, ksub: ksub_fig3d_sim_stiff_run}
+- id: run_fig3d_exp_soft
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_exp_soft}
+  outputs: {v_retro: v_fig3d_exp_soft_pred, F_mean: Fmean_fig3d_exp_soft_pred, F_max: Fmax_fig3d_exp_soft_pred, ksub: ksub_fig3d_exp_soft_run}
+- id: run_fig3d_exp_green
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_exp_green}
+  outputs: {v_retro: v_fig3d_exp_green_pred, F_mean: Fmean_fig3d_exp_green_pred, F_max: Fmax_fig3d_exp_green_pred, ksub: ksub_fig3d_exp_green_run}
+- id: run_fig3d_exp_yellow
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_exp_yellow}
+  outputs: {v_retro: v_fig3d_exp_yellow_pred, F_mean: Fmean_fig3d_exp_yellow_pred, F_max: Fmax_fig3d_exp_yellow_pred, ksub: ksub_fig3d_exp_yellow_run}
+- id: run_fig3d_exp_orange
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_exp_orange}
+  outputs: {v_retro: v_fig3d_exp_orange_pred, F_mean: Fmean_fig3d_exp_orange_pred, F_max: Fmax_fig3d_exp_orange_pred, ksub: ksub_fig3d_exp_orange_run}
+- id: run_fig3d_exp_red
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_exp_red}
+  outputs: {v_retro: v_fig3d_exp_red_pred, F_mean: Fmean_fig3d_exp_red_pred, F_max: Fmax_fig3d_exp_red_pred, ksub: ksub_fig3d_exp_red_run}
+# the Fig. 3D simulation readings at the settled step
+- id: run_fig3d_sim_rise_fine
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_sim_rise}
+  settings: {dt: 0.000625}
+  outputs: {v_retro: v_fig3d_sim_rise_fine_pred, F_mean: Fmean_fig3d_sim_rise_fine_pred, F_max: Fmax_fig3d_sim_rise_fine_pred, ksub: ksub_fig3d_sim_rise_fine_run}
+  note: "added choice: dt = 0.625 ms"
+
+# Fig. S1 curves
+- id: run_figS1A_koff01_read
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1A_koff01_read}
+  outputs: {v_retro: v_figS1A_koff01_read_pred, F_mean: Fmean_figS1A_koff01_read_pred, F_max: Fmax_figS1A_koff01_read_pred, ksub: ksub_figS1A_koff01_read_run}
+- id: run_figS1A_koff03_read
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1_x3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1A_koff03_read}
+  outputs: {v_retro: v_figS1A_koff03_read_pred, F_mean: Fmean_figS1A_koff03_read_pred, F_max: Fmax_figS1A_koff03_read_pred, ksub: ksub_figS1A_koff03_read_run}
+- id: run_figS1A_koff003_read
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1_div3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1A_koff003_read}
+  outputs: {v_retro: v_figS1A_koff003_read_pred, F_mean: Fmean_figS1A_koff003_read_pred, F_max: Fmax_figS1A_koff003_read_pred, ksub: ksub_figS1A_koff003_read_run}
+- id: run_figS1A_koff003_stiff_read
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1_div3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1A_koff003_stiff_read}
+  outputs: {v_retro: v_figS1A_koff003_stiff_read_pred, F_mean: Fmean_figS1A_koff003_stiff_read_pred, F_max: Fmax_figS1A_koff003_stiff_read_pred, ksub: ksub_figS1A_koff003_stiff_read_run}
+- id: run_figS1B_nc45_read
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1B, kon: kon_S1, koff: koff_S1_div3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1B_nc45_read}
+  outputs: {v_retro: v_figS1B_nc45_read_pred, F_mean: Fmean_figS1B_nc45_read_pred, F_max: Fmax_figS1B_nc45_read_pred, ksub: ksub_figS1B_nc45_read_run}
+- id: run_figS1B_nc45_soft_read
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1B, kon: kon_S1, koff: koff_S1_div3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1B_nc45_soft_read}
+  outputs: {v_retro: v_figS1B_nc45_soft_read_pred, F_mean: Fmean_figS1B_nc45_soft_read_pred, F_max: Fmax_figS1B_nc45_soft_read_pred, ksub: ksub_figS1B_nc45_soft_read_run}
+- id: run_figS1C_nc145_read
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1C, kon: kon_S1, koff: koff_S1_x3, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS1C_nc145_read}
+  outputs: {v_retro: v_figS1C_nc145_read_pred, F_mean: Fmean_figS1C_nc145_read_pred, F_max: Fmax_figS1C_nc145_read_pred, ksub: ksub_figS1C_nc145_read_run}
+# second figure pass: the Fig. 3D measured means with their SEMs (code reading fig3d_exp_sem)
+- id: run_fig3d_exp_sem
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_fig3d_exp_sem}
+  outputs: {v_retro: v_fig3d_exp_sem_pred, F_mean: Fmean_fig3d_exp_sem_pred, F_max: Fmax_fig3d_exp_sem_pred, ksub: ksub_fig3d_exp_sem_run}
+# Fig. S8C: control and GFP-actin transfected flow on 260 Pa and 24 kPa gels
+- id: run_figS8C_control
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS8C_control}
+  outputs: {v_retro: v_figS8C_control_pred, F_mean: Fmean_figS8C_control_pred, F_max: Fmax_figS8C_control_pred, ksub: ksub_figS8C_control_run}
+- id: run_figS8C_gfp
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: v_figS8C_gfp}
+  outputs: {v_retro: v_figS8C_gfp_pred, F_mean: Fmean_figS8C_gfp_pred, F_max: Fmax_figS8C_gfp_pred, ksub: ksub_figS8C_gfp_run}

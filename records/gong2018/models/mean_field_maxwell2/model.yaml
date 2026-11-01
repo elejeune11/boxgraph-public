@@ -1,0 +1,38 @@
+id: mean_field_maxwell2
+name: mean-field motor-clutch model with reinforcement on a generalized Maxwell substrate with two elements (Eqs. S11-S12, Fig. S8D)
+role: model
+stated: {page: 12, quote: "we replaced the standard linear viscoelastic model with the gener", where: "Eqs. S11-S12 (SI pp. 12-13); Fig. S8D"}
+equation: >-
+  sigma_i = eta_i dx_eta,i/dt = ka,i (xs - x_eta,i), i = 1, 2 (S11); kl xs + sum_i sigma_i = Fs (S12);
+  tau_s,i = eta_i / ka,i; with Eqs. S3, S5-S8 and the reinforcement rule as in mean_field_sls
+inputs:
+  nm:     {quantity: motor_number, unit: dimensionless}
+  Fm:     {quantity: motor_stall_force, unit: pN}
+  Fcr:    {quantity: reinforcement_threshold_force, unit: pN}
+  nc:     {quantity: clutch_number, unit: dimensionless}
+  Fb:     {quantity: clutch_rupture_force, unit: pN}
+  ron0:   {quantity: clutch_on_rate, unit: 1/s}
+  roff0:  {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  kc:     {quantity: clutch_stiffness, unit: pN/nm}
+  vu:     {quantity: unloaded_flow_velocity, unit: nm/s}
+  Vp:     {quantity: polymerization_speed, unit: nm/s}
+  alpha:  {quantity: reinforcement_sensitivity, unit: 1/pN}
+  kl:     {quantity: long_term_stiffness, unit: pN/nm}
+  ka1:    {quantity: additional_stiffness, unit: pN/nm}
+  eta1:   {quantity: substrate_viscosity, unit: pN*s/nm}
+  ka2:    {quantity: additional_stiffness, unit: pN/nm}
+  tau_s2: {quantity: relaxation_timescale, unit: s}
+outputs:
+  Vs: {quantity: spreading_speed, unit: nm/s}
+settings:
+  n_cycles: 10
+  break_fraction: 0.013333333333333334
+  t_max: 2000.0
+  cumulative: 1
+  fa_weighted: 0
+  p_start: 1.0e-9
+  rtol: 1.0e-7
+  max_step: 1.0
+  n_avg: 2000
+stochastic: false
+built_from: [mean_field_sls]

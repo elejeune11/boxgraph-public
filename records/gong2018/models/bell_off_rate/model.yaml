@@ -1,0 +1,15 @@
+id: bell_off_rate
+name: clutch dissociation rate under force, from a Bell model (p. 2)
+role: model
+stated: {page: 2, quote: "Using a Bell model (27), the dissociation rate", where: "main text p. 2 (ref. 27 = Bell 1978)"}
+equation: "roff,i = roff0 · exp(Fc,i/Fb)"
+inputs:
+  roff0: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fc:    {quantity: clutch_force, unit: pN}
+  Fb:    {quantity: clutch_rupture_force, unit: pN}
+outputs:
+  roff: {quantity: clutch_off_rate_loaded, unit: 1/s}
+settings: {}
+stochastic: false
+# A helper model for the relator: the paper states this off-rate law as a Bell model, citing ref. 27
+# (bell1978); it is a step inside mean_field_sls, which prints no off-rate.

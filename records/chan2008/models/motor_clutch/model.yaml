@@ -1,0 +1,26 @@
+id: motor_clutch
+name: stochastic motor-clutch model of a filopodium on a compliant substrate (SOM Eqs. 1-5)
+role: model
+stated: {page: 10, printed_page: "SOM p. 3", quote: "we assume that the effective dissociation rate, koff*, increases", where: "Eqs. 1-5 and Model Methodology, SOM pp. 3-5"}
+equation: >-
+  koff* = koff exp(Fclutch/Fb) (Eq. 1); Fclutch(i) = κclutch (xi - xsub) (Eq. 2);
+  vfilament = vu (1 - κsub xsub / Fstall) (Eq. 3); Fstall = nm Fm (Eq. 4);
+  xsub = κclutch Σ xi / (κsub + neng κclutch) (Eq. 5); each Monte Carlo step: clutches
+  associate at kon, engaged clutches dissociate at koff*, xsub from Eq. 5, vfilament from
+  Eq. 3, engaged clutches displaced by Δx = vfilament Δt
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ksub: {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  v_retro: {quantity: retrograde_flow_rate, unit: nm/s, description: "time average of -vfilament over the run"}
+  F_mean:  {quantity: mean_traction_force, unit: pN, description: "time average of -κsub xsub over the run"}
+  F_max:   {quantity: peak_filopodial_force, unit: pN, description: "most negative κsub xsub reached in the run (model sign)"}
+settings: {dt: 0.005, t_total: 300.0, seed: 1}
+stochastic: true

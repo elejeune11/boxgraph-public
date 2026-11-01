@@ -1,0 +1,792 @@
+# ---- the motor-clutch simulation, base parameters (Table 1), Fig. 2 --------------------------
+# Simulated time per run is not printed: t_total = 1000 s is the reader's choice (q_sim_length).
+- id: run_fig2_nc50
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc50}
+  outputs: {v_retro: v_fig2_nc50_pred, F_mean: F_fig2_nc50_pred}
+  note: "added choice: 1000 s simulated per point, averages over the whole run"
+- id: run_fig2_nc100
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_100, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc100}
+  outputs: {v_retro: v_fig2_nc100_pred, F_mean: F_fig2_nc100_pred}
+- id: run_fig2_nc5
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_5, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc5}
+  outputs: {v_retro: v_fig2_nc5_pred}
+- id: run_fig2_nc300
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_300, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc300}
+  outputs: {v_retro: v_fig2_nc300_pred, F_mean: F_fig2_nc300_pred}
+
+# ---- Fig. 6B and 6D: ensemble clutch stiffness and cycle time, base parameters ----------------
+- id: run_fig6b
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: kens_fig6b}
+  outputs: {k_ens: kens_fig6b_pred}
+- id: run_fig6d
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: tcycle_fig6d}
+  outputs: {t_cycle: tcycle_fig6d_pred}
+  note: "the paper does not define how a cycle is counted; here a cycle ends each time the last engaged clutch lets go (q_cycle_definition)"
+- id: run_tbinding
+  model: binding_time_eq10
+  inputs: {nc: nc_base, kon: kon_base}
+  outputs: {tbinding: tbinding_pred}
+
+# ---- Fig. S1A: the new algorithm on the parameters of Chan and Odde 2008 --------------------
+- id: run_figS1a
+  model: motor_clutch_ssa
+  inputs: {nm: nm_chan, Fm: Fm_chan, vu: vu_chan, nc: nc_chan, kon: kon_chan, koff: koff_chan, Fb: Fb_chan, kc: kc_chan}
+  sweep: {ksub: v_figS1a_present}
+  outputs: {v_retro: v_figS1a_pred}
+
+# ---- Fig. 7A: Table S1 parameters; 100 s per run to keep each call short ---------------------
+- id: run_fig7a
+  model: motor_clutch_ssa
+  inputs: {nm: nm_7a, Fm: Fm_7a, vu: vu_7a, nc: nc_7a, kon: kon_7a, koff: koff_7a, Fb: Fb_7a, kc: kc_7a}
+  sweep: {ksub: F_fig7a}
+  settings: {t_total: 100.0}
+  outputs: {F_mean: F_fig7a_pred}
+  note: "added choice: 100 s simulated per point (2000 clutches); the paper's traces in Fig. 7A span 40 s"
+- id: run_fig7a_minus_clutch
+  model: motor_clutch_ssa
+  inputs: {nm: nm_7a, Fm: Fm_7a, vu: vu_7a, nc: nc_7a_minus_clutch, kon: kon_7a, koff: koff_7a, Fb: Fb_7a, kc: kc_7a, ksub: ksub_8}
+  settings: {t_total: 100.0}
+  outputs: {F_mean: F_fig7a_minus_clutch_pred}
+  note: "added choice: 100 s simulated"
+- id: run_fig7a_minus_motor
+  model: motor_clutch_ssa
+  inputs: {nm: nm_7a_minus_motor, Fm: Fm_7a, vu: vu_7a, nc: nc_7a, kon: kon_7a, koff: koff_7a, Fb: Fb_7a, kc: kc_7a, ksub: ksub_32}
+  settings: {t_total: 100.0}
+  outputs: {F_mean: F_fig7a_minus_motor_pred}
+  note: "added choice: 100 s simulated"
+
+# ---- Fig. 7C: the fitted catch-slip lifetime (Eq. 9, Table S1 column Fig. 7C) ----------------
+- id: run_fig7c_lifetime
+  model: catch_slip_eq9
+  inputs: {koff: koff_7c, Fb: Fb_7c, koffc: koffc_7c, Fc: Fc_7c}
+  sweep: {F: tau_fig7c}
+  outputs: {tau: tau_fig7c_pred}
+
+# ---- S for kon (Eq. 3): optimal stiffness at 0.25-, 0.5-, 1-, 2- and 4-fold kon --------------
+- {id: run_kon_x025, model: scale_kon_eq5, inputs: {c: fold_025, kon0: kon_base}, outputs: {kon: kon_x025}}
+- {id: run_kon_x05,  model: scale_kon_eq5, inputs: {c: fold_05,  kon0: kon_base}, outputs: {kon: kon_x05}}
+- {id: run_kon_x2,   model: scale_kon_eq5, inputs: {c: fold_2,   kon0: kon_base}, outputs: {kon: kon_x2}}
+- {id: run_kon_x4,   model: scale_kon_eq5, inputs: {c: fold_4,   kon0: kon_base}, outputs: {kon: kon_x4}}
+- id: run_opt_kon_x025
+  model: optimal_stiffness
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x025, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  outputs: {ks_opt: ksopt_kon_x025, v_min: vmin_kon_x025}
+  note: "added choices: grid 0.001-100 pN/nm at 4 points per decade, 1000 s per point (q_optimum_search)"
+- id: run_opt_kon_x05
+  model: optimal_stiffness
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x05, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  outputs: {ks_opt: ksopt_kon_x05, v_min: vmin_kon_x05}
+- id: run_opt_base
+  model: optimal_stiffness
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  outputs: {ks_opt: ksopt_base, v_min: vmin_base}
+- id: run_opt_kon_x2
+  model: optimal_stiffness
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x2, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  outputs: {ks_opt: ksopt_kon_x2, v_min: vmin_kon_x2}
+- id: run_opt_kon_x4
+  model: optimal_stiffness
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x4, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  outputs: {ks_opt: ksopt_kon_x4, v_min: vmin_kon_x4}
+- id: run_S_kon
+  model: sensitivity_eq3
+  inputs: {c1: fold_025, c2: fold_05, c3: fold_1, c4: fold_2, c5: fold_4,
+           k1: ksopt_kon_x025, k2: ksopt_kon_x05, k3: ksopt_base, k4: ksopt_kon_x2, k5: ksopt_kon_x4}
+  outputs: {S: S_kon_pred}
+  note: "uses the mean of the replicate optima at each fold change"
+
+# ---- R from the limits of Fig. S2 (Eq. 2), single parameters --------------------------------
+- {id: run_R_kon,  model: range_eq2, inputs: {cmax: cup_kon,  cmin: clo_kon},  outputs: {R: R_kon_pred}}
+- {id: run_R_Fb,   model: range_eq2, inputs: {cmax: cup_Fb,   cmin: clo_Fb},   outputs: {R: R_Fb_pred}}
+- {id: run_R_nc,   model: range_eq2, inputs: {cmax: cup_nc,   cmin: clo_nc},   outputs: {R: R_nc_pred}}
+- {id: run_R_kc,   model: range_eq2, inputs: {cmax: cup_kc,   cmin: clo_kc},   outputs: {R: R_kc_pred}}
+- {id: run_R_Fm,   model: range_eq2, inputs: {cmax: cup_Fm,   cmin: clo_Fm},   outputs: {R: R_Fm_pred}}
+- {id: run_R_nm,   model: range_eq2, inputs: {cmax: cup_nm,   cmin: clo_nm},   outputs: {R: R_nm_pred}}
+- {id: run_R_koff, model: range_eq2, inputs: {cmax: cup_koff, cmin: clo_koff}, outputs: {R: R_koff_pred}}
+- {id: run_R_vu,   model: range_eq2, inputs: {cmax: cup_vu,   cmin: clo_vu},   outputs: {R: R_vu_pred}}
+# ... and the five highlighted pairs
+- {id: run_R_kon_koff, model: range_eq2, inputs: {cmax: cup_kon_koff, cmin: clo_kon_koff}, outputs: {R: R_kon_koff_pred}}
+- {id: run_R_Fb_nm,    model: range_eq2, inputs: {cmax: cup_Fb_nm,    cmin: clo_Fb_nm},    outputs: {R: R_Fb_nm_pred}}
+- {id: run_R_Fb_koff,  model: range_eq2, inputs: {cmax: cup_Fb_koff,  cmin: clo_Fb_koff},  outputs: {R: R_Fb_koff_pred}}
+- {id: run_R_nc_nm,    model: range_eq2, inputs: {cmax: cup_nc_nm,    cmin: clo_nc_nm},    outputs: {R: R_nc_nm_pred}}
+- {id: run_R_nc_koff,  model: range_eq2, inputs: {cmax: cup_nc_koff,  cmin: clo_nc_koff},  outputs: {R: R_nc_koff_pred}}
+
+# ---- SR = S x R (Eq. 4) from the printed S and R ----------------------------------------------
+- {id: run_SR_kon,  model: sr_eq4, inputs: {S: S_kon_3b,  R: R_kon_3b},  outputs: {SR: SR_kon_pred}}
+- {id: run_SR_Fb,   model: sr_eq4, inputs: {S: S_Fb_3b,   R: R_Fb_3b},   outputs: {SR: SR_Fb_pred}}
+- {id: run_SR_nc,   model: sr_eq4, inputs: {S: S_nc_3b,   R: R_nc_3b},   outputs: {SR: SR_nc_pred}}
+- {id: run_SR_kc,   model: sr_eq4, inputs: {S: S_kc_3b,   R: R_kc_3b},   outputs: {SR: SR_kc_pred}}
+- {id: run_SR_Fm,   model: sr_eq4, inputs: {S: S_Fm_3b,   R: R_Fm_3b},   outputs: {SR: SR_Fm_pred}}
+- {id: run_SR_nm,   model: sr_eq4, inputs: {S: S_nm_3b,   R: R_nm_3b},   outputs: {SR: SR_nm_pred}}
+- {id: run_SR_koff, model: sr_eq4, inputs: {S: S_koff_3b, R: R_koff_3b}, outputs: {SR: SR_koff_pred}}
+- {id: run_SR_vu,   model: sr_eq4, inputs: {S: S_vu_3b,   R: R_vu_3b},   outputs: {SR: SR_vu_pred}}
+- {id: run_SR_kon_koff, model: sr_eq4, inputs: {S: S_kon_koff_5a, R: R_kon_koff_5b}, outputs: {SR: SR_kon_koff_pred}}
+- {id: run_SR_Fb_nm,    model: sr_eq4, inputs: {S: S_Fb_nm_5a,    R: R_Fb_nm_5b},    outputs: {SR: SR_Fb_nm_pred}}
+- {id: run_SR_Fb_koff,  model: sr_eq4, inputs: {S: S_Fb_koff_5a,  R: R_Fb_koff_5b},  outputs: {SR: SR_Fb_koff_pred}}
+- {id: run_SR_nc_nm,    model: sr_eq4, inputs: {S: S_nc_nm_5a,    R: R_nc_nm_5b},    outputs: {SR: SR_nc_nm_pred}}
+- {id: run_SR_nc_koff,  model: sr_eq4, inputs: {S: S_nc_koff_5a,  R: R_nc_koff_5b},  outputs: {SR: SR_nc_koff_pred}}
+
+# ---- the nc limits of the text, simulated by the paper's 5% definitions -----------------------
+- id: run_nc_limits
+  model: nc_limits
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  replicates: 3
+  outputs: {nc_stall: nc_stall_pred, nc_free: nc_free_pred}
+  note: "added choices: κsub grid 0.001-100 pN/nm at 4 per decade, 300 s per point, 3 seeds (about 50 s per seed)"
+
+# ---- the nc limits stated in the text, as multipliers (Eq. 5) ---------------------------------
+- {id: run_c_nc_stall, model: nc_multiplier_eq5, inputs: {p: nc_stall_text, p0: nc_base}, outputs: {c: c_nc_stall_pred}}
+- {id: run_c_nc_free,  model: nc_multiplier_eq5, inputs: {p: nc_free_text,  p0: nc_base}, outputs: {c: c_nc_free_pred}}
+- {id: run_R_nc_text,  model: range_eq2, inputs: {cmax: c_nc_stall_pred, cmin: c_nc_free_pred}, outputs: {R: R_nc_text_pred}}
+
+# ---- AUDIT ADDITION: R (Eq. 2) from the Fig. S2 limits for every other pair ------------------
+- {id: run_R_kon_Fb,  model: range_eq2, inputs: {cmax: cup_kon_Fb,  cmin: clo_kon_Fb},  outputs: {R: R_kon_Fb_pred}}
+- {id: run_R_kon_nc,  model: range_eq2, inputs: {cmax: cup_kon_nc,  cmin: clo_kon_nc},  outputs: {R: R_kon_nc_pred}}
+- {id: run_R_kon_kc,  model: range_eq2, inputs: {cmax: cup_kon_kc,  cmin: clo_kon_kc},  outputs: {R: R_kon_kc_pred}}
+- {id: run_R_kon_Fm,  model: range_eq2, inputs: {cmax: cup_kon_Fm,  cmin: clo_kon_Fm},  outputs: {R: R_kon_Fm_pred}}
+- {id: run_R_kon_nm,  model: range_eq2, inputs: {cmax: cup_kon_nm,  cmin: clo_kon_nm},  outputs: {R: R_kon_nm_pred}}
+- {id: run_R_kon_vu,  model: range_eq2, inputs: {cmax: cup_kon_vu,  cmin: clo_kon_vu},  outputs: {R: R_kon_vu_pred}}
+- {id: run_R_Fb_kon,  model: range_eq2, inputs: {cmax: cup_Fb_kon,  cmin: clo_Fb_kon},  outputs: {R: R_Fb_kon_pred}}
+- {id: run_R_Fb_nc,   model: range_eq2, inputs: {cmax: cup_Fb_nc,   cmin: clo_Fb_nc},   outputs: {R: R_Fb_nc_pred}}
+- {id: run_R_Fb_kc,   model: range_eq2, inputs: {cmax: cup_Fb_kc,   cmin: clo_Fb_kc},   outputs: {R: R_Fb_kc_pred}}
+- {id: run_R_Fb_Fm,   model: range_eq2, inputs: {cmax: cup_Fb_Fm,   cmin: clo_Fb_Fm},   outputs: {R: R_Fb_Fm_pred}}
+- {id: run_R_Fb_vu,   model: range_eq2, inputs: {cmax: cup_Fb_vu,   cmin: clo_Fb_vu},   outputs: {R: R_Fb_vu_pred}}
+- {id: run_R_nc_kon,  model: range_eq2, inputs: {cmax: cup_nc_kon,  cmin: clo_nc_kon},  outputs: {R: R_nc_kon_pred}}
+- {id: run_R_nc_Fb,   model: range_eq2, inputs: {cmax: cup_nc_Fb,   cmin: clo_nc_Fb},   outputs: {R: R_nc_Fb_pred}}
+- {id: run_R_nc_kc,   model: range_eq2, inputs: {cmax: cup_nc_kc,   cmin: clo_nc_kc},   outputs: {R: R_nc_kc_pred}}
+- {id: run_R_nc_Fm,   model: range_eq2, inputs: {cmax: cup_nc_Fm,   cmin: clo_nc_Fm},   outputs: {R: R_nc_Fm_pred}}
+- {id: run_R_nc_vu,   model: range_eq2, inputs: {cmax: cup_nc_vu,   cmin: clo_nc_vu},   outputs: {R: R_nc_vu_pred}}
+- {id: run_R_kc_kon,  model: range_eq2, inputs: {cmax: cup_kc_kon,  cmin: clo_kc_kon},  outputs: {R: R_kc_kon_pred}}
+- {id: run_R_kc_Fb,   model: range_eq2, inputs: {cmax: cup_kc_Fb,   cmin: clo_kc_Fb},   outputs: {R: R_kc_Fb_pred}}
+- {id: run_R_kc_nc,   model: range_eq2, inputs: {cmax: cup_kc_nc,   cmin: clo_kc_nc},   outputs: {R: R_kc_nc_pred}}
+- {id: run_R_kc_Fm,   model: range_eq2, inputs: {cmax: cup_kc_Fm,   cmin: clo_kc_Fm},   outputs: {R: R_kc_Fm_pred}}
+- {id: run_R_kc_nm,   model: range_eq2, inputs: {cmax: cup_kc_nm,   cmin: clo_kc_nm},   outputs: {R: R_kc_nm_pred}}
+- {id: run_R_kc_koff, model: range_eq2, inputs: {cmax: cup_kc_koff, cmin: clo_kc_koff}, outputs: {R: R_kc_koff_pred}}
+- {id: run_R_kc_vu,   model: range_eq2, inputs: {cmax: cup_kc_vu,   cmin: clo_kc_vu},   outputs: {R: R_kc_vu_pred}}
+- {id: run_R_Fm_kon,  model: range_eq2, inputs: {cmax: cup_Fm_kon,  cmin: clo_Fm_kon},  outputs: {R: R_Fm_kon_pred}}
+- {id: run_R_Fm_Fb,   model: range_eq2, inputs: {cmax: cup_Fm_Fb,   cmin: clo_Fm_Fb},   outputs: {R: R_Fm_Fb_pred}}
+- {id: run_R_Fm_nc,   model: range_eq2, inputs: {cmax: cup_Fm_nc,   cmin: clo_Fm_nc},   outputs: {R: R_Fm_nc_pred}}
+- {id: run_R_Fm_kc,   model: range_eq2, inputs: {cmax: cup_Fm_kc,   cmin: clo_Fm_kc},   outputs: {R: R_Fm_kc_pred}}
+- {id: run_R_Fm_nm,   model: range_eq2, inputs: {cmax: cup_Fm_nm,   cmin: clo_Fm_nm},   outputs: {R: R_Fm_nm_pred}}
+- {id: run_R_Fm_koff, model: range_eq2, inputs: {cmax: cup_Fm_koff, cmin: clo_Fm_koff}, outputs: {R: R_Fm_koff_pred}}
+- {id: run_R_Fm_vu,   model: range_eq2, inputs: {cmax: cup_Fm_vu,   cmin: clo_Fm_vu},   outputs: {R: R_Fm_vu_pred}}
+- {id: run_R_nm_kon,  model: range_eq2, inputs: {cmax: cup_nm_kon,  cmin: clo_nm_kon},  outputs: {R: R_nm_kon_pred}}
+- {id: run_R_nm_Fb,   model: range_eq2, inputs: {cmax: cup_nm_Fb,   cmin: clo_nm_Fb},   outputs: {R: R_nm_Fb_pred}}
+- {id: run_R_nm_nc,   model: range_eq2, inputs: {cmax: cup_nm_nc,   cmin: clo_nm_nc},   outputs: {R: R_nm_nc_pred}}
+- {id: run_R_nm_kc,   model: range_eq2, inputs: {cmax: cup_nm_kc,   cmin: clo_nm_kc},   outputs: {R: R_nm_kc_pred}}
+- {id: run_R_nm_Fm,   model: range_eq2, inputs: {cmax: cup_nm_Fm,   cmin: clo_nm_Fm},   outputs: {R: R_nm_Fm_pred}}
+- {id: run_R_nm_koff, model: range_eq2, inputs: {cmax: cup_nm_koff, cmin: clo_nm_koff}, outputs: {R: R_nm_koff_pred}}
+- {id: run_R_nm_vu,   model: range_eq2, inputs: {cmax: cup_nm_vu,   cmin: clo_nm_vu},   outputs: {R: R_nm_vu_pred}}
+- {id: run_R_koff_kon, model: range_eq2, inputs: {cmax: cup_koff_kon, cmin: clo_koff_kon}, outputs: {R: R_koff_kon_pred}}
+- {id: run_R_koff_Fb,  model: range_eq2, inputs: {cmax: cup_koff_Fb,  cmin: clo_koff_Fb},  outputs: {R: R_koff_Fb_pred}}
+- {id: run_R_koff_nc,  model: range_eq2, inputs: {cmax: cup_koff_nc,  cmin: clo_koff_nc},  outputs: {R: R_koff_nc_pred}}
+- {id: run_R_koff_kc,  model: range_eq2, inputs: {cmax: cup_koff_kc,  cmin: clo_koff_kc},  outputs: {R: R_koff_kc_pred}}
+- {id: run_R_koff_Fm,  model: range_eq2, inputs: {cmax: cup_koff_Fm,  cmin: clo_koff_Fm},  outputs: {R: R_koff_Fm_pred}}
+- {id: run_R_koff_nm,  model: range_eq2, inputs: {cmax: cup_koff_nm,  cmin: clo_koff_nm},  outputs: {R: R_koff_nm_pred}}
+- {id: run_R_koff_vu,  model: range_eq2, inputs: {cmax: cup_koff_vu,  cmin: clo_koff_vu},  outputs: {R: R_koff_vu_pred}}
+- {id: run_R_vu_kon,  model: range_eq2, inputs: {cmax: cup_vu_kon,  cmin: clo_vu_kon},  outputs: {R: R_vu_kon_pred}}
+- {id: run_R_vu_Fb,   model: range_eq2, inputs: {cmax: cup_vu_Fb,   cmin: clo_vu_Fb},   outputs: {R: R_vu_Fb_pred}}
+- {id: run_R_vu_nc,   model: range_eq2, inputs: {cmax: cup_vu_nc,   cmin: clo_vu_nc},   outputs: {R: R_vu_nc_pred}}
+- {id: run_R_vu_kc,   model: range_eq2, inputs: {cmax: cup_vu_kc,   cmin: clo_vu_kc},   outputs: {R: R_vu_kc_pred}}
+- {id: run_R_vu_Fm,   model: range_eq2, inputs: {cmax: cup_vu_Fm,   cmin: clo_vu_Fm},   outputs: {R: R_vu_Fm_pred}}
+- {id: run_R_vu_nm,   model: range_eq2, inputs: {cmax: cup_vu_nm,   cmin: clo_vu_nm},   outputs: {R: R_vu_nm_pred}}
+- {id: run_R_vu_koff, model: range_eq2, inputs: {cmax: cup_vu_koff, cmin: clo_vu_koff}, outputs: {R: R_vu_koff_pred}}
+
+# ---- AUDIT ADDITION: SR = S x R (Eq. 4) from the printed Fig. 5A and 5B values, every other pair
+- {id: run_SR_kon_Fb,  model: sr_eq4, inputs: {S: S_kon_Fb_5a,  R: R_kon_Fb_5b},  outputs: {SR: SR_kon_Fb_pred}}
+- {id: run_SR_kon_nc,  model: sr_eq4, inputs: {S: S_kon_nc_5a,  R: R_kon_nc_5b},  outputs: {SR: SR_kon_nc_pred}}
+- {id: run_SR_kon_kc,  model: sr_eq4, inputs: {S: S_kon_kc_5a,  R: R_kon_kc_5b},  outputs: {SR: SR_kon_kc_pred}}
+- {id: run_SR_kon_Fm,  model: sr_eq4, inputs: {S: S_kon_Fm_5a,  R: R_kon_Fm_5b},  outputs: {SR: SR_kon_Fm_pred}}
+- {id: run_SR_kon_nm,  model: sr_eq4, inputs: {S: S_kon_nm_5a,  R: R_kon_nm_5b},  outputs: {SR: SR_kon_nm_pred}}
+- {id: run_SR_kon_vu,  model: sr_eq4, inputs: {S: S_kon_vu_5a,  R: R_kon_vu_5b},  outputs: {SR: SR_kon_vu_pred}}
+- {id: run_SR_Fb_kon,  model: sr_eq4, inputs: {S: S_Fb_kon_5a,  R: R_Fb_kon_5b},  outputs: {SR: SR_Fb_kon_pred}}
+- {id: run_SR_Fb_nc,   model: sr_eq4, inputs: {S: S_Fb_nc_5a,   R: R_Fb_nc_5b},   outputs: {SR: SR_Fb_nc_pred}}
+- {id: run_SR_Fb_kc,   model: sr_eq4, inputs: {S: S_Fb_kc_5a,   R: R_Fb_kc_5b},   outputs: {SR: SR_Fb_kc_pred}}
+- {id: run_SR_Fb_Fm,   model: sr_eq4, inputs: {S: S_Fb_Fm_5a,   R: R_Fb_Fm_5b},   outputs: {SR: SR_Fb_Fm_pred}}
+- {id: run_SR_Fb_vu,   model: sr_eq4, inputs: {S: S_Fb_vu_5a,   R: R_Fb_vu_5b},   outputs: {SR: SR_Fb_vu_pred}}
+- {id: run_SR_nc_kon,  model: sr_eq4, inputs: {S: S_nc_kon_5a,  R: R_nc_kon_5b},  outputs: {SR: SR_nc_kon_pred}}
+- {id: run_SR_nc_Fb,   model: sr_eq4, inputs: {S: S_nc_Fb_5a,   R: R_nc_Fb_5b},   outputs: {SR: SR_nc_Fb_pred}}
+- {id: run_SR_nc_kc,   model: sr_eq4, inputs: {S: S_nc_kc_5a,   R: R_nc_kc_5b},   outputs: {SR: SR_nc_kc_pred}}
+- {id: run_SR_nc_Fm,   model: sr_eq4, inputs: {S: S_nc_Fm_5a,   R: R_nc_Fm_5b},   outputs: {SR: SR_nc_Fm_pred}}
+- {id: run_SR_nc_vu,   model: sr_eq4, inputs: {S: S_nc_vu_5a,   R: R_nc_vu_5b},   outputs: {SR: SR_nc_vu_pred}}
+- {id: run_SR_kc_kon,  model: sr_eq4, inputs: {S: S_kc_kon_5a,  R: R_kc_kon_5b},  outputs: {SR: SR_kc_kon_pred}}
+- {id: run_SR_kc_Fb,   model: sr_eq4, inputs: {S: S_kc_Fb_5a,   R: R_kc_Fb_5b},   outputs: {SR: SR_kc_Fb_pred}}
+- {id: run_SR_kc_nc,   model: sr_eq4, inputs: {S: S_kc_nc_5a,   R: R_kc_nc_5b},   outputs: {SR: SR_kc_nc_pred}}
+- {id: run_SR_kc_Fm,   model: sr_eq4, inputs: {S: S_kc_Fm_5a,   R: R_kc_Fm_5b},   outputs: {SR: SR_kc_Fm_pred}}
+- {id: run_SR_kc_nm,   model: sr_eq4, inputs: {S: S_kc_nm_5a,   R: R_kc_nm_5b},   outputs: {SR: SR_kc_nm_pred}}
+- {id: run_SR_kc_koff, model: sr_eq4, inputs: {S: S_kc_koff_5a, R: R_kc_koff_5b}, outputs: {SR: SR_kc_koff_pred}}
+- {id: run_SR_kc_vu,   model: sr_eq4, inputs: {S: S_kc_vu_5a,   R: R_kc_vu_5b},   outputs: {SR: SR_kc_vu_pred}}
+- {id: run_SR_Fm_kon,  model: sr_eq4, inputs: {S: S_Fm_kon_5a,  R: R_Fm_kon_5b},  outputs: {SR: SR_Fm_kon_pred}}
+- {id: run_SR_Fm_Fb,   model: sr_eq4, inputs: {S: S_Fm_Fb_5a,   R: R_Fm_Fb_5b},   outputs: {SR: SR_Fm_Fb_pred}}
+- {id: run_SR_Fm_nc,   model: sr_eq4, inputs: {S: S_Fm_nc_5a,   R: R_Fm_nc_5b},   outputs: {SR: SR_Fm_nc_pred}}
+- {id: run_SR_Fm_kc,   model: sr_eq4, inputs: {S: S_Fm_kc_5a,   R: R_Fm_kc_5b},   outputs: {SR: SR_Fm_kc_pred}}
+- {id: run_SR_Fm_nm,   model: sr_eq4, inputs: {S: S_Fm_nm_5a,   R: R_Fm_nm_5b},   outputs: {SR: SR_Fm_nm_pred}}
+- {id: run_SR_Fm_koff, model: sr_eq4, inputs: {S: S_Fm_koff_5a, R: R_Fm_koff_5b}, outputs: {SR: SR_Fm_koff_pred}}
+- {id: run_SR_Fm_vu,   model: sr_eq4, inputs: {S: S_Fm_vu_5a,   R: R_Fm_vu_5b},   outputs: {SR: SR_Fm_vu_pred}}
+- {id: run_SR_nm_kon,  model: sr_eq4, inputs: {S: S_nm_kon_5a,  R: R_nm_kon_5b},  outputs: {SR: SR_nm_kon_pred}}
+- {id: run_SR_nm_Fb,   model: sr_eq4, inputs: {S: S_nm_Fb_5a,   R: R_nm_Fb_5b},   outputs: {SR: SR_nm_Fb_pred}}
+- {id: run_SR_nm_nc,   model: sr_eq4, inputs: {S: S_nm_nc_5a,   R: R_nm_nc_5b},   outputs: {SR: SR_nm_nc_pred}}
+- {id: run_SR_nm_kc,   model: sr_eq4, inputs: {S: S_nm_kc_5a,   R: R_nm_kc_5b},   outputs: {SR: SR_nm_kc_pred}}
+- {id: run_SR_nm_Fm,   model: sr_eq4, inputs: {S: S_nm_Fm_5a,   R: R_nm_Fm_5b},   outputs: {SR: SR_nm_Fm_pred}}
+- {id: run_SR_nm_koff, model: sr_eq4, inputs: {S: S_nm_koff_5a, R: R_nm_koff_5b}, outputs: {SR: SR_nm_koff_pred}}
+- {id: run_SR_nm_vu,   model: sr_eq4, inputs: {S: S_nm_vu_5a,   R: R_nm_vu_5b},   outputs: {SR: SR_nm_vu_pred}}
+- {id: run_SR_koff_kon, model: sr_eq4, inputs: {S: S_koff_kon_5a, R: R_koff_kon_5b}, outputs: {SR: SR_koff_kon_pred}}
+- {id: run_SR_koff_Fb,  model: sr_eq4, inputs: {S: S_koff_Fb_5a,  R: R_koff_Fb_5b},  outputs: {SR: SR_koff_Fb_pred}}
+- {id: run_SR_koff_nc,  model: sr_eq4, inputs: {S: S_koff_nc_5a,  R: R_koff_nc_5b},  outputs: {SR: SR_koff_nc_pred}}
+- {id: run_SR_koff_kc,  model: sr_eq4, inputs: {S: S_koff_kc_5a,  R: R_koff_kc_5b},  outputs: {SR: SR_koff_kc_pred}}
+- {id: run_SR_koff_Fm,  model: sr_eq4, inputs: {S: S_koff_Fm_5a,  R: R_koff_Fm_5b},  outputs: {SR: SR_koff_Fm_pred}}
+- {id: run_SR_koff_nm,  model: sr_eq4, inputs: {S: S_koff_nm_5a,  R: R_koff_nm_5b},  outputs: {SR: SR_koff_nm_pred}}
+- {id: run_SR_koff_vu,  model: sr_eq4, inputs: {S: S_koff_vu_5a,  R: R_koff_vu_5b},  outputs: {SR: SR_koff_vu_pred}}
+- {id: run_SR_vu_kon,  model: sr_eq4, inputs: {S: S_vu_kon_5a,  R: R_vu_kon_5b},  outputs: {SR: SR_vu_kon_pred}}
+- {id: run_SR_vu_Fb,   model: sr_eq4, inputs: {S: S_vu_Fb_5a,   R: R_vu_Fb_5b},   outputs: {SR: SR_vu_Fb_pred}}
+- {id: run_SR_vu_nc,   model: sr_eq4, inputs: {S: S_vu_nc_5a,   R: R_vu_nc_5b},   outputs: {SR: SR_vu_nc_pred}}
+- {id: run_SR_vu_kc,   model: sr_eq4, inputs: {S: S_vu_kc_5a,   R: R_vu_kc_5b},   outputs: {SR: SR_vu_kc_pred}}
+- {id: run_SR_vu_Fm,   model: sr_eq4, inputs: {S: S_vu_Fm_5a,   R: R_vu_Fm_5b},   outputs: {SR: SR_vu_Fm_pred}}
+- {id: run_SR_vu_nm,   model: sr_eq4, inputs: {S: S_vu_nm_5a,   R: R_vu_nm_5b},   outputs: {SR: SR_vu_nm_pred}}
+- {id: run_SR_vu_koff, model: sr_eq4, inputs: {S: S_vu_koff_5a, R: R_vu_koff_5b}, outputs: {SR: SR_vu_koff_pred}}
+
+# ==== SECOND FIGURE PASS (2026-10-31): calibrated figure readings (figures.yaml) ==============
+- id: run_fig2b_nc50_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig2b_nc50_read}
+  outputs: {F_mean: F_fig2b_nc50_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_fig2c_nc50_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc50_read}
+  outputs: {v_retro: v_fig2c_nc50_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_fig2b_nc100_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_100, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig2b_nc100_read}
+  outputs: {F_mean: F_fig2b_nc100_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_fig2c_nc100_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_100, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc100_read}
+  outputs: {v_retro: v_fig2c_nc100_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_fig2b_nc5_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_5, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig2b_nc5_read}
+  outputs: {F_mean: F_fig2b_nc5_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_fig2c_nc5_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_5, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc5_read}
+  outputs: {v_retro: v_fig2c_nc5_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_fig2b_nc300_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_300, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig2b_nc300_read}
+  outputs: {F_mean: F_fig2b_nc300_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_fig2c_nc300_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_300, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig2c_nc300_read}
+  outputs: {v_retro: v_fig2c_nc300_read_pred}
+  note: 'added choice: 1000 s simulated per point, averages over the whole run (as run_fig2_nc50)'
+- id: run_ksopt_fig2c_read
+  model: optimal_stiffness
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {nc: ksopt_fig2c_read}
+  outputs: {ks_opt: ksopt_fig2c_read_pred, v_min: vmin_fig2c_read_pred}
+  note: 'added choices: grid 0.001-100 pN/nm at 4 points per decade, 1000 s per point (q_optimum_search)'
+- id: run_fig3a_kon_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x01, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_kon_x01}
+  outputs: {v_retro: v_fig3a_kon_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kon_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x03, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_kon_x03}
+  outputs: {v_retro: v_fig3a_kon_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kon_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_kon_x1}
+  outputs: {v_retro: v_fig3a_kon_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kon_x3
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x3, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_kon_x3}
+  outputs: {v_retro: v_fig3a_kon_x3_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kon_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_x10, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_kon_x10}
+  outputs: {v_retro: v_fig3a_kon_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_kon_x01
+  model: scale_kon_eq5
+  inputs: {c: fold_01, kon0: kon_base}
+  outputs: {kon: kon_x01}
+- id: run_scale_kon_x03
+  model: scale_kon_eq5
+  inputs: {c: fold_03, kon0: kon_base}
+  outputs: {kon: kon_x03}
+- id: run_scale_kon_x3
+  model: scale_kon_eq5
+  inputs: {c: fold_3, kon0: kon_base}
+  outputs: {kon: kon_x3}
+- id: run_scale_kon_x10
+  model: scale_kon_eq5
+  inputs: {c: fold_10, kon0: kon_base}
+  outputs: {kon: kon_x10}
+- id: run_fig3a_koff_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_x01, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_koff_x01}
+  outputs: {v_retro: v_fig3a_koff_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_koff_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_x03, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_koff_x03}
+  outputs: {v_retro: v_fig3a_koff_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_koff_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_koff_x1}
+  outputs: {v_retro: v_fig3a_koff_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_koff_x3
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_x3, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_koff_x3}
+  outputs: {v_retro: v_fig3a_koff_x3_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_koff_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_x10, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_koff_x10}
+  outputs: {v_retro: v_fig3a_koff_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_koff_x01
+  model: scale_koff_eq5
+  inputs: {c: fold_01, koff0: koff_base}
+  outputs: {koff: koff_x01}
+- id: run_scale_koff_x03
+  model: scale_koff_eq5
+  inputs: {c: fold_03, koff0: koff_base}
+  outputs: {koff: koff_x03}
+- id: run_scale_koff_x3
+  model: scale_koff_eq5
+  inputs: {c: fold_3, koff0: koff_base}
+  outputs: {koff: koff_x3}
+- id: run_scale_koff_x10
+  model: scale_koff_eq5
+  inputs: {c: fold_10, koff0: koff_base}
+  outputs: {koff: koff_x10}
+- id: run_fig3a_Fb_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_x01, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fb_x01}
+  outputs: {v_retro: v_fig3a_Fb_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fb_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_x03, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fb_x03}
+  outputs: {v_retro: v_fig3a_Fb_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fb_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fb_x1}
+  outputs: {v_retro: v_fig3a_Fb_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fb_x3
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_x3, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fb_x3}
+  outputs: {v_retro: v_fig3a_Fb_x3_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fb_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_x10, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fb_x10}
+  outputs: {v_retro: v_fig3a_Fb_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_Fb_x01
+  model: scale_Fb_eq5
+  inputs: {c: fold_01, Fb0: Fb_base}
+  outputs: {Fb: Fb_x01}
+- id: run_scale_Fb_x03
+  model: scale_Fb_eq5
+  inputs: {c: fold_03, Fb0: Fb_base}
+  outputs: {Fb: Fb_x03}
+- id: run_scale_Fb_x3
+  model: scale_Fb_eq5
+  inputs: {c: fold_3, Fb0: Fb_base}
+  outputs: {Fb: Fb_x3}
+- id: run_scale_Fb_x10
+  model: scale_Fb_eq5
+  inputs: {c: fold_10, Fb0: Fb_base}
+  outputs: {Fb: Fb_x10}
+- id: run_fig3a_Fm_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_x01, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fm_x01}
+  outputs: {v_retro: v_fig3a_Fm_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fm_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_x03, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fm_x03}
+  outputs: {v_retro: v_fig3a_Fm_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fm_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fm_x1}
+  outputs: {v_retro: v_fig3a_Fm_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fm_x3
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_x3, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fm_x3}
+  outputs: {v_retro: v_fig3a_Fm_x3_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_Fm_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_x10, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_Fm_x10}
+  outputs: {v_retro: v_fig3a_Fm_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_Fm_x01
+  model: scale_Fm_eq5
+  inputs: {c: fold_01, Fm0: Fm_base}
+  outputs: {Fm: Fm_x01}
+- id: run_scale_Fm_x03
+  model: scale_Fm_eq5
+  inputs: {c: fold_03, Fm0: Fm_base}
+  outputs: {Fm: Fm_x03}
+- id: run_scale_Fm_x3
+  model: scale_Fm_eq5
+  inputs: {c: fold_3, Fm0: Fm_base}
+  outputs: {Fm: Fm_x3}
+- id: run_scale_Fm_x10
+  model: scale_Fm_eq5
+  inputs: {c: fold_10, Fm0: Fm_base}
+  outputs: {Fm: Fm_x10}
+- id: run_fig3a_nc_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_x01, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nc_x01}
+  outputs: {v_retro: v_fig3a_nc_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_nc_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_x03, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nc_x03}
+  outputs: {v_retro: v_fig3a_nc_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_nc_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nc_x1}
+  outputs: {v_retro: v_fig3a_nc_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_nc_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_x10, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nc_x10}
+  outputs: {v_retro: v_fig3a_nc_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_nc_x01
+  model: scale_nc_eq5
+  inputs: {c: fold_01, nc0: nc_base}
+  outputs: {nc: nc_x01}
+- id: run_scale_nc_x03
+  model: scale_nc_eq5
+  inputs: {c: fold_03, nc0: nc_base}
+  outputs: {nc: nc_x03}
+- id: run_scale_nc_x3
+  model: scale_nc_eq5
+  inputs: {c: fold_3, nc0: nc_base}
+  outputs: {nc: nc_x3}
+- id: run_scale_nc_x10
+  model: scale_nc_eq5
+  inputs: {c: fold_10, nc0: nc_base}
+  outputs: {nc: nc_x10}
+- id: run_fig3a_nm_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_x01, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nm_x01}
+  outputs: {v_retro: v_fig3a_nm_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_nm_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_x03, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nm_x03}
+  outputs: {v_retro: v_fig3a_nm_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_nm_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nm_x1}
+  outputs: {v_retro: v_fig3a_nm_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_nm_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_x10, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_nm_x10}
+  outputs: {v_retro: v_fig3a_nm_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_nm_x01
+  model: scale_nm_eq5
+  inputs: {c: fold_01, nm0: nm_base}
+  outputs: {nm: nm_x01}
+- id: run_scale_nm_x03
+  model: scale_nm_eq5
+  inputs: {c: fold_03, nm0: nm_base}
+  outputs: {nm: nm_x03}
+- id: run_scale_nm_x3
+  model: scale_nm_eq5
+  inputs: {c: fold_3, nm0: nm_base}
+  outputs: {nm: nm_x3}
+- id: run_scale_nm_x10
+  model: scale_nm_eq5
+  inputs: {c: fold_10, nm0: nm_base}
+  outputs: {nm: nm_x10}
+- id: run_fig3a_kc_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_x01}
+  sweep: {ksub: v_fig3a_kc_x01}
+  outputs: {v_retro: v_fig3a_kc_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kc_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_x03}
+  sweep: {ksub: v_fig3a_kc_x03}
+  outputs: {v_retro: v_fig3a_kc_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kc_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_kc_x1}
+  outputs: {v_retro: v_fig3a_kc_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kc_x3
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_x3}
+  sweep: {ksub: v_fig3a_kc_x3}
+  outputs: {v_retro: v_fig3a_kc_x3_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_kc_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_x10}
+  sweep: {ksub: v_fig3a_kc_x10}
+  outputs: {v_retro: v_fig3a_kc_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_kc_x01
+  model: scale_kc_eq5
+  inputs: {c: fold_01, kc0: kc_base}
+  outputs: {kc: kc_x01}
+- id: run_scale_kc_x03
+  model: scale_kc_eq5
+  inputs: {c: fold_03, kc0: kc_base}
+  outputs: {kc: kc_x03}
+- id: run_scale_kc_x3
+  model: scale_kc_eq5
+  inputs: {c: fold_3, kc0: kc_base}
+  outputs: {kc: kc_x3}
+- id: run_scale_kc_x10
+  model: scale_kc_eq5
+  inputs: {c: fold_10, kc0: kc_base}
+  outputs: {kc: kc_x10}
+- id: run_fig3a_vu_x01
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_x01, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_vu_x01}
+  outputs: {v_retro: v_fig3a_vu_x01_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_vu_x03
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_x03, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_vu_x03}
+  outputs: {v_retro: v_fig3a_vu_x03_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_vu_x1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_vu_x1}
+  outputs: {v_retro: v_fig3a_vu_x1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_vu_x3
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_x3, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_vu_x3}
+  outputs: {v_retro: v_fig3a_vu_x3_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig3a_vu_x10
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_x10, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig3a_vu_x10}
+  outputs: {v_retro: v_fig3a_vu_x10_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_scale_vu_x01
+  model: scale_vu_eq5
+  inputs: {c: fold_01, vu0: vu_base}
+  outputs: {vu: vu_x01}
+- id: run_scale_vu_x03
+  model: scale_vu_eq5
+  inputs: {c: fold_03, vu0: vu_base}
+  outputs: {vu: vu_x03}
+- id: run_scale_vu_x3
+  model: scale_vu_eq5
+  inputs: {c: fold_3, vu0: vu_base}
+  outputs: {vu: vu_x3}
+- id: run_scale_vu_x10
+  model: scale_vu_eq5
+  inputs: {c: fold_10, vu0: vu_base}
+  outputs: {vu: vu_x10}
+- id: run_fig4a_s1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig4a_s1}
+  outputs: {v_retro: v_fig4a_s1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig4a_s6
+  model: motor_clutch_ssa
+  inputs: {nm: nm_1600_fig4, Fm: Fm_base, vu: vu_base, nc: nc_1600_fig4, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig4a_s6}
+  settings: {t_total: 100.0}
+  outputs: {v_retro: v_fig4a_s6_pred}
+  note: 'added choice: 100 s simulated per point (1600 clutches; 1000 s exceeded the build time limit), as for run_fig7a'
+- id: run_fig4b_s1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig4b_s1}
+  outputs: {F_mean: F_fig4b_s1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig4b_s6
+  model: motor_clutch_ssa
+  inputs: {nm: nm_1600_fig4, Fm: Fm_base, vu: vu_base, nc: nc_1600_fig4, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig4b_s6}
+  settings: {t_total: 100.0}
+  outputs: {F_mean: F_fig4b_s6_pred}
+  note: 'added choice: 100 s simulated per point (1600 clutches; 1000 s exceeded the build time limit), as for run_fig7a'
+- id: run_fig4c_s1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig4c_s1}
+  outputs: {v_retro: v_fig4c_s1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig4c_s4
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_3_fig4, koff: koff_1_fig4, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig4c_s4}
+  outputs: {v_retro: v_fig4c_s4_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig4d_s1
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig4d_s1}
+  outputs: {F_mean: F_fig4d_s1_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig4d_s4
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_3_fig4, koff: koff_1_fig4, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig4d_s4}
+  outputs: {F_mean: F_fig4d_s4_pred}
+  note: 'added choice: 1000 s simulated per point'
+- id: run_fig6b_kens_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: kens_fig6b_read}
+  outputs: {k_ens: kens_fig6b_read_pred}
+- id: run_fig6b_flow_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig6b_flow_read}
+  outputs: {v_retro: v_fig6b_flow_read_pred}
+- id: run_fig6d_flow_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig6d_flow_read}
+  outputs: {v_retro: v_fig6d_flow_read_pred}
+- id: run_fig6e_flow_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: v_fig6e_flow_read}
+  outputs: {v_retro: v_fig6e_flow_read_pred}
+- id: run_fig6d_cycle_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: tcycle_fig6d_read}
+  outputs: {t_cycle: tcycle_fig6d_read_pred}
+  note: the paper does not define how a cycle is counted (q_cycle_definition)
+- id: run_tbinding_fig6d_read
+  model: binding_time_eq10
+  inputs: {kon: kon_base}
+  sweep: {nc: tbinding_fig6d_read}
+  outputs: {tbinding: tbinding_fig6d_read_pred}
+- id: run_fig6e_traction_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base}
+  sweep: {ksub: F_fig6e_traction_read}
+  outputs: {F_mean: F_fig6e_traction_read_pred}
+- id: run_fig7a_blue_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_7a, Fm: Fm_7a, vu: vu_7a, nc: nc_7a, kon: kon_7a, koff: koff_7a, Fb: Fb_7a, kc: kc_7a}
+  sweep: {ksub: F_fig7a_read}
+  settings: {t_total: 100.0}
+  outputs: {F_mean: F_fig7a_read_pred}
+  note: 'added choice: 100 s simulated per point (as run_fig7a)'
+- id: run_fig7a_minus_clutch_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_7a, Fm: Fm_7a, vu: vu_7a, nc: nc_7a_minus_clutch, kon: kon_7a, koff: koff_7a, Fb: Fb_7a, kc: kc_7a}
+  sweep: {ksub: F_fig7a_minus_clutch_read}
+  settings: {t_total: 100.0}
+  outputs: {F_mean: F_fig7a_minus_clutch_read_pred}
+  note: 'added choice: 100 s simulated per point (as run_fig7a)'
+- id: run_fig7a_minus_motor_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_7a_minus_motor, Fm: Fm_7a, vu: vu_7a, nc: nc_7a, kon: kon_7a, koff: koff_7a, Fb: Fb_7a, kc: kc_7a}
+  sweep: {ksub: F_fig7a_minus_motor_read}
+  settings: {t_total: 100.0}
+  outputs: {F_mean: F_fig7a_minus_motor_read_pred}
+  note: 'added choice: 100 s simulated per point (as run_fig7a)'
+- id: run_fig7c_kong
+  model: catch_slip_eq9
+  inputs: {koff: koff_7c, Fb: Fb_7c, koffc: koffc_7c, Fc: Fc_7c}
+  sweep: {F: tau_kong_fig7c}
+  outputs: {tau: tau_kong_fig7c_pred}
+- id: run_fig7c_fit_read
+  model: catch_slip_eq9
+  inputs: {koff: koff_7c, Fb: Fb_7c, koffc: koffc_7c, Fc: Fc_7c}
+  sweep: {F: tau_fig7c_read}
+  outputs: {tau: tau_fig7c_read_pred}
+- id: run_figS1a_present_read
+  model: motor_clutch_ssa
+  inputs: {nm: nm_chan, Fm: Fm_chan, vu: vu_chan, nc: nc_chan, kon: kon_chan, koff: koff_chan, Fb: Fb_chan, kc: kc_chan}
+  sweep: {ksub: v_figS1a_present_read}
+  outputs: {v_retro: v_figS1a_present_read_pred}

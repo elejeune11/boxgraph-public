@@ -1,0 +1,490 @@
+# Values as printed in craig2015. Page numbers are PDF pages; pp. 17-19 are the supplement's caption
+# pages (PMC), pp. 20-26 the supplemental figures.
+
+# ---- model set-up -------------------------------------------------------------------------------
+- {id: L_domain, quantity: distance_from_leading_edge, unit: um, origin: reported, printed: "8",
+   citation: {page: 6, printed_page: "5", quote: "L = 8 μm from the leading edge", where: text},
+   note: "the position of the boundary condition dV/dx(L) = 0, the end of the model domain"}
+- {id: L0_model, quantity: length_scale, unit: um, origin: reported, printed: "1",
+   citation: {page: 7, printed_page: "6", quote: "x = L 0 x˜ ≡ (1 μm) x˜", where: "text below Eq. 9"}}
+
+# ---- parameter values stated in the text (Section 2.2) --------------------------------------------
+- {id: gamma_text, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "~1000",
+   citation: {page: 7, printed_page: "6", quote: "achieved if γ ~ 1000. Note that comparison of the", where: text}}
+- {id: vstar_text, quantity: flow_weakening_parameter, unit: dimensionless, origin: reported, printed: "~0.3",
+   citation: {page: 7, printed_page: "6", quote: "In the simulations, we use v * ~ 0.3", where: text}}
+- {id: b_text, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "~10",
+   citation: {page: 7, printed_page: "6", quote: "use b ~ 10. Parameter F is the measure", where: text}}
+- {id: F_text, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "~10",
+   citation: {page: 8, printed_page: "7", quote: "compare well if F ~ 10", where: text}}
+
+# ---- estimate of lambda (p. 8) -----------------------------------------------------------------------
+- {id: T0_ptk1, quantity: traction_stress_scale, unit: pN/um^2, origin: reported, printed: "20",
+   citation: {page: 8, printed_page: "7", quote: "From [14], T0 = 20 pN μm−2", where: text}, from_source: ref-14}
+- {id: drag_scale_printed, quantity: drag_scale, unit: pN*s/um, origin: derived, printed: "~10^3",
+   citation: {page: 8, printed_page: "7", quote: "T0 L 02 /V0 ~ 103 pN s μm−1", where: text}}
+- {id: eta_ref29, quantity: actin_network_viscosity, unit: pN*s/um^2, origin: reported, printed: "~2 x 10^3",
+   citation: {page: 8, printed_page: "7", quote: "2 × 103 pN s μm−2 [29]. Parameter μ can be obtained", where: text},
+   from_source: ref-29, note: "printed as 'of the order of 2 x 10^3'"}
+- {id: thickness_text, quantity: lamellipodium_thickness, unit: um, origin: estimated, printed: "~1",
+   citation: {page: 8, printed_page: "7", quote: "by the lamellipodial thickness of the order of a micron", where: text},
+   note: "printed in words: 'of the order of a micron'"}
+- {id: lambda_est_printed, quantity: viscosity_parameter, unit: dimensionless, origin: derived, printed: "~2",
+   citation: {page: 8, printed_page: "7", quote: "Thus, parameter λ ~ 2.", where: text}}
+- {id: V0_ptk1, quantity: leading_edge_flow_speed, unit: nm/s, origin: measured, printed: "~20",
+   citation: {page: 8, printed_page: "7", quote: "(∼20 nm s−1) that decays across the lamellipodia", where: text},
+   from_source: ref-14, note: "Ptk1 cells, rapid actin flow at the leading edge"}
+- {id: V_lamella_ptk1, quantity: lamellar_flow_speed, unit: nm/s, origin: measured, printed: "~2",
+   citation: {page: 8, printed_page: "7", quote: "relatively uniform slow ﬂow (∼2 nm s−1) in the lamella", where: text},
+   from_source: ref-14, note: "added by the audit: Ptk1 cells, slow uniform flow in the lamella (used in the basis of gradient_added)"}
+
+# ---- Appendix A.2 (b = 0): the flow at the traction peak equals v* (p. 12) -----------------------------
+- {id: vpeak_b0_text, quantity: peak_flow_over_vstar, unit: dimensionless, origin: predicted, printed: "1",
+   citation: {page: 12, printed_page: "11", quote: "maximal for V˜ = v * independent of other system", where: "Appendix A.2"},
+   note: "added by the audit: with b = 0, T~ = exp(-V~/v*) V~ is 'maximal for V~ = v*', i.e. V~ / v* = 1 at the peak"}
+
+# ---- displacement and transport (Section 2, Appendix D) ----------------------------------------------
+- {id: V_char, quantity: actin_flow_speed, unit: nm/s, origin: reported, printed: "10",
+   citation: {page: 5, printed_page: "4", quote: "characteristic rate of the actin ﬂow is ten nm per", where: text},
+   note: "printed in words: 'ten nm per second'"}
+- {id: t_relevant, quantity: time_interval, unit: s, origin: reported, printed: "10",
+   citation: {page: 14, printed_page: "13", quote: "On the relevant time scale of 10 s, the actin", where: "Appendix D"}}
+- {id: disp_printed, quantity: network_displacement, unit: um, origin: derived, printed: "0.1",
+   citation: {page: 14, printed_page: "13", quote: "network displacement is but 0.1 μm, orders of magni-", where: "Appendix D"}}
+- {id: V0_eps, quantity: leading_edge_flow_speed, unit: um/s, origin: reported, printed: "0.02",
+   citation: {page: 14, printed_page: "13", quote: "parameter ε ~ 0.02 μm s−1 / 0.1 s−1 × 2 μm ~ 0.1", where: "Appendix D"}}
+- {id: r_turnover, quantity: actin_turnover_rate, unit: 1/s, origin: reported, printed: "0.1",
+   citation: {page: 13, printed_page: "12", quote: "The usual rates of actin turnover are", where: "Appendix D"},
+   note: "the value 0.1 s^-1 follows on the next line ('0.1 s−1.') and is used again in the estimate of epsilon on p. 14"}
+- {id: L0_eps, quantity: length_scale, unit: um, origin: reported, printed: "2",
+   citation: {page: 14, printed_page: "13", quote: "parameter ε ~ 0.02 μm s−1 / 0.1 s−1 × 2 μm ~ 0.1", where: "Appendix D"},
+   note: "L0 is called the lamellipodial length here; in the main text L0 = 1 um (p. 7)"}
+- {id: eps_printed, quantity: transport_parameter, unit: dimensionless, origin: derived, printed: "~0.1",
+   citation: {page: 14, printed_page: "13", quote: "parameter ε ~ 0.02 μm s−1 / 0.1 s−1 × 2 μm ~ 0.1", where: "Appendix D"}}
+
+# ---- lamellipodial width, tension and viscosity (Discussion) -----------------------------------------
+- {id: lamellum_start, quantity: lamellipodium_width, unit: um, origin: reported, printed: "2 to 4",
+   citation: {page: 2, printed_page: "1", quote: "network that begins 2–4 μm away from the leading", where: "Introduction"},
+   note: "the lamellum begins 2-4 um from the leading edge (background statement)"}
+- {id: tension_printed, quantity: membrane_tension, unit: pN/um, origin: predicted, printed: "~60",
+   citation: {page: 12, printed_page: "11", quote: "membrane tension magnitude (∼60 pN μm−1), which", where: Discussion}}
+- {id: viscosity_printed, quantity: actin_network_viscosity, unit: pN*s/um^2, origin: predicted, printed: "~10^3",
+   citation: {page: 12, printed_page: "11", quote: "to predict a viscosity value of μ ∼ 103 pN s μm−2", where: Discussion}}
+
+# ---- Fig. 4 parameters (caption, p. 10) -------------------------------------------------------------
+- {id: lam_fig4, quantity: viscosity_parameter, unit: dimensionless, origin: reported, printed: "3",
+   citation: {page: 10, printed_page: "9", quote: "Unless otherwise stated, parameters are: λ = 3, b = 15,", where: "Fig. 4 caption"}}
+- {id: b_fig4, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "15",
+   citation: {page: 10, printed_page: "9", quote: "Unless otherwise stated, parameters are: λ = 3, b = 15,", where: "Fig. 4 caption"}}
+- {id: vstar_fig4, quantity: flow_weakening_parameter, unit: dimensionless, origin: reported, printed: "0.3",
+   citation: {page: 10, printed_page: "9", quote: "v* = 0.3, and γ = 1000.", where: "Fig. 4 caption"}}
+- {id: gamma_fig4, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "1000",
+   citation: {page: 10, printed_page: "9", quote: "v* = 0.3, and γ = 1000.", where: "Fig. 4 caption"}}
+- {id: b_zero_fig4, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 10, printed_page: "9", quote: "without myosin-dependent adhesion strengthening (by setting b = 0)", where: "Fig. 4(d)-(f) caption"}}
+
+# ---- supplemental figure 2 parameters (caption p. 17, legend p. 21) -----------------------------------
+- {id: F_S2, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 17, quote: "parameters are: F=b=0, v*=0.3, γ=1000", where: "Supplemental figure 2 caption"}}
+- {id: b_S2, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 17, quote: "parameters are: F=b=0, v*=0.3, γ=1000", where: "Supplemental figure 2 caption"}}
+- {id: vstar_S2, quantity: flow_weakening_parameter, unit: dimensionless, origin: reported, printed: "0.3",
+   citation: {page: 17, quote: "parameters are: F=b=0, v*=0.3, γ=1000", where: "Supplemental figure 2 caption"}}
+- {id: gamma_S2, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "1000",
+   citation: {page: 17, quote: "parameters are: F=b=0, v*=0.3, γ=1000", where: "Supplemental figure 2 caption"}}
+- {id: lam_S2_1, quantity: viscosity_parameter, unit: dimensionless, origin: reported, printed: "1",
+   citation: {page: 21, quote: "λ=1 λ=2", where: "Supplemental figure 2(b) legend"}}
+- {id: lam_S2_2, quantity: viscosity_parameter, unit: dimensionless, origin: reported, printed: "2",
+   citation: {page: 21, quote: "λ=1 λ=2", where: "Supplemental figure 2(b) legend"}}
+- {id: lam_S2_3, quantity: viscosity_parameter, unit: dimensionless, origin: reported, printed: "3",
+   citation: {page: 21, quote: "λ=3 λ=4", where: "Supplemental figure 2(b) legend"}}
+- {id: lam_S2_4, quantity: viscosity_parameter, unit: dimensionless, origin: reported, printed: "4",
+   citation: {page: 21, quote: "λ=3 λ=4", where: "Supplemental figure 2(b) legend"}}
+
+# ---- supplemental figure 4 parameters (caption p. 18) ------------------------------------------------
+- {id: lam_S4, quantity: viscosity_parameter, unit: dimensionless, origin: reported, printed: "3",
+   citation: {page: 18, quote: "parameters are: λ=3, F=1, v*=0.3 and γ=1000", where: "Supplemental figure 4 caption"}}
+- {id: F_S4, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "1",
+   citation: {page: 18, quote: "parameters are: λ=3, F=1, v*=0.3 and γ=1000", where: "Supplemental figure 4 caption"}}
+- {id: vstar_S4, quantity: flow_weakening_parameter, unit: dimensionless, origin: reported, printed: "0.3",
+   citation: {page: 18, quote: "parameters are: λ=3, F=1, v*=0.3 and γ=1000", where: "Supplemental figure 4 caption"}}
+- {id: gamma_S4, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "1000",
+   citation: {page: 18, quote: "parameters are: λ=3, F=1, v*=0.3 and γ=1000", where: "Supplemental figure 4 caption"}}
+
+# ---- supplemental figure 1 (U2OS): Eq. 11 fit and model-fit parameters (caption p. 17) ----------------
+- {id: Vmax_fit, quantity: hill_max_flow_speed, unit: nm/s, origin: fitted, printed: "6.6",
+   citation: {page: 17, quote: "fit to model prediction (eq. 11, Vmax=6.6nm/s,", where: "Supplemental figure 1(c) caption"}}
+- {id: Fk_fit, quantity: hill_force_constant, unit: nN, origin: fitted, printed: "23",
+   citation: {page: 17, quote: "Fk=23nN). (d) Model fit (black line)", where: "Supplemental figure 1(c) caption"}}
+- {id: lam_S1, quantity: viscosity_parameter, unit: dimensionless, origin: fitted, printed: "50",
+   citation: {page: 17, quote: "Parameters: λ=50, γ=1000, v*=100, b=1.5, F=300", where: "Supplemental figure 1(d) caption"}}
+- {id: gamma_S1, quantity: myosin_detachment_parameter, unit: dimensionless, origin: fitted, printed: "1000",
+   citation: {page: 17, quote: "Parameters: λ=50, γ=1000, v*=100, b=1.5, F=300", where: "Supplemental figure 1(d) caption"}}
+- {id: vstar_S1, quantity: flow_weakening_parameter, unit: dimensionless, origin: fitted, printed: "100",
+   citation: {page: 17, quote: "Parameters: λ=50, γ=1000, v*=100, b=1.5, F=300", where: "Supplemental figure 1(d) caption"}}
+- {id: b_S1, quantity: strengthening_parameter, unit: dimensionless, origin: fitted, printed: "1.5",
+   citation: {page: 17, quote: "Parameters: λ=50, γ=1000, v*=100, b=1.5, F=300", where: "Supplemental figure 1(d) caption"}}
+- {id: F_S1, quantity: myosin_strength_parameter, unit: dimensionless, origin: fitted, printed: "300",
+   citation: {page: 17, quote: "Parameters: λ=50, γ=1000, v*=100, b=1.5, F=300", where: "Supplemental figure 1(d) caption"}}
+
+# ---- results read from figures ------------------------------------------------------------------------
+- {id: d_fig4c_peak, quantity: traction_peak_location, unit: um, origin: predicted, figure: fig4c_peak,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(c)", quote: "Position of traction peak in mm (black"}}
+- {id: d_fig4c_peak_F0, quantity: traction_peak_location, unit: um, origin: predicted, figure: fig4c_peak_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(c)", quote: "Position of traction peak in mm (black"}}
+- {id: d_fig4c_vpeak, quantity: peak_flow_over_vstar, unit: dimensionless, origin: predicted, figure: fig4c_vpeak,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(c)", quote: "corresponding to traction peak (blue exes) as a function of F"}}
+- {id: d_fig4f_peak, quantity: traction_peak_location, unit: um, origin: predicted, figure: fig4f_peak,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(f)", quote: "as a function of F. (d)–(f) Same as (a)–(c), except"}}
+- {id: d_fig4f_peak_F0, quantity: traction_peak_location, unit: um, origin: predicted, figure: fig4f_peak_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(f)", quote: "as a function of F. (d)–(f) Same as (a)–(c), except"}}
+- {id: d_fig4f_vpeak, quantity: peak_flow_over_vstar, unit: dimensionless, origin: predicted, figure: fig4f_vpeak,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(f)", quote: "as a function of F. (d)–(f) Same as (a)–(c), except"}}
+- {id: d_figS2a_peak, quantity: traction_peak_location, unit: um, origin: predicted, figure: figS2a_peak,
+   citation: {page: 17, where: "Supplemental figure 2(a)", quote: "Position of traction peak (black dots) and actin flow speed"}}
+- {id: d_figS2a_vpeak, quantity: peak_flow_over_vstar, unit: dimensionless, origin: predicted, figure: figS2a_vpeak,
+   citation: {page: 17, where: "Supplemental figure 2(a)", quote: "corresponding to traction peak (blue exes) as a function of λ"}}
+- {id: d_figS2b_lam1, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS2b_lam1,
+   citation: {page: 17, where: "Supplemental figure 2(b)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2b_lam2, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS2b_lam2,
+   citation: {page: 17, where: "Supplemental figure 2(b)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2b_lam3, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS2b_lam3,
+   citation: {page: 17, where: "Supplemental figure 2(b)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2b_lam4, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS2b_lam4,
+   citation: {page: 17, where: "Supplemental figure 2(b)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2c_lam1, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS2c_lam1,
+   citation: {page: 17, where: "Supplemental figure 2(c)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2c_lam2, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS2c_lam2,
+   citation: {page: 17, where: "Supplemental figure 2(c)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2c_lam3, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS2c_lam3,
+   citation: {page: 17, where: "Supplemental figure 2(c)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2c_lam4, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS2c_lam4,
+   citation: {page: 17, where: "Supplemental figure 2(c)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS4a_peak, quantity: traction_peak_location, unit: um, origin: predicted, figure: figS4a_peak,
+   citation: {page: 18, where: "Supplemental figure 4(a)", quote: "traction peak in μm (black dots) and actin flow speed"}}
+- {id: d_figS4a_vpeak, quantity: peak_flow_over_vstar, unit: dimensionless, origin: predicted, figure: figS4a_vpeak,
+   citation: {page: 18, where: "Supplemental figure 4(a)", quote: "corresponding to traction peak (blue exes) as a function of b"}}
+- {id: d_figS1a_flow, quantity: lamellar_flow_speed, unit: nm/s, origin: measured, figure: figS1a_flow,
+   citation: {page: 17, where: "Supplemental figure 1(a)", quote: "Actin flow speed in the lamella as a function of Y-compound concentration"},
+   from_source: ref-31}
+- {id: d_figS1b_force, quantity: total_traction_force, unit: nN, origin: measured, figure: figS1b_force,
+   citation: {page: 17, where: "Supplemental figure 1(b)", quote: "Total measured traction force as a function of Y-compound concentration"},
+   from_source: ref-31}
+- {id: d_figS1c_points, quantity: lamellar_flow_speed, unit: nm/s, origin: measured, figure: figS1c_points,
+   citation: {page: 17, where: "Supplemental figure 1(c)", quote: "Lamellar flow speed as a function of total force (black dots)"},
+   from_source: ref-31}
+- {id: d_figS1c_fit, quantity: lamellar_flow_speed, unit: nm/s, origin: predicted, figure: figS1c_fit,
+   citation: {page: 17, where: "Supplemental figure 1(c)", quote: "fit to model prediction (eq. 11, Vmax=6.6nm/s,"},
+   note: "the curve drawn as the fit of Eq. 11"}
+
+# ---- second pass: parameters of the supplemental profile panels ------------------------------------------
+- {id: b_S4_0, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 23, quote: "b=0 b=20", where: "Supplemental figure 4(b) legend"}}
+- {id: b_S4_20, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "20",
+   citation: {page: 23, quote: "b=0 b=20", where: "Supplemental figure 4(b) legend"}}
+- {id: b_S4_40, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "40",
+   citation: {page: 23, quote: "0.8 b=40", where: "Supplemental figure 4(b) legend"}}
+- {id: b_S4_60, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "60",
+   citation: {page: 23, quote: "b=60", where: "Supplemental figure 4(b) legend"}}
+- {id: b_S4_80, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "80",
+   citation: {page: 23, quote: "b=80", where: "Supplemental figure 4(b) legend"}}
+- {id: b_S4_100, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "100",
+   citation: {page: 23, quote: "0.6 b=100", where: "Supplemental figure 4(b) legend"}}
+- {id: b_S4_10cap, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "10",
+   citation: {page: 18, quote: "for myosin strength b=10 (G), b=40 (H), and b=100 (I)", where: "Supplemental figure 4 caption"}}
+- {id: b_S4_40cap, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "40",
+   citation: {page: 18, quote: "for myosin strength b=10 (G), b=40 (H), and b=100 (I)", where: "Supplemental figure 4 caption"}}
+- {id: b_S4_100cap, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "100",
+   citation: {page: 18, quote: "for myosin strength b=10 (G), b=40 (H), and b=100 (I)", where: "Supplemental figure 4 caption"}}
+- {id: F_S3, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 18, quote: "parameters are: F=b=0, v*=3, γ=1000", where: "Supplemental figure 3 caption"}}
+- {id: b_S3, quantity: strengthening_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 18, quote: "parameters are: F=b=0, v*=3, γ=1000", where: "Supplemental figure 3 caption"}}
+- {id: vstar_S3, quantity: flow_weakening_parameter, unit: dimensionless, origin: reported, printed: "3",
+   citation: {page: 18, quote: "parameters are: F=b=0, v*=3, γ=1000", where: "Supplemental figure 3 caption"}}
+- {id: gamma_S3, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "1000",
+   citation: {page: 18, quote: "parameters are: F=b=0, v*=3, γ=1000", where: "Supplemental figure 3 caption"}}
+- {id: gamma_S3_0p1, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "0.1",
+   citation: {page: 22, quote: "γ=0.1 γ=1 γ=10", where: "Supplemental figure 3(b) legend"}}
+- {id: gamma_S3_1, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "1",
+   citation: {page: 22, quote: "γ=0.1 γ=1 γ=10", where: "Supplemental figure 3(b) legend"}}
+- {id: gamma_S3_10, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "10",
+   citation: {page: 22, quote: "γ=0.1 γ=1 γ=10", where: "Supplemental figure 3(b) legend"}}
+- {id: gamma_S3_100, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "100",
+   citation: {page: 22, quote: "γ=100", where: "Supplemental figure 3(b) legend"}}
+- {id: gamma_S3_1000, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "1000",
+   citation: {page: 22, quote: "γ=1000 γ=2000", where: "Supplemental figure 3(b) legend"}}
+- {id: gamma_S3_2000, quantity: myosin_detachment_parameter, unit: dimensionless, origin: reported, printed: "2000",
+   citation: {page: 22, quote: "γ=1000 γ=2000", where: "Supplemental figure 3(b) legend"}}
+
+# ---- second pass: results read from the supplemental profile panels (figures.yaml) -------------------------
+- {id: d_figS2d_lam1, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS2d_lam1,
+   citation: {page: 17, where: "Supplemental figure 2(d)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2e_lam1, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS2e_lam1,
+   citation: {page: 17, where: "Supplemental figure 2(e)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2d_lam2, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS2d_lam2,
+   citation: {page: 17, where: "Supplemental figure 2(d)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2e_lam2, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS2e_lam2,
+   citation: {page: 17, where: "Supplemental figure 2(e)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2d_lam3, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS2d_lam3,
+   citation: {page: 17, where: "Supplemental figure 2(d)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2e_lam3, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS2e_lam3,
+   citation: {page: 17, where: "Supplemental figure 2(e)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2d_lam4, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS2d_lam4,
+   citation: {page: 17, where: "Supplemental figure 2(d)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS2e_lam4, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS2e_lam4,
+   citation: {page: 17, where: "Supplemental figure 2(e)", quote: "Actin flow, traction, myosin density, and adhesion density as a"}}
+- {id: d_figS3a_V, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS3a_V,
+   citation: {page: 18, where: "Supplemental figure 3(a)", quote: "Actin flow speed (black) and traction (red) as a function of distance"}}
+- {id: d_figS3a_T, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS3a_T,
+   citation: {page: 18, where: "Supplemental figure 3(a)", quote: "Actin flow speed (black) and traction (red) as a function of distance"}}
+- {id: d_figS3b_g0p1, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS3b_g0p1,
+   citation: {page: 18, where: "Supplemental figure 3(b)", quote: "Myosin distribution for different values of γ"}}
+- {id: d_figS3c_g0p1, quantity: scaled_myosin_gradient, unit: dimensionless, origin: predicted, figure: figS3c_g0p1,
+   citation: {page: 18, where: "Supplemental figure 3(c)", quote: "Myosin gradient for same values of γ as in (B)"}}
+- {id: d_figS3b_g1, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS3b_g1,
+   citation: {page: 18, where: "Supplemental figure 3(b)", quote: "Myosin distribution for different values of γ"}}
+- {id: d_figS3c_g1, quantity: scaled_myosin_gradient, unit: dimensionless, origin: predicted, figure: figS3c_g1,
+   citation: {page: 18, where: "Supplemental figure 3(c)", quote: "Myosin gradient for same values of γ as in (B)"}}
+- {id: d_figS3b_g10, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS3b_g10,
+   citation: {page: 18, where: "Supplemental figure 3(b)", quote: "Myosin distribution for different values of γ"}}
+- {id: d_figS3c_g10, quantity: scaled_myosin_gradient, unit: dimensionless, origin: predicted, figure: figS3c_g10,
+   citation: {page: 18, where: "Supplemental figure 3(c)", quote: "Myosin gradient for same values of γ as in (B)"}}
+- {id: d_figS3b_g100, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS3b_g100,
+   citation: {page: 18, where: "Supplemental figure 3(b)", quote: "Myosin distribution for different values of γ"}}
+- {id: d_figS3c_g100, quantity: scaled_myosin_gradient, unit: dimensionless, origin: predicted, figure: figS3c_g100,
+   citation: {page: 18, where: "Supplemental figure 3(c)", quote: "Myosin gradient for same values of γ as in (B)"}}
+- {id: d_figS3b_g1000, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS3b_g1000,
+   citation: {page: 18, where: "Supplemental figure 3(b)", quote: "Myosin distribution for different values of γ"}}
+- {id: d_figS3c_g1000, quantity: scaled_myosin_gradient, unit: dimensionless, origin: predicted, figure: figS3c_g1000,
+   citation: {page: 18, where: "Supplemental figure 3(c)", quote: "Myosin gradient for same values of γ as in (B)"}}
+- {id: d_figS3b_g2000, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS3b_g2000,
+   citation: {page: 18, where: "Supplemental figure 3(b)", quote: "Myosin distribution for different values of γ"}}
+- {id: d_figS3c_g2000, quantity: scaled_myosin_gradient, unit: dimensionless, origin: predicted, figure: figS3c_g2000,
+   citation: {page: 18, where: "Supplemental figure 3(c)", quote: "Myosin gradient for same values of γ as in (B)"}}
+- {id: d_figS4b_b0, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS4b_b0,
+   citation: {page: 18, where: "Supplemental figure 4(b)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4c_b0, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4c_b0,
+   citation: {page: 18, where: "Supplemental figure 4(c)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4d_b0, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS4d_b0,
+   citation: {page: 18, where: "Supplemental figure 4(d)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4e_b0, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4e_b0,
+   citation: {page: 18, where: "Supplemental figure 4(e)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4f_b0, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS4f_b0,
+   citation: {page: 18, where: "Supplemental figure 4(f)", quote: "and adhesion density as a function of distance from the leading edge"}}
+- {id: d_figS4b_b20, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS4b_b20,
+   citation: {page: 18, where: "Supplemental figure 4(b)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4c_b20, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4c_b20,
+   citation: {page: 18, where: "Supplemental figure 4(c)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4d_b20, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS4d_b20,
+   citation: {page: 18, where: "Supplemental figure 4(d)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4e_b20, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4e_b20,
+   citation: {page: 18, where: "Supplemental figure 4(e)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4f_b20, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS4f_b20,
+   citation: {page: 18, where: "Supplemental figure 4(f)", quote: "and adhesion density as a function of distance from the leading edge"}}
+- {id: d_figS4b_b40, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS4b_b40,
+   citation: {page: 18, where: "Supplemental figure 4(b)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4c_b40, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4c_b40,
+   citation: {page: 18, where: "Supplemental figure 4(c)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4d_b40, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS4d_b40,
+   citation: {page: 18, where: "Supplemental figure 4(d)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4e_b40, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4e_b40,
+   citation: {page: 18, where: "Supplemental figure 4(e)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4f_b40, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS4f_b40,
+   citation: {page: 18, where: "Supplemental figure 4(f)", quote: "and adhesion density as a function of distance from the leading edge"}}
+- {id: d_figS4b_b60, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS4b_b60,
+   citation: {page: 18, where: "Supplemental figure 4(b)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4c_b60, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4c_b60,
+   citation: {page: 18, where: "Supplemental figure 4(c)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4d_b60, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS4d_b60,
+   citation: {page: 18, where: "Supplemental figure 4(d)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4e_b60, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4e_b60,
+   citation: {page: 18, where: "Supplemental figure 4(e)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4f_b60, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS4f_b60,
+   citation: {page: 18, where: "Supplemental figure 4(f)", quote: "and adhesion density as a function of distance from the leading edge"}}
+- {id: d_figS4b_b80, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS4b_b80,
+   citation: {page: 18, where: "Supplemental figure 4(b)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4c_b80, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4c_b80,
+   citation: {page: 18, where: "Supplemental figure 4(c)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4d_b80, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS4d_b80,
+   citation: {page: 18, where: "Supplemental figure 4(d)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4e_b80, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4e_b80,
+   citation: {page: 18, where: "Supplemental figure 4(e)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4f_b80, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS4f_b80,
+   citation: {page: 18, where: "Supplemental figure 4(f)", quote: "and adhesion density as a function of distance from the leading edge"}}
+- {id: d_figS4b_b100, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS4b_b100,
+   citation: {page: 18, where: "Supplemental figure 4(b)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4c_b100, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4c_b100,
+   citation: {page: 18, where: "Supplemental figure 4(c)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4d_b100, quantity: scaled_myosin_density, unit: dimensionless, origin: predicted, figure: figS4d_b100,
+   citation: {page: 18, where: "Supplemental figure 4(d)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4e_b100, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4e_b100,
+   citation: {page: 18, where: "Supplemental figure 4(e)", quote: "Actin flow, traction, myosin density, myosin force"}}
+- {id: d_figS4f_b100, quantity: scaled_adhesion_density, unit: dimensionless, origin: predicted, figure: figS4f_b100,
+   citation: {page: 18, where: "Supplemental figure 4(f)", quote: "and adhesion density as a function of distance from the leading edge"}}
+- {id: d_figS4g_T, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4g_T,
+   citation: {page: 18, where: "Supplemental figure 4(g)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4g_Fmyo, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4g_Fmyo,
+   citation: {page: 18, where: "Supplemental figure 4(g)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4g_Fvisc, quantity: scaled_viscous_force, unit: dimensionless, origin: predicted, figure: figS4g_Fvisc,
+   citation: {page: 18, where: "Supplemental figure 4(g)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4h_T, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4h_T,
+   citation: {page: 18, where: "Supplemental figure 4(h)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4h_Fmyo, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4h_Fmyo,
+   citation: {page: 18, where: "Supplemental figure 4(h)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4h_Fvisc, quantity: scaled_viscous_force, unit: dimensionless, origin: predicted, figure: figS4h_Fvisc,
+   citation: {page: 18, where: "Supplemental figure 4(h)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4i_T, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: figS4i_T,
+   citation: {page: 18, where: "Supplemental figure 4(i)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4i_Fmyo, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: figS4i_Fmyo,
+   citation: {page: 18, where: "Supplemental figure 4(i)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+- {id: d_figS4i_Fvisc, quantity: scaled_viscous_force, unit: dimensionless, origin: predicted, figure: figS4i_Fvisc,
+   citation: {page: 18, where: "Supplemental figure 4(i)", quote: "Balance of forces on actin network (traction (black), myosin force"}}
+
+# ---- second pass: measured intensity profiles of Fig. 2(d) (figures.yaml) ----------------------------------
+- {id: d_fig2d_paxillin, quantity: paxillin_intensity_rel_max, unit: dimensionless, origin: measured, figure: fig2d_paxillin,
+   citation: {page: 4, where: "Fig. 2(d), left", quote: "Intensity as a function of distance from the leading edge for the sample cells in (c)"},
+   note: "Ptk1 control cell; 0.5 um bins; no error bars drawn"}
+- {id: d_fig2d_myosin, quantity: myosin_intensity_rel_max, unit: dimensionless, origin: measured, figure: fig2d_myosin,
+   citation: {page: 4, where: "Fig. 2(d), right", quote: "Intensity as a function of distance from the leading edge for the sample cells in (c)"},
+   note: "Ptk1 control cell; bars 0.5 um apart, centred on multiples of 0.5 um; no error bars drawn"}
+
+# ---- second pass: Fig. 4 profile panels (legend parameters, then the readings of figures.yaml) ---------
+- {id: F_fig4a_0, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 10, where: "Fig. 4(a) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4a_2, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "2",
+   citation: {page: 10, where: "Fig. 4(a) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4a_4, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "4",
+   citation: {page: 10, where: "Fig. 4(a) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4a_10, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "10",
+   citation: {page: 10, where: "Fig. 4(a) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4a_20, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "20",
+   citation: {page: 10, where: "Fig. 4(a) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4a_30, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "30",
+   citation: {page: 10, where: "Fig. 4(a) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4d_0, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 10, where: "Fig. 4(d) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4d_2, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "2",
+   citation: {page: 10, where: "Fig. 4(d) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4d_4, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "4",
+   citation: {page: 10, where: "Fig. 4(d) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4d_6, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "6",
+   citation: {page: 10, where: "Fig. 4(d) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4d_8, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "8",
+   citation: {page: 10, where: "Fig. 4(d) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4d_10, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "10",
+   citation: {page: 10, where: "Fig. 4(d) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4g_0, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "0",
+   citation: {page: 10, where: "Fig. 4(g) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4g_5, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "5",
+   citation: {page: 10, where: "Fig. 4(g) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4g_10, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "10",
+   citation: {page: 10, where: "Fig. 4(g) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4g_15, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "15",
+   citation: {page: 10, where: "Fig. 4(g) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4g_20, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "20",
+   citation: {page: 10, where: "Fig. 4(g) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4g_25, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "25",
+   citation: {page: 10, where: "Fig. 4(g) legend", none: "the legend is drawn inside the raster figure; its text is not in the page text"}}
+- {id: F_fig4i, quantity: myosin_strength_parameter, unit: dimensionless, origin: reported, printed: "10",
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(i) caption", quote: "for F = 10, b = 15, v* = 0.3"}}
+- {id: d_fig4a_F0, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4a_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(a)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4a_F2, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4a_F2,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(a)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4a_F4, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4a_F4,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(a)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4a_F10, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4a_F10,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(a)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4a_F20, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4a_F20,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(a)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4a_F30, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4a_F30,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(a)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4b_F0, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4b_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(b)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4b_F2, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4b_F2,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(b)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4b_F4, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4b_F4,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(b)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4b_F10, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4b_F10,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(b)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4b_F20, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4b_F20,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(b)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4b_F30, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4b_F30,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(b)", quote: "Actin ﬂow speed and traction as a function of distance from the leading edge"}}
+- {id: d_fig4d_F0, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4d_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(d)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4d_F2, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4d_F2,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(d)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4d_F4, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4d_F4,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(d)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4d_F6, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4d_F6,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(d)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4d_F8, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4d_F8,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(d)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4d_F10, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4d_F10,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(d)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4e_F0, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4e_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(e)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4e_F2, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4e_F2,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(e)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4e_F4, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4e_F4,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(e)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4e_F6, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4e_F6,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(e)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4e_F8, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4e_F8,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(e)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4e_F10, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4e_F10,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(e)", quote: "Same as (a)–(c), except"}}
+- {id: d_fig4g_F0, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4g_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(g)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4g_F5, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4g_F5,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(g)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4g_F10, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4g_F10,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(g)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4g_F15, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4g_F15,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(g)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4g_F20, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4g_F20,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(g)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4g_F25, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: fig4g_F25,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(g)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4h_F0, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4h_F0,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(h)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4h_F5, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4h_F5,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(h)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4h_F10, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4h_F10,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(h)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4h_F15, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4h_F15,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(h)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4h_F20, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4h_F20,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(h)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4h_F25, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4h_F25,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(h)", quote: "Actin ﬂow and traction as a function of distance from"}}
+- {id: d_fig4i_T, quantity: scaled_traction, unit: dimensionless, origin: predicted, figure: fig4i_T,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(i)", quote: "Balance of forces on actin network"}}
+- {id: d_fig4i_Fmyo, quantity: scaled_myosin_force, unit: dimensionless, origin: predicted, figure: fig4i_Fmyo,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(i)", quote: "Balance of forces on actin network"}}
+- {id: d_fig4i_Fvisc, quantity: scaled_viscous_force, unit: dimensionless, origin: predicted, figure: fig4i_Fvisc,
+   citation: {page: 10, printed_page: "9", where: "Fig. 4(i)", quote: "Balance of forces on actin network"}}
+
+# ---- second pass: the model-fit curves of supplemental figure 1(d), (e) (figures.yaml) ---------------------
+- {id: d_figS1d_fit, quantity: actin_flow_speed, unit: nm/s, origin: predicted, figure: figS1d_fit,
+   citation: {page: 17, where: "Supplemental figure 1(d)", quote: "Model fit (black line) to experimental data (blue dots) for actin flow speed"},
+   note: "dimensional: V0 is not printed (question q_S1de_scales), so no run reproduces it"}
+- {id: d_figS1e_fit, quantity: traction_stress, unit: Pa, origin: predicted, figure: figS1e_fit,
+   citation: {page: 17, where: "Supplemental figure 1(e)", quote: "Model fit to traction data for same cell as in (d)"},
+   note: "dimensional: T0 is not printed (question q_S1de_scales), so no run reproduces it"}
+
+# ---- second pass: predicted adhesion density of the Fig. 3 fits (figures.yaml) -----------------------------
+- {id: d_fig3a_adh, quantity: adhesion_density_rel_max, unit: dimensionless, origin: predicted, figure: fig3a_adh,
+   citation: {page: 9, printed_page: "8", where: "Fig. 3(a), right", quote: "density (whiskers) and adhesion density (squares) (right) for a blebbistatin-treated cell"},
+   note: "model output at fit parameters the paper does not print (question q_fig3_parameters): no run"}
+- {id: d_fig3b_adh, quantity: adhesion_density_rel_max, unit: dimensionless, origin: predicted, figure: fig3b_adh,
+   citation: {page: 9, printed_page: "8", where: "Fig. 3(b), right", quote: "density (whiskers) and adhesion density (squares) (right) for a blebbistatin-treated cell"},
+   note: "control cell; fit parameters not printed (question q_fig3_parameters): no run"}
+- {id: d_fig3c_adh, quantity: adhesion_density_rel_max, unit: dimensionless, origin: predicted, figure: fig3c_adh,
+   citation: {page: 9, printed_page: "8", where: "Fig. 3(c), right", quote: "density (whiskers) and adhesion density (squares) (right) for a blebbistatin-treated cell"},
+   note: "CA-Rho-treated cell; fit parameters not printed (question q_fig3_parameters): no run"}
+- {id: d_figS2b_lam1_atS3, quantity: scaled_flow_speed, unit: dimensionless, origin: predicted, figure: figS2b_lam1_atS3,
+   citation: {page: 17, where: "Supplemental figure 2(b)", quote: "Actin flow, traction, myosin density, and adhesion density as a"},
+   note: "the curve of d_figS2b_lam1 read at the positions of d_figS3a_V"}

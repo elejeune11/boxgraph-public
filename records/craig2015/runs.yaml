@@ -1,0 +1,716 @@
+# ---- order-of-magnitude estimates -------------------------------------------------------------------
+- id: run_lambda_estimate
+  model: lambda_estimate
+  inputs: {T0: T0_ptk1, L0: L0_model, V0: V0_ptk1, eta: eta_ref29, h: thickness_text}
+  outputs: {drag: drag_scale_pred, lam: lambda_est_pred}
+  note: "V0 is the ~20 nm/s leading-edge flow of Ptk1 cells (p. 8); the estimate on p. 8 does not name the V0 it uses"
+- id: run_displacement
+  model: network_displacement
+  inputs: {V: V_char, t: t_relevant}
+  outputs: {d: disp_pred}
+  note: "the flow speed is the 'characteristic rate of the actin flow' of p. 5; Appendix D does not say which speed it used"
+- id: run_epsilon
+  model: transport_epsilon
+  inputs: {V0: V0_eps, r: r_turnover, L0: L0_eps}
+  outputs: {eps: eps_pred}
+- id: run_width
+  model: lamellipodial_width
+  inputs: {eta: eta_ref29, h: thickness_text, V0: V0_ptk1, Tbar: T0_ptk1}
+  outputs: {X: width_pred}
+  note: "mu is the measured viscosity times the thickness (p. 8); T-bar is taken as the characteristic traction T0 of [14] (p. 8)"
+- id: run_tension_viscosity
+  model: tension_viscosity
+  inputs: {Tbar: T0_ptk1, X: width_added, grad: gradient_added, h: thickness_text}
+  outputs: {tension: tension_pred, eta: viscosity_pred}
+
+# ---- Eq. 11 (U2OS, supplemental figure 1(c)) -----------------------------------------------------------
+- id: run_hill_curve
+  model: hill_eq11
+  inputs: {Vmax: Vmax_fit, Fk: Fk_fit}
+  sweep: {Ftot: d_figS1c_fit}
+  outputs: {VLM: hill_curve_pred}
+- id: run_hill_points
+  model: hill_eq11
+  inputs: {Vmax: Vmax_fit, Fk: Fk_fit}
+  sweep: {Ftot: d_figS1c_points}
+  outputs: {VLM: hill_points_pred}
+
+# ---- Eq. 10 against the full model at the U2OS fit parameters ------------------------------------------
+- id: run_eq10_S1
+  model: uniform_flow_eq10
+  inputs: {F: F_S1, b: b_S1}
+  outputs: {V: eq10_S1_pred}
+- id: run_profile_S1_end
+  model: clutch_profile
+  inputs: {lam: lam_S1, F: F_S1, b: b_S1, vstar: vstar_S1, gamma: gamma_S1, x: L_domain}
+  outputs: {V: full_S1_V_end, T: full_S1_T_end}
+  note: "the flow speed at the far end of the domain (x = L = 8 um), where the flow is uniform"
+
+# ---- traction peak (Figs. 4(c), 4(f), S2(a), S4(a)) ----------------------------------------------------
+- id: run_fig4c
+  model: clutch_peak
+  inputs: {lam: lam_fig4, b: b_fig4, vstar: vstar_fig4, gamma: gamma_fig4}
+  sweep: {F: d_fig4c_peak}
+  outputs: {x_peak: fig4c_peak_pred, v_peak: fig4c_vpeak_pred}
+- id: run_fig4f
+  model: clutch_peak
+  inputs: {lam: lam_fig4, b: b_zero_fig4, vstar: vstar_fig4, gamma: gamma_fig4}
+  sweep: {F: d_fig4f_peak}
+  outputs: {x_peak: fig4f_peak_pred, v_peak: fig4f_vpeak_pred}
+- id: run_figS2a
+  model: clutch_peak
+  inputs: {F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {lam: d_figS2a_peak}
+  outputs: {x_peak: figS2a_peak_pred, v_peak: figS2a_vpeak_pred}
+- id: run_figS4a
+  model: clutch_peak
+  inputs: {lam: lam_S4, F: F_S4, vstar: vstar_S4, gamma: gamma_S4}
+  sweep: {b: d_figS4a_peak}
+  outputs: {x_peak: figS4a_peak_pred, v_peak: figS4a_vpeak_pred}
+- id: run_figS4a_backward
+  model: clutch_peak
+  inputs: {lam: lam_S4, F: F_S4, vstar: vstar_S4, gamma: gamma_S4}
+  settings: {dM_scheme: backward}
+  sweep: {b: d_figS4a_peak}
+  outputs: {x_peak: figS4a_peak_pred_bwd, v_peak: figS4a_vpeak_pred_bwd}
+  note: "the same run with dM/dx as a backward (upwind-side) difference, the other unstated choice (question q_numerics_scheme)"
+
+- id: run_vpeak_b0_text
+  model: clutch_peak
+  inputs: {lam: lam_S2_3, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  outputs: {x_peak: x_peak_b0_text_run, v_peak: vpeak_b0_text_pred}
+  note: "added by the audit: the Appendix A.2 claim (p. 12) at the supplemental figure 2 parameters with lambda = 3"
+
+# ---- profiles (supplemental figure 2(b), (c)) ----------------------------------------------------------
+- id: run_figS2b_lam1
+  model: clutch_profile
+  inputs: {lam: lam_S2_1, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2b_lam1}
+  outputs: {V: figS2b_lam1_pred, T: figS2b_lam1_T}
+- id: run_figS2b_lam2
+  model: clutch_profile
+  inputs: {lam: lam_S2_2, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2b_lam2}
+  outputs: {V: figS2b_lam2_pred, T: figS2b_lam2_T}
+- id: run_figS2b_lam3
+  model: clutch_profile
+  inputs: {lam: lam_S2_3, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2b_lam3}
+  outputs: {V: figS2b_lam3_pred, T: figS2b_lam3_T}
+- id: run_figS2b_lam4
+  model: clutch_profile
+  inputs: {lam: lam_S2_4, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2b_lam4}
+  outputs: {V: figS2b_lam4_pred, T: figS2b_lam4_T}
+- id: run_figS2c_lam1
+  model: clutch_profile
+  inputs: {lam: lam_S2_1, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2c_lam1}
+  outputs: {V: figS2c_lam1_V, T: figS2c_lam1_pred}
+- id: run_figS2c_lam2
+  model: clutch_profile
+  inputs: {lam: lam_S2_2, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2c_lam2}
+  outputs: {V: figS2c_lam2_V, T: figS2c_lam2_pred}
+- id: run_figS2c_lam3
+  model: clutch_profile
+  inputs: {lam: lam_S2_3, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2c_lam3}
+  outputs: {V: figS2c_lam3_V, T: figS2c_lam3_pred}
+- id: run_figS2c_lam4
+  model: clutch_profile
+  inputs: {lam: lam_S2_4, F: F_S2, b: b_S2, vstar: vstar_S2, gamma: gamma_S2}
+  sweep: {x: d_figS2c_lam4}
+  outputs: {V: figS2c_lam4_V, T: figS2c_lam4_pred}
+
+# ---- second pass: supplemental profile panels 2(d), (e), 3, 4(b)-(i) ------------------------------------------
+- id: run_figS2d_lam1
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_1, vstar: vstar_S2}
+  sweep: {x: d_figS2d_lam1}
+  outputs: {M: figS2d_lam1_pred}
+- id: run_figS2e_lam1
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_1, vstar: vstar_S2}
+  sweep: {x: d_figS2e_lam1}
+  outputs: {N: figS2e_lam1_pred}
+- id: run_figS2d_lam2
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_2, vstar: vstar_S2}
+  sweep: {x: d_figS2d_lam2}
+  outputs: {M: figS2d_lam2_pred}
+- id: run_figS2e_lam2
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_2, vstar: vstar_S2}
+  sweep: {x: d_figS2e_lam2}
+  outputs: {N: figS2e_lam2_pred}
+- id: run_figS2d_lam3
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_3, vstar: vstar_S2}
+  sweep: {x: d_figS2d_lam3}
+  outputs: {M: figS2d_lam3_pred}
+- id: run_figS2e_lam3
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_3, vstar: vstar_S2}
+  sweep: {x: d_figS2e_lam3}
+  outputs: {N: figS2e_lam3_pred}
+- id: run_figS2d_lam4
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_4, vstar: vstar_S2}
+  sweep: {x: d_figS2d_lam4}
+  outputs: {M: figS2d_lam4_pred}
+- id: run_figS2e_lam4
+  model: clutch_fields
+  inputs: {F: F_S2, b: b_S2, gamma: gamma_S2, lam: lam_S2_4, vstar: vstar_S2}
+  sweep: {x: d_figS2e_lam4}
+  outputs: {N: figS2e_lam4_pred}
+- id: run_figS3a_V
+  model: clutch_profile
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3a_V}
+  outputs: {V: figS3a_V_pred}
+- id: run_figS3a_T
+  model: clutch_profile
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3a_T}
+  outputs: {T: figS3a_T_pred}
+- id: run_figS3b_g0p1
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_0p1, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3b_g0p1}
+  outputs: {M: figS3b_g0p1_pred}
+- id: run_figS3c_g0p1
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_0p1, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3c_g0p1}
+  outputs: {dM: figS3c_g0p1_pred}
+- id: run_figS3b_g1
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_1, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3b_g1}
+  outputs: {M: figS3b_g1_pred}
+- id: run_figS3c_g1
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_1, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3c_g1}
+  outputs: {dM: figS3c_g1_pred}
+- id: run_figS3b_g10
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_10, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3b_g10}
+  outputs: {M: figS3b_g10_pred}
+- id: run_figS3c_g10
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_10, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3c_g10}
+  outputs: {dM: figS3c_g10_pred}
+- id: run_figS3b_g100
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_100, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3b_g100}
+  outputs: {M: figS3b_g100_pred}
+- id: run_figS3c_g100
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_100, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3c_g100}
+  outputs: {dM: figS3c_g100_pred}
+- id: run_figS3b_g1000
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_1000, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3b_g1000}
+  outputs: {M: figS3b_g1000_pred}
+- id: run_figS3c_g1000
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_1000, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3c_g1000}
+  outputs: {dM: figS3c_g1000_pred}
+- id: run_figS3b_g2000
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_2000, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3b_g2000}
+  outputs: {M: figS3b_g2000_pred}
+- id: run_figS3c_g2000
+  model: clutch_fields
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3_2000, lam: lam_S3_added, vstar: vstar_S3}
+  sweep: {x: d_figS3c_g2000}
+  outputs: {dM: figS3c_g2000_pred}
+- id: run_figS4b_b0
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_0, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4b_b0}
+  outputs: {V: figS4b_b0_pred}
+- id: run_figS4c_b0
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_0, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4c_b0}
+  outputs: {T: figS4c_b0_pred}
+- id: run_figS4d_b0
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_0, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4d_b0}
+  outputs: {M: figS4d_b0_pred}
+- id: run_figS4e_b0
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_0, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4e_b0}
+  outputs: {Fmyo: figS4e_b0_pred}
+- id: run_figS4f_b0
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_0, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4f_b0}
+  outputs: {N: figS4f_b0_pred}
+- id: run_figS4b_b20
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_20, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4b_b20}
+  outputs: {V: figS4b_b20_pred}
+- id: run_figS4c_b20
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_20, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4c_b20}
+  outputs: {T: figS4c_b20_pred}
+- id: run_figS4d_b20
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_20, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4d_b20}
+  outputs: {M: figS4d_b20_pred}
+- id: run_figS4e_b20
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_20, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4e_b20}
+  outputs: {Fmyo: figS4e_b20_pred}
+- id: run_figS4f_b20
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_20, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4f_b20}
+  outputs: {N: figS4f_b20_pred}
+- id: run_figS4b_b40
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_40, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4b_b40}
+  outputs: {V: figS4b_b40_pred}
+- id: run_figS4c_b40
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_40, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4c_b40}
+  outputs: {T: figS4c_b40_pred}
+- id: run_figS4d_b40
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_40, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4d_b40}
+  outputs: {M: figS4d_b40_pred}
+- id: run_figS4e_b40
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_40, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4e_b40}
+  outputs: {Fmyo: figS4e_b40_pred}
+- id: run_figS4f_b40
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_40, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4f_b40}
+  outputs: {N: figS4f_b40_pred}
+- id: run_figS4b_b60
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_60, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4b_b60}
+  outputs: {V: figS4b_b60_pred}
+- id: run_figS4c_b60
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_60, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4c_b60}
+  outputs: {T: figS4c_b60_pred}
+- id: run_figS4d_b60
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_60, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4d_b60}
+  outputs: {M: figS4d_b60_pred}
+- id: run_figS4e_b60
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_60, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4e_b60}
+  outputs: {Fmyo: figS4e_b60_pred}
+- id: run_figS4f_b60
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_60, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4f_b60}
+  outputs: {N: figS4f_b60_pred}
+- id: run_figS4b_b80
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_80, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4b_b80}
+  outputs: {V: figS4b_b80_pred}
+- id: run_figS4c_b80
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_80, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4c_b80}
+  outputs: {T: figS4c_b80_pred}
+- id: run_figS4d_b80
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_80, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4d_b80}
+  outputs: {M: figS4d_b80_pred}
+- id: run_figS4e_b80
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_80, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4e_b80}
+  outputs: {Fmyo: figS4e_b80_pred}
+- id: run_figS4f_b80
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_80, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4f_b80}
+  outputs: {N: figS4f_b80_pred}
+- id: run_figS4b_b100
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_100, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4b_b100}
+  outputs: {V: figS4b_b100_pred}
+- id: run_figS4c_b100
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_100, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4c_b100}
+  outputs: {T: figS4c_b100_pred}
+- id: run_figS4d_b100
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_100, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4d_b100}
+  outputs: {M: figS4d_b100_pred}
+- id: run_figS4e_b100
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_100, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4e_b100}
+  outputs: {Fmyo: figS4e_b100_pred}
+- id: run_figS4f_b100
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_100, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4f_b100}
+  outputs: {N: figS4f_b100_pred}
+- id: run_figS4g_T
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_10cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4g_T}
+  outputs: {T: figS4g_T_pred}
+- id: run_figS4g_Fmyo
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_10cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4g_Fmyo}
+  outputs: {Fmyo: figS4g_Fmyo_pred}
+- id: run_figS4g_Fvisc
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_10cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4g_Fvisc}
+  outputs: {Fvisc: figS4g_Fvisc_pred}
+- id: run_figS4h_T
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_40cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4h_T}
+  outputs: {T: figS4h_T_pred}
+- id: run_figS4h_Fmyo
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_40cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4h_Fmyo}
+  outputs: {Fmyo: figS4h_Fmyo_pred}
+- id: run_figS4h_Fvisc
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_40cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4h_Fvisc}
+  outputs: {Fvisc: figS4h_Fvisc_pred}
+- id: run_figS4i_T
+  model: clutch_profile
+  inputs: {F: F_S4, b: b_S4_100cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4i_T}
+  outputs: {T: figS4i_T_pred}
+- id: run_figS4i_Fmyo
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_100cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4i_Fmyo}
+  outputs: {Fmyo: figS4i_Fmyo_pred}
+- id: run_figS4i_Fvisc
+  model: clutch_fields
+  inputs: {F: F_S4, b: b_S4_100cap, gamma: gamma_S4, lam: lam_S4, vstar: vstar_S4}
+  sweep: {x: d_figS4i_Fvisc}
+  outputs: {Fvisc: figS4i_Fvisc_pred}
+
+# ---- second pass: Fig. 4 profile panels ------------------------------------------------------------------
+- id: run_fig4a_F0
+  model: clutch_profile
+  inputs: {F: F_fig4a_0, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4a_F0}
+  outputs: {V: fig4a_F0_pred}
+- id: run_fig4a_F2
+  model: clutch_profile
+  inputs: {F: F_fig4a_2, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4a_F2}
+  outputs: {V: fig4a_F2_pred}
+- id: run_fig4a_F4
+  model: clutch_profile
+  inputs: {F: F_fig4a_4, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4a_F4}
+  outputs: {V: fig4a_F4_pred}
+- id: run_fig4a_F10
+  model: clutch_profile
+  inputs: {F: F_fig4a_10, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4a_F10}
+  outputs: {V: fig4a_F10_pred}
+- id: run_fig4a_F20
+  model: clutch_profile
+  inputs: {F: F_fig4a_20, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4a_F20}
+  outputs: {V: fig4a_F20_pred}
+- id: run_fig4a_F30
+  model: clutch_profile
+  inputs: {F: F_fig4a_30, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4a_F30}
+  outputs: {V: fig4a_F30_pred}
+- id: run_fig4b_F0
+  model: clutch_profile
+  inputs: {F: F_fig4a_0, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4b_F0}
+  outputs: {T: fig4b_F0_pred}
+- id: run_fig4b_F2
+  model: clutch_profile
+  inputs: {F: F_fig4a_2, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4b_F2}
+  outputs: {T: fig4b_F2_pred}
+- id: run_fig4b_F4
+  model: clutch_profile
+  inputs: {F: F_fig4a_4, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4b_F4}
+  outputs: {T: fig4b_F4_pred}
+- id: run_fig4b_F10
+  model: clutch_profile
+  inputs: {F: F_fig4a_10, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4b_F10}
+  outputs: {T: fig4b_F10_pred}
+- id: run_fig4b_F20
+  model: clutch_profile
+  inputs: {F: F_fig4a_20, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4b_F20}
+  outputs: {T: fig4b_F20_pred}
+- id: run_fig4b_F30
+  model: clutch_profile
+  inputs: {F: F_fig4a_30, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4b_F30}
+  outputs: {T: fig4b_F30_pred}
+- id: run_fig4d_F0
+  model: clutch_profile
+  inputs: {F: F_fig4d_0, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F0}
+  outputs: {V: fig4d_F0_pred}
+- id: run_fig4d_F2
+  model: clutch_profile
+  inputs: {F: F_fig4d_2, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F2}
+  outputs: {V: fig4d_F2_pred}
+- id: run_fig4d_F4
+  model: clutch_profile
+  inputs: {F: F_fig4d_4, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F4}
+  outputs: {V: fig4d_F4_pred}
+- id: run_fig4d_F6
+  model: clutch_profile
+  inputs: {F: F_fig4d_6, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F6}
+  outputs: {V: fig4d_F6_pred}
+- id: run_fig4d_F8
+  model: clutch_profile
+  inputs: {F: F_fig4d_8, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F8}
+  outputs: {V: fig4d_F8_pred}
+- id: run_fig4d_F10
+  model: clutch_profile
+  inputs: {F: F_fig4d_10, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F10}
+  outputs: {V: fig4d_F10_pred}
+- id: run_fig4e_F0
+  model: clutch_profile
+  inputs: {F: F_fig4d_0, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F0}
+  outputs: {T: fig4e_F0_pred}
+- id: run_fig4e_F2
+  model: clutch_profile
+  inputs: {F: F_fig4d_2, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F2}
+  outputs: {T: fig4e_F2_pred}
+- id: run_fig4e_F4
+  model: clutch_profile
+  inputs: {F: F_fig4d_4, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F4}
+  outputs: {T: fig4e_F4_pred}
+- id: run_fig4e_F6
+  model: clutch_profile
+  inputs: {F: F_fig4d_6, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F6}
+  outputs: {T: fig4e_F6_pred}
+- id: run_fig4e_F8
+  model: clutch_profile
+  inputs: {F: F_fig4d_8, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F8}
+  outputs: {T: fig4e_F8_pred}
+- id: run_fig4e_F10
+  model: clutch_profile
+  inputs: {F: F_fig4d_10, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F10}
+  outputs: {T: fig4e_F10_pred}
+- id: run_fig4g_F0
+  model: clutch_profile
+  inputs: {F: F_fig4g_0, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4g_F0}
+  outputs: {V: fig4g_F0_pred}
+- id: run_fig4g_F5
+  model: clutch_profile
+  inputs: {F: F_fig4g_5, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4g_F5}
+  outputs: {V: fig4g_F5_pred}
+- id: run_fig4g_F10
+  model: clutch_profile
+  inputs: {F: F_fig4g_10, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4g_F10}
+  outputs: {V: fig4g_F10_pred}
+- id: run_fig4g_F15
+  model: clutch_profile
+  inputs: {F: F_fig4g_15, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4g_F15}
+  outputs: {V: fig4g_F15_pred}
+- id: run_fig4g_F20
+  model: clutch_profile
+  inputs: {F: F_fig4g_20, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4g_F20}
+  outputs: {V: fig4g_F20_pred}
+- id: run_fig4g_F25
+  model: clutch_profile
+  inputs: {F: F_fig4g_25, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4g_F25}
+  outputs: {V: fig4g_F25_pred}
+- id: run_fig4h_F0
+  model: clutch_profile
+  inputs: {F: F_fig4g_0, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4h_F0}
+  outputs: {T: fig4h_F0_pred}
+- id: run_fig4h_F5
+  model: clutch_profile
+  inputs: {F: F_fig4g_5, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4h_F5}
+  outputs: {T: fig4h_F5_pred}
+- id: run_fig4h_F10
+  model: clutch_profile
+  inputs: {F: F_fig4g_10, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4h_F10}
+  outputs: {T: fig4h_F10_pred}
+- id: run_fig4h_F15
+  model: clutch_profile
+  inputs: {F: F_fig4g_15, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4h_F15}
+  outputs: {T: fig4h_F15_pred}
+- id: run_fig4h_F20
+  model: clutch_profile
+  inputs: {F: F_fig4g_20, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4h_F20}
+  outputs: {T: fig4h_F20_pred}
+- id: run_fig4h_F25
+  model: clutch_profile
+  inputs: {F: F_fig4g_25, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_large_added}
+  sweep: {x: d_fig4h_F25}
+  outputs: {T: fig4h_F25_pred}
+- id: run_fig4i_T
+  model: clutch_profile
+  inputs: {F: F_fig4i, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4i_T}
+  outputs: {T: fig4i_T_pred}
+- id: run_fig4i_Fmyo
+  model: clutch_fields
+  inputs: {F: F_fig4i, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4i_Fmyo}
+  outputs: {Fmyo: fig4i_Fmyo_pred}
+- id: run_fig4i_Fvisc
+  model: clutch_fields
+  inputs: {F: F_fig4i, b: b_fig4, gamma: gamma_fig4, lam: lam_fig4, vstar: vstar_fig4}
+  sweep: {x: d_fig4i_Fvisc}
+  outputs: {Fvisc: fig4i_Fvisc_pred}
+
+# ---- second pass: supplemental figure 3(a) at the alternative v* = 0.3, lambda = 1 ----------------------
+- id: run_figS3a_V_alt
+  model: clutch_profile
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3, lam: lam_S3_alt, vstar: vstar_S3_alt}
+  sweep: {x: d_figS3a_V}
+  outputs: {V: figS3a_V_alt_pred}
+  note: "alternative to run_figS3a_V: v* = 0.3 instead of the captioned 3, lambda = 1 (question q_S3_figure_vstar)"
+- id: run_figS3a_T_alt
+  model: clutch_profile
+  inputs: {F: F_S3, b: b_S3, gamma: gamma_S3, lam: lam_S3_alt, vstar: vstar_S3_alt}
+  sweep: {x: d_figS3a_T}
+  outputs: {T: figS3a_T_alt_pred}
+  note: "alternative to run_figS3a_T: v* = 0.3 instead of the captioned 3, lambda = 1 (question q_S3_figure_vstar)"
+
+# ---- second pass: Fig. 4(d), (e) at the alternative lambda = 1 (question q_fig4def_lambda) ----
+- id: run_fig4d_F0_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_0, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F0}
+  outputs: {V: fig4d_F0_lam1_pred}
+  note: "alternative to run_fig4d_F0: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4d_F2_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_2, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F2}
+  outputs: {V: fig4d_F2_lam1_pred}
+  note: "alternative to run_fig4d_F2: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4d_F4_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_4, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F4}
+  outputs: {V: fig4d_F4_lam1_pred}
+  note: "alternative to run_fig4d_F4: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4d_F6_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_6, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F6}
+  outputs: {V: fig4d_F6_lam1_pred}
+  note: "alternative to run_fig4d_F6: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4d_F8_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_8, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F8}
+  outputs: {V: fig4d_F8_lam1_pred}
+  note: "alternative to run_fig4d_F8: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4d_F10_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_10, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4d_F10}
+  outputs: {V: fig4d_F10_lam1_pred}
+  note: "alternative to run_fig4d_F10: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4e_F0_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_0, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F0}
+  outputs: {T: fig4e_F0_lam1_pred}
+  note: "alternative to run_fig4e_F0: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4e_F2_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_2, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F2}
+  outputs: {T: fig4e_F2_lam1_pred}
+  note: "alternative to run_fig4e_F2: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4e_F4_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_4, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F4}
+  outputs: {T: fig4e_F4_lam1_pred}
+  note: "alternative to run_fig4e_F4: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4e_F6_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_6, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F6}
+  outputs: {T: fig4e_F6_lam1_pred}
+  note: "alternative to run_fig4e_F6: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4e_F8_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_8, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F8}
+  outputs: {T: fig4e_F8_lam1_pred}
+  note: "alternative to run_fig4e_F8: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"
+- id: run_fig4e_F10_lam1
+  model: clutch_profile
+  inputs: {F: F_fig4d_10, b: b_zero_fig4, gamma: gamma_fig4, lam: lam_fig4def_alt, vstar: vstar_fig4}
+  sweep: {x: d_fig4e_F10}
+  outputs: {T: fig4e_F10_lam1_pred}
+  note: "alternative to run_fig4e_F10: lambda = 1 instead of the captioned 3 (question q_fig4def_lambda)"

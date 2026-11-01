@@ -1,0 +1,54 @@
+id: chaudhuri2015
+kind: article
+title: Substrate stress relaxation regulates cell spreading
+authors: [Ovijit Chaudhuri, Luo Gu, Max Darnell, Darinka Klumpers, Sidi A. Bencherif, James C. Weaver, Nathaniel Huebsch, David J. Mooney]
+year: 2015
+venue: Nature Communications 6, 6364
+doi: 10.1038/ncomms7365
+file: corpus/2015_Chaudhuri.pdf
+page_range: [1, 23]
+pages: {1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 9: "2", 10: "3", 11: "4", 12: "5", 13: "6", 14: "7", 15: "8", 16: "9", 17: "10", 18: "11", 19: "12", 20: "13", 21: "14", 22: "15", 23: "16"}
+reader: {kind: agent, name: boxgraph-reader, model: claude-opus-5-5, prompt_version: "reader-1", date: "2026-11-01"}
+notes: >
+  Article pp. 1-7; Supplementary Information pp. 8-23 (SI page labels restart at 1 on PDF p. 8, which
+  shows no label). The page footer gives the article number as 6:6364 while the DOI is ncomms7365 and
+  "How to cite" gives 6:6365.
+
+  Quantitative core: the stochastic lattice-spring motor-clutch model of Supplementary Note 1, with its
+  inputs in Supp. Table 2. Five models are recorded: the Bell off rate and Supp. Eq. 1 (retrograde flow
+  and spreading velocity) as closed forms; Supp. Eq. 2 (Burgers relation) as printed, not runnable
+  because it is dimensionally inconsistent (question q_eq2_form); the full lattice model, not runnable
+  because lattice geometry, node mass, boundary conditions, ligand placement, strain application and the
+  damping values and units are unstated and the MATLAB code is unpublished (q_lattice_unstated); and the
+  lattice-free variant the paper uses to characterize the model (independent substrate springs, one per
+  clutch, Supp. Fig. 1d), made runnable from its words with the printed Supp. Table 2 parameters. Its
+  rules beyond the words are listed in q_s1d_rules.
+
+  The checked result is Supp. Fig. 1d: five curves (nC = 5, 25, 50, 100, 1000) read by code at twelve
+  stiffnesses each, compared with five-seed runs of the lattice-free model. The simulated time for
+  Supp. Fig. 1d is unstated: the main runs use 12 s (60,000 steps of 0.2 ms) and a second set uses 1 s
+  (q_s1d_duration). The x calibration of that panel is ambiguous: the tick marks and the end labels
+  disagree (q_s1d_xaxis). The paper's 0.2 ms time step is tested by refining dt on one point of the
+  lattice-free model.
+
+  Left out, and why: every result of the lattice model (Fig. 1b-d spread area, Fig. 5b lead node
+  spacing, Supp. Fig. 1c time-step test, 1e trajectory, 1f tensile curves, Supp. Fig. 2 Voigt and
+  Maxwell limits) is not read, because the model behind them cannot be run, so no comparison could use
+  them. [Superseded by the second pass below.] Whether Fig. 1d equals Fig. 1c minus Fig. 1b was not checked, because runs take only scalar
+  inputs. The damping values printed without units in the Fig. 1 and Fig. 5 captions are recorded only
+  in questions (q_eta_values_units, q_eta_names). Experimental data (AFM moduli of Fig. 2c and Supp.
+  Table 1, rheology and stress relaxation of Fig. 2a,b and Supp. Fig. 3, cell spreading areas, adhesion,
+  YAP, proliferation and stress fibre data of Figs. 3-4 and Supp. Figs. 4-5) feed no model in this
+  record and were not read, per the scope of this reading. Supp. Fig. 1a,b (schematic and flowchart) and
+  Supp. Fig. 6 (images) hold no values.
+
+  Second pass (figure reading, 2026-11-01, claude-opus-5-5): every data figure is now read by code
+  (figures.yaml, figures.md). Measured data: Fig. 2a-c, 3b, 3c, 3e, 4a, 4b, 4d, 4e and Supp. Figs. 3a,
+  3b (blue series), 4 and 5, with their error bars. Lattice-model results: Fig. 1b-d, 5b and Supp.
+  Fig. 1c, 1f. They are recorded as predicted data with no run, since the lattice model cannot be run.
+  Supp. Table 1's AFM moduli are added as table data and compared with Fig. 2c, and Fig. 2a's ionic
+  line is compared with the 3.4 kPa ionic line of Supp. Fig. 3a (consistency). Supp. Fig. 2 is left
+  out: it has no ticks and its labels are inconsistent. New questions: the red bars of Fig. 3b and 3c
+  match although their conditions differ, the y labels of Fig. 1c and 1d are inconsistent, the model
+  and measured spread areas are 10^4 apart, and Supp. Fig. 2's labels support the area/line ligand
+  density mapping.

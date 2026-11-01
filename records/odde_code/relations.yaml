@@ -1,0 +1,38 @@
+# The code's header says it reduplicates "the Chan Motor-Clutch model with event stepping"
+# (motorclutch1_1.m and motorclutch2_3.m line 5). Relating mc_event_port to bangasser2013/motor_clutch_ssa
+# is left to that relation job.
+# mapping: b's input symbol -> expression in a's input symbols. Both models use pN, nm, s and the same
+# sign convention (vu, Fm, Fb negative), so no conversion factors are needed.
+# Both models are stochastic simulations of the same clutch scheme by two numerical algorithms (Chan's
+# 5 ms time steps; the code's event stepping), so the claim is tested as approximated_by, one output per
+# relation, with a tolerance that allows for the run-to-run noise of a single seeded run of each.
+- id: rel_chan_event_stepping_flow
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: odde_code/mc_event_port
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", Kc: "kc", gain: "0", Ksub: "ksub"}
+  output_map: {v_retro: v_retro}
+  regime: {nm: [50, 100], Fm: [-2, -2], vu: [-120, -120], nc: [50, 100], kon: [0.3, 1], koff: [0.03, 0.3],
+           Fb: [-2, -2], kc: [0.8, 5], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {file: motorclutch2_3.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}
+  assumptions:
+    - "the code's gain term is set to 0, which makes its off-rate Chan's Eq. 1"
+    - "regime: Chan's Table S1 set (nm = nc = 75, kon = 1 /s, kc = 5 pN/nm) and the code's own (nm = nc = 50, kon = 0.3 /s, Kc = 0.8 pN/nm) span nm, nc, kon and kc; koff spans Chan's Fig. S1A values (0.03-0.3 /s); ksub spans Chan's Table S1 range and the code's logspace(-2,2) sweep; vu, Fm, Fb are the value both print"
+    - "tolerance 0.1 (added): allows for the noise of one seeded run of each model (300 s of Chan's model, 1e5 events of the code); a larger difference is not noise"
+- id: rel_chan_event_stepping_traction
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: odde_code/mc_event_port
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", Kc: "kc", gain: "0", Ksub: "ksub"}
+  output_map: {F_trac: F_mean}
+  regime: {nm: [50, 100], Fm: [-2, -2], vu: [-120, -120], nc: [50, 100], kon: [0.3, 1], koff: [0.03, 0.3],
+           Fb: [-2, -2], kc: [0.8, 5], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {file: motorclutch2_3.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}
+  assumptions:
+    - "the code's gain term is set to 0, which makes its off-rate Chan's Eq. 1"
+    - "both outputs are the time-averaged traction as a positive magnitude (Chan's -κsub xsub averaged over the run; the code's -avtrac)"
+    - "regime and tolerance as in rel_chan_event_stepping_flow"

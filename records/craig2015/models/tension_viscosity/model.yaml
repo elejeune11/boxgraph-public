@@ -1,0 +1,15 @@
+id: tension_viscosity
+name: membrane tension and actin viscosity from traction, lamellipodial width and flow gradient (Discussion)
+role: model
+stated: {page: 12, quote: "the membrane tension roughly balances the", where: "Discussion"}
+equation: "tension ~ T-bar X ~ mu dV/dx(0);  viscosity = mu / thickness"
+inputs:
+  Tbar: {quantity: traction_stress_scale, unit: pN/um^2}
+  X: {quantity: lamellipodium_width, unit: um}
+  grad: {quantity: flow_gradient, unit: 1/s}
+  h: {quantity: lamellipodium_thickness, unit: um}
+outputs:
+  tension: {quantity: membrane_tension, unit: pN/um}
+  eta: {quantity: actin_network_viscosity, unit: pN*s/um^2}
+from_words: true
+stochastic: false

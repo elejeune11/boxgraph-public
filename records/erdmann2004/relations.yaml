@@ -1,0 +1,60 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units.
+# 1 dyne = 1e7 pN; 1 eV/nm = 160.2176634 pN = 1.602176634e-5 dyne.
+- id: rel_bell_rate
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: erdmann2004/single_bond_rate
+  mapping: {k0: "k_minus", F: "1e7*f", i: "1", Fb: "160.2176634*kT/gamma"}
+  regime: {k_minus: [1.0e-4, 10], gamma: [0.1, 1], f: [1.0e-7, 1.0e-5], kT: [0.0257, 0.0267]}
+  provenance: stated
+  citation: {page: 1, printed_page: "108102-1", quote: "with the dissociation rate k k0 eF=iFb introduced by Bell", where: text}
+  assumptions:
+    - "Fb = kB T/xb (p. 1) corresponds to Bell's kT/gamma; i = 1 so that F is the force on one closed bond, Bell's F/Nb"
+- id: rel_bell_critical_force
+  kind: same_as
+  a: bell1978/critical_force_eq19_20
+  b: erdmann2004/critical_force
+  mapping: {gamma: "KN2"}
+  output_map: {fc_over_N0: alpha_c}
+  regime: {kT: [0.0257, 0.0267], r0: [0.1, 1], KN2: [0.01, 1.0e4]}
+  provenance: stated
+  citation: {page: 3, printed_page: "108102-3", quote: "ity analysis of the deterministic Eq. (4), which yields", where: text}
+  assumptions:
+    - "Erdmann's gamma = kon/k0 corresponds to Bell's KN2 = k+ N2/k-, and fc/N0 = F/(N0 Fb) to Bell's alpha_c = r0 fc/kT"
+- id: rel_stochastic_bell
+  kind: approximated_by
+  a: erdmann2004/lifetime_adjoint
+  b: bell1978/detach_time_eq17
+  mapping:
+    k_minus: "k0"
+    KN2: "gamma"
+    r0: "0.5"
+    kT: "0.0267"
+    f: "f/floor(N0 + 1/2)*0.0267/0.5*1.602176634e-5"
+  regime: {N0: [50, 100], gamma: [10, 100], f: [400, 600], k0: [0.1, 10]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 1, printed_page: "108102-1", quote: "for a stochastic version of the Bell model", where: text}
+  assumptions:
+    - "Bell's force per potential bond F/N1 is Erdmann's f/N0 in units of kT/r0; r0 and kT are fixed because only r0 f/kT enters"
+    - "regime added: large clusters and forces well above Bell's critical force (f/N0 = 4 to 12 against fc/N0 below 2.7), where a mean-field description is expected to hold; the paper says the two differ for small clusters and near fc (p. 3)"
+    - "Bell's Eq. 17 starts from the zero-force equilibrium Nb(0) = KN2 N1/(1 + KN2) and stops at Nb/N1 = 0.01; Erdmann's lifetime starts from N0 closed bonds and ends at i = 0"
+    - "tolerance 0.1 added: the paper states no accuracy for the deterministic description"
+- id: rel_no_rebinding_continuum
+  kind: approximated_by
+  a: erdmann2004/lifetime_adjoint
+  b: bell1978/detach_time_eq22_exact
+  mapping:
+    k_minus: "k0"
+    r0: "0.5"
+    kT: "0.0267"
+    f: "f/floor(N0 + 1/2)*0.0267/0.5*1.602176634e-5"
+  regime: {N0: [200, 400], gamma: [0, 0], f: [100, 600], k0: [0.1, 10]}
+  tolerance: 0.02
+  provenance: proposed
+  reason: >-
+    Without rebinding Erdmann's exact lifetime is T = sum_{i=1}^{N0} 1/(i e^{f/i}) (p. 3), and Bell's
+    Eq. 22 neglects rebinding and gives (1/k-) E1(Y0) with Y0 = r0 F/kT N1. The integral of
+    e^{-f/x}/x from 0 to N0 is E1(f/N0), so Bell's form is the continuum limit of Erdmann's sum, with a
+    relative error of order (f/N0)/N0 (below 1% in this regime). f is capped at 600 because
+    Erdmann's rate 1 e^{f/1} overflows double precision above f = 709.

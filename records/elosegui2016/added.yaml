@@ -1,0 +1,85 @@
+# Inputs the clutch model needs that the paper does not print. Supplementary Table 1 gives the integrin
+# off-rate only as "Catch bond" and the talin unfolding and refolding rates only as "Slip bond"; the
+# Supplementary Note describes their forms in words (p. 23-24) but prints no coefficients. The values below
+# are those of the same laboratory's later released clutch code (Supplementary Software 1 of Andreu et al.
+# 2021, record andreu2021_code, koffcb.m and cmstretchg.m), whose paper says it takes its talin slip bond
+# and clutch parameters from this paper (its ref. 20). They are labelled as added; they are not this
+# paper's printed values.
+- id: koff_a_added
+  quantity: catch_bond_prefactor
+  unit: 1/s
+  printed: "11.27"
+  basis: "andreu2021_code koffcb.m case 'mn' (a = 11.27): k_off(F) = a exp(bF) + c exp(dF), a fit to the Kong et al. 2009 fibronectin-α5β1 catch bond with Mn2+, as the Supplementary Note describes (p. 24, 'sum of two exponentials', 'with Mn2+ ions', 'fibronectin-α5β1 data'); this paper prints no coefficients"
+  stands_for: "k_off(f), first (slip) term prefactor"
+- id: koff_b_added
+  quantity: catch_bond_force_coefficient
+  unit: 1/pN
+  printed: "-0.1601"
+  basis: "andreu2021_code koffcb.m case 'mn' (b = -1.601e+011 /N)"
+  stands_for: "k_off(f), first term force coefficient"
+- id: koff_c_added
+  quantity: catch_bond_prefactor
+  unit: 1/s
+  printed: "0.0008882"
+  basis: "andreu2021_code koffcb.m case 'mn' (c = 0.0008882)"
+  stands_for: "k_off(f), second (catch) term prefactor"
+- id: koff_d_added
+  quantity: catch_bond_force_coefficient
+  unit: 1/pN
+  printed: "0.1225"
+  basis: "andreu2021_code koffcb.m case 'mn' (d = 1.225e+011 /N)"
+  stands_for: "k_off(f), second term force coefficient"
+# koffcb.m also carries a commented-out second set of the four k_off coefficients (16.67, -1.945e11, 0.001442,
+# 1.356e11): an alternative fit, not four independent alternatives, so it is noted in q_rate_laws rather than
+# run coefficient by coefficient (every alternative re-runs the whole simulation set).
+- id: koff_g_added
+  quantity: catch_bond_prefactor
+  unit: 1/s
+  printed: "1000"
+  basis: "The Supplementary Note says unbinding rates were 'further increased' at very low forces (< 1 pN) without saying by how much. andreu2021_code koffcb.m case 'cm' ('Custom curve to fit data') adds g exp(-h f) to the 'mn' curve with g = 1000 /s ('Increase in koff at zero force wrt mn ion')"
+  alternatives: ["0"]
+  stands_for: "added low-force term of k_off, its value at zero force"
+- id: koff_fend_added
+  quantity: low_force_term_vanishing_force
+  unit: pN
+  printed: "0.15"
+  basis: "andreu2021_code koffcb.m case 'cm': fend = 0.15e-12 N, 'Force at which the added curve vanishes' (h = -ln(0.1/g)/fend, so the term is 10% of g at fend); it lies within the paper's '< 1 pN'"
+  stands_for: "force scale of the added low-force term of k_off"
+- id: ln_kunf0_added
+  quantity: ln_unfolding_rate_zero_force
+  unit: dimensionless
+  printed: "-7.573"
+  basis: "andreu2021_code cmstretchg.m line 104 (kunf = exp(-7.573) exp(1.786e12 |F| pt)): a single exponential with positive exponent fitted to Yao et al. 2014, as the Supplementary Note describes (p. 24); this paper prints only 'Slip bond'"
+  stands_for: "k_unf(f) = exp(ln_kunf0) exp(kunf_b FR f)"
+- id: kunf_b_added
+  quantity: unfolding_force_coefficient
+  unit: 1/pN
+  printed: "1.786"
+  basis: "andreu2021_code cmstretchg.m line 104 (1.786e12 /N)"
+  stands_for: "k_unf(f) force coefficient"
+- id: ln_kfold0_added
+  quantity: ln_refolding_rate_zero_force
+  unit: dimensionless
+  printed: "13.07"
+  basis: "andreu2021_code cmstretchg.m line 97 (kf = exp(13.07) exp(-2.288e12 |F| pt)): a single exponential with negative exponent fitted to Yao et al. 2014, as the Supplementary Note describes for k_fold (p. 24); with the unfolding law it puts the unfolding/refolding crossing at the 5 pN the paper cites (p. 5)"
+  stands_for: "k_fold(f) = exp(ln_kfold0) exp(kfold_b FR f)"
+- id: kfold_b_added
+  quantity: refolding_force_coefficient
+  unit: 1/pN
+  printed: "-2.288"
+  basis: "andreu2021_code cmstretchg.m line 97 (-2.288e12 /N)"
+  stands_for: "k_fold(f) force coefficient"
+- id: kvin_added
+  quantity: vinculin_binding_rate
+  unit: 1/s
+  printed: "1000"
+  basis: "The Supplementary Note names a force-independent vinculin binding rate k_vin (p. 24) but gives no value, and Supplementary Table 1 omits it. andreu2021_code reinforces at once on unfolding (k_vin effectively infinite); 1000 /s is fast against the 5 ms step and the refolding rate near the unfolding force, so vinculin almost always wins, as in that code"
+  alternatives: ["10"]
+  stands_for: "k_vin"
+- id: ksub_factor_added
+  quantity: ksub_geometry_factor
+  unit: dimensionless
+  printed: "1.396"
+  basis: "The note converts k_sub to Young's modulus 'by assuming a given adhesion radius ra as described previously' (refs. SN-1, SN-2) without the formula. k_sub = (4π/9) E r_a (the elastic half-space under a circular adhesion, as in Ghibaudo et al. 2008) gives c = 1.396; it maps 1 pN/nm to about 0.42 kPa at r_a = 1700 nm, consistent with Andreu et al. 2021 calling 1 pN/nm a ~0.5 kPa gel taken from this paper"
+  alternatives: ["3.1416"]
+  stands_for: "k_sub = c E r_a"

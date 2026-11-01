@@ -1,0 +1,21 @@
+- id: run_decay
+  model: decay
+  inputs: {k0: k0, F: F, xb: xb_added, kT: kT}
+  outputs: {t: t_pred}
+- id: run_curve
+  model: decay
+  inputs: {k0: k0, xb: xb_added, kT: kT}
+  sweep: {F: t_curve}
+  outputs: {t: t_curve_pred}
+- id: run_euler
+  model: euler
+  inputs: {k0: k0}
+  outputs: {t: t_euler}
+- id: run_drift
+  model: drift
+  inputs: {k0: k0}
+  outputs: {t: t_drift}
+- id: run_coarse
+  model: coarse
+  inputs: {k0: k0}
+  outputs: {t: t_coarse}

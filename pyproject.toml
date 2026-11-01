@@ -1,0 +1,46 @@
+[project]
+name = "boxgraph"
+version = "0.7.0"
+license = { text = "MIT" }
+description = "An executable literature review: BoxGraph, ModelAtlas and the Synthesis."
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.7",
+  "pyyaml>=6",
+  "pint>=0.24",
+  "sympy>=1.13",
+  "numpy>=1.26",
+  "scipy>=1.13",
+  "networkx>=3.3",
+  "pillow>=10",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "matplotlib>=3.8", "ruff>=0.6"]
+pipeline = []
+
+[project.scripts]
+boxgraph = "boxgraph.cli:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["boxgraph", "boxgraph.*", "pipeline", "pipeline.*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]  # pipeline/ and experiments/ are imported by tests but not installed
+
+[tool.ruff]
+line-length = 130
+target-version = "py311"
+extend-exclude = ["docs/minimalist_design/figures", "records", "build"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501", "B905", "UP042"]  # UP042: keep (str, Enum); StrEnum would change str() of members
+
+[tool.ruff.lint.per-file-ignores]
+"tests/fixtures/**" = ["E", "F", "W", "I", "B", "UP"]

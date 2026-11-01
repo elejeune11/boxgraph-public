@@ -1,0 +1,407 @@
+# ---- stretchscriptg.m: the parameters passed to cmstretchg -----------------------------------------
+- id: kc_code
+  quantity: clutch_stiffness
+  unit: N/m
+  origin: reported
+  printed: "1"
+  citation: {file: stretchscriptg.m, lines: "11", quote: "kc = 1;"}
+  from_source: andreu2021
+  from_datum: kc_table
+- id: pt_code
+  quantity: talin_force_fraction
+  unit: dimensionless
+  origin: reported
+  printed: "0.073"
+  citation: {file: stretchscriptg.m, lines: "12", quote: "pt = 0.073;"}
+  from_source: andreu2021
+  from_datum: FR_table
+- id: mr_code
+  quantity: integrin_density
+  unit: 1/um^2
+  origin: reported
+  printed: "1200"
+  citation: {file: stretchscriptg.m, lines: "13", quote: "mr = 1200;"}
+  from_source: andreu2021
+  from_datum: dmax_table
+  note: "the comment on the same line says '680 seems to work well'"
+- id: a_code
+  quantity: adhesion_radius
+  unit: m
+  origin: reported
+  printed: "1700 x 10^-9"
+  citation: {file: stretchscriptg.m, lines: "14", quote: "a =1700e-9;"}
+  note: "used only to turn the mean force into a stress (line 56); the comment gives 1500e-9 as another value"
+- id: ksub_code
+  quantity: substrate_stiffness
+  unit: N/m
+  origin: reported
+  printed: "1 x 10^-3"
+  citation: {file: stretchscriptg.m, lines: "16", quote: "ksub = 1e-3;"}
+  from_source: andreu2021
+  from_datum: ksub_table
+- id: kont1_code
+  quantity: integrin_binding_rate_intrinsic
+  unit: um^2/s
+  origin: reported
+  printed: "2.11 x 10^-4"
+  citation: {file: stretchscriptg.m, lines: "17", quote: "kont1 = 2.11e-4;"}
+  from_source: andreu2021
+  from_datum: kon_i_table
+- id: dint1_code
+  quantity: integrin_density
+  unit: 1/um^2
+  origin: reported
+  printed: "300"
+  citation: {file: stretchscriptg.m, lines: "20", quote: "dint1 = 300;"}
+  from_source: andreu2021
+  from_datum: dmin_table
+- id: intadd_code
+  quantity: integrin_density_increment
+  unit: 1/um^2
+  origin: reported
+  printed: "24"
+  citation: {file: stretchscriptg.m, lines: "21", quote: "intadd = 24; % At 1000 s: 4 at 100 s: 24"}
+  from_source: andreu2021
+  from_datum: dadd_table
+- id: nc_code
+  quantity: n_fibronectin
+  unit: dimensionless
+  origin: reported
+  printed: "1200"
+  citation: {file: stretchscriptg.m, lines: "22", quote: "nc = 1200;"}
+  from_source: andreu2021
+  from_datum: nf_table
+- id: bl_code
+  quantity: yap_baseline_offset
+  unit: dimensionless
+  origin: reported
+  printed: "1.2"
+  citation: {file: stretchscriptg.m, lines: "25", quote: "bl = 1.2;"}
+- id: sc_code
+  quantity: yap_scaling_slope
+  unit: dimensionless
+  origin: reported
+  printed: "1.4"
+  citation: {file: stretchscriptg.m, lines: "26", quote: "sc = 1.4;"}
+- id: Am_2p5_code
+  quantity: stretch_amplitude
+  unit: um
+  origin: reported
+  printed: "1.5"
+  citation: {file: stretchscriptg.m, lines: "28-30", quote: "Am = 1.5;"}
+  conditions: {applied_stretch: "2.5%"}
+  from_source: andreu2021
+  from_datum: A_2p5
+- id: Am_5_code
+  quantity: stretch_amplitude
+  unit: um
+  origin: reported
+  printed: "2"
+  citation: {file: stretchscriptg.m, lines: "66-68", quote: "Am = 2; % Amplitude of stretch in um."}
+  conditions: {applied_stretch: "5%"}
+  from_source: andreu2021
+  from_datum: A_5
+- id: Am_10_code
+  quantity: stretch_amplitude
+  unit: um
+  origin: reported
+  printed: "2.5"
+  citation: {file: stretchscriptg.m, lines: "104-106", quote: "Am = 2.5; % 2.5 works well for 10%"}
+  conditions: {applied_stretch: "10%"}
+  from_source: andreu2021
+  from_datum: A_10
+- id: Am_20_code
+  quantity: stretch_amplitude
+  unit: um
+  origin: reported
+  printed: "3"
+  citation: {file: stretchscriptg.m, lines: "140-142", quote: "Am = 3;"}
+  conditions: {applied_stretch: "20%"}
+  from_source: andreu2021
+  from_datum: A_20
+
+# ---- cmstretchg.m: constants written inside the function ------------------------------------------
+- id: ln_kfold0_code
+  quantity: ln_refolding_rate_zero_force
+  unit: dimensionless
+  origin: reported
+  printed: "13.07"
+  citation: {file: cmstretchg.m, lines: "97", quote: "kf = 1.*exp(13.07).*exp(-2.288e12.*abs(Fc).*pt);"}
+- id: kfold_b_code
+  quantity: refolding_force_coefficient
+  unit: 1/N
+  origin: reported
+  printed: "-2.288 x 10^12"
+  citation: {file: cmstretchg.m, lines: "97", quote: "kf = 1.*exp(13.07).*exp(-2.288e12.*abs(Fc).*pt);"}
+- id: ln_kunf0_code
+  quantity: ln_unfolding_rate_zero_force
+  unit: dimensionless
+  origin: reported
+  printed: "-7.573"
+  citation: {file: cmstretchg.m, lines: "104", quote: "kuf(indfhigh) = 1.*exp(-7.573).*exp(1.786e12.*abs(Fc(indfhigh)).*pt);"}
+  note: "used for clutch forces above the 150 pN end of the rate tables"
+- id: kunf_b_code
+  quantity: unfolding_force_coefficient
+  unit: 1/N
+  origin: reported
+  printed: "1.786 x 10^12"
+  citation: {file: cmstretchg.m, lines: "104", quote: "kuf(indfhigh) = 1.*exp(-7.573).*exp(1.786e12.*abs(Fc(indfhigh)).*pt);"}
+
+# ---- koffcb.m case 'cm' (stretchscriptg.m line 15 sets ion = 'cm'): k_off above 150 pN --------------
+- id: cm_c_code
+  quantity: catch_bond_prefactor
+  unit: 1/s
+  origin: reported
+  printed: "0.0008882"
+  citation: {file: koffcb.m, lines: "41", quote: "c = 0.0008882;"}
+- id: cm_d_code
+  quantity: catch_bond_force_coefficient
+  unit: 1/N
+  origin: reported
+  printed: "1.225 x 10^11"
+  citation: {file: koffcb.m, lines: "42", quote: "d = 1.225e+011;"}
+- id: cm_a_code
+  quantity: catch_bond_prefactor
+  unit: 1/s
+  origin: reported
+  printed: "11.27"
+  citation: {file: koffcb.m, lines: "43", quote: "a = 11.27;"}
+- id: cm_b_code
+  quantity: catch_bond_force_coefficient
+  unit: 1/N
+  origin: reported
+  printed: "-1.601 x 10^11"
+  citation: {file: koffcb.m, lines: "44", quote: "b = -1.601e+011;"}
+- id: cm_g_code
+  quantity: custom_term_prefactor
+  unit: 1/s
+  origin: reported
+  printed: "1000"
+  citation: {file: koffcb.m, lines: "45", quote: "g = 1000; % Increase in koff at zero force wrt mn ion."}
+- id: cm_fend_code
+  quantity: custom_term_vanishing_force
+  unit: N
+  origin: reported
+  printed: "0.15 x 10^-12"
+  citation: {file: koffcb.m, lines: "46", quote: "fend = 0.15e-12;"}
+
+# ---- koffcb.m case 'mn' ('loading rate script.m' line 10 sets ion = 'mn'): k_off of the rate tables ---
+- id: mn_a_code
+  quantity: catch_bond_prefactor
+  unit: 1/s
+  origin: reported
+  printed: "11.27"
+  citation: {file: koffcb.m, lines: "33", quote: "a = 11.27;       % 16.67; %"}
+- id: mn_b_code
+  quantity: catch_bond_force_coefficient
+  unit: 1/N
+  origin: reported
+  printed: "-1.601 x 10^11"
+  citation: {file: koffcb.m, lines: "34", quote: "b = -1.601e+011; %-1.945e11;"}
+- id: mn_c_code
+  quantity: catch_bond_prefactor
+  unit: 1/s
+  origin: reported
+  printed: "0.0008882"
+  citation: {file: koffcb.m, lines: "35", quote: "c = 0.0008882;   % 0.001442;"}
+- id: mn_d_code
+  quantity: catch_bond_force_coefficient
+  unit: 1/N
+  origin: reported
+  printed: "1.225 x 10^11"
+  citation: {file: koffcb.m, lines: "36", quote: "d = 1.225e+011;  % 1.356e11;"}
+
+# ---- loading rate script.m: constants of the rate tables ------------------------------------------
+- id: pt_lr_code
+  quantity: talin_force_fraction
+  unit: dimensionless
+  origin: reported
+  printed: "0.073"
+  citation: {file: loading rate script.m, lines: "11", quote: "pt = 0.073;"}
+  from_source: andreu2021
+  from_datum: FR_table
+- id: ln_kunf0_lr_code
+  quantity: ln_unfolding_rate_zero_force
+  unit: dimensionless
+  origin: reported
+  printed: "-7.573"
+  citation: {file: loading rate script.m, lines: "28", quote: "% koff = 1.*exp(-7.573).*exp(1.786e12.*abs(f).*pt); % Talin unfolding"}
+  note: "written on a commented-out line: the script runs for one event at a time, uncommented by hand"
+- id: kunf_b_lr_code
+  quantity: unfolding_force_coefficient
+  unit: 1/N
+  origin: reported
+  printed: "1.786 x 10^12"
+  citation: {file: loading rate script.m, lines: "28", quote: "% koff = 1.*exp(-7.573).*exp(1.786e12.*abs(f).*pt); % Talin unfolding"}
+- id: Fbreaking_code
+  quantity: actin_breaking_force
+  unit: N
+  origin: reported
+  printed: "142 x 10^-12"
+  citation: {file: loading rate script.m, lines: "63", quote: "Fbreaking = 142e-12;"}
+  from_source: andreu2021
+  from_datum: Fact_table
+- id: L_first_code
+  quantity: loading_rate
+  unit: N/s
+  origin: reported
+  printed: "1 x 10^-12"
+  citation: {file: loading rate script.m, lines: "14", quote: "L = 1e-12*2.^(0:0.5:16);"}
+  note: "the first (lowest) loading rate of the grid"
+- id: fstart_first_code
+  quantity: clutch_force
+  unit: N
+  origin: reported
+  printed: "0"
+  citation: {file: loading rate script.m, lines: "16", quote: "fstart = 0:steps:150e-12;"}
+  note: "the first starting force of the grid"
+
+# ---- kofflr.mat (loaded by stretchscriptg.m line 5): entries of the shipped rate tables ------------
+# Copied at 6 significant figures from the float64 arrays (read with scipy.io.loadmat). A .mat file has
+# no lines to cite. Index values are grid points of 'loading rate script.m' (L = 1e-12*2^(0:0.5:16) N/s,
+# fstart = 0:1e-12:150e-12 N), chosen at whole octaves and around the forces where the script's cut-off
+# (line 44) switches branch.
+- id: kint_mat_L1
+  quantity: corrected_unbinding_rate
+  unit: 1/s
+  origin: reported
+  citation: {none: "kofflr.mat, variable kint, row 1 (L = 1 pN/s), columns fstart + 1: a .mat file has no lines"}
+  table: {index_quantity: clutch_force, index_unit: pN, index: ["0", "20", "40", "60", "76", "78", "80", "82", "84", "86"],
+          values: ["11.132", "0.288266", "0.211101", "1.49668", "9.94982", "12.6916", "16.2083", "20.7302", "26.1458", "33.4044"]}
+- id: kint_mat_F0
+  quantity: corrected_unbinding_rate
+  unit: 1/s
+  origin: reported
+  citation: {none: "kofflr.mat, variable kint, column 1 (fstart = 0), rows 1, 5, ..., 33: a .mat file has no lines"}
+  table: {index_quantity: loading_rate, index_unit: pN/s, index: ["1", "4", "16", "64", "256", "1024", "4096", "16384", "65536"],
+          values: ["11.132", "10.5871", "6.27309", "2.43975", "4.07929", "11.8546", "40.2555", "143.395", "520.496"]}
+- id: kunf_mat_L1
+  quantity: corrected_unfolding_rate
+  unit: 1/s
+  origin: reported
+  citation: {none: "kofflr.mat, variable kunf, row 1 (L = 1 pN/s), columns fstart + 1: a .mat file has no lines"}
+  table: {index_quantity: clutch_force, index_unit: pN, index: ["0", "20", "40", "60", "80", "82", "84", "86", "90"],
+          values: ["0.0261697", "0.0514151", "0.177211", "1.40366", "17.6316", "22.9247", "29.8884", "38.0731", "64.1369"]}
+
+# ---- experimental data.mat (loaded by stretchscriptg.m line 4, plotted with errorbar against the model) --
+# Copied at 4 decimals from the float64 arrays. fre are the frequencies (Hz; 0 is the unstretched control),
+# rows 1-4 are 2.5, 5, 10, 20% stretch (stretchscriptg.m line 29). yem +- yee is plotted with the model
+# (the YAP ratio); pem +- pee is not used by the scripts: its values match the adhesion-length axis of
+# Fig. 2e. The code does not say what the error arrays are.
+- id: yap_exp_2p5
+  quantity: yap_ratio
+  unit: dimensionless
+  origin: measured
+  citation: {none: "experimental data.mat, variables yem and yee, row 1, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "2.5%"}
+  from_source: andreu2021_data
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["1.1436 ± 0.0427", "1.3023 ± 0.0477", "1.3194 ± 0.0387", "1.2078 ± 0.0314", "1.6065 ± 0.0800", "1.6066 ± 0.0687", "1.5936 ± 0.0626"]}
+- id: yap_exp_5
+  quantity: yap_ratio
+  unit: dimensionless
+  origin: measured
+  citation: {none: "experimental data.mat, variables yem and yee, row 2, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "5%"}
+  from_source: andreu2021_data
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["1.1466 ± 0.0263", "1.3802 ± 0.0605", "1.5887 ± 0.0810", "1.5608 ± 0.0657", "1.6781 ± 0.0923", "1.6531 ± 0.0621", "1.4715 ± 0.0517"]}
+- id: yap_exp_10
+  quantity: yap_ratio
+  unit: dimensionless
+  origin: measured
+  citation: {none: "experimental data.mat, variables yem and yee, row 3, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "10%"}
+  from_source: andreu2021_data
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["1.1873 ± 0.0315", "1.2939 ± 0.0479", "1.2298 ± 0.0527", "1.3959 ± 0.0645", "1.8702 ± 0.0608", "1.3549 ± 0.0465", "1.3029 ± 0.0648"]}
+- id: yap_exp_20
+  quantity: yap_ratio
+  unit: dimensionless
+  origin: measured
+  citation: {none: "experimental data.mat, variables yem and yee, row 4, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "20%"}
+  from_source: andreu2021_data
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["1.0931 ± 0.0224", "1.2342 ± 0.0316", "1.4026 ± 0.0456", "1.6216 ± 0.0915", "1.9003 ± 0.0646", "1.2612 ± 0.0580", "1.1860 ± 0.0402"]}
+- id: length_exp_2p5
+  quantity: adhesion_length
+  unit: um
+  origin: measured
+  citation: {none: "experimental data.mat, variables pem and pee, row 1, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "2.5%"}
+  from_source: andreu2021_data
+  note: "the code gives no unit; µm is the unit of the adhesion-length axis of Fig. 2e, on which these values fall"
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["0.7606 ± 0.0388", "1.1156 ± 0.0818", "0.9790 ± 0.0546", "1.0001 ± 0.0469", "1.3997 ± 0.0967", "1.7119 ± 0.0762", "1.5298 ± 0.0887"]}
+- id: length_exp_5
+  quantity: adhesion_length
+  unit: um
+  origin: measured
+  citation: {none: "experimental data.mat, variables pem and pee, row 2, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "5%"}
+  from_source: andreu2021_data
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["0.6970 ± 0.0237", "1.0370 ± 0.0405", "1.3658 ± 0.0609", "1.6921 ± 0.0868", "2.2052 ± 0.1328", "1.4633 ± 0.0672", "1.3985 ± 0.0673"]}
+- id: length_exp_10
+  quantity: adhesion_length
+  unit: um
+  origin: measured
+  citation: {none: "experimental data.mat, variables pem and pee, row 3, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "10%"}
+  from_source: andreu2021_data
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["0.9564 ± 0.0249", "1.0848 ± 0.0484", "1.1308 ± 0.0558", "1.7921 ± 0.1123", "2.5471 ± 0.1165", "1.1965 ± 0.0590", "0.9776 ± 0.0395"]}
+- id: length_exp_20
+  quantity: adhesion_length
+  unit: um
+  origin: measured
+  citation: {none: "experimental data.mat, variables pem and pee, row 4, against fre: a .mat file has no lines"}
+  conditions: {applied_stretch: "20%"}
+  from_source: andreu2021_data
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0", "0.125", "0.25", "0.5", "1", "2", "5.6569"],
+          values: ["0.7399 ± 0.0269", "0.9121 ± 0.0489", "1.0183 ± 0.0712", "1.5058 ± 0.0948", "1.8253 ± 0.1080", "0.9923 ± 0.0485", "0.9381 ± 0.0477"]}
+
+# ---- the paper's Fig. 2e model lines, copied from the paper's record --------------------------------
+# Each value is the code reading of andreu2021 (figure fig2e_line_*), written as its centre +- the larger
+# half-width of its 95% interval, rounded to 3 decimals; the build checks each copy against that reading.
+- id: fig2e_model_2p5
+  quantity: adhesion_length
+  unit: um
+  origin: predicted
+  citation: {none: "copied from the paper's record andreu2021 (fig2e_model_2p5, read from Fig. 2e, PDF p. 4)"}
+  conditions: {applied_stretch: "2.5%"}
+  from_source: andreu2021
+  from_datum: fig2e_model_2p5
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0.125", "0.25", "0.5", "1", "2"],
+          values: ["0.689 ± 0.033", "0.719 ± 0.036", "0.839 ± 0.033", "1.207 ± 0.047", "2.053 ± 0.040"]}
+- id: fig2e_model_5
+  quantity: adhesion_length
+  unit: um
+  origin: predicted
+  citation: {none: "copied from the paper's record andreu2021 (fig2e_model_5, read from Fig. 2e, PDF p. 4)"}
+  conditions: {applied_stretch: "5%"}
+  from_source: andreu2021
+  from_datum: fig2e_model_5
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0.125", "0.25", "0.5", "1", "2"],
+          values: ["0.741 ± 0.030", "0.759 ± 0.026", "0.945 ± 0.030", "1.900 ± 0.046", "1.667 ± 0.047"]}
+- id: fig2e_model_10
+  quantity: adhesion_length
+  unit: um
+  origin: predicted
+  citation: {none: "copied from the paper's record andreu2021 (fig2e_model_10, read from Fig. 2e, PDF p. 4)"}
+  conditions: {applied_stretch: "10%"}
+  from_source: andreu2021
+  from_datum: fig2e_model_10
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0.125", "0.25", "0.5", "1", "2"],
+          values: ["0.787 ± 0.039", "0.807 ± 0.032", "1.199 ± 0.042", "2.117 ± 0.032", "1.298 ± 0.042"]}
+- id: fig2e_model_20
+  quantity: adhesion_length
+  unit: um
+  origin: predicted
+  citation: {none: "copied from the paper's record andreu2021 (fig2e_model_20, read from Fig. 2e, PDF p. 4)"}
+  conditions: {applied_stretch: "20%"}
+  from_source: andreu2021
+  from_datum: fig2e_model_20
+  table: {index_quantity: stretch_frequency, index_unit: Hz, index: ["0.125", "0.25", "0.5", "1", "2"],
+          values: ["0.757 ± 0.036", "0.929 ± 0.032", "1.926 ± 0.035", "2.044 ± 0.032", "1.075 ± 0.042"]}

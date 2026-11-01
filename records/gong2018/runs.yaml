@@ -1,0 +1,181 @@
+# The mean-field runs all use the Table S1 parameters and the mean-field Fb = 1.3 pN (SI p. 11).
+- id: run_fig1_params
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           ka: ka_fig1, kl: kl_fig1, eta: eta_fig1}
+  outputs: {Vs: vs_fig1_params, t_life: tlife_fig1_params, Fa: fa_fig1_params}
+  note: "the typical set of Fig. 1C-D; Fig. 1D shows t_life and the mean Vs only as a plotted trace (not read)"
+- id: run_fig1b_reinf
+  model: mean_field_elastic
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1}
+  sweep: {ks: vs_fig1b_reinf}
+  outputs: {Vs: vs_fig1b_reinf_pred}
+- id: run_fig1b_noreinf
+  model: mean_field_elastic
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_none}
+  sweep: {ks: vs_fig1b_noreinf}
+  outputs: {Vs: vs_fig1b_noreinf_pred}
+- id: run_fig2b_ka01
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           ka: ka01_fig2b, kl: kl_fig2b}
+  sweep: {eta: vs_fig2b_ka01}
+  outputs: {Vs: vs_fig2b_ka01_pred}
+- id: run_fig2b_ka05
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           ka: ka05_fig2b, kl: kl_fig2b}
+  sweep: {eta: vs_fig2b_ka05}
+  outputs: {Vs: vs_fig2b_ka05_pred}
+- id: run_fig2b_ka2
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           ka: ka2_fig2b, kl: kl_fig2b}
+  sweep: {eta: vs_fig2b_ka2}
+  outputs: {Vs: vs_fig2b_ka2_pred}
+- id: run_figS8d_ka2_05
+  model: mean_field_maxwell2
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           kl: kl_figS8d, ka1: ka1_figS8d, eta1: eta1_figS8d, ka2: ka2_05_figS8d}
+  sweep: {tau_s2: vs_figS8d_ka2_05}
+  outputs: {Vs: vs_figS8d_ka2_05_pred}
+- id: run_figS8d_ka2_1
+  model: mean_field_maxwell2
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           kl: kl_figS8d, ka1: ka1_figS8d, eta1: eta1_figS8d, ka2: ka2_1_figS8d}
+  sweep: {tau_s2: vs_figS8d_ka2_1}
+  outputs: {Vs: vs_figS8d_ka2_1_pred}
+- id: run_figS8d_ka2_2
+  model: mean_field_maxwell2
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           kl: kl_figS8d, ka1: ka1_figS8d, eta1: eta1_figS8d, ka2: ka2_2_figS8d}
+  sweep: {tau_s2: vs_figS8d_ka2_2}
+  outputs: {Vs: vs_figS8d_ka2_2_pred}
+- id: run_tau_b
+  model: binding_timescale
+  inputs: {ron: ron0_tableS1}
+  outputs: {tau_b: tau_b_pred}
+- id: run_tau_l_low
+  model: lifetime_timescale
+  inputs: {Fm: Fm_tableS1, Nm: nm_tableS1, vu: vu_tableS1, kl: kl_range_low}
+  outputs: {tau_l: tau_l_at_kl_low}
+- id: run_tau_l_high
+  model: lifetime_timescale
+  inputs: {Fm: Fm_tableS1, Nm: nm_tableS1, vu: vu_tableS1, kl: kl_range_high}
+  outputs: {tau_l: tau_l_at_kl_high}
+- id: run_eq_s9
+  model: boussinesq_eq_s9
+  inputs: {R: R_contact, E: E_1kPa, nu: nu_S9}
+  outputs: {k: k_eq_s9, coef: coef_eq_s9}
+- id: run_increase_PA
+  model: relative_increase
+  inputs: {V1: vs_PA_effective, V2: vs_PA_multiple}
+  outputs: {increase: increase_PA_pred}
+- id: run_fa_length
+  model: fa_length
+  inputs: {R: R_contact}
+  outputs: {r: r_pred}
+# ---- second pass (figures) ----
+- id: run_fig1d_mean
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           ka: ka_fig1, kl: kl_fig1}
+  sweep: {eta: vs_fig1d_mean}
+  outputs: {Vs: vs_fig1d_mean_pred}
+  note: "the typical set of Fig. 1C-D; the same parameters as run_fig1_params, swept over the one-point datum"
+- id: run_fig3a_kl001
+  model: mean_field_sls_taus
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           k0: k0_fig3a, kl: kl_fig3a_001}
+  sweep: {ratio: vs_fig3a_kl001}
+  outputs: {Vs: vs_fig3a_kl001_pred}
+- id: run_fig3a_kl01
+  model: mean_field_sls_taus
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           k0: k0_fig3a, kl: kl_fig3a_01}
+  sweep: {ratio: vs_fig3a_kl01}
+  outputs: {Vs: vs_fig3a_kl01_pred}
+- id: run_fig3a_kl1
+  model: mean_field_sls_taus
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           k0: k0_fig3a, kl: kl_fig3a_1}
+  sweep: {ratio: vs_fig3a_kl1}
+  outputs: {Vs: vs_fig3a_kl1_pred}
+- id: run_fig3c_means
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1,
+           ka: ka_fig3bc, kl: kl_fig3c_added}
+  sweep: {eta: vs_fig3c_means}
+  outputs: {Vs: vs_fig3c_means_pred}
+- id: run_figS3d_ka01
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_none,
+           ka: ka01_figS3d, kl: kl_figS3d}
+  sweep: {eta: vs_figS3d_ka01}
+  outputs: {Vs: vs_figS3d_ka01_pred}
+- id: run_figS3d_ka05
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_none,
+           ka: ka05_figS3d, kl: kl_figS3d}
+  sweep: {eta: vs_figS3d_ka05}
+  outputs: {Vs: vs_figS3d_ka05_pred}
+- id: run_figS3d_ka2
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_none,
+           ka: ka2_figS3d, kl: kl_figS3d}
+  sweep: {eta: vs_figS3d_ka2}
+  outputs: {Vs: vs_figS3d_ka2_pred}
+- id: run_figS3d_ka10
+  model: mean_field_sls
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_none,
+           ka: ka10_figS3d, kl: kl_figS3d}
+  sweep: {eta: vs_figS3d_ka10}
+  outputs: {Vs: vs_figS3d_ka10_pred}
+- id: run_figS7_model
+  model: mean_field_elastic
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1}
+  sweep: {ks: vs_figS7_model}
+  outputs: {Vs: vs_figS7_model_pred}
+- id: run_figS7_pa
+  model: mean_field_elastic
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1}
+  sweep: {ks: vs_figS7_pa}
+  outputs: {Vs: vs_figS7_pa_pred}
+- id: run_figS7_ha
+  model: mean_field_elastic
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1}
+  sweep: {ks: vs_figS7_ha}
+  outputs: {Vs: vs_figS7_ha_pred}
+- id: run_figS7_alg
+  model: mean_field_elastic
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1}
+  sweep: {ks: vs_figS7_alg}
+  outputs: {Vs: vs_figS7_alg_pred}
+- id: run_figS1a_ode
+  model: mean_field_elastic
+  inputs: {nm: nm_tableS1, Fm: Fm_tableS1, Fcr: Fcr_tableS1, nc: nc_tableS1, Fb: Fb_meanfield, ron0: ron0_tableS1,
+           roff0: roff0_tableS1, kc: kc_tableS1, vu: vu_tableS1, Vp: Vp_tableS1, alpha: alpha_tableS1}
+  sweep: {ks: vs_figS1a_ode}
+  outputs: {Vs: vs_figS1a_ode_pred}

@@ -1,0 +1,31 @@
+# The code's stiffness sweep (motorclutch2_3.m lines 27, 42-44, 144, 159) with the minimum of the
+# plotted retro located by us. Notes: the code plots retro against stiffness and stops; it does not
+# compute an optimum. The minimum is taken here as the least grid value refined by a parabola in
+# log10(stiffness) through it and its neighbours (added method, q_optimum_method). Each grid point is
+# one mc_event_port run with the same seed, as the code runs one simulation per stiffness.
+id: optimum_port
+name: "optimal stiffness from the code's stiffness sweep (motorclutch2_3.m, Python port; minimum located by us)"
+role: model
+stated: {file: motorclutch2_3.m, lines: "27", quote: "stiffness=logspace(-2,2,10); %define stiffness vector"}
+built_from: [mc_event_port]
+equation: "ks_opt = argmin over Ksub in logspace(-2,2,10) of retro(Ksub), refined by a parabola in log10(Ksub)"
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  Kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  gain: {quantity: feedback_gain, unit: dimensionless}
+outputs:
+  ks_opt: {quantity: optimal_substrate_stiffness, unit: pN/nm, description: "stiffness of least mean retrograde flow"}
+  v_min:  {quantity: retrograde_flow_rate, unit: nm/s, description: "least retro on the grid"}
+settings:
+  ksub_min: 0.01      # line 27, logspace(-2,...)
+  ksub_max: 100.0     # line 27, logspace(...,2,...)
+  n_points: 10        # line 27, logspace(...,10)
+  events: 100000      # line 26
+  seed: 1
+stochastic: true

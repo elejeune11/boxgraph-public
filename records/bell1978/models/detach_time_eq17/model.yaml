@@ -1,0 +1,17 @@
+id: detach_time_eq17
+name: time to detach a cell under force, numerical solution of Eq. 17
+role: model
+stated: {page: 6, printed_page: "623", quote: "lutions of Eq. 17 have been obtained and", where: "Eq. 17"}
+equation: "dNb/dt = k+(N1 - Nb)N2 - k- Nb exp(gamma F/kT Nb), Nb(0) = KN2 N1/(1 + KN2) (Eq. 18), gamma = r0; t is the time at which Nb reaches zero"
+inputs:
+  k_minus: {quantity: reverse_rate_membrane, unit: 1/s}
+  KN2: {quantity: KN2_product, unit: dimensionless}
+  r0: {quantity: barrier_range, unit: nm}
+  f: {quantity: force_per_bond, unit: dyne, description: "F/N1"}
+  kT: {quantity: thermal_energy, unit: eV/particle}
+outputs:
+  t: {quantity: detachment_time, unit: s}
+settings:
+  rtol: 1.0e-8      # added: the paper gives no numerical settings
+  n_stop: 0.01      # added: Nb/N1 at which the cell is counted as detached
+  n_grid: 20001     # added: grid on which the absence of an equilibrium is checked

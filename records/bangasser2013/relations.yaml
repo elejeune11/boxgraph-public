@@ -1,0 +1,201 @@
+# Relations this paper states about its models. Numbers in each model's port units:
+# 1 pN = 1e-7 dyne; 1 pN nm = 1/160.2176634 eV.
+- id: rel_catch_slip_to_bell
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: bell1978/loaded_reverse_rate
+  mapping: {k_minus: "koff", f: "1e-7*F", gamma: "1", kT: "Fb/160.2176634"}
+  output_map: {k_minus_F: koff_star}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.001, 1], Fb: [1, 10], Fc: [1, 10]}
+  provenance: stated
+  citation: {page: 3, printed_page: "583", quote: "The first term in this equation is identical to the Bell model", where: "text below Eq. 9"}
+  assumptions:
+    - "Bell's force per bond F/Nb is the force Fi on one clutch, and Bell's kT/γ is the characteristic rupture force Fb (taken with γ = 1 nm)"
+- id: rel_ssa_from_chan
+  kind: derived_from
+  a: bangasser2013/motor_clutch_ssa
+  b: chan2008/motor_clutch
+  steps:
+    - "the fixed time step Monte Carlo simulation is replaced by a variable time step Gillespie SSA (Eq. 1)"
+    - "the order of events is changed so that the force balance is calculated at the end of each time step"
+  provenance: stated
+  citation: {page: 14, quote: "The model simulation algorithm from Chan and Odde(1) was updated", where: "Supporting Material, Model Simulation Algorithm"}
+  assumptions:
+    - "Chan and Odde's model signs retrograde quantities negative; this record's SSA takes them positive"
+- id: rel_ssa_offrate_from_bell
+  kind: derived_from
+  a: bell1978/loaded_reverse_rate
+  b: bangasser2013/motor_clutch_ssa
+  steps:
+    - "each engaged clutch leaves at Bell's loaded off-rate koff exp(Fi/Fb), its load Fi set by the clutch spring and the substrate force balance"
+  provenance: stated
+  citation: {page: 2, printed_page: "582", quote: "their off-rate increases exponentially in the load", where: "text, citing ref. 23"}
+  assumptions:
+    - "Bell's kT/γ is the characteristic rupture force Fb, and Bell's force per bond is the load Fi on one clutch"
+- id: rel_catch_slip_lifetime_to_bell_eq16
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: bell1978/lifetime_eq16
+  mapping: {tau0: "1/koff", E0: "0", gamma: "1", f: "1e-7*F", kT: "Fb/160.2176634"}
+  output_map: {tau: tau}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.004, 1], Fb: [1, 10], koffc: [0.001, 1], Fc: [1, 10]}
+  # the numeric limit stops at koffc ~ 1e-8 1/s, leaving a relative residual up to koffc/koff ~ 2.5e-6
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    With no catch term (koffc -> 0), the lifetime 1/koff* implied by Eq. 9 is 1/koff exp(-F/Fb),
+    Bell's Eq. 16 bond lifetime with tau0 exp(E0/kT) = 1/koff and kT/gamma = Fb. Only the product
+    tau0 exp(E0/kT) matters, so E0 is mapped to 0 and tau0 carries the whole unloaded lifetime.
+  assumptions:
+    - "Bell's force per bond is the force on one clutch, and Bell's kT/γ is Fb (taken with γ = 1 nm)"
+    - "Bell's unloaded lifetime tau0 exp(E0/kT) is Bangasser's 1/koff"
+- id: rel_catch_slip_to_chan_off_rate
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: chan2008/off_rate_eq1
+  mapping: {koff: "koff", Fclutch: "F", Fb: "Fb"}
+  output_map: {koff_star: koff_star}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.01, 1], Fb: [1, 10], koffc: [0.001, 1], Fc: [1, 10]}
+  # the numeric limit stops at koffc ~ 1e-8 1/s, leaving a relative residual up to koffc/koff ~ 1e-6
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    Bangasser says the first term of Eq. 9 is the Bell slip-bond off-rate used in the rest of the study,
+    whose motor-clutch model is Chan and Odde's (ref. 15); Chan's Eq. 1 is that off-rate. With no catch
+    term (koffc -> 0), Eq. 9 is Chan's Eq. 1 with the clutch force Fi as Chan's Fclutch.
+  assumptions:
+    - "in positive (Bangasser) signs; Chan's Table S1 prints Fclutch and Fb both negative, which leaves their ratio unchanged"
+- id: rel_chan_fixed_step_approximates_ssa
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: chan2008/motor_clutch
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ksub: "ksub"}
+  output_map: {v_retro: v_retro}
+  regime: {nm: [60, 90], Fm: [1.6, 2.4], vu: [100, 140], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12], Fb: [1.6, 2.4], kc: [4, 6], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 14, quote: "using the SSA algorithm resulted in behavior qualitatively similar to that obtained from our", where: "Supporting Material, Model Simulation Algorithm; Fig. S1A"}
+  assumptions:
+    - "Chan's fixed time step Monte Carlo (dt = 0.005 s, 300 s) approximates the variable time step SSA (1000 s); each model runs at its own settings and seed"
+    - "Chan signs vu, Fm and Fb negative and reports -v as the retrograde flow; Bangasser takes them positive"
+    - "regime around Chan and Odde's parameter set (Fig. S1C: nm = nc = 75, kon = 1 1/s, kc = 5 pN/nm), at which Fig. S1A compares the two algorithms"
+    - "tolerance 0.1 is the relator's choice: the paper says only 'qualitatively similar', and Fig. S1A that the quantitative shape changed at the same parameters"
+- id: rel_catch_slip_to_erdmann_single_bond
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: erdmann2004/single_bond_rate
+  mapping: {k0: "koff", F: "F", i: "1", Fb: "Fb"}
+  output_map: {k: koff_star}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.01, 1], Fb: [1, 10], koffc: [0.001, 1], Fc: [1, 10]}
+  # the numeric limit stops at koffc ~ 1e-8 1/s, leaving a relative residual up to koffc/koff ~ 1e-6
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    Neither paper cites the other. Both write Bell's slip-bond off-rate in the same variables: Erdmann's
+    k = k0 e^{F/(i Fb)} with Fb = kB T/xb, and the first term of Bangasser's Eq. 9, koff exp(Fi/Fb), which
+    Bangasser calls identical to the Bell model. With no catch term (koffc -> 0) and the force carried by
+    one bond (i = 1), Eq. 9 is Erdmann's single-bond rate.
+  assumptions:
+    - "Bangasser's force Fi on one clutch is Erdmann's force F on a cluster with i = 1 closed bond"
+    - "Bangasser's characteristic rupture force Fb plays the role of Erdmann's force scale Fb = kB T/xb; the relation joins the rate laws, not the quantities"
+- id: rel_erdmann_no_rebinding_to_binding_time
+  kind: reduces_to
+  a: erdmann2004/lifetime_eq8
+  b: bangasser2013/binding_time_eq10
+  mapping: {nc: "floor(N0 + 1/2)", kon: "k0"}
+  output_map: {tbinding: T}
+  limit: {gamma: "0"}
+  regime: {N0: [1, 200], gamma: [0, 10], k0: [0.01, 10]}
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    Without rebinding (gamma -> 0), Erdmann's Eq. 8 gives the cluster lifetime H_N0/k0: the mean time for
+    N0 independent bonds, each leaving at rate k0, to all have left. Bangasser's Eq. 10 is the same
+    first-passage sum, sum 1/(kon (nc - i)) = H_nc/kon, for nc independent clutches each binding at kon.
+    The two are one pure-death process read in opposite directions.
+  assumptions:
+    - "a formal correspondence only: Erdmann's bonds dissociate at k0, Bangasser's clutches associate at kon; no quantity of one paper is the other's"
+    - "Bangasser's Eq. 10 neglects clutch unbinding during binding, as Erdmann's gamma -> 0 neglects rebinding during rupture"
+# Relations to the Odde lab's released MATLAB code (record odde_code), released with this paper. Neither
+# the paper nor the code names the other's model, so these are proposed. Both are stochastic event-stepping
+# (Gillespie) simulations of one clutch scheme; the code signs vu, Fm, Fb negative, this record positive.
+# One output per relation (approximated_by); each model runs at its own settings and seed.
+- id: rel_ssa_approx_code_flow
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: odde_code/mc_event_port
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", Kc: "kc", gain: "0", Ksub: "ksub"}
+  output_map: {v_retro: v_retro}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    The code (motorclutch2_3.m) carries this paper's base set (Table 1: nm = nc = 50, kon = 0.3 /s,
+    kc = 0.8 pN/nm) and is the event-stepping algorithm the Supporting Material describes (Eq. 1: the
+    event with the shortest time is executed and time advances by it). With the code's gain set to 0 its
+    off-rate is this paper's Bell slip bond koff exp(Fi/Fb). The two differ in run length (1e5 events
+    against 1000 s), in the order of the force-balance update, and in the random stream.
+  assumptions:
+    - "the code's gain term is set to 0 (its own value)"
+    - "the code signs vu, Fm and Fb negative (retrograde negative); this record's SSA takes them positive; both report the retrograde flow positive"
+    - "regime: +-20% around Table 1's base set, over the whole stiffness range of Fig. 2 (0.01-100 pN/nm)"
+    - "tolerance 0.1 (added): allows for the noise of one seeded run of each and for the differences in update order and run length; a larger difference is not noise"
+- id: rel_ssa_approx_code_traction
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: odde_code/mc_event_port
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", Kc: "kc", gain: "0", Ksub: "ksub"}
+  output_map: {F_trac: F_mean}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: "as rel_ssa_approx_code_flow, for the time-averaged traction (Fig. 2B)"
+  assumptions:
+    - "both outputs are the time-averaged traction as a positive magnitude (this record's ksub x_sub; the code's -avtrac)"
+    - "regime and tolerance as in rel_ssa_approx_code_flow"
+- id: rel_ssa_approx_code_kens
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: odde_code/mc_event_port
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", Kc: "kc", gain: "0", Ksub: "ksub"}
+  output_map: {k_ens: k_ens}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: "as rel_ssa_approx_code_flow, for the ensemble clutch stiffness, kc times the mean engaged number (Fig. 6B)"
+  assumptions:
+    - "both are kc times the time-averaged number of engaged clutches (the code computes avnumcon; the product is this paper's definition, p. 7)"
+    - "regime and tolerance as in rel_ssa_approx_code_flow"
+  # Relator's check (base set, seed 1): the two agree within 2% at ksub = 0.01 pN/nm but the code's mean
+  # engaged number is ~10% higher at 1 pN/nm and ~28% higher at 100 pN/nm (2.23 against 1.75). A likely
+  # cause, not tested: the code weights numcon(i), the state after event i, by timestep(i), the interval
+  # before it (motorclutch2_3.m lines 134-146), which biases the average most when few clutches are engaged.
+- id: rel_ssa_approx_code_cycle
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: odde_code/mc_event_port
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", Kc: "kc", gain: "0", Ksub: "ksub"}
+  output_map: {t_cycle: t_cycle}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: "as rel_ssa_approx_code_flow, for the load-and-fail cycle time (Fig. 6D)"
+  assumptions:
+    - "the two cycle times are defined differently: this record's is the run time over the number of times the last engaged clutch let go; the code's is the mean interval between states with no engaged clutch"
+    - "regime and tolerance as in rel_ssa_approx_code_flow"
+# Kong et al. 2009 (record kong2009, ref. 32): no relation entered. Bangasser uses Kong's Fig. 3A lifetimes
+# only as data to fit Eq. 9 (linked in cited.yaml); neither paper relates a model of one to a model of the other.
+# Kong's two models (series_bonds: rates of bonds in series add; survival_first_order: ln N falls linearly
+# at the off rate) share with Eq. 9 only the plain form "rates add" (Eq. 9's two terms are two pathways of one
+# bond, not two bonds in series), which the atlas would flag as too plain to mean anything.
+# Not entered: optimal_stiffness -> odde_code/optimum_port (approximated_by). The relation test's 40 samples
+# of a 10-point sweep at 1e5 events each exceed the 900 s run limit, so it could not be tested; the two
+# optima are compared on the base set by odde_code's cmp_b13_opt instead.

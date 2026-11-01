@@ -1,0 +1,47 @@
+id: craig2015
+kind: article
+title: Model for adhesion clutch explains biphasic relationship between actin flow and traction at the cell leading edge
+authors: [Erin M Craig, Jonathan Stricker, Margaret Gardel, Alex Mogilner]
+year: 2015
+venue: Phys. Biol. 12, 035002
+doi: 10.1088/1478-3975/12/3/035002
+file: corpus/2015_Craig.pdf
+page_range: [2, 26]
+pages: {2: "1", 3: "2", 4: "3", 5: "4", 6: "5", 7: "6", 8: "7", 9: "8", 10: "9", 11: "10", 12: "11", 13: "12", 14: "13", 15: "14", 16: "15"}
+reader: {kind: agent, name: boxgraph-reader, model: claude-opus-5-5, prompt_version: "reader-1", date: "2026-11-01"}
+notes: >
+  PDF p. 1 is a download page and is not part of the source; pp. 2-16 are the article (journal pages 1-15),
+  pp. 17-19 the supplement's captions (as printed on the PMC page) and pp. 20-26 the supplemental figures.
+  The quantitative core is the dimensionless steady-state model of Eqs. 5-9, whose results are printed only
+  as figures. It is entered as two models (clutch_profile for V~(x), T~(x); clutch_peak for the traction peak
+  and the flow there), solved as the steady equations of the paper's own discretisation (40 segments over
+  L = 8 um, upwind myosin advection). The unstated numerical choices (dM/dx differencing, the far-end
+  Neumann condition, how the peak is located) are run settings with questions. Compared with the paper:
+  the peak against F (Fig. 4(c)), against F with b = 0 (Fig. 4(f)), against lambda (supp. fig. 2(a)) and
+  against b (supp. fig. 4(a)), and the flow and traction profiles of supp. fig. 2(b), (c), all read from
+  the figures by the record's code. Also in the record: the order-of-magnitude estimates of the text
+  (lambda, T0 L0^2/V0, epsilon, network displacement, lamellipodial width, membrane tension, viscosity),
+  Eq. 10 against the full model, and Eq. 11 with its printed fit parameters against both the drawn fit
+  curve and the measured U2OS points (supp. fig. 1). Values printed with "~" get no verdict.
+  Findings recorded as questions: Fig. 4(f) is inconsistent with Fig. 4(c) at F = 0 under the captioned
+  lambda = 3 (it matches lambda ~ 1); the stated Nadh(0) = 0 is not what the figures show at x = 0; the
+  drawn Eq. 11 curve does not match the printed Fk; supp. fig. 4(a) at large b depends on the
+  discretisation. The Neumann discretisation was chosen after comparing with supp. fig. 2(b), (c)
+  (question q_neumann_choice). Left out: the Fig. 3 fits (parameters not printed), the dimensional U2OS
+  fit curves of supp. fig. 1(d), (e) (V0, T0 not printed), the model variants of Appendices A-C and
+  supp. figs. 5-7 (not modelled), the viscoelastic and elastic analyses of Appendix E (no printed numbers),
+  and measured scatter clouds and single-cell intensity bars (Figs. 2, 3) that no model here predicts;
+  see figures.md.
+  A second, figure-reading pass (same date) read what the first left out where it has values: the Fig.
+  2(d) measured intensity bars; the adhesion-density markers of the Fig. 3 fits and the supp. fig. 1(d),
+  (e) fit curves (recorded, no run: parameters not printed); the pale raster profiles of Fig. 4(a), (b),
+  (d), (e), (g)-(i), read by hue; and the profile panels of supp. figs. 2(d), (e), 3 and 4(b)-(i). These
+  are run with clutch_profile and a new model clutch_fields (the same solver's myosin density and
+  gradient, adhesion density, myosin and viscous force). Added inputs: lambda of supp. fig. 3 (unstated),
+  v* >> 1 of Fig. 4(g), (h), and, for alternative runs only, lambda = 1 for Fig. 4(d), (e) and v* = 0.3,
+  lambda = 1 for supp. fig. 3(a). Findings: Fig. 4(d), (e) reproduce at lambda = 1, not the captioned 3
+  (q_fig4de_profiles_lambda); supp. fig. 3(a) looks drawn with v* = 0.3, not the captioned 3
+  (q_S3_figure_vstar); small systematic myosin offsets (q_S2d_myosin_offset) and large-b peaks
+  (q_S4_profiles_large_b) depend on the unstated discretisation. Still left out: the clouds of single
+  measurements (Figs. 2(b), 3, supp. fig. 1(d), (e)), the Fig. 3 fit lines (not separable from the dense
+  dots) and myosin whiskers (ambiguous marks), and supp. figs. 5-7 (variants not modelled).

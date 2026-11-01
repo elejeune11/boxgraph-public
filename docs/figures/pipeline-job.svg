@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" font-family="Instrument Sans, system-ui, sans-serif" viewBox="0 0 880 320" width="880" role="img" aria-label="Life of one agent job. It waits for the step before it and for its locks, then an agent runs in its own session with limited tools and a budget cap. A gate then checks the files the agent wrote, and scans the project for files written outside its record. If the gate passes, the job is recorded in completed.yaml. If it fails, the errors are sent back into the same session and the agent tries again; after two or three failed tries the job is parked for a person. If the run is stopped, the next run resumes the same session.">
+          <style>
+svg {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #1b2230; --muted: #5d6676; --line: #8a93a3;
+  --agent: #2f5fb3; --agent-fill: #e6eefb; --code-fill: #eef0f3; --ok: #2e7d4f; --warn: #a3501c;
+  --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+ background: var(--panel); }
+@media (prefers-color-scheme: dark) { svg {
+  --bg: #12161d; --panel: #1a2029; --fg: #e3e7ee; --muted: #9aa3b2; --line: #6d7687;
+  --agent: #8fb4ff; --agent-fill: #1d2c47; --code-fill: #232a35; --ok: #6fcf97; --warn: #f0a070;   } }
+text { font-family: var(--sans); fill: var(--fg); font-size: 12.5px; }
+.t { font-weight: 600; font-size: 13px; }
+.s { fill: var(--muted); font-size: 11px; }
+.m { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+.lab { fill: var(--muted); font-size: 11px; font-style: italic; }
+.agent { fill: var(--agent-fill); stroke: var(--agent); stroke-width: 1.5; }
+.code { fill: var(--code-fill); stroke: var(--line); stroke-width: 1.2; }
+.file { fill: none; stroke: var(--line); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.lane { fill: none; stroke: var(--line); stroke-opacity: 0.45; stroke-width: 1; }
+.plan { fill: none; stroke: var(--warn); stroke-width: 1.4; stroke-dasharray: 6 4; }
+.wire { fill: none; stroke: var(--fg); stroke-width: 1.3; }
+.wire.soft { stroke: var(--line); }
+.wire.ok { stroke: var(--ok); }
+.wire.warn { stroke: var(--warn); }
+.wire.dash { stroke-dasharray: 5 4; }
+.head { fill: var(--fg); }
+.head.soft { fill: var(--line); }
+.head.ok { fill: var(--ok); }
+.head.warn { fill: var(--warn); }
+.okt { fill: var(--ok); font-weight: 600; }
+.warnt { fill: var(--warn); font-weight: 600; }
+</style>
+          <defs>
+            <marker id="bh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker>
+            <marker id="bhok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head ok"/></marker>
+            <marker id="bhw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head warn"/></marker>
+          </defs>
+
+          <rect x="216" y="20" width="178" height="48" rx="6" class="code"/>
+          <text x="305" y="40" text-anchor="middle" class="t">run stopped and restarted</text>
+          <text x="305" y="57" text-anchor="middle" class="s">e.g. the 2-hour task limit</text>
+          <path d="M305 68 V118" class="wire" marker-end="url(#bh)"/>
+          <text x="313" y="98" class="lab">resumes the same session</text>
+
+          <rect x="20" y="122" width="160" height="72" rx="6" class="code"/>
+          <text x="100" y="145" text-anchor="middle" class="t">waiting</text>
+          <text x="100" y="163" text-anchor="middle" class="s">for the step before</text>
+          <text x="100" y="179" text-anchor="middle" class="s">and for its locks</text>
+
+          <rect x="216" y="122" width="178" height="72" rx="6" class="agent"/>
+          <text x="305" y="145" text-anchor="middle" class="t">agent works</text>
+          <text x="305" y="163" text-anchor="middle" class="s">own session, own tools</text>
+          <text x="305" y="179" text-anchor="middle" class="s">turn and $ caps</text>
+
+          <rect x="436" y="122" width="150" height="72" rx="6" class="code"/>
+          <text x="511" y="141" text-anchor="middle" class="t">gate</text>
+          <text x="511" y="159" text-anchor="middle" class="s">validate + write scan</text>
+          <text x="511" y="174" text-anchor="middle" class="s">checks the files,</text>
+          <text x="511" y="188" text-anchor="middle" class="s">not the agent's words</text>
+
+          <rect x="660" y="122" width="200" height="72" rx="6" class="file"/>
+          <text x="760" y="152" text-anchor="middle" class="okt">passed</text>
+          <text x="760" y="172" text-anchor="middle" class="s">added to completed.yaml</text>
+
+          <path d="M180 158 H212" class="wire" marker-end="url(#bh)"/>
+          <path d="M394 158 H432" class="wire" marker-end="url(#bh)"/>
+          <path d="M586 158 H656" class="wire ok" marker-end="url(#bhok)"/>
+          <text x="621" y="150" text-anchor="middle" class="okt" style="font-size:11px">sound</text>
+
+          <path d="M480 194 V232 H305 V198" class="wire warn" marker-end="url(#bhw)"/>
+          <text x="392" y="250" text-anchor="middle" class="warnt" style="font-size:11px">fails: errors sent back</text>
+          <text x="392" y="265" text-anchor="middle" class="s">into the same session</text>
+
+          <rect x="660" y="248" width="200" height="56" rx="6" class="file" style="stroke: var(--warn)"/>
+          <text x="760" y="271" text-anchor="middle" class="warnt">parked for a person</text>
+          <text x="760" y="289" text-anchor="middle" class="s">see --status and the logs</text>
+          <path d="M550 194 V276 H656" class="wire warn" marker-end="url(#bhw)"/>
+          <text x="558" y="230" class="s">still failing after</text>
+          <text x="558" y="244" class="s">3 tries (read)</text>
+          <text x="558" y="258" class="s">or 2 (others)</text>
+        </svg>

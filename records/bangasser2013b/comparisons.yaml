@@ -1,0 +1,81 @@
+# ---- reproduction: the paper's own ODE results from its own equations and inputs ----
+- {id: cmp_tcycle_r1, purpose: reproduction, computed: tcycle_r1_pred, printed: tcycle_r1_text, conditions_ok: "the run uses r = 1 (r_S2E_low), the condition of the printed value"}
+- {id: cmp_tcycle_r3, purpose: reproduction, computed: tcycle_r3_pred, printed: tcycle_r3_text, conditions_ok: "the run uses r = 3 (r_S2E_high), the condition of the printed value"}
+- {id: cmp_ksopt_ode_n25, purpose: reproduction, computed: ksopt_ode_n25_pred, printed: ksopt_ode_n25, conditions_ok: "the run uses nm = nc = 25 and r = 3, the conditions of the printed value"}
+- {id: cmp_ksopt_ode_n3600, purpose: reproduction, computed: ksopt_ode_n3600_pred, printed: ksopt_ode_n3600, conditions_ok: "the run uses nm = nc = 3600 and r = 3, the conditions of the printed value"}
+# eye readings of the ODE curves (no verdict; the differences are kept)
+- {id: cmp_tfail_fig2, purpose: reproduction, computed: tcycle_fig2_pred, printed: tfail_fig2b_ode}
+- {id: cmp_xs_fig2, purpose: reproduction, computed: xs_fig2_pred, printed: xs_fig2c_ode}
+- {id: cmp_Fc_fig2, purpose: reproduction, computed: Fc_fig2_pred, printed: Fc_fig2d_ode}
+- {id: cmp_vf_fig2, purpose: reproduction, computed: vf_fig2_pred, printed: vf_fig2e_ode}
+- {id: cmp_Pb_fig2, purpose: reproduction, computed: Pb_fig2_pred, printed: Pb_fig2b_ode}
+- {id: cmp_tcycle_S2F_r2, purpose: reproduction, computed: tcycle_S2F_r2_pred, printed: tcycle_figS2f_r2}
+- {id: cmp_pb_S1, purpose: reproduction, computed: pb_S1_pred, printed: pb_figS1b_ode}
+- {id: cmp_xs_S1, purpose: reproduction, computed: xs_S1_pred, printed: xs_figS1c_ode}
+- {id: cmp_Fc_S1, purpose: reproduction, computed: Fc_S1_pred, printed: Fc_figS1d_ode}
+- {id: cmp_koff_S1, purpose: reproduction, computed: koff_S1_pred, printed: koff_figS1f_ode}
+- {id: cmp_xs_S1_alt, purpose: reproduction, computed: xs_S1alt_pred, printed: xs_figS1c_ode, note: "with the added κs = 0.01 pN/nm"}
+
+# ---- reproduction: the arithmetic of the Discussion (p. 9) ----
+- {id: cmp_L, purpose: reproduction, computed: L_pred, printed: L_text}
+- {id: cmp_L_fold, purpose: reproduction, computed: L_fold_pred, printed: L_fold_text}
+- {id: cmp_Fm_vu, purpose: reproduction, computed: Fm_vu_pred, printed: Fm_vu_text}
+- {id: cmp_Fm_vu_subst, purpose: consistency, computed: Fm_vu_pred, printed: Fm_vu_subst, note: "the ratio as substituted into Eq. 31 (0.01 pN-s/nm) against Fm/vu from the printed orders of Fm and vu"}
+- {id: cmp_n_traction, purpose: reproduction, computed: n_traction_pred, printed: n_order, note: "added in audit: n = F/Fm from the printed orders of the traction force and Fm (p. 9)"}
+- {id: cmp_nfac, purpose: reproduction, computed: nfac_pred, printed: nfac_text}
+- {id: cmp_coef_eq31, purpose: reproduction, computed: coef_eq31_pred, printed: coef_eq31}
+- {id: cmp_kon_range, purpose: reproduction, computed: kon_range_pred, printed: kon_range_text}
+- {id: cmp_koff_range, purpose: reproduction, computed: koff_range_pred, printed: koff_range_text}
+
+# ---- approximation: Eq. 30 and the ODEs against the Monte Carlo optima the paper prints ----
+- {id: cmp_eq30_vs_mc_n25, purpose: approximation, computed: ksopt_eq30_n25_pred, printed: ksopt_mc_n25, conditions_ok: "the run uses nm = nc = 25 and the base set, as the Monte Carlo value"}
+- {id: cmp_eq30_vs_mc_n3600, purpose: approximation, computed: ksopt_eq30_n3600_pred, printed: ksopt_mc_n3600, conditions_ok: "the run uses nm = nc = 3600 and the base set, as the Monte Carlo value"}
+- {id: cmp_ode_vs_mc_n25, purpose: approximation, computed: ksopt_ode_n25_pred, printed: ksopt_mc_n25, conditions_ok: "same nm = nc and base set; r is a parameter of the ODE only"}
+- {id: cmp_ode_vs_mc_n3600, purpose: approximation, computed: ksopt_ode_n3600_pred, printed: ksopt_mc_n3600, conditions_ok: "same nm = nc and base set; r is a parameter of the ODE only"}
+- {id: cmp_eq30_vs_ode_n25, purpose: approximation, computed: ksopt_eq30_n25_pred, printed: ksopt_ode_n25, conditions_ok: "same nm = nc and base set; Eq. 30 has no r", note: "Eq. 30 is derived from the same motor-clutch picture; the paper compares it with the Monte Carlo output (Fig. 5), not with the ODE"}
+- {id: cmp_eq30_vs_ode_n3600, purpose: approximation, computed: ksopt_eq30_n3600_pred, printed: ksopt_ode_n3600, conditions_ok: "same nm = nc and base set; Eq. 30 has no r"}
+
+# ==== calibrated figure readings (figures.yaml) ===============================================
+# ---- reproduction: the ODE failure time (Figs. 2b-e, 6a, S2E) ----
+- {id: cmp_tfail_fig2b_cal, purpose: reproduction, computed: tcyc_fig2_drop_pred, printed: fig2b_drop_cal, conditions_ok: "base set on 0.1 pN/nm (Fig. 2 legend), r = 2 (p. 5)"}
+- {id: cmp_tfail_fig2c_cal, purpose: reproduction, computed: tcyc_fig2_drop_pred, printed: fig2c_drop_cal, conditions_ok: "same cycle as Fig. 2(b)"}
+- {id: cmp_tfail_fig2d_cal, purpose: reproduction, computed: tcyc_fig2_drop_pred, printed: fig2d_drop_cal, conditions_ok: "same cycle as Fig. 2(b)"}
+- {id: cmp_tfail_fig2e_cal, purpose: reproduction, computed: tcyc_fig2_drop_pred, printed: fig2e_drop_cal, conditions_ok: "same cycle as Fig. 2(b); the flow jumps back to vu at the failure"}
+- {id: cmp_tfail_fig6a_cal, purpose: reproduction, computed: tcyc_fig2_drop_pred, printed: fig6a_ode_drop_cal, conditions_ok: "base set on 0.1 pN/nm, r = 2 (Fig. 6 legend)"}
+- {id: cmp_tfail_S2E_cal, purpose: reproduction, computed: tcyc_S2E_drops_pred, printed: figS2e_drops_cal, conditions_ok: "S2E states no stiffness; the run uses the added 0.1 pN/nm (ks_S2E_added)"}
+# ---- reproduction: the ODE state over the cycle (Figs. 2b-f, 6a, S2E) ----
+- {id: cmp_Pb_fig2_cal, purpose: reproduction, computed: Pb_fig2cal_pred, printed: fig2b_ode_cal}
+- {id: cmp_xs_fig2_cal, purpose: reproduction, computed: xs_fig2cal_pred, printed: fig2c_ode_cal}
+- {id: cmp_Fc_fig2_cal, purpose: reproduction, computed: Fc_fig2cal_pred, printed: fig2d_ode_cal}
+- {id: cmp_vf_fig2_cal, purpose: reproduction, computed: vf_fig2cal_pred, printed: fig2e_ode_cal}
+- {id: cmp_koff_fig2_cal, purpose: reproduction, computed: koff_fig2cal_pred, printed: fig2f_ode_cal}
+- {id: cmp_Pb_fig6a_cal, purpose: reproduction, computed: Pb_fig2cal_pred, printed: fig6a_ode_cal}
+- {id: cmp_Pb_S2E_r1_cal, purpose: reproduction, computed: Pb_S2E_r1_pred, printed: figS2e_r1_cal, conditions_ok: "r = 1; S2E states no stiffness, the run uses the added 0.1 pN/nm"}
+- {id: cmp_Pb_S2E_r2_cal, purpose: reproduction, computed: Pb_S2E_r2_pred, printed: figS2e_r2_cal, conditions_ok: "r = 2; S2E states no stiffness, the run uses the added 0.1 pN/nm"}
+- {id: cmp_Pb_S2E_r3_cal, purpose: reproduction, computed: Pb_S2E_r3_pred, printed: figS2e_r3_cal, conditions_ok: "r = 3; S2E states no stiffness, the run uses the added 0.1 pN/nm"}
+# ---- reproduction: the single clutch (Fig. S1), on the stated and on the added stiffness ----
+- {id: cmp_pb_S1_cal, purpose: reproduction, computed: pb_S1cal_pred, printed: figS1b_ode_cal}
+- {id: cmp_xs_S1_cal, purpose: reproduction, computed: xs_S1cal_pred, printed: figS1c_ode_cal}
+- {id: cmp_Fc_S1_cal, purpose: reproduction, computed: Fc_S1cal_pred, printed: figS1d_ode_cal}
+- {id: cmp_vf_S1_cal, purpose: reproduction, computed: vf_S1cal_pred, printed: figS1e_ode_cal}
+- {id: cmp_koff_S1_cal, purpose: reproduction, computed: koff_S1cal_pred, printed: figS1f_ode_cal}
+- {id: cmp_pb_S1alt_cal, purpose: reproduction, computed: pb_S1altcal_pred, printed: figS1b_ode_cal, conditions_ok: "deliberately on 0.01 pN/nm, not the stated 0.1, to test q_figS1_stiffness"}
+- {id: cmp_xs_S1alt_cal, purpose: reproduction, computed: xs_S1altcal_pred, printed: figS1c_ode_cal, conditions_ok: "deliberately on 0.01 pN/nm, not the stated 0.1, to test q_figS1_stiffness"}
+- {id: cmp_Fc_S1alt_cal, purpose: reproduction, computed: Fc_S1altcal_pred, printed: figS1d_ode_cal, conditions_ok: "deliberately on 0.01 pN/nm, not the stated 0.1, to test q_figS1_stiffness"}
+- {id: cmp_vf_S1alt_cal, purpose: reproduction, computed: vf_S1altcal_pred, printed: figS1e_ode_cal, conditions_ok: "deliberately on 0.01 pN/nm, not the stated 0.1, to test q_figS1_stiffness"}
+- {id: cmp_koff_S1alt_cal, purpose: reproduction, computed: koff_S1altcal_pred, printed: figS1f_ode_cal, conditions_ok: "deliberately on 0.01 pN/nm, not the stated 0.1, to test q_figS1_stiffness"}
+# ---- reproduction: Fig. 4(b) flow curves and Fig. S2F cycle times ----
+- {id: cmp_vmean_fig4b_n25_cal, purpose: reproduction, computed: vmean_fig4b_n25_pred, printed: fig4b_n25_cal, note: "the record's cycle mean of the ODE flow (q_ode_mean_flow)"}
+- {id: cmp_vmean_fig4b_n3600_cal, purpose: reproduction, computed: vmean_fig4b_n3600_pred, printed: fig4b_n3600_cal, note: "the record's cycle mean of the ODE flow (q_ode_mean_flow)"}
+- {id: cmp_tcyc_S2F_r3_cal, purpose: reproduction, computed: tcyc_S2F_r3_pred, printed: figS2f_r3_cal}
+- {id: cmp_tcyc_S2F_r2_cal, purpose: reproduction, computed: tcyc_S2F_r2_pred, printed: figS2f_r2_cal}
+- {id: cmp_tcyc_S2F_r1_cal, purpose: reproduction, computed: tcyc_S2F_r1_pred, printed: figS2f_r1_cal}
+# ---- approximation: the ODEs against the paper's Monte Carlo curves (the paper's own claims) ----
+- {id: cmp_ode_vs_mc_fig4_n25_cal, purpose: approximation, computed: vmean_fig4b_n25_pred, printed: fig4a_n25_cal, conditions_ok: "same nm = nc and base set; r belongs to the ODE only"}
+- {id: cmp_ode_vs_mc_fig4_n3600_cal, purpose: approximation, computed: vmean_fig4b_n3600_pred, printed: fig4a_n3600_cal, conditions_ok: "same nm = nc and base set; r belongs to the ODE only"}
+- {id: cmp_ode_vs_mc_S2F_cal, purpose: approximation, computed: tcyc_S2F_r2_pred, printed: figS2f_mc_cal, conditions_ok: "base set; the legend says r = 2 'matches the cycle time very well on stiffnesses below 1 pN/nm' (p. 17)"}
+- {id: cmp_ode_vs_mc_S1b_cal, purpose: approximation, computed: pb_S1cal_pred, printed: figS1b_mc_cal, conditions_ok: "the single-clutch ODE against the single-clutch Monte Carlo mean it was 'validated against' (p. 16)"}
+- {id: cmp_ode_vs_mc_S1c_cal, purpose: approximation, computed: xs_S1cal_pred, printed: figS1c_mc_cal, conditions_ok: "as cmp_ode_vs_mc_S1b_cal"}
+- {id: cmp_ode_vs_mc_S1d_cal, purpose: approximation, computed: Fc_S1cal_pred, printed: figS1d_mc_cal, conditions_ok: "as cmp_ode_vs_mc_S1b_cal"}
+- {id: cmp_ode_vs_mc_S1e_cal, purpose: approximation, computed: vf_S1cal_pred, printed: figS1e_mc_cal, conditions_ok: "as cmp_ode_vs_mc_S1b_cal"}
+- {id: cmp_ode_vs_mc_S1f_cal, purpose: approximation, computed: koff_S1cal_pred, printed: figS1f_mc_cal, conditions_ok: "as cmp_ode_vs_mc_S1b_cal"}

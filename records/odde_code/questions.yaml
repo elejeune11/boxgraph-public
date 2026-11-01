@@ -1,0 +1,135 @@
+- id: q_params_vs_chan
+  kind: reading
+  about: [nm_23, nc_23, kon_23, Kc_23, nm_chan, nc_chan, kon_chan, kc_chan]
+  text: >-
+    The code's header says it reduplicates "the Chan Motor-Clutch model", but motorclutch2_3.m does not
+    use Chan and Odde's Table S1 set: nm = nc = 50 (Chan 75), kon = 0.3 /s (Chan 1), Kc = 0.8 pN/nm
+    (Chan 5). These are exactly Bangasser et al. 2013's base set (Table 1, which the build checks),
+    a set that paper says was fit to Chan and Odde's data and whose Kc was "assigned based on
+    experimental data for the spring constant of integrins". So the code is the Bangasser 2013
+    simulation; to compare it with Chan and Odde the record runs it with Chan's four values copied in.
+  citation: {file: motorclutch2_3.m, lines: "16-23", quote: "Kc=0.8; %Clutch spring constant in pN/nm"}
+- id: q_mixed_set_1_1
+  kind: choice
+  about: [nm_11, nc_11, kon_11, Kc_11, Ksub_11, run_11]
+  text: >-
+    motorclutch1_1.m runs a set that matches neither paper: kon = 1 /s as Chan and Odde, but nm = nc = 50
+    and Kc = 0.8 pN/nm as Bangasser et al. 2013 (whose kon is 0.3), on Ksub = 1 pN/nm. No paper prints a
+    result for this set, so its run (run_11) is not compared. The script only plots one trajectory and a
+    histogram/hazard analysis of the cycle times.
+  citation: {file: motorclutch1_1.m, lines: "19", quote: "kon=1; %On rate constant in 1/s"}
+- id: q_sign_convention
+  kind: reading
+  about: [Fm_23, vu_23, Fb_23]
+  text: >-
+    The code writes vu, Fm and Fb negative (retrograde motion and clutch tension negative), as Chan and
+    Odde's Table S1 does; Bangasser et al. 2013 print them positive. The links in cited.yaml say so
+    (negated). The outputs of the port turn the plotted quantities positive as the code's plots do
+    (vel = -vf, line 138; traction plotted as -avtrac, line 164).
+  citation: {file: motorclutch2_3.m, lines: "17-18", quote: "vu=-120; %unloaded motor velocity in nm/s"}
+- id: q_gain
+  kind: unstated_model
+  about: [gain_23, gain_11, mc_event_port]
+  text: >-
+    Both scripts carry a feedback term that no paper describes: the off-rate is koff exp(Fc/(Fb + gain Fc))
+    (motorclutch2_3.m line 96), and motorclutch1_1.m also computes an unused Fbe = Fb + gain Ksub xsub
+    (line 67). With gain = 0, as written in both, it reduces to the papers' koff exp(Fc/Fb) and has no
+    effect; it is entered as an input so the port stays the code.
+  citation: {file: motorclutch2_3.m, lines: "96", quote: "tunbind=-log(rand(1,length(ceng)))./(koff*exp(Fc(ceng)./(Fb+gain*Fc(ceng))));"}
+- id: q_run_length
+  kind: choice
+  about: [events_23, eventlimit_11, mc_event_port, ref_events_b13_v, ref_events_b13_F]
+  text: >-
+    The code fixes the number of events (1e5 per stiffness in motorclutch2_3.m), not the simulated time,
+    so the simulated time varies with stiffness: about 8200 s at 0.01 pN/nm and 3400 s at 100 pN/nm for
+    the base set, 700-1900 s at Chan's set. Chan and Odde run 300 s; the paper records of Bangasser et al.
+    2013 use 1000 s as the reader's choice. The averages include the start-up from all clutches free.
+    The record refines the event count (x2, x4) on the base set.
+  citation: {file: motorclutch2_3.m, lines: "26", quote: "events=1e5; %number of events to simulate"}
+- id: q_seed
+  kind: choice
+  about: [mc_event_port, optimum_port, run_chan_1d, run_chan_1d_soft, run_chan_1d_Fsoft, run_chan_1d_Fstiff]
+  text: >-
+    The code draws MATLAB rand without a seed and makes one run per stiffness. The port cannot reproduce
+    MATLAB's stream: it uses numpy with seeds and the build's replicates (5 seeds; 3 for the four runs at
+    the stiffnesses of Chan and Odde's Fig. 1D, to keep the build short), so single runs differ from the
+    code's, their distribution does not.
+  citation: {file: motorclutch2_3.m, lines: "87", quote: "tbind=-log(rand(1,length(cdisen)))/kon;"}
+- id: q_update_order
+  kind: reading
+  about: [mc_event_port]
+  text: >-
+    In the code the flow and the traction of an interval are computed from the substrate position before
+    its event (lines 119-120), and after the event every engaged clutch, including one that has just bound,
+    moves by vf dt over the whole interval (line 122); the clutch that just unbound does not move. The
+    papers describe the step as "engaged clutches advance by v_f Δt" without saying whether the clutch that
+    bound at the end of the interval counts. The port follows the code; the order is part of what the
+    comparisons test.
+  citation: {file: motorclutch2_3.m, lines: "119-123", quote: "xc(ceng)=xc(ceng)+vf*dt; %claculate positions of engaged clutches"}
+- id: q_cycle_definition
+  kind: reading
+  about: [mc_event_port, cmp_b13_fig6d, tcycle_fig6d_b13]
+  text: >-
+    The code's cycle time is the mean interval between states with no engaged clutch, found by exact
+    equality subpos == 0 (line 142), counting from the initial state at t = 0. The paper (Fig. 6D) does not
+    say how its cycle time was computed; the code gives one definition.
+  citation: {file: motorclutch2_3.m, lines: "142", quote: "cyctime=diff(t(subpos==0)); %cycle time"}
+- id: q_kens_not_in_code
+  kind: unstated_model
+  about: [run_b13_fig6b, kens_b13_port]
+  text: >-
+    The code computes the mean number of engaged clutches (avnumcon, line 146) but not the ensemble clutch
+    stiffness Kc avnumcon that Bangasser et al. 2013 plot in Fig. 6B; the port adds that product.
+  citation: {file: motorclutch2_3.m, lines: "146", quote: "avnumcon(jj)=sum((numcon.*timestep)/t(events+1)); %average number of engaged clutches"}
+- id: q_optimum_method
+  kind: choice
+  about: [optimum_port, run_b13_opt, run_n25_opt, cmp_b13_opt, cmp_b13b_opt_n25, ref_grid_b13, ref_grid_n25]
+  text: >-
+    The code sweeps 10 stiffnesses (logspace(-2,2,10), 0.44 decade apart) and plots retro; it does not
+    locate the optimum. The record locates it by the least grid value and a parabola in log10(Ksub)
+    through it and its neighbours, at the code's grid and at 2x and 4x as many points. On the code's own
+    grid the base-set optimum is pulled away from the paper's dashed line, which lies between two grid
+    points (0.077 and 0.22 pN/nm); the finer grids show where the code's curve has its minimum. The
+    base-set optimum moves from about 0.098 to 0.117 pN/nm on refining and settles there, still below the
+    0.137 ± 0.007 read off Bangasser's Fig. 2C. The n = 25 optimum settles near 0.37 pN/nm against the
+    printed 0.4. Whether the dashed line marks a fitted minimum, a grid point or a finer sweep is not said.
+  citation: {file: motorclutch2_3.m, lines: "27", quote: "stiffness=logspace(-2,2,10); %define stiffness vector"}
+- id: q_chan_algorithm
+  kind: unexplained_difference
+  about: [cmp_c08_fig1d, cmp_c08_fig1d_soft, cmp_c08_fig1d_Fsoft, cmp_c08_fig1d_Fstiff, cmp_b13_figS1a]
+  text: >-
+    Run with Chan and Odde's Table S1 values (nm = nc = 75, kon = 1 /s, Kc = 5 pN/nm), the ported
+    event-stepping code reproduces Bangasser et al. 2013's Fig. S1A curve, which that paper presents as its
+    own event-stepping simulation of Chan's parameters. It does not reproduce Chan and Odde's Fig. 1D. On
+    soft substrates (0.5-2 pN/nm) the flow is about half of Chan's (34 vs 76 nm/s at 0.5 pN/nm), and the
+    traction is about twice Chan's on the soft side (about 93-112 vs 47-55 pN). The curves meet only on
+    stiff substrates. So the code is not the algorithm behind Chan's printed figure, although its header
+    says it reduplicates the Chan model. Chan's time-stepped scheme (5 ms steps), or something else
+    unstated, gives different results at the same parameters. Neither paper says which is right; the record
+    only finds that they differ.
+  citation: {file: motorclutch1_1.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}
+- id: q_initial_dt
+  kind: reading
+  about: [dt_initial_11, mc_event_port]
+  text: >-
+    Both scripts move the engaged clutches by vf times 0.005 s before the loop (motorclutch1_1.m lines
+    43-48, motorclutch2_3.m line 66), the comment saying "(dt=0.005)", Chan and Odde's 5 ms time step. No
+    clutch is engaged at t = 0, so it moves nothing; motorclutch1_1.m stores it as timestep(1), which no
+    average uses. A remnant of the time-stepped model.
+  citation: {file: motorclutch2_3.m, lines: "66", quote: "xc(ceng)=xc(ceng)+vf*0.005;"}
+- id: q_not_ported
+  kind: reading
+  about: [mc_event_port]
+  text: >-
+    Not entered: the outputs the code computes but no paper prints (velcv, rebcyc, avcough, avtime,
+    avsubpos, binds, failures in motorclutch2_3.m; Fcdist, cdisp1, ndisp1, texp, cndisp in motorclutch1_1.m,
+    the last two plotted only on commented-out lines 172-174), and the plots, including the survival,
+    density and hazard analysis of the cycle times (motorclutch1_1.m lines 143-166).
+  citation: {file: motorclutch1_1.m, lines: "149-156", quote: "[hi lo]=hist(cyctime,50);"}
+- id: q_legend_swapped
+  kind: possible_error
+  about: [mc_event_port]
+  text: >-
+    motorclutch1_1.m plots plotyy(lo,S,lo,pdf), S(t) on the left axis and pdf(t) on the right, but labels
+    them legend('pdf(t)','S(t)'), the other way round. It affects only the figure the script draws.
+  citation: {file: motorclutch1_1.m, lines: "159-161", quote: "legend('pdf(t)','S(t)')"}

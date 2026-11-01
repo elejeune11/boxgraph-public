@@ -1,0 +1,25 @@
+id: nc_limits
+name: stalled and free-flowing limits of the number of clutches (definitions of p. 3)
+role: model
+stated: {page: 3, printed_page: "583", quote: "The free flowing parameter limit is defined as the parameter value that first", where: "text, p. 3"}
+equation: >-
+  free flowing limit: the parameter value that first gives a minimum F-actin flow rate within 5% of
+  vu; stalled limit: the value that first gives a minimum F-actin flow rate within 5% of zero
+  (relative to vu); found by progressively increasing or decreasing the parameter. Minimum taken
+  over substrate stiffness with motor_clutch_ssa; here by bisection over whole clutch numbers.
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless, description: "the base value the search starts from"}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+outputs:
+  nc_stall: {quantity: n_clutches, unit: dimensionless, description: "smallest nc above the base that stalls"}
+  nc_free:  {quantity: n_clutches, unit: dimensionless, description: "largest nc below the base that flows freely"}
+settings: {fraction: 0.05, ksub_min: 0.001, ksub_max: 100.0, per_decade: 4, t_total: 300.0, seed: 1}
+stochastic: true
+from_words: true
+built_from: [motor_clutch_ssa]
