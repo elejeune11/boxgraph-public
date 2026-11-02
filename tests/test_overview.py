@@ -208,3 +208,19 @@ def test_the_page_offers_both_views_and_no_family_highlight(syn, tmp_path):
     assert set(d["positions"]) == set(syn["papers"])
     assert 'id="view-full"' in page and 'id="view-sources"' in page
     assert "Families of models" not in page
+
+
+def test_a_model_judged_against_another_papers_measurement_links_the_two_sources(syn):
+    """A model of one source judged against a measurement of another links the two, counting the verdicts."""
+    val = [x for x in overview_data(syn)["links"] if x["kind"] == "validation"]
+    assert [(x["a"], x["b"]) for x in val] == [("toy", "toy2")]
+    assert val[0]["verdicts"] == {"reproduced": 1}
+
+
+def test_a_case_study_can_show_a_model_against_another_papers_measurement(syn, tmp_path):
+    """A case study can show a validation across papers, with its values from the build."""
+    content = {"case_studies": [{"id": "v", "title": "T", "summary": "",
+                                 "steps": [{"text": "a", "show": "validation: toy2/val_lifetime_vs_toy_curve"}]}]}
+    d = embedded(render_overview(syn, tmp_path, title="T", content=content).read_text())
+    e = d["case_studies"][0]["steps"][0]["evidence"]
+    assert e["kind"] == "validation" and e["verdict"] == "reproduced" and e["against"] == "toy/t_curve"

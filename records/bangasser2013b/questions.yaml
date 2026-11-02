@@ -253,3 +253,223 @@
     its time axis, so that calibration is exact by construction and its misfit is unknown. The intervals
     include the misfit, but S1C's time calibration rests on two ticks only.
   citation: {page: 19, quote: "Time (s)", where: "Fig. S1"}
+
+# ==== CROSS-VALIDATION against bangasser2013 (2026-11-02) ====
+- id: q_xval_bangasser2013
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_optimum, clutch_offrate_eq5, single_clutch_ode]
+  text: >-
+    No validation of this record's models against bangasser2013's measurements is entered. That record's
+    measured data are all re-plotted from other papers. (1) Kong et al.'s integrin-fibronectin lifetimes
+    against force (bangasser2013/tau_kong_fig7c, a catch bond). The only lifetime this record gives is
+    the slip-bond Bell off-rate of Eq. 5 for a generic clutch (koff, Fb of the Chan and Odde base set);
+    this paper never applies it to integrin bonds, so running it on Kong et al.'s forces would test
+    nothing the paper claims. (2) Chan and Odde's neuron retrograde flow rates against substrate Young's
+    modulus (bangasser2013/v_figS1b_measured). Eqs. 8-12 and 19 give a cycle-mean flow against substrate
+    spring constant, and this paper prints only an order-of-magnitude correspondence "1-1000 kPa
+    (κs ≈ 1-1000 pN/nm)" (p. 9), not a conversion for those gels; a sweep over the measured moduli needs
+    that conversion as a model, which this job may not add. The base set used here is Chan and Odde's,
+    fitted to those same neuron data, so such a check would be fit_quality, not validation. (3) The
+    normalized migration and traction of Fig. 1 (bangasser2013/migration_fig1a_*, traction_fig1b_*):
+    each is normalized to its cell type's maximum and no motor-clutch parameters are given for those
+    cells, so the ODEs predict only the biphasic trend, not the values. Open choice: a later job with a
+    modulus-to-stiffness conversion model could enter (2) as fit_quality.
+  citation: {page: 9, printed_page: "457", quote: "to obtain an optimum substrate stiffness in the range", where: text}
+
+# ==== CROSS-VALIDATION against bell1978 (2026-11-02): none added ====
+- id: q_xval_bell1978_none
+  kind: choice
+  about: [clutch_offrate_eq5, clutch_ensemble_cycle, single_clutch_ode, motors_for_traction]
+  text: >-
+    No validation of this record's models against bell1978's measurements is entered. This paper cites
+    bell1978 (ref. 3) only as the source of the force-dependent off-rate law it uses (Eq. 5), not as data
+    its models explain or are compared with. bell1978's measured data are force_adhesive (about 1 dyne to
+    detach one cell, from its ref. 52) and the inhibiting sugar concentrations c_sugar_low and
+    c_sugar_high (0.001 and 0.01 M, from its ref. 49). The sugar concentrations are conditions, and no
+    model here has an inhibitor input or output. force_adhesive is the force to pull an adherent cell off
+    a surface. The nearest outputs here are the traction of one motor-clutch module (motors_for_traction,
+    clutch_ensemble_*) and the clutch forces of the ODEs. Those are forces a cell's motors exert at a
+    given substrate stiffness, not a detachment force, and neither paper gives the module count, clutch
+    parameters or stiffness for the cells of ref. 52. The value is also printed only as an order of
+    magnitude ("~ 1"), which gets no verdict. clutch_ensemble_cycle has the same shape as bell1978's
+    detach_time_eq17 (a time from a force and a rate), but that is a relation between models, not a
+    measurement, and is left to the job that relates models across papers.
+  citation: {page: 1, printed_page: "449", quote: "according to a force-dependent Bell model.3", where: text}
+
+# ==== CROSS-VALIDATION against chan2008 (2026-11-02) ====
+- id: q_xval_chan2008_r
+  kind: choice
+  about: [clutch_ensemble_cycle, r_fig2, r_fig4, ks_chan_260Pa_added, ks_chan_57kPa_added]
+  text: >-
+    The validations val_flow_chan_260Pa and val_flow_chan_57kPa against chan2008's measured flow run the ODEs at r = 2, the shape parameter this
+    paper uses with the base set (Fig. 2, p. 5). Fig. 4 (flow against stiffness) uses r = 3, and Fig. S2F
+    says r = 2 matches the cycle time below 1 pN/nm while lower r matches better on stiffer substrates.
+    The choice changes the predicted flow on the 260 Pa gel about two-fold (r = 3 roughly halves it), and
+    little on the 57 kPa gel. It is open which r should stand for Chan and Odde's filopodia.
+  citation: {page: 5, printed_page: "453", quote: "simulated cycles, and r = 2 was used for the ODE", where: text}
+- id: q_xval_chan2008_unused
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, single_clutch_ode]
+  text: >-
+    chan2008 measurements considered and not used for validation here: (1) the Fig. 3D measured means and
+    the Fig. S8C bars (chan2008/v_fig3d_exp_*, v_figS8C_*) are curves indexed by gel modulus; a sweep
+    needs a modulus-to-spring-constant conversion as a model in this record, which it does not have (only
+    the two printed Fig. 3C means are entered, with an added κs each); v_fig3d_exp_red repeats the 57 kPa
+    gel. (2) v_stiff_text is printed "~110" (approximate, no verdict). (3) T_max_fig, the peak filopodial
+    traction: no model here outputs a peak traction force, and nm was set to that value (chan2008 Table
+    S1). (4) failures_figS5D, a failure frequency (1/s): the nearest output here is the ODE cycle time,
+    a different quantity, and the bead-step failures are not shown to be whole-module load-and-fail
+    cycles. (5) contact bead distance δ, the displacement/step histograms (Figs. 4D, S4, S5, S11D) and the
+    scaled surface tension (Fig. 4E): no model here predicts them.
+  citation: {page: 3, printed_page: "451", quote: "the base parameter set from Chan and Odde6", where: text}
+# cross-record validation against chaudhuri2015 (2026-11-02): none added
+- id: q_xval_chaudhuri2015_none
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode, optimum_eq30]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chaudhuri2015. chaudhuri2015 cites Bangasser et al. 2013 (Biophys. J., its ref. 20; the
+    bangasser2013 record), not this paper, and neither paper says one's model explains the other's
+    data. chaudhuri2015's measurements are cell-spreading areas after 20 h (Figs. 3b, 3c, 4b, Supp.
+    Figs. 4, 5), gel moduli and stress relaxation and rheology curves (Fig. 2, Supp. Fig. 3, Supp.
+    Table 1), and fractions of cells with stress fibres, attached or proliferating, and nuclear YAP
+    ratios (Figs. 3e, 4a, 4d, 4e). The models here give a load-and-fail cycle time, a cycle-mean
+    F-actin flow rate, clutch states over time and an optimal substrate stiffness; none of them
+    outputs a spread area, a gel property or a cell fraction, and turning a flow rate into an area at
+    20 h would need a spreading model this paper does not state. chaudhuri2015 also measures no flow
+    rate or traction to run the ODEs against.
+  citation: {page: 3, printed_page: "451", quote: "the base parameter set from Chan and Odde6", where: text}
+# cross-record validation against elosegui2014 (2026-11-02): none added
+- id: q_xval_elosegui2014_none
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode, optimum_eq30]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2014. elosegui2014 cites Bangasser et al. 2013 (Biophys. J., its ref. 20; the bangasser2013
+    record), not this paper, and neither paper says one's model explains the other's data. The candidate
+    is elosegui2014's measured actin rearward flow against gel stiffness (flow_a5b1_fig4e, flow_avb6_fig4h,
+    flow_both_fig4k, nm/s, on gels of 0.25-29 kPa), which clutch_ensemble_cycle's v_mean would measure
+    (its tractions in Pa, integrin densities in a.u., SPR responses, bead detachment times and recruitment
+    have no output here). It is not entered because the model cannot be run on that measurement's own
+    conditions: (1) the parameters here are Chan and Odde's set for neuronal filopodia, and neither paper
+    states nm, Fm, vu, nc, kon, koff, Fb or κc for myoepithelial cells bound through a5b1 or avb6
+    (elosegui2014 puts its clutch parameters in a Supplementary Information that is blank in its copy,
+    elosegui2014/q_si_unreadable); (2) neither paper converts these gels' Young's moduli to the substrate
+    spring constant the model takes, and chan2008's fitted Δ belongs to filopodia; (3) the measured flows
+    rest on mechanisms the ODEs here lack (an integrin-FN catch bond and force-triggered integrin
+    reinforcement, elosegui2014 p. 4). Entering all of these as added values would make the result the
+    reader's model, not this paper's. bangasser2013b's own measurements (computation times, Fig. 6b) are
+    predicted by no model of elosegui2014.
+  citation: {page: 3, printed_page: "451", quote: "the base parameter set from Chan and Odde6", where: text}
+- id: q_xval_elosegui2016_none
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode, optimum_eq30, motors_for_traction]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2016. elosegui2016 cites this paper (its ref. 33) only for trends: clutch determinants
+    "predicted to regulate force transmission", and a peak-force rigidity "also determined by force
+    loading" (elosegui2016 p. 6). It never runs these equations or compares them with its data. The
+    nearest measurements are the actin retrograde flow of MEFs against gel Young's modulus
+    (elosegui2016/fig3e_control_data, fig3e_shrna_data); clutch_ensemble_cycle's v_mean would measure
+    that quantity. It is not entered because the model cannot be run on that measurement's own
+    conditions: (1) the parameters here are Chan and Odde's set for embryonic chick neuron filopodia,
+    and this paper states none for MEFs; elosegui2016's Supplementary Table 1 values (nm, nf, kont, ...)
+    were adjusted to its own MEF data, so a run on them would be a fit, not a test; (2) elosegui2016's
+    integrin off-rate is a catch bond (its coefficients themselves added, elosegui2016/koff_*_added),
+    with no single koff and Fb for the slip-bond law of Eq. 5 used here; (3) the model takes a substrate
+    spring constant, and the modulus-to-spring-constant conversion exists only as an added geometry
+    factor in elosegui2016 (ksub_factor_added); this paper prints only an order-of-magnitude
+    correspondence, "1-1000 kPa (κs ≈ 1-1000 pN/nm)" (p. 9). A verdict would rest on added inputs
+    alone, the reader's model rather than this paper's. The MEF tractions (Pa; fig1a_*, fig3d_*,
+    fig4-6 *_data) are stresses over an adhesion, and the models here give forces (pN) of one module.
+    YAP ratios, adhesion lengths, spreading areas, avb3 bond lifetimes and stainings are quantities of
+    no model here. In the other direction, see elosegui2016/q_xval_bangasser2013b_none.
+  citation: {page: 3, printed_page: "451", quote: "the base parameter set from Chan and Odde6", where: text}
+- id: q_xval_gardel2008_none
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode, optimum_eq30, vu_order]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of gardel2008.
+    This paper cites gardel2008 (ref. 13) once, with refs. 6, 8 and 34, as a source for the order of
+    magnitude of the unloaded motor velocity, vu ~0.1 um/s (p. 9; vu_order, a reported input). It never
+    says its ODEs explain, fit or predict gardel2008's data. gardel2008's measurements are F-actin speeds
+    and traction stresses at grid points and single FAs of PtK1 cells on one gel per condition. They
+    include the region box plots, speed histograms and edge-distance profiles of Figs. 1-4, the
+    speed at peak traction (v_ts_mean, Fig. 3 E,F, Fig. 4 D) and the bounds vs, vw and slopes of Fig. 5.
+    None can be run on its own conditions. (1) Stress in Pa is not an output here: the models give clutch
+    force in pN, and no adhesion area or clutch density is stated. (2) Speeds vary with position across
+    the cell, or across FAs, at a fixed gel. The ODEs have no spatial variable. Their only stress-speed
+    relation is the one traced by varying the substrate spring constant. (3) Neither paper states nm, Fm,
+    vu, nc, kon, koff, Fb or κc for PtK1 lamellae, or converts gardel2008's gel shear moduli (1.5-5.4 kPa)
+    to the spring constant κs the model takes. Run on Chan and Odde's filopodial set with an added κs, the
+    model would give a cycle-mean flow, but nothing in gardel2008 measures that quantity under those
+    conditions. The result would be the reader's model, not this paper's. In the other direction,
+    gardel2008's models (switch_speed_claim, switch_speed_by_condition) give the F-actin speed at peak
+    traction. Nothing here measures that: this record's only measured data are computation times
+    (Fig. 6b). See gardel2008/q_xval_bangasser2013b_none.
+  citation: {page: 9, printed_page: "457", quote: "while vu is on the order of", where: text}
+# cross-record validation against gong2018 (2026-11-02): none added
+- id: q_xval_gong2018_none
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode, optimum_eq30]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of gong2018.
+    gong2018 cites this paper (its ref. 16, SI Table S1 ref. 1) as a source of its motor-clutch
+    parameters and for the trend that, without reinforcement, the FA lifetime "is proportional to its
+    lifetime timescale" (gong2018 p. 8); it never runs these ODEs against its data. gong2018's
+    measurements are cell spreading areas (Figs. 4D, 5D, 6D, S5A), spreading speeds on elastic gels
+    extracted from those areas with an adjusted initial radius and spreading timescale (Fig. S7), and
+    gel relaxation stiffness curves (Figs. 4B, 5B, S6A). The models here output a load-and-fail cycle
+    time, a cycle-mean F-actin flow rate, clutch states and an optimal substrate spring constant. None
+    is a spreading area, a spreading speed or a gel property: gong2018's spreading speed is Vs = Vp - Vf
+    (its Eq. 6), and the polymerization speed Vp, the spreading model and the reinforcement rule are not
+    part of this paper's models; adding them would make the result gong2018's model, not this one.
+    gong2018 also measures no flow rate, traction or cycle time. Although clutch_ensemble_cycle and
+    gong2018/lifetime_timescale have the same shape (a time from force, stiffness and velocity), the
+    cycle times here are predictions, not measurements, so there is nothing to validate either against.
+    In the other direction, see gong2018/q_xval_bangasser2013b_none.
+  citation: {page: 3, printed_page: "451", quote: "the base parameter set from Chan and Odde6", where: text}
+# cross-record validation against odde_code (2026-11-02): none added
+- id: q_xval_odde_code_none
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode, optimum_eq30, fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal]
+  text: >-
+    (Cross-record validation.) No validation was entered in either direction between this record and
+    odde_code. odde_code is software (the Odde lab MATLAB event-stepping motor-clutch scripts) and holds
+    no measured data. Its data are the code's parameters and predicted curves copied from the papers'
+    records, so no model here has a measurement there to be judged against. This paper's own `measured`
+    data are only the computation times of Fig. 6(b) (fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal):
+    how long the authors' ODE solver and Monte Carlo software ran on their computer. The paper has no
+    experimental measurement; it compares its ODEs with Monte Carlo simulations, which are predictions.
+    odde_code's mc_event_port outputs flow, traction, failure frequency, cycle time, engaged clutches,
+    clutch tension and simulated time, but not a computation time. A run time depends on the machine
+    and the implementation (MATLAB on the authors' computer, against a Python port here), so it is not
+    a quantity of the motor-clutch model. clutch_ensemble_cycle and odde_code/mc_event_port have the
+    same shape, and odde_code already compares its port with this paper's Monte Carlo optimum at
+    nm = nc = 25 (cmp_b13b_opt_n25). Both are relations between models and predictions, not
+    measurements, and are left to the job that relates models across papers.
+  citation: {page: 8, printed_page: "456", quote: "Run times for 1 and 100 MC runs are compared to ODE solution times", where: "Fig. 6(b)"}
+# cross-record validation against andreu2021 (2026-11-02): none added
+- id: q_xval_andreu2021_none
+  kind: choice
+  about: [clutch_ensemble_cycle, clutch_ensemble_timecourse, clutch_ensemble_optimum, single_clutch_ode, optimum_eq30, fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of andreu2021,
+    and no model of andreu2021 against a measurement here. andreu2021 cites Bangasser, Rosenfeld and Odde
+    2013 (its ref. 79; the bangasser2013 record), not this paper, and only for the Gillespie algorithm;
+    neither paper says one's model explains the other's data. The candidate is andreu2021's measured actin
+    retrograde flow of mouse embryonic fibroblasts on 0.6 kPa gels and on glass (andreu2021/fig1b_flow,
+    nm/s), which clutch_ensemble_cycle's v_mean would measure. It is not entered because the model cannot
+    be run on that measurement's own conditions: (1) the parameters here are Chan and Odde's set for
+    embryonic chick neuron filopodia, and neither paper states nm, Fm, vu, nc, kon, koff, Fb or κc for
+    MEFs (andreu2021's own clutch model has no motors, imposes the actin speed by stretch, and uses a
+    catch bond with fitted coefficients, so its Supplementary Table 4 does not supply them); (2) the model
+    takes a substrate spring constant, and neither paper converts a 0.6 kPa gel to one, nor gives one for
+    glass (this paper prints only "1-1000 kPa (κs ≈ 1-1000 pN/nm)" as an order of magnitude, p. 9);
+    (3) the two points are categorical conditions, not a curve the model could be swept along. Entering
+    all of these as added values would make the verdict the reader's model, not this paper's. andreu2021's
+    other measurements (paxillin adhesion lengths, YAP ratios, bead speeds, loading rates and stiffness
+    under magnetic tweezers, AFM moduli, spreading areas) are quantities of no model here. In the other
+    direction, this record's only measured data are computation times (Fig. 6b), which no andreu2021 model
+    outputs; see andreu2021/q_xval_bangasser2013b_none.
+  citation: {page: 3, printed_page: "451", quote: "the base parameter set from Chan and Odde6", where: text}

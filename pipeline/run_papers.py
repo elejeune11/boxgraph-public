@@ -154,6 +154,30 @@ def relate_jobs(pairs: dict[tuple[str, str], list[str]], model: str, budget: flo
     return _with_extra(out, extra)
 
 
+def validate_jobs(pairs: dict[tuple[str, str], list[str]], model: str, budget: float, extra: str = "") -> list[Job]:
+    """One validation job per pair of records: the models of each judged against the other's measurements.
+    Each may write only its two records' validations, added inputs and questions, and locks both."""
+    guide = str(PROMPTS / "record_guide.md")
+    out = []
+    for (a, b), reasons in sorted(pairs.items()):
+        check = f"build/validate-check/{a}+{b}"
+        tools = ["Read", "Glob", "Grep", f"Bash({VENV}/boxgraph validate:*)", f"Bash({VENV}/boxgraph validations:*)",
+                 f"Bash({VENV}/python:*)", *READ_ONLY_SHELL, *write_rules(f"{check}/**")]
+        writable = [f"{check}/**"]
+        for rid in (a, b):
+            for f in ("validations.yaml", "added.yaml", "questions.yaml"):
+                tools += write_rules(f"records/{rid}/{f}")
+                writable.append(f"records/{rid}/{f}")
+        prompt = (PROMPTS / "validate.md").read_text().format(
+            a=a, b=b, reasons="\n".join(f"- {r}" for r in reasons), check=check, venv=VENV)
+        gate = ["sh", "-c", f"{VENV}/boxgraph validate records/{a} records/{b} --cache {CACHE} && "
+                f"{VENV}/boxgraph validations records --only {a},{b} --cache {CACHE}"]
+        out.append(Job(id=f"validate:{a}+{b}", kind="validate", prompt=prompt, cwd=str(ROOT), validate=gate,
+                       allowed_tools=tools, append_system_prompt_file=guide, model=model, max_turns=200,
+                       budget_usd=budget, max_attempts=2, locks=[a, b], writable=writable))
+    return _with_extra(out, extra)
+
+
 def _paper_ids(job: Job) -> list[str]:
     return job.id.split(":", 1)[1].split("+")
 
@@ -162,7 +186,7 @@ def select(js: dict[str, list[Job]], stages: list[str], only: list[str] | None,
            job_ids: list[str] | None = None) -> list[Job]:
     """The jobs of the chosen stages, for the chosen papers (all if `only` is None); a relation job
     is kept when either of its papers is chosen. `job_ids`, if given, keeps only those jobs."""
-    out = [j for s in (*PER_PAPER, "relate") if s in stages for j in js.get(s, [])]
+    out = [j for s in (*PER_PAPER, "relate", "validate") if s in stages for j in js.get(s, [])]
     if only is not None:
         out = [j for j in out if set(_paper_ids(j)) & set(only)]
     if job_ids is not None:
@@ -261,7 +285,7 @@ def _lock(state: Path):
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--stages", default="ingest,read,audit,digitize,relate,build")
+    ap.add_argument("--stages", default="ingest,read,audit,digitize,relate,validate,build")
     ap.add_argument("--concurrency", type=int, default=3)
     ap.add_argument("--agent", default=os.environ.get("BOXGRAPH_AGENT", "claude"),
                     help="the agent command to run jobs with (default: $BOXGRAPH_AGENT or claude)")
@@ -351,6 +375,10 @@ def main(argv=None) -> int:
                 print(f"  {len(shape_only)} pair(s) share only a model's shape; listed, not related:")
                 for (x, y), why in shape_only.items():
                     print(f"    {x} + {y}: " + "; ".join(why))
+            if "validate" in stages:
+                val = select({"validate": validate_jobs(pairs, a.model, a.budget_relate)}, stages, only, job_ids)
+                print("Validation jobs (each after its pair's relation job; its models against the other's measurements):")
+                print("\n".join(plan(val, done, a.rerun)))
             new = [i for i in (only or ids) if i not in ready()]
             if new:
                 print(f"  pairs for {', '.join(new)} are found after they are read (budget cap ${a.budget_relate:.0f} each)")
@@ -407,6 +435,16 @@ def _runs(a, o, todo, done, stages, only, job_ids, manual, extra, ps, results, f
             o.reset([j.id for j in rel])
         if rel:
             results.update(_run(o, rel, done))
+            done = load_completed(LEDGER)
+    if "validate" in stages:  # after a pair's relations are in: its models against the other's measurements
+        pairs, _ = split_pairs(candidate_pairs(ROOT / "records", ready(), manual))
+        related = {k: v for k, v in pairs.items() if f"relate:{k[0]}+{k[1]}" in done}
+        val = pending(select({"validate": validate_jobs(related, a.model, a.budget_relate, extra=extra)}, stages, only, job_ids),
+                      done, a.rerun)
+        if a.rerun:
+            o.reset([j.id for j in val])
+        if val:
+            results.update(_run(o, val, done))
     needs_person = sorted((jid, r) for jid, r in results.items() if r.get("status") != "passed")
     build_failed = False
     if "build" in stages:

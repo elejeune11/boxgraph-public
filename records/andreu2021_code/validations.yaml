@@ -1,0 +1,124 @@
+# The code's clutch model (ported) against the measured YAP ratios and paxillin adhesion lengths of the
+# paper's Fig. 1e-h (record andreu2021), triangular signal at 0.125-2 Hz: the measurements the paper's
+# Fig. 2e overlays on this model's lines. Each run sweeps the measured curve's own frequencies with the
+# code's parameters for that stretch. Every entry is fit_quality, not validation: the paper says the
+# amplitude A "provided good fits" (p. 10) and F_act is "the value that best fit our data" (p. 10), and the
+# output is scaled to the measurements (bl, sc "to scale results to experimental data", stretchscriptg.m
+# lines 25-26; p. 11 "scaled between the minimum and maximum experimental length values").
+- id: val_fig1e_yap
+  model: cmstretchg_port
+  inputs: &in_2p5 {A: Am_2p5_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: andreu2021/fig1e_yap_tri}
+  replicates: 3
+  output: yap_scaled
+  against: andreu2021/fig1e_yap_tri
+  purpose: fit_quality
+  quantities: {andreu2021/yap_nuc_cyt_ratio: yap_ratio, andreu2021/stretch_frequency: stretch_frequency}
+  basis: >-
+    stretchscriptg.m plots this output against the measured YAP ratios at 2.5% stretch (line 63, errorbar
+    of yem); the same means are Fig. 1e of the paper (triangular points). Fitted, not tested: bl and sc are
+    set "to scale results to experimental data" (lines 25-26) and A was chosen because it "provided good
+    fits" (paper p. 10).
+- id: val_fig1e_pax
+  model: cmstretchg_port
+  inputs: *in_2p5
+  sweep: {fr: andreu2021/fig1e_pax_tri}
+  replicates: 3
+  output: adhesion_length
+  against: andreu2021/fig1e_pax_tri
+  purpose: fit_quality
+  quantities: {andreu2021/adhesion_length: adhesion_length, andreu2021/stretch_frequency: stretch_frequency}
+  basis: >-
+    The paper overlays this model's line on the measured paxillin lengths of Fig. 1 ("Model predictions
+    (black line) overlaid on experimental YAP and paxillin results", Fig. 2e caption, p. 4), the output
+    carried to the length axis by the twin axes of Fig. 2e (added here). Fitted, not tested: values "were
+    scaled between the minimum and maximum experimental length values" (p. 11) and A "provided good fits"
+    (p. 10).
+- id: val_fig1f_yap
+  model: cmstretchg_port
+  inputs: &in_5 {A: Am_5_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: andreu2021/fig1f_yap_tri}
+  replicates: 3
+  output: yap_scaled
+  against: andreu2021/fig1f_yap_tri
+  purpose: fit_quality
+  quantities: {andreu2021/yap_nuc_cyt_ratio: yap_ratio, andreu2021/stretch_frequency: stretch_frequency}
+  basis: "As val_fig1e_yap, at 5% stretch (stretchscriptg.m line 100; paper Fig. 1f)."
+- id: val_fig1f_pax
+  model: cmstretchg_port
+  inputs: *in_5
+  sweep: {fr: andreu2021/fig1f_pax_tri}
+  replicates: 3
+  output: adhesion_length
+  against: andreu2021/fig1f_pax_tri
+  purpose: fit_quality
+  quantities: {andreu2021/adhesion_length: adhesion_length, andreu2021/stretch_frequency: stretch_frequency}
+  basis: "As val_fig1e_pax, at 5% stretch (paper Fig. 1f, overlaid on the model in Fig. 2e)."
+- id: val_fig1g_yap
+  model: cmstretchg_port
+  inputs: &in_10 {A: Am_10_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: andreu2021/fig1g_yap_tri}
+  replicates: 3
+  output: yap_scaled
+  against: andreu2021/fig1g_yap_tri
+  purpose: fit_quality
+  quantities: {andreu2021/yap_nuc_cyt_ratio: yap_ratio, andreu2021/stretch_frequency: stretch_frequency}
+  basis: "As val_fig1e_yap, at 10% stretch (stretchscriptg.m line 137; paper Fig. 1g)."
+- id: val_fig1g_pax
+  model: cmstretchg_port
+  inputs: *in_10
+  sweep: {fr: andreu2021/fig1g_pax_tri}
+  replicates: 3
+  output: adhesion_length
+  against: andreu2021/fig1g_pax_tri
+  purpose: fit_quality
+  quantities: {andreu2021/adhesion_length: adhesion_length, andreu2021/stretch_frequency: stretch_frequency}
+  basis: "As val_fig1e_pax, at 10% stretch (paper Fig. 1g, overlaid on the model in Fig. 2e)."
+- id: val_fig1h_yap
+  model: cmstretchg_port
+  inputs: &in_20 {A: Am_20_code, nc: nc_code, dint1: dint1_code, kont1: kont1_code, kc: kc_code, ksub: ksub_code,
+           pt: pt_code, mr: mr_code, intadd: intadd_code, Fbreaking: Fbreaking_code,
+           koff_a: mn_a_code, koff_b: mn_b_code, koff_c: mn_c_code, koff_d: mn_d_code,
+           pt_table: pt_lr_code, ln_kunf0_table: ln_kunf0_lr_code, kunf_b_table: kunf_b_lr_code,
+           cm_a: cm_a_code, cm_b: cm_b_code, cm_c: cm_c_code, cm_d: cm_d_code, cm_g: cm_g_code, cm_fend: cm_fend_code,
+           ln_kunf0: ln_kunf0_code, kunf_b: kunf_b_code, ln_kfold0: ln_kfold0_code, kfold_b: kfold_b_code,
+           bl: bl_code, sc: sc_code, a: a_code,
+           yap_at_zero_length: yap_at_zero_length_added, length_per_yap: length_per_yap_added}
+  sweep: {fr: andreu2021/fig1h_yap_tri}
+  replicates: 3
+  output: yap_scaled
+  against: andreu2021/fig1h_yap_tri
+  purpose: fit_quality
+  quantities: {andreu2021/yap_nuc_cyt_ratio: yap_ratio, andreu2021/stretch_frequency: stretch_frequency}
+  basis: "As val_fig1e_yap, at 20% stretch (stretchscriptg.m line 173; paper Fig. 1h)."
+- id: val_fig1h_pax
+  model: cmstretchg_port
+  inputs: *in_20
+  sweep: {fr: andreu2021/fig1h_pax_tri}
+  replicates: 3
+  output: adhesion_length
+  against: andreu2021/fig1h_pax_tri
+  purpose: fit_quality
+  quantities: {andreu2021/adhesion_length: adhesion_length, andreu2021/stretch_frequency: stretch_frequency}
+  basis: "As val_fig1e_pax, at 20% stretch (paper Fig. 1h, overlaid on the model in Fig. 2e)."

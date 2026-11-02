@@ -90,7 +90,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
     </div>
     <figure>
       <div class="frame">
-        <svg viewBox="0 0 1480 570" width="1480" role="img" aria-label="Pipeline flow. pipeline.add registers a paper in papers.yaml and copies its PDF into corpus; pipeline.attach does the same for a paper's released code or data. run_papers checks the list and ingests each PDF into text and page images. Each paper then goes through read, audit and digitize agents in its own lane, up to three agents at once; released code or data is only read, after its paper's read. When a record's steps have all passed, the pairs step picks which records to relate: one cites the other, a model is built from the other, the list asks for it, or it is a paper's code or data; a shared model shape alone is only listed. One relate agent runs per pair, locking both records. The build then runs every model and writes the report, figure check and explorer. Every passed job is recorded in completed.yaml, so it is never run again.">
+        <svg viewBox="0 0 1480 570" width="1480" role="img" aria-label="Pipeline flow. pipeline.add registers a paper in papers.yaml and copies its PDF into corpus; pipeline.attach does the same for a paper's released code or data. run_papers checks the list and ingests each PDF into text and page images. Each paper then goes through read, audit and digitize agents in its own lane, up to three agents at once; released code or data is only read, after its paper's read. When a record's steps have all passed, the pairs step picks which records to relate: one cites the other, a model is built from the other, the list asks for it, or it is a paper's code or data; a shared model shape alone is only listed. One relate agent runs per pair, locking both records, then one validate agent judges each record's models against the other's measurements. The build then runs every model and writes the overview, report, figure check and explorer. Every passed job is recorded in completed.yaml, so it is never run again.">
           <defs>
             <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker>
             <marker id="ahs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head soft"/></marker>
@@ -195,28 +195,34 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="1066" y="284" text-anchor="middle" class="s">relate_with · its paper</text>
           <text x="1066" y="299" text-anchor="middle" class="lab">shape alone: listed</text>
 
-          <!-- relate -->
-          <rect x="1176" y="186" width="120" height="68" rx="6" class="agent"/>
-          <text x="1236" y="208" text-anchor="middle" class="t">relate A + B</text>
-          <text x="1236" y="226" text-anchor="middle" class="s">locks A and B</text>
-          <text x="1236" y="242" text-anchor="middle" class="s">gate: relations test</text>
-          <rect x="1176" y="286" width="120" height="68" rx="6" class="agent"/>
-          <text x="1236" y="308" text-anchor="middle" class="t">relate A + C</text>
-          <text x="1236" y="326" text-anchor="middle" class="s">locks A and C</text>
-          <text x="1236" y="342" text-anchor="middle" class="s">gate: relations test</text>
+          <!-- relate, then validate -->
+          <text x="1236" y="150" text-anchor="middle" class="lab">two jobs per flagged pair,</text>
+          <text x="1236" y="163" text-anchor="middle" class="lab">each locking both records</text>
+          <rect x="1176" y="172" width="120" height="96" rx="6" class="agent"/>
+          <text x="1236" y="192" text-anchor="middle" class="t">relate A + B</text>
+          <text x="1236" y="208" text-anchor="middle" class="s">gate: relations test</text>
+          <path d="M1184 219 H1288" class="wire"/>
+          <text x="1236" y="238" text-anchor="middle" class="t">validate A + B</text>
+          <text x="1236" y="254" text-anchor="middle" class="s">gate: all checked</text>
+          <rect x="1176" y="284" width="120" height="96" rx="6" class="agent"/>
+          <text x="1236" y="304" text-anchor="middle" class="t">relate A + C</text>
+          <text x="1236" y="320" text-anchor="middle" class="s">gate: relations test</text>
+          <path d="M1184 331 H1288" class="wire"/>
+          <text x="1236" y="350" text-anchor="middle" class="t">validate A + C</text>
+          <text x="1236" y="366" text-anchor="middle" class="s">gate: all checked</text>
           <path d="M1136 262 H1156 V220 H1172" class="wire" marker-end="url(#ah)"/>
-          <path d="M1136 278 H1156 V320 H1172" class="wire" marker-end="url(#ah)"/>
-          <text x="1236" y="176" text-anchor="middle" class="lab">one job per flagged pair</text>
+          <path d="M1136 278 H1156 V332 H1172" class="wire" marker-end="url(#ah)"/>
 
           <!-- build -->
-          <rect x="1336" y="218" width="124" height="104" rx="6" class="code"/>
-          <text x="1398" y="242" text-anchor="middle" class="t">build</text>
-          <text x="1398" y="261" text-anchor="middle" class="s">runs every model</text>
-          <text x="1398" y="278" text-anchor="middle" class="s">report.html</text>
-          <text x="1398" y="294" text-anchor="middle" class="s">figures.html</text>
-          <text x="1398" y="310" text-anchor="middle" class="s">explorer.html</text>
+          <rect x="1336" y="210" width="124" height="120" rx="6" class="code"/>
+          <text x="1398" y="234" text-anchor="middle" class="t">build</text>
+          <text x="1398" y="253" text-anchor="middle" class="s">runs every model</text>
+          <text x="1398" y="270" text-anchor="middle" class="s">overview/</text>
+          <text x="1398" y="286" text-anchor="middle" class="s">report.html</text>
+          <text x="1398" y="302" text-anchor="middle" class="s">figures.html</text>
+          <text x="1398" y="318" text-anchor="middle" class="s">explorer.html</text>
           <path d="M1296 220 H1316 V258 H1332" class="wire" marker-end="url(#ah)"/>
-          <path d="M1296 320 H1316 V282 H1332" class="wire" marker-end="url(#ah)"/>
+          <path d="M1296 332 H1316 V282 H1332" class="wire" marker-end="url(#ah)"/>
 
           <!-- ledger -->
           <rect x="566" y="500" width="730" height="48" rx="6" class="file"/>
@@ -224,11 +230,11 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="931" y="538" text-anchor="middle" class="s">committed ledger of passed jobs · every later run, on any machine, skips them</text>
           <path d="M756 452 V496" class="wire ok" marker-end="url(#ahok)"/>
           <text x="764" y="480" class="okt" style="font-size:11px">passed</text>
-          <path d="M1236 354 V496" class="wire ok" marker-end="url(#ahok)"/>
+          <path d="M1236 380 V496" class="wire ok" marker-end="url(#ahok)"/>
           <text x="1244" y="480" class="okt" style="font-size:11px">passed</text>
         </svg>
       </div>
-      <figcaption>One command, <code>python -m pipeline.run_papers</code>, runs everything after the upload. Inside a lane each step waits for the one before it. Lanes run side by side, at most three agents at once. Pairs are chosen only after reading, because the signs of a relation come from the records: one cites the other, a model is built from the other, the corpus list asks for it, or one is the other's code or data. A shared model shape alone is a weak sign, so such a pair is listed for a person, not related. Released code or data is only read, once its paper's read has passed. Relate jobs that share a paper take turns, since each locks both of its records. The build is plain code: it runs every model, so every verdict is recomputed rather than stored.</figcaption>
+      <figcaption>One command, <code>python -m pipeline.run_papers</code>, runs everything after the upload. Inside a lane each step waits for the one before it. Lanes run side by side, at most three agents at once. Pairs are chosen only after reading, because the signs of a relation come from the records: one cites the other, a model is built from the other, the corpus list asks for it, or one is the other's code or data. A shared model shape alone is a weak sign, so such a pair is listed for a person, not related. Released code or data is only read, once its paper's read has passed. Once a pair is related, a validate job enters each model of one record that predicts a measurement of the other (or a question saying why none does). Relate and validate jobs that share a paper take turns, since each locks both of its records. The build is plain code: it runs every model, so every verdict is recomputed rather than stored.</figcaption>
     </figure>
   </section>
 
@@ -236,7 +242,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
     <h2>Where BoxGraph, ModelAtlas and the Synthesis fit</h2>
     <figure>
       <div class="frame">
-        <svg viewBox="0 0 1090 496" width="1090" role="img" aria-label="Three layers. In the pipeline, read, audit and digitize agents write record files, and relate agents write relations.yaml. BoxGraph's validate checks the record files and sends pass or retry back to the agents. ModelAtlas's test_relation tests relations.yaml and sends pass or retry back to the relate agents, running models through BoxGraph's engine. The build step calls the Synthesis, which loads every record, tests every relation through ModelAtlas, recomputes every verdict through BoxGraph, and writes the report, figure check and explorer.">
+        <svg viewBox="0 0 1090 496" width="1090" role="img" aria-label="Three layers. In the pipeline, read, audit and digitize agents write record files, relate agents write relations.yaml, and validate agents write validations.yaml. BoxGraph's validate checks the record files and sends pass or retry back to the agents. ModelAtlas's test_relation tests relations.yaml and sends pass or retry back to the relate agents, running models through BoxGraph's engine; boxgraph validations does the same for validations.yaml. The build step calls the Synthesis, which loads every record, tests every relation through ModelAtlas, recomputes every verdict through BoxGraph, and writes the overview, report, figure check and explorer.">
           <defs>
             <marker id="dh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker>
             <marker id="dhok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head ok"/></marker>
@@ -254,8 +260,8 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="250" y="75" text-anchor="middle" class="t">read · audit · digitize</text>
           <text x="250" y="94" text-anchor="middle" class="s">agents, one lane per paper</text>
           <rect x="500" y="50" width="200" height="62" rx="6" class="agent"/>
-          <text x="600" y="75" text-anchor="middle" class="t">relate</text>
-          <text x="600" y="94" text-anchor="middle" class="s">agent, one per pair</text>
+          <text x="600" y="75" text-anchor="middle" class="t">relate · validate</text>
+          <text x="600" y="94" text-anchor="middle" class="s">agents, two per pair</text>
           <rect x="860" y="50" width="200" height="62" rx="6" class="code"/>
           <text x="960" y="75" text-anchor="middle" class="t">build step</text>
           <text x="960" y="94" text-anchor="middle" class="s">plain code, no agent</text>
@@ -269,13 +275,14 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <rect x="500" y="172" width="200" height="86" rx="6" class="file"/>
           <text x="600" y="196" text-anchor="middle" class="t">relations.yaml</text>
           <text x="600" y="215" text-anchor="middle" class="s">kind · mapping · regime</text>
-          <text x="600" y="231" text-anchor="middle" class="s">stated or proposed</text>
+          <text x="600" y="231" text-anchor="middle" class="t" style="font-size:12px">validations.yaml</text>
           <text x="600" y="247" text-anchor="middle" class="s">no status written</text>
-          <rect x="940" y="172" width="130" height="86" rx="6" class="file"/>
-          <text x="1005" y="196" text-anchor="middle" class="t">build/</text>
-          <text x="1005" y="215" text-anchor="middle" class="s">report.html</text>
-          <text x="1005" y="231" text-anchor="middle" class="s">figures.html</text>
-          <text x="1005" y="247" text-anchor="middle" class="s">explorer.html</text>
+          <rect x="940" y="166" width="130" height="102" rx="6" class="file"/>
+          <text x="1005" y="188" text-anchor="middle" class="t">build/</text>
+          <text x="1005" y="206" text-anchor="middle" class="s">overview/</text>
+          <text x="1005" y="222" text-anchor="middle" class="s">report.html</text>
+          <text x="1005" y="238" text-anchor="middle" class="s">figures.html</text>
+          <text x="1005" y="254" text-anchor="middle" class="s">explorer.html</text>
 
           <!-- row 3: boxgraph -->
           <rect x="140" y="348" width="220" height="80" rx="6" class="code"/>
@@ -301,7 +308,8 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <path d="M250 258 V344" class="wire" marker-end="url(#dh)"/>
           <text x="258" y="296" class="lab">checked by validate</text>
           <path d="M600 258 V344" class="wire" marker-end="url(#dh)"/>
-          <text x="608" y="296" class="lab">tested by boxgraph relations</text>
+          <text x="608" y="290" class="lab">relations: tested by ModelAtlas</text>
+          <text x="608" y="304" class="lab">validations: checked by the Synthesis</text>
           <path d="M140 388 H100 V81 H136" class="wire ok" marker-end="url(#dhok)"/>
           <text x="94" y="226" text-anchor="end" class="okt" style="font-size:11px">gate:</text>
           <text x="94" y="241" text-anchor="end" class="s">pass or</text>
@@ -325,11 +333,11 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <path d="M700 215 H780 V362 H856" class="wire soft" marker-end="url(#ahs)"/>
           <text x="786" y="300" class="lab">loads every</text>
           <text x="786" y="314" class="lab">sound record</text>
-          <path d="M1005 348 V262" class="wire" marker-end="url(#dh)"/>
+          <path d="M1005 348 V272" class="wire" marker-end="url(#dh)"/>
           <text x="1013" y="300" class="lab">writes</text>
         </svg>
       </div>
-      <figcaption>Agents only ever write files in <code>records/&lt;id&gt;/</code>. Every judgement is made by code in <code>boxgraph/</code>. BoxGraph decides whether a record is sound and is the gate for read, audit and digitize. ModelAtlas decides whether a relation holds and is the gate for relate. The Synthesis is rebuilt from all the records every time, using both. No verdict, relation status or family is ever written into a record, so adding a paper in any order gives the same Synthesis.</figcaption>
+      <figcaption>Agents only ever write files in <code>records/&lt;id&gt;/</code>. Every judgement is made by code in <code>boxgraph/</code>. BoxGraph decides whether a record is sound and is the gate for read, audit and digitize. ModelAtlas decides whether a relation holds and is the gate for relate. The validate gate asks the Synthesis whether each model judged against another paper's measurement can be checked. The Synthesis is rebuilt from all the records every time, using both. No verdict, relation status or family is ever written into a record, so adding a paper in any order gives the same Synthesis.</figcaption>
     </figure>
   </section>
 
@@ -388,7 +396,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="558" y="258" class="s">or 2 (others)</text>
         </svg>
       </div>
-      <figcaption>The orchestrator trusts only the files and the gate. Every gate runs <code>boxgraph validate</code> on the record, with a shared cache so a retry does not rerun every simulation. Audit and digitize must also have written their log (<code>audit.md</code>, <code>figures.md</code>). A relate gate validates both records with their models run, then tests their relations. After every attempt the project is also scanned: a file changed outside the job's record, or page content or released code or data written into it, fails the attempt and is named to the agent. A step starts only when the step before it has passed.</figcaption>
+      <figcaption>The orchestrator trusts only the files and the gate. Every gate runs <code>boxgraph validate</code> on the record, with a shared cache so a retry does not rerun every simulation. Audit and digitize must also have written their log (<code>audit.md</code>, <code>figures.md</code>). A relate gate validates both records with their models run, then tests their relations; a validate gate validates both records, then requires every validation between them to be checked. After every attempt the project is also scanned: a file changed outside the job's record, or page content or released code or data written into it, fails the attempt and is named to the agent. A step starts only when the step before it has passed.</figcaption>
     </figure>
   </section>
 

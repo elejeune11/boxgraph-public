@@ -1,0 +1,65 @@
+# ==== against chan2008's measured retrograde flow (2026-11-02) ================================
+# The SSA motor-clutch model with this paper's base set (Table 1, Fig. S1C 'Present Study') gives a
+# time-averaged F-actin flow at a substrate spring constant. chan2008 prints the mean flow measured in
+# embryonic chick forebrain neuron filopodia on two gels (Fig. 3C). The base set was fitted to Chan and
+# Odde's neuron flow data (Fig. S1 legend), so each entry is fit_quality, not an independent test.
+# chan2008's six-point Fig. 3D curve and its Fig. S8C bars are not entered: see q_xval_chan2008_curves.
+- id: val_flow_chan_260Pa
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ksub: ksub_chan_260Pa_added}
+  output: v_retro
+  against: chan2008/v_fig3c_260
+  purpose: fit_quality
+  quantities: {chan2008/retrograde_flow_rate: retrograde_flow_rate}
+  conditions_ok: >-
+    chan2008 states the gel by its Young's modulus (260 Pa); the model takes a spring constant, entered
+    as ksub_chan_260Pa_added (an added conversion, 1 pN/nm per kPa as this paper's Fig. S1B plots it;
+    chan2008's own Eq. 13 with its fitted Δ is the alternative). The measured mean is over many
+    filopodia, the model's over one long simulated run.
+  basis: >-
+    The SSA "produces simulated model behavior consistent with our previous published data (Fig. S1B
+    and C)" (p. 14), and the base set was obtained when "the model was fit to the embryonic chick
+    forebrain neuron data from Chan and Odde" (Fig. S1 legend, p. 18): nm, nc, kon and κc were altered,
+    koff kept. These are the flow measurements of chan2008 (Fig. 3C/3D, the same 260 Pa gel), so the
+    comparison reports the fit, not a test.
+- id: val_flow_chan_57kPa
+  model: motor_clutch_ssa
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ksub: ksub_chan_57kPa_added}
+  output: v_retro
+  against: chan2008/v_fig3c_57k
+  purpose: fit_quality
+  quantities: {chan2008/retrograde_flow_rate: retrograde_flow_rate}
+  conditions_ok: >-
+    chan2008 states the gel by its Young's modulus (57 kPa); the model takes a spring constant, entered
+    as ksub_chan_57kPa_added (1 pN/nm per kPa, as Fig. S1B plots it). All alternatives lie far on the
+    stiff side of the base set's optimum, where the flow is near its plateau.
+  basis: >-
+    As val_flow_chan_260Pa, on the stiff gel: the base set was "fit to the embryonic chick forebrain
+    neuron data from Chan and Odde" (Fig. S1 legend, p. 18), whose 57 kPa point is this measurement.
+
+# ==== against kong2009's measured integrin-fibronectin lifetimes (2026-11-02) ===================
+# Eq. 9 with the Table S1 column Fig. 7C parameters gives a mean bond lifetime (1/koff*) at a clutch
+# force. Kong et al. measured mean lifetimes of FNIII7-10/a5b1-Fc/GG-7 at clamped forces in Ca2+/Mg2+
+# (their Fig. 3 A circles), the points this paper redraws in Fig. 7C ("Fig. 3A, Kong et al") and to
+# which the four Eq. 9 parameters were fitted: a fit, not a test. Kong's other curves are not entered:
+# see q_xval_kong2009_other_curves.
+- id: val_lifetime_kong_fig3a
+  model: catch_slip_eq9
+  inputs: {koff: koff_7c, Fb: Fb_7c, koffc: koffc_7c, Fc: Fc_7c}
+  sweep: {F: kong2009/lt_FN_a5b1Fc_CaMg}
+  output: tau
+  against: kong2009/lt_FN_a5b1Fc_CaMg
+  purpose: fit_quality
+  quantities: {kong2009/force_clamp: clutch_force, kong2009/bond_lifetime_mean: bond_lifetime}
+  conditions_ok: >-
+    Kong et al. measured the lifetime of a serial chain (FNIII7-10 / a5b1-Fc / GG-7 Fab) in Ca2+/Mg2+
+    at a force clamped on that one complex; Eq. 9 is a single clutch bond's lifetime at its tension.
+    This paper itself fits Eq. 9 to these lifetimes as the integrin catch bond, without separating the
+    Fc/GG-7 link (whose lifetime Kong et al. measured as the grey squares), so the comparison is the
+    paper's own, on the measurement's own forces.
+  basis: >-
+    "The catch-slip off-rate model was fit to integrin catch bond data from Kong, et al. (32) (Fig. 7 C)"
+    (p. 9); the Fig. 7C legend labels the points "Fig. 3A, Kong et al". koff, Fb, koff,c and Fc of the
+    Table S1 Fig. 7C column are those fitted values, so this reports the fit's quality against Kong's
+    own reading of the points (the record's cmp_fig7c_kong does the same against this paper's redrawn
+    copy).

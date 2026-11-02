@@ -27,3 +27,29 @@
     beside the stated value to test that reading (q_figS1_stiffness).
   alternatives: ["0.1"]
   stands_for: "κsub of Fig. S1, as the plotted substrate position implies"
+
+# ==== cross-validation against chan2008 (2026-11-02): κs of Chan and Odde's gels ==============
+- id: ks_chan_260Pa_added
+  quantity: substrate_stiffness
+  unit: pN/nm
+  printed: "0.174"
+  basis: >-
+    Neither paper states the spring constant of the 260 Pa gel of chan2008 Fig. 3C. Chan and Odde convert
+    gel modulus to spring constant with their Eq. 13, κsub = πEδ/(1+υ), and use a fitting parameter
+    Δ = 277 nm "to account for our underestimate of κsub" (chan2008 SOM p. 18), with υ = 0.3 for the
+    gels. Taking Δ in place of δ (as chan2008/L_eq13_added does): π × 260 Pa × 277 nm / 1.3 = 0.174 pN/nm.
+    Alternatives: δ + Δ = 427 nm gives 0.268 pN/nm; δ = 150 nm as printed in Eq. 13 gives 0.0942 pN/nm.
+    This paper itself only says "1-1000 kPa (κs ≈ 1-1000 pN/nm)" (p. 9), i.e. ~1 pN/nm per kPa, which
+    would give 0.26 pN/nm, inside this range.
+  alternatives: ["0.268", "0.0942"]
+  stands_for: "κs of the 260 Pa polyacrylamide gel of chan2008 Fig. 3C"
+- id: ks_chan_57kPa_added
+  quantity: substrate_stiffness
+  unit: pN/nm
+  printed: "38.2"
+  basis: >-
+    As ks_chan_260Pa_added, for the 57 kPa gel of chan2008 Fig. 3C: π × 57 kPa × 277 nm / 1.3 = 38.2
+    pN/nm. Alternatives: Δ read as δ + Δ = 427 nm gives 58.8 pN/nm; δ = 150 nm gives 20.7 pN/nm. All
+    lie far on the stiff side of the base set's optimum, where the ODE flow is near vu.
+  alternatives: ["58.8", "20.7"]
+  stands_for: "κs of the 57 kPa polyacrylamide gel of chan2008 Fig. 3C"

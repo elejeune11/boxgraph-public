@@ -2,4 +2,31 @@
 # Fig. S1C, the text). The numerical choices the paper leaves unstated (simulated time, the
 # stiffness grid of the optimum search, the seed, the definition of a load-and-fail cycle) are
 # run settings, given in the runs' notes and as `choice` questions.
-[]
+
+# ==== cross-validation against chan2008 (2026-11-02): κsub of Chan and Odde's gels ============
+# Used only by validations.yaml; no run of this record's own uses them.
+- id: ksub_chan_260Pa_added
+  quantity: substrate_stiffness
+  unit: pN/nm
+  printed: "0.26"
+  basis: >-
+    Neither paper states the spring constant of the 260 Pa gel of chan2008 Fig. 3C. This paper plots its
+    base-set flow against Young's modulus in Fig. S1B and against spring constant in Figs. 2-4; the two
+    curves take the same values at the same numbers (base-set flow ~74 nm/s at 0.1 and ~100 nm/s at 1 on
+    either axis), i.e. κsub in pN/nm equals E in kPa, so 260 Pa -> 0.26 pN/nm. Alternatives: chan2008's
+    Eq. 13, κsub = πEΔ/(1+υ), with its fitted Δ = 277 nm and υ = 0.3 gives 0.174 pN/nm; with δ = 150 nm
+    as printed, 0.0942 pN/nm. Fig. S1B itself draws the 260 Pa point at about 0.13 kPa (q_xval_chan2008_
+    figS1b_positions), which by the same identity gives 0.13 pN/nm. All lie near the base set's optimum
+    (~0.14 pN/nm), where flow is lowest.
+  alternatives: ["0.174", "0.13", "0.0942"]
+  stands_for: "κsub of the 260 Pa polyacrylamide gel of chan2008 Fig. 3C"
+- id: ksub_chan_57kPa_added
+  quantity: substrate_stiffness
+  unit: pN/nm
+  printed: "57"
+  basis: >-
+    As ksub_chan_260Pa_added, for the 57 kPa gel of chan2008 Fig. 3C: 1 pN/nm per kPa as Fig. S1B plots
+    it. Alternatives: chan2008 Eq. 13 with Δ = 277 nm gives 38.2 pN/nm; with δ = 150 nm, 20.7 pN/nm. All
+    lie far on the stiff side of the optimum, where the base-set flow is near its plateau (~108 nm/s).
+  alternatives: ["38.2", "20.7"]
+  stands_for: "κsub of the 57 kPa polyacrylamide gel of chan2008 Fig. 3C"

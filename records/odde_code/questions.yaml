@@ -133,3 +133,87 @@
     motorclutch1_1.m plots plotyy(lo,S,lo,pdf), S(t) on the left axis and pdf(t) on the right, but labels
     them legend('pdf(t)','S(t)'), the other way round. It affects only the figure the script draws.
   citation: {file: motorclutch1_1.m, lines: "159-161", quote: "legend('pdf(t)','S(t)')"}
+# ---- cross-record validation against chan2008's measurements (validations.yaml), 2026-11-02 --------
+- id: q_xval_chan2008_scope
+  kind: choice
+  about: [mc_event_port, odde_code/val_c08_v260, odde_code/val_c08_v57k, chan2008/v_fig3c_260, chan2008/v_fig3c_57k, chan2008/v_fig3d_exp_sem, chan2008/v_figS8C_control, chan2008/v_figS8C_gfp, chan2008/v_stiff_text, chan2008/failures_figS5D, chan2008/T_max_fig]
+  text: >-
+    chan2008 measured flow, force and failures against a gel's Young's modulus; the code's model takes a
+    substrate spring constant in pN/nm. The only gels with a spring constant produced in chan2008 are
+    260 Pa and 57 kPa (ksub_260_pred, ksub_57k_pred: Eq. 13 with the fitted Δ = 277 nm, an input added
+    in that record), so the two validations use the Fig. 3C means on those gels. Both are entered as
+    fits (fit_quality), because Δ was fitted so that the model's flow matches the measured flows of
+    Fig. 3D (SOM p. 18). The model is run at Chan and Odde's Table S1 set, as in run_chan_1d. It is not
+    run at the code's own base set (motorclutch2_3.m, Bangasser et al. 2013's Table 1, which that paper
+    says was fit to Chan and Odde's data): the spring constant Bangasser et al. gave each of Chan's gels
+    is in neither record. Not used: the Fig. 3D points with SEMs (v_fig3d_exp_sem) and the Fig. S8C
+    bars, which are curves indexed by modulus and cannot be swept through a model input in pN/nm
+    without a spring constant for each read modulus (the 260 Pa and 57 kPa points of Fig. 3D are the
+    Fig. 3C means again). v_stiff_text is "~110", which gets no verdict. T_max_fig is a peak force,
+    which the port does not output. failures_figS5D: see q_xval_chan2008_failures.
+  citation: {file: motorclutch1_1.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}
+- id: q_xval_chan2008_failures
+  kind: unstated_model
+  about: [mc_event_port, chan2008/failures_figS5D, chan2008/q_failure_frequency_model]
+  text: >-
+    The port outputs a failure frequency (failfreq: states with no engaged clutch per second), and Chan
+    and Odde say their measured failure frequency rises with stiffness "as predicted by the model" (SOM
+    p. 14). The two are not entered as the same quantity. The measured failures are positive 1 s bead
+    steps larger than 30% of the trace's maximal displacement, a criterion that also counts large
+    partial releases and is limited by the 1 s sampling. The model counts complete releases, with no
+    time resolution. Neither paper links the two definitions, and the paper claims only the trend, not
+    the rates. The measurement is also indexed by modulus (260, 730, 1300 Pa), and neither record gives
+    a spring constant for 730 or 1300 Pa.
+  citation: {file: motorclutch2_3.m, lines: "145", quote: "failfreq(jj)=(length(numcon(numcon==0))-1)/(t(events+1)); %failures/s"}
+- id: q_xval_chan2008_algorithm
+  kind: unexplained_difference
+  about: [odde_code/val_c08_v260, odde_code/val_c08_v57k, q_chan_algorithm]
+  text: >-
+    Chan and Odde's time-stepped model was fitted (through Δ) to agree with these measured means. The
+    event-stepping port differs from that model on soft substrates at the same parameters
+    (q_chan_algorithm), and the 260 Pa gel's spring constant falls on the soft side. So the two
+    validations ask whether the fit carries over to the code's algorithm; whatever their verdicts are,
+    they do not test Δ.
+  citation: {file: motorclutch1_1.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}
+# ---- cross-record validation against bangasser2013b (2026-11-02): none added ------------------------
+- id: q_xval_bangasser2013b_none
+  kind: choice
+  about: [mc_event_port, optimum_port, bangasser2013b/fig6b_ode_cal, bangasser2013b/fig6b_mc1_cal, bangasser2013b/fig6b_mc100_cal, ksopt_mc_n25_b13b]
+  text: >-
+    No validation of the code's models against bangasser2013b's measurements was entered. That paper is
+    theory: it compares its master-equation ODEs with Monte Carlo simulations and has no experimental
+    data. Its only `measured` values are the computation times of its Fig. 6(b), how long the authors'
+    ODE solver and Monte Carlo software ran (fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal). Neither
+    mc_event_port nor optimum_port outputs a computation time. t_total is simulated time, not run time.
+    A run time belongs to a machine and an implementation, not to the motor-clutch model, so it is not
+    predicted by the port. The paper's Monte Carlo optimum at nm = nc = 25 (0.4 pN/nm) is a prediction.
+    The record already compares it as a reproduction (ksopt_mc_n25_b13b, cmp_b13b_opt_n25), not as a
+    validation. odde_code itself holds no measurements, so there is nothing for bangasser2013b's models
+    to be validated against either (bangasser2013b/q_xval_odde_code_none).
+  citation: {file: motorclutch2_3.m, lines: "26", quote: "events=1e5; %number of events to simulate"}
+# ---- cross-record validation against bangasser2013 (2026-11-02): none added -------------------------
+- id: q_xval_bangasser2013_none
+  kind: choice
+  about: [mc_event_port, optimum_port, bangasser2013/v_figS1b_measured, bangasser2013/tau_kong_fig7c, bangasser2013/traction_fig1b_neuron, bangasser2013/traction_fig1b_t24, bangasser2013/traction_fig1b_baec, bangasser2013/migration_fig1a_u87, bangasser2013/migration_fig1a_smc, bangasser2013/migration_fig1a_neut, bangasser2013/migration_fig1a_nih3t3]
+  text: >-
+    No validation of the code's models against bangasser2013's measurements was entered. That paper's
+    measured data are all from other works, redrawn in its figures. (1) Fig. S1B, Chan and Odde's six
+    neuron flow means (v_figS1b_measured): the flow is mc_event_port's v_retro, and the code's
+    motorclutch2_3.m set is the base set that bangasser2013 "fit to the embryonic chick forebrain neuron
+    data from Chan and Odde" (Fig. S1 legend), so it could only be a fit. But the curve is indexed by
+    Young's modulus (substrate_modulus, kPa), and the port takes a spring constant in pN/nm: a sweep would
+    cross two different quantities, and neither paper states the conversion (bangasser2013
+    q_xval_chan2008_ksub). The paper also draws the four soft points at 0.5-0.6 times the moduli chan2008
+    prints (bangasser2013 q_xval_chan2008_figS1b_positions). The 260 Pa and 57 kPa means of the same data
+    are already entered as fits against chan2008's own Fig. 3C (val_c08_v260, val_c08_v57k). (2) Fig. 7C,
+    Kong et al.'s integrin lifetimes against force (tau_kong_fig7c): the port outputs no bond lifetime,
+    and its off-rate is a slip bond koff exp(Fc/Fb), not the catch-slip Eq. 9 fitted to these points. The
+    shared shape of bangasser2013/catch_slip_eq9 and mc_event_port (a time from forces and rates) is a
+    relation between models, left to the job that relates them. (3) Fig. 1B normalized tractions (neurons,
+    T24, BAEC) and Fig. 1A normalized migration (U87, SMC, neutrophils, NIH/3T3): the port gives a mean
+    traction in pN, not a cell's traction normalized to its maximum, and no migration; the cell types other
+    than neurons have no parameters in either record, and all are indexed by modulus. These show trends
+    (stiffness optima) that the model reproduces only qualitatively. odde_code holds no measurements, so
+    nothing is there for bangasser2013's models to be validated against (bangasser2013
+    q_xval_odde_code_none).
+  citation: {file: motorclutch1_1.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}

@@ -268,3 +268,42 @@
     found for the peak positions of supplemental figure 4(a). The traction curve of panel (i) (b = 100) is
     the b = 100 curve of panel (c): the two are read independently and agree.
   citation: {page: 18, quote: "parameters are: λ=3, F=1, v*=0.3 and γ=1000", where: "Supplemental figure 4 caption"}
+
+# --- cross-record validation job (craig2015 + gardel2008) ---
+- id: q_gardel2008_not_a_test
+  kind: choice
+  about: [clutch_peak, clutch_profile, q_fig3_parameters]
+  text: >
+    The PtK1 measurements of gardel2008 (ref. [14]) were not used to validate this record's models. The
+    candidates were clutch_peak (traction-peak location) against gardel2008's Fig. 4 D left (distance of
+    maximal traction from the cell edge per condition, fig4d_distance_data), clutch_peak's flow at the
+    peak against Fig. 4 D right, and clutch_profile against the profiles of gardel2008 Figs. 2 B and 4 C.
+    None is a test: the paper chose its PtK1 parameters by agreement with these same cells (F ~ 10 "compare
+    well", gamma ~ 1000 "good agreement with the data", v* ~ 0.3 "to explain the experimental relationship",
+    pp. 7-8; Figs. 2-3 are the data of [14]), and the per-condition values (F for blebbistatin, control,
+    CA-Rho; the lower lambda for blebbistatin) are not printed (q_fig3_parameters). The profile and
+    flow outputs are moreover in units of V0, T0 and v*, which the paper does not give per cell. A test
+    would need parameters fixed independently of [14] for each perturbation.
+  citation: {page: 8, quote: "compare well if F ~ 10", where: "Section 2.2"}
+- id: q_no_validation_chan2008
+  kind: unstated_model
+  about: [clutch_profile, clutch_peak, clutch_fields, uniform_flow_eq10, hill_eq11, lamellipodial_width, lambda_estimate, tension_viscosity, transport_epsilon, network_displacement]
+  text: >-
+    Cross-validation against chan2008 (ref. 17, cited only among "recent modeling studies
+    [16-19]", p. 3; the paper never says its model explains or is compared with chan2008's data)
+    found no measurement of chan2008 that a model here predicts. chan2008 measured the F-actin
+    retrograde flow rate in neuronal filopodia on polyacrylamide gels of given Young's modulus
+    (Fig. 3C, 3D, S8C), a filopodium's peak traction force and force-to-bead distance (Fig. S10),
+    bead displacement and step-size histograms, failure rates and a scaled surface tension. This
+    record's models describe a lamellipodium and lamellum on an unspecified substrate.
+    clutch_profile, clutch_peak, clutch_fields and uniform_flow_eq10 are dimensionless, V0 and T0
+    are not printed per cell, and none has a substrate-stiffness input, so they cannot give a
+    filopodial flow in nm/s at a gel modulus. hill_eq11 gives a lamellar flow from a cell's total
+    traction force, with Vmax and Fk fitted to U2OS cells. chan2008's forces are per filopodium
+    (pN) and its flows are filopodial: not the same quantities. lamellipodial_width shares the
+    shape of chan2008/cerruti_force_eq11 (a length from a length and a pressure) only formally. It
+    predicts a lamellipodial width, and chan2008 measures none; its contact-bead distance is a
+    different quantity. The other models give order-of-magnitude scales (lambda, drag, epsilon,
+    tension, displacement) that chan2008 does not measure. In the other direction, see
+    chan2008/q_no_validation_craig2015.
+  citation: {page: 3, quote: "recent modeling studies [16–19] borrowed ideas", where: text}

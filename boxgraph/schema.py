@@ -426,6 +426,27 @@ class CitedLink(Strict):
     evidence: str
 
 
+class CrossValidation(Strict):
+    """A model of this record judged against a measurement printed in another record (05-building:
+    "a model in another paper may predict them"). The build runs the model, with inputs from this
+    record or the other, and compares its output with the other record's datum at that datum's
+    precision. Nothing of the other record is copied here: its values are read at build time."""
+
+    id: str
+    model: str  # a model of this record
+    inputs: dict[str, str] = {}  # model input -> datum or added id here, or '<record>/<datum>' there
+    sweep: dict[str, str] = {}  # model input -> a table (here or '<record>/<datum>') whose index it takes
+    settings: dict[str, Any] = {}
+    replicates: int | None = None
+    output: str  # the model output that predicts the measurement
+    against: str  # '<record>/<datum>': the measurement in the other record
+    purpose: ComparisonPurpose = ComparisonPurpose.validation  # fit_quality when the model was fitted to it
+    quantities: dict[str, str] = {}  # '<record>/<quantity>' there -> the quantity here it is the same as
+    conditions_ok: str | None = None  # label: why differing conditions may still be compared
+    basis: str  # why this model is expected to predict that measurement
+    note: str | None = None
+
+
 # --------------------------------------------------------------------------
 # One record = one source, read once
 # --------------------------------------------------------------------------
@@ -446,3 +467,4 @@ class Record(Strict):
     relations: list[Relation] = []
     correspondences: list[Correspondence] = []
     cited: list[CitedLink] = []
+    validations: list[CrossValidation] = []

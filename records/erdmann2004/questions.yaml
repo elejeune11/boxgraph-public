@@ -174,3 +174,47 @@
     between tau = 10 and 70, a ≈ 4 x 10^-4. That leans towards the slowest eigenvalue rather than the
     printed 2.5 x 10^-4, but the two rates differ by about 1.3 px over that range, within each point's
     interval, so the figure still does not settle it.
+# cross-record validation against bell1978 (2026-11-02): none added
+- id: q_xval_bell1978_none
+  kind: unstated_input
+  about: [critical_force, rebinding_from_critical_force, lifetime_eq8, single_bond_rate]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978. Bell's measurements are the force needed to detach a cell, "~ 1 dyne per cell" (datum
+    bell1978/force_adhesive, from his ref. 52), and the free-sugar concentrations 0.001 and 0.01 M
+    that reverse lectin binding (c_sugar_low, c_sugar_high, inputs to his estimates). No model here
+    outputs a concentration. critical_force gives the dimensionless critical force per bond
+    plog(gamma/e); turning it into a force per cell needs the cluster size N0, the force scale Fb and
+    the rebinding rate gamma of those cells' bonds, none of which either paper states for the
+    experiment of ref. 52 (Bell's own 2.5 x 10^5 bonds per cell is a prediction made from the 1 dyne,
+    so using it would be circular). The datum is also printed as an approximation ("~ 1"), which gets
+    no verdict. single_bond_rate and lifetime_eq8 would need a measured single-bond rate or a cluster
+    lifetime, and Bell measures neither: his lifetimes, rates and Fig. 8 are model results. In the
+    other direction, this record has no measured datum at all (theory only; k0, Fb and Fc are
+    reported inputs from refs. 16-17): see bell1978 q_xval_erdmann2004_none.
+  citation: {page: 3, printed_page: "108102-3", quote: "a critical force fc  N0 plog=e [1], where the product", where: text}
+# cross-record validation against chan2008 (2026-11-02): none added
+- id: q_xval_chan2008_none
+  kind: unstated_input
+  about: [critical_force, rebinding_from_critical_force, lifetime_eq8, lifetime_adjoint, decay_rate_eq1, single_bond_rate]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chan2008. Chan's measurements are filopodial retrograde flow rates (Fig. 3C-D, S8C), the peak
+    filopodial force <T> = 110 ± 25 pN and the bead-contact distance (Fig. S10), failure frequencies
+    against gel stiffness (Fig. S5D), and histograms of bead steps, strains and radial deviations
+    (Figs. 3C, 4D-E, S4, S5, S11). No model here outputs a flow rate, a displacement or a histogram.
+    The models here hold a cluster under a constant force F with no substrate, while every Chan
+    measurement comes from bonds loaded at a rate set by myosin and a compliant gel (load and fail),
+    and the measurements differ by gel stiffness, which no model here takes as an input. Chan says
+    so of Schwarz and coworkers' analysis: "Schwarz and coworkers treat the force as acting normal
+    to the adhesion cluster" (chan2008 p. 31; that is their J. Chem. Phys. paper, see
+    chan2008/q_ref_S56_source). The nearest candidates fail on quantity or conditions:
+    critical_force gives the force above which a constant-force cluster has no stable state, not the
+    peak of a load-and-fail traction trace (a different quantity, and Chan's myosin number was tuned
+    to that peak); lifetime_eq8 is the lifetime at zero force, and lifetime_adjoint and
+    decay_rate_eq1 at constant force, so neither gives a failure frequency on a gel of given
+    stiffness. Running them would also need N0, gamma and k0 for the filopodial clutches, which
+    Erdmann does not state; Chan's nc, kon, koff and Fb are values of his own model, several tuned to
+    these neurons. In the other direction, this record has no measured datum (theory only): see
+    chan2008/q_xval_erdmann2004_none.
+  citation: {page: 1, printed_page: "108102-1", quote: "clusters under constant force has been first modeled by", where: text}

@@ -308,3 +308,216 @@
     does not describe the low-force lifetimes. That is a fit_quality finding, consistent with the
     plotted curve.
   citation: {page: 8, printed_page: "588", quote: "A catch-slip bond model was fit to integrin catch bond data", where: "Figs. 2-4, 7C"}
+
+# ==== CROSS-VALIDATION against bangasser2013b (2026-11-02) ====
+- id: q_xval_bangasser2013b
+  kind: choice
+  about: [motor_clutch_ssa, catch_slip_eq9, binding_time_eq10]
+  text: >-
+    No validation of this record's models against bangasser2013b's measurements is entered. The only
+    measured data in bangasser2013b are the computation times of its software (Fig. 6b:
+    bangasser2013b/fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal), which no model here predicts. Its
+    other plotted values are outputs of its own ODE and Monte Carlo models (origin predicted): relating
+    those to motor_clutch_ssa is a model-to-model comparison for a later job, not a validation against a
+    measurement. The shared shape of catch_slip_eq9 and bangasser2013b/clutch_ensemble_cycle (a time
+    from forces and rates) does not make one predict a measurement of the other.
+  citation: {none: "neither paper states that a model of this record predicts a measurement of bangasser2013b"}
+
+# ==== CROSS-VALIDATION against bell1978 (2026-11-02): none added ====
+- id: q_xval_bell1978_none
+  kind: choice
+  about: [catch_slip_eq9, motor_clutch_ssa, tau_kong_fig7c]
+  text: >-
+    No model of this record is validated against a measurement of bell1978, and no bell1978 model
+    against a measurement here. This paper cites bell1978 (ref. 23) only for the slip off-rate law:
+    "The first term in this equation is identical to the Bell model (23)" (p. 3). It does not say a
+    model of either paper predicts a number the other measured. bell1978's measured values are a
+    force of about 1 dyne needed to detach a cell (force_adhesive, from its ref. 52, printed with
+    "~", so it would get no verdict) and the sugar concentrations of an inhibition experiment
+    (c_sugar_low, c_sugar_high: inputs, not results); no model here outputs either. motor_clutch_ssa
+    gives retrograde flow and traction of a filopodium on a substrate spring, not a cell's
+    detachment force. In the other direction, the measurement here that a bell1978 model could give
+    is Kong et al.'s integrin-fibronectin lifetimes against force (tau_kong_fig7c, Fig. 7C), which
+    bell1978/lifetime_eq16 gives in kind (bond lifetime at a force per bond). But bell1978's tau0, E0
+    and gamma are estimates for antibody-hapten bonds, not this bond, and neither paper states Bell
+    parameters for integrin-FN. The only parameters for it are this record's koff_7c and Fb_7c, fitted
+    to these same points as part of the catch-slip Eq. 9. Mapping them onto Eq. 16 needs tau0 and E0
+    split from one rate (an added tau0, and a computed E0 that a record may not hold), and would be
+    half of a fit already reported as cmp_fig7c_kong (fit_quality). The slip-only Eq. 16 also cannot
+    give the catch branch at low force. The shared shape of catch_slip_eq9 and
+    bell1978/detach_time_eq17 (a time from a force and rates) is a relation between models, left to
+    the job that relates models across papers. See bell1978 q_xval_bangasser2013_none.
+  citation: {page: 3, printed_page: "583", quote: "The first term in this equation is identical to the Bell model", where: text}
+
+# ==== cross-record validation with chan2008 (2026-11-02) ======================================
+- id: q_xval_chan2008_ksub
+  kind: unstated_input
+  about: [ksub_chan_260Pa_added, ksub_chan_57kPa_added, motor_clutch_ssa]
+  text: >-
+    (Cross-record validation.) motor_clutch_ssa takes a substrate spring constant; chan2008 states its
+    gels by Young's modulus. Neither paper gives this paper's conversion. The validations use 1 pN/nm per
+    kPa, which is how Fig. S1B plots the base-set curve against modulus (it repeats the κsub curve of
+    Figs. 2-4 number for number). chan2008's Eq. 13 with its fitted Δ (0.67 pN/nm per kPa) and with δ
+    (0.36 pN/nm per kPa) are the alternatives in added.yaml. On the stiff gel all choices give the
+    plateau; on the 260 Pa gel all lie near the optimum.
+  citation: {page: 18, quote: "Using the new algorithm the model was fit to the embryonic chick forebrain neuron data", where: "Fig. S1 legend"}
+- id: q_xval_chan2008_figS1b_positions
+  kind: reading
+  about: [v_figS1b_measured, figS1b_points, ksub_chan_260Pa_added]
+  text: >-
+    (Cross-record validation.) Fig. S1B draws Chan and Odde's six flow means at about 0.13, 0.37, 0.65,
+    0.76, 24 and 56 kPa (read from the figwork overlay against the decade ticks). chan2008 names the
+    gels 260 and 730 Pa, 1.1, 1.3, 24 and 57 kPa (chan2008 Fig. 3C-D). The two stiff points agree; the
+    four soft ones are drawn at 0.5-0.6 times the moduli chan2008 prints. Whether Fig. S1B uses another
+    modulus calibration of the same gels, or misplaces them, is not said. It matters for the fit: the
+    base-set curve passes through the points at the plotted positions, which sit on its steep rise.
+  citation: {page: 18, quote: "Using the new algorithm the model was fit to the embryonic chick forebrain neuron data", where: "Fig. S1B (PDF p. 20)"}
+- id: q_xval_chan2008_curves
+  kind: choice
+  about: [motor_clutch_ssa, ksub_chan_260Pa_added, ksub_chan_57kPa_added]
+  text: >-
+    (Cross-record validation.) Measurements of chan2008 considered and not entered against this
+    record's models: (1) the six-point Fig. 3D curve (chan2008/v_fig3d_exp_sem and its first-pass
+    per-colour readings) and the Fig. S8C bars (chan2008/v_figS8C_control, v_figS8C_gfp) are indexed by
+    Young's modulus, and motor_clutch_ssa takes a spring constant, so a sweep over them would cross two
+    different quantities; only the scalar Fig. 3C means are entered, with added spring constants. The
+    Fig. 3D points at 260 Pa and 57 kPa are the same gels as Fig. 3C. (2) chan2008's peak filopodial
+    force (T_max_fig, T_max_text): no model here outputs a peak force (F_mean is a time average). (3)
+    The ~110 nm/s stiff plateau (v_stiff_text) is approximate and gets no verdict. (4) The flow and
+    step-size histograms, surface tension and failure frequency: no model here predicts them. (5)
+    catch_slip_eq9 has no counterpart measurement in chan2008, which measured no bond lifetimes.
+  citation: {page: 14, quote: "consistent with our previous published data", where: "Supporting Material"}
+# cross-record validation against chaudhuri2015 (2026-11-02): none added
+- id: q_xval_chaudhuri2015_none
+  kind: choice
+  about: [motor_clutch_ssa, optimal_stiffness, catch_slip_eq9, binding_time_eq10, nc_limits]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chaudhuri2015, which is later than this paper and cites it for the motor-clutch framework, not the
+    other way round. chaudhuri2015 measures alginate gel mechanics (initial Young's modulus by AFM,
+    Fig. 2c and Supp. Table 1; normalized stress relaxation, Fig. 2a and Supp. Fig. 3a; normalized
+    storage and loss moduli, Fig. 2b and Supp. Fig. 3b) and cell responses on those gels (spread area,
+    Figs. 3b-c, 4b, Supp. Figs. 4-5; percent of cells with stress fibres, attached or proliferating,
+    Figs. 3e, 4a, 4e; YAP nuclear ratio, Fig. 4d). None of these is an output of a model here:
+    motor_clutch_ssa gives retrograde flow, traction force, engaged clutches and cycle time on a linear
+    elastic spring, with no gel rheology and no spreading; catch_slip_eq9 gives a bond off rate and
+    lifetime, which chaudhuri2015 did not measure. Running motor_clutch_ssa on a modulus to predict a
+    spread area would only predict a trend the measurement does not quantify. The shared shape of
+    catch_slip_eq9 and chaudhuri2015/bell_off_rate is a relation between models, not a measurement.
+  citation: {page: 14, quote: "consistent with our previous published data", where: "Supporting Material"}
+# cross-record validation against elosegui2014 (2026-11-02): none added
+- id: q_xval_elosegui2014_none
+  kind: choice
+  about: [motor_clutch_ssa, optimal_stiffness, catch_slip_eq9, binding_time_eq10]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2014. That paper is later and cites this one (its ref. 20) as one of two clutch models
+    its own model "expands on" (p. 4), and for how rates modulate rigidity sensing (p. 6). It never
+    says this model, with these parameters, predicts its data. Its measurements on gels are of breast
+    myoepithelial cells: tractions in Pa (Figs. 1b,c, 4d,g,j), which are a stress and not this model's
+    mean traction force in pN, so the quantities differ; actin rearward flows in nm/s (Figs. 4e,h,k);
+    and adhesion integrin densities in arbitrary units (Figs. 4f,i,l). The flows are the same quantity
+    as v_retro. But running motor_clutch_ssa on them would apply this paper's base set, which was fitted
+    to chick forebrain neuron filopodia (Fig. S1 legend), to myoepithelial cells. Neither paper gives
+    motor, clutch or rate values for those cells. The one model built for them
+    (elosegui2014/integrin_clutch_sim) adds integrin densities, competing integrin types, a catch bond
+    and reinforcement, and its parameters are in an unreadable Supplementary Information. The gels are
+    given by Young's modulus, with no spring-constant conversion stated for these cells. Every input
+    would be added, so a verdict would test the added values, not the model. The bead detachment times
+    (Fig. 2c), bead recruitment (Fig. 2e,g), SPR responses (Fig. 2a) and membrane densities (Fig. 2b)
+    are outputs of no model here. catch_slip_eq9 gives a single-bond lifetime, and elosegui2014
+    measured none: its catch-bond curve is Kong et al.'s (its ref. 12), which this record already holds
+    as tau_kong_fig7c (fit_quality).
+  citation: {none: "neither paper states that a model of this record predicts a measurement of elosegui2014"}
+# cross-record validation against elosegui2016 (2026-11-02): none added
+- id: q_xval_elosegui2016_none
+  kind: choice
+  about: [motor_clutch_ssa, optimal_stiffness, catch_slip_eq9, binding_time_eq10, nc_limits]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2016, which is later and cites this paper (its ref. 32) only for trends: clutch determinants
+    "predicted to regulate force transmission" and a peak rigidity "determined by force loading"
+    (elosegui2016 p. 6), and its results "fully abide by the clutch model" (p. 8). It never says this
+    model, with these parameters, predicts its data. Its measurements are of mouse embryonic fibroblasts
+    on fibronectin-coated gels given by Young's modulus: tractions in Pa (Figs. 1a, 3d, 4a,e, 5a,e, 6a-i,
+    Supp. Figs. 2, 5a), a stress and not this model's mean traction force in pN; actin flows in nm/s
+    (Fig. 3e), the same quantity as v_retro; and adhesion lengths, YAP ratios, integrin densities in
+    a.u., spread areas, pMLC ratios, attached fractions and bond lifetimes of FN-avb3 (Fig. 3a). Running
+    motor_clutch_ssa on the Fig. 3e flows would apply this paper's base set, fitted to chick forebrain
+    neuron filopodia (Fig. S1 legend), to fibroblasts. elosegui2016 gives MEF motor values (nm, Fm, vu,
+    kc in its Supplementary Table 1) but its clutches are a fibronectin-a5b1 catch bond with binding rate
+    kont dint, not this model's kon, koff and Fb slip bond, and it states no spring-constant conversion
+    beyond its own unprinted one. Every clutch input would be added, so a verdict would test added values,
+    not the model. catch_slip_eq9 gives an a5b1-fibronectin lifetime (Kong et al.); elosegui2016 measured
+    avb3 lifetimes (Fig. 3a), a different bond, and the model's parameters are fitted to the a5b1 data.
+    In the other direction, see elosegui2016/q_xval_bangasser2013_none.
+  citation: {none: "neither paper states that a model of this record predicts a measurement of elosegui2016"}
+
+# ==== cross-record validation with gong2018 (2026-11-02): none added ==========================
+- id: q_xval_gong2018_none
+  kind: unstated_model
+  about: [motor_clutch_ssa, catch_slip_eq9, optimal_stiffness, binding_time_eq10]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of gong2018,
+    which cites this paper (its ref. 17) only as one source of the motor-clutch model and states no
+    comparison with it. gong2018's measured data are 3T3 spreading speeds vs substrate stiffness
+    (Fig. S7), spreading areas (Figs. 4D, 5D, 6D, S5A) and gel relaxation stiffnesses (Figs. 4B, 5B,
+    S6A). motor_clutch_ssa outputs the retrograde flow and traction, not the spreading speed, which
+    gong2018 obtains as Vs = Vp - Vf with a polymerization speed this record has no model or value for;
+    no model here gives a spreading area or a gel's relaxation. catch_slip_eq9 and binding_time_eq10
+    have no counterpart measurement in gong2018. In the other direction, see
+    gong2018/q_xval_bangasser2013_none.
+  citation: {none: "neither paper states that a model of this record predicts a measurement of gong2018"}
+# ==== cross-record validation with andreu2021 (2026-11-02): none added ========================
+- id: q_xval_andreu2021_none
+  kind: unstated_model
+  about: [motor_clutch_ssa, optimal_stiffness, catch_slip_eq9, binding_time_eq10]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of andreu2021,
+    which cites this paper (its ref. 79) only for the Gillespie algorithm (andreu2021 p. 10) and states no
+    comparison with it. The one measurement of andreu2021 whose quantity a model here outputs is the actin
+    retrograde flow of Fig. 1b (andreu2021/fig1b_flow, mouse embryonic fibroblasts on a 0.6 kPa gel and
+    on glass), against motor_clutch_ssa's v_retro. It is not entered: (1) every parameter of
+    motor_clutch_ssa here (Table 1) is the set fitted to embryonic chick forebrain neuron filopodia (Fig.
+    S1 legend); neither paper states nm, Fm, vu, nc, kon, koff, Fb or kc for fibroblast lamellipodia, so
+    all eight would be added inputs and the entry would test those, not the model; andreu2021's own clutch
+    parameters (Supplementary Table 4) belong to a catch-bond model with no motors, not to this one.
+    (2) The glass value is measured "at the very edge of lamellipodia (where adhesion is still very low)"
+    (andreu2021 p. 2), a low-adhesion region that a run on a stiff substrate does not represent. (3) The
+    gel is given as a Young's modulus, and this paper gives no modulus-to-spring-constant conversion
+    (Fig. S1B, left out for that reason). The other measurements of andreu2021 (adhesion lengths, YAP
+    ratios, tweezers bead speeds, loading rates and stiffnesses, AFM moduli, areas) have no output here;
+    the bead loading rates are imposed by the tweezers, not produced by motors. andreu2021/supp_table1_edge
+    and motor_clutch_ssa share the shape force-velocity-stiffness but do not share a measured quantity.
+    In the other direction, see andreu2021/q_xval_bangasser2013_none.
+  citation: {none: "neither paper states that a model of this record predicts a measurement of andreu2021"}
+
+# ==== cross-record validation with kong2009 (2026-11-02) =======================================
+- id: q_xval_kong2009_other_curves
+  kind: choice
+  about: [catch_slip_eq9, motor_clutch_ssa, tau_kong_fig7c]
+  text: >-
+    Only Kong et al.'s Fig. 3 A circles (FN/a5b1-Fc/GG-7 in Ca2+/Mg2+, kong2009/lt_FN_a5b1Fc_CaMg) are
+    entered, as val_lifetime_kong_fig3a (fit_quality). The same series read as a line
+    (kong2009/line_FN_a5b1Fc_CaMg_fig3) and its replot (kong2009/replot_fig5a_of_fig3a) would repeat it.
+    Kong's other lifetime curves (Mg2+/EGTA, Mn2+, truncated a5b1, membrane a5b1, activating antibodies,
+    Fc/GG-7 and antibody controls) are other bonds or other cation conditions: this paper gives Eq. 9
+    parameters only for its Ca2+/Mg2+ fit, and running them on another condition would add the
+    assumption that the bond is unchanged, which Kong et al.'s own curves contradict. Kong's adhesion
+    frequencies, rupture-force histograms, molecular stiffnesses, flow-cytometry histograms and
+    ln(event count) survival plots are outputs of no model here; motor_clutch_ssa gives flow and
+    traction, which Kong et al. did not measure.
+  citation: {page: 9, printed_page: "589", quote: "catch-slip off-rate model was fit to integrin catch bond", where: text}
+
+# ==== cross-record validation with odde_code (2026-11-02): none added ==========================
+- id: q_xval_odde_code_none
+  kind: choice
+  about: [motor_clutch_ssa, catch_slip_eq9, optimal_stiffness, binding_time_eq10]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against odde_code, which is software
+    (the Odde lab's MATLAB motor-clutch scripts) and holds no measurements: every value in it is a code
+    parameter, a value copied from a paper's record, or a model output. Its outputs on this paper's base
+    set are already compared with this paper's predicted curves as reproductions in that record. The
+    shared shape of catch_slip_eq9 and odde_code/mc_event_port is a relation between models, not a
+    measurement. In the other direction, see odde_code/q_xval_bangasser2013_none.
+  citation: {none: "odde_code is software and records no measured value"}

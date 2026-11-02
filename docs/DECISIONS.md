@@ -396,3 +396,30 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   step naming something the build does not have stops the overview with its name.
 - **Small:** one HTML file with its data embedded (about 0.7 MB for sixteen sources);
   only a case study's figures are copied beside it (`img/`).
+
+## Models against other papers' measurements (v0.8)
+
+- **Why:** an experimental paper (no equations) has measurements and nothing to relate; the paper
+  written to explain them has a model. Neither a relation between models nor a cited value covers
+  "this model predicts those measurements", so it was never checked (Craig 2015 against Gardel 2008).
+- **Where it is written:** `validations.yaml` in the modelling record. Each entry names a model, its
+  inputs (here, or `<record>/<datum>` in the other record), an optional sweep over a table of the other
+  record, the output, the measurement (`against: <record>/<datum>`), and its `basis`. Nothing of the
+  other record is copied: its values, figure readings included, are read from its build.
+- **Quantities are matched only where named:** each record names its quantities independently, so every
+  quantity of the other record a validation uses is mapped to one of this record (`quantities`); two
+  quantities that only share a dimension are not matched. Without the mapping the validation cannot be
+  checked, and says so.
+- **The verdict** is the ordinary one, at the measurement's precision, value by value for a curve. It is
+  reported in the Synthesis (`validations`), the report's section across papers, and the overview (a
+  link of its own kind). A validation that disagrees is a result, not a finding: models are validated
+  against data, and disagreeing data is what a validation is for.
+- **The pipeline** runs one `validate:a+b` job per related pair, after its relation job. It may write
+  only the two records' `validations.yaml`, `added.yaml` and `questions.yaml`; its gate is both records
+  sound with their models run and `boxgraph validations records --only a,b` checking every entry.
+- **A model fitted to the measurement is not a test of it:** such an entry has `purpose: fit_quality`
+  and is reported as a fit. Craig 2015 chose its parameters by agreement with Gardel 2008's cells, and
+  prints neither its per-condition parameters nor the per-cell scales of its outputs, so its record
+  holds no validation against Gardel, and an open question says why (q_gardel2008_not_a_test).
+- **Approximate ranges** ('0 to ~30', '~5 to 50') are read as printed, with no precision, like '~5'.
+

@@ -224,3 +224,93 @@
     near the 1.4 and 3.4 kPa covalent lines there (which could not be read apart). The comparison
     cmp_fig2a_ionic_s3a tests the first identification.
   citation: {page: 3, printed_page: "3", quote: "Stress relaxation of covalently and ionically crosslinked alginate gels", where: "Fig. 2a"}
+# cross-record validation against gong2018 (2026-11-02): none added
+- id: q_xval_gong2018_none
+  kind: choice
+  about: [clutch_springs_nolattice, lattice_spreading, substrate_stiffness, spreading_speed]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    gong2018. The only measurements there that a model here could give are the spreading speeds on
+    elastic gels of gong2018 Fig. S7 (vs_figS7_pa, vs_figS7_ha, vs_figS7_alg). They are indexed by an
+    adhesion-scale substrate spring constant (k = 2RE, gong2018 Eq. S9), one spring shared by all
+    clutches of an adhesion. The runnable model here, clutch_springs_nolattice, takes ksub, the
+    stiffness of one independent spring per clutch. That is a different quantity of the same
+    dimension, so the two are not mapped. A run would need an added mapping (for example
+    ksub = k / nc, which makes the two agree only while every clutch is bound) and an added clutch
+    number (Supp. Fig. 1d uses 5 to 1000). Both are open choices that would decide the verdict. The
+    lattice model, the one the paper relates to cells, cannot be run (q_lattice_unstated). gong2018's
+    other measurements (spreading areas, relaxation stiffness of gels) are outputs of no runnable
+    model here.
+  citation: {page: 21, printed_page: "14", where: "Supplemental Model Characterization", quote: "treating the substrate as collection of independent simple springs, each connected to a clutch"}
+# cross-record validation against chan2008 (2026-11-02): none added
+- id: q_xval_chan2008_none
+  kind: choice
+  about: [clutch_springs_nolattice, retrograde_flow_eq1, bell_off_rate, lattice_spreading, spreading_speed, retrograde_flow_velocity]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chan2008, although this paper builds its model on chan2008's ("building upon the framework of a
+    previous model by Chan and Odde", Supp. Note 1; refs. 19 and S1). The paper takes chan2008's
+    framework only, and never compares its model with chan2008's data. chan2008 measured retrograde
+    flow rates on polyacrylamide gels of given Young's modulus (v_fig3c_260, v_fig3c_57k,
+    v_fig3d_exp_sem, v_figS8C_control, v_figS8C_gfp), a peak filopodial force (T_max_text, T_max_fig),
+    bead displacement and step-size histograms, failure frequencies and a scaled surface tension.
+    The runnable model here, clutch_springs_nolattice, outputs only the spreading speed
+    (v_spread = vu - v_retrograde). That is a different quantity from a retrograde flow rate, so the
+    two are not mapped, and recovering v_retrograde would need vu, which is an input, not an output.
+    retrograde_flow_eq1 gives the retrograde flow velocity, but only from a total clutch force that
+    chan2008 does not measure. bell_off_rate gives a per-clutch off rate, which chan2008 does not
+    measure. lattice_spreading cannot be run (q_lattice_unstated). Even a flow-rate output would need a
+    mapping from gel modulus to this model's per-clutch spring stiffness ksub, plus a clutch number
+    for a filopodium. Neither is stated here: chan2008's Eq. 13 belongs to that record, and its
+    length scale is itself open there.
+  citation: {page: 18, printed_page: "11", where: "Supp. Note 1", quote: "building upon the framework of a previous model by"}
+# cross-record validation against bell1978 (2026-11-02): none added
+- id: q_xval_bell1978_none
+  kind: choice
+  about: [bell_off_rate, clutch_springs_nolattice, retrograde_flow_eq1, lattice_spreading, clutch_off_rate_loaded]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978. This paper cites Bell (sref-5) only for the form of its clutch off-rate law
+    ("undergo force-dependent dissociation as per the Bell model5"), never for data. bell1978's
+    measured values are force_adhesive (about 1 dyne to detach a cell, quoted from its ref. 52 and
+    printed as approximate) and the inhibiting sugar concentrations c_sugar_low and c_sugar_high (0.001
+    and 0.01 M, experimental conditions from its ref. 49). None of them is an output of a model
+    here: bell_off_rate gives the off rate of one clutch, clutch_springs_nolattice and
+    retrograde_flow_eq1 give spreading and retrograde flow speeds, and lattice_spreading cannot be
+    run (q_lattice_unstated). bell1978 measures no single-bond off rate, so the shared Bell law
+    (relation rel_bell_loaded_rate_same_as_bell_off_rate) has no measurement to be tested against.
+  citation: {page: 18, printed_page: "11", where: "Supp. Note 1", quote: "undergo force-dependent dissociation as per the Bell model5 given by"}
+# cross-record validation against bangasser2013b (2026-11-02): none added
+- id: q_xval_bangasser2013b_none
+  kind: choice
+  about: [clutch_springs_nolattice, retrograde_flow_eq1, bell_off_rate, lattice_spreading]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013b. This paper's ref. 20 is Bangasser, Rosenfeld & Odde 2013 (Biophys. J.; the
+    bangasser2013 record), not bangasser2013b (Cell. Mol. Bioeng.), and it is cited for the
+    motor-clutch framework, not for data. bangasser2013b's only measured values are the computation
+    times of its ODE and Monte Carlo software (Fig. 6b: fig6b_ode_cal, fig6b_mc1_cal,
+    fig6b_mc100_cal); all its other plotted values are outputs of its own models. No model here
+    predicts a software run time, so there is nothing to validate against. The shared shape of
+    clutch_springs_nolattice and bangasser2013b/clutch_ensemble_cycle is a relation between models,
+    not a measurement.
+  citation: {page: 7, printed_page: "7", where: "ref. 20", quote: "Bangasser, B. L., Rosenfeld, S. S. & Odde, D. J. Determinants of maximal force"}
+# cross-record validation against bangasser2013 (2026-11-02): none added
+- id: q_xval_bangasser2013_none
+  kind: choice
+  about: [clutch_springs_nolattice, bell_off_rate, retrograde_flow_eq1, lattice_spreading]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013. This paper cites Bangasser, Rosenfeld & Odde (ref. 20; Supp. ref. 8) for the
+    model's behaviour, a stiffness optimum set by clutch number and the stalled state at many clutches,
+    which the lattice-free variant "recreates" (Supplemental Model Characterization): that is a
+    model-to-model relation, not a measurement. bangasser2013's measurements are (1) Kong et al.'s
+    integrin bond lifetimes against force (bangasser2013/tau_kong_fig7c): bell_off_rate gives a loaded
+    off rate, not a lifetime, and a lifetime is not the same quantity; its parameters (koff, Frup of
+    Supp. Table 2) are for this paper's clutch, and a slip law cannot meet a catch-bond curve anyway;
+    (2) Chan and Odde's neuron filopodia retrograde flow against substrate stiffness, as replotted in
+    Fig. S1B (bangasser2013/v_figS1b_measured): clutch_springs_nolattice gives spreading speed
+    vu - v_retrograde, not retrograde flow, and retrograde_flow_eq1 needs the total clutch force, which
+    was not measured; (3) the normalized migration and traction curves of other studies (Fig. 1A-B),
+    which no model here gives. So nothing here predicts any of them as measured.
+  citation: {page: 21, printed_page: "14", where: "Supplemental Model Characterization", quote: "mediated by clutch number as reported in Bangasser"}

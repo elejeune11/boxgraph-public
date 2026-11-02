@@ -1,0 +1,25 @@
+# ==== against bangasser2013's measured retrograde flow (2026-11-02) ===========================
+# bangasser2013 Fig. S1B re-plots this paper's six neuron flow means (green squares, "Chan and Odde,
+# 2008") with error bars against Young's modulus. motor_clutch_E with this record's Table S1 set predicts
+# flow from modulus. These are this paper's own measurements, to which its nc, kon and Δ were tuned, so
+# the entry is fit_quality. It runs at the moduli where bangasser2013 draws the points, which for the
+# four soft gels are about half of this paper's (q_xval_bangasser2013_figS1b_positions).
+- id: val_flow_bangasser_figS1b
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: bangasser2013/v_figS1b_measured}
+  output: v_retro
+  against: bangasser2013/v_figS1b_measured
+  purpose: fit_quality
+  quantities: {bangasser2013/substrate_modulus: substrate_modulus, bangasser2013/retrograde_flow_rate: retrograde_flow_rate}
+  conditions_ok: >-
+    The points are this paper's Fig. 3D neuron filopodia (260 Pa to 57 kPa gels), re-plotted by
+    bangasser2013; the model runs at the moduli as bangasser2013 plots them, not at the gel moduli
+    printed here. The error bars there are of unstated kind (this paper's Fig. 3D bars are SEMs).
+  basis: >-
+    bangasser2013 labels the points "Chan and Odde, 2008" and says its new base set was "fit to the
+    embryonic chick forebrain neuron data from Chan and Odde" (bangasser2013 p. 18), i.e. these are the
+    flow measurements this paper's motor-clutch model was compared with "to test how well our model
+    predictions of F-actin retrograde flow fit with our experimental measurements" (SOM p. 18). Fitted,
+    not tested: Table S1 sets nc "to slow retrograde flow to experimentally observed levels" and kon "to
+    match dynamics observed in this study", and Δ = 277 nm was fitted to these data.

@@ -1,0 +1,39 @@
+# ==== against chan2008's measured retrograde flow (2026-11-02) ================================
+# The clutch-ensemble ODEs (Eqs. 8-12, 19) with Chan and Odde's base parameter set (Table S1 here,
+# from ref. 6) give a cycle-mean F-actin flow rate at a substrate spring constant. chan2008 prints the
+# mean measured flow on two gels (Fig. 3C). The base set's nc and kon, and the κs of each gel (via the
+# fitted Δ of chan2008 Eq. 13), were set by Chan and Odde to match these flow data, so each entry is
+# fit_quality, not an independent test.
+- id: val_flow_chan_260Pa
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_chan_260Pa_added, r: r_fig2}
+  output: v_mean
+  against: chan2008/v_fig3c_260
+  purpose: fit_quality
+  quantities: {chan2008/retrograde_flow_rate: cycle_mean_flow_rate}
+  conditions_ok: >-
+    chan2008 states the gel by its Young's modulus (260 Pa); the model takes a spring constant, entered
+    as ks_chan_260Pa_added from chan2008's own Eq. 13 with its fitted Δ. The measured mean is over many
+    load-and-fail cycles of many filopodia, the model's over one cycle, which repeats identically.
+  basis: >-
+    This paper solves its ODEs with "the base parameter set from Chan and Odde6" (p. 3) and states that
+    the ODE model "reproduces the biphasic response to substrate stiffness" (p. 5) of that motor-clutch
+    model. Fitted, not tested: chan2008 Table S1 sets nc "to slow retrograde flow to experimentally
+    observed levels" and kon "to match dynamics observed in this study", and the κsub of each gel rests on
+    Δ = 277 nm, introduced "to test how well our model predictions of F-actin retrograde flow fit with
+    our experimental measurements" (chan2008 SOM p. 18). r = 2 is this paper's choice for the base set
+    (p. 5); r = 3 (Fig. 4) is the open alternative (q_xval_chan2008_r).
+- id: val_flow_chan_57kPa
+  model: clutch_ensemble_cycle
+  inputs: {nm: nm_base, Fm: Fm_base, vu: vu_base, nc: nc_base, kon: kon_base, koff: koff_base, Fb: Fb_base, kc: kc_base, ks: ks_chan_57kPa_added, r: r_fig2}
+  output: v_mean
+  against: chan2008/v_fig3c_57k
+  purpose: fit_quality
+  quantities: {chan2008/retrograde_flow_rate: cycle_mean_flow_rate}
+  conditions_ok: >-
+    chan2008 states the gel by its Young's modulus (57 kPa); the model takes a spring constant, entered
+    as ks_chan_57kPa_added from chan2008's own Eq. 13 with its fitted Δ.
+  basis: >-
+    As val_flow_chan_260Pa, on the stiff gel. Fitted, not tested: the base set's nc and kon and the
+    gel's κsub (via Δ = 277 nm) were set by Chan and Odde to match their measured flow (chan2008 Table S1,
+    SOM p. 18).

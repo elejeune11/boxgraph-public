@@ -133,3 +133,11 @@ def test_close_means_the_same_sign_and_order_of_magnitude():
     assert P.verdict(1e-9, neg) == V.not_reproduced
     zero = P.parse("0.0")  # a range that includes zero keeps the width rule alone
     assert P.verdict(0.12, zero) == V.close
+
+
+@pytest.mark.parametrize("text, mid", [("0 to ∼30", 15.0), ("~5 to 50", 27.5), ("∼5 – ∼50", 27.5), ("about 2 to 3", 2.5)])
+def test_an_approximate_range_is_read_but_has_no_precision(text, mid):
+    """A range with an approximate end ('0 to ~30', '~5 to 50') is recorded as printed, has no precision, and so gets no verdict."""
+    p = P.parse(text)
+    assert p.how == "none" and p.value == pytest.approx(mid)
+    assert P.verdict(mid, p) == P.Verdict.no_verdict

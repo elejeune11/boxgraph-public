@@ -1,0 +1,42 @@
+# The code's event-stepping model (ported), run at Chan and Odde's Table S1 set (the inputs of
+# run_chan_1d), against the mean flow rates Chan and Odde measured on their softest and stiffest gels.
+# The substrate stiffness of each gel is chan2008's own: Eq. 13 with the fitted length Δ = 277 nm
+# (chan2008/ksub_260_pred, ksub_57k_pred, produced by that record's runs). Δ was fitted so that the
+# model's flow matches these measurements (Fig. 3D), so each entry is a fit, not a test.
+- id: val_c08_v260
+  model: mc_event_port
+  inputs: {nm: nm_chan, Fm: Fm_11, vu: vu_11, nc: nc_chan, kon: kon_chan, koff: koff_11, Fb: Fb_11, Kc: kc_chan, gain: gain_23,
+           Ksub: chan2008/ksub_260_pred}
+  replicates: 3
+  output: v_retro
+  against: chan2008/v_fig3c_260
+  purpose: fit_quality
+  quantities: {chan2008/substrate_stiffness: substrate_stiffness, chan2008/retrograde_flow_rate: retrograde_flow_rate}
+  conditions_ok: >-
+    The measurement is on a 260 Pa gel; the model takes a spring constant, which is chan2008's own
+    κsub for that gel (Eq. 13 with Δ = 277 nm and υ = 0.3, run_ksub_260), the value Chan and Odde's
+    model is run at for the same comparison (chan2008/val_v_260).
+  basis: >-
+    The code says it reduplicates Chan and Odde's motor-clutch model ("Reduplicate the Chan
+    Motor-Clutch model with event stepping", motorclutch1_1.m line 5), and Chan and Odde compare that
+    model's flow with this measured mean (SOM p. 18: "In order to test how well our model predictions
+    of F-actin retrograde flow fit with our experimental measurements, we introduce a fitting
+    parameter, Δ"). Run here at Table S1's parameters. A fit, not a test: the κsub input rests on Δ,
+    which was fitted to the measured flows of Fig. 3D, this gel's among them (chan2008 Delta_fit).
+- id: val_c08_v57k
+  model: mc_event_port
+  inputs: {nm: nm_chan, Fm: Fm_11, vu: vu_11, nc: nc_chan, kon: kon_chan, koff: koff_11, Fb: Fb_11, Kc: kc_chan, gain: gain_23,
+           Ksub: chan2008/ksub_57k_pred}
+  replicates: 3
+  output: v_retro
+  against: chan2008/v_fig3c_57k
+  purpose: fit_quality
+  quantities: {chan2008/substrate_stiffness: substrate_stiffness, chan2008/retrograde_flow_rate: retrograde_flow_rate}
+  conditions_ok: >-
+    The measurement is on a 57 kPa gel; the model takes a spring constant, which is chan2008's own
+    κsub for that gel (Eq. 13 with Δ = 277 nm and υ = 0.3, run_ksub_57k), the value Chan and Odde's
+    model is run at for the same comparison (chan2008/val_v_57k).
+  basis: >-
+    As val_c08_v260, on the stiffest gel. The code reduplicates Chan and Odde's model, which they
+    compare with this measured mean (SOM p. 18, Fig. 3D). A fit, not a test: κsub rests on the
+    length Δ = 277 nm fitted to the measured flows of Fig. 3D (chan2008 Delta_fit).

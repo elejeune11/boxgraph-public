@@ -25,7 +25,8 @@ flags every result elsewhere that depends on it.
   or symbolically. Models verified to be the same under a mapping form a family.
 - **The Synthesis**: what the build computes from all records: a verdict for
   every comparison at the precision the value was printed with, checks of values
-  one paper takes from another, models run on other papers' inputs, findings,
+  one paper takes from another, models run on other papers' inputs and judged
+  against their measurements, findings,
   and the open questions they raise.
 
 ## The Synthesis so far
@@ -140,17 +141,20 @@ test is a finding.*
 ### 4 · The Synthesis
 
 The review itself: each paper's verdicts, one paper's model run on another's
-inputs where a verified relation allows it, cited values checked against the
+inputs where a verified relation allows it or judged against another's
+measurements, cited values checked against the
 paper they came from (and a paper against its own code and data), findings
 and what they put in doubt, and the references worth reading next. A written
 review is generated from it, every sentence traced to the records.
 [Read the full document →](docs/minimalist_design/04-synthesis.md)
 
-![Two kinds of check](docs/minimalist_design/figures/fig7-two-checks.svg)
+![Kinds of check](docs/minimalist_design/figures/fig7-two-checks.svg)
 
 *Figure 7. A paper against itself needs only that paper. A paper against
 another needs a verified relation that lets one paper's model run on the
-other's inputs.*
+other's inputs. A model against another paper's measurement needs the
+quantities the two share, named; a model fitted to that measurement is
+reported as a fit.*
 
 ### 5 · How it is built
 
@@ -188,8 +192,9 @@ validator.
 
 *From upload to Synthesis. A paper is ingested, then read, audited and its
 figures read, one agent per stage. Each new paper is then related to every
-record it shows a sign of a relation with, one agent per pair, and the build
-makes the Synthesis.*
+record it shows a sign of a relation with, one agent per pair, and a second
+agent per pair judges each paper's models against the other's measurements.
+The build then makes the Synthesis.*
 
 ![Where BoxGraph, ModelAtlas and the Synthesis fit](docs/figures/pipeline-layers.svg)
 
@@ -335,6 +340,7 @@ records/<id>/
   references.yaml    cited works
   relations.yaml     relations between models, stated or proposed
   cited.yaml         values taken from another source, linked to the datum they came from
+  validations.yaml   models of this source judged against another source's measurements
   figures.yaml       calibrated figure readings, re-read from the page by every build
   figures/*.py       the code that reads each figure, run by every build
   text/ pages/       page text and images from ingest (git-ignored)
@@ -384,7 +390,10 @@ Add several papers, then run them together (`--papers a,b,c`, or leave
    dimension from two dimensional inputs in common) are listed for a person,
    not related on their own. One agent per pair; two jobs never edit one
    record at once;
-4. **builds** the Synthesis, the report, the figure-check page and the explorer.
+4. **validates** across each related pair: where one paper's model predicts what the other measured,
+   it is run on that measurement's conditions and judged against it. One agent per pair, after its
+   relation job;
+5. **builds** the Synthesis, the report, the figure-check page and the explorer.
 
 Every agent:
 
@@ -434,7 +443,7 @@ Afterwards: read `build/report.html`, check the readings in
 
 ## Status
 
-Version 0.7. Results so far, known limits and next steps are in
+Version 0.8. Results so far, known limits and next steps are in
 [`docs/STATUS.md`](docs/STATUS.md).
 
 ## Licence

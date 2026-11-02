@@ -336,9 +336,10 @@ def atlas():
 
 
 def two_checks():
-    f = Figure("Two kinds of check", "A paper against itself: its inputs run through its model, compared with its own results; this needs only the paper. "
+    f = Figure("Kinds of check", "A paper against itself: its inputs run through its model, compared with its own results; this needs only the paper. "
                "A paper against another: one paper's inputs run through another paper's model, compared with its results; this needs a verified "
-               "relation that maps one model onto the other.")
+               "relation that maps one model onto the other. A model against another paper's measurement: the model run on the measurement's "
+               "conditions, compared with what was measured; this needs the quantities the two papers share, named.")
     f.text(30, 30, "A paper against itself", "th")
     f.text(30, 50, "needs only this paper")
     f.node("c-teal", 30, 140, 110, 56, "A's inputs")
@@ -359,9 +360,20 @@ def two_checks():
     f.edge("M850 168 H918", both=True)
     f.text(885, 156, "compared", anchor="middle")
     f.edge("M795 110 V138", "dot")
-    f.text(30, 240, "Linked is not checked: a cross-paper check exists only where a verified relation lets one paper's model run on another's inputs.")
-    f.text(30, 258, "A paper enters the Synthesis when its record is sound, whether or not it reproduces. Not reproduced is a result.")
-    return f.svg(1060, 276)
+    f.text(560, 246, "A model against another's measurement", "th")
+    f.text(560, 266, "needs the shared quantities, named")
+    f.node("rec", 695, 282, 200, 44, "Stated correspondence", ["B's quantity = A's quantity"])
+    f.node("c-teal", 560, 356, 110, 56, "B's conditions")
+    f.node("c-purple", 740, 356, 110, 56, "A's model")
+    f.node("c-teal", 920, 356, 110, 56, "B's measured", ["as printed"])
+    f.edge("M670 384 H738")
+    f.text(704, 372, "run", anchor="middle")
+    f.edge("M850 384 H918", both=True)
+    f.text(885, 372, "compared", anchor="middle")
+    f.edge("M795 326 V354", "dot")
+    f.text(30, 456, "Linked is not checked: a cross-paper check exists only where a relation lets one model run on another's inputs, or a model is run on another's measurement.")
+    f.text(30, 474, "A model fitted to that measurement is reported as a fit, not a test. A paper enters the Synthesis when its record is sound; not reproduced is a result.")
+    return f.svg(1060, 492)
 
 
 FIGURES = {

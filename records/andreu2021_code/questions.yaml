@@ -149,3 +149,86 @@
     unit; they are taken as adhesion lengths in µm because their values fall on the adhesion-length axis
     of Fig. 2e. Both are said to come from the paper's source data (record andreu2021_data, not yet read).
   citation: {file: stretchscriptg.m, lines: "63", quote: "errorbar(fre,yem(expstretch,:), yee(expstretch,:),'.b');"}
+# ---- added by the cross-record validation job (andreu2021 + andreu2021_code) -------------------------
+- id: q_fre_ns_sq
+  kind: reading
+  about: [yap_exp_2p5, yap_exp_5, yap_exp_10, yap_exp_20, length_exp_2p5, length_exp_5, length_exp_10, length_exp_20, q_frequencies, val_yap_2p5, val_length_2p5]
+  text: >-
+    The first and last points of experimental data.mat (fre = 0 and 5.6569 Hz) are not triangular-signal
+    frequencies: their values match the Ns (non-stretched) and Sq (square 1 Hz) points of the paper's
+    Fig. 1e-h (andreu2021 fig1*_ns_sq; at 2.5% YAP 1.1436 and 1.5936 here, about 1.142 and 1.593 read there),
+    and the middle five match the triangular points at 0.125-2 Hz. 5.6569 = 2^2.5 is a plotting position on
+    the log axis. So the runs at fre (run_*_exp) and the comparisons val_yap_* and val_length_* set the
+    triangular model at 5.66 Hz against a square 1 Hz measurement, and at 0 Hz (no movement: the scaled
+    baseline bl) against the unstretched control. The cross-record entries in validations.yaml compare the
+    model only with the five triangular points, read from the paper's Fig. 1.
+  citation: {file: stretchscriptg.m, lines: "63", quote: "errorbar(fre,yem(expstretch,:), yee(expstretch,:),'.b');"}
+- id: q_cross_fit
+  kind: choice
+  about: [cmstretchg_port, Am_2p5_code, Am_5_code, Am_10_code, Am_20_code, bl_code, sc_code]
+  text: >-
+    The comparisons of the code's model with the paper's Fig. 1e-h measurements (validations.yaml,
+    val_fig1{e,f,g,h}_{yap,pax}) are entered as fit_quality,
+    not validation: the amplitudes A were chosen because they gave good fits and F_act as the value that best
+    fit the data (paper p. 10), and bl, sc scale the output to the experimental data. Only the shape of each
+    curve across frequency is not tuned point by point, and the record cannot judge that shape alone.
+  citation: {file: stretchscriptg.m, lines: "25-26", quote: "bl = 1.2; % Baseline value to scale results to experimental data (1.2)"}
+# ---- added by the cross-record validation job (andreu2021_code + andreu2021_data) --------------------
+- id: q_cross_source_data
+  kind: choice
+  about: [cmstretchg_port, andreu2021_data/fig1e_yap_2hz_b1, andreu2021_data/fig1e_pax_2hz_b1, q_cross_fit]
+  text: >-
+    No validation against the source data (record andreu2021_data) was entered. That record holds only the
+    per-cell samples behind each plotted point (tables indexed by sample_number, often split into blocks),
+    with no means or s.e.m.; the clutch model (cmstretchg_port) gives one population value per stretch and
+    frequency (yap_scaled, adhesion_length), which cannot be set against a list of single cells, and the
+    record has no processing model that averages the blocks into a mean per condition. The samples that
+    matter (Fig. 1e-h, YAP ratio and paxillin adhesion length at 2.5-20% stretch, 0.125-2 Hz triangular) are
+    those whose means the paper plots in Fig. 1 and overlays on the model in Fig. 2e, already compared here
+    (val_fig1*_yap, val_fig1*_pax) as fit_quality, since A, F_act, bl and sc were tuned to them (q_cross_fit):
+    averaged, they would again be a fit, not a test. The other measurements of that record (retrograde flow,
+    bead speed, loading rate, stiffness and recruitment under optical tweezers, AFM moduli, lung YAP, other
+    cell types) are not outputs of this model, or need conditions (bead geometry, trap stiffness, cell-type
+    parameters) that neither source gives for it. Open: a processing model in andreu2021_data that derives
+    the mean of each condition would let these entries be checked against the raw samples, still as
+    fit_quality.
+  citation: {none: "the source data and the model are in different records; the reason is structural"}
+# ---- added by the cross-record validation job (andreu2021_code + chan2008) --------------------------
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [cmstretchg_port, lr_rate_port, chan2008/v_fig3d_exp_sem, chan2008/v_fig3c_260, chan2008/v_fig3c_57k, chan2008/T_max_text]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of chan2008,
+    although the code says it builds on that model. chan2008 measures, in growth-cone filopodia of
+    embryonic chick forebrain neurons on unstretched polyacrylamide gels of 260 Pa to 57 kPa: the
+    retrograde flow rate (Fig. 3C means and histograms, Fig. 3D, Fig. S8C), the peak filopodial force and
+    force-to-bead distance (110 +- 25 pN, 150 +- 30 nm), bead step-size histograms and failure frequencies
+    (Figs. S4, S5) and surface tension (Fig. 4E). In cmstretchg_port the speed between actin and substrate
+    is not produced by motors but imposed by the stretch, vf = 2 A fr sign(sin 2 pi fr t) (cmstretchg.m
+    line 69): the flow is an input, not an output, and without stretch (fr = 0) nothing moves. Its outputs
+    (integrin density and its YAP scaling, mean substrate force and traction, mean bound clutches) are none
+    of chan2008's measured quantities: mf is a time-averaged force, chan2008's T the peak force of single
+    filopodia under myosin pulling, and choosing A and fr to mimic a ~100 nm/s flow would invent a
+    condition neither source states. lr_rate_port gives loading-rate-corrected rates that chan2008 does not
+    measure. In the other direction, see chan2008/q_xval_andreu2021_code_none.
+  citation: {file: cmstretchg.m, lines: "6-8", quote: "the flow between csk and substrate is not given by actomyosin contractility, but by an externally applied cyclic stretch"}
+# ---- added by the cross-record validation job (andreu2021_code + kong2009) --------------------------
+- id: q_xval_kong2009_none
+  kind: unstated_model
+  about: [lr_rate_port, cmstretchg_port, mn_a_code, mn_b_code, mn_c_code, mn_d_code, kong2009/lt_FN_a5b1Fc_Mn, kong2009/lt_FN_a5b1Fc_MgEGTA]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of kong2009,
+    although koffcb.m takes its off-rate "for a5b1 integrins (kong et al. JCB)": the 'mn' coefficients
+    (a, b, c, d; mn_*_code) are a two-exponential curve through Kong's Mn2+ lifetimes (Fig. 3 C, read in
+    kong2009 as lt_FN_a5b1Fc_Mn), and the unused 'mg' case a piecewise curve through the Mg2+/EGTA ones.
+    kong2009 measures the mean bond lifetime at a clamped force (s). No model here outputs that quantity:
+    lr_rate_port gives the unbinding rate corrected for a force ramp of loading rate L from a starting
+    force (corrected_unbinding_rate, 1/s), and cmstretchg_port gives integrin density, its YAP scaling,
+    mean force and traction, and bound clutches under cyclic stretch. The constant-force off-rate k_off(F)
+    is not a model of its own in this record (it sits inside lr_rate_port), and a rate is not a mean
+    lifetime: equating 1/k with the mean lifetime is an added single-exponential assumption that neither
+    source states and that Kong's own Fig. S5 (two subpopulations of events) argues against. Even if such
+    a model were added, the coefficients were fitted to this very curve, so the entry would be a
+    fit_quality check, not a test. Kong's other measurements (adhesion frequencies, rupture-force
+    histograms, molecular stiffness, event counts, flow cytometry) are outputs of neither model.
+  citation: {file: koffcb.m, lines: "2-3", quote: "% Calculates koff as a function of force for a5b1 integrins (kong et al."}

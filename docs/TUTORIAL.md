@@ -83,7 +83,8 @@ before it counts.
 ```
 
 A paper takes one to two hours and roughly $5-40 of agent time, most of it
-reading figures; a relation between two papers a few minutes and $0.3-2. The run
+reading figures; a relation between two papers, and then the check of each one's models against
+the other's measurements, a few minutes and $0.3-2 each. The run
 ends with a summary of what it spent and what, if anything, needs a person.
 `--status` shows every job; a call that was stopped before reporting its cost is
 listed with its tokens.

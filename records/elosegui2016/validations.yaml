@@ -1,0 +1,48 @@
+# The clutch model with talin unfolding (clutch_talin_sim) against the a5b1-mediated measurements of
+# elosegui2014. Neither paper says this model predicts those measurements: the 2016 model is described from
+# the 2014 one (p. 23, ref. 1 of the Supplementary Note = elosegui2014) and its parameters are the MEF values
+# of Supplementary Table 1, fitted to this paper's own MEF data, not to the 2014 cells. So these are
+# validations (not fits), and transfers across cell type: see q_val_elosegui2014_cell_type.
+- id: val_traction_myo_ctrl_2014
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: 'elosegui2014/traction_ctrl_fig1b'}
+  output: traction
+  against: 'elosegui2014/traction_ctrl_fig1b'
+  purpose: validation
+  quantities: {'elosegui2014/substrate_stiffness': substrate_rigidity, 'elosegui2014/cell_traction': cell_traction}
+  conditions_ok: >
+    Same laboratory, same measurement (traction force microscopy on fibronectin-coated polyacrylamide gels of
+    AFM-measured Young's modulus, method 'described previously5', p. 10), and both are adhesions mediated by
+    fibronectin-binding integrins with talin present (myo ctrl cells adhere mainly through a5b1 in elosegui2014).
+    The cell type differs (myoepithelial vs MEF): the cell-specific inputs (nm, nf, dint, kont, ra) are the MEF
+    values of Supplementary Table 1, which neither paper states for myo ctrl cells (q_val_elosegui2014_cell_type).
+  basis: >
+    clutch_talin_sim is the stochastic integrin-fibronectin clutch with talin-mediated integrin recruitment, an
+    adaptation of the elosegui2014 model ('adapting a Monte Carlo simulation approach previously described', p.
+    23); elosegui2014 drew its own clutch model (a5b1 parameters) through these myo ctrl tractions. Run at the
+    gel moduli of Fig. 1b, it gives the average cell traction there.
+- id: val_flow_a5b1_2014
+  model: clutch_talin_sim
+  inputs: {nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  sweep: {E: 'elosegui2014/flow_a5b1_fig4e'}
+  output: actin_flow
+  against: 'elosegui2014/flow_a5b1_fig4e'
+  purpose: validation
+  quantities: {'elosegui2014/substrate_stiffness': substrate_rigidity, 'elosegui2014/actin_flow_speed': actin_retrograde_flow}
+  conditions_ok: >
+    Same laboratory and same kind of measurement (lifeact-GFP actin rearward flow at the cell edge on
+    fibronectin-coated polyacrylamide gels), adhesion mediated by a5b1 with talin present. The cell type
+    differs (myoepithelial vs MEF); the cell-specific inputs are the MEF values of Supplementary Table 1
+    (q_val_elosegui2014_cell_type).
+  basis: >
+    The same model as val_traction_myo_ctrl_2014; its actin_flow output is the actin rearward speed the
+    elosegui2014 clutch model drew through these points (Fig. 4e, 'Lines indicate model predictions').

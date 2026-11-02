@@ -117,6 +117,26 @@ def _relations(args) -> int:
     return 1 if bad else 0
 
 
+def _validations(args) -> int:
+    """The models of these records judged against measurements in the others (validations.yaml)."""
+    from .synthesis import check_validations
+
+    only = [s for s in args.only.split(",") if s]
+    cache = args.cache or os.environ.get("BOXGRAPH_CACHE")
+    res = check_validations(args.records, only, cache_dir=Path(cache) if cache else None)
+    bad = 0
+    for v in res:
+        if v["status"] != "checked":
+            bad += 1
+            print(f"{v['id']:44} {v['status']}")
+            continue
+        print(f"{v['id']:44} {v['verdict']:15} {v['model']} against {v['against']}"
+              + (f"  ({'; '.join(v['correspondences'])})" if v["correspondences"] else ""))
+    if not res:
+        print("no validations between these records")
+    return 1 if bad else 0
+
+
 def _ingest(args) -> int:
     from .ingest import ingest
 
@@ -249,6 +269,11 @@ def main(argv=None) -> int:
     b.add_argument("--standalone", action="store_true", help="embed the explorer's images in the page (one file)")
     b.add_argument("--overview", help="YAML with the overview's introduction, links and case studies")
     b.set_defaults(fn=_build)
+    vl = sub.add_parser("validations", help="judge the models of some records against measurements in the others")
+    vl.add_argument("records")
+    vl.add_argument("--only", required=True, help="comma-separated record ids (each record's validations against the others)")
+    vl.add_argument("--cache", help="cache directory for model runs (default: $BOXGRAPH_CACHE, if set)")
+    vl.set_defaults(fn=_validations)
     rl = sub.add_parser("relations", help="test the relations entered in some records")
     rl.add_argument("records")
     rl.add_argument("--only", help="comma-separated record ids whose relations to test (default: all)")

@@ -209,3 +209,121 @@
     The same measurements appear to be re-plotted, so their validations against the clutch models are not
     independent of the Fig. 1a/3d ones.
   citation: {page: 13, printed_page: "SI 2", quote: "Note that in figure 1, talin 1 Head L325R data represent", where: "Supplementary Fig. 2 caption"}
+- id: q_val_elosegui2014_cell_type
+  kind: choice
+  about: [clutch_talin_sim, nf_table, nm_table, dint_table, kont_table, ra_table]
+  text: >
+    (Cross-validation.) val_traction_myo_ctrl_2014 and val_flow_a5b1_2014 run clutch_talin_sim with the MEF
+    parameters of Supplementary Table 1 on the gels of elosegui2014's myoepithelial cells. Neither paper states
+    nf, nm, dint, kont or ra for those cells (the elosegui2014 Supplementary Table 1 is unreadable in its copy),
+    and neither says this model predicts those measurements. Using MEF values is a choice: a mismatch may come
+    from the cell type rather than the model, and the verdicts test the model's transfer across cell types,
+    not the model on its own cells. Measurements not used: myo b6 tractions and the avb6-mediated series
+    (Fig. 1b blue, 4g-i), which bind through avb6, with kinetics this model does not have; Fig. 1c and 4d,
+    which re-plot or nearly repeat the a5b1 tractions of Fig. 1b; the integrin densities of Fig. 4f, i, l,
+    in arbitrary units, not the model's dint in 1/um^2; and the SPR, bead and recruitment data of Fig. 2,
+    which no model here outputs.
+- id: q_xval_gong2018_none
+  kind: unstated_model
+  about: [clutch_talin_sim, clutch_no_talin_sim]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    gong2018, which cites this paper. gong2018 measures cell spreading areas (Figs. 4D, 5D, 6D, S5A),
+    spreading speeds derived from them (Fig. S7) and the stress relaxation of its gels (Figs. 4B, 5B,
+    S6A). The clutch models here output traction stress, actin retrograde flow and integrin density
+    on purely elastic gels; none gives a spreading speed or area, and none has a viscoelastic
+    substrate, so none, run on gong2018's conditions, gives a quantity it measured.
+- id: q_xval_kong2009_none
+  kind: unstated_model
+  about: [clutch_talin_sim, clutch_no_talin_sim, koff_a_added, koff_b_added, koff_c_added, koff_d_added, 'kong2009/lt_FN_a5b1Fc_Mn']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of kong2009
+    (ref. 26, ST1-5, SN-3). The Supplementary Note says the catch-bond k_off(f) was fitted to the
+    fibronectin-a5b1 lifetimes measured with Mn2+ (kong2009 Fig. 3 C, lt_FN_a5b1Fc_Mn), but in this record
+    that rate law is not a model of its own: it is a part of clutch_talin_sim and clutch_no_talin_sim, whose
+    outputs are cell traction, actin flow and integrin density, and its coefficients are added (from
+    andreu2021_code), not printed. No model here outputs a single-bond lifetime versus force, so none, run on
+    kong2009's clamped forces, gives a quantity kong2009 measured; even a lifetime model would be a fit
+    (fit_quality), not a test, for the Mn2+ series. talin_unfolding_time gives talin unfolding times (fitted to
+    ref. 25 data), not integrin-ligand lifetimes. The other kong2009 measurements (lifetimes in other cations
+    and constructs, adhesion frequencies, rupture forces, stiffness, flow cytometry) are not outputs of any
+    model here either.
+  citation: {page: 24, quote: "parameters of the two exponentials were obtained after fitting the curve to experimental data", where: Supplementary Note}
+- id: q_xval_chan2008_none
+  kind: unstated_input
+  about: [clutch_no_talin_sim, clutch_talin_sim, nf_table, nm_table, kont_table, dint_table, ra_table, 'chan2008/v_fig3d_exp_sem', 'chan2008/v_figS8C_control', 'chan2008/v_fig3c_260', 'chan2008/v_fig3c_57k']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chan2008 (ref. 4, ST1-3), although this paper says its talin-depleted results "fully abide" by
+    chan2008's clutch model (p. 8) and clutch_no_talin_sim has the same shape as chan2008's
+    motor_clutch_E (actin speed from gel modulus, binding rates, stiffnesses and a motor velocity).
+    chan2008 measures F-actin retrograde flow in filopodia of embryonic chick forebrain neurons on
+    260 Pa to 57 kPa gels (Fig. 3C means, Fig. 3D with SEMs, Fig. S8C), filopodial forces (pN), bead
+    displacement histograms and failure rates. clutch_no_talin_sim and clutch_talin_sim, run with this
+    record's inputs, predict the periphery of a mouse embryonic fibroblast: nf, nm, kont, dadd and FR
+    were adjusted to this paper's MEF tractions (Supplementary Table 1), and ra = 1700 nm is an
+    adhesion's radius. Neither paper states nf, kont, dint, nm or ra for a neuron filopodium
+    (chan2008's nc clutches, kon and koff are not these ports), and whether talin unfolding
+    (clutch_talin_sim) or not (clutch_no_talin_sim) applies to those neurons is stated by neither, so
+    a run would not be on the measurement's own cells. The flows are also of different structures
+    (filopodia there; the cell periphery here, p. 10). chan2008's filopodial forces (pN), the
+    scaled surface tension (dimensionless), bead displacements and failure rates are not outputs of
+    these models (they give traction stress in Pa, actin speed and integrin density). In the other
+    direction, see chan2008/q_no_validation_elosegui2016.
+  citation: {page: 8, printed_page: "547", quote: "or integrin activity fully abides by the clutch model first proposed", where: text}
+- id: q_xval_bangasser2013b_none
+  kind: choice
+  about: [clutch_no_talin_sim, clutch_talin_sim, talin_unfolding_time, threshold_sensitivity, unfold_refold_crossing]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013b (ref. 33 here). bangasser2013b is a theory paper: its only measured data are the
+    computation times of its ODE and Monte Carlo software (bangasser2013b Fig. 6b), which no model
+    here predicts. Its other plotted values are predictions of its own models, not measurements, so
+    they are no validation target (relating the two clutch models is a model-to-model job). This paper
+    cites ref. 33 only for qualitative trends of the clutch model (p. 6). In the other direction, see
+    bangasser2013b/q_xval_elosegui2016_none.
+  citation: {page: 6, printed_page: "545", quote: "predicted to regulate force transmission32,33", where: text}
+- id: q_xval_bangasser2013_none
+  kind: choice
+  about: [clutch_no_talin_sim, clutch_talin_sim, talin_unfolding_time, threshold_sensitivity, unfold_refold_crossing]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013 (ref. 32 here), although clutch_no_talin_sim has the same shape as
+    bangasser2013/motor_clutch_ssa. This paper cites ref. 32 only for qualitative trends (p. 6, p. 8).
+    bangasser2013 is a theory paper; the measurements it plots are others' data: normalized migration
+    (Fig. 1A) and normalized traction (Fig. 1B) of U87, smooth muscle, neutrophil, NIH/3T3, neuron, T24
+    and BAEC cells, which are outputs of no model here (they give traction stress in Pa, not a value
+    normalized to each cell type's maximum); Kong et al.'s a5b1-fibronectin bond lifetimes (Fig. 7C),
+    which no model here outputs (the catch-bond k_off is part of the clutch simulations and its
+    coefficients are added; see q_xval_kong2009_none); and Chan and Odde's neuron filopodial flows
+    (Fig. S1B), the chan2008 measurements for which q_xval_chan2008_none gives the reasons: the clutch
+    models here carry MEF inputs (Supplementary Table 1) that neither paper states for neuron filopodia.
+    In the other direction, see bangasser2013/q_xval_elosegui2016_none.
+  citation: {page: 8, printed_page: "547", quote: "or integrin activity fully abides by the clutch model first proposed", where: text}
+- id: q_xval_andreu2021_none
+  kind: reading
+  about: [clutch_talin_sim, clutch_no_talin_sim, threshold_sensitivity, 'andreu2021/fig1b_flow', 'andreu2021/figS1a_yap', 'andreu2021/fig2c_adhesion']
+  text: >-
+    (Cross-record validation.) One andreu2021 measurement is a real target for clutch_talin_sim, but it
+    cannot be entered as a checkable validation as the datum is recorded, so none is added. andreu2021
+    Fig. 1b gives the actin retrograde flow of MEFs on 0.6 kPa polyacrylamide gels coated with 10 ug/mL
+    fibronectin (andreu2021 p. 8): the cell type and coating of this record's reference condition (nf =
+    1200 at 10 ug/ml, Fig. 6 caption, p. 7). andreu2021 calls it "indicative of a fast flow caused by low
+    adhesion (and thereby low actin attachment) to the ECM20" (andreu2021 p. 2; ref. 20 is this paper).
+    This record's MEF parameters were fitted to its own Fig. 3, not to that point, so it would be a
+    validation. But andreu2021/fig1b_flow is one two-entry datum indexed by a condition index (1 = 0.6 kPa
+    gel, 2 = glass), not by substrate rigidity: a scalar run at E = 0.6 kPa cannot be compared with a
+    two-entry table, a sweep cannot take a condition index as E (the two quantities are not the same), and
+    the glass point has no finite rigidity and was measured "at the very edge of lamellipodia (where
+    adhesion is still very low)" (andreu2021 p. 2), a state the model does not represent. andreu2021 also
+    holds no datum for the 0.6 kPa rigidity itself. The 0.6 kPa flow becomes checkable if andreu2021
+    records it as its own datum with the gel rigidity as a condition, which only that record's reader may
+    do; the text's "~50 nm/s" (andreu2021 p. 2) is approximate and gets no verdict. Other andreu2021
+    measurements considered and not used: YAP vs rigidity (Supplementary Fig. 1a) and every YAP ratio,
+    which no model here outputs; paxillin adhesion lengths (Fig. 1e-h, 2c, 4k, Supplementary Fig. 1, 3,
+    5d), where the models output an integrin density, not a length; and everything measured under
+    substrate stretch, optical-tweezer or AFM loading (Fig. 1e-h, 3, 4, Supplementary Fig. 2, 4, 5),
+    which no model here represents (none imposes substrate motion). The YAP onset at 3.4 kPa (andreu2021
+    p. 2) is a different quantity from threshold_sensitivity's E_threshold (a 10% rise in integrin
+    density) and is not a datum there. In the other direction, see andreu2021/q_xval_elosegui2016_none.
+  citation: {page: 7, quote: "nf = 1200 (blue, reference condition from", where: "Fig. 6 caption"}

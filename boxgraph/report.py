@@ -98,6 +98,8 @@ def build_index(syn: dict) -> dict[str, str]:
         add(cross_id(x), x)
     for c in syn["cited_values"]:
         add(c["datum"], c)
+    for v in syn.get("validations", []):
+        add(v["id"], v)
     for r in syn["references"]:
         add(f"ref:{r['source']}/{r['id']}", r)
     return {k: _material(*v) for k, v in idx.items()}
@@ -193,6 +195,13 @@ def review(syn: dict) -> list[Sentence]:
             f"Running {x['model']} on the inputs of {x['run']} gives {_fmt(x['computed_value'])} against "
             f"{x['printed']} printed as {x['printed_text']}: {x['verdict']}, given "
             + "; ".join(x["correspondences"]) + ".", [cross_id(x)], "cross"))
+    for v in syn.get("validations", []):
+        if v.get("status") != "checked":
+            continue
+        how = "fitted to" if v.get("purpose") == "fit_quality" else "judged against"
+        S.append(Sentence(f"{v['model']} is {how} {v['against']}, measured in {v['against_record']} "
+                          f"({v['id']}): {v['verdict']}" + (", given " + "; ".join(v["correspondences"]) if v["correspondences"] else "")
+                          + ".", [v["id"]], "cross"))
     for c in syn["cited_values"]:
         if c.get("status") == "checked":
             S.append(Sentence(f"{c['datum']} prints {c['printed']} and says it comes from {c.get('cited_record', c['from_source'])}, "

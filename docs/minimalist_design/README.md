@@ -51,4 +51,4 @@ the script, not the SVG files.
 | [4](figures/fig4-verdicts.svg) | Verdicts at the precision a value was printed with |
 | [5](figures/fig5-model-or-numerics.svg) | Whether a result belongs to the model or to its numerics |
 | [6](figures/fig6-modelatlas.svg) | ModelAtlas: models as stated, relations, a family |
-| [7](figures/fig7-two-checks.svg) | A paper against itself, and against another |
+| [7](figures/fig7-two-checks.svg) | A paper against itself, against another, and a model against another's measurement |

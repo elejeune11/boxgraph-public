@@ -11,6 +11,7 @@ result never depends on the order papers were added (principle 11).
 
 from __future__ import annotations
 
+from dataclasses import replace
 from itertools import combinations
 from pathlib import Path
 
@@ -22,7 +23,7 @@ from . import units as U
 from .atlas import families as compute_families
 from .atlas import test_relation
 from .engine import Builder, BuildError, RecordBuild, execute
-from .schema import ComparisonPurpose, Provenance
+from .schema import Comparison, ComparisonPurpose, Provenance, Run
 from .store import LoadedRecord, RecordLoadError, load_record, model_by_id
 from .validate import validate
 
@@ -389,6 +390,108 @@ def _cross_checks(records, sound, rel_results, rels, evaluated, cache_dir=None) 
 # --------------------------------------------------------------------------
 
 
+def _validations(records, sound, evaluated, cache_dir=None, only: set[str] | None = None) -> list[dict]:
+    """Each record's models judged against measurements in other records (validations.yaml). The model
+    runs on its record's values and the other record's, as built; quantities of the two records are
+    matched only where the record names them as the same (`quantities`)."""
+    out = []
+    for sid in sorted(records):
+        if sid not in sound or (only is not None and sid not in only):
+            continue
+        lr = records[sid]
+        for v in lr.record.validations:
+            other = v.against.split("/")[0]
+            if only is not None and other not in only:
+                continue
+            entry = {"id": g(sid, v.id), "record": sid, "model": g(sid, v.model), "against": v.against,
+                     "purpose": v.purpose.value,
+                     "against_record": other, "basis": v.basis, "correspondences": [], "added": []}
+            out.append(entry)
+            model = model_by_id(lr, v.model)
+            vals = dict(evaluated[sid][0])
+            notes: list[str] = []
+
+            try:
+                if model is None:
+                    raise _Unchecked(f"unknown model {v.model}")
+                if v.output not in model.outputs:
+                    raise _Unchecked(f"model {v.model} has no output {v.output}")
+                ctx = (sid, v, vals, notes, sound, evaluated)
+                inputs = {sym: _external(ctx, key, model.inputs[sym].quantity) if "/" in key and sym in model.inputs
+                          else key for sym, key in v.inputs.items()}
+                sweep = {sym: _external(ctx, key, model.inputs[sym].quantity, as_index=True)
+                         if "/" in key and sym in model.inputs else key for sym, key in v.sweep.items()}
+                if "/" not in v.against:
+                    raise _Unchecked("against must name a datum of another record")
+                _external(ctx, v.against, model.outputs[v.output].quantity)
+                b = Builder(lr, cache_dir=cache_dir)
+                out_id = f"{v.id}.{v.output}"
+                run = Run(id=f"validation {v.id}", model=v.model, inputs=inputs, sweep=sweep, settings=v.settings,
+                          outputs={v.output: out_id}, replicates=v.replicates)
+                rr, new = b._do_run(run, vals)
+                if not rr.ok:
+                    raise _Unchecked(rr.error or "the model did not run")
+                vals.update(new)
+                cr = b._compare(Comparison(id=v.id, purpose=v.purpose, computed=out_id,
+                                           printed=v.against, conditions_ok=v.conditions_ok), vals)
+                if not cr.ok:
+                    raise _Unchecked(cr.error or "the comparison failed")
+            except _Unchecked as e:
+                entry["status"] = f"cannot be checked: {e}"
+                entry["correspondences"] = sorted(set(notes))
+                continue
+            entry.update({"status": "checked", "verdict": cr.verdict, "per_value": cr.per_value,
+                          "computed_value": cr.computed_value, "computed_se": cr.computed_se,
+                          "printed_text": cr.printed_text, "difference": cr.difference,
+                          "conditions_note": cr.conditions_note, "correspondences": sorted(set(notes)),
+                          "added": sorted(set(rr.added_inputs))})
+    return out
+
+
+class _Unchecked(Exception):
+    pass
+
+
+def _external(ctx, key: str, want_quantity: str, as_index: bool = False) -> str:
+    """Another record's value, put into `vals` under the quantity this record names it as; returns its key."""
+    sid, v, vals, notes, sound, evaluated = ctx
+    rid, _, did = key.partition("/")
+    if rid not in sound:
+        raise _Unchecked(f"{rid} is not in the Synthesis")
+    ext = evaluated[rid][0].get(did)
+    if ext is None:
+        raise _Unchecked(f"{rid} has no datum {did!r}")
+    there = ext.index_quantity if as_index else ext.quantity
+    if there != want_quantity or rid != sid:
+        if v.quantities.get(f"{rid}/{there}") != want_quantity:
+            raise _Unchecked(f"say which quantity of {sid} {rid}/{there} is (quantities): "
+                             f"the model expects {want_quantity!r}")
+        notes.append(f"{rid}/{there} = {sid}/{want_quantity}")
+    here = f"{key}#index" if as_index else key
+    upd = {"index_quantity": want_quantity} if as_index else {"quantity": want_quantity}
+    if not as_index and ext.index_quantity:  # a curve: its index is named here too, where it is said
+        idx_here = v.quantities.get(f"{rid}/{ext.index_quantity}")
+        if idx_here:
+            upd["index_quantity"] = idx_here
+            notes.append(f"{rid}/{ext.index_quantity} = {sid}/{idx_here}")
+    vals[here] = replace(ext, id=here, **upd)
+    return here
+
+
+def check_validations(root: str | Path, only: list[str], cache_dir: Path | None = None) -> list[dict]:
+    """The validations between the named records, each record built on its own (for a job's gate)."""
+    records, _ = _load(Path(root))
+    sound, evaluated = set(), {}
+    for sid in sorted(set(only)):
+        if sid not in records or not validate(records[sid], run=False).sound:
+            continue
+        b = Builder(records[sid], cache_dir=cache_dir).build()
+        if not b.problems:
+            sound.add(sid)
+            evaluated[sid] = (b.values, b.runs, b.comparisons)
+    return _validations(records, sound, evaluated, cache_dir, only=set(only))
+
+
 def cross_id(x: dict) -> str:
     """The global id of one cross-paper check."""
     return f"cross:{x['relation']}:{x['run']}:{x.get('printed', '-')}:{x['model']}"
@@ -449,6 +552,7 @@ def build_synthesis(root: str | Path, cache_dir: Path | None = None) -> dict:
     cited = _cited_values(records, sound, builds)
     evaluated = {sid: (builds[sid].values, builds[sid].runs, builds[sid].comparisons) for sid in sound}
     cross = _cross_checks(records, sound, results, rels, evaluated, cache_dir)
+    validations = _validations(records, sound, evaluated, cache_dir)
     G = _graph(records, sound, cross)
 
     def implications_of(node: str) -> list[str]:
@@ -534,6 +638,7 @@ def build_synthesis(root: str | Path, cache_dir: Path | None = None) -> dict:
         "relations": [results[k].to_json() | {"key": k} for k in sorted(results)],
         "families": fams,
         "cross_checks": cross,
+        "validations": validations,
         "cited_values": cited,
         "findings": findings,
         "references": refs,

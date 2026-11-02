@@ -109,13 +109,14 @@ def _calls(log: Path) -> list[dict]:
 
 @needs_poppler
 def test_a_corpus_runs_end_to_end_and_a_second_run_spends_nothing(project, capsys):
-    """Two papers and one paper's code go through ingest, read, audit, digitize, relate and build; the ledger lists every
+    """Two papers and one paper's code go through ingest, read, audit, digitize, relate, validate and build; the ledger lists every
     job; the code's value that differs from the paper is a finding; a rerun runs no agent."""
     root, fake, log = project
     assert rp.main(["--agent", str(fake), "--state", str(root / "pipeline_state")]) == 0, capsys.readouterr().out
     done = rp.load_completed(root / "pipeline" / "completed.yaml")
     assert sorted(done) == ["audit:toy", "audit:toy2", "digitize:toy", "digitize:toy2", "read:toy", "read:toy2",
-                            "read:toycode", "relate:toy+toy2", "relate:toy+toycode"]
+                            "read:toycode", "relate:toy+toy2", "relate:toy+toycode", "validate:toy+toy2",
+                            "validate:toy+toycode"]
     syn = json.loads((root / "build" / "synthesis.json").read_text())
     assert any(f["subject"] == "toycode/k0_code" and f["kind"] == "cited_value" for f in syn["findings"])
     assert (root / "build" / "report.html").exists() and (root / "records" / "toy" / "text").is_dir()

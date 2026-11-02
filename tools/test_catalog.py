@@ -27,6 +27,7 @@ AREAS = {
     "test_figure_code.py": "Figure readings by the record's own code",
     "test_atlas.py": "ModelAtlas",
     "test_synthesis.py": "The Synthesis",
+    "test_validation.py": "Models against other papers' measurements",
     "test_report.py": "The written review",
     "test_explore.py": "The explorer page",
     "test_overview.py": "The overview page",

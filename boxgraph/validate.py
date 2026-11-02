@@ -353,6 +353,40 @@ def validate(lr: LoadedRecord, run: bool = True, cache_dir: Path | None = None) 
         for side in (c.computed, c.printed):
             if side not in node_ids:
                 E(f"comparison {c.id}: refers to unknown {side!r}")
+    # ---- models against another record's measurements --------------------------
+    models_by_id = {m.id: m for m in rec.models}
+    quantity_ids = {q.id for q in rec.quantities}
+    seen_v: set[str] = set()
+    for v in rec.validations:
+        where = f"validation {v.id}"
+        if v.id in seen_v or v.id in {c.id for c in rec.comparisons}:
+            E(f"{where}: id used twice")
+        seen_v.add(v.id)
+        if not v.basis.strip():
+            E(f"{where}: say why the model is expected to predict the measurement (basis)")
+        if v.purpose not in (ComparisonPurpose.validation, ComparisonPurpose.fit_quality):
+            E(f"{where}: purpose must be validation, or fit_quality for a model fitted to that measurement")
+        m = models_by_id.get(v.model)
+        if m is None:
+            E(f"{where}: unknown model {v.model!r}")
+        else:
+            if v.output not in m.outputs:
+                E(f"{where}: model {m.id} has no output {v.output!r}")
+            given = set(v.inputs) | set(v.sweep)
+            missing, unknown = sorted(set(m.inputs) - given), sorted(given - set(m.inputs))
+            if missing or unknown:
+                E(f"{where}: inputs do not match model {m.id}: missing {missing}, unknown {unknown}")
+        for sym, vid in {**v.inputs, **v.sweep}.items():
+            if "/" not in vid and vid not in node_ids:
+                E(f"{where}: input {sym} refers to unknown {vid!r}")
+        if v.against.count("/") != 1 or v.against.split("/")[0] in ("", rec.source.id):
+            E(f"{where}: against must name a datum of another record, as '<record>/<datum>' (got {v.against!r})")
+        for there, here in v.quantities.items():
+            if there.count("/") != 1:
+                E(f"{where}: quantities: {there!r} must be '<record>/<quantity>'")
+            if here not in quantity_ids:
+                E(f"{where}: quantities: {here!r} is not a quantity of this record")
+
     run_ids = {r.id for r in rec.runs}
     for ref in rec.refinements:
         if ref.run not in run_ids:

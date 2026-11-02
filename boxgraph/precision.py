@@ -106,6 +106,14 @@ def parse(text: str) -> Printed:
     raw = str(text)
     s = _normalise(raw)
     low = s.lower()
+    approx = re.compile("|".join(re.escape(m) for m in ("~", "≈", "≃", "∼", "about", "approx.", "approximately", "roughly")))
+    bare = approx.sub("", s).strip()
+    if bare != s.strip():  # an approximate range ('0 to ~30', '~5 to 50'): read, with no precision
+        m = re.match(rf"^(?P<a>{_NUM})\s*(?:to|-)\s*(?P<b>{_NUM})$", re.sub(r"\s+", " ", bare))
+        if m and not _PLAIN.match(bare):
+            a, _ = _parse_number(m.group("a"))
+            b, _ = _parse_number(m.group("b"))
+            return Printed(raw, (a + b) / 2, None, None, "none")
     for marker in NO_PRECISION_MARKERS:
         if low.startswith(marker):
             rest = s[len(marker):].strip()

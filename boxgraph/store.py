@@ -35,6 +35,7 @@ LIST_FILES = {
     "figures": "figures.yaml",
     "correspondences": "correspondences.yaml",
     "cited": "cited.yaml",
+    "validations": "validations.yaml",
 }
 
 

@@ -22,6 +22,12 @@ that review traces back to the records.
   condition, with the data it was plotted from. Where two sources print a
   value by different conventions (opposite signs), the link says so and
   the check applies and shows it.
+- **Models against other papers' measurements:** a model of one paper,
+  run on the conditions of a measurement printed in another, judged at
+  that measurement's precision. The record says why the model should
+  predict it, and names every quantity of the other paper it takes as the
+  same as one of its own. A paper written to explain another's data is
+  checked against that data.
 - **Findings:** a value that doesn't follow from its own inputs, a stated
   relation that is refuted, a result that belongs to its numerics rather
   than its model, a conflict inside a family. Each traces to the page and
@@ -32,23 +38,28 @@ that review traces back to the records.
   and which open questions it would settle, so the most useful paper to
   read next is known.
 
-## Two kinds of check
+## Kinds of check
 
-![Two kinds of check](figures/fig7-two-checks.svg)
+![Kinds of check](figures/fig7-two-checks.svg)
 
 *Figure 7. A paper against itself needs only that paper. A paper against
 another needs a verified relation that lets one paper's model run on the
-other's inputs.*
+other's inputs. A model against another paper's measurement needs the
+quantities the two share, named; where the model was fitted to that
+measurement, it is reported as a fit.*
 
 | | Needs | Gives |
 |---|---|---|
 | **A paper against itself** | only that paper | the paper's verdicts |
 | **A paper against another** | a verified relation in ModelAtlas | findings across papers |
+| **A model against another's measurement** | the shared quantities, named | a test of the model, or the quality of a fit |
 
 **Linked is not checked.** Papers are linked wherever a verified relation
 connects their models. A cross-paper check exists only where the link lets
 one paper's model run on another's inputs. A cited value is checked
-without any relation: it only needs both papers in the record.
+without any relation: it only needs both papers in the record. So is a
+model against another paper's measurement: it needs the model, the
+measurement, and the stated correspondence of their quantities.
 
 **Entering never requires reproducing.** A paper enters the Synthesis when
 its record is sound. Whether its results follow from its inputs is what the

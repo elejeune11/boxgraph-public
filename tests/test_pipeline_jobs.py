@@ -2,7 +2,7 @@
 
 import subprocess
 
-from pipeline.run_papers import jobs, papers, pending, plan, relate_jobs, select
+from pipeline.run_papers import jobs, papers, pending, plan, relate_jobs, select, validate_jobs
 
 
 def test_audit_passes_only_with_an_audit_log(tmp_path):
@@ -269,3 +269,27 @@ def test_a_stopped_run_says_how_to_resume(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(rp, "_run", stop)
     rc = rp.main(["--stages", "read", "--papers", "chan2008", "--rerun", "--state", str(tmp_path / "st")])
     assert rc == 130 and "run again to resume" in capsys.readouterr().out
+
+
+def test_validate_jobs_are_per_pair_and_write_only_validations_added_inputs_and_questions():
+    """A validation job per pair may write only the two records' validations, added inputs and questions; never their data, models or comparisons."""
+    (j,) = validate_jobs({("craig2015", "gardel2008"): ["a reason"]}, "m", 1)
+    assert j.id == "validate:craig2015+gardel2008" and j.locks == ["craig2015", "gardel2008"]
+    for rid in ("craig2015", "gardel2008"):
+        for f in ("validations.yaml", "added.yaml", "questions.yaml"):
+            assert f"records/{rid}/{f}" in j.writable
+    assert not any(w.endswith(("data.yaml", "comparisons.yaml", "runs.yaml")) or "models" in w for w in j.writable)
+
+
+def test_validate_gate_runs_both_records_and_checks_their_validations():
+    """A validation job passes only when both records are sound with their models run and every validation between them can be checked."""
+    (j,) = validate_jobs({("a", "b"): ["r"]}, "m", 1)
+    gate = " ".join(j.validate)
+    assert "validate records/a records/b" in gate and "validations records --only a,b" in gate
+
+
+def test_validation_jobs_are_kept_when_their_stage_is_chosen():
+    """Validation jobs are selected like relation jobs: by stage, by paper, and by id."""
+    val = validate_jobs({("a", "b"): ["r"], ("c", "d"): ["r"]}, "m", 1)
+    assert [j.id for j in select({"validate": val}, ["validate"], ["a"])] == ["validate:a+b"]
+    assert select({"validate": val}, ["relate"], None) == []

@@ -28,7 +28,7 @@ PURPOSES = {
     "fit_quality": "A fitted curve against the data it was fitted to.",
 }
 VERDICTS = ("reproduced", "close", "not reproduced", "no verdict")
-EVIDENCE = ("comparison", "relation", "cited", "cross_check", "figure", "refinement", "family", "question")
+EVIDENCE = ("comparison", "relation", "cited", "cross_check", "validation", "figure", "refinement", "family", "question")
 
 
 class CaseStudyError(ValueError):
@@ -93,6 +93,13 @@ def overview_data(syn: dict) -> dict:
             continue
         x = link(s, t, "cross_check")
         x.setdefault("verdicts", Counter())[c.get("verdict") or "no verdict"] += 1
+
+    for v in sorted(syn.get("validations", []), key=lambda v: v["id"]):
+        s, t_ = v["record"], v["against_record"]
+        if v.get("status") != "checked" or t_ not in papers or s not in papers or s == t_:
+            continue
+        x = link(s, t_, "validation")
+        x.setdefault("verdicts", Counter())[v.get("verdict") or "no verdict"] += 1
 
     sources = []
     for sid in sorted(papers, key=lambda k: (papers[k].get("year") or 0, k)):
@@ -215,7 +222,7 @@ def full_graph(data: dict, syn: dict) -> dict:
                    if r["a"] in ids and r["b"] in ids})
     edges += [{"kind": "relation", "a": a, "b": b, "relation": k, "status": st} for a, b, k, st in rels]
     for lk in data["links"]:
-        if lk["kind"] in ("cited", "cross_check"):
+        if lk["kind"] in ("cited", "cross_check", "validation"):
             edges.append({k: lk[k] for k in lk if k in ("kind", "a", "b", "agree", "differ", "unjudged", "verdicts")})
     nodes.sort(key=lambda n: n["id"])
     edges.sort(key=lambda e: (e["kind"], e["a"], e["b"], e.get("relation", ""), e.get("status", "")))
@@ -318,6 +325,14 @@ def _evidence(syn: dict, ref: str, outdir: Path, case: str) -> dict:
                 "printed": x.get("printed_text"), "computed": _fmt(x.get("computed_value")),
                 "verdict": x.get("verdict") or "no verdict", "added": x.get("added") or [],
                 "correspondences": x.get("correspondences") or []}
+    if kind == "validation":
+        x = next((x for x in syn.get("validations", []) if x["id"] == key), None)
+        if x is None:
+            raise CaseStudyError(f"case study {case}: validation {key} is not in the build")
+        return {"kind": kind, "id": key, "model": x["model"], "against": x["against"], "status": x["status"],
+                "basis": x.get("basis"), "printed": x.get("printed_text"), "computed": _fmt(x.get("computed_value")),
+                "verdict": x.get("verdict") or "no verdict", "per_value": x.get("per_value"),
+                "correspondences": x.get("correspondences") or [], "added": x.get("added") or []}
     if kind == "refinement":
         sid, _, rid = key.partition("/")
         r = next((r for r in papers.get(sid, {}).get("refinements", []) if r["id"] == rid), None)
@@ -446,6 +461,7 @@ section { display: grid; gap: 16px; min-width: 0; }
 .lk.relation { stroke: var(--link); }
 .lk.cited { stroke: var(--cited); stroke-dasharray: 5 4; }
 .lk.cross_check { stroke: var(--accent); stroke-dasharray: 1 4; }
+.lk.validation { stroke: var(--accent); stroke-dasharray: 8 3 2 3; }
 .nd { cursor: pointer; }
 .nd .shape { fill: var(--panel); stroke: var(--ink); stroke-width: 1.5; transition: stroke-width .15s; }
 .nd text.lb { font-size: 11.5px; fill: var(--ink); font-weight: 500; pointer-events: none; }
@@ -610,6 +626,7 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
     var A = short(S[l.a]), B = short(S[l.b]);
     if (l.kind === "relation") return A + " – " + B + ": " + Object.keys(l.status).map(function (k) { return l.status[k] + " " + (statusName[k] || k); }).join(", ") + " model relation(s) tested";
     if (l.kind === "cited") return A + " – " + B + ": values taken from one and checked against the other: " + (l.agree || 0) + " agree, " + (l.differ || 0) + " differ" + (l.unjudged ? ", " + l.unjudged + " without a verdict" : "");
+    if (l.kind === "validation") return A + " – " + B + ": a model of one judged against measurements of the other (" + Object.keys(l.verdicts).map(function (k) { return l.verdicts[k] + " " + k; }).join(", ") + ")";
     return A + " – " + B + ": a model of one run on the inputs of the other (" + Object.keys(l.verdicts).map(function (k) { return l.verdicts[k] + " " + k; }).join(", ") + ")";
   }
   function panelFor(id) {
@@ -721,12 +738,12 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       var nr = D.full.edges.filter(function (e) { return e.kind === "relation"; }).length;
       return '<div class="eyebrow">How to read this</div>' +
         "<p>Everything at once: " + D.sources.length + " sources (larger marks) and their " + nm + " models (small dots), each model joined to its source by a faint line.</p>" +
-        "<p>The " + nr + " relations tested between models are drawn between their dots: verified (dark), not verified or refuted (red), or not testable (grey). Between sources, dashed lines are values one takes from another, checked; dotted lines are a model run on another source's inputs.</p>" +
+        "<p>The " + nr + " relations tested between models are drawn between their dots: verified (dark), not verified or refuted (red), or not testable (grey). Between sources, dashed lines are values one takes from another, checked; dotted lines are a model run on another source's inputs; dash-dot lines are a model judged against another source's measurements.</p>" +
         "<p>Select a source or a model to follow its connections.</p>";
     }
     return '<div class="eyebrow">How to read this</div>' +
       "<p>Each mark is a source: a paper (circle), the code released with one (square), or its source data (diamond). Sources are placed by year, left to right.</p>" +
-      "<p>Lines join sources where something was tested between them: a relation between their models (solid), a value one takes from the other, checked against it (dashed), or one model run on the other's inputs (dotted). Thicker lines carry more checks.</p>" +
+      "<p>Lines join sources where something was tested between them: a relation between their models (solid), a value one takes from the other, checked against it (dashed), one model run on the other's inputs (dotted), or one model judged against the other's measurements (dash-dot). Thicker lines carry more checks.</p>" +
       "<p>Select a source to see what connects it, and its models around it. " + D.links.length + " links in all.</p>";
   }
   function legend() {
@@ -734,8 +751,8 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
     if (VIEW === "full") return '<span><svg width="12" height="10"><circle cx="6" cy="5" r="3" class="mdkey"/></svg>a model</span>' +
       "<span>" + line("mb", 1) + "model of a source</span><span>" + line("rl st-verified", 1.5) + "relation verified</span>" +
       "<span>" + line("rl st-not_verified", 1.5) + "not verified or refuted</span><span>" + line("rl st-unverifiable", 1.5) + "not testable</span>" +
-      "<span>" + line("lk cited", 2) + "values taken and checked</span><span>" + line("lk cross_check", 2) + "a model run on another's inputs</span>";
-    return "<span>" + line("lk relation", 2) + "model relations tested</span><span>" + line("lk cited", 2) + "values taken and checked</span><span>" + line("lk cross_check", 2) + "a model run on another's inputs</span>";
+      "<span>" + line("lk cited", 2) + "values taken and checked</span><span>" + line("lk cross_check", 2) + "a model run on another's inputs</span>" + "<span>" + line("lk validation", 2) + "a model against another's measurements</span>";
+    return "<span>" + line("lk relation", 2) + "model relations tested</span><span>" + line("lk cited", 2) + "values taken and checked</span><span>" + line("lk cross_check", 2) + "a model run on another's inputs</span>" + "<span>" + line("lk validation", 2) + "a model against another's measurements</span>";
   }
   function renderGraph() {
     app.querySelector(".canvas").innerHTML = VIEW === "full" ? fullGraph() : graph();
@@ -834,6 +851,12 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       '<div class="row"><span class="mono">' + esc(e.model) + "</span> on the inputs of " + src(e.on_inputs_of + "/") + "</div>" +
       '<div class="row"><span>Printed <span class="big">' + esc(e.printed) + '</span></span><span>Computed <span class="big">' + esc(e.computed) + "</span></span>" + pill(e.verdict) + "</div>" +
       (e.added.length ? '<div class="detail">Inputs added: ' + esc(e.added.join("; ")) + "</div>" : "") + "</div>";
+    if (e.kind === "validation") return '<div class="ev"><div class="row"><span class="eyebrow">A model against another paper\'s measurement</span></div>' +
+      '<div class="row"><span class="mono">' + esc(e.model) + "</span> against " + src(e.against) + ' <span class="mono">' + esc(e.against.split("/").slice(1).join("/")) + "</span></div>" +
+      (e.status === "checked" ? '<div class="row"><span>Measured <span class="big">' + (Array.isArray(e.printed) ? esc(e.printed.join(", ")) : esc(e.printed)) + '</span></span><span>Predicted <span class="big">' + esc(e.computed) + "</span></span>" + pill(e.verdict) + "</div>"
+        : '<div class="detail">' + esc(e.status) + "</div>") +
+      '<div class="detail">Why this model should predict it: ' + esc(e.basis) + "</div>" +
+      (e.correspondences.length ? '<div class="detail">Taken as the same quantity: ' + esc(e.correspondences.join("; ")) + "</div>" : "") + "</div>";
     if (e.kind === "refinement") return '<div class="ev"><div class="row"><span class="eyebrow">A numerical setting refined</span>' + src(e.source) + "</div>" +
       '<div class="tbl"><table><thead><tr><th>' + esc(e.setting) + '</th><th>' + esc(e.output) + "</th></tr></thead><tbody>" +
       e.series.map(function (x, i) { return '<tr><td class="mono">' + num(x.setting) + (i === 0 ? ' <span class="muted">(the paper\'s setting)</span>' : "") + '</td><td class="mono">' + num(x.value) + "</td></tr>"; }).join("") + "</tbody></table></div>" +

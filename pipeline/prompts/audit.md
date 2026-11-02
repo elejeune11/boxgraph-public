@@ -1,5 +1,6 @@
 You are auditing the BoxGraph record `records/{id}/`, read from `{file}` (PDF pages {first}-{last}) by
-another agent. Text is in `records/{id}/text/`, page images in `records/{id}/pages/`.
+another agent. Text is in `records/{id}/text/`, page images in `records/{id}/pages/` (open them with the
+Read tool). Figures are read by the next job, from the PDF; here, do not render pages or read figures.
 
 Your job is a second, independent reading of the same paper against the record. Check:
 1. Every number in `data.yaml` against the page image: digits, sign, exponent, unit, page. OCR errors in

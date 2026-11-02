@@ -170,3 +170,132 @@
     k_sub = 1 pN/nm (the code's value) the 20% panel comes close and the others partly. The measured data
     thus side with the code's value, as q_ksub_unit argues from the Fig. 2e lines.
   citation: {page: 23, quote: "Substrate spring constant 1 µN/nm", where: Supplementary Table 4}
+# ---- added by the cross-record validation job (andreu2021 + andreu2021_code) -------------------------
+- id: q_no_cross_validation_code
+  kind: choice
+  about: [clutch_stretch_sim]
+  text: >-
+    No validation of this record's clutch model against the measurements in andreu2021_code was added. Those
+    are the YAP ratios (yap_exp_*) and adhesion lengths (length_exp_*) of experimental data.mat: the model has
+    no YAP output, and the adhesion lengths are the same measurements as Fig. 1e-h (already compared here,
+    val_fig1*_pax_*), plus two points a sweep over them must include but the model cannot represent: the
+    5.6569 Hz point is the square 1 Hz signal (Sq) and the 0 Hz point the unstretched control (Ns), not
+    triangular-signal frequencies (andreu2021_code q_fre_ns_sq). On the five triangular points the comparison
+    is the one this record already makes, and it is fitted (A and F_act chosen as best fits, output scaled to
+    the experimental lengths), so it measures a fit rather than a test.
+  citation: {page: 10, quote: "provided good ﬁts at values ranging from 1.5 to 3", where: "Methods, Model parameters"}
+# ---- added by the cross-record validation job (andreu2021 + andreu2021_data) -------------------------
+- id: q_no_cross_validation_data
+  kind: choice
+  about: [clutch_stretch_sim, edge_speed, supp_table1_edge]
+  text: >-
+    No validation of this record's models against the measurements in andreu2021_data was added. Every
+    measured datum there (634) holds the per-cell values of one condition, indexed by sample number, and the
+    record holds no mean: it leaves means and s.e.m. to a processing model, which it does not have. The
+    clutch model outputs one time-averaged adhesion length per stretch and frequency, the mean the paper
+    plots, not a per-cell value. A sweep over sample number would mean nothing, and comparing the mean with
+    each cell's value would test the cell-to-cell spread, which the model does not predict. Where the means
+    can be compared (the paxillin lengths of Fig. 1e-h at 0.125-2 Hz), this record already compares them,
+    read from the figure (val_fig1*_pax_*). That comparison is a fit, not a test: A and F_act were chosen as
+    best fits, and the output is scaled to the measured lengths. The Sq and Ns blocks are not
+    triangular-signal frequencies, which the model needs. The YAP ratios have no model output. The bead
+    speeds, loading rates and stiffnesses of Fig. 3, Fig. 4 and Supplementary Fig. 4 come from
+    magnetic-tweezers beads, not from the cell edge under substrate stretch that edge_speed and
+    supp_table1_edge describe. The AFM moduli, lung YAP, gel rigidities and treatment groups have no model
+    here. If andreu2021_data gains per-condition means, the Fig. 1e-h adhesion lengths can be entered as
+    fit_quality.
+  citation: {page: 10, quote: "provided good ﬁts at values ranging from 1.5 to 3", where: "Methods, Model parameters"}
+# ==== cross-record validation with bangasser2013 (2026-11-02): none added ======================
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [clutch_stretch_sim, edge_speed, supp_table1_edge]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013, which this paper cites (ref. 79) only for the Gillespie algorithm of its simulations
+    (Methods item 3, p. 10). bangasser2013's measured data are normalized cell migration and traction of
+    other papers' cell types vs substrate modulus (Fig. 1A-B), Kong et al.'s alpha5beta1-fibronectin bond
+    lifetimes vs force (Fig. 7C) and Chan and Odde's neuron retrograde flow vs modulus (Fig. S1B). The
+    models here output an integrin density and adhesion length under imposed cyclic stretch
+    (clutch_stretch_sim) and the deformation speed, load and loading rate at the cell edge (edge_speed,
+    supp_table1_edge): none of these quantities is measured there. clutch_stretch_sim's catch-bond rate
+    law is a fit to Kong et al.'s lifetimes (koff_a_added and following, from Supplementary Software 1),
+    but it is not a model of this record with a lifetime output, and the fit would make it fit_quality
+    anyway; it has no flow output (flows are imposed by stretch, p. 10) and no traction output either. In
+    the other direction, see bangasser2013/q_xval_andreu2021_none.
+  citation: {page: 10, quote: "by a Gillespie algorithm79 which only executes one event per", where: "Methods, Computational clutch model, item 3"}
+# ==== cross-record validation with bangasser2013b (2026-11-02): none added =====================
+- id: q_xval_bangasser2013b_none
+  kind: unstated_model
+  about: [clutch_stretch_sim, edge_speed, supp_table1_edge, fig1b_flow]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013b, and no model of bangasser2013b against a measurement here. This paper does not cite
+    bangasser2013b: its ref. 79 is Bangasser, Rosenfeld and Odde 2013 (Biophys. J.; the bangasser2013
+    record), cited only for the Gillespie algorithm (Methods item 3, p. 10). bangasser2013b is theory: its
+    only data of origin measured are the run times of its ODE and Monte Carlo software (fig6b_*_cal), which
+    no model here outputs. clutch_stretch_sim and bangasser2013b/clutch_ensemble_timecourse are both clutch
+    models built from force, rates and stiffness, but the outputs differ (an integrin density scaled to an
+    adhesion length here; bound fraction, clutch force, F-actin flow and off-rate there), and both sides'
+    curves are predictions, not measurements. In the other direction, the one measurement here that a model
+    there would output is the actin retrograde flow of Fig. 1b (fig1b_flow, MEFs on 0.6 kPa gels and on
+    glass), against clutch_ensemble_cycle's cycle-mean flow; see bangasser2013b/q_xval_andreu2021_none for
+    why it is not entered.
+  citation: {page: 10, quote: "by a Gillespie algorithm79 which only executes one event per", where: "Methods, Computational clutch model, item 3"}
+# ==== cross-record validation with chan2008 (2026-11-02): none added ===========================
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [clutch_stretch_sim, edge_speed, supp_table1_edge, fig1b_flow]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of chan2008,
+    and no model of chan2008 against a measurement here. This paper cites chan2008 (ref. 21) only as an
+    example of clutch models of rigidity sensing (p. 2) and states no comparison with its data.
+    chan2008's measurements are embryonic chick neuron filopodia on gels without imposed stretch:
+    F-actin retrograde flow rates and their histograms, bead displacements, step sizes, failure
+    frequencies and filopodial forces vs gel modulus. edge_speed and chan2008/motor_clutch_E share the
+    shape of a velocity from a length and a rate, but edge_speed's output is the deformation speed of
+    the cell edge under externally applied cyclic stretch (|v| = 2Af), which chan2008 never imposes or
+    measures; a retrograde flow driven by myosin is a different quantity of the same dimension, so the two
+    are not mapped. supp_table1_edge adds only load and loading rate at the stretched cell edge, and
+    clutch_stretch_sim outputs an integrin density scaled to a paxillin adhesion length under stretch;
+    chan2008 measures neither. In the other direction, the one measurement here that a chan2008 model
+    outputs is the retrograde flow of Fig. 1b (fig1b_flow); see chan2008/q_xval_andreu2021_none for why
+    it is not entered (neuron filopodia parameters, no fibroblast set, a low-adhesion glass point).
+  citation: {page: 2, printed_page: "2", quote: "factors such as ECM rigidity20,21, viscosity22, or ligand density23", where: "Introduction"}
+# ==== cross-record validation with elosegui2016 (2026-11-02): none added =======================
+- id: q_xval_elosegui2016_none
+  kind: choice
+  about: [clutch_stretch_sim, edge_speed, supp_table1_edge, fig1b_flow]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2016 (ref. 20). clutch_stretch_sim is "based on our previous work20" (p. 4) and has the same
+    input shape as elosegui2016/clutch_talin_sim, but it has no myosin motors: its clutches are loaded only
+    by the imposed stretch (|v| = 2Af, p. 10), and its output is the time-averaged integrin density scaled
+    to the paxillin adhesion-length axis of this paper's Fig. 2e (len0, len_scale). elosegui2016 measures
+    unstretched MEFs pulling with their own myosin: traction and actin flow vs rigidity (its Fig. 1a, 3d,
+    3e, 6), vinculin, beta3-integrin and pFAK adhesion lengths (Fig. 1c, 2a, 2c, 4c, 5c), YAP, a bond
+    lifetime (Fig. 3a) and a threshold rigidity of about 5 kPa. Run with A = 0 the model loads no clutch
+    and stays at d_min, which predicts none of these; its length scaling is set on this paper's paxillin
+    lengths, not on vinculin lengths; and it has no traction, flow or YAP output. edge_speed and
+    supp_table1_edge give the kinematics of a stretched cell edge, which elosegui2016 does not impose or
+    measure. In the other direction, the measurement here that elosegui2016/clutch_talin_sim would
+    predict is the actin flow on 0.6 kPa gels (fig1b_flow); see elosegui2016/q_xval_andreu2021_none for
+    why it cannot be entered as the datum is recorded.
+  citation: {page: 4, printed_page: "4", quote: "model based on our previous work20", where: "text, A clutch model considering how the loading rate"}
+# ==== cross-record validation with kong2009 (2026-11-02): none added ===========================
+- id: q_xval_kong2009_none
+  kind: unstated_model
+  about: [clutch_stretch_sim, edge_speed, supp_table1_edge, koff_a_added, koff_b_added, koff_c_added, koff_d_added, 'kong2009/lt_FN_a5b1Fc_Mn']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of kong2009
+    (ref. 39). The paper says the integrin unbinding rate "depends on force as a catch bond as
+    experimentally measured20,39" (p. 10), and the added k_off coefficients (koff_*_added, from
+    Supplementary Software 1, koffcb.m case 'mn') are a two-exponential curve through Kong's Mn2+
+    lifetimes (kong2009 Fig. 3 C, lt_FN_a5b1Fc_Mn). But that rate law is not a model of its own here: it
+    sits inside clutch_stretch_sim, whose outputs are the time-averaged integrin density and its scaling
+    to adhesion length under cyclic stretch. kong2009 measures mean single-bond lifetimes at a clamped
+    force (Figs. 3-6), adhesion frequencies, rupture forces and molecular stiffness; none is an output of
+    clutch_stretch_sim, edge_speed (cell-edge speed) or supp_table1_edge (cell-edge deformation, load and
+    loading rate). Even a lifetime model built from k_off would be a fit (fit_quality) for the Mn2+ series,
+    not a test, and taking 1/k_off as the mean lifetime is a single-exponential assumption that kong2009's
+    Fig. S5 argues against. In the other direction, see kong2009/q_xval_andreu2021_none.
+  citation: {page: 10, printed_page: "10", quote: "depends on force as a catch bond as", where: "Methods, Computational clutch model"}

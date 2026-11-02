@@ -1,4 +1,4 @@
-# Status: version 0.7 (2026-11-01)
+# Status: version 0.8 (2026-11-02)
 
 ## What exists
 
@@ -7,7 +7,7 @@
   the soundness validator.
 - **ModelAtlas**: relation tests for all five kinds, families.
 - **The Synthesis**: per-paper verdicts by purpose, cross-paper checks, cited-value
-  checks, six kinds of finding, implications, references, a traced written review,
+  checks, models judged against other papers' measurements (v0.8), six kinds of finding, implications, references, a traced written review,
   Markdown and HTML report.
 - **The reading pipeline** (`pipeline/`): ingest, reader guide, read / audit / relate
   jobs run as parallel headless agent jobs, gated by the validator,
@@ -26,7 +26,8 @@
 - **Adding papers** (`pipeline/`): `python -m pipeline.add` registers a PDF;
   `run_papers` runs read, audit and digitize per paper, picks the pairs worth
   relating from the records (citations, models described from another, same
-  shape), relates each pair with locks on both records, and builds. A committed
+  shape), relates each pair with locks on both records, then runs a validate
+  job for the pair (v0.8), and builds. A committed
   ledger (`pipeline/completed.yaml`) keeps finished jobs from running again.
   Diagrams: `docs/pipeline.html`.
 - **Builds recompute, they do not re-run:** model runs, relation tests and
@@ -49,7 +50,16 @@
   outside its record and for page content in a record, required logs must be
   fresh, and the run ends with a summary and an exit code. An end-to-end test
   runs the whole pipeline with a fake agent in CI.
-- **311 tests** (catalogue in `docs/TESTS.md`), lint and CI (green).
+- **Models against other papers' measurements** (v0.8): a record's
+  `validations.yaml` says which of its models predicts which measurement of
+  another record, on which inputs, and which quantities of the two are the same.
+  The build runs the model on the other record's values (figure readings
+  included) and judges it at the measurement's precision. A model fitted to that
+  measurement is entered with `purpose: fit_quality` and reported as a fit.
+- **The overview** (v0.7): `build/overview/index.html`, served from `site/`: the
+  sources and models as a graph (in full, or the sources alone by year), three
+  case studies and a view per source.
+- **353 tests** (catalogue in `docs/TESTS.md`), lint and CI (green).
 
 ## The corpus
 
@@ -103,6 +113,31 @@ cost $5-40 to read, audit and digitize, depending on how many figures plot
 data; a relation job $0.3-1.6. After the batch: 204 findings, 59 relations,
 two families, one cross-paper check. The batch papers' findings are in
 `build/report.html` and have not yet been reviewed by a person.
+
+Validations (v0.8): a validate job ran for each of the 48 related pairs, all
+passed their gates ($39.42 in all, $0.3-1.6 a pair, plus one stopped call not
+priced). They entered 20 validations, every one checked by the build, and for the other
+pairs a question saying why none applies (most pairs are two theory papers, or
+a measurement no model there predicts). Only two are tests, and neither
+reproduces: Elosegui 2016's talin clutch model against Elosegui 2014's traction
+under myosin inhibition (Fig. 1b, which rises and then falls with stiffness;
+the model keeps rising) and its α5β1 retrograde flow (Fig. 4e). The other 18 are
+fits, the model tuned to that data:
+
+| Model | Against | Verdict |
+|---|---|---|
+| Bangasser 2013 simulation | Chan 2008 flow, 260 Pa and 57 kPa | both reproduced |
+| Bangasser 2013b software | the same | 260 Pa not reproduced (49 against 78 ± 4 nm/s), 57 kPa close |
+| Odde lab code | the same | 260 Pa not reproduced (43 against 78 ± 4 nm/s), 57 kPa reproduced |
+| Andreu 2021 code | Andreu 2021 Fig. 1e-h, YAP and paxillin, four stretches | 1 reproduced, 3 close, 4 not reproduced |
+| Chan 2008 model | Bangasser 2013 Fig. S1B | not reproduced |
+| Bangasser 2013 Eq. 9 (catch-slip bond) | Kong 2009 Fig. 3A lifetimes | not reproduced: Kong's lifetimes first fall with force, Eq. 9's only rise then fall |
+
+The two implementations that miss at 260 Pa may be run with parameters other
+than the set fitted to Chan; a person should check. Craig 2015 against Gardel
+2008 is not a test (Craig's parameters were chosen to match Gardel's cells) and
+cannot be checked as a fit (per-cell scales are not printed): an open question
+in Craig's record.
 
 Findings:
 
@@ -197,9 +232,9 @@ approximation within a 10% tolerance the relator chose, and is not verified
 - Cross-paper checks do not yet carry curves across papers.
 - The evaluation corpus is one synthetic paper; the figure-reading test is
   eight real panels.
-- **Costs of stopped attempts are not recorded**: an attempt stopped at a time
+- **Costs of stopped attempts are not priced**: an attempt stopped at a time
   limit never reports its cost, so the ledger undercounts resumed jobs (by
-  about a quarter in wave 2). The transcripts have the token counts to fix it.
+  about a quarter in wave 2). `--status` lists their tokens from the transcripts.
 - **Source data with samples only:** Andreu's spreadsheet gives per-sample
   values, not the means and SEMs the figures plot, so no figure reading could be
   measured against it. That needs a processing step (mean and SEM of a sample
@@ -213,11 +248,9 @@ approximation within a 10% tolerance the relator chose, and is not verified
 
 ## Next
 
-1. An overview site for showing the Synthesis: the knowledge graph first,
-   three case studies, a page per source.
-2. A person reviews the findings against the papers, the batch's first.
+1. A person reviews the findings and the validations against the papers, the
+   batch's first.
+2. A second field: 0D and 1D models of the cardiovascular system.
 3. A processing step for sample tables, so source data measures figure readings.
-4. Record the cost of stopped attempts from the transcripts.
-5. More synthetic evaluation papers, one per finding kind.
-6. Second independent readings, and a comparison of the two.
-7. The next papers, chosen from `build/report.html` "What to read next".
+4. More synthetic evaluation papers, one per finding kind.
+5. Second independent readings, and a comparison of the two.
