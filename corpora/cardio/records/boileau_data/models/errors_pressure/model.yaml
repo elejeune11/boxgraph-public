@@ -1,0 +1,16 @@
+id: errors_pressure
+name: relative pressure errors of a released 1D waveform against the released reference (boileau2015 Eqs. 10-13, pressure forms)
+role: processing
+software: true
+stated: {file: Benchmark2_CommonCarotidArtery/README.txt, lines: "16-24", quote: "col 2: pressure [kPa]"}
+equation: "E_P^RMS = sqrt(1/n sum ((P_i^1D - P_i)/P_i)^2); E_P^MAX = max_i |(P_i^1D - P_i)/P_i|; E_P^SYS = (max P^1D - max P)/max P; E_P^DIAS = (min P^1D - min P)/min P"
+inputs:
+  t_ini: {quantity: time, unit: s, description: "start of the last 1D cardiac cycle, as the README or time_shifts.txt gives it"}
+  t_lag: {quantity: time_lag, unit: s, description: "where t = 0 of the reference record falls after t_ini (added)"}
+  period: {quantity: cardiac_period, unit: s, description: "period of the inflow; a time past t_ini + period is taken one period earlier"}
+outputs:
+  rms: {quantity: pressure_rms_error, unit: percent}
+  max: {quantity: pressure_max_error, unit: percent}
+  sys: {quantity: pressure_systolic_error, unit: percent}
+  dias: {quantity: pressure_diastolic_error, unit: percent}
+settings: {reference_file: "", reference_column: 2, solution_file: "", solution_column: 2}

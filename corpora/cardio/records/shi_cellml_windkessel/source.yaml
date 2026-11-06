@@ -1,0 +1,51 @@
+id: shi_cellml_windkessel
+kind: software
+title: Lumped-parameter cardiovascular model with Windkessel after-load (CellML)
+authors: [Yubing Shi, Rod Hose]
+year: 2019
+url: https://models.physiomeproject.org/cardiovascular_circulation
+version: "sha256:ed827f8e18724c19b510975f2f18038c5811695a691cae3a9b3a06fc0d6e5fb8"
+licence: none stated
+language: cellml
+file: corpus/cardio/code/shi_cellml_windkessel
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-02"}
+notes: >
+  What the code is. A CellML 1.1 model (workspace changeset a47dc58c5d9b) of the Fig. 1(a) model
+  of shi2018: a left atrium and left ventricle as variable-elastance chambers with on-off (diode)
+  mitral and aortic valves, driving a two-element Windkessel (R, C) whose outflow returns
+  directly to the left atrium; no pulmonary loop. Entry point MainWindKessel.cellml imports
+  ModelLeftHeart.cellml (LA = TempCDa, LV = TempCDv, Ela = EAtrium, Elv = EVentricle, parameters
+  ParaLeftHeart) and ModelWindKessel.cellml (Zwk = TempRC, parameters ParaWindKessel); Units.cellml
+  defines the units (UnitP = 133 Pa, UnitV = 1 mL). ParaSys.cellml (systemic segment parameters)
+  is in the folder but not imported by this model, so it is not recorded here. windkessel.ai,
+  .png and .svg are circuit diagrams. No licence file or header. Authors from the file's RDF
+  metadata (Shi, Hose); year of the paper, since the code gives none; url is shi2018 ref [19].
+
+  How it was read. CellML is not run here: the equations of the nine imported files are ported
+  line by line to Python (models/windkessel_left_heart, our code), and the 21 parameter values and
+  initial values the model uses are cited by file and line. The CellML has no solver settings; the
+  port uses RK4 at dt = 0.1 ms for 10 s and reports the 10th beat (q_solver; refinements show the
+  results unchanged to < 0.01%).
+
+  Against the papers. shi2018 prints no parameter value and says they are those of ref [5]
+  (korakianitis2006), so the heart parameters are linked to korakianitis2006 Tables 1, 2 and 5:
+  elastances, reference pressures and volumes, valve coefficients CQao/CQmi and T agree as
+  written. Differences and hidden choices: the initial LV volume is 500 mL in the code against
+  V_lv0 = 800 ml in korakianitis2006 Table 2, and the initial LA volume (20 mL) and initial
+  Windkessel pressure (0) are printed nowhere (q_vlv0_initial); the Windkessel R = 0.55 mmHg s/mL
+  and C = 2.8 mL/mmHg are printed in neither paper and are not lumped sums of the korakianitis2006
+  segments (q_windkessel_values); activation times are fractions of T, and Ts2 = 0.45 T is printed
+  nowhere (q_timing_fractions); the ventricular activation function has the usual 1 - cos /
+  1 + cos form, which differs from korakianitis2006 Eq. 3 as recorded there (q_elastance_form);
+  valves are on-off, not the leaflet dynamics of korakianitis2006 (q_valves_simplified); pi is
+  3.14159 and UnitP is 133 Pa (q_pi, q_unit_pressure).
+
+  What it reproduces. shi2018 prints no result of the Fig. 1(a) model, so nothing here is a
+  reproduction (the validator's one warning; q_no_printed_results). Its Section 3 results are for
+  the Fig. 1(d) model; they are copied here (from_datum) and the code's run is compared with them
+  as an approximation. Run as released, the Windkessel model gives LV pressure about 9.6-120 mmHg
+  and Windkessel pressure about 78-120 mmHg, near the printed 0-120 and 80-120 mmHg, but LV volume
+  about 52-202 mL, stroke volume about 150 mL, mean flow about 9 L/min and peak aortic and mitral
+  flows about 1580 and 1260 mL/s, against the printed 55-130 mL, 75 mL, 5 L/min, 1000 and 800 mL/s
+  (the build gives the exact values and verdicts). The code's own claim of validation against
+  published data is therefore not borne out for flows and volumes (q_validation_claim_code).

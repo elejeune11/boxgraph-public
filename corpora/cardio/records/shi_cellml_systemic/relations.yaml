@@ -1,0 +1,246 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_systemic_collapses_to_windkessel
+  kind: reduces_to
+  a: shi_cellml_systemic/systemic_left_heart
+  b: shi_cellml_windkessel/windkessel_left_heart
+  mapping:
+    ElaMax: "ElaMax"
+    ElaMin: "ElaMin"
+    PlaIni: "PlaIni"
+    VlaIni: "VlaIni"
+    ElvMax: "ElvMax"
+    ElvMin: "ElvMin"
+    PlvIni: "PlvIni"
+    VlvIni: "VlvIni"
+    T: "T"
+    Tpwb: "Tpwb"
+    Tpww: "Tpww"
+    Ts1: "Ts1"
+    Ts2: "Ts2"
+    CVao: "CVao"
+    CVmi: "CVmi"
+    Vlv0: "Vlv0"
+    Vla0: "Vla0"
+    Cwk: "Csas + Csat + Csvn"
+    Rwk: "Rsvn"
+    P0: "(Csas*P0sas + Csat*P0sat + Csvn*P0svn)/(Csas + Csat + Csvn)"
+    pi: "pi"
+  output_map: {P_art_max: P_sat_max}
+  limit: {Lsas: "0", Lsat: "0", Rsas: "0", Rsat: "0", Rsar: "0", Rscp: "0"}
+  regime:
+    ElaMax: [0.2, 0.3]
+    ElaMin: [0.12, 0.18]
+    PlaIni: [0.5, 1.5]
+    VlaIni: [3, 5]
+    ElvMax: [2.0, 3.0]
+    ElvMin: [0.08, 0.12]
+    PlvIni: [0.5, 1.5]
+    VlvIni: [4, 6]
+    T: [0.9, 1.1]
+    Tpwb: [0.9, 0.94]
+    Tpww: [0.08, 0.1]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    CVao: [300, 400]
+    CVmi: [350, 450]
+    Vlv0: [400, 600]
+    Vla0: [10, 30]
+    Rsas: [0.002, 0.004]
+    Csas: [0.2, 0.4]
+    Lsas: [0.00005, 0.00008]
+    P0sas: [80, 120]
+    Q0sas: [0, 0]
+    Rsat: [0.04, 0.06]
+    Csat: [1.2, 2.0]
+    Lsat: [0.0013, 0.0021]
+    P0sat: [80, 120]
+    Q0sat: [0, 0]
+    Rsar: [0.4, 0.6]
+    Rscp: [0.4, 0.6]
+    Rsvn: [0.2, 1.0]
+    Csvn: [10, 30]
+    P0svn: [0, 10]
+    pi: [3.14159, 3.14159]
+  assumptions:
+    - "only the two inertances and the four upstream resistances go to zero; the three compliances are kept and merge into one node (if C and L shrink together, sinus and artery stay undamped LC resonators of impedance sqrt(L/C) and the peak pressure does not converge)"
+    - "P0 is the volume-weighted initial pressure: in the limit the three nodes equalize at once, conserving stressed volume; the initial flows Q0sas and Q0sat have no counterpart"
+    - "Csas is sampled from 0.2 upward (code value 0.08): at L = 1e-8 the sinus LC mode makes the fixed-step RK4 (dt = 0.1 ms) of model.py unstable for Csas below about 0.15; the limit itself holds for any Csas"
+  provenance: proposed
+  reason: >
+    The two CellML workspaces share the heart files line for line, and the Windkessel afterload
+    (ModelWindKessel, TempRC) is the same component as the systemic vein segment Svn (TempRC). With
+    the sinus and artery inertances and the sinus, artery, arteriole and capillary resistances at
+    zero, the aortic sinus, artery and vein are one pressure node of compliance Csas + Csat + Csvn
+    draining to the left atrium through Rsvn: the two-element Windkessel of MainWindKessel. Neither
+    code states this; the windkessel record notes its own R and C are not lumped sums of these
+    segments, so the relation is between the models, not between their parameter values.
+- id: rel_systemic_code_from_korakianitis2006
+  kind: derived_from
+  a: korakianitis2006/circulation_valves
+  b: shi_cellml_systemic/systemic_left_heart
+  mapping:
+    ElaMax: "Ela_max"
+    ElaMin: "Ela_min"
+    PlaIni: "Pla0"
+    VlaIni: "Vla0"
+    ElvMax: "Elvs"
+    ElvMin: "Elvd"
+    PlvIni: "Plv0"
+    VlvIni: "Vlv0"
+    T: "T"
+    Tpwb: "Tpwb/T"
+    Tpww: "Tpww/T"
+    Ts1: "Ts1/T"
+    Ts2: "Ts2/T"
+    CVao: "CQao"
+    CVmi: "CQmi"
+    Vlv0: "Vlv_init"
+    Vla0: "Vla_init"
+    Rsas: "Rsas"
+    Csas: "Csas"
+    Lsas: "Lsas"
+    P0sas: "Psas_init"
+    Q0sas: "0"
+    Rsat: "Rsat"
+    Csat: "Csat"
+    Lsat: "Lsat"
+    P0sat: "Psat_init"
+    Q0sat: "0"
+    Rsar: "Rsar"
+    Rscp: "Rscp"
+    Rsvn: "Rsvn"
+    Csvn: "Csvn"
+    P0svn: "Psvn_init"
+    pi: "3.14159"
+  output_map: {P_lv_max: Plv_max}
+  steps:
+    - "take the on-off valve of Eq. 7 for the mitral and aortic valves (setting valve_model: on_off); with AR = 0 for a negative pressure difference Eq. 6 gives no backflow, as in TempCD"
+    - "remove the right atrium, right ventricle, tricuspid and pulmonary valves and the pulmonary loop, and return the systemic venous flow of Eq. 20 to the left atrium (P_ra -> P_la)"
+    - "replace the ventricular activation of Eq. 3 as printed by 1 - cos(pi t/T_s1) on [0, T_s1] and 1 + cos(pi (t - T_s1)/(T_s2 - T_s1)) on (T_s1, T_s2]"
+    - "let the atrial activation of Eq. 5 that runs past T wrap into the start of the next cycle"
+    - "drive the artery flow of Eq. 18 by P_sat instead of P_sas as printed: dQ_sat/dt = (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat"
+    - "write the activation times as fractions of T, set pi = 3.14159, and start the two inertance flows at 0"
+  assumptions:
+    - "circulation_valves runs the leaflet-dynamics valve by default; the derivation starts from its on-off branch (Eq. 7)"
+    - "a's right-heart and pulmonary inputs (and their initial values) have no counterpart in b"
+  provenance: proposed
+  reason: >
+    The code's notes (source.yaml) and shi2018 (its rel_fig1c_code_from_fig1d and
+    rel_fig1d_is_korakianitis2006) make this code the left-heart and systemic part of korakianitis2006's
+    Eqs. 1-20: the chamber law P = P0 + e (V - V0) (Eq. 4), the on-off valve flow CQ sqrt(dP) (Eqs. 6-7),
+    the R-L-C sinus and artery (Eqs. 15-18), the resistive arteriole and capillary and the R-C vein
+    (Eqs. 19-20) are the same equations in other symbols, and 22 of the code's parameter values are
+    korakianitis2006's (data.yaml from_datum). Neither source states the derivation. The code changes the
+    ventricular activation (Eq. 3), the artery-flow driver (Eq. 18) and the circuit (no right heart or
+    pulmonary loop), so b is neither the same as a nor a parameter limit of it: the relation is a
+    derivation in words, with the input mapping that shi2018's rel_fig1c_code_from_fig1d cannot give.
+- id: rel_systemic_reduced_from_closed_loop_cellml
+  kind: derived_from
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi_cellml_systemic/systemic_left_heart
+  mapping:
+    ElaMax: "ElaMax"
+    ElaMin: "ElaMin"
+    PlaIni: "PlaIni"
+    VlaIni: "VlaIni"
+    ElvMax: "ElvMax"
+    ElvMin: "ElvMin"
+    PlvIni: "PlvIni"
+    VlvIni: "VlvIni"
+    T: "T"
+    Tpwb: "Tpwb"
+    Tpww: "Tpww"
+    Ts1: "Ts1"
+    Ts2: "Ts2"
+    CVao: "CVao"
+    CVmi: "CVmi"
+    Vlv0: "Vlv0"
+    Vla0: "Vla0"
+    Rsas: "Rsas"
+    Csas: "Csas"
+    Lsas: "Lsas"
+    P0sas: "P0sas"
+    Q0sas: "Q0sas"
+    Rsat: "Rsat"
+    Csat: "Csat"
+    Lsat: "Lsat"
+    P0sat: "P0sat"
+    Q0sat: "Q0sat"
+    Rsar: "Rsar"
+    Rscp: "Rscp"
+    Rsvn: "Rsvn"
+    Csvn: "Csvn"
+    P0svn: "P0svn"
+    pi: "pi"
+  output_map: {P_lv_max: P_lv_max}
+  steps:
+    - "remove the right atrium and ventricle (RA, RV with Era, Erv), the tricuspid and pulmonary valves and the pulmonary loop (ModelPul: Pas, Pat, Par, Pcp, Pvn)"
+    - "connect the systemic vein outflow to the left atrium: Svn.Po = LA.Pi and Svn.Qo = LA.Qi (MainSystemic) in place of Svn.Po = RA.Pi, Svn.Qo = RA.Qi (ModelMain)"
+    - "keep the left heart (TempCDa, TempCDv, EAtrium, EVentricle, the left-side ParaHeart values) and the systemic loop (ModelSys, ParaSys, TempRLC, TempR, TempRC) unchanged"
+  regime:
+    ElaMax: [0.225, 0.275]
+    ElaMin: [0.135, 0.165]
+    PlaIni: [0.9, 1.1]
+    VlaIni: [3.6, 4.4]
+    ElvMax: [2.25, 2.75]
+    ElvMin: [0.09, 0.11]
+    PlvIni: [0.9, 1.1]
+    VlvIni: [4.5, 5.5]
+    EraMax: [0.225, 0.275]
+    EraMin: [0.135, 0.165]
+    PraIni: [0.9, 1.1]
+    VraIni: [3.6, 4.4]
+    ErvMax: [1.035, 1.265]
+    ErvMin: [0.09, 0.11]
+    PrvIni: [0.9, 1.1]
+    VrvIni: [9, 11]
+    T: [1, 1]
+    Tpwb: [0.92, 0.93]
+    Tpww: [0.08, 0.09]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    CVao: [315, 385]
+    CVmi: [360, 440]
+    CVpa: [315, 385]
+    CVti: [360, 440]
+    Vlv0: [450, 550]
+    Vla0: [15, 25]
+    Vra0: [15, 25]
+    Vrv0: [450, 550]
+    Rsas: [0.0027, 0.0033]
+    Csas: [0.072, 0.088]
+    Lsas: [0.0000558, 0.0000682]
+    P0sas: [90, 110]
+    Q0sas: [0, 0]
+    Rsat: [0.045, 0.055]
+    Csat: [1.44, 1.76]
+    Lsat: [0.00153, 0.00187]
+    P0sat: [90, 110]
+    Q0sat: [0, 0]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    P0svn: [0, 5]
+    Rpas: [0.0018, 0.0022]
+    Cpas: [0.162, 0.198]
+    Lpas: [0.0000468, 0.0000572]
+    P0pas: [20, 30]
+    Q0pas: [0, 0]
+    Rpat: [0.009, 0.011]
+    Cpat: [3.42, 4.18]
+    Lpat: [0.00153, 0.00187]
+    P0pat: [20, 30]
+    Q0pat: [0, 0]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0006, 0.006]
+    Cpvn: [18.45, 22.55]
+    P0pvn: [0, 5]
+    pi: [3.14159, 3.14159]
+  provenance: stated
+  citation: {file: MainSystemic.cellml, lines: "41", quote: "it is one of a family that can be obtained by reduction of a more complex model that is published separately", where: "documentation, Model Structure"}
+  assumptions:
+    - "The documentation does not name the 'more complex model'. It is taken as the full closed loop of the sibling workspace shi_hose_2009 (korakianitis_cellml), by the same authors in the same CellML series: its template files (TempCDa, TempCDv, TempRLC, TempR, TempRC, EVentricle) and ModelSys hold the same equations, its EAtrium the same atrial activation written as mt - Tpwb T + T where this code writes mt - (Tpwb - 1) T, and its left-side heart and systemic parameters are this code's values."
+    - "'Reduction' is taken as removing the right heart and pulmonary loop and closing the systemic loop on the left atrium; no parameter limit of the closed loop gives this circuit, so the steps are structural and cannot be applied symbolically."
+    - "a's right-heart and pulmonary inputs (and their initial values) have no counterpart in b; each of b's inputs is the input of a with the same name."

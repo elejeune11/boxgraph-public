@@ -1,0 +1,49 @@
+# Parameter values written in the code that the Windkessel model uses (MainWindKessel.cellml imports
+# ModelLeftHeart, ModelWindKessel, and through them ParaLeftHeart, ParaWindKessel, TempCDa, TempCDv,
+# TempRC, EAtrium, EVentricle, Units). ParaSys.cellml is in the folder but not imported: left out.
+# Units: the code's UnitP (133 Pa) is entered as mmHg, UnitV (0.001 L) as mL, UnitE as mmHg/mL, etc.
+# shi2018 prints no parameter value; it says they are those of ref [5] (korakianitis2006), so the
+# heart parameters are checked against korakianitis2006 Tables 1, 2 and 5.
+
+# --- left atrium (ParaLeftHeart -> LA, Ela)
+- {id: ElaMax_code, quantity: chamber_elastance, unit: mmHg/mL, origin: reported, printed: "0.25", from_source: korakianitis2006, from_datum: Ela_max, citation: {file: ParaLeftHeart.cellml, lines: "12", quote: 'initial_value="0.25" name="ElaMax"'}}
+- {id: ElaMin_code, quantity: chamber_elastance, unit: mmHg/mL, origin: reported, printed: "0.15", from_source: korakianitis2006, from_datum: Ela_min, citation: {file: ParaLeftHeart.cellml, lines: "13", quote: 'initial_value="0.15" name="ElaMin"'}}
+- {id: PlaIni_code, quantity: chamber_reference_pressure, unit: mmHg, origin: reported, printed: "1.0", from_source: korakianitis2006, from_datum: Pla0, citation: {file: ParaLeftHeart.cellml, lines: "14", quote: 'initial_value="1.0" name="PlaIni"'}, note: "mapped to Pini of LA (ModelLeftHeart.cellml line 83): the reference pressure, not an initial value despite its name"}
+- {id: VlaIni_code, quantity: chamber_reference_volume, unit: mL, origin: reported, printed: "4.0", from_source: korakianitis2006, from_datum: Vla0, citation: {file: ParaLeftHeart.cellml, lines: "15", quote: 'initial_value="4.0" name="VlaIni"'}, note: "mapped to Vini of LA (ModelLeftHeart.cellml line 84): the reference volume"}
+# --- left ventricle (ParaLeftHeart -> LV, Elv)
+- {id: ElvMax_code, quantity: chamber_elastance, unit: mmHg/mL, origin: reported, printed: "2.5", from_source: korakianitis2006, from_datum: Elvs, citation: {file: ParaLeftHeart.cellml, lines: "16", quote: 'initial_value="2.5" name="ElvMax"'}}
+- {id: ElvMin_code, quantity: chamber_elastance, unit: mmHg/mL, origin: reported, printed: "0.1", from_source: korakianitis2006, from_datum: Elvd, citation: {file: ParaLeftHeart.cellml, lines: "17", quote: 'initial_value="0.1" name="ElvMin"'}}
+- {id: PlvIni_code, quantity: chamber_reference_pressure, unit: mmHg, origin: reported, printed: "1.0", from_source: korakianitis2006, from_datum: Plv0, citation: {file: ParaLeftHeart.cellml, lines: "18", quote: 'initial_value="1.0" name="PlvIni"'}, note: "mapped to Pini of LV (ModelLeftHeart.cellml line 91): the reference pressure"}
+- {id: VlvIni_code, quantity: chamber_reference_volume, unit: mL, origin: reported, printed: "5.0", from_source: korakianitis2006, from_datum: Vlv0, citation: {file: ParaLeftHeart.cellml, lines: "19", quote: 'initial_value="5.0" name="VlvIni"'}, note: "mapped to Vini of LV (ModelLeftHeart.cellml line 92): the reference volume"}
+# --- timing
+- {id: T_code, quantity: heart_period, unit: s, origin: reported, printed: "1.0", from_source: korakianitis2006, from_datum: T_period, citation: {file: ParaLeftHeart.cellml, lines: "20", quote: 'initial_value="1.0" name="T"'}}
+- {id: Tpwb_code, quantity: p_wave_onset_fraction, unit: dimensionless, origin: reported, printed: "0.92", citation: {file: ParaLeftHeart.cellml, lines: "21", quote: 'initial_value="0.92" name="Tpwb"'}, note: "a fraction of T in the code (EAtrium uses Tpwb*T); korakianitis2006 prints T_pwb = 0.92 s, the same time with T = 1 s (question q_timing_fractions)"}
+- {id: Tpww_code, quantity: p_wave_duration_fraction, unit: dimensionless, origin: reported, printed: "0.09", citation: {file: ParaLeftHeart.cellml, lines: "22", quote: 'initial_value="0.09" name="Tpww"'}, note: "a fraction of T; korakianitis2006 prints T_pww = 0.09 s (question q_timing_fractions)"}
+- {id: Ts1_code, quantity: peak_systole_fraction, unit: dimensionless, origin: reported, printed: "0.3", citation: {file: ParaLeftHeart.cellml, lines: "23", quote: 'initial_value="0.3" name="Ts1"'}, note: "a fraction of T; korakianitis2006 prints only Ts = 0.3 s (question q_timing_fractions)"}
+- {id: Ts2_code, quantity: end_systole_fraction, unit: dimensionless, origin: reported, printed: "0.45", citation: {file: ParaLeftHeart.cellml, lines: "24", quote: 'initial_value="0.45" name="Ts2"'}, note: "not printed in korakianitis2006 or shi2018 (question q_timing_fractions)"}
+# --- valves
+- {id: CVao_code, quantity: valve_flow_coefficient, unit: mL/(s*mmHg^0.5), origin: reported, printed: "350.", from_source: korakianitis2006, from_datum: CQao, citation: {file: ParaLeftHeart.cellml, lines: "25", quote: 'initial_value="350." name="CVao"'}}
+- {id: CVmi_code, quantity: valve_flow_coefficient, unit: mL/(s*mmHg^0.5), origin: reported, printed: "400.", from_source: korakianitis2006, from_datum: CQmi, citation: {file: ParaLeftHeart.cellml, lines: "26", quote: 'initial_value="400." name="CVmi"'}}
+# --- initial volumes
+- {id: Vlv0_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "500", from_source: korakianitis2006, from_datum: Vlv_init_table2, citation: {file: ParaLeftHeart.cellml, lines: "27", quote: 'initial_value="500" name="Vlv0"'}, note: "mapped to V0 of LV (ModelLeftHeart.cellml line 94), the initial_value of V (TempCDv.cellml line 25); korakianitis2006 Table 2 prints V_lv0 = 800 ml (question q_vlv0_initial)"}
+- {id: Vla0_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "20", citation: {file: ParaLeftHeart.cellml, lines: "28", quote: 'initial_value="20" name="Vla0"'}, note: "mapped to V0 of LA, the initial LA volume; not printed in either paper"}
+# --- Windkessel (ParaWindKessel -> Zwk)
+- {id: Cwk_code, quantity: vascular_compliance, unit: mL/mmHg, origin: reported, printed: "2.8", citation: {file: ParaWindKessel.cellml, lines: "12", quote: 'initial_value="2.8" name="Cwk"'}, note: "not printed in shi2018 or korakianitis2006 (question q_windkessel_values)"}
+- {id: Rwk_code, quantity: vascular_resistance, unit: mmHg*s/mL, origin: reported, printed: "0.55", citation: {file: ParaWindKessel.cellml, lines: "13", quote: 'initial_value="0.55" name="Rwk"'}, note: "not printed in shi2018 or korakianitis2006 (question q_windkessel_values)"}
+- {id: P0wk_code, quantity: initial_vessel_pressure, unit: mmHg, origin: reported, printed: "0.", citation: {file: ParaWindKessel.cellml, lines: "14", quote: 'initial_value="0." name="P0"'}, note: "the initial Windkessel pressure (TempRC.cellml line 12: Pi initial_value P0)"}
+# --- constants written in the equations
+- {id: pi_code_atrium, quantity: pi_constant, unit: dimensionless, origin: reported, printed: "3.14159", citation: {file: EAtrium.cellml, lines: "22", quote: 'cellml:units="dimensionless">3.14159</cn>'}, note: "pi written to six figures in the atrial activation function (question q_pi)"}
+- {id: pi_code_ventricle, quantity: pi_constant, unit: dimensionless, origin: reported, printed: "3.14159", citation: {file: EVentricle.cellml, lines: "20", quote: 'cellml:units="dimensionless">3.14159</cn>'}, note: "the same in the ventricular activation function"}
+
+# --- results that shi2018 prints for its Fig. 1(d) model (Section 3, p. 7), copied from the paper's
+# record to judge how well the Fig. 1(a) Windkessel reduction approximates them (comparisons.yaml)
+- {id: lv_pressure_min_shi2018, quantity: min_lv_pressure, unit: mmHg, origin: predicted, printed: "0", from_source: shi2018, from_datum: lv_pressure_min_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: lv_pressure_max_shi2018, quantity: peak_lv_pressure, unit: mmHg, origin: predicted, printed: "120", from_source: shi2018, from_datum: lv_pressure_max_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: arterial_pressure_min_shi2018, quantity: min_arterial_pressure, unit: mmHg, origin: predicted, printed: "80", from_source: shi2018, from_datum: arterial_pressure_min_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: arterial_pressure_max_shi2018, quantity: peak_arterial_pressure, unit: mmHg, origin: predicted, printed: "120", from_source: shi2018, from_datum: arterial_pressure_max_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: mean_flow_shi2018, quantity: mean_valve_flow, unit: L/min, origin: predicted, printed: "~5", from_source: shi2018, from_datum: mean_flow_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: peak_aortic_flow_shi2018, quantity: peak_aortic_flow, unit: mL/s, origin: predicted, printed: "~1000", from_source: shi2018, from_datum: peak_aortic_flow_mls, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: peak_mitral_flow_shi2018, quantity: peak_mitral_flow, unit: mL/s, origin: predicted, printed: "~800", from_source: shi2018, from_datum: peak_mitral_flow_mls, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: lv_volume_min_shi2018, quantity: min_lv_volume, unit: mL, origin: predicted, printed: "55", from_source: shi2018, from_datum: lv_volume_min_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: lv_volume_max_shi2018, quantity: max_lv_volume, unit: mL, origin: predicted, printed: "130", from_source: shi2018, from_datum: lv_volume_max_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}
+- {id: stroke_volume_shi2018, quantity: stroke_volume, unit: mL, origin: derived, printed: "75", from_source: shi2018, from_datum: stroke_volume_text, citation: {none: "printed in shi2018 p. 7 for the Fig. 1(d) model, not in the code"}}

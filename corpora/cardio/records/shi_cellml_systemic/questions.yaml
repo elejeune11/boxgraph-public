@@ -1,0 +1,207 @@
+- id: q_no_printed_results
+  kind: unstated_model
+  about: [systemic_left_heart]
+  text: >
+    This code is the Fig. 1(c) model of shi2018 ("Systemic model with multi-compartment afterload":
+    left heart plus the systemic loop, venous return straight to the left atrium). shi2018 shows
+    it only as a schematic (Figs. 1(c), 2, 3) and prints no result of it; its only results
+    (Fig. 5, Section 3) are for the Fig. 1(d) model, whose CellML is not in this folder. So
+    nothing here is a reproduction; the comparisons judge the code against the full-circulation
+    results of shi2018 and korakianitis2006 (purpose approximation).
+- id: q_eq18_code
+  kind: unexplained_difference
+  about: [systemic_left_heart]
+  text: >
+    In the code the systemic artery flow is driven by the artery pressure: Sat is a TempRLC
+    (dQo/dt = (Pi - Po - R Qo)/L with Pi = P_sat) whose Po is Sar.Pi = P_svn + (R_sar + R_scp) Q_sat,
+    i.e. dQ_sat/dt = (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat. korakianitis2006 Eq. 18
+    as recorded there has P_sas - P_svn (the aortic sinus pressure), which that record flags as a
+    possible misprint (korakianitis2006 q_eq18_psas). The code, by the paper's second author,
+    follows the analogy with Eq. 16, which supports reading Eq. 18 as a misprint.
+  citation: {file: ModelSys.cellml, lines: "75-79", quote: '<map_components component_1="Sat" component_2="Sar"/>'}
+- id: q_return_to_la
+  kind: choice
+  about: [systemic_left_heart]
+  text: >
+    The venous segment empties straight into the left atrium (MainSystemic.cellml connects
+    Vessel.Po and Vessel.Qo to LEFTHeart.Pi and Qi), so the right heart and the pulmonary loop of
+    korakianitis2006 are left out; Svn keeps the korakianitis2006 resistance R_svn = 0.075 and
+    compliance C_svn = 20.5. This is the reduction shi2018 describes for Fig. 1(c). The vena cava
+    compliance C_svc = 1.5 ml/mmHg of korakianitis2006 Table 2 is not in the code (it is in no
+    equation of that paper either: its q_vena_cava).
+  citation: {file: MainSystemic.cellml, lines: "75-81", quote: '<map_variables variable_1="Pi" variable_2="Po"/>'}
+- id: q_initial_values
+  kind: unstated_input
+  about: [Vlv0_code, Vla0_code, P0sas_code, P0sat_code, P0svn_code, Q0sas_code, Q0sat_code]
+  text: >
+    The code starts the left ventricle at 500 mL, the left atrium at 20 mL, the aortic sinus and
+    artery at 100 mmHg and the vein at 0 mmHg, with zero flows. With no unstressed vessel volume
+    this fixes the circulating volume of the closed loop at 500 + 20 + 0.08 x 100 + 1.6 x 100 +
+    20.5 x 0 = 688 mL, which sets every pressure, flow and volume of the periodic solution. None
+    of these initial values is printed in either paper; korakianitis2006 Table 2 prints
+    V_lv0 = 800 ml (read in that record as an initial LV volume; its q_vlv0_table2), which the
+    code does not use.
+  citation: {file: ParaSys.cellml, lines: "17-32", quote: 'name="P0svn"'}
+- id: q_timing_fractions
+  kind: choice
+  about: [Tpwb_code, Tpww_code, Ts1_code, Ts2_code]
+  text: >
+    The code writes the activation times as dimensionless fractions of the period T (Tpwb = 0.92,
+    Tpww = 0.09, Ts1 = 0.3, Ts2 = 0.45, used as Tpwb*T etc.), while korakianitis2006 prints them in
+    seconds (T_pwb 0.92 s, T_pww 0.09 s, Ts 0.3 s) with T = 1 s. With T = 1 s they are the same
+    times, so they are not linked for a unit check here. The code settles what korakianitis2006
+    leaves open (its q_ts1_ts2): Ts1 = 0.3 T is the peak of activation and Ts2 = 0.45 T its end.
+    Ts2 is printed in neither paper.
+  citation: {file: ParaLeftHeart.cellml, lines: "21-24", quote: 'name="Ts2"'}
+- id: q_elastance_form
+  kind: unexplained_difference
+  about: [systemic_left_heart]
+  text: >
+    The code's ventricular activation is et = 1 - cos(pi t/Ts1) rising to 2 at Ts1, then
+    1 + cos(pi (t - Ts1)/(Ts2 - Ts1)) falling to 0 at Ts2, with E = Emin + et (Emax - Emin)/2, so
+    E runs from Emin to Emax. Eq. 3 of korakianitis2006 as recorded there is cos(t/T_s1 pi) and
+    cos((t + T_s2 - T_s1)/T_s1 pi), which gives a negative elastance (its q_eq3_activation). The
+    code's form is the one that record suggests Eq. 3 was meant to be.
+  citation: {file: EVentricle.cellml, lines: "20", quote: '<apply><eq/><ci>et</ci>'}
+- id: q_atrial_wrap
+  kind: choice
+  about: [systemic_left_heart, Tpwb_code, Tpww_code]
+  text: >
+    Tpwb + Tpww = 1.01 exceeds 1, and the code wraps the last 0.01 T of atrial activation into the
+    start of the next cycle (the first branch of EAtrium, 0 <= mt <= (Tpwb + Tpww - 1) T).
+    korakianitis2006 Eq. 5 as recorded there cuts it off instead (its q_e_wave_atrial_wrap).
+  citation: {file: EAtrium.cellml, lines: "22", quote: '<apply><eq/><ci>et</ci><piecewise>'}
+- id: q_valves_simplified
+  kind: choice
+  about: [systemic_left_heart]
+  text: >
+    The valves are on-off diodes (Tao = 1 when the upstream pressure is at least the downstream,
+    else 0) with an orifice law Q = CV |dP|^0.5, as in korakianitis2006 Eqs. 6-7 (its Section 3.1
+    results), not the leaflet dynamics of its Eqs. 8 and 14. The code's documentation says so:
+    valve dynamics "have to be simplified in the current CellML implementation". No backflow is
+    possible (the backward branch is multiplied by Tao = 0), whatever the sign printed in
+    korakianitis2006 Eq. 6 (its q_eq6_sign).
+  citation: {file: MainSystemic.cellml, lines: "19", quote: "have to be simplified in the current CellML implementation"}
+- id: q_arterial_pressure
+  kind: reading
+  about: [arterial_pressure_min_shi2018, arterial_pressure_max_shi2018, cmp_part_max_shi, cmp_part_min_shi]
+  text: >
+    shi2018 prints an "arterial pressure" range without saying which segment. It is compared here
+    with the systemic artery pressure P_sat; the aortic sinus pressure P_sas, compared with
+    korakianitis2006's "aortic pressure", differs from it by less than 1 mmHg in this run
+    (the build gives both).
+- id: q_solver
+  kind: numerics
+  about: [run_systemic_code_values, systemic_left_heart]
+  text: >
+    The CellML files hold no simulation settings (no end time, step or solver). The port uses
+    classical RK4 at dt = 0.1 ms (the DT of korakianitis2006 Table 5) for 10 s from the code's
+    initial values and reports the 10th beat; halving and quartering dt and doubling the simulated
+    time change the results by well under 0.1% (refinements.yaml). shi2018 says OpenCell offers
+    backward Euler, Adams-Moulton and implicit Runge-Kutta schemes but not which was used.
+- id: q_pi
+  kind: choice
+  about: [pi_code_atrium, pi_code_ventricle]
+  text: >
+    pi is written as 3.14159 in both activation functions (relative error 8e-7). The effect on the
+    results is far below printed precision; the port uses the code's number, one pi input for
+    both functions since both files write the same number.
+  citation: {file: EAtrium.cellml, lines: "22", quote: "3.14159"}
+- id: q_unit_pressure
+  kind: choice
+  about: [systemic_left_heart]
+  text: >
+    The code defines its pressure unit UnitP as 133 Pa, not 133.322 Pa (1 mmHg). Every value and
+    equation is in UnitP, so the results in UnitP are what the record calls mmHg; only a conversion
+    to SI would carry the 0.24% difference.
+  citation: {file: Units.cellml, lines: "5", quote: 'multiplier="133"'}
+- id: q_differences_from_papers
+  kind: unexplained_difference
+  about: [cmp_plv_min_shi, cmp_plv_peak_k2006, cmp_psas_min_k2006, cmp_sv_k2006, cmp_qao_peak_k2006, cmp_qmi_peak_k2006]
+  text: >
+    Run as released (our port, dt 0.1 ms, 10th beat), the code gives LV pressure about 7.4 to
+    120.7 mmHg, aortic sinus pressure about 83 to 121 mmHg, LV volume about 52 to 132 mL, stroke
+    volume about 79 mL, mean flow about 4.8 L/min, and peak aortic and mitral (E) flows about 1020
+    and 832 mL/s (the build gives exact values and verdicts). This is near shi2018's Fig. 1(d)
+    ranges except the lowest LV pressure (printed 0 mmHg; the code's diastolic LV pressure cannot
+    fall below about PlvIni + ElvMin (Vlv_min - VlvIni), some 5 mmHg). It is further from
+    korakianitis2006's on-off valve results with the same parameters (peak LV and aortic pressure
+    126.4 mmHg, aortic pressure down to 90 mmHg, stroke volume 70 ml, peak aortic flow 983.4 ml/s,
+    mitral E peak 702.9 ml/s). Possible sources, none printed: the missing pulmonary loop and right
+    heart, the circulating volume set by the initial values (q_initial_values), the artery flow law
+    (q_eq18_code) and the activation function (q_elastance_form).
+- id: q_validation_claim_code
+  kind: overstated_claim
+  about: [systemic_left_heart]
+  text: >
+    The code's documentation says its results "have been validated against the original C
+    implementation as well as those published data in literature". Neither the C code nor any
+    result of this Fig. 1(c) model is published, so the claim cannot be checked as stated. What
+    can be checked: run as released, the code lands close to the full-circulation ranges printed
+    by shi2018 and korakianitis2006 (comparisons.yaml).
+  citation: {file: MainSystemic.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_windkessel
+  kind: unstated_model
+  about: [systemic_left_heart]
+  text: >
+    Cross-validation against shi_cellml_windkessel finds nothing to test. That record, like this
+    one, is CellML code: its data are code parameters (origin reported) and results of shi2018's
+    Fig. 1(d) model copied from the paper (predicted, derived), and it has no figure readings. It
+    holds no measurement, so systemic_left_heart has nothing of it to be validated against. The
+    two codes share the left-heart files line for line; how their afterloads differ is a relation
+    between models (for the later job), not a validation.
+- id: q_no_cross_validation_shi2018
+  kind: unstated_model
+  about: [systemic_left_heart]
+  text: >
+    Cross-validation against shi2018 finds nothing to test. shi2018 holds no measurement: its data
+    are results of its own Fig. 1(d) simulation printed in the text (predicted, derived) and 21
+    Fig. 5 readings, all of model output (its figures.md: "The paper plots no measured data"). So
+    systemic_left_heart has no measurement of shi2018 to be validated against, and no model of
+    shi2018 can be validated against this record, which holds code parameters and copied
+    predictions only. The code against shi2018's printed results is already in comparisons.yaml
+    (purpose approximation); the code's Fig. 5 curves against shi2018's readings would also be
+    model against model, not a validation. The clinical data that shi2018 and this code say the
+    model was validated against are in neither record (q_validation_claim_code).
+  citation: {file: MainSystemic.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [systemic_left_heart]
+  text: >
+    Cross-validation against korakianitis2006 finds nothing to test. That record holds no
+    measurement: its data are Table 1-5 parameters (origin reported), Section 3 results of its own
+    simulations (predicted, derived), and figure readings of Figs. 2 and 4-13, all model output (its
+    figures.md: "it shows no measurements, so every figure datum has origin predicted"). So
+    systemic_left_heart has no measurement of korakianitis2006 to be validated against. The code
+    against korakianitis2006's printed on-off valve results is already in comparisons.yaml (purpose
+    approximation; q_differences_from_papers); that is model against model. In the other
+    direction, this record holds code parameters and copied predictions only, so no
+    korakianitis2006 model can be validated against it either.
+  citation: {file: MainSystemic.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_westkessel
+  kind: unstated_model
+  about: [systemic_left_heart]
+  text: >
+    Cross-validation against shi_cellml_westkessel finds nothing to test, in either direction.
+    That record, like this one, is CellML code: its data are code parameters (origin reported)
+    and shi2018's Fig. 1(d) results copied from the paper (predicted, derived), and it has no
+    figure readings. It holds no measurement, so systemic_left_heart has nothing of it to be
+    validated against, and this record holds none for westkessel_left_heart either. Neither code
+    names the other or says it explains the other's results. The two share the left-heart files
+    line for line and differ in the afterload (five-segment loop here, three-element Westerhof
+    there); that is a relation between models for the later job, and running one against the
+    other's run output would be model against model, not a validation.
+  citation: {file: MainSystemic.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_korakianitis_cellml
+  kind: unstated_model
+  about: [systemic_left_heart]
+  text: >
+    Cross-validation with korakianitis_cellml finds nothing to test in either direction. That
+    record, like this one, is CellML code. Its data are code parameters and initial values (origin
+    reported) and korakianitis2006's Section 3.1 results copied from the paper (predicted), and it
+    has no figure readings. It holds no measurement, so systemic_left_heart has nothing of it to be
+    validated against, and this record holds none for closed_loop_onoff. That code's left heart
+    and systemic loop are this code's files. The shared shape of the two models comes from that,
+    not from one explaining the other's data. Running one against the other's run output would
+    compare model with model. That is the relation already recorded in relations.yaml, not a
+    validation. No validation was added.

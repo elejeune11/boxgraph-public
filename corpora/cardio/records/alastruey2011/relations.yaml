@@ -1,0 +1,55 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+# (a: formaggia2003, CGS: cm, dyne/cm^2; b: this record, SI: m, Pa)
+- id: rel_eq5_from_formaggia_string_law
+  kind: derived_from
+  a: formaggia2003/tube_law_eq9
+  b: alastruey2011/tube_law_eq5_elastic
+  mapping: {A: "A/10000", r0: "R0/100", E: "E/10", h: "h0/100", Pext: "Pext/10"}
+  steps: ["subs: E = 4*E/3"]
+  regime: {A: [0.05, 5.0], R0: [0.2, 1.2], E: [1.0e6, 1.0e7], h0: [0.02, 0.2], Pext: [0, 13332]}
+  provenance: stated
+  citation: {page: 3, printed_page: "2252", quote: "derived from a generalised string model (Quarteroni et al., 2000; Formaggia et al.", where: "text below Eq. 5"}
+  assumptions:
+    - "Formaggia et al. reduce their generalised string model (their Eq. 5) to the algebraic law of their Eq. 9 by neglecting all derivatives, with b-tilde = E h0/(kappa R0^2) (their Eq. 7, p. 5), kappa = 1 or 3/4; they take kappa = 1, so formaggia2003/tube_law_eq9 has beta = E h0 sqrt(pi)"
+    - "the step E -> E/kappa with kappa = 3/4 (plane stress in Formaggia's Eq. 7) is ours, not printed by this paper; it gives this paper's beta = (4/3) sqrt(pi) E h"
+    - "only the elastic part of Eq. 5 is tested: the viscous term Gamma (Formaggia's gamma-tilde term) is not in tube_law_eq9"
+# (a: olufsen2000, CGS: cm, cm^2, dyne/cm^2; b: this record, SI: m, m^2, Pa)
+- id: rel_eq5_from_olufsen_laplace_law
+  kind: derived_from
+  a: olufsen2000/tube_law_eq14
+  b: alastruey2011/tube_law_eq5_elastic
+  mapping: {A: "A/10000", r0: "r0/100", E: "E/10", h: "h/100", Pext: "p0/10"}
+  steps:
+    - "relate the wall stress to P - Pext and the strain to eta = r - r0 by Laplace's law, Eq. 3, tau = r(P - Pext)/h, epsilon = eta/((1 - sigma^2) r0), sigma = 0.5, as in Olufsen et al. (2000)"
+    - "take the elastic part of the Voigt law, Eq. 2 (phi = 0)"
+    - "approximate 1/r by 1/r0 (Eq. 4)"
+    - "express eta through A = pi r^2 and A0 = pi r0^2 (Eq. 5)"
+  provenance: stated
+  citation: {page: 2, printed_page: "2251", quote: "using Laplace's law (Olufsen et al., 2000)", where: "above Eq. 3"}
+  assumptions:
+    - >
+      The paper cites Olufsen et al. (2000) for Laplace's law, Eq. 3. Olufsen et al. combine the same law
+      (their p. 5, with 1/(1 - sigma_x sigma_theta) = 4/3 where this paper has 1/(1 - sigma^2) = 4/3) with a
+      purely elastic wall and keep the 1/r, which gives their state equation Eq. 14, recorded as the helper
+      olufsen2000/tube_law_eq14. This paper then approximates 1/r by 1/r0, a step in words that is not a
+      substitution, limit or series of Eq. 14, so the derivation cannot be applied symbolically; the proposed
+      relation rel_eq5_approximates_olufsen_eq14 measures the error that step makes.
+    - "this paper's Pext (the pressure at which r = r0) stands where Olufsen's p0 (the pressure at which A = A0) stands"
+    - "only the elastic part of Eq. 5 is related: Olufsen et al. disregard wall visco-elasticity"
+- id: rel_eq5_approximates_olufsen_eq14
+  kind: approximated_by
+  a: olufsen2000/tube_law_eq14
+  b: alastruey2011/tube_law_eq5_elastic
+  mapping: {A: "A/10000", r0: "r0/100", E: "E/10", h: "h/100", Pext: "p0/10"}
+  regime: {A: [3.2047, 3.4636], r0: [1.0, 1.01], E: [1.0e6, 2.0e7], h: [0.05, 0.15], p0: [0, 1.07e5]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    Eq. 14 of Olufsen et al. (2000) and the elastic part of this paper's Eq. 5 both follow from Laplace's law
+    (Eq. 3 here, cited to Olufsen et al.) with a thin, incompressible, purely elastic wall; this paper alone
+    approximates 1/r by 1/r0 (p. 2). Writing s = r/r0, Olufsen's p - p0 is (4/3)(E h/r0)(1 - 1/s) and this
+    paper's P - Pext is (4/3)(E h/r0)(s - 1): they agree to first order in the strain and differ by the factor
+    s. The regime keeps the radius between r0 and 1.05 r0 (A from pi (1.01 cm)^2 to pi (1.05 cm)^2 with r0 in
+    [1.0, 1.01] cm), radial strains up to 5%, of the order of the few-per-cent diameter changes in these
+    networks; p0 runs from 0 to about 80 mmHg. The relative error is largest at p0 = 0, where it is 1 - 1/s,
+    up to 0.048; the tolerance 0.05 is the acceptable error for strains up to 5%.

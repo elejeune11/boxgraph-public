@@ -1,0 +1,106 @@
+- id: run_code_values
+  model: closed_loop_onoff
+  inputs: &code_inputs
+    ElaMax: ElaMax_code
+    ElaMin: ElaMin_code
+    PlaIni: PlaIni_code
+    VlaIni: VlaIni_code
+    ElvMax: ElvMax_code
+    ElvMin: ElvMin_code
+    PlvIni: PlvIni_code
+    VlvIni: VlvIni_code
+    EraMax: EraMax_code
+    EraMin: EraMin_code
+    PraIni: PraIni_code
+    VraIni: VraIni_code
+    ErvMax: ErvMax_code
+    ErvMin: ErvMin_code
+    PrvIni: PrvIni_code
+    VrvIni: VrvIni_code
+    T: T_code
+    Tpwb: Tpwb_code
+    Tpww: Tpww_code
+    Ts1: Ts1_code
+    Ts2: Ts2_code
+    CVao: CVao_code
+    CVmi: CVmi_code
+    CVpa: CVpa_code
+    CVti: CVti_code
+    Vlv0: Vlv0_code
+    Vla0: Vla0_code
+    Vra0: Vra0_code
+    Vrv0: Vrv0_code
+    Rsas: Rsas_code
+    Csas: Csas_code
+    Lsas: Lsas_code
+    P0sas: P0sas_code
+    Q0sas: Q0sas_code
+    Rsat: Rsat_code
+    Csat: Csat_code
+    Lsat: Lsat_code
+    P0sat: P0sat_code
+    Q0sat: Q0sat_code
+    Rsar: Rsar_code
+    Rscp: Rscp_code
+    Rsvn: Rsvn_code
+    Csvn: Csvn_code
+    P0svn: P0svn_code
+    Rpas: Rpas_code
+    Cpas: Cpas_code
+    Lpas: Lpas_code
+    P0pas: P0pas_code
+    Q0pas: Q0pas_code
+    Rpat: Rpat_code
+    Cpat: Cpat_code
+    Lpat: Lpat_code
+    P0pat: P0pat_code
+    Q0pat: Q0pat_code
+    Rpar: Rpar_code
+    Rpcp: Rpcp_code
+    Rpvn: Rpvn_code
+    Cpvn: Cpvn_code
+    P0pvn: P0pvn_code
+    pi: pi_code_ventricle
+  settings: {dt: 0.0001, t_end: 11.0}
+  outputs:
+    P_lv_max: code_plv_max
+    P_lv_min: code_plv_min
+    P_sas_max: code_psas_max
+    P_sas_min: code_psas_min
+    P_rv_max: code_prv_max
+    P_pas_max: code_ppas_max
+    V_lv_max: code_vlv_max
+    V_lv_min: code_vlv_min
+    SV: code_sv
+    Q_ao_mean: code_qao_mean
+    Q_ao_peak: code_qao_peak
+    Q_mi_E: code_qmi_E
+    Q_ti_E: code_qti_E
+  note: >
+    All inputs as written in the code. Solver settings are ours (the CellML holds none): classical
+    RK4 at the paper's DT = 0.1 ms from the code's initial values, results over the 10th to 11th s,
+    the cycle the paper analyses (q_solver; refinements.yaml).
+- id: run_code_rpvn_paper
+  model: closed_loop_onoff
+  inputs:
+    <<: *code_inputs
+    Rpvn: Rpvn_paper
+  settings: {dt: 0.0001, t_end: 11.0}
+  outputs:
+    P_lv_max: rpvn_plv_max
+    P_lv_min: rpvn_plv_min
+    P_sas_max: rpvn_psas_max
+    P_sas_min: rpvn_psas_min
+    P_rv_max: rpvn_prv_max
+    P_pas_max: rpvn_ppas_max
+    V_lv_max: rpvn_vlv_max
+    V_lv_min: rpvn_vlv_min
+    SV: rpvn_sv
+    Q_ao_mean: rpvn_qao_mean
+    Q_ao_peak: rpvn_qao_peak
+    Q_mi_E: rpvn_qmi_E
+    Q_ti_E: rpvn_qti_E
+  note: >
+    The code's model and values with one change: the pulmonary venous resistance as printed in
+    korakianitis2006 Table 2 (0.006) instead of the code's 0.0006 (q_rpvn). Every other input is
+    the code's.

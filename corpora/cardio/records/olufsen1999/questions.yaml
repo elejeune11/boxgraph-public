@@ -1,0 +1,259 @@
+- id: q_boundary_layer_exponent
+  kind: possible_error
+  about: [boundary_layer_lighthill, delta_bl_estimate, delta_bl_constant]
+  text: >
+    The estimate is printed as (nu/omega)^(1/2) = [nu T/(2 pi)]^2 ≈ 0.01 cm. The exponent 2 cannot be
+    meant: [nu T/(2 pi)]^2 has dimension length^4. With the printed nu = 0.046 cm^2/s and T = 1.25 s,
+    (nu/omega)^(1/2) = [nu T/(2 pi)]^(1/2) ≈ 0.096 cm, ten times the printed 0.01 cm, but in agreement
+    with the '(1 mm)' printed a few lines below. The printed 0.01 equals nu T/(2 pi) = 0.0092 with no
+    square root. The record models the first, dimensionally consistent form.
+  citation: {page: 2, quote: "larger arteries can be estimated from", where: text}
+- id: q_wave_speed_factor
+  kind: possible_error
+  about: [larger_arteries_1d]
+  text: >
+    The printed wave speed c0^2 = (A/rho) dp/dA = (4/3) Eh/(rho r0) sqrt(A0/A) does not follow from
+    Eq. 5: differentiating p - p0 = (4/3)(Eh/r0)(1 - sqrt(A0/A)) gives (A/rho) dp/dA =
+    (2/3) Eh/(rho r0) sqrt(A0/A), half the printed value. The compliance printed on p. 5,
+    C = 3 A0 r0/(2 Eh), agrees with Eq. 5 (and with the factor 2/3). No printed number rests on c0.
+  citation: {page: 3, quote: "the square of the wave propagation velocity", where: text}
+- id: q_asymmetry_eq21
+  kind: unexplained_difference
+  about: [asymmetry_eq21, gamma_printed, eta_chosen, xi_chosen]
+  text: >
+    With the printed xi = 2.76 and eta = 1.16, Eq. 21 gives gamma ≈ 0.356, not the printed 0.41.
+    Conversely gamma = 0.41 with xi = 2.76 gives eta ≈ 1.171 (Eq. 21 itself follows from Eqs. 19-20).
+    eta(gamma) is flat here, so a small rounding of eta moves gamma a lot; the tree of Fig. 9 is run
+    with the printed gamma = 0.41.
+- id: q_tree_leaf_rule
+  kind: reading
+  about: [structured_tree_impedance]
+  text: >
+    The paper says branching 'terminates when the radius of any given vessel is less than some given
+    minimum radius' and that 'the tree is terminated whenever the radius of the leaves of the tree is
+    less than' it. The record reads this as: a vessel whose radius is below r_min is still part of the
+    tree and is a leaf (zero impedance at its end). The other reading (vessels below r_min are not
+    built; the last vessel above r_min ends in zero impedance) gives a smaller DC impedance
+    (about 2240 instead of about 2890 g s^-1 cm^-4 for the Fig. 9 tree with rho = 1.05 g/cm^3).
+  citation: {page: 6, quote: "where the tree is terminated whenever the radius of the", where: text}
+- id: q_tree_density
+  kind: unstated_input
+  about: [rho_blood_added, structured_tree_impedance]
+  text: >
+    The density of blood is not stated (only nu = mu/rho). The impedance of the tree scales nearly in
+    proportion to rho; the usual range 1.0-1.06 g/cm^3 changes it by a few per cent only.
+- id: q_tree_K_smoothing
+  kind: unstated_model
+  about: [structured_tree_impedance]
+  text: >
+    K of Eq. 12 is discontinuous at w = 4; the paper says 'it is possible to construct a smooth
+    function for K for all w' but does not give the one used. The record uses the piecewise form as
+    printed, with the principal branch of i^(-1/2).
+  citation: {page: 5, quote: "because the jump is small it is possible to construct a smooth", where: text}
+- id: q_fig9_magnitude
+  kind: unexplained_difference
+  about: [cmp_tree_Zmod_fig9b, cmp_tree_Zphase_fig9c, structured_tree_impedance]
+  text: >
+    The structured tree built from the printed inputs (root radius 0.5 cm, minimum radius 0.025 cm,
+    l/r = 130, xi = 2.76, gamma = 0.41, Eq. 6 with the printed k1-k3, nu = 0.046 cm^2/s) gives a DC
+    impedance of about 2.9 x 10^3 g s^-1 cm^-4 and falls to its characteristic level near
+    10^3 already at omega ≈ 2 1/s, whereas the solid line of Fig. 9(B) starts near 9 x 10^3 and keeps
+    above 3 x 10^3 up to omega ≈ 5 1/s. Something in the brachiocephalic tree differs from what is
+    printed (e.g. the minimum radius, the length rule for the small vessels, or the leaf impedance).
+- id: q_fig9_axis_units
+  kind: reading
+  about: [fig9b_st, fig9c_st]
+  text: >
+    The caption of Fig. 9 says 'omega = 2 pi f for omega in [0:125] Hz' while the axes are labelled
+    omega [s^-1]. The record takes the axis label: omega in 1/s.
+  citation: {page: 9, quote: "for v [ [0:125] Hz", where: "Fig. 9"}
+- id: q_larger_arteries_not_runnable
+  kind: unstated_input
+  about: [larger_arteries_1d]
+  text: >
+    The coupled nonlinear model (Eqs. 3-11) cannot be run from the paper: the geometry of the tree of
+    Fig. 1 comes from Segers et al. (ref. 45) and is not printed, the windkessel parameters of
+    Figs. 7-8 are fitted but not printed, the inflow exists only as the plotted curve of Fig. 4, and
+    the mesh and time step are not given. Its results (Figs. 7, 8, 10, 11) are not checked here.
+  citation: {page: 10, quote: "The geometrical data for this model", where: text}
+- id: q_lrr_change
+  kind: choice
+  about: [lrr_brachio, lrr_iberall]
+  text: >
+    For Fig. 9 the length-to-radius ratio was changed from 50 to 130 to match the measured data;
+    the record runs the Fig. 9 tree with 130 for every vessel of the tree, as the text implies.
+# --- Added in the audit ---
+- id: q_continuity_eq13
+  kind: possible_error
+  about: [structured_tree_impedance]
+  text: >
+    Eq. 13 is printed as 'i omega/C P + dQ/dx = 0'. With C = dA/dp this is not dimensionally
+    consistent; the linearized continuity equation is i omega C P + dQ/dx = 0, and only that form
+    gives the wave speed c = sqrt(A0 K/(rho C)) and g = sqrt(C A0 K/rho) printed on p. 6 (Eq. 14 is
+    also printed with rho C/(K A0), i.e. C in the numerator). The record's tree model uses the p. 6
+    expressions for c and g, i.e. the consistent form; no runnable model rests on the printed Eq. 13.
+  citation: {page: 5, quote: "corresponding continuity equation therefore becomes", where: Eq. 13}
+- id: q_cvol_derivative
+  kind: possible_error
+  about: [stiffness_eq6, Eh_r0_data_fig3]
+  text: >
+    The volume compliance is printed as Cvol = dp/dV ≈ 3 r0/(2 Eh). A compliance is dV/dp, not dp/dV,
+    and 3 r0/(2 Eh) is a relative compliance (1/A0) dA/dp of Eq. 5 at A = A0, not a volume compliance.
+    How the plotted Eh/r0 estimates of Fig. 3 were obtained from the Cvol of refs. 45, 46, 53 (per unit
+    length? per vessel? normalized?) is therefore not determined by the text.
+  citation: {page: 3, quote: "estimates for the volume compli", where: text}
+- id: q_dc_power
+  kind: unexplained_difference
+  about: [dc_root_radius_power, dc_radius_power_printed, cmp_dc_power_r0, cmp_dc_power_r1, cmp_dc_power_r2, cmp_dc_power_r3]
+  text: >
+    The paper says the DC root impedance is 'approximately inversely proportional to the root radius
+    to the third power', noting the agreement is not exact because the number of generations varies.
+    The tree of the record (l/r = 50, xi = 2.76, gamma = 0.41, rho = 1.05 g/cm^3) gives a power of
+    about 2.1 to 2.55 between root radii 0.1 and 0.5 cm for the printed minimum radii 0.06 to
+    0.01 cm, clearly below 3. The root radii the paper used for this statement are not printed
+    (r_root_lo_added, r_root_hi_added are the audit's choice).
+  citation: {page: 9, quote: "The agreement is not exact, how", where: text}
+- id: q_fig9_data_source
+  kind: reading
+  about: [fig9b_st, fig9c_st]
+  text: >
+    The text (p. 8) says the measured impedance data are 'adapted from Nichols and O'Rourke (27)',
+    while the caption of Fig. 9 (p. 9) says 'Measured data are from Mills et al. (26)'. The record does
+    not read the measured curves; a later reader of md 0 and md 1 should cite both.
+  citation: {page: 9, quote: "Measured data are from Mills et", where: "Fig. 9"}
+- id: q_boundary_layer_reading
+  kind: reading
+  about: [delta_bl_estimate, boundary_layer_lighthill]
+  text: >
+    Audit: the 110-dpi page image of p. 2 agrees with the first reading ('[nu T/(2 pi)]^2 ≈ 0.01 cm').
+    The model computes the first form (nu/omega)^(1/2); the printed 0.01 cm is closer to nu T/(2 pi)
+    = 0.0092 cm (no square root). The record compares the printed ≈ 0.01, which gets no verdict as an
+    approximate value; the clear disagreement (0.096 vs 0.01 cm) therefore rests on
+    q_boundary_layer_exponent and the consistency comparison with '1 mm', not on a verdict.
+# Added in the figure pass.
+- id: q_fig9_measured_vs_tree
+  kind: unexplained_difference
+  about: [val_tree_Zmod_md0, val_tree_Zmod_md1, val_tree_Zphase_md0, val_tree_Zphase_md1, structured_tree_impedance, q_fig9_magnitude]
+  text: >
+    Figure pass: the measured impedances md 0 and md 1, read from Fig. 9(B) and 9(C), follow the
+    plotted solid s.t. line for omega about 5-25 1/s (at omega = 10 1/s: |Z| about 1.5-1.6 x 10^3
+    against about 2 x 10^3 for the s.t. line; phase about -60 to -80 deg, the s.t. line near -78). The tree built from the printed inputs gives
+    there |Z| ≈ 1.1 x 10^3 and a phase of only a few degrees, so it agrees with neither. This supports
+    q_fig9_magnitude: the tree behind the plotted s.t. curve differs from the one the printed inputs
+    describe, and the measured curves do not settle in what.
+  citation: {page: 9, quote: "dashed lines indicate measured results (md 0 and md 1)", where: "Fig. 9"}
+- id: q_fig12_time_label
+  kind: reading
+  about: [fig12a_aortic, p_aortic_fig12a]
+  text: >
+    The leftmost tick of the time axis of Fig. 12(A) is printed '-0.3'. By the spacing of the other
+    ticks (0, .1, ..., .7 s, about 421 px per 0.1 s at 1200 dpi) it sits at -0.03 s; the reading fits
+    the axis to the ticks 0 to .7 only and leaves the '-0.3' tick out.
+  citation: {page: 11, quote: "Measured data for pressure p(x, t) in aorta (A)", where: "Fig. 12(A)"}
+# Added by the cross-validation job with olufsen2000.
+- id: q_no_cross_validation_olufsen2000
+  kind: unstated_input
+  about: [Zmod_md0_fig9b, Zmod_md1_fig9b, Zphase_md0_fig9c, Zphase_md1_fig9c, p_aortic_fig12a, p_0cm_fig12b, p_radial_fig12b, co_measured, inflow_fig4, larger_arteries_1d, structured_tree_impedance]
+  text: >
+    Cross-validation with olufsen2000, which cites this paper as ref. 21, found no pair to test, in
+    either direction. olufsen2000's runnable models give gamma, alpha and beta, nu, an area, a period from a
+    heart rate, the tube-law pressure from an area, and a boundary-layer thickness. None of these is one of
+    this paper's measurements. Those measurements are impedance (Fig. 9), pressures (Fig. 12) and the
+    cardiac output and inflow of ref. 20. Its coupled network model (olufsen2000/network_1d), which would
+    predict pressures, is not runnable. olufsen2000 measures MR flows (Figs. 3, 7), cuff pressures, an inlet
+    radius, the cycle length and a heart rate. Of this record's models, only larger_arteries_1d gives flow
+    or pressure, and it is not runnable (q_larger_arteries_not_runnable). structured_tree_impedance gives
+    impedance, which olufsen2000 does not measure. No validation was added.
+  citation: {page: 11, quote: "Measured data for pressure p(x, t) in aorta (A)", where: "Fig. 12(A)"}
+# Added by the cross-validation job with olufsen2004.
+- id: q_no_cross_validation_olufsen2004
+  kind: unstated_input
+  about: [Zmod_md0_fig9b, Zmod_md1_fig9b, Zphase_md0_fig9c, Zphase_md1_fig9c, p_aortic_fig12a, p_0cm_fig12b, p_radial_fig12b, co_measured, inflow_fig4, windkessel_eq7, structured_tree_impedance]
+  text: >
+    Cross-validation with olufsen2004, which cites this paper as ref. 19, found no pair to test, in either
+    direction. olufsen2004 is analytical and measures nothing, so no model here can be judged against it.
+    Of its models, only the three-element windkessel (olufsen2004/windkessel3_p73, the same form as Eq. 7
+    here) gives a quantity measured here, the input impedance of Fig. 9 (md 0, md 1). Neither paper prints
+    R1, R2 and CT for the bed of those measurements: this paper fits CT empirically to the structured tree
+    and does not print it (p. H263), and the dotted wk curve of Fig. 9 has no printed parameters. Running it
+    would need all three elements added, or fitted to the same curves, so it would not be a test. Its other
+    models (rigid-vessel time-scales, step response, inductance) give no quantity measured here. No
+    validation was added.
+  citation: {page: 7, quote: "windkessel model is fitted empirically to match that"}
+
+# Added by the cross-validation job with reymond2009.
+- id: q_no_cross_validation_reymond2009
+  kind: unstated_model
+  about: [stiffness_eq6, structured_tree_impedance, windkessel_eq7, larger_arteries_1d, Eh_r0_data_fig3, Zmod_md0_fig9b, Zmod_md1_fig9b, Zphase_md0_fig9c, Zphase_md1_fig9c, p_aortic_fig12a, p_0cm_fig12b, p_radial_fig12b, co_measured, inflow_fig4]
+  text: >
+    Cross-validation with reymond2009, which cites this paper as ref. 43 (only in its Table 1 survey, as the
+    source of the structured-tree outflow), found no pair to test, in either direction. reymond2009 measures
+    flow and pressure waves and their extremes (Tables 4-5, Figs. 4-5), the elastance curve of Fig. 1B and
+    literature pulse wave velocities against diameter (Fig. 3). The runnable models here give Eh/r0 (Eq. 6),
+    root input impedance (structured tree, Eq. 7 windkessel), tree ratios, the boundary layer and the
+    cardiac-output reduction: none of these is measured there. The model that would give flows and pressures,
+    the 1-D model of Eqs. 3-11, is not runnable (q_larger_arteries_not_runnable).
+    Eq. 6 does not give pulse wave velocity: turning Eh/r0 into PWV needs the wave-speed relation of p. 2,
+    whose printed factor is itself in doubt (q_wave_speed_factor) and which is not a model of this record, so
+    the Fig. 3 PWV points of reymond2009 are not crossed with Eh/r0 (related, but a different quantity). A
+    wave-speed model added here, with both the printed and the Eq. 5 factor, would make that pair testable. In the other direction, reymond2009's runnable
+    models (Eq. 22 PWV, Eq. 22 + 6 distensibility, Eq. 9, R1 = ZC, Eq. 15, pulse and mean pressure
+    rules) give quantities this paper does not measure: its Fig. 3 points are estimates of Eh/r0 from
+    literature volume compliances, not PWV or distensibility. No validation was added.
+  citation: {page: 3, quote: "The data and the fitted curve are shown in Fig. 3"}
+
+# Added by the cross-validation job with stergiopulos1992.
+- id: q_no_cross_validation_stergiopulos1992
+  kind: unstated_model
+  about: [stiffness_eq6, structured_tree_impedance, windkessel_eq7, larger_arteries_1d, Zmod_md0_fig9b, Zmod_md1_fig9b, Zphase_md0_fig9c, Zphase_md1_fig9c, p_aortic_fig12a, p_0cm_fig12b, p_radial_fig12b, co_measured, inflow_fig4]
+  text: >
+    Cross-validation with stergiopulos1992 (ref. 46 here) found no pair to test, in either direction. This
+    paper cites ref. 46 only for the 1D model family, the windkessel outflow and, with refs. 45 and 53, as a
+    source of the volume compliances behind the Eh/r0 estimates of Fig. 3 (p. 3). It does not say that any
+    of its models explains or is compared with a stergiopulos1992 measurement. The only measured data there
+    are the Gosling et al. pulsatility indices (Fig. 7) and the Fronek et al. leg/brachial systolic ratios
+    (p. 9). No runnable model here gives either quantity: Eq. 6 gives Eh/r0, the structured tree and the Eq. 7
+    windkessel give root input impedance, and the rest give tree counts, a boundary-layer thickness and a
+    cardiac-output reduction. The model that would give leg pressures, the 1D model of Eqs. 3-11, is not
+    runnable (q_larger_arteries_not_runnable). stergiopulos1992's Table 1 compliances, which feed the Fig. 3
+    fit, are model inputs there (origin reported), not measurements, and they are a volume compliance, not
+    Eh/r0, so Eq. 6 is not entered against them even as a fit. In the other direction, stergiopulos1992's
+    arterial_tree_1d gives scalar pressure and PI ratios and ascending-aortic systolic, diastolic and mean
+    pressure, not the impedance spectra of Fig. 9 or the pressure waveforms of Fig. 12 (read here only on the
+    upstroke and fall of the aortic curve, not its peak), and it is built on a generic adult's geometry and
+    inflow, not on the subjects of refs. 26/27 or 41. Its terminal_impedance_eq7 gives the impedance of one
+    terminal windkessel, not the root impedance of the ascending aorta measured in Fig. 9. No validation was added.
+  citation: {page: 3, quote: "and Segers et al. (45) we obtain k1"}
+
+# Added by the cross-validation job with westerhof1969.
+- id: q_no_validation_vs_westerhof1969
+  kind: choice
+  about: [stiffness_eq6, structured_tree_impedance, windkessel_eq7, larger_arteries_1d, Eh_r0_data_fig3, Zmod_md0_fig9b, Zmod_md1_fig9b, Zphase_md0_fig9c, Zphase_md1_fig9c, p_aortic_fig12a, p_0cm_fig12b, p_radial_fig12b, co_measured, inflow_fig4]
+  text: >
+    Cross-validation with westerhof1969 (ref. 53 here) found no pair to test, in either direction. This paper
+    cites ref. 53 only as one source of the volume compliances Cvol behind the Eh/r0 estimates of Fig. 3, to
+    which Eq. 6 is fitted (p. 3); it does not say any of its models explains a westerhof1969 measurement.
+    Those compliances are not measurements in westerhof1969: its Table 1 radii, wall thicknesses and moduli are
+    inputs of the analog (origin reported) and the segment compliances are computed from them (predicted), and
+    neither record holds an Eh/r0 datum there that Eq. 6's output could be set against, so Eq. 6 is not entered
+    even as fit_quality (its fit to the Fig. 3 points is already cmp_eq6_fig3_data here). westerhof1969's
+    measurements are the decay times, impedance-level and wave-velocity increases measured on its own analog
+    (tau_*, dZin_stiff_printed, dc_stiff_printed) and the apparent wave velocities in man of Luchsinger et al.
+    and Gabe et al. (Fig. 7). No runnable model here gives a decay time, a relative change under halved
+    compliance, or an apparent wave velocity along the aorta: the structured tree and the Eq. 7 windkessel give
+    root input impedance, and the 1D model that would give wave travel is not runnable
+    (q_larger_arteries_not_runnable). See westerhof1969 q_no_validation_vs_olufsen1999 for the other direction.
+  citation: {page: 3, quote: "With data for Cvol from Westerhof et al. (53)"}
+- id: q_no_validation_vs_olufsen2012
+  kind: choice
+  about: [larger_arteries_1d, structured_tree_impedance, stiffness_eq6, Zmod_md0_fig9b, Zmod_md1_fig9b, p_aortic_fig12a, co_measured, inflow_fig4]
+  text: >
+    No validation against olufsen2012 is entered, in either direction (cross-validation job 2026-11-04).
+    The measurements of olufsen2012 are the pulmonary length-radius points of Huang et al. (its Fig. 5) and the
+    MRI aortic and pulmonary inflows of its Fig. 3, which drive its network. No runnable model here gives a
+    vessel length (the structured tree only sets L = lrr r with lrr an input) or a flow waveform (the 1D model
+    larger_arteries_1d is not runnable); the structured tree gives root input impedance, the windkessel and
+    Eq. 6 an impedance and a systemic Eh/r0, none of which 2012 measures. In the other direction, 2012 never
+    compares its models with this paper's measurements (Figs. 9, 12, the cardiac output of ref. 20), and its
+    only model of systemic pressure is its non-runnable network. See olufsen2012 q_no_validation_vs_olufsen1999.
+  citation: {page: 3, quote: "The data and the fitted curve are shown in Fig. 3"}

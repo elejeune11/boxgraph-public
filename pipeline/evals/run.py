@@ -22,6 +22,14 @@ from pipeline.orchestrator import Job, Orchestrator
 from pipeline.run_papers import PROMPTS, READ_ONLY_SHELL, ROOT, VENV
 
 EVALS = ROOT / "pipeline" / "evals"
+RECORDS_EVAL = "records_eval"
+
+
+def reader_prompt(rid: str, file: str, pages: int, note: str, model: str | None) -> str:
+    """The same reading prompt as for a real paper, for a record in records_eval/."""
+    return (PROMPTS / "read.md").read_text().format(
+        id=rid, records=RECORDS_EVAL, file=file, first=1, last=pages, page_note=note, others="none",
+        date=dt.date.today().isoformat(), model=model)
 
 
 def main(argv=None) -> int:
@@ -54,9 +62,7 @@ def main(argv=None) -> int:
             shutil.copy(f, d / "text" / f.name)
         n = len(list((d / "text").glob("*.txt")))
         file, note = f"pipeline/evals/{a.eval} (text only)", "There are no page images for this source; the text is exact."
-    prompt = (PROMPTS / "read.md").read_text().format(
-        id=rid, file=file, first=1, last=n, page_note=note, others="none",
-        date=dt.date.today().isoformat(), model=a.model).replace("records/", "records_eval/")
+    prompt = reader_prompt(rid, file, n, note, a.model)
     tools = ["Read", "Glob", "Grep", f"Write(records_eval/{rid}/**)", f"Edit(records_eval/{rid}/**)",
              f"Bash({VENV}/boxgraph validate:*)", f"Bash({VENV}/boxgraph figure:*)", f"Bash({VENV}/python:*)",
              *READ_ONLY_SHELL]

@@ -1,0 +1,31 @@
+id: network_1d_structured_tree
+name: nonlinear 1D model of the large systemic and pulmonary arteries coupled to asymmetric structured trees, with pressure along the alpha and beta branches (Eqs. 2.1-2.52)
+role: model
+stated: {page: 6, printed_page: "285", quote: "The conservation of volume and momentum equations are given by", where: "Eqs. 2.2-2.4"}
+equation: >
+  dq/dx + dA/dt = 0, dq/dt + d(q^2/A)/dx + (A/rho) dp/dx = -2 pi nu r q/(delta A) (2.2);
+  p - p0 = (4/3)(Eh/r0)(1 - sqrt(A0/A)) (2.4); Eh/r0 = k1 exp(k2 r0) + k3 (systemic, 2.5), Eh/r0 = 3/(4 epsilon) (pulmonary, 2.8);
+  r0(x) = r_prox exp(-k x) (2.1); outflow p(x, t) = int_{t-T}^{t} q(x, tau) z(x, t - tau) dtau (2.15) with Z(0, omega) of the
+  structured tree (2.20-2.30); pressures along the alpha- and beta-branches by Eqs. 2.43-2.48
+inputs:
+  k1: {quantity: stiffness_fit_amplitude, unit: mmHg}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: mmHg}
+  Eh_r0_pulm: {quantity: wall_stiffness_Eh_over_r0, unit: mmHg}
+  xi: {quantity: radius_exponent, unit: dimensionless}
+  gamma: {quantity: asymmetry_ratio, unit: dimensionless}
+  rmin: {quantity: tree_minimum_radius, unit: um}
+  lrr: {quantity: length_to_radius_ratio, unit: dimensionless}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  rho: {quantity: blood_density, unit: g/cm^3}
+outputs:
+  p_mean: {quantity: mean_pressure, unit: mmHg, description: "mean pressure at the proximal aorta, femoral and main pulmonary arteries (Table 2)"}
+  p_pulse: {quantity: pulse_pressure, unit: mmHg, description: "pulse pressure at the same sites (Table 2)"}
+  p: {quantity: arterial_pressure, unit: mmHg, description: "pressure waveforms of Figs. 7, 11, 13"}
+runnable: false
+not_runnable_reason: >
+  The inflow waveforms are given only as plotted curves (Fig. 3) and the systemic one only by reference to
+  Olufsen et al. (2000); blood density, viscosity and boundary-layer thickness are not printed; the root radii of
+  the structured trees and the way the pulmonary length law (Eq. 2.19) and l_rr are applied across the trees are
+  not fully specified; the numerical scheme and its settings are referred to Olufsen et al. (2000). The printed
+  results (Table 2, Eq. 3.1, Figs. 6-13) come from this full simulation.

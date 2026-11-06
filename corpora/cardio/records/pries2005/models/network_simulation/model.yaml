@@ -1,0 +1,18 @@
+id: network_simulation
+name: hemodynamic simulation of the mesenteric networks and the deviation parameters VERR, HERR, NINV
+role: fit
+stated: {page: 2, quote: "used to estimate the distribution of blood flow with the microvascular", where: "Eqs. 1-4, 12-14 and Optimization procedure"}
+equation: "flow conservation at each node with Poiseuille resistance (eta_vivo, D); phase separation logit FQE = A + B logit[(FQB - X0)/(1 - 2X0)] (Eqs. 1-4); Vc = Vb (HT/HD)vivo, Vb = Q/(pi D^2/4) (Eq. 14); parameters of Eqs. 8-11 by downhill simplex minimising VERR"
+inputs:
+  Wmax: {quantity: esl_max_thickness, unit: um}
+outputs:
+  Doff: {quantity: esl_offset_diameter, unit: um}
+  Dcrit: {quantity: esl_critical_diameter, unit: um}
+  D50: {quantity: esl_half_diameter, unit: um}
+  Eamp: {quantity: esl_peak_amplitude, unit: um}
+  Ewidth: {quantity: esl_peak_decay, unit: 1/um}
+  Epeak: {quantity: esl_peak_weight, unit: dimensionless}
+  EHD: {quantity: esl_hematocrit_sensitivity, unit: dimensionless}
+runnable: false
+not_runnable_reason: "Needs the three measured network data sets (segment connection matrix, lengths, diameters, boundary flows and hematocrits of 392, 546 and 383 segments) and the measured velocities and hematocrits it is fitted to; none is published in the paper. The fitted parameters it produced are recorded as data with origin fitted."
+built_from: [vivo_viscosity, fahraeus_vivo]

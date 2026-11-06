@@ -1,0 +1,85 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_network_1d_from_1999
+  kind: derived_from
+  a: olufsen1999/larger_arteries_1d
+  b: olufsen2000/network_1d
+  mapping: {nu: "nu", T: "T", k1: "k1", k2: "k2", k3: "k3"}
+  steps:
+    - "the one-dimensional fluid-dynamics model developed earlier (ref. 21) is used"
+    - "the equation specifying how pressures change from a parent vessel into its daughters has been modified (Eq. 17, with K5 = 0.75 at the ascending aorta)"
+    - "the model, stated but not derived in ref. 21, is derived here from the axisymmetric Navier-Stokes equations"
+  provenance: stated
+  citation: {page: 2, printed_page: "1282", quote: "In this paper we use the one-dimensional fluid-dyna-", where: text}
+  assumptions:
+    - "b's inputs rho, mu, delta, K5, xi, gamma, lrr have no port in a (a's record leaves the structured-tree parameters inside its outflow condition); they are not mapped"
+- id: rel_boundary_layer_same
+  kind: same_as
+  a: olufsen1999/boundary_layer_lighthill
+  b: olufsen2000/boundary_layer_lighthill
+  mapping: {nu: "nu", T: "T"}
+  regime: {nu: [0.02, 0.08], T: [0.5, 1.5]}
+  provenance: proposed
+  reason: >
+    Both papers estimate the boundary-layer thickness after Lighthill as delta = (nu/omega)^(1/2) with
+    omega = 2 pi/T (1999 p. 2; 2000 p. 4, which cites Lighthill, ref. 17, not ref. 21). The 1999 record
+    takes the first, dimensionally consistent printed form; 1999's second form [nu T/(2 pi)]^2 is a
+    recorded question there.
+- id: rel_asymmetry_same
+  kind: same_as
+  a: olufsen1999/asymmetry_eq21
+  b: olufsen2000/asymmetry_eq21
+  mapping: {xi: "xi", eta: "eta"}
+  regime: {xi: [2.6, 3.0], eta: [1.05, 1.16]}
+  provenance: proposed
+  reason: >
+    Both papers print Eq. 21, eta = (1 + gamma)/(1 + gamma^(xi/2))^(2/xi), relating the area ratio,
+    asymmetry ratio and radius exponent of the structured tree, which 2000 takes from ref. 21 (Fig. 2,
+    "adapted from Olufsen (see Ref. 21)"); both solve it for gamma in (0, 1]. The regime keeps eta below
+    2^(1 - 2/xi), the largest area ratio with a root gamma <= 1.
+- id: rel_structured_tree_windkessel
+  kind: approximated_by
+  a: olufsen2000/network_1d
+  b: stergiopulos1992/terminal_impedance_eq7
+  mapping: {}
+  provenance: stated
+  citation: {page: 13, printed_page: "1293", quote: "it is possible to relate the parameters of", where: text}
+  assumptions:
+    - >
+      The paper (pp. 12-13) sets its structured-tree outflow condition against "the much simpler windkessel
+      model", whose parameters are "the total resistance and compliance" (superscript 28 = stergiopulos1992,
+      whose Eq. 7 is the three-element windkessel recorded as terminal_impedance_eq7), and states the
+      correspondence in words: the windkessel's total resistance RT is the DC impedance of the structured tree,
+      its peripheral resistance R1 (= R1r RT) the high-frequency limit of that impedance, and its total
+      compliance CT is related to the slope at which the impedance falls from zero frequency. It also says the
+      windkessel "cannot capture the dynamics of higher frequencies", so the relation is an approximation, not
+      an identity.
+    - >
+      The structured-tree root impedance is not a model of its own in the olufsen2000 record: it sits inside
+      network_1d, which is not runnable, and its value depends on tree quantities (root radius, r_min, the
+      Womersley impedance recursion) that are not ports of network_1d. b's inputs RT, R1r, CT and f therefore
+      cannot be written in a's input symbols, and no mapping or regime is given; the relation is recorded as
+      the paper states it and is unverifiable until a structured-tree impedance model exists.
+- id: rel_stiffness_eq15_from_westerhof_compliance
+  kind: derived_from
+  a: westerhof1969/segment_compliance
+  b: olufsen2000/network_1d
+  mapping: {}
+  steps:
+    - "the wall stiffness Eh/r0 of the state equation (Eq. 14) is made a function of the diastolic radius r0, Eh/r0 = k1 exp(k2 r0) + k3 (Eq. 15), by a formula based on compliance estimates of refs. 27, 28 and 31 (31 = westerhof1969)"
+  provenance: stated
+  citation: {page: 5, printed_page: "1285", quote: "mula based on compliance estimates27,28,31", where: "above Eq. 15"}
+  assumptions:
+    - >
+      The paper states only that Eq. 15 rests on compliance estimates that include Westerhof et al. 1969, whose
+      segment compliance C' = 3 pi r^2 (a + 1)^2/(E (2a + 1)), a = r/h (Fig. 1, Table 1) is recorded as
+      westerhof1969/segment_compliance. It does not say how the estimates were turned into k1, k2, k3 (the
+      values themselves are taken from ref. 21 = olufsen1999, linked in cited.yaml), so the step is a fit in
+      words that cannot be applied symbolically.
+    - >
+      b (network_1d) is not runnable and has no ports r, h, E or dz; its inputs k1, k2, k3 are fit constants that
+      cannot be written in a's input symbols, and its other inputs (rho, mu, nu, delta, T, K5, xi, gamma, lrr)
+      have no counterpart in a. No mapping or regime is given; the relation is recorded as stated and is
+      unverifiable.
+    - >
+      For reference only, not a claim of either paper: linearizing Eq. 14 at A = A0 gives a compliance per length
+      dA/dp = 3 pi r0^3/(2 E h), which is the thin-wall (h/r -> 0) leading term of Westerhof's C'.

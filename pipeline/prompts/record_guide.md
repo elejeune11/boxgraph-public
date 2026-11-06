@@ -5,6 +5,11 @@ is in `docs/minimalist_design/` (read `01-goal.md` and `02-boxgraph.md`
 first). A complete small example record is `tests/fixtures/toy/`; copy its
 file formats exactly. The schema is `boxgraph/schema.py`.
 
+Each review is a corpus of its own. Its records are in
+`corpora/<name>/records/` and its files in `corpus/<name>/`; your task names
+both. Paths below say `records/<id>/` and `corpus/<file>` for short: use the
+records folder and file your task names in every path and command.
+
 The record checks **consistency, not truth**: whether a paper's printed
 results follow from its own printed equations and inputs. You do not judge
 whether the paper is right, and you never summarize it.
@@ -42,7 +47,7 @@ doi: 10.1126/science.347575
 file: corpus/<file>.pdf
 page_range: [1, 10]          # PDF pages that belong to this source
 pages: {1: "618", 2: "619"}  # PDF page -> journal page label, where visible
-reader: {kind: agent, name: boxgraph-reader, model: <your model id>, prompt_version: "reader-1", date: "<today>"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "<today>"}
 notes: >
   How the reading went: what is in scope, what was left out and why.
 ```
@@ -149,6 +154,26 @@ def symbolic():   # optional but wanted for closed-form models: same names, same
 - A model is **as the paper states it**, in its own symbols, even if it fails
   to reproduce the paper's numbers. Do not "fix" an equation to make numbers
   work. If you suspect the equation is misprinted, record that as a question.
+- **An evident misprint gets a corrected variant beside the printed model**,
+  never instead of it. Evident means you can state the evidence: the paper's
+  own figure, text or released code shows the other form, or a sign or
+  dimension argument shows the printed form cannot be meant (it gives a
+  negative elastance, flow against a closed valve, mismatched units). Write a
+  second model with `variant_of: <the printed model's id>` and its
+  `corrections`, one per corrected equation, then run and compare it with
+  the same printed results as the printed model:
+  ```yaml
+  variant_of: circulation_valves
+  corrections:
+    - equation: Eq. 3
+      change: "activation (1 - cos(pi t/Ts1))/2 instead of the printed cos(pi t/Ts1)"
+      evidence: "Fig. 2 (p. 4) shows the elastance rising from its minimum; the printed form gives negative elastance"
+  ```
+  Keep the printed model and its comparisons and the `possible_error`
+  question. Correct only what the evidence shows, each correction in the
+  smallest form that matches it; when several readings are possible, add
+  each as its own variant. Never correct a printed number this way: a value
+  stays as printed, with a question.
 - A model given only in words is made runnable if the words allow it
   (`from_words: true`). If it cannot be made runnable, set `runnable: false`
   with `not_runnable_reason`, add an open question about it, and do not
@@ -311,6 +336,16 @@ in the record; a later job relates models across papers.
    `.venv/bin/boxgraph validate records/<id>`
    Model runs are cached in a cache shared with the check that follows your
    job, so do not pass `--cache`: a run you make is then not repeated.
+   A shell command is stopped after 10 minutes. When the record has many slow
+   runs (a simulation per comparison, a model run to a steady beat), check
+   the structure first with `--no-run`, test single models directly as in
+   step 4, then start the full validation in the background and wait for it
+   to finish before you stop: runs it completes stay cached even if it is
+   stopped, so starting it again continues rather than repeats.
+   A cached run is keyed on its model's code: any edit to a `model.py`, even
+   to a comment, makes every run of that model (and of models that load it)
+   run again. Finish the model code before the full validation, and after it
+   leave the code as it is.
    Look at warnings too: a printed result never compared, an added input
    without alternatives, a stochastic model never refined.
 6. If a comparison comes out not reproduced, first re-check your reading

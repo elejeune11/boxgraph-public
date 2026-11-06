@@ -64,3 +64,26 @@ def test_a_relation_whose_test_fails_is_unverifiable_not_a_crash(tmp_path):
     syn = build_synthesis(root, cache_dir=tmp_path / "c")
     rel = next(r for r in syn["relations"] if r["key"] == "toy2/rel_dims")
     assert rel["status"] == "unverifiable"
+
+
+def test_a_refinement_needs_two_factors_including_the_papers_own(tmp_path):
+    """A refinement with fewer than two factors, or without factor 1, is a validation error and a build problem, never a crash."""
+    for factors in ([1], [], [2, 4]):
+        d = _toy(tmp_path / str(len(factors)) / str(sum(factors)))
+        _edit(d / "refinements.yaml", lambda rs, f=factors: rs[0].update(factors=f))
+        assert any("factor" in e for e in validate(load_record(d), run=False).errors), factors
+        b = Builder(load_record(d), cache_dir=tmp_path / "c").build()
+        assert any("factor" in p for p in b.problems), (factors, b.problems)
+        build_synthesis(d.parent, cache_dir=tmp_path / "c")
+
+
+def test_a_refinement_finding_quotes_the_value_at_the_papers_setting(tmp_path):
+    """A refinement that settles away from the paper's result quotes the value at factor 1, wherever factor 1 is listed."""
+    d = _toy(tmp_path / "r")
+    _edit(d / "refinements.yaml", lambda rs: [r.update(factors=[2, 1, 4, 8, 16]) for r in rs if r["id"] == "ref_coarse"])
+    b = Builder(load_record(d), cache_dir=tmp_path / "c").build()
+    ref = b.refinements["ref_coarse"]
+    at_one = next(x["value"] for x in ref["series"] if x["factor"] == 1)
+    syn = build_synthesis(d.parent, cache_dir=tmp_path / "c")
+    (f,) = [f for f in syn["findings"] if f["subject"] == "toy/ref_coarse"]
+    assert ref["settles"] and f"from {at_one:.4g}" in f["detail"].replace("  ", " "), f["detail"]

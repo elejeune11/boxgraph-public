@@ -1,0 +1,21 @@
+id: step_response_eq31_p0
+name: flow after a pressure step in the first-order rigid-vessel model, with the step size p0 (Eq. 31 corrected)
+stated: {page: 14, quote: "at t = 0 it will suddenly jump to πp0 (1−λp /λq )/8", where: "Eq. 31 and text"}
+equation: "q = alpha p0 (1 - lambda_p/lambda_q) e^(-t/lambda_q), t > 0; alpha = pi/8, lambda_q = 1/beta_1^2, lambda_p = A lambda_q (Eq. 18)"
+variant_of: step_response_eq31
+corrections:
+  - equation: Eq. 31
+    change: "the factor p0 restored: q = alpha p0 (1 - lambda_p/lambda_q) e^(-t/lambda_q) instead of the printed alpha (1 - lambda_p/lambda_q) e^(-t/lambda_q)"
+    evidence: >
+      the text below Eq. 31 (p. 74) says the flow jumps at t = 0 to pi p0 (1 - lambda_p/lambda_q)/8; the
+      integral above Eq. 31, with p = p0 for t <= 0, gives the factor p0; and q is linear in p (Eq. 18),
+      so the printed form cannot depend on the step size as it must
+inputs:
+  beta1: {quantity: bessel_j0_zero, unit: dimensionless}
+  p0: {quantity: dimensionless_pressure, unit: dimensionless}
+  t: {quantity: dimensionless_time, unit: dimensionless}
+outputs:
+  q: {quantity: dimensionless_flow, unit: dimensionless}
+settings: {}
+stochastic: false
+built_from: [timescales_first_order]

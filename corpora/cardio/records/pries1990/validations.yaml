@@ -1,0 +1,121 @@
+# pries1990's in vitro viscosity law (Eqs. 2-3, viscosity_invitro) judged against the in vitro tube
+# viscosities measured or compiled in pries1992. pries1990 (p. 4): "Literature data obtained with
+# human blood were used to define a parametric equation for the variation of relative apparent
+# viscosity (eta_rel) with HD and D in rat blood". pries1992 (p. 1) names ref. 40 (pries1990) among
+# the "Empirical descriptions of blood viscosity as a function of tube diameter ... derived based on
+# compilations of literature data (19, 30, 37, 40, 55)" and says such compilations "provide fitting
+# algorithms that do not adequately represent all features of the experimental data".
+# Conditions that differ everywhere (see q_p92_species_scaling): pries1990 states Eqs. 2-3 for rat
+# blood; the pries1992 measurements are tube flow of (mostly human) blood, eta_rel relative to the
+# suspending medium. Both are in vitro relative apparent viscosity at high shear in glass tubes.
+
+- id: val_eta045_p92_fig5_points
+  model: viscosity_invitro
+  inputs: {HD: pries1992/HctD_045}
+  sweep: {D: pries1992/eta_fig5_points_HD045}
+  output: eta_rel
+  against: pries1992/eta_fig5_points_HD045
+  purpose: validation
+  quantities:
+    pries1992/tube_diameter: vessel_diameter
+    pries1992/discharge_hematocrit: discharge_hematocrit
+    pries1992/relative_apparent_viscosity: relative_apparent_viscosity
+  conditions_ok: >
+    pries1990 states Eqs. 2-3 for rat blood (scaled from human in vitro data by the cube root of
+    red cell volume, p. 4); the pries1992 points are in vitro tube data of human (and some other)
+    blood, at HD 0.45 (some extrapolated to 0.45 by pries1992's Eq. 1). Both are relative apparent
+    viscosity in glass tubes at high shear rate, the quantity Eq. 2 describes; the species scaling
+    is an open question (q_p92_species_scaling), not a reason not to compare.
+  basis: >
+    Eqs. 2-3 of pries1990 give eta_rel as a function of D and HD from in vitro tube data (p. 4,
+    "Literature data obtained with human blood were used to define a parametric equation"); at
+    HD = 0.45 they predict the compiled measurements of pries1992 Fig. 5 (the 163 points of Fig. 2),
+    which pries1992 (p. 1) offers as a fuller data base than earlier compilations including ref. 40.
+  note: "the pries1992 compilation includes literature studies that may overlap those behind pries1990's fit (q_p92_fit_overlap)"
+
+- id: val_eta_p92_fig3_33um
+  model: viscosity_invitro
+  inputs: {D: D_p92_fig3_3p3}
+  sweep: {HD: pries1992/eta_fig3_33um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_33um_points
+  purpose: validation
+  quantities: {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: &species "pries1990 states Eqs. 2-3 for rat blood; the pries1992 tubes carry human blood (cell-to-tube scaling open, q_p92_species_scaling); both are in vitro relative apparent viscosity at high shear"
+  basis: &fig3basis >
+    Eqs. 2-3 give eta_rel at any D and HD (p. 4); pries1992 Fig. 3 gives measured eta_rel against
+    HD in one tube diameter per panel, which Eqs. 2-3 predict at that diameter.
+- id: val_eta_p92_fig3_44um
+  model: viscosity_invitro
+  inputs: {D: D_p92_fig3_4p4}
+  sweep: {HD: pries1992/eta_fig3_44um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_44um_points
+  purpose: validation
+  quantities: {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: *species
+  basis: *fig3basis
+- id: val_eta_p92_fig3_56um
+  model: viscosity_invitro
+  inputs: {D: D_p92_fig3_5p6}
+  sweep: {HD: pries1992/eta_fig3_56um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_56um_points
+  purpose: validation
+  quantities: {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: *species
+  basis: *fig3basis
+- id: val_eta_p92_fig3_6um
+  model: viscosity_invitro
+  inputs: {D: D_p92_fig3_6}
+  sweep: {HD: pries1992/eta_fig3_6um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_6um_points
+  purpose: validation
+  quantities: {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: *species
+  basis: *fig3basis
+- id: val_eta_p92_fig3_9um
+  model: viscosity_invitro
+  inputs: {D: D_p92_fig3_9}
+  sweep: {HD: pries1992/eta_fig3_9um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_9um_points
+  purpose: validation
+  quantities: {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: *species
+  basis: *fig3basis
+  note: "pries1992's own measurements (p. 5: tubes of >6 um 'obtained in present study'), so not data behind pries1990's fit"
+- id: val_eta_p92_fig3_12um
+  model: viscosity_invitro
+  inputs: {D: D_p92_fig3_12}
+  sweep: {HD: pries1992/eta_fig3_12um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_12um_points
+  purpose: validation
+  quantities: {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: *species
+  basis: *fig3basis
+  note: "pries1992's own measurements (p. 5), not data behind pries1990's fit"
+- id: val_eta_p92_fig3_20um
+  model: viscosity_invitro
+  inputs: {D: pries1992/D_20}
+  sweep: {HD: pries1992/eta_fig3_20um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_20um_points
+  purpose: validation
+  quantities: {pries1992/tube_diameter: vessel_diameter, pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: "pries1990 states Eqs. 2-3 for rat blood; the pries1992 20 um tubes carry human cells in a medium of 1.85 cP (eta_rel is relative to that medium, as Eq. 2's to plasma); both are in vitro relative apparent viscosity at high shear"
+  basis: *fig3basis
+  note: "pries1992's own measurements (p. 5), not data behind pries1990's fit"
+- id: val_eta_p92_fig3_40um
+  model: viscosity_invitro
+  inputs: {D: D_p92_fig3_40}
+  sweep: {HD: pries1992/eta_fig3_40um_points}
+  output: eta_rel
+  against: pries1992/eta_fig3_40um_points
+  purpose: validation
+  quantities: {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_apparent_viscosity}
+  conditions_ok: *species
+  basis: *fig3basis
+  note: "pries1992's own measurements (p. 5), not data behind pries1990's fit"

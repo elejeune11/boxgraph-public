@@ -1,6 +1,14 @@
 # BoxGraph: common tasks. Run `make help`.
 PY ?= .venv/bin/python
 BG ?= .venv/bin/boxgraph
+# Every corpus lives in corpora/<name>/; the corpus targets take CORPUS=<name> (motor_clutch, cardio, ...)
+CORPUS ?=
+RUN = $(PY) -m pipeline.run_papers --corpus $(CORPUS)
+RECORDS = corpora/$(CORPUS)/records
+OUT = build/$(CORPUS)
+CONTENT = corpora/$(CORPUS)/overview.yaml
+SITE = site/$(CORPUS)
+NEED = @test -n "$(CORPUS)" || { echo "name a corpus: make $@ CORPUS=<name>, one of: $$(ls corpora)"; exit 2; }
 
 .PHONY: help install test lint docs check ingest plan read build report clean site
 
@@ -10,12 +18,13 @@ help:
 	@echo "lint      run ruff"
 	@echo "docs      regenerate docs/TESTS.md and the design figures"
 	@echo "check     lint + tests + docs freshness (what CI runs)"
-	@echo "ingest    extract page text and images for the corpus in pipeline/papers.yaml"
-	@echo "plan      what the pipeline would run for the corpus, with budget caps"
-	@echo "read      run every job not yet done: read, audit, digitize, relate, build"
-	@echo "build     validate and build every record into build/ (synthesis + report)"
-	@echo "site      copy the built overview into site/, which GitHub Pages serves"
+	@echo "ingest    extract page text and images for a corpus (corpora/<name>/papers.yaml)"
+	@echo "plan      what the pipeline would run for a corpus, with budget caps"
+	@echo "read      run every job not yet done: read, audit, digitize, relate, validate, build"
+	@echo "build     validate and build a corpus's records into build/<name>/: Synthesis, report, overview"
+	@echo "site      copy the built overview into site/<name>/, which GitHub Pages serves (run build first)"
 	@echo "clean     remove build outputs and caches"
+	@echo "(ingest, plan, read, build and site take CORPUS=<name>: make build site CORPUS=motor_clutch)"
 
 install:  # the exact versions in uv.lock
 	uv sync --locked --python 3.13 --extra dev --extra pipeline
@@ -34,19 +43,24 @@ check: lint test
 	$(PY) tools/test_catalog.py --check
 
 ingest:
-	$(PY) -m pipeline.run_papers --stages ingest
+	$(NEED)
+	$(RUN) --stages ingest
 
 plan:
-	$(PY) -m pipeline.run_papers --plan
+	$(NEED)
+	$(RUN) --plan
 
 read:
-	$(PY) -m pipeline.run_papers
+	$(NEED)
+	$(RUN)
 
 build:
-	$(BG) build records --out build --title "BoxGraph Synthesis"
+	$(NEED)
+	$(BG) build $(RECORDS) --out $(OUT) --cache build/cache --title "BoxGraph Synthesis" $(if $(wildcard $(CONTENT)),--overview $(CONTENT))
 
 clean:
 	rm -rf build .pytest_cache
 
-site:  # after a build: the overview, as GitHub Pages serves it
-	mkdir -p site && rm -rf site/img && cp -r build/overview/. site/
+site:  # after a build: the overview, as GitHub Pages serves it (site/index.html is the landing page, kept by hand)
+	$(NEED)
+	mkdir -p $(SITE) && rm -rf $(SITE)/img && cp -r $(OUT)/overview/. $(SITE)/

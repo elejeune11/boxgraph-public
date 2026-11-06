@@ -1,0 +1,175 @@
+# Cross-validation against stergiopulos1999 (ref. 29), 2026-11-03. This paper is analytical and measures
+# nothing, so only its models can be judged, and only against stergiopulos1999's measurements. The one model
+# here that gives a measured quantity of that paper is the three-element windkessel of Fig. 3D (helper
+# windkessel3_p73, p. 73), whose steady sinusoidal p/q is the aortic input impedance. Run with dog 71's elements
+# from stergiopulos1999 Table 1 (R1 = Z_c, R2 = R_p, C1 = C), it predicts the input impedance measured in dog 71
+# (stergiopulos1999 Fig. 5, squares at the first five harmonics). Two parameter sets:
+#  - the "actual" values by standard techniques (Z_c, R_p, C_PPM), the set Fig. 5 itself uses: validation;
+#  - the values fitted to dog 71's measured pressure with measured flow as input (Table 1, 3-el WK): fit_quality,
+#    since the pressure and flow fitted are those whose Fourier ratio is the plotted impedance.
+# R1 and R2 are both windkessel_resistance here, so Z_c and R_p of stergiopulos1999 map to that one quantity
+# (q_val_stergiopulos_resistance_map).
+
+# ---- standard ("actual") values: Z_c from the 3rd-10th harmonics, R_p = mean P/mean Q, C by pulse pressure ----
+- id: val_wk3_std_d71_mod_vs_stergiopulos
+  model: windkessel3_p73
+  inputs: {R1: 'stergiopulos1999/rc_std_d71', R2: 'stergiopulos1999/rp_d71', C1: 'stergiopulos1999/cppm_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_mod_measured_fig'}
+  output: modulus
+  against: 'stergiopulos1999/fig5_mod_measured_fig'
+  purpose: validation
+  quantities: &qmod {'stergiopulos1999/characteristic_impedance': windkessel_resistance, 'stergiopulos1999/peripheral_resistance': windkessel_resistance, 'stergiopulos1999/total_arterial_compliance': windkessel_compliance, 'stergiopulos1999/frequency': frequency, 'stergiopulos1999/input_impedance_modulus': input_impedance_modulus}
+  basis: &bstd "p. 73: 'the three-element windkessel model of Fig. 3D' (R1 in series with R2 parallel to C1), whose printed equation gives p/q = (R1 + R2 + j w R1 R2 C1)/(1 + j w R2 C1) for sinusoidal p and q; p. 78: 'the four-element windkessel model (including inductance) suggested by [29] fits the data better than the three-element windkessel model', i.e. this paper takes the three-element windkessel as a description of [29]'s data. stergiopulos1999 Fig. 5 draws the same circuit's impedance for dog 71 'with characteristic impedance and total arterial compliance obtained from standard methods' (Table 1: Z_c = 0.275, R_p = 4.54 mmHg s/ml, C_PPM = 0.208 ml/mmHg) against the impedance measured in dog 71. These values are estimated from the dog's pressure and flow, not fitted by a windkessel; Z_c is the mean modulus of the 3rd-10th harmonics of the same impedance, so agreement at the higher harmonics is partly built in (q_val_stergiopulos_zc_from_same_impedance)."
+- id: val_wk3_std_d71_ph_vs_stergiopulos
+  model: windkessel3_p73
+  inputs: {R1: 'stergiopulos1999/rc_std_d71', R2: 'stergiopulos1999/rp_d71', C1: 'stergiopulos1999/cppm_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_ph_measured_fig'}
+  output: phase
+  against: 'stergiopulos1999/fig5_ph_measured_fig'
+  purpose: validation
+  quantities: &qph {'stergiopulos1999/characteristic_impedance': windkessel_resistance, 'stergiopulos1999/peripheral_resistance': windkessel_resistance, 'stergiopulos1999/total_arterial_compliance': windkessel_compliance, 'stergiopulos1999/frequency': frequency, 'stergiopulos1999/input_impedance_phase': input_impedance_phase}
+  basis: *bstd
+
+# ---- three-element windkessel values fitted to dog 71's pressure (Table 1) ----
+- id: val_wk3_fit_d71_mod_vs_stergiopulos
+  model: windkessel3_p73
+  inputs: {R1: 'stergiopulos1999/rc_3wk_d71', R2: 'stergiopulos1999/rp_d71', C1: 'stergiopulos1999/c_3wk_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_mod_measured_fig'}
+  output: modulus
+  against: 'stergiopulos1999/fig5_mod_measured_fig'
+  purpose: fit_quality
+  quantities: *qmod
+  basis: &bfit "As for the standard set (p. 73 three-element windkessel; p. 78 'fits the data better'), with Z_c and C of the three-element windkessel fitted by stergiopulos1999 (p. 2: 'fitted in the time domain with use of aortic flow as input and adjustment of the model parameters to minimize the root-mean-square deviation between measured pressure and windkessel-' predicted pressure) to dog 71's measured aortic pressure, R_p given. Fig. 5's impedance is 'determined in dog 71' by Fourier analysis of that dog's pressure and flow, so the fit was made to the same measurement in the time domain: reported as fit quality, not a test (q_val_stergiopulos_same_beat)."
+- id: val_wk3_fit_d71_ph_vs_stergiopulos
+  model: windkessel3_p73
+  inputs: {R1: 'stergiopulos1999/rc_3wk_d71', R2: 'stergiopulos1999/rp_d71', C1: 'stergiopulos1999/c_3wk_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_ph_measured_fig'}
+  output: phase
+  against: 'stergiopulos1999/fig5_ph_measured_fig'
+  purpose: fit_quality
+  quantities: *qph
+  basis: *bfit
+
+# ---- Cross-validation with westerhof1971 (ref. 35), 2026-11-03 ----
+# The three-element windkessel of Fig. 3D (helper windkessel3_p73), run with westerhof1971's Table 1
+# element values for the bed of each figure (R1 = R_c, R2 = R_p, C1 = C), against the input impedance
+# westerhof1971 measured on its hydraulic models (Figs. 2-3, fully drawn lines; Figs. 4-5, crosses) and the
+# in vivo dog impedances from the literature it plots (Figs. 2-3, dots). Table 1's values are estimates
+# made from other data (peripheral resistance from ref. 2, R_c from rho c/(pi r^2), C from the diastolic
+# decay; westerhof1971 p. 5) and are the design values the hydraulic models were built to; none was fitted
+# to these impedances, so all are validations. The circles of Figs. 4-5 (model plus adapter) are not used
+# (q_val_westerhof1971_choices).
+- id: val_wk3_dog_syst_model_mod_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_syst', R2: 'westerhof1971/rp_dog_syst', C1: 'westerhof1971/c_dog_syst'}
+  sweep: {f: 'westerhof1971/f2_mod_line_read'}
+  output: modulus
+  against: 'westerhof1971/f2_mod_line_read'
+  purpose: validation
+  quantities: &qw_mod {'westerhof1971/resistor_resistance': windkessel_resistance, 'westerhof1971/total_arterial_compliance': windkessel_compliance, 'westerhof1971/frequency': frequency, 'westerhof1971/input_impedance_modulus': input_impedance_modulus}
+  basis: &bw_model "p. 73: 'the three-element windkessel model of Fig. 3D [10, 16, 21, 28, 30, 35]' (ref. 35 is westerhof1971), R1 in series with R2 parallel to C1, whose printed equation gives p/q = (R1 + R2 + j w R1 R2 C1)/(1 + j w R2 C1) for sinusoidal p and q; p. 62: the three-element windkessel 'estimates experimental data [7, 10, 16, 21, 28, 30, 35]'. westerhof1971 builds a hydraulic version of this circuit (its Fig. 1A, R_c in series with R_p parallel to C) with the Table 1 values for each bed, resistors 'milled to the desired length so as to obtain the exact resistance' (p. 4), and measures its input impedance with a sinusoidal pump (p. 5). The windkessel with those design values should predict the measured impedance, apart from the inertance of the tubes that it lacks (westerhof1971 q_hydraulic_inertance)."
+- id: val_wk3_dog_syst_model_ph_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_syst', R2: 'westerhof1971/rp_dog_syst', C1: 'westerhof1971/c_dog_syst'}
+  sweep: {f: 'westerhof1971/f2_ph_line_read'}
+  output: phase
+  against: 'westerhof1971/f2_ph_line_read'
+  purpose: validation
+  quantities: &qw_ph {'westerhof1971/resistor_resistance': windkessel_resistance, 'westerhof1971/total_arterial_compliance': windkessel_compliance, 'westerhof1971/frequency': frequency, 'westerhof1971/input_impedance_phase': input_impedance_phase}
+  basis: *bw_model
+- id: val_wk3_dog_pulm_model_mod_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_pulm', R2: 'westerhof1971/rp_dog_pulm', C1: 'westerhof1971/c_dog_pulm'}
+  sweep: {f: 'westerhof1971/f3_mod_line_read'}
+  output: modulus
+  against: 'westerhof1971/f3_mod_line_read'
+  purpose: validation
+  quantities: *qw_mod
+  basis: *bw_model
+- id: val_wk3_dog_pulm_model_ph_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_pulm', R2: 'westerhof1971/rp_dog_pulm', C1: 'westerhof1971/c_dog_pulm'}
+  sweep: {f: 'westerhof1971/f3_ph_line_read'}
+  output: phase
+  against: 'westerhof1971/f3_ph_line_read'
+  purpose: validation
+  quantities: *qw_ph
+  basis: *bw_model
+- id: val_wk3_cat_syst_model_mod_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_cat_syst', R2: 'westerhof1971/rp_cat_syst', C1: 'westerhof1971/c_cat_syst'}
+  sweep: {f: 'westerhof1971/f4_mod_crosses_read'}
+  output: modulus
+  against: 'westerhof1971/f4_mod_crosses_read'
+  purpose: validation
+  quantities: *qw_mod
+  basis: *bw_model
+- id: val_wk3_cat_syst_model_ph_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_cat_syst', R2: 'westerhof1971/rp_cat_syst', C1: 'westerhof1971/c_cat_syst'}
+  sweep: {f: 'westerhof1971/f4_ph_crosses_read'}
+  output: phase
+  against: 'westerhof1971/f4_ph_crosses_read'
+  purpose: validation
+  quantities: *qw_ph
+  basis: *bw_model
+- id: val_wk3_cat_pulm_model_mod_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_cat_pulm', R2: 'westerhof1971/rp_cat_pulm', C1: 'westerhof1971/c_cat_pulm'}
+  sweep: {f: 'westerhof1971/f5_mod_crosses_read'}
+  output: modulus
+  against: 'westerhof1971/f5_mod_crosses_read'
+  purpose: validation
+  quantities: *qw_mod
+  basis: *bw_model
+- id: val_wk3_cat_pulm_model_ph_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_cat_pulm', R2: 'westerhof1971/rp_cat_pulm', C1: 'westerhof1971/c_cat_pulm'}
+  sweep: {f: 'westerhof1971/f5_ph_crosses_read'}
+  output: phase
+  against: 'westerhof1971/f5_ph_crosses_read'
+  purpose: validation
+  quantities: *qw_ph
+  basis: *bw_model
+
+# ---- the in vivo dog impedances from the literature (Figs. 2-3, dots) ----
+- id: val_wk3_dog_syst_invivo_mod_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_syst', R2: 'westerhof1971/rp_dog_syst', C1: 'westerhof1971/c_dog_syst'}
+  sweep: {f: 'westerhof1971/f2_mod_dots_read'}
+  output: modulus
+  against: 'westerhof1971/f2_mod_dots_read'
+  purpose: validation
+  quantities: *qw_mod
+  conditions_ok: &cw_invivo "The dots are in vivo input impedances of the dog's systemic (Fig. 2) or pulmonary (Fig. 3) tree pooled from several studies (westerhof1971 refs. 1, 14-17, 25), not one animal; Table 1's dog values are generic estimates for the same bed. The comparison tests whether the windkessel with those estimates is of the size of the pooled data, not a prediction for any one dog (westerhof1971 q_literature_dots)."
+  basis: &bw_invivo "p. 73: 'the three-element windkessel model of Fig. 3D [10, 16, 21, 28, 30, 35]', whose printed equation gives p/q = (R1 + R2 + j w R1 R2 C1)/(1 + j w R2 C1); p. 62: the three-element windkessel 'estimates experimental data [7, 10, 16, 21, 28, 30, 35]', ref. 35 being westerhof1971, whose Figs. 2-3 are that data. westerhof1971 p. 5: the dog's peripheral resistances 'were obtained in this laboratory (2)', the characteristic impedances 'estimated from Z0 = rho c/(pi r^2) (28)' and C from the diastolic decay, none from the plotted impedances; 'Both models agree well with the real data as is shown in Figs. 2 and 3'."
+- id: val_wk3_dog_syst_invivo_ph_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_syst', R2: 'westerhof1971/rp_dog_syst', C1: 'westerhof1971/c_dog_syst'}
+  sweep: {f: 'westerhof1971/f2_ph_dots_read'}
+  output: phase
+  against: 'westerhof1971/f2_ph_dots_read'
+  purpose: validation
+  quantities: *qw_ph
+  conditions_ok: *cw_invivo
+  basis: *bw_invivo
+- id: val_wk3_dog_pulm_invivo_mod_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_pulm', R2: 'westerhof1971/rp_dog_pulm', C1: 'westerhof1971/c_dog_pulm'}
+  sweep: {f: 'westerhof1971/f3_mod_dots_read'}
+  output: modulus
+  against: 'westerhof1971/f3_mod_dots_read'
+  purpose: validation
+  quantities: *qw_mod
+  conditions_ok: *cw_invivo
+  basis: *bw_invivo
+- id: val_wk3_dog_pulm_invivo_ph_vs_westerhof1971
+  model: windkessel3_p73
+  inputs: {R1: 'westerhof1971/rc_dog_pulm', R2: 'westerhof1971/rp_dog_pulm', C1: 'westerhof1971/c_dog_pulm'}
+  sweep: {f: 'westerhof1971/f3_ph_dots_read'}
+  output: phase
+  against: 'westerhof1971/f3_ph_dots_read'
+  purpose: validation
+  quantities: *qw_ph
+  conditions_ok: *cw_invivo
+  basis: *bw_invivo

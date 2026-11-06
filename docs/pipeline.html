@@ -118,7 +118,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="266" y="203" text-anchor="middle" class="t">papers.yaml</text>
           <text x="266" y="221" text-anchor="middle" class="s">id · pages · note</text>
           <rect x="196" y="304" width="140" height="56" rx="6" class="file"/>
-          <text x="266" y="323" text-anchor="middle" class="t">corpus/</text>
+          <text x="266" y="323" text-anchor="middle" class="t">corpus/&lt;name&gt;/</text>
           <text x="266" y="339" text-anchor="middle" class="s">PDFs · code · data</text>
           <text x="266" y="353" text-anchor="middle" class="s">never committed</text>
 
@@ -226,7 +226,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
 
           <!-- ledger -->
           <rect x="566" y="500" width="730" height="48" rx="6" class="file"/>
-          <text x="931" y="520" text-anchor="middle" class="t">pipeline/completed.yaml</text>
+          <text x="931" y="520" text-anchor="middle" class="t">corpora/&lt;name&gt;/completed.yaml</text>
           <text x="931" y="538" text-anchor="middle" class="s">committed ledger of passed jobs · every later run, on any machine, skips them</text>
           <path d="M756 452 V496" class="wire ok" marker-end="url(#ahok)"/>
           <text x="764" y="480" class="okt" style="font-size:11px">passed</text>
@@ -234,7 +234,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="1244" y="480" class="okt" style="font-size:11px">passed</text>
         </svg>
       </div>
-      <figcaption>One command, <code>python -m pipeline.run_papers</code>, runs everything after the upload. Inside a lane each step waits for the one before it. Lanes run side by side, at most three agents at once. Pairs are chosen only after reading, because the signs of a relation come from the records: one cites the other, a model is built from the other, the corpus list asks for it, or one is the other's code or data. A shared model shape alone is a weak sign, so such a pair is listed for a person, not related. Released code or data is only read, once its paper's read has passed. Once a pair is related, a validate job enters each model of one record that predicts a measurement of the other (or a question saying why none does). Relate and validate jobs that share a paper take turns, since each locks both of its records. The build is plain code: it runs every model, so every verdict is recomputed rather than stored.</figcaption>
+      <figcaption>One command, <code>python -m pipeline.run_papers --corpus &lt;name&gt;</code>, runs everything after the upload. Inside a lane each step waits for the one before it. Lanes run side by side, at most three agents at once. Pairs are chosen only after reading, because the signs of a relation come from the records: one cites the other, a model is built from the other, the corpus list asks for it, or one is the other's code or data. A shared model shape alone is a weak sign, so such a pair is listed for a person, not related. Released code or data is only read, once its paper's read has passed. Once a pair is related, a validate job enters each model of one record that predicts a measurement of the other (or a question saying why none does). Relate and validate jobs that share a paper take turns, since each locks both of its records. The build is plain code: it runs every model, so every verdict is recomputed rather than stored.</figcaption>
     </figure>
   </section>
 
@@ -251,7 +251,8 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <!-- layer bands -->
           <rect x="120" y="20" width="960" height="108" rx="8" class="lane"/>
           <text x="132" y="38" class="m">pipeline/ · runs the agents, owns no rules</text>
-          <text x="712" y="186" class="m">both in records/&lt;id&gt;/</text>
+          <text x="712" y="186" class="m">both in corpora/&lt;name&gt;/</text>
+          <text x="712" y="200" class="m">records/&lt;id&gt;/</text>
           <rect x="120" y="318" width="960" height="122" rx="8" class="lane"/>
           <text x="132" y="336" class="m">boxgraph/ · the rules, generic code with nothing about any field</text>
 
@@ -278,7 +279,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="600" y="231" text-anchor="middle" class="t" style="font-size:12px">validations.yaml</text>
           <text x="600" y="247" text-anchor="middle" class="s">no status written</text>
           <rect x="940" y="166" width="130" height="102" rx="6" class="file"/>
-          <text x="1005" y="188" text-anchor="middle" class="t">build/</text>
+          <text x="1005" y="188" text-anchor="middle" class="t">build/&lt;name&gt;/</text>
           <text x="1005" y="206" text-anchor="middle" class="s">overview/</text>
           <text x="1005" y="222" text-anchor="middle" class="s">report.html</text>
           <text x="1005" y="238" text-anchor="middle" class="s">figures.html</text>
@@ -337,7 +338,7 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="1013" y="300" class="lab">writes</text>
         </svg>
       </div>
-      <figcaption>Agents only ever write files in <code>records/&lt;id&gt;/</code>. Every judgement is made by code in <code>boxgraph/</code>. BoxGraph decides whether a record is sound and is the gate for read, audit and digitize. ModelAtlas decides whether a relation holds and is the gate for relate. The validate gate asks the Synthesis whether each model judged against another paper's measurement can be checked. The Synthesis is rebuilt from all the records every time, using both. No verdict, relation status or family is ever written into a record, so adding a paper in any order gives the same Synthesis.</figcaption>
+      <figcaption>Agents only ever write files in their record, <code>corpora/&lt;name&gt;/records/&lt;id&gt;/</code>. Every judgement is made by code in <code>boxgraph/</code>. BoxGraph decides whether a record is sound and is the gate for read, audit and digitize. ModelAtlas decides whether a relation holds and is the gate for relate. The validate gate asks the Synthesis whether each model judged against another paper's measurement can be checked. The Synthesis is rebuilt from all the records every time, using both. No verdict, relation status or family is ever written into a record, so adding a paper in any order gives the same Synthesis.</figcaption>
     </figure>
   </section>
 
@@ -417,8 +418,8 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
           <text x="346" y="57" text-anchor="middle" class="s">kind: software | dataset</text>
 
           <rect x="256" y="92" width="180" height="56" rx="6" class="file"/>
-          <text x="346" y="115" text-anchor="middle" class="t">corpus/code · corpus/data</text>
-          <text x="346" y="133" text-anchor="middle" class="s">never committed</text>
+          <text x="346" y="115" text-anchor="middle" class="t">corpus/&lt;name&gt;/</text>
+          <text x="346" y="133" text-anchor="middle" class="s">code · data · never committed</text>
 
           <path d="M196 70 H222 V44 H252" class="wire" marker-end="url(#ch)"/>
           <text x="218" y="36" text-anchor="end" class="lab">registers</text>
@@ -471,13 +472,15 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
       <table>
         <thead><tr><th>Where</th><th>What</th><th>In git</th></tr></thead>
         <tbody>
-          <tr><td class="mono">pipeline/papers.yaml</td><td>The corpus list: id, file, page range, note, relate_with</td><td>yes</td></tr>
-          <tr><td class="mono">records/&lt;id&gt;/</td><td>Models (YAML + <code>model.py</code>), data with short locating quotes, figure-reading code, relations, questions</td><td>yes</td></tr>
-          <tr><td class="mono">pipeline/completed.yaml</td><td>Every passed job, with date and cost</td><td>yes</td></tr>
-          <tr><td class="mono">corpus/</td><td>The PDFs, released code and source data</td><td>no, copyright</td></tr>
-          <tr><td class="mono">records/&lt;id&gt;/text, pages, figwork</td><td>Page text, page images, figure crops</td><td>no, copyright</td></tr>
-          <tr><td class="mono">pipeline_state/</td><td>This machine's job state and agent logs, used to resume a stopped run</td><td>no</td></tr>
-          <tr><td class="mono">build/</td><td>Synthesis, report, figure check, explorer, model cache</td><td>no, rebuilt</td></tr>
+          <tr><td class="mono">corpora/&lt;name&gt;/papers.yaml</td><td>The corpus list: id, file, page range, note, relate_with</td><td>yes</td></tr>
+          <tr><td class="mono">corpora/&lt;name&gt;/records/&lt;id&gt;/</td><td>Models (YAML + <code>model.py</code>), data with short locating quotes, figure-reading code, relations, questions</td><td>yes</td></tr>
+          <tr><td class="mono">corpora/&lt;name&gt;/completed.yaml</td><td>Every passed job, with date and cost</td><td>yes</td></tr>
+          <tr><td class="mono">corpora/&lt;name&gt;/overview.yaml</td><td>The overview's words and case studies</td><td>yes</td></tr>
+          <tr><td class="mono">corpus/&lt;name&gt;/</td><td>The PDFs, released code and source data</td><td>no, copyright</td></tr>
+          <tr><td class="mono">corpora/&lt;name&gt;/records/&lt;id&gt;/text, pages, figwork</td><td>Page text, page images, figure crops</td><td>no, copyright</td></tr>
+          <tr><td class="mono">pipeline_state/&lt;name&gt;/</td><td>This machine's job state and agent logs, used to resume a stopped run</td><td>no</td></tr>
+          <tr><td class="mono">build/&lt;name&gt;/</td><td>Synthesis, report, figure check, explorer</td><td>no, rebuilt</td></tr>
+          <tr><td class="mono">build/cache/</td><td>Model runs, shared by every corpus</td><td>no, rebuilt</td></tr>
         </tbody>
       </table>
     </div>
@@ -486,12 +489,14 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: 
   <section>
     <h2>Commands</h2>
     <div class="cmds">
-      <div>python -m pipeline.add paper.pdf --id smith2015 <span>[--pages 1-12] [--note "…"] [--relate-with bell1978]</span></div>
-      <div>python -m pipeline.attach code.zip --id smith_code --kind software --papers smith2015 <span># or a data file with --kind dataset</span></div>
-      <div>python -m pipeline.run_papers --plan <span># what would run, with budget caps</span></div>
-      <div>python -m pipeline.run_papers <span>[--papers smith2015] [--concurrency 3]</span></div>
-      <div>python -m pipeline.run_papers --status <span># state of every job on this machine</span></div>
-      <div>python -m pipeline.run_papers --reset read:smith2015 <span># release a parked job after looking at it</span></div>
+      <div>python -m pipeline.add paper.pdf --id smith2015 --corpus motor_clutch <span>[--pages 1-12] [--note "…"] [--relate-with bell1978]</span></div>
+      <div>python -m pipeline.attach code.zip --id smith_code --kind software --papers smith2015 --corpus motor_clutch <span># or a data file with --kind dataset</span></div>
+      <div>python -m pipeline.run_papers --corpus motor_clutch --plan <span># what would run, with budget caps</span></div>
+      <div>python -m pipeline.run_papers --corpus motor_clutch <span>[--papers smith2015] [--concurrency 3]</span></div>
+      <div>python -m pipeline.run_papers --corpus motor_clutch --status <span># state of every job on this machine</span></div>
+      <div>python -m pipeline.run_papers --corpus motor_clutch --reset read:smith2015 <span># release a parked job after looking at it</span></div>
+      <div>make build site CORPUS=motor_clutch <span># build the review and copy its overview to site/motor_clutch/</span></div>
+      <div>python -m pipeline.run_papers --corpus cardio --plan <span># every command names its corpus, kept in corpora/&lt;name&gt;/</span></div>
     </div>
   </section>
 </main>

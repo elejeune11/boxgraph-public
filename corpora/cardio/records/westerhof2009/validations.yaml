@@ -1,0 +1,59 @@
+# Cross-validation against stergiopulos1999 (2026-11-02; ref. 63). This review's three- and four-element
+# windkessel impedances (Fig. 5 circuits), run with stergiopulos1999's dog 71 values (Table 1), judged against
+# the dog 71 measured input impedance (stergiopulos1999 Fig. 5). Every dog 71 parameter set there was obtained
+# from dog 71's own pressure and flow, so all are fit_quality, none is a test (q_val_stergiopulos_fit_only).
+
+- id: val_wk3_std_dog71_mod
+  model: wk3_impedance
+  inputs: {R: 'stergiopulos1999/rp_d71', Zc: 'stergiopulos1999/rc_std_d71', C: 'stergiopulos1999/cppm_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_mod_measured_fig'}
+  output: Zmod
+  against: 'stergiopulos1999/fig5_mod_measured_fig'
+  purpose: fit_quality
+  quantities: &q3 {'stergiopulos1999/frequency': frequency, 'stergiopulos1999/peripheral_resistance': peripheral_resistance, 'stergiopulos1999/characteristic_impedance': characteristic_impedance, 'stergiopulos1999/total_arterial_compliance': total_arterial_compliance, 'stergiopulos1999/input_impedance_modulus': input_impedance_modulus, 'stergiopulos1999/input_impedance_phase': input_impedance_phase}
+  basis: &bstd "The three-element windkessel of Fig. 5 (ref. 73) gives the aortic input impedance; stergiopulos1999 Fig. 5 plots the measured input impedance of dog 71 'compared with input impedance of 3- and 4-element windkessel'. Fitted: Rp, Z_c and C_PPM of dog 71 are the standard-technique values of stergiopulos1999 Table 1; Rp is mean pressure over mean flow (the 0 Hz impedance) and Z_c the average modulus of this same measured impedance between the 3rd and 10th harmonics (stergiopulos1999 p. 2, 'Zc was estimated from the average of the modulus of the Zin between the 3rd and 10th harmonics'), so two of the three parameters are taken from the measurement itself."
+- id: val_wk3_std_dog71_ph
+  model: wk3_impedance
+  inputs: {R: 'stergiopulos1999/rp_d71', Zc: 'stergiopulos1999/rc_std_d71', C: 'stergiopulos1999/cppm_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_ph_measured_fig'}
+  output: phase
+  against: 'stergiopulos1999/fig5_ph_measured_fig'
+  purpose: fit_quality
+  quantities: *q3
+  basis: *bstd
+- id: val_wk3_fit_dog71_mod
+  model: wk3_impedance
+  inputs: {R: 'stergiopulos1999/rp_d71', Zc: 'stergiopulos1999/rc_3wk_d71', C: 'stergiopulos1999/c_3wk_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_mod_measured_fig'}
+  output: Zmod
+  against: 'stergiopulos1999/fig5_mod_measured_fig'
+  purpose: fit_quality
+  quantities: *q3
+  basis: &b3fit "The three-element windkessel of Fig. 5 (ref. 73) gives the aortic input impedance of dog 71 (stergiopulos1999 Fig. 5). Fitted: Rp given and Z_c, C fitted to dog 71's aortic pressure with its flow as input (stergiopulos1999 Table 1; p. 2, 'fitted in the time domain with use of aortic flow as input'). The impedance is the ratio of the same pressure and flow, so the fit is to this measurement in another form."
+- id: val_wk3_fit_dog71_ph
+  model: wk3_impedance
+  inputs: {R: 'stergiopulos1999/rp_d71', Zc: 'stergiopulos1999/rc_3wk_d71', C: 'stergiopulos1999/c_3wk_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_ph_measured_fig'}
+  output: phase
+  against: 'stergiopulos1999/fig5_ph_measured_fig'
+  purpose: fit_quality
+  quantities: *q3
+  basis: *b3fit
+- id: val_wk4_fit_dog71_mod
+  model: wk4_impedance
+  inputs: {R: 'stergiopulos1999/rp_d71', Zc: 'stergiopulos1999/rc_4wk_d71', C: 'stergiopulos1999/c_4wk_d71', L: 'stergiopulos1999/l_4wk_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_mod_measured_fig'}
+  output: Zmod
+  against: 'stergiopulos1999/fig5_mod_measured_fig'
+  purpose: fit_quality
+  quantities: &q4 {'stergiopulos1999/frequency': frequency, 'stergiopulos1999/peripheral_resistance': peripheral_resistance, 'stergiopulos1999/characteristic_impedance': characteristic_impedance, 'stergiopulos1999/total_arterial_compliance': total_arterial_compliance, 'stergiopulos1999/total_arterial_inertance': total_arterial_inertance, 'stergiopulos1999/input_impedance_modulus': input_impedance_modulus, 'stergiopulos1999/input_impedance_phase': input_impedance_phase}
+  basis: &b4fit "The four-element windkessel of Fig. 5, which this review cites to stergiopulos1999 (p. 4, 'a fourth element of the Windkessel has been proposed [63]'), gives the aortic input impedance of dog 71 (stergiopulos1999 Fig. 5). Fitted: Rp given and Z_c, C, L fitted to dog 71's aortic pressure with its flow as input (stergiopulos1999 Table 1; p. 2, 'fitted in the time domain with use of aortic flow as input'). The impedance is the ratio of the same pressure and flow, so the fit is to this measurement in another form."
+- id: val_wk4_fit_dog71_ph
+  model: wk4_impedance
+  inputs: {R: 'stergiopulos1999/rp_d71', Zc: 'stergiopulos1999/rc_4wk_d71', C: 'stergiopulos1999/c_4wk_d71', L: 'stergiopulos1999/l_4wk_d71'}
+  sweep: {f: 'stergiopulos1999/fig5_ph_measured_fig'}
+  output: phase
+  against: 'stergiopulos1999/fig5_ph_measured_fig'
+  purpose: fit_quality
+  quantities: *q4
+  basis: *b4fit

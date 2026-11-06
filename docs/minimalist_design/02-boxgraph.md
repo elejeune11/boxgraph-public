@@ -79,6 +79,18 @@ time against the record's own choice, never in every combination: the
 runs stay few, and a verdict that changes under any single alternative is
 reported.
 
+**A misprinted equation is run both ways.** A model is entered as printed.
+When a printed equation is evidently misprinted, because the paper's own
+figure, text or released code shows another form, or because a sign or
+dimension argument shows the printed form cannot be meant, the record also
+holds a variant of the model with the correction. The variant names the
+printed model, and for each correction the equation, the change and the
+evidence. It is added by the reader, like an added input. Both are run and
+compared with the same printed results. The printed model's verdicts stand
+as the paper's; the variant's are reported apart, and say whether the
+correction accounts for the difference. A printed value is never corrected
+this way: only an equation, and only with its evidence.
+
 A record is **sound** when every value traces to the paper or is labelled
 as added, every model that can be made to run does run, and units and
 quantities agree. A model the paper gives only in words is still entered
@@ -131,6 +143,22 @@ compares two intervals: reproduced when they overlap, close when the gap
 between them is no wider than the printed interval, otherwise not
 reproduced. A value from a model without randomness is a single point, and
 the rule is the one above. A verdict states both precisions.
+
+**Rounded inputs.** A model is run on its inputs as printed, and printing
+rounds them: a paper that computed with 1.26 and printed 1.3 can print a
+result that the printed 1.3 does not give. So when a result misses its
+printed precision by no more than a tenth of its value, the model is run
+again with each printed input at either end of its printed range, one at a
+time, and the changes are added up into a range around the computed value.
+The verdict then compares that range with the printed one, as for a model
+with randomness, and says that the inputs' rounding was used and which
+inputs were varied. Only printed inputs are varied, at most eight of them,
+the most coarsely printed first; added inputs have no printed rounding. A
+result further off is judged as computed, and the comparison says that the
+rounding was not tried. A range wider than a tenth of the value either way
+always reaches a result that was tried, so for it "reproduced" says that the
+paper's printed precision cannot settle the question, not that the value was
+pinned down; the range is kept beside the verdict so a reader can tell.
 
 ## Values read from figures
 

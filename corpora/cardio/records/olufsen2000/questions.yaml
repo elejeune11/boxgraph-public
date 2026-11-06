@@ -1,0 +1,196 @@
+- id: q_gamma_eq21
+  kind: possible_error
+  about: [gamma_printed, asymmetry_eq21, cmp_gamma_eq21]
+  text: >
+    Eq. 21 with the printed area ratio eta = 1.16 and exponent xi = 2.76 gives gamma ≈ 0.356, not the printed
+    0.41 (eta(gamma) is monotonic on (0, 1], so the root is unique; with gamma = 0.41 Eq. 21 gives eta ≈ 1.171).
+    The same value 0.41 is printed from the same inputs in ref. 21 (olufsen1999). The printed alpha = 0.9 and
+    beta = 0.6 (Eq. 22) round the same way from either gamma, so they do not tell which gamma was used.
+  citation: {page: 7, printed_page: "1287", quote: "asymmetry-ratio ␥ ⫽0.41. The area-ratio", where: "Eq. 21"}
+- id: q_period_heart_rate
+  kind: unexplained_difference
+  about: [T_printed, T_fig3_caption, heart_rate_results, heart_rate_appendix, cmp_period_hr]
+  text: >
+    The cardiac period used for the inflow and the boundary-layer estimate is T = 1.1 s (p. 4, Fig. 3), but the
+    subject's average heart rate at rest is printed as 51 beats per minute (pp. 11, 14), which is a period of
+    60/51 ≈ 1.18 s. The paper does not say whether the measured cycle was shortened or which beat was used.
+  citation: {page: 11, printed_page: "1291", quote: "His average heart rate at rest was", where: text}
+- id: q_rmin_count
+  kind: possible_error
+  about: [network_1d]
+  text: >
+    The text says 'four different minimum radii r_min = 0.01, 0.02, 0.03 cm were chosen' but lists three values,
+    and Table 1 uses exactly these three.
+  citation: {page: 10, printed_page: "1290", quote: "different minimum radii r min⫽0.01,0.02,0.03 cm were", where: text}
+- id: q_subject_age
+  kind: possible_error
+  about: [heart_rate_results, heart_rate_appendix]
+  text: >
+    The subject is described as 'a 32 year old male weighing 65 kg and being 178 cm tall' (p. 11) and as
+    'a 25 years old healthy male subject' (Appendix A, p. 14). Both passages give the same heart rate (51 per
+    minute), so they appear to describe the same subject; one of the ages may be a misprint.
+  citation: {page: 14, printed_page: "1294", quote: "ject was a 25 years old healthy male subject without any", where: "Appendix A"}
+- id: q_network_not_runnable
+  kind: unstated_input
+  about: [network_1d]
+  text: >
+    The coupled 1D model cannot be run from what is printed: the inflow is only the plotted curve of Fig. 3, the
+    network connectivity is only the drawing of Fig. 1, and p0, the grid spacing, the time step, the number of
+    timesteps per period N (used for the impedance and the convolution 38) and the number of periods are not
+    stated (Fig. B5 only says the solution converges after about four periods). Its printed results (Figs. 4-8, B5)
+    are therefore recorded as figure data and not reproduced.
+  citation: {page: 18, printed_page: "1298", quote: "Experiments suggest that a stable solu", where: text}
+- id: q_figB4_labels
+  kind: possible_error
+  about: [network_1d]
+  text: >
+    Fig. B4 (p. 17) labels the outlet of vessel 7 '(r_b)5 = 1.09 cm', while '(r_b)5 = (r_t)7 = 1.11 cm' is
+    printed at the junction of vessels 5 and 7; Table 1 and Algorithm 1 (art[3] = ves[1.0, 1.11, 1.09, ...])
+    give 1.09 cm as the outlet radius of vessel 7, so the subscript 5 on that label looks like a misprint for 7.
+    The caption also says 'inlet and outlet diameters' although the values shown are the radii of Table 1.
+    No value in the record depends on this figure (audit, second reading).
+  citation: {page: 17, printed_page: "1297", quote: "branch its length, inlet and outlet diameters are specified", where: "Fig. B4"}
+- id: q_cuff_pressure_claim
+  kind: reading
+  about: [p_l_subclavian_fig8, p_systolic_cuff, p_diastolic_cuff]
+  text: >
+    The cuff pressures 120/80 mmHg are said to 'correspond well' to the pressures computed at the left subclavian
+    artery (Fig. 8, E). The plotted curve reaches about 119 mmHg at its peak and about 85 mmHg at its minimum
+    (read by eye); the record does not judge the claim because the cuff was presumably on the brachial artery and
+    no tolerance is stated, and no comparison is made between a curve and these two scalars.
+  citation: {page: 11, printed_page: "1291", quote: "ments corresponded well to the pressures computed at", where: text}
+- id: q_no_cross_validation_olufsen1999
+  kind: unstated_input
+  about: [inflow_fig3, q_aortic_arc_meas_fig7, q_l_subclavian_meas_fig7, q_femoral_meas_fig7, p_systolic_cuff, p_diastolic_cuff, r_t_ascending_aorta, T_fig3_caption, heart_rate_results, network_1d]
+  text: >
+    Cross-validation with olufsen1999 (ref. 21) found no pair to test, in either direction. This paper's
+    measurements are MR flows (Figs. 3, 7), cuff pressures, the inlet radius, the cycle length and the heart rate
+    of one subject. The olufsen1999 model that would predict flow or pressure at these sites, its nonlinear 1D
+    model (olufsen1999/larger_arteries_1d), is not runnable: the geometry, windkessel parameters and numerical
+    settings are not printed. Its runnable models give quantities this paper does not measure: impedance
+    (structured_tree_impedance), Eh/r0 (stiffness_eq6), boundary-layer thickness, tree size and gamma.
+    olufsen1999's measurements are impedance moduli and phases (Fig. 9, refs. 26/27), aortic and brachial
+    pressures (Fig. 12, ref. 41) and a cardiac output. Only this paper's network_1d (not runnable,
+    q_network_not_runnable) would predict them. No runnable model here gives impedance (the structured-tree
+    recursion, Eqs. 23-37, is not recorded as a model) or cardiac output. On p. 13 this paper says the
+    structured tree 'captures the observed oscillations of the impedance'. That claim is about a trend and
+    names no data set it is checked against here, so it is not a quantitative prediction. No validation was
+    added. A runnable version of either 1D model, or this paper's impedance recursion, would make the Fig. 7
+    flows and the Fig. 9 / Fig. 12 measurements testable.
+  citation: {page: 13, printed_page: "1293", quote: "the observed oscillations of the impedance in the part of", where: text}
+- id: q_no_cross_validation_olufsen2004
+  kind: choice
+  about: [kinematic_viscosity, period_from_heart_rate, network_1d, inflow_fig3, q_aortic_arc_meas_fig7, p_systolic_cuff, p_diastolic_cuff, r_t_ascending_aorta, T_fig3_caption, heart_rate_results]
+  text: >
+    Cross-validation with olufsen2004 (which cites this paper as its ref. 20) found no pair to test, in either
+    direction. olufsen2004 is analytical and measures nothing: its printed numbers are blood properties (rho,
+    mu, nu, origin reported), zeros of J0 quoted from a handbook, a heart rate of 60 per minute and radii chosen
+    for its time-scale analysis, and the time-scales its own models produce. So no model of this record
+    (kinematic_viscosity, period_from_heart_rate, Eqs. 21-22, the tube law, network_1d) can be judged against
+    an olufsen2004 measurement; nu = mu/rho run on olufsen2004's rho and mu would agree or not with a reported,
+    not a measured, value, which is a relation between the two papers' inputs, not a validation. In the other
+    direction, this paper's measurements (the MR flows of Figs. 3 and 7, the cuff pressures 120/80 mmHg, the
+    inlet radius, the cycle length 1.1 s and heart rate 51 per minute) are not produced by any olufsen2004 model:
+    those give dimensionless time-scales of a rigid vessel, a dimensionless step response with unstated
+    parameters, a vessel inductance, a radius threshold for the time-scale crossing and the impedance of a
+    three-element windkessel, and none is driven by a measured flow wave or produces a dimensional flow,
+    pressure, period or radius of one subject. olufsen2004 cites this paper only as a one-dimensional network
+    model (its pp. 2-3), not as data its models explain. No validation was added.
+- id: q_no_cross_validation_reymond2009
+  kind: choice
+  about: [network_1d, tube_law_eq14, circle_area, period_from_heart_rate, kinematic_viscosity, inflow_fig3, q_aortic_arc_meas_fig7, p_systolic_cuff, p_diastolic_cuff, r_t_ascending_aorta, T_fig3_caption]
+  text: >
+    Cross-validation with reymond2009 (which cites this paper as its ref. 44) found no pair to test, in either
+    direction. The two main models share a shape (a tree giving flow and pressure in time), but both are not
+    runnable: network_1d here (q_network_not_runnable) and reymond2009/arterial_tree_1d (its q_1d_not_runnable).
+    So neither can be run on the other's measured flows and pressures (Figs. 3, 7 and the cuff 120/80 here;
+    Tables 4-5 and Figs. 4-5 there). This record's runnable models give nu, the boundary layer, gamma, alpha, beta,
+    pressure from area, area from radius and period from heart rate. reymond2009 measures none of these: it measures
+    flows and radial, carotid and temporal pressures, Senzaki et al.'s normalized elastance and literature PWV against
+    diameter, and prints no measured lumen area or cycle length. reymond2009's runnable models give PWV, wall
+    properties, terminal windkessel ratios, PP and a one-third mean pressure. This paper measures no PWV or wall
+    property, and it prints no measured pulse or mean pressure. reymond2009 cites this paper only as a 1-D model
+    (its p. 1 and Table 1), not as data its model explains. No validation was added; see
+    reymond2009/q_no_validation_vs_olufsen2000.
+  citation: {page: 11, printed_page: "1291", quote: "pressures were 120/80 mmHg 共measured with a cuff兲; for", where: text}
+- id: q_no_validation_vs_stergiopulos1992
+  kind: choice
+  about: [network_1d, tube_law_eq14, period_from_heart_rate, inflow_fig3, q_aortic_arc_meas_fig7, q_femoral_meas_fig7, p_systolic_cuff, p_diastolic_cuff]
+  text: >
+    (Cross-validation with stergiopulos1992, which this paper cites as ref. 28; cross-validation job 2026-11-04.)
+    No pair to test was found in either direction. This paper cites ref. 28 only for arterial geometry (p. 2),
+    the viscous stress term (p. 4), compliance estimates (p. 5), pressure continuity at bifurcations (p. 6)
+    and the windkessel (p. 12), never as
+    data a model explains. network_1d here, the only model giving flow or pressure in time, is not runnable
+    (q_network_not_runnable), so it cannot be run on stergiopulos1992's measurements (Gosling et al.'s
+    pulsatility indices, Fronek et al.'s leg/brachial systolic ratios). This record's runnable models give nu,
+    the boundary layer, gamma, alpha, beta, pressure from area, area from radius and period from heart rate,
+    none of which is measured there. In the other direction, stergiopulos1992/arterial_tree_1d gives
+    ascending-aortic systolic, diastolic and mean pressure, leg/brachial ratios, PI ratios and a mean-flow
+    ratio, but not flow in time at named sites (the MR flows of Figs. 3, 7) and not brachial pressure (the
+    cuff 120/80 of this subject). Its 55-segment geometry, terminal impedances and inflow are those of a
+    generic adult, not this subject's (Table 1, Fig. 3), so it cannot be run on this measurement's
+    conditions. The shared dimensional shape of network_1d and arterial_tree_1d is a relation between
+    models, not a validation against data. No validation was added; see
+    stergiopulos1992/q_no_validation_vs_olufsen2000.
+  citation: {page: 11, printed_page: "1291", quote: "pressures were 120/80 mmHg 共measured with a cuff兲; for", where: text}
+- id: q_no_validation_vs_westerhof1969
+  kind: choice
+  about: [network_1d, tube_law_eq14, circle_area, period_from_heart_rate, kinematic_viscosity, inflow_fig3, q_aortic_arc_meas_fig7, p_systolic_cuff, p_diastolic_cuff, r_t_ascending_aorta, T_fig3_caption, heart_rate_results]
+  text: >
+    (Cross-validation with westerhof1969, which this paper cites as ref. 31.) No validation is entered in either
+    direction. This paper cites ref. 31 once, on p. 5: the stiffness formula Eh/r0 = k1 exp(k2 r0) + k3 (Eq. 15) is
+    'based on compliance estimates' of refs. 27, 28 and 31. That is a fit to westerhof1969's compliances, which would
+    be fit_quality, not validation; but Eq. 15 is not a model of this record (it lives only inside network_1d, which
+    is not runnable, q_network_not_runnable), the constants are taken from ref. 21, and westerhof1969's compliances
+    are its Table 1 element values (origin reported, computed from literature E, h and r), not measurements. The
+    westerhof1969 measurements are decay times and the 'about 50 per cent' stiff-system changes measured on its
+    analog, and Luchsinger's and Gabe's apparent wave velocities in man (its Fig. 7). None of this record's runnable
+    models (nu, boundary layer, gamma, alpha, beta, pressure from area by Eq. 14, area from radius, period from heart
+    rate) gives a decay time, an impedance level or a wave velocity; Eq. 14 gives pressure from area, and no
+    westerhof1969 measurement is a pressure at a printed area. The reverse direction is in
+    westerhof1969/q_no_validation_vs_olufsen2000.
+  citation: {page: 5, printed_page: "1285", quote: "mula based on compliance estimates27,28,31", where: text}
+
+- id: q_no_validation_vs_boileau2015
+  kind: choice
+  about: [network_1d, tube_law_eq14, inflow_fig3, q_aortic_arc_meas_fig7, p_systolic_cuff, p_diastolic_cuff, r_t_ascending_aorta]
+  text: >
+    (Cross-validation with boileau2015, which cites this paper as ref. 9.) No validation is entered in either
+    direction. boileau2015's measurements are the in vitro pressure and flow waveforms of its ref. 45 in a
+    37-artery silicone network (its Figs. 6-9). The only model of this record that gives pressure and flow
+    waveforms, network_1d, is not runnable (q_network_not_runnable) and describes this paper's human arterial
+    tree with structured-tree outflow, not that network; tube_law_eq14 gives pressure from area, and
+    boileau2015 prints no measured area. In the other direction, boileau2015's models (tube law, wave speed,
+    characteristic impedance, Windkessel mean pressure, CFL, Gaussian inflow) give no flow waveform, and this
+    record prints no measured area at a pressure, wave speed or terminal resistances for the subject that would
+    let them predict the cuff pressures. The reverse direction is in boileau2015/q_no_validation_vs_olufsen2000.
+  citation: {page: 11, printed_page: "1291", quote: "pressures were 120/80 mmHg 共measured with a cuff兲; for", where: text}
+- id: q_no_validation_vs_alastruey2011
+  kind: choice
+  about: [network_1d, tube_law_eq14, circle_area, kinematic_viscosity, period_from_heart_rate]
+  text: >
+    No model of this record is validated against alastruey2011, and none of alastruey2011's against this
+    record's measurements (cross-validation job 2026-11-04); alastruey2011 cites this paper only for Laplace's
+    law and as prior evidence for 1-D models. Its measurements are the silicone-network fluid (rho, mu), the
+    wall's E and viscosity phi from a uniaxial test (Fig. 2), the Table 2 geometry and wave speeds, and in vitro
+    midpoint pressure and flow waveforms and flow harmonics (Figs. 3-4). network_1d here is not runnable
+    (q_network_not_runnable) and fixes this paper's human tree with structured-tree outflow, so it cannot be run
+    on the 37-segment silicone network. tube_law_eq14 gives pressure from area, and alastruey2011 measures no
+    area at a pressure; circle_area, kinematic_viscosity and period_from_heart_rate give quantities that
+    alastruey2011 does not measure. The reverse direction is in alastruey2011/q_no_validation_vs_olufsen2000.
+  citation: {none: "a finding of the cross-record job between olufsen2000 and alastruey2011, not a printed statement"}
+- id: q_no_validation_vs_olufsen2012
+  kind: choice
+  about: [network_1d, area_ratio_eq21, asymmetry_eq21, scaling_eq22, tube_law_eq14, circle_area, kinematic_viscosity, period_from_heart_rate, boundary_layer_lighthill]
+  text: >
+    No model of this record is validated against olufsen2012 (cross-validation job 2026-11-04). olufsen2012 cites
+    this paper but measures only two things: the Huang et al. pulmonary length-radius points of its Fig. 5, and the
+    MRI inflows of its Fig. 3. Its systemic inflow, Fig. 3(a), is this paper's measurement re-plotted, and its pulmonary
+    inflow is a model input. network_1d, the only model here that gives flows, is not runnable (q_network_not_runnable).
+    It is also a systemic model, so it could not be run on the pulmonary network. No runnable model here gives a vessel
+    length: the structured tree's l_rr = 50 rule exists only inside network_1d. The runnable models give an area ratio,
+    an asymmetry ratio, scaling factors, a pressure from area, an area from a radius, a viscosity, a period or a boundary
+    layer, and olufsen2012 measures none of these. The reverse direction is in
+    olufsen2012/q_no_validation_vs_olufsen2000.
+  citation: {none: "a finding of the cross-record job between olufsen2000 and olufsen2012, not a printed statement"}

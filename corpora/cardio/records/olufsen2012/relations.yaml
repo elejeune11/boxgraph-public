@@ -1,0 +1,108 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+#
+# The structured tree. 2012 (p. 9) says its tree "follows the structure described previously (Olufsen 1999 ...)"
+# and formulates it by Eqs. 2.16-2.18, taking xi = 2.76, eta = 1.16, gamma = 0.41 "as in previous studies
+# (Olufsen 1999)". 1999 relates the three by Eq. 21, eta = (1 + gamma)/(1 + gamma^(xi/2))^(2/xi), with
+# gamma = (r_d2/r_d1)^2 (Eq. 20); olufsen1999/area_ratio_eq21 is that equation in its printed, forward form.
+# 2012's Eq. 2.18 right-hand form is the same expression; its Eq. 2.17 as printed defines gamma = r_d1/r_d2,
+# which with the left-hand form of 2.18 (olufsen2012/area_ratio_eq216_217) gives a different function of gamma.
+- id: rel_area_ratio_eq218_same_as_1999_eq21
+  kind: same_as
+  a: olufsen1999/area_ratio_eq21
+  b: olufsen2012/area_ratio_eq218
+  mapping: {xi: "xi", gamma: "gamma"}
+  regime: {xi: [2.33, 3.0], gamma: [0.05, 1.0]}
+  provenance: stated
+  citation: {page: 9, printed_page: "288", quote: "This tree follows the structure described previously (Olufsen", where: "text before Eqs. 2.16-2.18"}
+  assumptions:
+    - "the paper's gamma, eta and xi are taken to be the 1999 quantities, as it takes their values from Olufsen 1999 (p. 9: 'As in previous studies (Olufsen 1999)')"
+    - "regime: 2.33 <= xi <= 3 as Eq. 2.16 prints; gamma in (0, 1] as in 1999 (gamma = (r_d2/r_d1)^2 with r_d2 <= r_d1)"
+- id: rel_area_ratio_eq216_217_same_as_1999_eq21
+  kind: same_as
+  a: olufsen1999/area_ratio_eq21
+  b: olufsen2012/area_ratio_eq216_217
+  mapping: {xi: "xi", gamma: "gamma"}
+  regime: {xi: [2.33, 3.0], gamma: [0.05, 1.0]}
+  provenance: stated
+  citation: {page: 9, printed_page: "288", quote: "This tree follows the structure described previously (Olufsen", where: "Eqs. 2.16-2.18"}
+  assumptions:
+    - "the paper states that its tree, formulated by Eqs. 2.16-2.18, follows Olufsen 1999 and uses 1999's gamma = 0.41; this relation tests the definitions as printed (Eq. 2.17: gamma = r_d1/r_d2) against 1999's Eq. 21 (gamma = (r_d2/r_d1)^2) with gamma taken as the same quantity"
+- id: rel_area_ratio_eq216_217_regamma_1999_eq21
+  kind: same_as
+  a: olufsen1999/area_ratio_eq21
+  b: olufsen2012/area_ratio_eq216_217
+  mapping: {xi: "xi", gamma: "1/sqrt(gamma)"}
+  regime: {xi: [2.33, 3.0], gamma: [0.05, 1.0]}
+  provenance: proposed
+  reason: >
+    1999 defines the asymmetry ratio as gamma = (r_d2/r_d1)^2 (Eq. 20), 2012's Eq. 2.17 prints gamma = r_d1/r_d2.
+    With 2012's gamma written as 1999's gamma^(-1/2), the left-hand form of 2012's Eq. 2.18 should be 1999's Eq. 21:
+    the two papers' definitions then differ only in what they call gamma, while 2012 uses 1999's value 0.41.
+# The large-artery model.
+- id: rel_network_1d_from_1999
+  kind: derived_from
+  a: olufsen1999/larger_arteries_1d
+  b: olufsen2012/network_1d_structured_tree
+  mapping: {nu: "nu", k1: "k1/1333.22", k2: "k2", k3: "k3/1333.22"}
+  steps:
+    - "the systemic arteries model of Olufsen (1999) is used as a point of departure (p. 2) and extended to the pulmonary arteries (p. 20)"
+    - "the pulmonary wall stiffness is set from the distensibility, Eh/r0 = 3/(4 epsilon) (Eq. 2.8), instead of the systemic fit Eq. 2.5"
+    - "the structured trees are terminated at r_min = 100 um (systemic) and 50 um (pulmonary), with a new length-to-radius law for the pulmonary trees (Eq. 2.19), and pressures are computed along the alpha and beta branches (Eqs. 2.43-2.48)"
+  provenance: stated
+  citation: {page: 20, printed_page: "299", quote: "The systemic arteries model originally developed by Olufsen (1999) has been", where: "Discussion"}
+  assumptions:
+    - "both models are not runnable (geometry, inflow and numerical settings are not printed in full), so the relation is recorded as stated and is unverifiable"
+    - "k1 and k3 are in g/s^2/cm (= dyn/cm^2) in 1999 and in mmHg in 2012; 1 mmHg = 1333.22 dyn/cm^2 (2012 p. 6: 1 mmHg = 133.32 Pa). The printed fits differ: 1999 k1 = 2.00 x 10^7 g/s^2/cm (1.50 x 10^4 mmHg), k2 = -22.53 1/cm, k3 = 8.65 x 10^5 g/s^2/cm (649 mmHg); 2012 k1 = 1.50 x 10^4 mmHg, k2 = -25.5 1/cm, k3 = 349 mmHg"
+    - "b's inputs Eh_r0_pulm, xi, gamma, rmin, lrr and rho have no port in a (a's record keeps the structured-tree parameters inside its outflow condition); they are not mapped. a's T has no port in b"
+# Relations to Olufsen et al. (2000), olufsen2000. 2012 names 2000 beside 1999 as the model it starts from (p. 2),
+# for its fluid dynamics (p. 5), its systemic geometry and inflow (pp. 4, 7), its numerical solver (p. 7), its
+# impedance algorithm (p. 14), and its structured tree (pp. 8-9). 2000 defines gamma = ((r0)_d2/(r0)_d1)^2 and
+# prints Eq. 21, eta = (1 + gamma)/(1 + gamma^(xi/2))^(2/xi) (p. 7); olufsen2000/area_ratio_eq21 is that
+# equation in its printed, forward form.
+- id: rel_network_1d_from_2000
+  kind: derived_from
+  a: olufsen2000/network_1d
+  b: olufsen2012/network_1d_structured_tree
+  mapping: {nu: "nu", rho: "rho", k1: "k1/1333.22", k2: "k2", k3: "k3/1333.22", xi: "xi", gamma: "gamma", lrr: "lrr"}
+  steps:
+    - "the previous model (Olufsen 1998, 1999; Olufsen et al. 2000; Ottesen et al. 2004) is used as a point of departure and modified to predict flow and pressure in both large and small arteries (p. 2)"
+    - "the systemic geometry and inflow are those of Olufsen et al. (2000) (pp. 4, 7), and the numerical solver and the impedance algorithm are referred to it (pp. 7, 14)"
+    - "the model is extended to the pulmonary arteries, with Eh/r0 = 3/(4 epsilon) (Eq. 2.8) instead of the systemic fit (Eq. 2.5), structured trees terminated at r_min = 100 um (systemic) and 50 um (pulmonary), a pulmonary length-radius law (Eq. 2.19), and pressures along the alpha and beta branches (Eqs. 2.43-2.48)"
+  provenance: stated
+  citation: {page: 2, printed_page: "281", quote: "modify it to predict flow and pressure in both large and small arteries", where: Introduction}
+  assumptions:
+    - "both models are not runnable (inflow given only as a plotted curve, geometry and numerical settings not printed in full), so the relation is recorded as stated and is unverifiable"
+    - "k1 and k3 are in g/s^2/cm (= dyn/cm^2) in 2000 and in mmHg in 2012; 1 mmHg = 1333.22 dyn/cm^2. The printed fits differ (2000 takes 1999's k2 = -22.53 1/cm and k3 = 8.65 x 10^5 g/s^2/cm; 2012 prints k2 = -25.5 1/cm, k3 = 349 mmHg)"
+    - "b's inputs Eh_r0_pulm and rmin have no port in a; a's inputs mu, delta, T and K5 have no port in b"
+- id: rel_area_ratio_eq218_same_as_2000_eq21
+  kind: same_as
+  a: olufsen2000/area_ratio_eq21
+  b: olufsen2012/area_ratio_eq218
+  mapping: {xi: "xi", gamma: "gamma"}
+  regime: {xi: [2.33, 3.0], gamma: [0.05, 1.0]}
+  provenance: stated
+  citation: {page: 9, printed_page: "288", quote: "This tree follows the structure described previously (Olufsen", where: "text before Eqs. 2.16-2.18"}
+  assumptions:
+    - "the paper says its tree follows the structure of Olufsen 1999 and Olufsen et al. 2000, and formulates it by Eqs. 2.16-2.18; the gamma, eta and xi of both papers are taken to be the same quantities"
+    - "regime: 2.33 <= xi <= 3 as both papers print (2000 p. 7, 2012 Eq. 2.16); gamma in (0, 1] as in 2000 (gamma = ((r0)_d2/(r0)_d1)^2 with the smaller daughter d2)"
+- id: rel_area_ratio_eq216_217_same_as_2000_eq21
+  kind: same_as
+  a: olufsen2000/area_ratio_eq21
+  b: olufsen2012/area_ratio_eq216_217
+  mapping: {xi: "xi", gamma: "gamma"}
+  regime: {xi: [2.33, 3.0], gamma: [0.05, 1.0]}
+  provenance: stated
+  citation: {page: 9, printed_page: "288", quote: "This tree follows the structure described previously (Olufsen", where: "Eqs. 2.16-2.18"}
+  assumptions:
+    - "the paper states that its tree, formulated by Eqs. 2.16-2.18, follows Olufsen et al. 2000; this relation tests the definitions as printed (Eq. 2.17: gamma = r_d1/r_d2) against 2000's Eq. 21 (gamma = ((r0)_d2/(r0)_d1)^2) with gamma taken as the same quantity"
+- id: rel_area_ratio_eq216_217_regamma_2000_eq21
+  kind: same_as
+  a: olufsen2000/area_ratio_eq21
+  b: olufsen2012/area_ratio_eq216_217
+  mapping: {xi: "xi", gamma: "1/sqrt(gamma)"}
+  regime: {xi: [2.33, 3.0], gamma: [0.05, 1.0]}
+  provenance: proposed
+  reason: >
+    2000 defines the asymmetry ratio as gamma = ((r0)_d2/(r0)_d1)^2 (p. 7), 2012's Eq. 2.17 prints gamma = r_d1/r_d2.
+    With 2012's gamma written as 2000's gamma^(-1/2), the left-hand form of 2012's Eq. 2.18 should be 2000's Eq. 21:
+    the two definitions then differ only in what they call gamma.

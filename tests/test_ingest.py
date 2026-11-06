@@ -8,7 +8,7 @@ import pytest
 
 from boxgraph.ingest import ingest
 
-CORPUS = Path(__file__).parents[1] / "corpus"
+CORPUS = Path(__file__).parents[1] / "corpus" / "motor_clutch"
 PDF = CORPUS / "2004_Erdmann.pdf"
 
 needs_pdf = pytest.mark.skipif(not PDF.exists() or not shutil.which("pdftotext"), reason="needs corpus PDF and poppler")
@@ -47,3 +47,10 @@ def test_missing_pdf(tmp_path):
     """A missing PDF is an error."""
     with pytest.raises(FileNotFoundError):
         ingest(tmp_path / "nope.pdf", "x", tmp_path)
+
+
+@needs_pdf
+def test_ingest_names_the_pdf_without_the_machine_path(tmp_path):
+    """ingest.json names the PDF by its file name, not by where it sits on the reader's machine."""
+    d = ingest(PDF.resolve(), "e", tmp_path, images=False)
+    assert json.loads((d / "ingest.json").read_text())["file"] == PDF.name

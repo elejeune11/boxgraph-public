@@ -1,0 +1,235 @@
+- id: q_westkessel_values
+  kind: unstated_input
+  about: [Rc_code, Cv_code, Rv_code, P0v_code, westkessel_left_heart]
+  text: >
+    The afterload values Rc = 0.005 mmHg s/mL, Rv = 0.65 mmHg s/mL and Cv = 2.6 mL/mmHg are hidden
+    choices: shi2018 prints no parameter value, and korakianitis2006 (whose values shi2018 says the
+    models use) has no three-element afterload. They are not lumped sums of the korakianitis2006
+    systemic segments: its series resistances from aortic sinus to vena cava add to
+    1.148 mmHg s/mL (against Rc + Rv = 0.655), and its arterial compliances Csas + Csat to
+    1.68 mL/mmHg (all systemic compliances 22.18). Rc is close to its aortic sinus resistance
+    Rsas = 0.003. They also differ from the sibling Windkessel code (R = 0.55, C = 2.8), so the
+    Fig. 1(a) and 1(b) codes do not share one total resistance. With Rc + Rv = 0.655 the circuit
+    carries about 8.5 L/min, against the 5 L/min shi2018 prints for its Fig. 1(d) model.
+  citation: {file: ParaWestkessel.cellml, lines: "11-13", quote: 'name="Rv"'}
+- id: q_algebraic_loop
+  kind: numerics
+  about: [westkessel_left_heart]
+  text: >
+    The aortic valve (TempCDv: Qo = CV Tao |Pi - Po|^0.5, Po = Zc.Pi) feeds the characteristic
+    resistance (TempR: Zc.Pi = Zc.Po + Rc Qi), so the valve flow and the pressure just downstream
+    of the valve are defined by each other: an algebraic loop that the CellML leaves to the DAE
+    solver (OpenCell). The port solves it in closed form (the non-negative root of
+    Q^2 + CV^2 Rc Q - CV^2 (Plv - Pv) = 0 when Plv >= Pv, else Q = 0), which is the unique
+    solution consistent with the code's Tao switch. A solver that iterates on the loop should
+    give the same answer; the code does not say how it was solved.
+  citation: {file: TempR.cellml, lines: "19", quote: "<ci>Pi</ci><apply><plus/><ci>Po</ci>"}
+- id: q_arterial_pressure_site
+  kind: choice
+  about: [cmp_part_max, cmp_part_min, westkessel_left_heart]
+  text: >
+    The record takes the pressure at the afterload inlet (Vessel.Pi = Zc.Pi, upstream of Rc) as
+    the arterial pressure compared with shi2018's printed 80-120 mmHg. The compliance pressure
+    (Zv.Pi, downstream of Rc) is another candidate; with Rc = 0.005 the two differ by at most
+    Rc times the peak flow, about 7 mmHg at systole and 0 in diastole, so the minimum is the same
+    and only the peak depends on the choice.
+- id: q_vlv0_initial
+  kind: unexplained_difference
+  about: [Vlv0_code, Vla0_code]
+  text: >
+    The code starts the left ventricle at 500 mL and the left atrium at 20 mL, with the
+    compliance at 0 mmHg: 520 mL in all, which is the circulating volume of this closed loop.
+    korakianitis2006 Table 2 prints V_lv0 = 800 ml (read in that record as an initial LV volume,
+    itself uncertain: its q_vlv0_table2), and no initial LA volume. The total volume sets the
+    filling pressures and so the stroke volume of the reduced model; neither paper states it for
+    the Fig. 1(b) model.
+  citation: {file: ParaLeftHeart.cellml, lines: "27-28", quote: 'name="Vlv0"'}
+- id: q_timing_fractions
+  kind: choice
+  about: [Tpwb_code, Tpww_code, Ts1_code, Ts2_code]
+  text: >
+    The code writes the activation times as dimensionless fractions of the period T (Tpwb = 0.92,
+    Tpww = 0.09, Ts1 = 0.3, Ts2 = 0.45, used as Tpwb*T etc.), while korakianitis2006 prints them in
+    seconds (T_pwb 0.92 s, T_pww 0.09 s, Ts 0.3 s) with T = 1 s. With T = 1 s they are the same
+    times, so they are not linked for a unit check here. Ts2 = 0.45 T, the end of ventricular
+    activation, is printed in neither paper.
+  citation: {file: ParaLeftHeart.cellml, lines: "21-24", quote: 'name="Ts2"'}
+- id: q_elastance_form
+  kind: unexplained_difference
+  about: [westkessel_left_heart]
+  text: >
+    The code's ventricular activation is et = 1 - cos(pi t/Ts1) rising to 2 at Ts1, then
+    1 + cos(pi (t - Ts1)/(Ts2 - Ts1)) falling to 0 at Ts2, with E = Emin + et (Emax - Emin)/2, so
+    E runs from Emin to Emax. Eq. 3 of korakianitis2006 as recorded there is written with
+    cos(t/T_s1 pi) and cos((t + T_s2 - T_s1)/T_s1 pi), which does not give this curve. The code's
+    form is the usual one; whether korakianitis2006 Eq. 3 is a misprint is for the cross-record pass.
+  citation: {file: EVentricle.cellml, lines: "20", quote: '<apply><eq/><ci>et</ci>'}
+- id: q_valves_simplified
+  kind: choice
+  about: [westkessel_left_heart]
+  text: >
+    The valves are on-off diodes (Tao = 1 when the upstream pressure is at least the downstream,
+    else 0) with an orifice law Q = CV |dP|^0.5, as in korakianitis2006 Eqs. 6-7, not the leaflet
+    dynamics of its Eqs. 8 and 14 that its main results use. The code's own documentation says so:
+    valve dynamics "have to be simplified in the current CellML implementation". No backflow is
+    possible (the backward branch is multiplied by Tao = 0).
+  citation: {file: MainWestkessel.cellml, lines: "19", quote: "have to be simplified in the current CellML implementation"}
+- id: q_name_westkessel
+  kind: reading
+  about: [westkessel_left_heart]
+  text: >
+    The code calls its afterload a "Westkessel" model (title, file names; the diagram files are
+    spelled "weskessel"); shi2018 calls the same Fig. 1(b) afterload a "three-element Westerhof
+    compartment" (p. 4) and "Westerhoff afterload" in the Fig. 1 caption. The circuit in the code
+    (Rc in series with a parallel Rv-Cv, ModelWestkessel.cellml) is that three-element model, as
+    in westerhof1971 (shi2018 ref [3]). shi2018 p. 4 says only Fig. 1(a, d) were put in CellML,
+    though this Fig. 1(b) code is in the same repository.
+  citation: {file: MainWestkessel.cellml, lines: "28", quote: "The systemic loop is described with a Westkessel model"}
+- id: q_unused_units
+  kind: reading
+  about: [westkessel_left_heart]
+  text: >
+    Units.cellml here also defines an inertance unit UnitL (absent from the Windkessel code's
+    Units.cellml), but no imported component uses it; the folder also holds ParaSys.cellml
+    (systemic segment parameters), which MainWestkessel does not import. Neither affects the model.
+  citation: {file: Units.cellml, lines: "28", quote: '<units name="UnitL">'}
+- id: q_solver
+  kind: numerics
+  about: [run_westkessel_code_values, westkessel_left_heart]
+  text: >
+    The CellML files hold no simulation settings (no end time, step or solver). The port uses
+    classical RK4 at dt = 0.1 ms for 10 s from the code's initial values and reports the 10th
+    beat; quartering dt and doubling the simulated time change the results by less than 0.01%
+    (refinements.yaml). shi2018 says OpenCell offers backward Euler, Adams-Moulton and implicit
+    Runge-Kutta schemes but not which was used.
+- id: q_pi
+  kind: choice
+  about: [pi_code_atrium, pi_code_ventricle]
+  text: >
+    pi is written as 3.14159 in both activation functions (relative error 8e-7). The effect on the
+    results is far below printed precision; the port uses the code's number. The port takes one pi
+    input for both functions since both files write the same number.
+  citation: {file: EAtrium.cellml, lines: "22", quote: "3.14159"}
+- id: q_unit_pressure
+  kind: choice
+  about: [westkessel_left_heart]
+  text: >
+    The code defines its pressure unit UnitP as 133 Pa, not 133.322 Pa (1 mmHg). Every value and
+    equation is in UnitP, so the results in UnitP are what the record calls mmHg; only a conversion
+    to SI would carry the 0.24% difference.
+  citation: {file: Units.cellml, lines: "5", quote: 'multiplier="133"'}
+- id: q_validation_claim_code
+  kind: overstated_claim
+  about: [westkessel_left_heart, wst_sv, wst_qao_mean]
+  text: >
+    The code's documentation says its results "have been validated against the original C
+    implementation as well as those published data in literature". Neither the C code nor any
+    result of this Fig. 1(b) model is published in shi2018. Run as released, it gives LV and
+    arterial pressures some 10 mmHg above the ranges shi2018 prints for Fig. 1(d), and a stroke
+    volume near 140 mL and a cardiac output near 8.5 L/min, against the printed 75 mL and 5 L/min
+    (comparisons.yaml).
+  citation: {file: MainWestkessel.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_printed_results
+  kind: unstated_model
+  about: [westkessel_left_heart]
+  text: >
+    shi2018 shows this Fig. 1(b) model only as a schematic and prints no result of it; its only
+    results (Fig. 5, Section 3) are for the Fig. 1(d) model. So nothing here is a reproduction;
+    the comparisons judge the reduction against the full model's printed results (purpose
+    approximation).
+- id: q_no_cross_validation_shi2018
+  kind: unstated_model
+  about: [westkessel_left_heart]
+  text: >
+    Cross-validation against shi2018 finds nothing to test, in either direction. shi2018 holds no
+    measurement: its data are the Section 3 results of its own Fig. 1(d) simulation (predicted,
+    derived) and its Fig. 5 readings, which are model output too (its figures.md: "The paper plots
+    no measured data"). So westkessel_left_heart has no measurement there to be validated against;
+    how it approximates those simulated results is already judged in comparisons.yaml (purpose
+    approximation). This record is code and holds no measurement either, so no shi2018 model can
+    be validated against it. The code's claim of validation against "published data in
+    literature" (q_validation_claim_code) names no data that either record holds.
+  citation: {file: MainWestkessel.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_systemic
+  kind: unstated_model
+  about: [westkessel_left_heart]
+  text: >
+    Cross-validation against shi_cellml_systemic finds nothing to test, in either direction.
+    That record, like this one, is CellML code: its data are code parameters (origin reported)
+    and results of shi2018's Fig. 1(d) and korakianitis2006's on-off valve model copied from the
+    papers (predicted, derived), and it has no figure readings. It holds no measurement, so
+    westkessel_left_heart has nothing of it to be validated against, and this record holds none
+    for systemic_left_heart either. Neither code names the other or says it explains the other's
+    results. The two share the left-heart files and differ in the afterload (three-element
+    Westerhof here, five-segment systemic loop there); that is a relation between models for the
+    later job, not a validation.
+  citation: {file: MainWestkessel.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_windkessel
+  kind: unstated_model
+  about: [westkessel_left_heart]
+  text: >
+    Cross-validation against shi_cellml_windkessel finds nothing to test, in either direction.
+    Both records are CellML code from the same repository: their data are code parameters (origin
+    reported) and shi2018's printed Fig. 1(d) simulation results (predicted, derived), with no
+    measured datum and no figure readings in either. So westkessel_left_heart has no measurement
+    there to be validated against, and this record holds none for windkessel_left_heart. Neither
+    code names the other or says it explains the other's results. The two models share the left
+    heart and differ only in the afterload (three-element Westerhof here, two-element Windkessel
+    there); comparing their outputs would be model against model, a relation for the later job,
+    not a validation.
+  citation: {file: MainWestkessel.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_westerhof1971
+  kind: unstated_model
+  about: [westkessel_left_heart]
+  text: >
+    Cross-validation against westerhof1971 (this code's ref-westerhof1971, the source of its
+    three-element afterload) finds nothing to test. westerhof1971's measurements are the input
+    impedance (modulus and phase against frequency, Figs. 2-5) and the d-c resistance of its
+    hydraulic models of the dog and cat systemic and pulmonary trees, the in vivo dog impedance
+    dots it plots from the literature, and the viscosity and density of its perfusate.
+    westkessel_left_heart outputs only time-domain summaries of a beating human-scale left heart
+    (LV and afterload-inlet pressure extremes, LV volumes, stroke volume, mean and peak valve
+    flows); it outputs no impedance, d-c resistance, viscosity or density, and its afterload
+    values (Rc = 0.005, Rv = 0.65 mmHg s/mL, Cv = 2.6 mL/mmHg) are not those of any dog or cat
+    model there. Its afterload circuit has the impedance of westerhof1971's Fig. 1A, but that is a
+    relation between models (westerhof1971/impedance_3el), not a prediction of a measurement by
+    this model as written. The other way, this record is code and holds no measurement, so no
+    westerhof1971 model can be validated against it (westerhof1971/q_no_cross_validation_shi_cellml_westkessel).
+    The shared shape of westkessel_left_heart and westerhof1971/air_volume_eq9 (a volume from a
+    compliance and a pressure) is a coincidence of units: air_volume_eq9 gives the air volume of a
+    reservoir, which the code neither models nor measures.
+  citation: {file: MainWestkessel.cellml, lines: "28", quote: "The systemic loop is described with a Westkessel model"}
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [westkessel_left_heart]
+  text: >
+    Cross-validation against korakianitis2006 (ref-korakianitis2006, the source of the heart
+    parameters) finds nothing to test, in either direction. korakianitis2006 holds no measurement:
+    its data are printed parameters (Tables 1-5, origin reported) and results of its own
+    simulations (predicted, derived), and all its figure readings are model output (its
+    figures.md: "it shows no measurements, so every figure datum has origin predicted"). The
+    observations that paper invokes ("results illustrated in cardiology textbooks",
+    echo-cardiographic valve motion) are qualitative and in neither record. So
+    westkessel_left_heart has no measurement there to be validated against, although it shares
+    the shape of korakianitis2006/circulation_onoff_corrected; running it against that paper's
+    on-off results would compare model with model (with a different afterload), a relation for the
+    later job. This record is code and holds no measurement, so no korakianitis2006 model can be
+    validated against it.
+  citation: {file: MainWestkessel.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}
+- id: q_no_cross_validation_korakianitis_cellml
+  kind: unstated_model
+  about: [westkessel_left_heart]
+  text: >
+    Cross-validation against korakianitis_cellml finds nothing to test, in either direction. Both
+    records are CellML code by the same authors (Shi, Hose), and neither holds a measurement: no
+    datum of either has origin measured, and neither has figure readings or a figures.md.
+    korakianitis_cellml's data are code parameters and initial values (origin reported) and
+    korakianitis2006 Section 3.1 model results copied for reproduction (predicted, derived). This
+    record's ref-korakianitis2006 is the paper, the source of the heart parameters, not that code
+    record and not a source of measurements. So westkessel_left_heart has nothing of that record to
+    be validated against, and this record holds nothing for closed_loop_onoff. The shared model
+    shape reflects shared code: the left-heart equations and parameters are the same, with a
+    three-element Westerhof afterload here in place of the full closed loop there. Running one
+    model against the other's run output would compare model with model, a relation for a later
+    job, not a validation. No validation was added.
+  citation: {file: MainWestkessel.cellml, lines: "21", quote: "The results have been validated against the original C implementation"}

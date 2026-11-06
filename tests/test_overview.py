@@ -224,3 +224,52 @@ def test_a_case_study_can_show_a_model_against_another_papers_measurement(syn, t
     d = embedded(render_overview(syn, tmp_path, title="T", content=content).read_text())
     e = d["case_studies"][0]["steps"][0]["evidence"]
     assert e["kind"] == "validation" and e["verdict"] == "reproduced" and e["against"] == "toy/t_curve"
+
+
+@pytest.fixture(scope="module")
+def corrected(tmp_path_factory):
+    """A record holding a misprinted model and its corrected variant."""
+    root = tmp_path_factory.mktemp("misprint")
+    shutil.copytree(FX / "misprint", root / "misprint")
+    s = build_synthesis(root, cache_dir=tmp_path_factory.mktemp("cache"))
+    return json.loads(json.dumps(to_json(s), default=str))
+
+
+def test_a_source_view_lists_its_corrected_variants_with_their_evidence_and_verdicts(corrected, tmp_path):
+    """A source's view lists each corrected variant: the model it corrects, each correction with its evidence, and the variant's verdicts."""
+    d = embedded(render_overview(corrected, tmp_path, title="T").read_text())
+    src = next(s for s in d["sources"] if s["id"] == "misprint")
+    want = corrected["papers"]["misprint"]["variants"]
+    assert want, "the fixture has a corrected variant"
+    assert {v["model"] for v in src["variants"]} == set(want)
+    for v in src["variants"]:
+        w = want[v["model"]]
+        assert v["of"] == w["of"] and v["tally"] == {k: n for k, n in w["tally"].items() if k != "error"}
+        assert [c["equation"] for c in v["corrections"]] == [c["equation"] for c in w["corrections"]]
+        assert all(c["change"] and c["evidence"] for c in v["corrections"])
+    roles = {m["id"]: m.get("variant_of") for m in src["models"]}
+    assert all(roles[v["model"]] == v["of"] for v in src["variants"])
+
+
+def test_corrected_reproductions_are_explained_as_their_own_purpose(corrected, tmp_path):
+    """A comparison computed by a corrected variant has its own purpose, explained on the page."""
+    d = embedded(render_overview(corrected, tmp_path, title="T").read_text())
+    src = next(s for s in d["sources"] if s["id"] == "misprint")
+    assert "reproduction, corrected" in src["by_purpose"]
+    assert d["purposes"].get("reproduction, corrected")
+
+
+def test_sources_with_the_same_author_year_label_are_told_apart(syn):
+    """Two sources whose short label (authors, year) is the same get a, b suffixes, as in a reference list."""
+    s = copy.deepcopy(syn)
+    for sid in ("toy", "toy2"):
+        s["papers"][sid].update(authors=["A. Smith"], year=2001, kind="article")
+    by = {x["id"]: x["label"] for x in overview_data(s)["sources"]}
+    assert (by["toy"], by["toy2"]) == ("Smith 2001a", "Smith 2001b")
+    assert len(set(by.values())) == len(by)
+
+
+def test_the_overview_text_can_name_the_page(syn, tmp_path):
+    """A title in the overview's text names the page in place of the build's title."""
+    page = render_overview(syn, tmp_path, title="Build title", content={"title": "A review of toys"}).read_text()
+    assert "<title>A review of toys</title>" in page and embedded(page)["title"] == "A review of toys"

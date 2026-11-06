@@ -1,0 +1,57 @@
+id: shi_cellml_systemic
+kind: software
+title: Lumped-parameter model for the systemic circulation (CellML)
+authors: [Yubing Shi, Rod Hose]
+year: 2019
+url: https://models.physiomeproject.org/cardiovascular_circulation
+version: "sha256:31d6fbadbcfde6662212985adda039ca2c0dba82482dc7fbc86a7e9576c89cf9"
+licence: none stated
+language: cellml
+file: corpus/cardio/code/shi_cellml_systemic
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-02"}
+notes: >
+  What the code is. A CellML 1.1 model (Physiome workspace changeset 1f1189e668a0) of the Fig. 1(c)
+  model of shi2018 ("Systemic model with multi-compartment afterload"): a left atrium and left
+  ventricle as variable-elastance chambers with on-off (diode) mitral and aortic valves, driving
+  the five-segment systemic loop of korakianitis2006 (aortic sinus and artery as R-L-C, arteriole
+  and capillary as R, vein as R-C), whose venous outflow returns straight to the left atrium; no
+  right heart, no pulmonary loop. Entry point MainSystemic.cellml imports ModelLeftHeart.cellml
+  (LA = TempCDa, LV = TempCDv, Ela = EAtrium, Elv = EVentricle, parameters ParaLeftHeart) and
+  ModelSys.cellml (Sas, Sat = TempRLC; Sar, Scp = TempR; Svn = TempRC; parameters ParaSys);
+  Units.cellml sets UnitP = 133 Pa and UnitV = 1 mL. Every .cellml file in the folder is used.
+  systemic.ai, .png and .svg are circuit diagrams. The heart files are the same, line for line,
+  as in the sibling record shi_cellml_windkessel. No licence file or header. Authors from the
+  RDF metadata (Shi, Hose); year of the paper, since the code gives none; url is shi2018 ref [19].
+
+  How it was read. CellML is not run here: the equations of the eleven imported files are ported
+  to Python (models/systemic_left_heart, our code; files and lines in its model.yaml), and the 34
+  parameter, initial and constant values the model uses are cited by file and line. The CellML has no solver
+  settings; the port uses RK4 at dt = 0.1 ms for 10 s and reports the 10th beat (q_solver;
+  refinements on dt and simulated time).
+
+  Against the papers. shi2018 prints no parameter value and says they are those of
+  korakianitis2006, so 22 values are linked to korakianitis2006 Tables 1, 2 and 5. Elastances,
+  reference pressures and volumes, valve coefficients, period, and all ten systemic R, C, L
+  values agree as written; the initial LV volume does not (below). Differences and hidden choices: the initial values (LV 500 mL against
+  V_lv0 = 800 ml in korakianitis2006 Table 2; LA 20 mL, sinus and artery 100 mmHg, vein 0 mmHg,
+  printed nowhere) fix a circulating volume of 688 mL (q_initial_values); activation times are
+  fractions of T and Ts2 = 0.45 T is printed nowhere (q_timing_fractions); the atrial activation
+  wraps into the next cycle (q_atrial_wrap); the ventricular activation has the 1 - cos / 1 + cos
+  form, not korakianitis2006 Eq. 3 as printed (q_elastance_form); the artery flow is driven by
+  P_sat, not by P_sas as korakianitis2006 Eq. 18 is printed, supporting that record's misprint
+  question (q_eq18_code); valves are on-off with no backflow (q_valves_simplified); venous return
+  goes to the left atrium and C_svc is unused (q_return_to_la); pi is 3.14159 and UnitP 133 Pa
+  (q_pi, q_unit_pressure).
+
+  What it reproduces. Neither paper prints a result of this Fig. 1(c) model, so nothing here is a
+  reproduction (the validator's one warning; q_no_printed_results). The full-circulation results
+  of shi2018 (Section 3, Fig. 1(d)) and korakianitis2006 (Section 3.1, on-off valves) are copied
+  here (from_datum) and the code's run is compared with them as approximations. Run as released
+  it gives LV pressure about 7.4-120.7 mmHg, arterial pressure about 83-120 mmHg, LV volume about
+  52-132 mL, stroke volume about 79 mL, mean flow about 4.8 L/min and peak aortic and mitral (E)
+  flows about 1020 and 832 mL/s. That is close to shi2018's printed 0-120, 80-120 mmHg, 55-130 mL,
+  75 mL, about 5 L/min, about 1000 and 800 mL/s, except the lowest LV pressure, and further from
+  korakianitis2006's 126.4 mmHg peaks, 90 mmHg minimum aortic pressure, 70 ml, 983.4 and 702.9 ml/s
+  (q_differences_from_papers; the build gives the exact values and verdicts). The code's claim of
+  validation against the C implementation cannot be checked from what is published
+  (q_validation_claim_code).

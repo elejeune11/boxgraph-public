@@ -1,0 +1,19 @@
+id: tube_law_eq3
+name: pressure from area by the elastic tube law (Eq. 3)
+role: model
+stated: {page: 3, where: Eq. 3, quote: "we consider a relationship of the form [10]"}
+# A helper for the relation to Formaggia et al. 2003, whose tube law the paper says Eq. 3 follows
+# (ref. 10, p. 3). The paper's own results use Eq. 3 through initial_area_eq16 and pwv_at_pressure;
+# no printed result is computed from this helper.
+equation: "P - Pext = Pd + beta/Ad (sqrt(A) - sqrt(Ad)),  beta = (4/3) sqrt(pi) E h"
+inputs:
+  A:    {quantity: lumen_area, unit: m^2}
+  Ad:   {quantity: diastolic_area, unit: m^2}
+  Pd:   {quantity: diastolic_pressure, unit: Pa}
+  E:    {quantity: youngs_modulus, unit: Pa}
+  h:    {quantity: wall_thickness, unit: m}
+  Pext: {quantity: external_pressure, unit: Pa}
+outputs:
+  P: {quantity: blood_pressure, unit: Pa}
+settings: {}
+stochastic: false

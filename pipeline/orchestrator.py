@@ -1,8 +1,9 @@
-"""Run headless Claude Code jobs in parallel, each gated by a validator.
+"""Run headless agent jobs in parallel, each gated by a validator.
 
 A job is one bounded task (read one paper, audit one record, relate models)
-run by `claude -p` in a working directory, with a restricted tool set, a
-turn limit and a dollar budget. After the agent stops, the orchestrator runs
+run by the agent command (by default the `claude` CLI, as `claude -p`) in a
+working directory, with a restricted tool set, a turn limit and a dollar
+budget. After the agent stops, the orchestrator runs
 the job's validator. If it fails, the agent's session is resumed with the
 validator's output, up to max_attempts; then the job is parked for a human.
 A job whose dependency did not pass is blocked and never started.
@@ -27,7 +28,7 @@ from pathlib import Path
 
 DISALLOWED = ["Agent", "WebFetch", "WebSearch", "NotebookEdit"]
 
-# Variables that tie a process to *this* Claude Code session. A child agent
+# Variables that tie a process to the agent session that started the run. A child agent
 # must not inherit them, or it would share the parent's session identity.
 PARENT_SESSION_VARS = ("CLAUDE_CODE_SESSION_ID", "CLAUDE_CODE_REMOTE_SESSION_ID", "CLAUDE_CODE_REMOTE_SDK_URL",
                        "CLAUDE_CODE_MESSAGING_SOCKET", "CLAUDE_CODE_MESSAGING_TOKEN", "CLAUDE_PID",
@@ -53,11 +54,11 @@ class Job:
     budget_usd: float = 30.0
     max_attempts: int = 3
     depends_on: list[str] = field(default_factory=list)
-    timeout_s: int = 3 * 3600
+    timeout_s: int = 8 * 3600  # the agent, including its own checks; a model run alone may take two hours
     disallowed_tools: list[str] = field(default_factory=list)  # in addition to DISALLOWED
     locks: list[str] = field(default_factory=list)  # jobs sharing a lock never run at the same time
     env: dict[str, str] = field(default_factory=dict)  # extra environment for the agent and its gate
-    validate_timeout_s: int = 3600  # a gate that runs longer fails the attempt
+    validate_timeout_s: int = 6 * 3600  # a gate that runs longer fails the attempt (it may run several long models)
     fresh: list[str] = field(default_factory=list)  # files the job must (re)write; one left from before fails it
     writable: list[str] = field(default_factory=list)  # globs (relative to the watched root) the job may change
 
@@ -77,6 +78,15 @@ PAPER_CONTENT = {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".gif", ".bmp
                  ".m", ".mat", ".xlsx", ".xls"}  # pages, and copies of a source's released code or data
 
 
+def _record_depth(parts: tuple[str, ...] | list[str]) -> int | None:
+    """How many path parts lead to a records folder: 1 for records/, 3 for corpora/<name>/records/; None elsewhere."""
+    if tuple(parts[:1]) == ("records",):
+        return 1
+    if len(parts) >= 3 and parts[0] == "corpora" and parts[2] == "records":
+        return 3
+    return None
+
+
 def snapshot(root: Path) -> dict[str, tuple[int, int]]:
     """Every watched file under root, with its size and modification time."""
     out = {}
@@ -84,8 +94,9 @@ def snapshot(root: Path) -> dict[str, tuple[int, int]]:
     for dirpath, dirs, files in os.walk(root):
         rel = Path(dirpath).relative_to(root)
         parts = rel.parts
+        k = _record_depth(parts)
         dirs[:] = [d for d in dirs if d not in UNWATCHED
-                   and not (len(parts) == 2 and parts[0] == "records" and d in RECORD_IGNORED)]
+                   and not (k is not None and len(parts) == k + 1 and d in RECORD_IGNORED)]
         for f in files:
             fp = Path(dirpath) / f
             try:
@@ -138,7 +149,8 @@ def stray_writes(before: dict, after: dict, writable: list[str], root: Path | No
     bad = []
     for path in changed:
         parts = path.split("/")
-        if parts[0] == "records" and len(parts) > 2 and Path(path).suffix.lower() in PAPER_CONTENT:
+        k = _record_depth(parts)
+        if k is not None and len(parts) > k + 1 and Path(path).suffix.lower() in PAPER_CONTENT:
             bad.append(f"{path} (page content, or a copy of released code or data, may not be written into a record)")
         elif not any(fnmatch.fnmatchcase(path, g.replace("**", "*")) for g in writable):
             bad.append(path)
@@ -149,7 +161,7 @@ USAGE_KEYS = ("input_tokens", "cache_creation_input_tokens", "cache_read_input_t
 
 
 def transcript_dir(cwd: str | Path) -> Path:
-    """Where Claude Code keeps the session transcripts of agents started in cwd."""
+    """Where the default agent command keeps the session transcripts of agents started in cwd."""
     return Path.home() / ".claude" / "projects" / re.sub(r"[^A-Za-z0-9]", "-", str(Path(cwd).resolve()))
 
 
@@ -204,14 +216,14 @@ def _stop(proc) -> None:
 
 
 class Orchestrator:
-    def __init__(self, db: Path, claude_bin: str = "claude", concurrency: int = 3, logs: Path | None = None,
+    def __init__(self, db: Path, agent_bin: str = "claude", concurrency: int = 3, logs: Path | None = None,
                  watch: Path | None = None, on_passed=None, crash_backoff_s: float = 60.0):
         self.watch = Path(watch) if watch else None  # root scanned for writes outside a job's area
         self.on_passed = on_passed  # called with each job's row as it passes
         self.crash_backoff_s = crash_backoff_s
         self.db = Path(db)
         self.db.parent.mkdir(parents=True, exist_ok=True)
-        self.claude = claude_bin
+        self.agent = agent_bin
         self.concurrency = concurrency
         self.logs = Path(logs or self.db.parent / "logs")
         self.logs.mkdir(parents=True, exist_ok=True)
@@ -241,7 +253,7 @@ class Orchestrator:
 
     # ---- one agent call ---------------------------------------------------------
     def _argv(self, job: Job, prompt: str, resume: str | None, budget: float | None = None) -> list[str]:
-        a = [self.claude, "-p", prompt, "--output-format", "stream-json", "--verbose",
+        a = [self.agent, "-p", prompt, "--output-format", "stream-json", "--verbose",
              "--permission-mode", "dontAsk", "--max-turns", str(job.max_turns),
              "--max-budget-usd", f"{job.budget_usd if budget is None else budget:g}", "--allowedTools", *job.allowed_tools,
              "--disallowedTools", *DISALLOWED, *job.disallowed_tools]
@@ -309,14 +321,18 @@ class Orchestrator:
 
     async def _validate(self, job: Job) -> tuple[bool, str]:
         proc = await asyncio.create_subprocess_exec(*job.validate, cwd=job.cwd, stdout=asyncio.subprocess.PIPE,
-                                                    stderr=asyncio.subprocess.STDOUT, env=child_env() | job.env)
+                                                    stderr=asyncio.subprocess.STDOUT, env=child_env() | job.env,
+                                                    start_new_session=True)  # its own process group, like an agent
         try:
             out, _ = await asyncio.wait_for(proc.communicate(), timeout=job.validate_timeout_s)
         except TimeoutError:
-            proc.kill()
+            _stop(proc)
             await proc.wait()
             return False, (f"The gate timed out after {job.validate_timeout_s} s. Something in the record takes too long "
                            "to run: shorten the slowest runs (fewer replicates or a shorter simulated time) and say so.")
+        except BaseException:  # cancelled (a stopped run, SIGTERM): never leave the gate, or what it started, running
+            _stop(proc)
+            raise
         return proc.returncode == 0, out.decode(errors="replace")[-6000:]
 
     def reset(self, job_ids) -> None:
@@ -332,14 +348,15 @@ class Orchestrator:
         async with sem:
             session, cost, turns = None, 0.0, 0
             prompt = job.prompt
+            started = time.time()
             if prev and prev["status"] == "running":
                 # stopped mid-run: carry on in the same session, from what it already did
                 session = self._last_session(job.id)
                 cost, turns = float(prev["cost_usd"] or 0), int(prev["turns"] or 0)
+                started = prev["started"] or started  # what it wrote before it was stopped is its own
                 if session:
                     prompt = ("You were interrupted before you finished. Continue the task where you left off; "
                               "check what you have already written before changing it.")
-            started = time.time()
             self._put(job.id, kind=job.kind, status="running", attempts=0, cost_usd=cost, turns=turns, started=started)
             all_refused: set[str] = set()
             error = None

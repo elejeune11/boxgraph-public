@@ -1,0 +1,42 @@
+- {id: lumen_radius, name: lumen radius of a vessel at its reference (diastolic) pressure, dimension: "[length]", description: "r_d in Tables III, V, VII; R0 (the reference radius) and the proximal/distal radii of Tables XII-XIII"}
+- {id: diastolic_area, name: reference (diastolic) lumen area, dimension: "[length]**2", description: "A_d of the tube law (Eq. 3): the area at P = P_d; for the single-pulse and network cases A_d = A_0"}
+- {id: initial_area, name: lumen area at zero transmural pressure, dimension: "[length]**2", description: "A_0 = A(x,0) of Eq. 16, the area at P = 0 used as initial condition"}
+- {id: wall_thickness, name: arterial wall thickness, dimension: "[length]", description: "h in Eq. 3"}
+- {id: youngs_modulus, name: Young's modulus of the arterial wall, dimension: "[pressure]", description: "E in Eq. 3"}
+- {id: blood_density, name: blood mass density, dimension: "[mass]/[length]**3", description: "rho"}
+- {id: blood_viscosity, name: blood dynamic viscosity, dimension: "[pressure]*[time]", description: "mu"}
+- {id: velocity_profile_order, name: order of the axial velocity profile, dimension: dimensionless, description: "zeta in Eq. 2"}
+- {id: diastolic_pressure, name: diastolic (reference) pressure of the tube law, dimension: "[pressure]", description: "P_d in Eq. 3"}
+- {id: outflow_pressure, name: pressure at which flow to the microcirculation ceases, dimension: "[pressure]", description: "P_out in Eq. 9"}
+- {id: mean_pressure, name: time-averaged pressure over a cardiac cycle, dimension: "[pressure]"}
+- {id: pulse_wave_velocity, name: pulse wave velocity, dimension: "[length]/[time]", description: "c of Eqs. 4-5; c0 at the initial area of the single pulse, c_m at mean pressure"}
+- {id: proximal_resistance, name: proximal resistance R1 of a three-element Windkessel, dimension: "[pressure]*[time]/[length]**3", description: "R1 in Eq. 9; the paper sets it equal to the characteristic impedance of the end point (p. 5)"}
+- {id: distal_resistance, name: distal resistance R2 of a three-element Windkessel, dimension: "[pressure]*[time]/[length]**3", description: "R2 in Eq. 9"}
+- {id: windkessel_compliance, name: compliance C of a three-element Windkessel, dimension: "[length]**4*[time]**2/[mass]", description: "C in Eq. 9 (m^3/Pa)"}
+- {id: mean_flow_rate, name: time-averaged inflow rate over a cardiac cycle, dimension: "[length]**3/[time]"}
+- {id: outlet_count, name: number of identical terminal Windkessels sharing the inflow, dimension: dimensionless}
+- {id: inflow_rate, name: volume inflow rate at the inlet, dimension: "[length]**3/[time]", description: "Q_in(t) of Eqs. 6 and 14"}
+- {id: gaussian_rate_coefficient, name: coefficient of the squared time in the Gaussian inflow exponent, dimension: "1/[time]**2", description: "the 10000 in Eq. 14"}
+- {id: time, name: time, dimension: "[time]"}
+- {id: pulse_duration, name: duration of a pulse wave, dimension: "[time]", description: "the width T of the single-pulse inflow, or the systolic period T_s of a physiological inflow"}
+- {id: wavelength, name: pulse wavelength, dimension: "[length]", description: "duration of the pulse times its wave speed (c0 T, T_s c_m)"}
+- {id: distance_along_vessel, name: distance from the inlet along the vessel, dimension: "[length]", description: "x"}
+- {id: peak_pressure_ratio, name: peak pressure of the viscous pulse relative to the inlet peak, dimension: dimensionless, description: "P_peak,visc(x)/P_peak,inv of Eq. 15, plotted as P/P_peak in Fig. 2"}
+- {id: thickness_coef_a, name: coefficient a of the wall-thickness law, dimension: dimensionless, description: "a~ in Eq. 17"}
+- {id: thickness_coef_b, name: exponent rate b of the wall-thickness law, dimension: "1/[length]", description: "b~ in Eq. 17"}
+- {id: thickness_coef_c, name: coefficient c of the wall-thickness law, dimension: dimensionless, description: "c~ in Eq. 17"}
+- {id: thickness_coef_d, name: exponent rate d of the wall-thickness law, dimension: "1/[length]", description: "d~ in Eq. 17"}
+- {id: time_step, name: time step of a numerical scheme, dimension: "[time]", description: "Delta t of Table I"}
+- {id: element_size, name: "size of an element, cell or stencil of a numerical scheme", dimension: "[length]", description: "Omega_e of Table I"}
+- {id: cfl_number, name: Courant-Friedrichs-Lewy number, dimension: dimensionless, description: "CFL = lambda Delta t / Omega_e of Table I"}
+- {id: flow_velocity, name: cross-sectional mean axial blood velocity, dimension: "[length]/[time]", description: "U of Eq. 1"}
+- {id: relative_rms_error, name: relative root mean square error of a 1D solution against reference data, dimension: dimensionless, description: "E^RMS of Eq. 10, in per cent in Tables IV, VI, VIII and X"}
+# ---------------------------------------------------------------- figure readings (figures.yaml)
+- {id: blood_pressure, name: blood pressure at a site of the vessel or network, dimension: "[pressure]", description: "P(t) of the waveform figures (Figs. 3-9)"}
+- {id: pressure_difference, name: pressure at the inlet minus pressure at the outlet of a vessel, dimension: "[pressure]", description: "Delta P of Figs. 3(b) and 4(b)"}
+- {id: volume_flow_rate, name: volume flow rate through a cross-section at a site, dimension: "[length]**3/[time]", description: "Q(t) of the waveform figures (Figs. 3-9)"}
+- {id: radius_change, name: change in lumen radius from its diastolic value, dimension: "[length]", description: "Delta r of Figs. 3(d), 4(d), 5(c)"}
+- {id: inviscid_peak_pressure_ratio, name: peak pressure of the inviscid pulse relative to the inlet peak, dimension: dimensionless, description: "tips of the thin solid lines of Fig. 2, P/P_peak"}
+# ---------------------------------------------------------------- tube-law helper (models/tube_law_eq3)
+- {id: lumen_area, name: luminal cross-sectional area of the vessel at a point and time, dimension: "[length]**2", description: "A(x,t) of Eqs. 1 and 3"}
+- {id: external_pressure, name: pressure outside the vessel, dimension: "[pressure]", description: "P_ext in Eq. 3"}

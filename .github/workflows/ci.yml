@@ -24,6 +24,6 @@ jobs:
         run: .venv/bin/python tools/test_catalog.py --check
       - name: Records validate (structure only; page text is not in git)
         run: |
-          for d in records/*/; do
+          for d in corpora/*/records/*/; do
             if [ -f "$d/source.yaml" ]; then .venv/bin/boxgraph validate "$d" --no-run || exit 1; fi
           done

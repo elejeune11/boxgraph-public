@@ -1,0 +1,16 @@
+id: errors_radius_change
+name: relative radius-change errors of a released 1D waveform against the released 3D one (boileau2015 Eqs. 10-13, flow forms)
+role: processing
+software: true
+stated: {file: Benchmark2_CommonCarotidArtery/README.txt, lines: "16-24", quote: "col 4: change in radius from diastole [mm]"}
+equation: "as for Q: every difference divided by max_j(Delta r_j) of the reference (p. 12: 'we use the same metrics as for the flow rate')"
+inputs:
+  t_ini: {quantity: time, unit: s, description: "start of the last 1D cardiac cycle, as the README gives it"}
+  t_lag: {quantity: time_lag, unit: s, description: "where t = 0 of the 3D record falls after t_ini (added)"}
+  period: {quantity: cardiac_period, unit: s, description: "period of the inflow; a time past t_ini + period is taken one period earlier"}
+outputs:
+  rms: {quantity: radius_change_rms_error, unit: percent}
+  max: {quantity: radius_change_max_error, unit: percent}
+  sys: {quantity: radius_change_systolic_error, unit: percent}
+  dias: {quantity: radius_change_diastolic_error, unit: percent}
+settings: {reference_file: "", reference_column: 4, solution_file: "", solution_column: 4}

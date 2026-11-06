@@ -1,0 +1,418 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+# a is korakianitis2006's simplified circulation (on-off valves, Eqs. 3, 6, 18 as corrected; ml, mmHg, s);
+# b is this chapter's circulation_ch2 in its own settings (simplified: no atrial contraction, no KG
+# diaphragm motion, on-off valves, Eq. 2-14), in the same port units. b's KG diaphragm and leaflet
+# inputs have no counterpart in a and do nothing in that configuration; they are mapped to the
+# chapter's Table 2-3 and 2-4 values (and the added theta_max of 75 deg, as in runs.yaml).
+- id: rel_simplified_from_korakianitis2006_psas
+  kind: reduces_to
+  a: korakianitis2006/circulation_onoff_corrected
+  b: shi2013_ch2/circulation_ch2
+  mapping: &map
+    CQao: "CQao"
+    CQmi: "CQmi"
+    CQpo: "CQpo"
+    CQti: "CQti"
+    Elvs: "Elvs"
+    Elvd: "Elvd"
+    Plv0: "Plv0"
+    Vlv0: "Vlv0"
+    Ela_max: "Ela_max"
+    Ela_min: "Ela_min"
+    Pla0: "Pla0"
+    Vla0: "Vla0"
+    Ervs: "Ervs"
+    Ervd: "Ervd"
+    Prv0: "Prv0"
+    Vrv0: "Vrv0"
+    Era_max: "Era_max"
+    Era_min: "Era_min"
+    Pra0: "Pra0"
+    Vra0: "Vra0"
+    Csas: "Csas"
+    Rsas: "Rsas"
+    Lsas: "Lsas"
+    Csat: "Csat"
+    Rsat: "Rsat"
+    Lsat: "Lsat"
+    Rsar: "Rsar"
+    Rscp: "Rscp"
+    Rsvn: "Rsvn"
+    Csvn: "Csvn"
+    Cpas: "Cpas"
+    Rpas: "Rpas"
+    Lpas: "Lpas"
+    Cpat: "Cpat"
+    Rpat: "Rpat"
+    Lpat: "Lpat"
+    Rpar: "Rpar"
+    Rpcp: "Rpcp"
+    Rpvn: "Rpvn"
+    Cpvn: "Cpvn"
+    Kst_la: "2.5"
+    Kst_lv: "20.0"
+    Kf_sav: "0.0004"
+    Ke_sav: "9000.0"
+    m_sav: "0.0004"
+    A_sav: "0.00047"
+    Kst_ra: "2.5"
+    Kst_rv: "20.0"
+    Kf_pav: "0.0004"
+    Ke_pav: "9000.0"
+    m_pav: "0.0004"
+    A_pav: "0.00047"
+    Kp_ao: "5500"
+    Kf_ao: "50"
+    Kp_mi: "5500"
+    Kf_mi: "50"
+    Kp_po: "5500"
+    Kf_po: "50"
+    Kp_ti: "5500"
+    Kf_ti: "50"
+    theta_max_ao: "75"
+    theta_min_ao: "0"
+    theta_max_mi: "75"
+    theta_min_mi: "0"
+    theta_max_po: "75"
+    theta_min_po: "0"
+    theta_max_ti: "75"
+    theta_min_ti: "0"
+    T: "T"
+    Ts1: "Ts1"
+    Ts2: "Ts2"
+    Tpwb: "Tpwb"
+    Tpww: "Tpww"
+    Vlv_init: "Vlv_init"
+    Vla_init: "Vla_init"
+    Vrv_init: "Vrv_init"
+    Vra_init: "Vra_init"
+    Psas_init: "Psas_init"
+    Psat_init: "Psat_init"
+    Psvn_init: "Psvn_init"
+    Ppas_init: "Ppas_init"
+    Ppat_init: "Ppat_init"
+    Ppvn_init: "Ppvn_init"
+  output_map: {Psas_max: Psas_max}
+  limit: &limit {Ela_max: "0.15", Era_max: "0.15"}
+  regime: &regime
+    CQao: [315, 385]
+    CQmi: [360, 440]
+    CQpo: [315, 385]
+    CQti: [360, 440]
+    Elvs: [2.25, 2.75]
+    Elvd: [0.09, 0.11]
+    Plv0: [0.9, 1.1]
+    Vlv0: [4.5, 5.5]
+    Ela_max: [0.15, 0.275]
+    Ela_min: [0.15, 0.15]
+    Pla0: [0.9, 1.1]
+    Vla0: [3.6, 4.4]
+    Ervs: [1.035, 1.265]
+    Ervd: [0.09, 0.11]
+    Prv0: [0.9, 1.1]
+    Vrv0: [9, 11]
+    Era_max: [0.15, 0.275]
+    Era_min: [0.15, 0.15]
+    Pra0: [0.9, 1.1]
+    Vra0: [3.6, 4.4]
+    Csas: [0.072, 0.088]
+    Rsas: [0.0027, 0.0033]
+    Lsas: [0.0000558, 0.0000682]
+    Csat: [1.44, 1.76]
+    Rsat: [0.045, 0.055]
+    Lsat: [0.00153, 0.00187]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    Cpas: [0.162, 0.198]
+    Rpas: [0.0018, 0.0022]
+    Lpas: [0.0000468, 0.0000572]
+    Cpat: [3.42, 4.18]
+    Rpat: [0.009, 0.011]
+    Lpat: [0.00153, 0.00187]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0054, 0.0066]
+    Cpvn: [18.45, 22.55]
+    T: [1, 1]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    Tpwb: [0.90, 0.93]
+    Tpww: [0.08, 0.10]
+    Vlv_init: [500, 800]
+    Vla_init: [15, 25]
+    Vrv_init: [400, 550]
+    Vra_init: [15, 25]
+    Psas_init: [90, 110]
+    Psat_init: [90, 110]
+    Psvn_init: [0, 5]
+    Ppas_init: [20, 30]
+    Ppat_init: [20, 30]
+    Ppvn_init: [0, 5]
+  provenance: proposed
+  reason: &reason >
+    No source states this relation: the chapter is adapted from the authors' two 2006 Medical
+    Engineering & Physics papers (p. 1, ref-korakianitis-shi2006a, -2006b), not from korakianitis2006
+    (J. Biomech.), and cites none of its values. But the chapter's simplified model is the same
+    authors' circulation: the same chamber law (Eqs. 2-2 to 2-4; korakianitis2006's Eqs. 2-4, with the activation 1 - cos / 1 + cos that korakianitis2006's record takes as the
+    evident correction of its Eq. 3), the same orifice law with on-off valves (Eqs. 2-13, 2-14;
+    Eqs. 6, 7), and the same R-L-C loops with the artery flow driven by P_sat - P_svn (Eq. 2-21; the
+    corrected Eq. 18). What the chapter's simplified configuration leaves out is atrial contraction
+    ("without atrial contraction e_la = E_la,min", Eq. 2-5), which korakianitis2006's model always has
+    (Eq. 5). With the atrial elastance held at its minimum (E_a,max -> E_a,min) the two codes give
+    the same numbers at the paper values (every shared output to the last digit). Hence reduces_to,
+    in that limit; the chapter's other configurations (atrial contraction, KG diaphragm, leaflet
+    dynamics) have no settings-free counterpart here and are not tested.
+  assumptions:
+    - "The limit E_a,max -> E_a,min is taken at E_a,min = 0.15 mmHg/ml, the value both papers print (Table 1 of korakianitis2006, Table 2-1 of the chapter); the relation tester takes limits to a number, so E_a,min is held at that point."
+    - "T is held at 1 s: both codes report the cycle [10 s, 10 s + T) with t_end = 11 s, a whole cycle only for T = 1 s."
+    - "b's KG diaphragm and leaflet inputs are mapped to the chapter's values; they do nothing with kg_motion and valve_dynamics off."
+- id: rel_simplified_from_korakianitis2006_mitral_e
+  kind: reduces_to
+  a: korakianitis2006/circulation_onoff_corrected
+  b: shi2013_ch2/circulation_ch2
+  mapping: *map
+  output_map: {Qmi_E: Qmi_E}
+  limit: *limit
+  regime: *regime
+  provenance: proposed
+  reason: *reason
+  assumptions:
+    - "As rel_simplified_from_korakianitis2006_psas, for the mitral E peak; both models take it as the largest mitral flow between Ts2 and Tpwb of the analysed cycle."
+# Against the authors' CellML code of the same circulation (korakianitis_cellml/closed_loop_onoff, mL,
+# mmHg, s). a is the CellML port, b this chapter's circulation_ch2 in its own settings (simplified). The
+# code's timings are fractions of T (korakianitis_cellml q_timing_fractions), so b's times are a's
+# fractions times T; the code's initial vessel flows have no counterpart in b, which starts them at
+# zero, and are held at zero; the code's pi is held at the constant (the code writes 3.14159, q_pi).
+# b's KG diaphragm and leaflet inputs are mapped to Table 2-3 and 2-4 values as above.
+- id: rel_simplified_from_cellml_psas
+  kind: reduces_to
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi2013_ch2/circulation_ch2
+  mapping: &cmap
+    CQao: "CVao"
+    CQmi: "CVmi"
+    CQpo: "CVpa"
+    CQti: "CVti"
+    Elvs: "ElvMax"
+    Elvd: "ElvMin"
+    Plv0: "PlvIni"
+    Vlv0: "VlvIni"
+    Ela_max: "ElaMax"
+    Ela_min: "ElaMin"
+    Pla0: "PlaIni"
+    Vla0: "VlaIni"
+    Ervs: "ErvMax"
+    Ervd: "ErvMin"
+    Prv0: "PrvIni"
+    Vrv0: "VrvIni"
+    Era_max: "EraMax"
+    Era_min: "EraMin"
+    Pra0: "PraIni"
+    Vra0: "VraIni"
+    Csas: "Csas"
+    Rsas: "Rsas"
+    Lsas: "Lsas"
+    Csat: "Csat"
+    Rsat: "Rsat"
+    Lsat: "Lsat"
+    Rsar: "Rsar"
+    Rscp: "Rscp"
+    Rsvn: "Rsvn"
+    Csvn: "Csvn"
+    Cpas: "Cpas"
+    Rpas: "Rpas"
+    Lpas: "Lpas"
+    Cpat: "Cpat"
+    Rpat: "Rpat"
+    Lpat: "Lpat"
+    Rpar: "Rpar"
+    Rpcp: "Rpcp"
+    Rpvn: "Rpvn"
+    Cpvn: "Cpvn"
+    Kst_la: "2.5"
+    Kst_lv: "20.0"
+    Kf_sav: "0.0004"
+    Ke_sav: "9000.0"
+    m_sav: "0.0004"
+    A_sav: "0.00047"
+    Kst_ra: "2.5"
+    Kst_rv: "20.0"
+    Kf_pav: "0.0004"
+    Ke_pav: "9000.0"
+    m_pav: "0.0004"
+    A_pav: "0.00047"
+    Kp_ao: "5500"
+    Kf_ao: "50"
+    Kp_mi: "5500"
+    Kf_mi: "50"
+    Kp_po: "5500"
+    Kf_po: "50"
+    Kp_ti: "5500"
+    Kf_ti: "50"
+    theta_max_ao: "75"
+    theta_min_ao: "0"
+    theta_max_mi: "75"
+    theta_min_mi: "0"
+    theta_max_po: "75"
+    theta_min_po: "0"
+    theta_max_ti: "75"
+    theta_min_ti: "0"
+    T: "T"
+    Ts1: "Ts1*T"
+    Ts2: "Ts2*T"
+    Tpwb: "Tpwb*T"
+    Tpww: "Tpww*T"
+    Vlv_init: "Vlv0"
+    Vla_init: "Vla0"
+    Vrv_init: "Vrv0"
+    Vra_init: "Vra0"
+    Psas_init: "P0sas"
+    Psat_init: "P0sat"
+    Psvn_init: "P0svn"
+    Ppas_init: "P0pas"
+    Ppat_init: "P0pat"
+    Ppvn_init: "P0pvn"
+  output_map: {Psas_max: P_sas_max}
+  limit: &climit {ElaMax: "0.15", EraMax: "0.15"}
+  regime: &cregime
+    ElaMax: [0.15, 0.275]
+    ElaMin: [0.15, 0.15]
+    PlaIni: [0.9, 1.1]
+    VlaIni: [3.6, 4.4]
+    ElvMax: [2.25, 2.75]
+    ElvMin: [0.09, 0.11]
+    PlvIni: [0.9, 1.1]
+    VlvIni: [4.5, 5.5]
+    EraMax: [0.15, 0.275]
+    EraMin: [0.15, 0.15]
+    PraIni: [0.9, 1.1]
+    VraIni: [3.6, 4.4]
+    ErvMax: [1.035, 1.265]
+    ErvMin: [0.09, 0.11]
+    PrvIni: [0.9, 1.1]
+    VrvIni: [9, 11]
+    T: [1, 1]
+    Tpwb: [0.92, 0.93]
+    Tpww: [0.08, 0.09]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    CVao: [315, 385]
+    CVmi: [360, 440]
+    CVpa: [315, 385]
+    CVti: [360, 440]
+    Vlv0: [500, 800]
+    Vla0: [15, 25]
+    Vra0: [15, 25]
+    Vrv0: [400, 550]
+    Rsas: [0.0027, 0.0033]
+    Csas: [0.072, 0.088]
+    Lsas: [0.0000558, 0.0000682]
+    P0sas: [90, 110]
+    Q0sas: [0, 0]
+    Rsat: [0.045, 0.055]
+    Csat: [1.44, 1.76]
+    Lsat: [0.00153, 0.00187]
+    P0sat: [90, 110]
+    Q0sat: [0, 0]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    P0svn: [0, 5]
+    Rpas: [0.0018, 0.0022]
+    Cpas: [0.162, 0.198]
+    Lpas: [0.0000468, 0.0000572]
+    P0pas: [20, 30]
+    Q0pas: [0, 0]
+    Rpat: [0.009, 0.011]
+    Cpat: [3.42, 4.18]
+    Lpat: [0.00153, 0.00187]
+    P0pat: [20, 30]
+    Q0pat: [0, 0]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0006, 0.006]
+    Cpvn: [18.45, 22.55]
+    P0pvn: [0, 5]
+    pi: [3.141592653589793, 3.141592653589793]
+  provenance: proposed
+  reason: &creason >
+    Neither source states this relation. The chapter never mentions the CellML code; it is "adapted
+    from" Korakianitis and Shi 2006, Med. Eng. Phys. 28, 613-628 (p. 1, ref-korakianitis-shi2006a), and
+    the CellML documentation cites the same paper as its ref. 1 (korakianitis_cellml ref-korakianitis2006mep)
+    among the C original it ports, by the same author (Shi). Their equations are the same: the chamber law
+    with activation 1 - cos / 1 + cos (Eqs. 2-2 to 2-4; EVentricle.cellml), the orifice law with on-off
+    valves (Eqs. 2-13, 2-14; TempCDa/TempCDv, where the reverse branch is multiplied by Tao = 0, so the
+    sign of Eq. 2-13's reverse branch, q_eq2_13_sign in this record, does not matter), the R-L-C loops with the
+    arteriole and capillary resistances in series with the artery (Eq. 2-21; TempR carrying Qsat), and
+    the same atrial activation, including its wrap past T into the next beat (Eq. 2-6; EAtrium.cellml
+    line 22). What the chapter's simplified configuration leaves out is atrial contraction ("without
+    atrial contraction e_la = E_la,min"), which the code always has. With the atrial elastance held at its
+    minimum (E_a,max -> E_a,min) the two codes, run side by side at the code's values (R_pvn = 0.006),
+    agree on every shared output to about 1e-9 (scratch run, build/cardio/relate-check). Hence reduces_to
+    in that limit. The chapter's atrial-contraction configuration would be the code itself, but it is a
+    setting of circulation_ch2, not an input, and is not tested here; the KG diaphragm and leaflet-dynamics
+    configurations have no counterpart in the code.
+  assumptions:
+    - "The limit E_a,max -> E_a,min is taken at E_a,min = 0.15 mmHg/ml, the value both print (Table 2-1; ParaHeart.cellml); the relation tester takes limits to a number, so E_a,min is held at that point."
+    - "T is held at 1 s: the chapter's code reports [10 s, 10 s + T) and the port [t_end - T, t_end] with t_end = 11 s, the same cycle only for T = 1 s; the code's timing fractions then equal the chapter's times."
+    - "The code's pi is held at the constant pi; at the code's 3.14159 the outputs move by about 1e-6."
+    - "The code's initial vessel flows are held at zero, where the chapter's model starts them."
+    - "b's KG diaphragm and leaflet inputs are mapped to the chapter's values; they do nothing with kg_motion and valve_dynamics off."
+- id: rel_simplified_from_cellml_co
+  kind: reduces_to
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi2013_ch2/circulation_ch2
+  mapping: *cmap
+  output_map: {CO: Q_ao_mean}
+  limit: *climit
+  regime: *cregime
+  tolerance: 0.00001
+  provenance: proposed
+  reason: *creason
+  assumptions:
+    - "As rel_simplified_from_cellml_psas, for the mean aortic flow; the code averages one period by the trapezoidal rule over both end points, the chapter by the sample mean over [10 s, 11 s), which agree only to the extent the 11th cycle is periodic."
+    - "The tolerance (1e-5) is ours: it admits the difference of the two averaging rules (about 3e-6 in the limit at the regime's samples), not a difference of the models."
+- id: rel_simplified_from_cellml_mitral_e
+  kind: reduces_to
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi2013_ch2/circulation_ch2
+  mapping: *cmap
+  output_map: {Qmi_E: Q_mi_E}
+  limit: *climit
+  regime: *cregime
+  provenance: proposed
+  reason: *creason
+  assumptions:
+    - "As rel_simplified_from_cellml_psas, for the mitral E peak; both take the largest mitral flow between Ts2 and Tpwb of the analysed cycle."
+- id: rel_pv_law_suga
+  kind: reduces_to
+  a: shi2013_ch2/elastance_eq2_4
+  b: suga1973/pv_ratio
+  mapping: {P: "Plv", V: "Vlv", Vd: "Vlv0"}
+  output_map: {E: elv}
+  limit: {Plv0: "0"}
+  regime: {Plv: [5, 150], Vlv: [60, 150], Plv0: [0.5, 2], Vlv0: [2, 40]}
+  provenance: stated
+  citation: {page: 12, printed_page: "60", quote: "ventricular pressure is described as a linear function of the chamber volume and the chamber elastance", where: "text before Eq. 2-1; Eq. 2-4 (p. 13)"}
+  assumptions:
+    - "The chapter names Suga et al.'s variable elastance model for its pressure-volume law (pp. 12, 13) and prints it as Eq. 2-4 with a reference pressure Plv,0; Suga's E(t) = P(t)/[V(t) - Vd] has none, so the chapter's law becomes Suga's when Plv,0 -> 0, with Vlv,0 in the role of Vd."
+    - "Suga's P is the total left ventricular pressure and Vd the volume-axis intercept of the end-systolic line; mapping them to the chapter's Plv and Vlv,0 joins the forms, not the quantities (the chapter prints Vlv,0 = 5.0 ml, Suga measures Vd in dogs)."
+    - "elastance_eq2_4 is Eq. 2-4 solved for elv, entered as a helper so the two laws give the same output."
+- id: rel_elastance_suga
+  kind: derived_from
+  a: suga1973/elastance_normalized
+  b: shi2013_ch2/elastance_ch2
+  mapping: {Elvs: "Emax", Ts1: "Tmax/1000", t: "t/1000"}
+  output_map: {elv: E}
+  steps:
+    - "take Suga et al.'s variable elastance model E(t) = Emax EN(t/Tmax) (p. 12)"
+    - "replace the measured normalized curve EN by 'a commonly used activation function' (Eq. 2-3, p. 13), raised from E_lv,d to E_lv,s (Eq. 2-2)"
+    - "for the atrium, adopt the same model with the values of parameters and the form of the activation function adapted (Eqs. 2-5, 2-6, p. 13)"
+  provenance: stated
+  citation: {page: 13, printed_page: "61", quote: "Again Suga et al.'s variable elastance model (Suga et al. 1973) is adopted", where: "text before Eq. 2-5; also p. 12 before Eq. 2-1"}
+  assumptions:
+    - "Eq. 2-2 peaks at t = T_s1 with e_lv = E_lv,s, so E_lv,s plays the role of Emax and T_s1 of Tmax (ms in Suga, s in the chapter); the chapter's other inputs (E_lv,d, T_s2, T, the atrial ones) have no counterpart in Suga's two-parameter description."
+    - "Suga's EN is only plotted (Fig. 5), so elastance_normalized does not run and the relation cannot be tested; the chapter's words stand as the evidence. Whether the cosine activation of Eq. 2-3 follows Suga's EN is a question for the figure reading, not for this relation."

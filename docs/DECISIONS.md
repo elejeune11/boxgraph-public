@@ -1,6 +1,7 @@
 # Implementation decisions
 
-Choices the design documents leave open, made while building version 0.1.
+Choices the design documents leave open, made while building versions 0.1
+to 0.9; later sections name the version they belong to.
 Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
 
 ## Records
@@ -132,7 +133,7 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   (`experiments/digitizer_real/`): agents writing their own code had a mean
   error of 0.25% of the axis and 98% coverage; the shared digitizer 0.60% and
   97% at 300 dpi, 0.46% and 92% at 1200 dpi. So a figure reading is now
-  usually `mode: code`: `read(image, at)` in `records/<id>/figures/`, run by
+  usually `mode: code`: `read(image, at)` in the record's `figures/` folder, run by
   every build in the isolated runner on the rendered crop (cached by code and
   image), returning values, 95% intervals and pixel positions; the build
   draws crosses at those positions for checking. The declarative modes stay.
@@ -225,17 +226,17 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   corpus list asks for it. On the first corpus these signs find exactly the
   three pairs the single relation job linked. Pairs are found after reading,
   from the records, so a paper added later is related to those already read.
-- Jobs that passed are listed in `pipeline/completed.yaml`, committed with
-  the records; a run skips them. The SQLite state is per machine and per run,
+- Jobs that passed are listed in the corpus's ledger,
+  `corpora/<name>/completed.yaml`, committed with the records; a run skips them. The SQLite state is per machine and per run,
   and is not what says a paper is done.
 - Jobs that edit one record hold a lock on it: two relation jobs that share a
   record run one after the other.
 - Gates validate with the build's model cache, so a retry or a gate after a
   small change does not rerun every simulation. Cache files are written
   whole (a temporary file, then a rename), since jobs share the cache.
-- A relation job's gate validates its two records without running their
-  models, then tests the pair's relations (`boxgraph relations`); the full
-  build follows the run.
+- A relation job's gate validates its two records with their models run
+  (from the shared cache), then tests the pair's relations
+  (`boxgraph relations`); the full build follows the run.
 - Agents run non-interactively, with an explicit allow list:
   read anything; write only inside their record; run the validator, Python
   and read-only shell commands. `Agent`, `WebFetch` and `WebSearch` are
@@ -322,7 +323,7 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
 - **A record of its own.** Released code is a source of kind `software`, and
   released data (e.g. a journal's source-data spreadsheet) one of kind
   `dataset`, each with its own record. The files live under the ignored
-  `corpus/` (`corpus/code/<id>/`, `corpus/data/<id>.xlsx`) and are never
+  `corpus/` (`corpus/<name>/code/<id>/`, `corpus/<name>/data/<id>.xlsx`) and are never
   committed, whatever their licence; the record pins them by a digest of
   their contents (`version: sha256:...`, see `boxgraph/sources.py`), names
   their `licence` ('none stated' if none) and `url`, and is unsound when the
@@ -359,8 +360,8 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   a close result must also have the printed value's sign and be within a factor
   of ten of it (02-boxgraph, amended). For precise values nothing changes.
 - **Which pairs are related.** A relation job runs for a pair when one record
-  cites the other, a model is described from the other, or the corpus list asks
-  for it. Two models of the same shape alone (a rate from a force and a rate)
+  cites the other, a model is described from the other, one is the other's
+  released code or data, or the corpus list asks for it. Two models of the same shape alone (a rate from a force and a rate)
   is a weak sign that grows with the corpus; such pairs are printed for a
   person, not related (with five papers, three of Andreu's ten relation jobs
   were of this kind and found nothing).
@@ -390,11 +391,14 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   a weak pull to the middle) from a golden-ratio start, then no overlap within a column.
   The same Synthesis gives the same picture in any order.
 - **Case studies: the words are a person's, the numbers the build's.** The text lives
-  in `overview/content.yaml` (field content, outside `boxgraph/`); each step names what
+  in the corpus's `overview.yaml` (field content, outside `boxgraph/`); each step names what
   it shows (`comparison: src/id`, `relation: src/id`, `cited: src/datum`,
-  `cross_check: src/relation`, `figure: src/id`), and the build fills in the values. A
+  `cross_check: src/relation`, `validation: src/id`, `figure: src/id`,
+  `refinement: src/id`, `family: src/model`, `question: src/id`), and the build fills
+  in the values. A
   step naming something the build does not have stops the overview with its name.
-- **Small:** one HTML file with its data embedded (about 0.7 MB for sixteen sources);
+- **Small:** one HTML file with its data embedded (under 1 MB for sixteen sources, about
+  2 MB for the 29 of the cardiovascular corpus);
   only a case study's figures are copied beside it (`img/`).
 
 ## Models against other papers' measurements (v0.8)
@@ -423,3 +427,135 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   holds no validation against Gardel, and an open question says why (q_gardel2008_not_a_test).
 - **Approximate ranges** ('0 to ~30', '~5 to 50') are read as printed, with no precision, like '~5'.
 
+## Several corpora (v0.9)
+
+- **A field is a corpus of its own.** A second field (0D and 1D models of the
+  cardiovascular system) would otherwise share one Synthesis and one overview
+  with the first, and the two have no relation between them to test. Each
+  review should read as one whole, so each corpus is reviewed on its own.
+- **Where a corpus lives.** The default corpus keeps its original paths
+  (`pipeline/papers.yaml`, `pipeline/completed.yaml`, `overview/content.yaml`,
+  `records/`), so nothing committed moved. A named corpus keeps the same files
+  in `corpora/<name>/` (`papers.yaml`, `completed.yaml`, `overview.yaml`,
+  `records/`), its sources in `corpus/<name>/`, its build in `build/<name>/`,
+  its run state in `pipeline_state/<name>/`, and its page in `site/<name>/`.
+  `pipeline.corpus.layout` is the one place these are named. The default
+  corpus later moved to `corpora/motor_clutch/`; see "One layout for every
+  corpus (v0.9)" below.
+- **What is shared.** The code, the prompts and the model cache
+  (`build/cache/`, keyed by a model's code and inputs, so sharing it is safe).
+  `boxgraph/` is unchanged: it builds whatever records folder it is given.
+- **Agents are told the folder.** Job prompts name the corpus's records folder
+  in every path and command; the reader guide says its `records/<id>/` means
+  that folder. Write permissions, gates, and the scan for stray writes and page
+  content all use it, and git ignores a named corpus's page text, page images
+  and figure work as it does the default's.
+- **No relations across corpora.** Pairs are found only among one corpus's
+  records. If two fields ever need linking, that is a decision for then.
+
+
+## Time limits (v0.9)
+
+- **A model run may take two hours.** The limit only stops a model that hangs;
+  1D network models and long stochastic runs can take most of an hour. Figure
+  reading code keeps fifteen minutes. A gate may take six hours (it can run
+  several long models) and an agent job eight. On a machine that stops
+  commands after two hours, a single model run near that length is better
+  built on a machine without that limit.
+
+## Rounded inputs in verdicts (v0.9)
+
+- **Why.** In the cardiovascular corpus most results that missed were off by
+  under 1-3%: the papers computed with unrounded inputs and printed them
+  rounded. Judging a result only by its own printed digits called these not
+  reproduced.
+- **The rule** (design 02, Verdicts). A miss within 10% of the printed value
+  is judged again with the range the printed inputs' rounding allows: each
+  input at either end of its printed range, one at a time, the changes added
+  up (exact for a linear model, a fair bound otherwise). At most eight
+  inputs, the most coarsely printed first; added inputs and other runs'
+  outputs are not varied; models with randomness keep their own interval.
+  The comparison records the inputs varied and the range.
+- **Cost.** Two extra runs per varied input, cached; only for misses within
+  10%. Alternatives of added inputs reuse the baseline's range, so they run
+  nothing more.
+- **The 10% limit** keeps the cost bounded; a coarsely printed input (one
+  significant figure) could in principle explain a larger miss, and such a
+  result is reported as not reproduced, with rounding "not tried".
+
+## Corrected variants of misprinted equations (v0.9)
+
+- **Why.** In Korakianitis and Shi (2006) three printed equations are evident
+  misprints (an activation that gives negative elastance, unlike the paper's
+  own Fig. 2; a reverse flow without its sign; a flow driven by the wrong
+  pressure). The model as printed missed 116 of 122 results, which says
+  little about the model the authors ran.
+- **The rule** (design 02). The printed model stays, with its verdicts as the
+  paper's. A variant model (`variant_of`, `corrections`: equation, change,
+  evidence) is run on the same results. Evidence is the paper's own figure,
+  text or released code, or a sign or dimension argument. Numbers are never
+  corrected this way.
+- **Reporting.** A variant's comparisons are tallied as "reproduction,
+  corrected" and never count toward the paper's own tally. They make no
+  finding of their own; a printed result the variant reproduces keeps its
+  not-reproduced finding, which names the correction that reproduces it.
+
+## The overview (v0.9)
+
+- **Corrections are shown.** A source with a corrected variant of a misprinted
+  model gets a Corrections section: each variant, the equations it changes,
+  the change, the evidence, and the tally of its comparisons. The Models table
+  says which model a variant corrects. The paper's own tally counts only the
+  model as printed.
+- **Purposes are explained.** Each purpose of a comparison has a line of
+  explanation, and "reproduction, corrected" (and the other purposes computed
+  with a variant) says it was computed with a corrected variant: what the
+  stated correction explains.
+- **Labels are told apart.** Sources that share an author-year label get a
+  letter (Shi 2013a, Shi 2013b), so every mark and heading names one source.
+- **Values read from a figure** are shown as values, and the figure is named
+  once rather than with every value.
+- **The page's title** comes from the overview text (`title:`) when it gives
+  one; otherwise from the build's `--title`.
+- **One page per corpus.** Each corpus has its own overview: the default one
+  in `site/`, a named one in `site/<name>/` (`make build site CORPUS=<name>`).
+  The two published overviews link to each other through the `links` of their
+  overview text. The first review's page is now `site/motor_clutch/`, under a
+  landing page; see "One layout for every corpus (v0.9)".
+
+## Robustness rules from the v0.9 review
+
+- **Missing values in a relation test.** Points where either model gives no
+  value are left out and named in the detail. No value at any point makes the
+  relation unverifiable; a result that holds only on the points that have
+  values is ambiguous, never verified.
+- **A refinement must include the paper's own setting.** Its factors must be
+  at least two and include 1; the value at factor 1 is the one quoted as the
+  paper's setting.
+- **Figure code is keyed with its folder.** A figure reading's cache key
+  covers every `*.py` in the folder of its code, since a reading may import a
+  sibling; model keys are unchanged.
+- **A cross-paper check never stops the build.** A model that gives no value,
+  or a mapping that cannot be evaluated, is reported as not checked, with the
+  reason.
+- **Left for later.** The limit `-> 0` in a `reduces_to` test still scales
+  its approach points with a floor of 1. Without the floor, one cardiovascular
+  model stops giving values near the limit, which is a numerical breakdown
+  rather than evidence about the relation; how to treat that is undecided.
+
+## One layout for every corpus (v0.9)
+
+- **No default corpus.** When named corpora were added, the first review kept
+  its top-level paths (`records/`, `pipeline/papers.yaml`,
+  `pipeline/completed.yaml`, `overview/content.yaml`). That made one review
+  look special, and put a corpus's data inside `pipeline/`, the replaceable
+  code layer.
+- **Every corpus lives in `corpora/<name>/`.** The first review is now
+  `corpora/motor_clutch/`, with its sources in `corpus/motor_clutch/`, its
+  build in `build/motor_clutch/` and its run state in
+  `pipeline_state/motor_clutch/`, laid out like `cardio`.
+- **Every command names its corpus.** `pipeline.add`, `pipeline.attach` and
+  `pipeline.run_papers` require `--corpus <name>`; the make targets that work
+  on a corpus require `CORPUS=<name>`.
+- **A landing page.** Each review's overview is in `site/<name>/`;
+  `site/index.html`, kept by hand, links the reviews.

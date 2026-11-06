@@ -97,8 +97,8 @@ shows.
 A relation joins *models*. It never says that a parameter in one paper is
 the same physical quantity as a parameter in another. Two models can be the
 same rate law while their "k" are different things. Correspondences between
-quantities are listed, with their evidence, and never merged. With one
-atlas across fields this matters: a link between fields is normal, and
+quantities are listed, with their evidence, and never merged. This matters
+most where a relation joins models from different fields: such a link
 mostly says nothing about quantities.
 
 When one paper's model is run on another's inputs (see [the

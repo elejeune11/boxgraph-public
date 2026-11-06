@@ -259,3 +259,69 @@ def test_each_source_says_what_kind_of_source_it_is(syn):
     src = yaml.safe_load((FX / "toy" / "source.yaml").read_text())
     assert syn["papers"]["toy"]["kind"] == src["kind"]
     assert syn["papers"]["toy"]["venue"] == src.get("venue")
+
+
+def test_correspondences_read_names_that_are_sympy_functions():
+    """A mapping whose input is named like a sympy function (gamma, beta) is read as that input."""
+    from types import SimpleNamespace as NS
+
+    from boxgraph.synthesis import _correspondences
+
+    port = lambda q: NS(quantity=q)  # noqa: E731
+    ma = NS(inputs={"gamma": port("area_ratio"), "beta": port("exponent")})
+    mb = NS(inputs={"eta": port("area_ratio")})
+    rel = NS(mapping={"eta": "(1 + gamma)/(1 + gamma**(beta/2))**(2/beta)"})
+    pairs = _correspondences(rel, "a", ma, "b", mb)
+    assert pairs == sorted(pairs) and len(pairs) == 2, pairs
+
+
+def _verified(monkeypatch, rel_id):
+    """Have the atlas call one relation verified, so its cross-paper checks run."""
+    from dataclasses import replace
+
+    import boxgraph.synthesis as S
+
+    orig = S.test_relation
+
+    def fake(rel, *a, **k):
+        r = orig(rel, *a, **k)
+        return replace(r, status="verified", too_plain=False) if rel.id == rel_id else r
+
+    monkeypatch.setattr(S, "test_relation", fake)
+
+
+def test_a_cross_paper_run_that_gives_no_value_is_not_checked(tmp_path, monkeypatch):
+    """A cross-paper run whose model gives no value (NaN) is listed as not checked, with why; the build goes on."""
+    import boxgraph.synthesis as S
+
+    root = tmp_path / "r"
+    for n in ("toy", "toy2"):
+        shutil.copytree(FX / n, root / n)
+
+    class NoValue(dict):
+        def __missing__(self, k):
+            return None
+
+    monkeypatch.setattr(S, "execute", lambda *a, **k: [NoValue()])
+    s = build_synthesis(root, cache_dir=tmp_path / "c")
+    xs = [x for x in s["cross_checks"] if x["relation"] == "toy2/rel_same"]
+    assert xs and all(x["status"].startswith("not checked") and "no value" in x["status"] for x in xs), xs
+
+
+def test_a_mapping_that_cannot_be_evaluated_is_not_checked(tmp_path, monkeypatch):
+    """A cross-paper mapping that cannot be evaluated on a run's inputs (a division by zero) is not checked, with why."""
+    import yaml
+
+    root = tmp_path / "r"
+    for n in ("toy", "toy2"):
+        shutil.copytree(FX / n, root / n)
+    rels = yaml.safe_load((root / "toy2" / "relations.yaml").read_text())
+    rels.append({"id": "rel_pole", "kind": "same_as", "a": "toy/decay", "b": "toy2/lifetime",
+                 "mapping": {"tau0": "1000/(5*k0 - 1)", "f": "F", "fb": "kT/xb"}, "output_map": {"tau": "t"},
+                 "regime": {"k0": [0.01, 10], "F": [0, 20], "xb": [0.1, 2], "kT": [4.0, 4.3]},
+                 "provenance": "proposed", "reason": "test fixture; a pole at the run's k0"})
+    (root / "toy2" / "relations.yaml").write_text(yaml.safe_dump(rels))
+    _verified(monkeypatch, "rel_pole")
+    s = build_synthesis(root, cache_dir=tmp_path / "c")
+    xs = [x for x in s["cross_checks"] if x["relation"] == "toy2/rel_pole" and x["model"] == "toy2/lifetime"]
+    assert xs and all(x["status"].startswith("not checked") for x in xs), xs

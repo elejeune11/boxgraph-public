@@ -1,0 +1,60 @@
+id: bangasser2013
+kind: article
+title: Determinants of Maximal Force Transmission in a Motor-Clutch Model of Cell Traction in a Compliant Microenvironment
+authors: [Benjamin L. Bangasser, Steven S. Rosenfeld, David J. Odde]
+year: 2013
+venue: Biophysical Journal 105, 581-592 (with Supporting Material)
+doi: 10.1016/j.bpj.2013.06.027
+file: corpus/motor_clutch/2013_Bangasser.pdf
+page_range: [1, 21]
+pages: {1: "581", 2: "582", 3: "583", 4: "584", 5: "585", 6: "586", 7: "587", 8: "588", 9: "589", 10: "590", 11: "591", 12: "592"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-10-31"}
+notes: >
+  PDF pp. 1-12 are the article (pp. 581-592); pp. 13-21 are the Supporting Material (algorithm,
+  per-parameter discussion, Table S1 on p. 17, legends, references, Fig. S1 on p. 20, Fig. S2 on
+  p. 21), which carry no printed page labels.
+  In scope is the quantitative core. (1) The stochastic motor-clutch model, simulated by the
+  Gillespie SSA as the Supporting Material describes it (motor_clutch_ssa). The slip-bond off-rate,
+  force balance and force-velocity law are Chan and Odde's (ref. 15), named but not written here.
+  It runs on the base set (Table 1), the Table S1 sets (Fig. 7A) and Chan and Odde's set (Fig. S1C).
+  (2) The optimal stiffness and the sensitivity S (Eq. 3), recomputed by simulation for kon only.
+  (3) The stall and free-flowing limits of nc by the paper's 5% definitions (nc_limits).
+  (4) Eq. 2 (R), Eq. 4 (SR), Eq. 5, Eq. 9 (catch-slip lifetime) and Eq. 10 (binding time).
+  Checks with verdicts: R from the Fig. S2 multiplier limits against Fig. 3B and Fig. 5B (13
+  reproduced), SR = S x R against Fig. 3B and Fig. 5C (9 reproduced, 4 close by last-digit rounding,
+  q_sr_rounding). Also the simulated S for kon against the printed 1.4 (reproduced), the simulated
+  nc limits against the text's 110 and six (reproduced), and the S values of the text against
+  Figs. 3B and 5A (consistent).
+  The model's other printed results are only plotted. The figure tools (high-resolution rendering,
+  calibrated code readings) were refused by this session's permission mode, so those values were read
+  by eye from the 110 dpi page images and carry no verdict (q_eye_readings, figures.md). The
+  simulations match them closely: Figs. 2B-C, S1A, 6B, 6D cycle time and 7A.
+  Finding: Eq. 10 with the base set gives a binding time about twice the dashed line of Fig. 6D
+  (q_tbinding), the line on which the paper's explanation of the optimum rests. Two smaller printed
+  slips: the right axis of Fig. 6B is labelled nm/s for a spring constant, and the text lists nc
+  among the motor parameters.
+  Reader's choices (no printed values): the simulated time (1000 s; 100 s for the 2000-clutch
+  runs), averaging over the whole run, 5 seeds, the κsub grid and parabola for the optimum, and the
+  definition of a load-and-fail cycle. The simulated time and the grid are refined and settle within
+  the declared tolerances; the nc_limits search is not refined (about 50 s per seed).
+  Left out: Fig. 1 (other papers' data), Fig. 3A, Fig. 4, Fig. 5D, Fig. 7B (clutch-length
+  histograms), Fig. 7C right (catch-slip motor-clutch curves; that variant was not built), Kong et
+  al.'s lifetimes in Fig. 7C, and Fig. S1B (needs a modulus-to-stiffness conversion this paper does
+  not give). The S values other than kon's, and the Fig. S2 limits other than nc's, are recorded
+  but not re-simulated: each needs a search over many simulations. The validator lists them as never
+  compared. Also left out: the cell-migration and traction ranges quoted from other studies in the
+  Introduction and Discussion, which feed no model.
+  Audit (2026-10-31, audit.md): no transcription errors found. Added the remaining 51 pairs of
+  Fig. 5 / Fig. S2, so every printed R is checked against the Fig. S2 limits and every printed SR
+  against S x R, plus the Fig. 5 diagonals against Fig. 3B; also six new open questions.
+  Second figure pass (2026-10-31, figures.md): the figure tools ran this time. 98 calibrated readings
+  by the record's own code (figures/, shared code figures/_panel.py) cover every plot with values:
+  Figs. 1A-B (measured points of other papers, with error bars), 2B-C (and the dashed optima),
+  3A (38 curves), 4A-D, 6B, 6D (incl. the binding-time line), 6E, 7A (bars), 7B (histograms),
+  7C left (Kong et al.'s points with error bars, and the fit), 7C right, S1A and S1B (Chan and
+  Odde's points). Each predicted curve whose parameters are printed is simulated at the read
+  positions and compared (Eq. 5 scaling models added for the Fig. 3A multipliers); Eq. 9 is
+  compared with Kong et al.'s lifetimes (fit_quality). The calibrated binding-time line is 6.4 s
+  against 15.0 s from Eq. 10 (q_tbinding_calibrated). Left out: Fig. 5D (3D surface), drawings,
+  single trajectories, the Gaussian guide curves of Fig. 1, two fully hidden Fig. 3A curves.
+  The eye-read data of the first pass are kept unchanged.

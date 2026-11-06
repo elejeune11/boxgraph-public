@@ -1,5 +1,5 @@
-Read the data file `{file}` into the BoxGraph record `records/{id}/`. It is the data released with
-{papers} (already read: `records/<paper>/`), e.g. a journal's source-data spreadsheet. {page_note}
+Read the data file `{file}` into the BoxGraph record `{records}/{id}/`. It is the data released with
+{papers} (already read: `{records}/<paper>/`), e.g. a journal's source-data spreadsheet. {page_note}
 
 This record is a source of its own, of kind `dataset`: the numbers behind the paper's figures, as
 released. Never copy the file into the record; it is never committed.
@@ -15,6 +15,6 @@ released. Never copy the file into the record; it is never committed.
    values>", where: "source data for Fig. 3b"}}`. Record the spread (SD, SEM, n) the same way when the
    sheet gives it, as tables of their own. Raw per-cell or per-experiment data need not be recorded;
    the means and spreads the figures show do.
-3. Validate with `.venv/bin/boxgraph validate records/{id}` until SOUND: it checks every value against
+3. Validate with `.venv/bin/boxgraph validate {records}/{id}` until SOUND: it checks every value against
    its cells. Write `notes` in source.yaml last.
-Run one simple command per shell call (no `cd`, no `&&`). Write only inside `records/{id}/`.
+Run one simple command per shell call (no `cd`, no `&&`). Write only inside `{records}/{id}/`.

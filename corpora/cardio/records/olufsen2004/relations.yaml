@@ -1,0 +1,77 @@
+# Olufsen & Nadim compare their inductance L1 = 8 lambda_q rho L/(pi R^2) (Eq. 27) with Stergiopulos et al. [29],
+# whose segment inertance (Eq. 1, uniform tube) is c_u rho l/(pi R^2) with c_u = 4/3: "a factor 4/3 instead of
+# 8 lambda_q". lambda_q = 1/beta_1^2 = 0.1729 (Eq. 18), so 8 lambda_q = 1.383; the regime brackets that value.
+# Tolerance 0.05 is this job's choice for "similar ... slightly higher" (expected error about 3.6%).
+- id: rel_eq27_inductance_approx_stergiopulos_eq1
+  kind: approximated_by
+  a: olufsen2004/inductance_eq27
+  b: stergiopulos1999/inertance_eq1_uniform
+  mapping: {cu: "4/3", rho: "rho", ls: "Lv", R: "R"}
+  output_map: {L: L1}
+  regime: {lambda_q: [0.1725, 0.1733], rho: [1.0, 1.1], Lv: [1, 50], R: [0.2, 1.5]}
+  tolerance: 0.05
+  provenance: stated
+  citation: {page: 11, printed_page: "71", quote: "This result is similar to the one obtained by Stergiopulos et al", where: "Eq. 27"}
+  assumptions:
+    - "the paper says its L1 differs from that of Stergiopulos et al. [29] by a factor 4/3 instead of 8 lambda_q; Stergiopulos's Eq. 1 with c_u = 4/3 (Jager et al.) is taken for one segment of constant radius"
+    - "lambda_q is the first-order flow time-scale 1/beta_1^2 of Eq. 18; the tolerance 0.05 is added"
+# Olufsen & Nadim cite Westerhof et al. [34] only in a list of lumped models (p. 1) and state no relation to
+# its models. Proposed: Westerhof's first inductor L_1 = rho dz/(pi r^2) (Fig. 1 key, n = 1) and Eq. 27's
+# L1 = 8 lambda_q rho L/(pi R^2) are both the inertance of a rigid tube segment and differ only by the
+# constant 8 lambda_q = 1.383, so they scale alike in density, length and radius (not same_as: the
+# factor differs by about 38%).
+- id: rel_eq27_inductance_scales_westerhof_inertance
+  kind: scales_as
+  a: olufsen2004/inductance_eq27
+  b: westerhof1969/segment_inertance
+  mapping: {rho: "rho", r: "R", dz: "Lv"}
+  output_map: {L: L1}
+  regime: {lambda_q: [0.1725, 0.1733], rho: [1.0, 1.1], Lv: [1, 50], R: [0.2, 1.5]}
+  provenance: proposed
+  reason: >
+    Both give the inertance of a rigid cylindrical segment as a constant times rho length/(pi radius^2):
+    Westerhof et al. with constant 1 (first ladder element, n = 1), Olufsen & Nadim with 8 lambda_q = 1.383
+    from the first residue of the Laplace-transformed Navier-Stokes solution.
+# Olufsen & Nadim cite Westerhof et al. [35] among the sources of the three-element windkessel (Fig. 3D)
+# and print its differential equation (p. 73). Westerhof et al. 1971 draw the same circuit (Fig. 1A: R_c in
+# series with R_p parallel to C) and give its input impedance. Under R1 = R_c, R2 = R_p, C1 = C the ratio
+# p/q of the printed equation's sinusoidal solution should be that impedance. Westerhof's C port is in
+# cm^4 s^2/Mg (Table 1 prints C x 10^6), the helper's C1 in cm^4 s^2/g, hence the factor 1e-6.
+- id: rel_windkessel3_p73_same_as_westerhof_3el
+  kind: same_as
+  a: westerhof1971/impedance_3el
+  b: olufsen2004/windkessel3_p73
+  mapping: {R1: "Rc", R2: "Rp", C1: "C*1e-6", f: "f"}
+  output_map: {modulus: modulus}
+  regime: {Rc: [20, 500], Rp: [500, 10000], C: [10, 2000], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 13, printed_page: "73", quote: "the three-element windkessel model of Fig. 3D", where: "p. 73, unnumbered equation"}
+  assumptions:
+    - "the paper's Fig. 3D circuit, attributed among others to ref. 35, is taken to be Westerhof et al.'s Fig. 1A model with R1 = R_c, R2 = R_p, C1 = C"
+    - "the printed differential equation is compared through its steady sinusoidal solution (helper olufsen2004/windkessel3_p73); this relation checks the modulus, the next the phase"
+- id: rel_windkessel3_p73_same_as_westerhof_3el_phase
+  kind: same_as
+  a: westerhof1971/impedance_3el
+  b: olufsen2004/windkessel3_p73
+  mapping: {R1: "Rc", R2: "Rp", C1: "C*1e-6", f: "f"}
+  output_map: {phase: phase}
+  regime: {Rc: [20, 500], Rp: [500, 10000], C: [10, 2000], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 13, printed_page: "73", quote: "the three-element windkessel model of Fig. 3D", where: "p. 73, unnumbered equation"}
+  assumptions:
+    - "as for the modulus relation above; this one checks the phase of p/q"
+# Olufsen & Nadim cite Olufsen et al. 2000 [20] only among one-dimensional network models (pp. 2-3) and
+# state no relation between its models and theirs. Both papers define the kinematic viscosity of blood as
+# nu = mu/rho (2000 p. 3 below Eq. 7, with mu, rho from p. 10; 2004 p. 4) and print nu = 0.046 cm2/s,
+# though 2000 takes rho = 1.055 and 2004 rho = 1.06 g/cm3 (both with mu = 0.049 g/cm/s).
+- id: rel_kinematic_viscosity_same_as_olufsen2000
+  kind: same_as
+  a: olufsen2000/kinematic_viscosity
+  b: olufsen2004/kinematic_viscosity
+  mapping: {mu: "mu", rho: "rho"}
+  regime: {mu: [0.03, 0.06], rho: [1.0, 1.1]}
+  provenance: proposed
+  reason: >
+    Both records' models are the same definition nu = mu/rho in the same port units (g/cm/s, g/cm^3,
+    cm^2/s); the 2004 paper cites the 2000 paper [20] for its one-dimensional arterial model but does not
+    say it takes this definition or these values from it.

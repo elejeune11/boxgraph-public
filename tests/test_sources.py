@@ -1,4 +1,4 @@
-"""Code and data as sources of their own (docs/CODE_PLAN.md): a software record cites the
+"""Code and data as sources of their own (docs/archive/CODE_PLAN.md): a software record cites the
 values written in its code by file and line, pins the code by its content, and runs it; a
 dataset record cites spreadsheet cells. Neither the code nor the data is ever committed."""
 

@@ -6,9 +6,9 @@ validations are other jobs' work.
 Why this pair was chosen:
 {reasons}
 
-1. Read both records: the models (`records/<id>/models/*/model.yaml`), and the measured data
+1. Read both records: the models (`{records}/<id>/models/*/model.yaml`), and the measured data
    (`data.yaml` entries with `origin: measured`, and the figure readings in `figures.yaml` /
-   `figures.md`). Read the parts of each paper (text in `records/<id>/text/`) that say one paper's model
+   `figures.md`). Read the parts of each paper (text in `{records}/<id>/text/`) that say one paper's model
    explains, fits or predicts the other paper's measurements ("explains the biphasic relationship
    measured by ...", "compared with the data of ref. N").
 2. For each measurement of one record that a model of the other predicts, add an entry to the
@@ -41,9 +41,9 @@ Why this pair was chosen:
      `questions.yaml`.
 4. You may write only `validations.yaml`, `added.yaml` and `questions.yaml` of these two records. Never
    change data, models, runs, comparisons or anything already in the files.
-5. Check your work: `{venv}/boxgraph validations records --only {a},{b}` must list each validation as
+5. Check your work: `{venv}/boxgraph validations {records} --only {a},{b}` must list each validation as
    checked (a verdict, of any kind, is a result; "cannot be checked" is not), and
-   `{venv}/boxgraph validate records/{a} records/{b}` must say both records are sound. Work in
+   `{venv}/boxgraph validate {records}/{a} {records}/{b}` must say both records are sound. Work in
    `{check}/` for anything scratch.
 6. End with a short summary: each validation added, the verdict, and the measurements you considered
    and did not use, with why.

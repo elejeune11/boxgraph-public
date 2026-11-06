@@ -1,0 +1,15 @@
+id: distensibility_eq22_eq6
+name: segment distensibility at the reference pressure from the PWV-diameter fit (Eqs. 22 and 6)
+role: model
+stated: {page: 5, quote: "To that effect, we fitted an empirical", where: "Eq. 22 (p. 5) with Eq. 6 (p. 3)"}
+equation: "PWV(d) ≈ a2 / d^b2 (Eq. 22);  C_A^e(d, Pref) = A / (rho PWV^2(d, Pref)) (Eq. 6);  distensibility = C_A / A"
+inputs:
+  d_prox: {quantity: lumen_diameter, unit: mm, description: proximal lumen diameter of the segment (Table 2)}
+  d_dist: {quantity: lumen_diameter, unit: mm, description: distal lumen diameter of the segment (Table 2)}
+  a2: {quantity: pwv_fit_coefficient, unit: dimensionless, description: "a2 of Eq. 22; read as PWV in m/s for d in mm (q_eq22_units)"}
+  b2: {quantity: pwv_fit_exponent, unit: dimensionless}
+  rho: {quantity: blood_density, unit: kg/m^3}
+outputs:
+  D: {quantity: distensibility, unit: 1/Pa, description: "area compliance per unit area, 1/(rho PWV^2), at the mean lumen diameter"}
+settings: {}
+stochastic: false

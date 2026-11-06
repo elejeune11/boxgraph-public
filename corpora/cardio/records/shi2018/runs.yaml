@@ -1,0 +1,34 @@
+- id: run_stroke_volume
+  model: stroke_volume_difference
+  inputs: {V_max: lv_volume_max_text, V_min: lv_volume_min_text}
+  outputs: {SV: stroke_volume_pred}
+- id: run_text_vmin_fig5d
+  model: text_min_lv_volume_over_pressure
+  inputs: {V_min: lv_volume_min_text}
+  sweep: {P: V_lv_min_fig5d}
+  outputs: {V_min: V_lv_min_text_over_fig5d}
+- id: run_text_vmax_fig5d
+  model: text_max_lv_volume_over_pressure
+  inputs: {V_max: lv_volume_max_text}
+  sweep: {P: V_lv_max_fig5d}
+  outputs: {V_max: V_lv_max_text_over_fig5d}
+- id: run_text_vmin_fig5c
+  model: text_min_lv_volume_over_time
+  inputs: {V_min: lv_volume_min_text}
+  sweep: {t: V_lv_min_fig5c}
+  outputs: {V_min: V_lv_min_text_over_fig5c}
+- id: run_text_vmax_fig5c
+  model: text_max_lv_volume_over_time
+  inputs: {V_max: lv_volume_max_text}
+  sweep: {t: V_lv_max_fig5c}
+  outputs: {V_max: V_lv_max_text_over_fig5c}
+- id: run_text_pmax_fig5d
+  model: text_peak_lv_pressure_over_volume
+  inputs: {P_max: lv_pressure_max_text}
+  sweep: {V: P_lv_max_fig5d}
+  outputs: {P_max: P_lv_max_text_over_fig5d}
+- id: run_text_pmin_fig5d
+  model: text_min_lv_pressure_over_volume
+  inputs: {P_min: lv_pressure_min_text}
+  sweep: {V: P_lv_min_fig5d}
+  outputs: {P_min: P_lv_min_text_over_fig5d}

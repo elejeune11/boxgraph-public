@@ -1,0 +1,37 @@
+id: endograft_bifurcation
+name: 1D model of a bifurcated channel with an endograft, six domains (Fig. 10), A, W1, W2 at the midpoints of Omega_1, Omega_2 and Omega_6 at time t (Figs. 11-13)
+role: model
+stated: {page: 16, printed_page: "266", quote: "The presence of an endograft may be treated by our one-dimensional model", where: "Section 3.2; Fig. 10; Eqs. 13-23, 32, 35, 38"}
+equation: "Eqs. (2), (3), (9), (10) in each domain; interfaces Q1 = Q2 and p_t,1 = p_t,2 (32); bifurcation Q1 = Q2 + Q3 (35) and p_t,1 = p_t,2 = p_t,3 (38)"
+built_from: [bifurcation_angles]
+inputs:
+  E_vessel: {quantity: young_modulus, unit: dyne/cm^2, description: "Omega_1, Omega_4, Omega_6"}
+  E_endograft: {quantity: young_modulus, unit: dyne/cm^2, description: "Omega_2, Omega_3, Omega_5"}
+  h0: {quantity: wall_thickness, unit: cm}
+  R0_1: {quantity: reference_radius, unit: cm}
+  R0_2: {quantity: reference_radius, unit: cm}
+  R0_3: {quantity: reference_radius, unit: cm}
+  R0_4: {quantity: reference_radius, unit: cm}
+  R0_5: {quantity: reference_radius, unit: cm}
+  R0_6: {quantity: reference_radius, unit: cm}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  alpha: {quantity: momentum_correction_coefficient, unit: dimensionless}
+  L: {quantity: vessel_length, unit: cm, description: "length of each of the six domains"}
+  P_amp: {quantity: inlet_pressure_amplitude, unit: dyne/cm^2}
+  T_pulse: {quantity: inlet_pulse_period, unit: s, description: "the half-sine P_amp sin(pi t/T) lasts 0 <= t <= T"}
+  t: {quantity: time, unit: s}
+outputs:
+  A_1: {quantity: cross_section_area, unit: cm^2}
+  W1_1: {quantity: characteristic_w1, unit: cm/s}
+  W2_1: {quantity: characteristic_w2, unit: cm/s}
+  A_2: {quantity: cross_section_area, unit: cm^2}
+  W1_2: {quantity: characteristic_w1, unit: cm/s}
+  W2_2: {quantity: characteristic_w2, unit: cm/s}
+  A_6: {quantity: cross_section_area, unit: cm^2}
+  W1_6: {quantity: characteristic_w1, unit: cm/s}
+  W2_6: {quantity: characteristic_w2, unit: cm/s}
+# dt = 0.00001 s and 546 uniformly spaced nodes as printed (p. 16): 6 equal domains of 91 nodes,
+# 90 elements each. t_end covers the plotted 0-2 s. newton_tol as printed (p. 13).
+settings: {dt: 1.0e-5, n_elements: 90, t_end: 2.0, newton_tol: 1.0e-8, inlet: pressure}
+stochastic: false

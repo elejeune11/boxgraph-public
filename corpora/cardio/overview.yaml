@@ -1,0 +1,92 @@
+# The cardiovascular overview's text: what the page says that the build cannot. Every number on the
+# page comes from the build. Used by
+#   make build CORPUS=cardio
+title: "Cardiovascular models: a literature review"
+intro:
+  - All models are wrong, but some are useful (George E. P. Box). This page is a literature review of 0D (lumped-parameter) and 1D models of the cardiovascular system, from the heart and the large arteries to the viscosity of blood in microvessels, in which each paper's models are taken as stated and put to work, to see where each one holds.
+  - Every value is traced to the page it was printed on. Every model is rebuilt and run on the paper's own inputs and compared with what the paper reports, at the precision it was printed with. Relations between the models of different papers, such as a Windkessel and the arterial network it lumps, are tested rather than assumed. Released model code and released data are checked against the paper they belong to, and a model of one paper is judged against what another paper measured.
+  - Nothing is corrected or overwritten. Where an equation is evidently misprinted, the model is kept as printed and a corrected variant is added beside it, with the evidence; the paper's tally counts only the model as printed. Every result is rebuilt each time a source is added, so the review changes as the literature does. A disagreement is recorded as a result, with the open question it raises.
+links:
+  - {text: "All reviews", href: "../"}
+  - {text: "The design and the code (GitHub)", href: "https://github.com/elejeune11/boxgraph-public"}
+  - {text: "The first review: cell adhesion and the motor-clutch model", href: "../motor_clutch/"}
+case_studies:
+  - id: misprint
+    teaches: A misprint and its correction
+    title: An equation that cannot be the one that was used
+    summary: >-
+      Pries et al. (1990) correct the in vitro viscosity of blood for microvessels in vivo with
+      an equation that, as printed, has the wrong dimensions. The record keeps it, runs it, and
+      adds a corrected variant beside it, so the reader can see what the correction explains.
+    steps:
+      - text: >-
+          Eq. 7 multiplies the relative viscosity by D⁴/(D − W), which carries the dimension of a
+          length cubed. With diameters in micrometres it raises the viscosity about a millionfold
+          in a 100 µm vessel, while the paper's Fig. 3 stays between about 1 and 25.
+        show: "question: pries1990/q_eq7_form"
+      - text: >-
+          Run as printed on the diameters of the curves read from Fig. 3, the model gives values
+          in the thousands to millions where the figure shows about 10.
+        show: "comparison: pries1990/cmp_fig3_HD045"
+      - text: >-
+          The factor (D/(D − W))⁴, dimensionless and the form the figure follows, reproduces every
+          point read from the same curve. The same holds at all five hematocrits plotted. This is
+          reported as a corrected reproduction, apart from the paper as printed.
+        show: "comparison: pries1990/cmp_fig3c_HD045"
+
+  - id: data
+    teaches: Released data against the paper
+    title: One number in a table of hundreds
+    summary: >-
+      Boileau et al. (2015) compare six numerical schemes for 1D blood flow and released every
+      scheme's waveforms. The record recomputes the paper's error tables from the released files,
+      so each printed percentage is checked against the data it summarizes.
+    steps:
+      - text: >-
+          For the upper thoracic aorta, the STM scheme's errors in pressure, flow, radius and
+          pressure drop are recomputed from its released waveform and reproduce the printed values,
+          for example the root-mean-square flow error.
+        show: "comparison: boileau_data/cmp_b3_Q_rms_STM"
+      - text: >-
+          One entry does not: Table VI prints a diastolic flow error of 12.95% for STM, against
+          2.67-3.48% for the other five schemes. The released waveform gives 2.95%.
+        show: "comparison: boileau_data/cmp_b3_Q_dias_STM"
+      - text: >-
+          A stray leading 1 would explain it. The record keeps the printed value and the question,
+          because only the authors can say which number is right.
+        show: "question: boileau_data/q_table6_stm_qdias"
+
+  - id: parameter
+    teaches: A parameter across three papers
+    title: The asymmetry of a structured tree
+    summary: >-
+      Olufsen's structured-tree outflow condition, used in 1999, 2000 and 2012, splits each
+      vessel into two daughters whose sizes are set by an asymmetry ratio gamma and an area
+      ratio eta. All three papers print gamma = 0.41; the record checks it against the equation
+      that links it to eta in each paper.
+    steps:
+      - text: >-
+          In Olufsen (1999), Eq. 21 with the printed exponent and area ratio (xi = 2.76,
+          eta = 1.16) gives gamma ≈ 0.36, not the printed 0.41.
+        show: "comparison: olufsen1999/cmp_asymmetry"
+      - text: The 2000 paper prints the same three numbers, with the same result.
+        show: "comparison: olufsen2000/cmp_gamma_eq21"
+      - text: >-
+          The 2012 paper defines gamma differently (Eq. 2.17), as a ratio of radii rather than
+          the squared ratio of 1999, and the two forms of its Eq. 2.18 then disagree with each
+          other.
+        show: "question: olufsen2012/q_gamma_definition"
+      - text: >-
+          With the 1999 definition, the area ratio computed from gamma = 0.41 is close to the
+          printed 1.16, though not equal to it.
+        show: "comparison: olufsen2012/cmp_eta_base"
+      - text: >-
+          With the same definition, the curves of the paper's Fig. 8(a) are reproduced at every
+          point read.
+        show: "comparison: olufsen2012/cmp_eta_fig8a_g05"
+      - text: >-
+          With gamma read literally from the 2012 definition, the curves for gamma below 1 are not
+          reproduced (at gamma = 1 the two definitions agree).
+          The figures were computed with the 1999 definition; the printed equation and the printed
+          gamma = 0.41 are not consistent with each other in any of the three papers.
+        show: "comparison: olufsen2012/cmp_eta_fig8a_g05_definitions"

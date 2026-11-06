@@ -1,0 +1,17 @@
+id: unit_translation
+name: translation between hemodynamic and electric quantities of the analog (Table 2)
+role: model
+stated: {page: 8, printed_page: "128", quote: "Translation from hemodynamic to electrical quantities and vice-versa", where: "Table 2"}
+equation: "R_el/R = (k_p/1333.22)/k_q; L_el/L = (k_p/1333.22) k_t / k_q; C_el/C = k_q k_t / (k_p/1333.22); V_el/V = k_q k_t (1 mmHg = 1333.22 dyn cm^-2)"
+inputs:
+  kp: {quantity: tf_pressure, unit: dimensionless, description: "volts per mmHg, divided by b"}
+  kq: {quantity: tf_flow, unit: dimensionless, description: "amperes per cm3/s, divided by b"}
+  kt: {quantity: tf_time, unit: dimensionless, description: "electric seconds per real second"}
+outputs:
+  kR: {quantity: tf_resistance, unit: dimensionless}
+  kL: {quantity: tf_inertance, unit: dimensionless}
+  kC: {quantity: tf_distensibility, unit: dimensionless}
+  kV: {quantity: tf_volume, unit: dimensionless}
+settings: {}
+from_words: true
+stochastic: false

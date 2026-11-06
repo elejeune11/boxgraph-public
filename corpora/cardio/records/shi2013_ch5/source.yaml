@@ -1,0 +1,30 @@
+id: shi2013_ch5
+kind: thesis
+title: "Chapter 5: Numerical simulation of global hydro-dynamics in a pulsatile bioreactor for cardiovascular tissue engineering"
+authors: [Y. Shi]
+year: 2013
+venue: PhD thesis, University of Sheffield, 2013 (thesis PDF pages 177-190); adapted from J. Biomech. 41(3), 953-959, 2008
+file: corpus/cardio/2013_Shi_ch5.pdf
+page_range: [1, 14]
+pages: {1: "161", 2: "162", 3: "163", 4: "164", 5: "165", 6: "166", 7: "167", 8: "168", 9: "169", 10: "170", 11: "171", 12: "172", 13: "173", 14: "174"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-03"}
+notes: >
+  Scope: the lumped-parameter bioreactor model (Eqs. 5-1 to 5-15) with every Table 5-1 input,
+  the results the text prints (tissue-construct pressure range 0 ~ 120 mmHg and flow range
+  0 ~ 400 ml/s, split into their lower and upper ends; diaphragm amplitude 0.0065 m and offset
+  about 0.0035 m, p. 12), and the waveforms of Figs. 5-3 to 5-6 read by code. Two models share
+  one integrator: cycle summaries (bioreactor_eqs5_1_15) and the state at a time
+  (bioreactor_waveform); Eq. 5-12 is also a model of its own, checked against Fig. 5-3.
+  Main finding: with Table 5-1's printed units for the diaphragm (ke mmHg·m, kf mmHg·m·s, which
+  pint turns into 2.0e6 N/m and 3333 N·s/m beside ms in kg), the diaphragm barely moves and none
+  of the results are reproduced. Reading the same numbers as N/m and N·s/m (added.yaml, an
+  alternative reading, not a stated value) reproduces the figure curves of Pct, Qct, l, u, Pcl,
+  Qci and Qs and the 0.0065 m amplitude, but not the text's range ends (peak Pct ~104 vs 120 mmHg,
+  peak Qct ~345 vs 400 ml/s) nor the plotted Pcu: at peak flow Eqs. 5-4, 5-7 and 5-10 put Pcu near
+  +17 mmHg, the figure about -6 mmHg (the printed-unit run comes "close" there only because almost
+  nothing flows). The 0.0035 m offset is printed as "about" and gets no verdict. Added: g = 9.81 m/s^2; solver step, 12 cycles from rest and the
+  periodic phase mapping are settings (questions q_gravity, q_solver_settings). Left out:
+  Cci (in Table 5-1, used by no equation), Sodian et al.'s experimental range (-12 ~ 23 mmHg at
+  18 s, a different bioreactor; no model here predicts it), Guyton's physiological range, and the
+  overlapping curves of Fig. 5-6 (figures.md). References are the in-text author-year citations;
+  the thesis reference list is outside this chapter's pages.

@@ -1,0 +1,278 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+# a is korakianitis2006's circulation (Eqs. 1-20, units ml, mmHg, s); b is this code's port (mL, mmHg, s).
+# The code's timings are fractions of T (q_timing_fractions); its initial vessel flows are inputs that
+# korakianitis2006's models start at zero; its pi is the constant (q_pi: 3.14159 in the code).
+# The chamber names differ: the paper's V_0 (reference volume) is the code's VIni, the paper's initial
+# volume (Table 2 "V_lv0", Vlv_init here) is the code's V0.
+- id: rel_cellml_simplified_valves
+  kind: approximated_by
+  a: korakianitis2006/circulation_valves
+  b: korakianitis_cellml/closed_loop_onoff
+  mapping: &map
+    ElaMax: "Ela_max"
+    ElaMin: "Ela_min"
+    PlaIni: "Pla0"
+    VlaIni: "Vla0"
+    ElvMax: "Elvs"
+    ElvMin: "Elvd"
+    PlvIni: "Plv0"
+    VlvIni: "Vlv0"
+    EraMax: "Era_max"
+    EraMin: "Era_min"
+    PraIni: "Pra0"
+    VraIni: "Vra0"
+    ErvMax: "Ervs"
+    ErvMin: "Ervd"
+    PrvIni: "Prv0"
+    VrvIni: "Vrv0"
+    T: "T"
+    Tpwb: "Tpwb/T"
+    Tpww: "Tpww/T"
+    Ts1: "Ts1/T"
+    Ts2: "Ts2/T"
+    CVao: "CQao"
+    CVmi: "CQmi"
+    CVpa: "CQpo"
+    CVti: "CQti"
+    Vlv0: "Vlv_init"
+    Vla0: "Vla_init"
+    Vra0: "Vra_init"
+    Vrv0: "Vrv_init"
+    Rsas: "Rsas"
+    Csas: "Csas"
+    Lsas: "Lsas"
+    P0sas: "Psas_init"
+    Q0sas: "0"
+    Rsat: "Rsat"
+    Csat: "Csat"
+    Lsat: "Lsat"
+    P0sat: "Psat_init"
+    Q0sat: "0"
+    Rsar: "Rsar"
+    Rscp: "Rscp"
+    Rsvn: "Rsvn"
+    Csvn: "Csvn"
+    P0svn: "Psvn_init"
+    Rpas: "Rpas"
+    Cpas: "Cpas"
+    Lpas: "Lpas"
+    P0pas: "Ppas_init"
+    Q0pas: "0"
+    Rpat: "Rpat"
+    Cpat: "Cpat"
+    Lpat: "Lpat"
+    P0pat: "Ppat_init"
+    Q0pat: "0"
+    Rpar: "Rpar"
+    Rpcp: "Rpcp"
+    Rpvn: "Rpvn"
+    Cpvn: "Cpvn"
+    P0pvn: "Ppvn_init"
+    pi: "pi"
+  output_map: {Q_ao_mean: CO}
+  regime: &dynregime
+    CQao: [315, 385]
+    CQmi: [360, 440]
+    CQpo: [315, 385]
+    CQti: [360, 440]
+    Elvs: [2.25, 2.75]
+    Elvd: [0.09, 0.11]
+    Plv0: [0.9, 1.1]
+    Vlv0: [4.5, 5.5]
+    Ela_max: [0.225, 0.275]
+    Ela_min: [0.135, 0.165]
+    Pla0: [0.9, 1.1]
+    Vla0: [3.6, 4.4]
+    Ervs: [1.035, 1.265]
+    Ervd: [0.09, 0.11]
+    Prv0: [0.9, 1.1]
+    Vrv0: [9, 11]
+    Era_max: [0.225, 0.275]
+    Era_min: [0.135, 0.165]
+    Pra0: [0.9, 1.1]
+    Vra0: [3.6, 4.4]
+    Csas: [0.072, 0.088]
+    Rsas: [0.0027, 0.0033]
+    Lsas: [0.0000558, 0.0000682]
+    Csat: [1.44, 1.76]
+    Rsat: [0.045, 0.055]
+    Lsat: [0.00153, 0.00187]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    Cpas: [0.162, 0.198]
+    Rpas: [0.0018, 0.0022]
+    Lpas: [0.0000468, 0.0000572]
+    Cpat: [3.42, 4.18]
+    Rpat: [0.009, 0.011]
+    Lpat: [0.00153, 0.00187]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0006, 0.006]
+    Cpvn: [18.45, 22.55]
+    Kp_ao: [4950, 6050]
+    Kf_ao: [45, 55]
+    Kb_ao: [1.8, 2.2]
+    Kv_ao: [6.3, 7.7]
+    Kp_mi: [4950, 6050]
+    Kf_mi: [45, 55]
+    Kb_mi: [1.8, 2.2]
+    Kv_mi: [3.15, 3.85]
+    Kp_po: [4950, 6050]
+    Kf_po: [45, 55]
+    Kb_po: [1.8, 2.2]
+    Kv_po: [3.15, 3.85]
+    Kp_ti: [4950, 6050]
+    Kf_ti: [45, 55]
+    Kb_ti: [1.8, 2.2]
+    Kv_ti: [3.15, 3.85]
+    theta_max_ao: [73, 77]
+    theta_min_ao: [4, 6]
+    theta_max_mi: [73, 77]
+    theta_min_mi: [4, 6]
+    theta_ref_mi: [73, 77]
+    theta_max_po: [73, 77]
+    theta_min_po: [4, 6]
+    theta_max_ti: [73, 77]
+    theta_min_ti: [4, 6]
+    T: [1, 1]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    Tpwb: [0.92, 0.93]
+    Tpww: [0.08, 0.09]
+    Vlv_init: [500, 800]
+    Vla_init: [15, 25]
+    Vrv_init: [450, 550]
+    Vra_init: [15, 25]
+    Psas_init: [90, 110]
+    Psat_init: [90, 110]
+    Psvn_init: [0, 5]
+    Ppas_init: [20, 30]
+    Ppat_init: [20, 30]
+    Ppvn_init: [0, 5]
+  tolerance: 0.05
+  provenance: stated
+  citation: {file: ModelMain.cellml, lines: "19", quote: "some features of the original model, such as the heart valve dynamics, have been simplified in the current CellML implementation", where: "documentation, Model Status"}
+  assumptions:
+    - "The documentation's 'original model' (implemented in C, refs. 1-3) is taken as korakianitis2006's circulation with leaflet-dynamics valves (Eqs. 8 and 14) as printed, the model this record's ref. 2 states; the C code itself is not released."
+    - "'Simplified' valve dynamics are taken to mean an approximation of the dynamic valves; the tolerance (5% on the mean aortic flow) is ours: the documentation gives no measure of how close the simplified code is."
+    - "T is held at 1 s: korakianitis2006's code reports the cycle [10 s, 10 s + T) and the port [t_end - T, t_end], which are the same cycle only for T = 1 s, the paper's period."
+- id: rel_cellml_simplified_valves_corrected
+  kind: approximated_by
+  a: korakianitis2006/circulation_valves_corrected
+  b: korakianitis_cellml/closed_loop_onoff
+  mapping: *map
+  output_map: {Q_ao_mean: CO}
+  regime: *dynregime
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    The stated relation (rel_cellml_simplified_valves) read with korakianitis2006's evident misprints
+    corrected (Eqs. 3, 6, 14, 18), the forms the code itself has: the code's on-off valves would then
+    approximate the corrected leaflet-dynamics circulation of the paper's Section 3.2.
+  assumptions:
+    - "The tolerance (5% on the mean aortic flow) is ours."
+    - "T is held at 1 s, as in rel_cellml_simplified_valves."
+- id: rel_cellml_onoff_co
+  kind: approximated_by
+  a: korakianitis2006/circulation_onoff_corrected
+  b: korakianitis_cellml/closed_loop_onoff
+  mapping: *map
+  output_map: {Q_ao_mean: CO}
+  regime: &onoffregime
+    CQao: [315, 385]
+    CQmi: [360, 440]
+    CQpo: [315, 385]
+    CQti: [360, 440]
+    Elvs: [2.25, 2.75]
+    Elvd: [0.09, 0.11]
+    Plv0: [0.9, 1.1]
+    Vlv0: [4.5, 5.5]
+    Ela_max: [0.225, 0.275]
+    Ela_min: [0.135, 0.165]
+    Pla0: [0.9, 1.1]
+    Vla0: [3.6, 4.4]
+    Ervs: [1.035, 1.265]
+    Ervd: [0.09, 0.11]
+    Prv0: [0.9, 1.1]
+    Vrv0: [9, 11]
+    Era_max: [0.225, 0.275]
+    Era_min: [0.135, 0.165]
+    Pra0: [0.9, 1.1]
+    Vra0: [3.6, 4.4]
+    Csas: [0.072, 0.088]
+    Rsas: [0.0027, 0.0033]
+    Lsas: [0.0000558, 0.0000682]
+    Csat: [1.44, 1.76]
+    Rsat: [0.045, 0.055]
+    Lsat: [0.00153, 0.00187]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    Cpas: [0.162, 0.198]
+    Rpas: [0.0018, 0.0022]
+    Lpas: [0.0000468, 0.0000572]
+    Cpat: [3.42, 4.18]
+    Rpat: [0.009, 0.011]
+    Lpat: [0.00153, 0.00187]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0006, 0.006]
+    Cpvn: [18.45, 22.55]
+    T: [1, 1]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    Tpwb: [0.92, 0.93]
+    Tpww: [0.08, 0.09]
+    Vlv_init: [500, 800]
+    Vla_init: [15, 25]
+    Vrv_init: [450, 550]
+    Vra_init: [15, 25]
+    Psas_init: [90, 110]
+    Psat_init: [90, 110]
+    Psvn_init: [0, 5]
+    Ppas_init: [20, 30]
+    Ppat_init: [20, 30]
+    Ppvn_init: [0, 5]
+  tolerance: 0.001
+  provenance: proposed
+  reason: &onoffreason >
+    The code's valves are on-off diodes (TempCDa/TempCDv: Tao = 1 if Pi >= Po else 0), which is
+    korakianitis2006's simplified model of Section 3.1 ("on-off heart valve model as described by
+    Eq. (7)"), and its activation, reverse-flow and artery-flow equations are the forms korakianitis2006's
+    record takes as the evident corrections of Eqs. 3, 6 and 18. Run side by side at the paper's inputs
+    the two agree to about 1e-5. They are not quite one model: the code's atrial activation
+    (EAtrium.cellml line 22) carries a P wave that runs past T into the next beat, where korakianitis2006's
+    Eq. 5 cuts it at T, and the code assumes Tpwb + Tpww >= 1 (for a shorter P wave its third branch
+    starts a second wave before T). The regime keeps Tpwb + Tpww >= T, as at the paper's 0.92 + 0.09 s,
+    and the tolerance (0.1%) is ours.
+  assumptions:
+    - "T is held at 1 s: korakianitis2006's code reports the cycle [10 s, 10 s + T) and the port [t_end - T, t_end], the same cycle only for T = 1 s."
+    - "pi in the code is mapped to the constant pi; the code writes 3.14159 (q_pi)."
+    - "The code's initial vessel flows are mapped to zero, where korakianitis2006's models start them."
+- id: rel_cellml_onoff_plv
+  kind: approximated_by
+  a: korakianitis2006/circulation_onoff_corrected
+  b: korakianitis_cellml/closed_loop_onoff
+  mapping: *map
+  output_map: {P_lv_max: Plv_max}
+  regime: *onoffregime
+  tolerance: 0.001
+  provenance: proposed
+  reason: *onoffreason
+  assumptions:
+    - "As rel_cellml_onoff_co, for the peak LV pressure."
+- id: rel_cellml_onoff_mitral_e
+  kind: approximated_by
+  a: korakianitis2006/circulation_onoff_corrected
+  b: korakianitis_cellml/closed_loop_onoff
+  mapping: *map
+  output_map: {Q_mi_E: Qmi_E}
+  regime: *onoffregime
+  tolerance: 0.001
+  provenance: proposed
+  reason: *onoffreason
+  assumptions:
+    - "As rel_cellml_onoff_co, for the mitral E peak; both models take it as the largest mitral flow between Ts2 and Tpwb of the cycle."

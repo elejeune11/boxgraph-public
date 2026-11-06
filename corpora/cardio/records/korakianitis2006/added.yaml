@@ -1,0 +1,96 @@
+- id: Ts1_added
+  quantity: time_peak_systole
+  unit: s
+  printed: "0.3"
+  basis: >
+    Eq. 3 needs T_s1 (peak of systolic phase); Table 5 gives only "Ts = 0.3 s" (systolic duration),
+    and Fig. 2 shows the left ventricular elastance peaking about 0.3 s after the cycle starts.
+    The authors' CellML implementation (shi_cellml_systemic, ParaLeftHeart) uses Ts1 = 0.3 T.
+  alternatives: ["0.2", "0.25"]
+  stands_for: T_s1 in Eq. 3
+- id: Ts2_added
+  quantity: time_end_systole
+  unit: s
+  printed: "0.45"
+  basis: >
+    Eq. 3 needs T_s2 (end of systolic phase), which is not stated. Fig. 2 shows the elastance back
+    at its diastolic value about 0.45 s after the cycle starts; the authors' CellML implementation
+    uses Ts2 = 0.45 T. If "Ts = 0.3 s" in Table 5 is the end of systole, T_s2 would be 0.3 s.
+  alternatives: ["0.3", "0.5"]
+  stands_for: T_s2 in Eq. 3
+- id: Vla_init_added
+  quantity: initial_chamber_volume
+  unit: ml
+  printed: "20"
+  basis: Not stated. The authors' CellML implementation starts the left atrium at 20 ml.
+  alternatives: ["4", "50"]
+  stands_for: initial left atrial volume
+- id: Vra_init_added
+  quantity: initial_chamber_volume
+  unit: ml
+  printed: "20"
+  basis: Not stated; taken equal to the left atrium.
+  alternatives: ["4", "50"]
+  stands_for: initial right atrial volume
+- id: Psas_init_added
+  quantity: initial_vessel_pressure
+  unit: mmHg
+  printed: "100"
+  basis: Not stated. The authors' CellML implementation starts the aortic sinus at 100 mmHg.
+  alternatives: ["80", "120"]
+  stands_for: initial P_sas
+- id: Psat_init_added
+  quantity: initial_vessel_pressure
+  unit: mmHg
+  printed: "100"
+  basis: Not stated. The authors' CellML implementation starts the systemic artery at 100 mmHg.
+  alternatives: ["80", "120"]
+  stands_for: initial P_sat
+- id: Psvn_init_added
+  quantity: initial_vessel_pressure
+  unit: mmHg
+  printed: "0"
+  basis: >
+    Not stated. The authors' CellML implementation starts the systemic vein at 0 mmHg. In a closed
+    loop the initial state fixes the circulating volume, so this choice changes every result.
+    If Table 2's "V_lv0 = 800 ml" is instead an initial systemic venous volume, P_svn would start
+    at 800/20.5 = 39 mmHg.
+  alternatives: ["5", "39"]
+  stands_for: initial P_svn
+- id: Ppas_init_added
+  quantity: initial_vessel_pressure
+  unit: mmHg
+  printed: "20"
+  basis: Not stated; a pulmonary arterial pressure within the range the paper reports (peak 26.8 mmHg).
+  alternatives: ["10", "25"]
+  stands_for: initial P_pas
+- id: Ppat_init_added
+  quantity: initial_vessel_pressure
+  unit: mmHg
+  printed: "20"
+  basis: Not stated; taken equal to P_pas.
+  alternatives: ["10", "25"]
+  stands_for: initial P_pat
+- id: Ppvn_init_added
+  quantity: initial_vessel_pressure
+  unit: mmHg
+  printed: "0"
+  basis: >
+    Not stated; taken like the systemic vein. If Table 2's "V_rv0 = 500 ml" is an initial
+    pulmonary venous volume, P_pvn would start at 500/20.5 = 24 mmHg.
+  alternatives: ["5", "24"]
+  stands_for: initial P_pvn
+- id: Vlv_init_cellml
+  quantity: initial_chamber_volume
+  unit: ml
+  printed: "500"
+  basis: >
+    (Revisit, audit.) An alternative to the record's choice Vlv_init_table2 (Table 2's "V_lv0 = 800 ml"
+    read as the initial LV volume, q_vlv0_table2), which every printed-model run keeps. The authors'
+    released CellML code starts the left ventricle at 500 ml: shi_cellml_systemic, ParaLeftHeart.cellml
+    line 27 (Vlv0 = 500 UnitV), with the left atrium at 20 ml (line 28, the record's Vla_init_added),
+    the aortic sinus and artery at 100 mmHg (ParaSys.cellml lines 17 and 23) and the vein at 0 mmHg
+    (line 32), as the record already uses. The code has no right heart or pulmonary loop, so it
+    states no right-side initial volume. Used only by the _ic runs of the corrected variants.
+  alternatives: ["800"]
+  stands_for: initial left ventricular volume V_lv(0)

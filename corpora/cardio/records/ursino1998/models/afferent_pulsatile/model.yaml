@@ -1,0 +1,22 @@
+id: afferent_pulsatile
+name: mean sinus nerve frequency under a sinusoidal carotid sinus pressure (Eqs. 30-31 at periodic steady state)
+role: model
+stated: {page: 6, printed_page: "H1738", quote: "Effect of a sinusoidal pulsation at carotid sinuses", where: "Fig. 3 legend; Eqs. 30-31"}
+equation: "Pcs = Pm + (A/2) sin(w t); tau_p dP~/dt = Pcs + tau_z dPcs/dt - P~; fcs = [fmin + fmax exp((P~ - Pn)/ka)]/[1 + exp((P~ - Pn)/ka)]; output: time mean of fcs. Pm = (P% / 100) Pref"
+inputs:
+  Pn: {quantity: carotid_sinus_pressure, unit: mmHg}
+  ka: {quantity: afferent_slope_pressure, unit: mmHg}
+  fmin: {quantity: afferent_frequency, unit: 1/s}
+  fmax: {quantity: afferent_frequency, unit: 1/s}
+  tau_z: {quantity: afferent_time_constant, unit: s}
+  tau_p: {quantity: afferent_time_constant, unit: s}
+  P_pct: {quantity: carotid_pressure_normalized, unit: percent, description: "mean carotid sinus pressure in percent of Pref, the x axis of Fig. 3 top"}
+  P_ref: {quantity: carotid_sinus_pressure, unit: mmHg, description: "the pressure that is 100% on that axis"}
+  A_pp: {quantity: pulsation_amplitude, unit: mmHg, description: "peak-to-peak amplitude of the sinusoid; 0 gives the static sigmoid"}
+  f_puls: {quantity: carotid_pressure_frequency, unit: Hz}
+outputs:
+  fcs_mean: {quantity: afferent_frequency, unit: 1/s}
+settings: {n_phase: 720}
+stochastic: false
+# At periodic steady state Eq. 30 (linear) gives P~ = Pm + (A/2)|H| sin(w t + phi), H = (1 + j w tau_z)/(1 + j w tau_p);
+# the mean of Eq. 31 over one period is taken at n_phase equally spaced phases (the paper simulated in time).

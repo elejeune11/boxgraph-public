@@ -1,0 +1,49 @@
+id: formaggia2003
+kind: article
+title: One-dimensional models for blood flow in arteries
+authors: [Luca Formaggia, Daniele Lamponi, Alfio Quarteroni]
+year: 2003
+venue: Journal of Engineering Mathematics 47, 251-276
+doi: 10.1023/B:ENGI.0000007980.01347.29
+file: corpus/cardio/2003_Formaggia.pdf
+page_range: [1, 26]
+pages: {1: "251", 2: "252", 3: "253", 4: "254", 5: "255", 6: "256", 7: "257", 8: "258", 9: "259", 10: "260", 11: "261", 12: "262", 13: "263", 14: "264", 15: "265", 16: "266", 17: "267", 18: "268", 19: "269", 20: "270", 21: "271", 22: "272", 23: "273", 24: "274", 25: "275", 26: "276"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-04"}
+notes: >
+  A methods paper: 1D blood-flow equations (2)-(3) closed by the algebraic wall law (9)-(10), a
+  second-order Taylor-Galerkin scheme (22)-(23) with characteristic extrapolation at the ends, and
+  domain-decomposition interface conditions (32), (34)-(38) for stents and bifurcations. Its printed
+  results are almost all plots. In scope: (1) the momentum-correction coefficient of the power-law
+  profile, alpha = (zeta + 2)/(zeta + 1), checked against the alpha = 1.1 quoted from [19] for zeta = 9
+  (consistency); (2) the bifurcation test with angle-dependent losses (Section 3.1, Figs. 6-8), built as
+  model bifurcation_angles, a full re-implementation of the paper's scheme on a three-vessel network
+  with Newton junction solves; (3) the bifurcated channel with an endograft (Section 3.2, Figs. 11-13),
+  model endograft_bifurcation, the same solver on the six domains of Fig. 10. Every panel of
+  Figs. 6-8 and 11-13 is read by the record's own code (25 readings, see figures.md) and compared at
+  each read time. A second figure pass (2026-11-04) read the Section 4 plots, Figs. 14-18 (47 more
+  readings, all panels but Fig. 16's flat initial flow rate): recorded as predicted data with no run,
+  since no model here produces them. They show the Fig. 14 initial pulse is about 32 cm long, as the
+  text says, not the caption's 35 cm (q_fig14_wavelength_figure); the plotted differences are of the
+  order the text claims (q_wall_claims_figures); and the right panel of Fig. 17 cannot be at the
+  t = 0.2 s its title gives (q_fig17_panels).
+  Main findings. (a) The bifurcation test as printed (R0 = 0.5 cm in all three vessels) cannot give
+  Figs. 7-8: their resting A and W are those of R0 = 0.4 and 0.3 cm (q_bif_radii). Runs 'r' use those
+  added radii. (b) Fig. 6 shows W1 returning to rest while W2 is still disturbed, which an imposed
+  inlet pressure does not allow; runs 'rc' impose the incoming characteristic (Eq. 25) instead
+  (q_inlet_condition), and these reproduce Fig. 6 at nearly every read point and most of Figs. 7-8;
+  the flat W2 lines of Figs. 7-8 are read more finely than the model's small friction-driven drift.
+  (c) The legend's 'alpha3 = 3' for the dotted line conflicts with the text (alpha3 = 0); both are
+  run (cases c1 and c1z). (d) Fig. 7's area axis is labelled 0.58 at a top that its ticks put at
+  0.56 (q_fig7_axis_label). (e) Figs. 11-13, run as printed, are not reproduced at the plotted times:
+  the plots span 2 s for a pulse of printed period 0.1 s, and the model's features fall at about a
+  tenth of the plotted times (q_endo_time_axis); the panel titles' probe positions also disagree with
+  L = 5 cm (q_endo_positions).
+  Unstated and added: dt and mesh of the bifurcation test (dt = 1e-5 s and h = 0.1 cm, the paper's
+  values for its other tests, with refinements), K_R = 8 pi nu, the reading of 'half-sine of period T'
+  as sin(pi t/T) on [0, T], the non-reflecting outlet with B neglected. pi/4 in the legend is entered
+  as an added value in radians because the value grammar has no fractions.
+  Left out: the derivations and energy estimates (no numbers); alpha = 4/3 for the parabolic profile
+  (printed as a fraction, exact; q_alpha_fraction); the tests of the extended wall models (Section 4,
+  Figs. 14-18) and their claims ('order of 10^-3', 'less than 1%'), whose inputs are not given fully
+  enough to run (q_wall_models_not_run); the interface-condition comparison 'differ less than one
+  percent' (p. 13), whose set-up is not given.

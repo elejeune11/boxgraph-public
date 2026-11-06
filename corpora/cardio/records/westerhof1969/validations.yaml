@@ -1,0 +1,124 @@
+# Models of this record judged against measurements printed in stergiopulos1999 (human beats, Table 2).
+# The analog is a model of the normal adult human systemic tree; Stergiopulos et al. report Z_c and C
+# measured in two human subjects (type A and type C beats, data of their ref. 12). Neither paper fitted
+# these models to those measurements, so these are validations.
+
+# ---- Characteristic impedance of the ascending aorta (p. 140) vs measured Z_c (standard technique) ----
+- id: val_Z0_aorta_vs_rc_std_hA
+  model: char_impedance
+  inputs: {Lp: Lp_aorta_printed, Cp: Cp_aorta_printed}
+  output: Z0
+  against: stergiopulos1999/rc_std_hA
+  quantities: {stergiopulos1999/characteristic_impedance: characteristic_impedance}
+  conditions_ok: "The analog represents a generic normal adult human tree; the measurement is one human subject (type A beat). Both are the characteristic impedance of the human proximal aorta, so the comparison tests whether the model's aortic properties are of the right size for man, not a subject-specific prediction."
+  basis: "p. 140: for frequencies above about 2 cps 'the input impedance should be close to the characteristic impedance of the ascending aorta', which the model gives as sqrt(L'/C') from Table 1. Stergiopulos et al. measure Z_c as the average input-impedance modulus over the higher harmonics (standard technique), and relate Z_c to 'the local inertia and compliance of the very proximal ascending aorta' (p. 6, citing this paper, ref. 21)."
+- id: val_Z0_aorta_vs_rc_std_hC
+  model: char_impedance
+  inputs: {Lp: Lp_aorta_printed, Cp: Cp_aorta_printed}
+  output: Z0
+  against: stergiopulos1999/rc_std_hC
+  quantities: {stergiopulos1999/characteristic_impedance: characteristic_impedance}
+  conditions_ok: "The analog represents a generic normal adult human tree; the measurement is one human subject (type C beat). Both are the characteristic impedance of the human proximal aorta, so the comparison tests whether the model's aortic properties are of the right size for man, not a subject-specific prediction."
+  basis: "p. 140: for frequencies above about 2 cps 'the input impedance should be close to the characteristic impedance of the ascending aorta', which the model gives as sqrt(L'/C') from Table 1. Stergiopulos et al. measure Z_c as the average input-impedance modulus over the higher harmonics (standard technique), and relate Z_c to 'the local inertia and compliance of the very proximal ascending aorta' (p. 6, citing this paper, ref. 21)."
+
+# ---- Total compliance of the tree (sum of all Table 1 capacitors, p. 136) vs measured total arterial C ----
+- &val_ctot
+  id: val_Ctot_vs_cppm_hA
+  model: total_compliance
+  inputs: &ctot_inputs
+    C_2A: s2a_C
+    C_2B: s2b_C
+    C_3A: s3a_C
+    C_3B: s3b_C
+    C_4A: s4a_C
+    C_4B: s4b_C
+    C_4C: s4c_C
+    C_5A: s5a_C
+    C_5B: s5b_C
+    C_5C: s5c_C
+    C_6A: s6a_C
+    C_7A: s7a_C
+    C_7B: s7b_C
+    C_8A: s8a_C
+    C_8B: s8b_C
+    C_9A: s9a_C
+    C_9B: s9b_C
+    C_9C: s9c_C
+    C_9D: s9d_C
+    C_9E: s9e_C
+    C_10A: s10a_C
+    C_10B: s10b_C
+    C_10C: s10c_C
+    C_11A: s11a_C
+    C_11B: s11b_C
+    C_11C: s11c_C
+    C_11D: s11d_C
+    C_11E: s11e_C
+    C_12A: s12a_C
+    C_12B: s12b_C
+    C_12C: s12c_C
+    C_12D: s12d_C
+    C_12E: s12e_C
+    C_13A: s13a_C
+    C_14A: s14a_C
+    C_14B: s14b_C
+    C_15A: s15a_C
+    C_15B: s15b_C
+    C_16A: s16a_C
+    C_16B: s16b_C
+    C_16C: s16c_C
+    C_16D: s16d_C
+    C_17A: s17a_C
+    C_17B: s17b_C
+    C_17C: s17c_C
+    C_17D: s17d_C
+    C_18A: s18a_C
+    C_18B: s18b_C
+    C_18C: s18c_C
+    C_18D: s18d_C
+    C_19A: s19a_C
+    C_20A: s20a_C
+    C_21A: s21a_C
+    C_22A: s22a_C
+    C_23A: s23a_C
+    C_24A: s24a_C
+    C_25AA: s25aa_C
+    C_25BA: s25ba_C
+    C_26AA: s26aa_C
+    C_26AB: s26ab_C
+    C_26AC: s26ac_C
+    C_26AD: s26ad_C
+    C_26AE: s26ae_C
+    C_26AF: s26af_C
+    C_26AG: s26ag_C
+    C_26AH: s26ah_C
+    C_26AI: s26ai_C
+    C_26AJ: s26aj_C
+    C_26BA: s26ba_C
+    C_26BB: s26bb_C
+    C_26BC: s26bc_C
+    C_26BD: s26bd_C
+    C_26BE: s26be_C
+    C_26BF: s26bf_C
+    C_26BG: s26bg_C
+    C_26BH: s26bh_C
+    C_26BI: s26bi_C
+    C_27A: s27a_C
+    C_27B: s27b_C
+  output: Ctot
+  against: stergiopulos1999/cppm_hA
+  quantities: {stergiopulos1999/total_arterial_compliance: total_compliance}
+  conditions_ok: "The analog represents a generic normal adult human tree; the measurement is one human subject (type A beat), by the pulse pressure method. Both are the total compliance of the human systemic arterial tree; the comparison tests whether the model's summed compliance is of the right size for man. The analog leaves out arteries below about 0.15 cm radius (p. 137), whose compliance the in vivo measurement includes."
+  basis: "p. 136: the RC time uses C 'the summation of all the capacitors of the entire' system, the model's total compliance. Stergiopulos et al. compute the total compliance of their distributed model in the same way, 'by summing the volume compliances of all arterial segments' (p. 2), and compare it with C measured in vivo."
+- <<: *val_ctot
+  id: val_Ctot_vs_car_hA
+  against: stergiopulos1999/car_hA
+  conditions_ok: "The analog represents a generic normal adult human tree; the measurement is one human subject (type A beat), by the area method. Both are the total compliance of the human systemic arterial tree; the comparison tests whether the model's summed compliance is of the right size for man. The analog leaves out arteries below about 0.15 cm radius (p. 137), whose compliance the in vivo measurement includes."
+- <<: *val_ctot
+  id: val_Ctot_vs_cppm_hC
+  against: stergiopulos1999/cppm_hC
+  conditions_ok: "The analog represents a generic normal adult human tree; the measurement is one human subject (type C beat), by the pulse pressure method. Both are the total compliance of the human systemic arterial tree; the comparison tests whether the model's summed compliance is of the right size for man. The analog leaves out arteries below about 0.15 cm radius (p. 137), whose compliance the in vivo measurement includes."
+- <<: *val_ctot
+  id: val_Ctot_vs_car_hC
+  against: stergiopulos1999/car_hC
+  conditions_ok: "The analog represents a generic normal adult human tree; the measurement is one human subject (type C beat), by the area method. Both are the total compliance of the human systemic arterial tree; the comparison tests whether the model's summed compliance is of the right size for man. The analog leaves out arteries below about 0.15 cm radius (p. 137), whose compliance the in vivo measurement includes."

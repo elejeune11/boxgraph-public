@@ -1,0 +1,21 @@
+id: weff_peak
+name: diameter of the peak of the effective ESL thickness (Eqs. 8-11)
+role: model
+stated: {page: 3, quote: "They exhibit a marked peak at a vessel diameter just above", where: "text on Fig. 2"}
+equation: "D_peak = argmax over D of Weff(D, HD) (Eqs. 8-11)"
+inputs:
+  HD: {quantity: discharge_hematocrit, unit: dimensionless}
+  Doff: {quantity: esl_offset_diameter, unit: um}
+  Dcrit: {quantity: esl_critical_diameter, unit: um}
+  D50: {quantity: esl_half_diameter, unit: um}
+  Wmax: {quantity: esl_max_thickness, unit: um}
+  Eamp: {quantity: esl_peak_amplitude, unit: um}
+  Ewidth: {quantity: esl_peak_decay, unit: 1/um}
+  Epeak: {quantity: esl_peak_weight, unit: dimensionless}
+  EHD: {quantity: esl_hematocrit_sensitivity, unit: dimensionless}
+outputs:
+  D_peak: {quantity: vessel_diameter, unit: um}
+settings: {D_lo: 3.3, D_hi: 100.0, n: 200001}
+stochastic: false
+from_words: true
+built_from: [esl_thickness]

@@ -12,7 +12,7 @@ import json
 import math
 import subprocess
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -24,7 +24,9 @@ from .schema import ROLE_OUTPUT_ORIGIN, Added, Datum, Origin
 from .store import LoadedRecord, model_by_id
 
 RUNNER = Path(__file__).with_name("_runner.py")
-DEFAULT_TIMEOUT = 900
+RUN_TIMEOUT = 2 * 3600  # a model run that takes longer is stopped: long simulations are normal, a hang is not
+READ_TIMEOUT = 15 * 60  # figure-reading code
+DEFAULT_TIMEOUT = RUN_TIMEOUT
 
 
 
@@ -128,12 +130,14 @@ def value_from_added(a: Added, override: str | None = None) -> Value:
 _CACHE: dict[str, Any] = {}
 
 
-def _code_bytes(path: Path) -> bytes:
+def _code_bytes(path: Path, figure: bool = False) -> bytes:
     """Everything a piece of record code can load, for its cache key: the file itself, the shared
     helpers beside it (files whose names start with '_'), any other code in a model's own folder, and,
-    through the models it is declared to be built from (model.yaml `built_from`), their code too."""
+    through the models it is declared to be built from (model.yaml `built_from`), their code too.
+    Figure code may import any module beside it, so all code in its folder counts."""
     out: list[bytes] = []
     seen: set[Path] = set()
+    visited: set[Path] = set()  # model folders, so a cycle in built_from ends
 
     def add(p: Path) -> None:
         p = p.resolve()
@@ -143,6 +147,9 @@ def _code_bytes(path: Path) -> bytes:
         out.append(p.name.encode() + b"\0" + p.read_bytes())
 
     def add_model_dir(d: Path) -> None:
+        if d.resolve() in visited:
+            return
+        visited.add(d.resolve())
         for f in sorted(d.glob("*.py")):
             add(f)
         spec = d / "model.yaml"
@@ -152,15 +159,14 @@ def _code_bytes(path: Path) -> bytes:
             except yaml.YAMLError:
                 built = []
             for mid in sorted(built):
-                if (d.parent / mid).resolve() not in seen:
-                    add_model_dir(d.parent / mid)
+                add_model_dir(d.parent / str(mid))
 
     path = Path(path)
     add(path)
     if (path.parent / "model.yaml").is_file():
         add_model_dir(path.parent)
     else:
-        for f in sorted(path.parent.glob("_*.py")):
+        for f in sorted(path.parent.glob("*.py" if figure else "_*.py")):
             add(f)
     return b"\0\0".join(out)
 
@@ -254,7 +260,7 @@ def execute(model_path: Path, calls: list[dict], timeout: int = DEFAULT_TIMEOUT,
     return res
 
 
-def read_with_code(code_path: Path, image, at: list[float], timeout: int = DEFAULT_TIMEOUT,
+def read_with_code(code_path: Path, image, at: list[float], timeout: int = READ_TIMEOUT,
                    cache_dir: Path | None = None) -> list[dict]:
     """Run a record's figure-reading code, read(image, at), in the isolated runner."""
     import tempfile
@@ -262,7 +268,7 @@ def read_with_code(code_path: Path, image, at: list[float], timeout: int = DEFAU
     import numpy as np
 
     img_sha = hashlib.sha256(np.ascontiguousarray(image).tobytes() + str(image.shape).encode()).hexdigest()
-    key = _cache_key(_code_bytes(code_path), [{"image": img_sha, "at": at, "want": "figure"}])
+    key = _cache_key(_code_bytes(code_path, figure=True), [{"image": img_sha, "at": at, "want": "figure"}])
     if cache_dir is not None:
         cached = _cache_read(cache_dir / f"{key}.json")
         if cached is not None:
@@ -346,6 +352,7 @@ class ComparisonResult:
     per_value: list[str] | None = None
     conditions_note: str | None = None
     computed_se: Any = None  # sampling error of the computed side, in printed unit and scale
+    input_rounding: dict | None = None  # the range the printed inputs' rounding allows, when it was tried
 
 
 @dataclass
@@ -398,12 +405,31 @@ def _cond_equal(x: str, y: str) -> bool:
         return True
     try:
         qx, qy = U.ureg.Quantity(str(x)), U.ureg.Quantity(str(y))
+        if qx.dimensionality != qy.dimensionality:
+            return False
         return math.isclose(qx.to_base_units().magnitude, qy.to_base_units().magnitude, rel_tol=1e-9)
     except Exception:  # noqa: BLE001
         return False
 
 
 DEFAULT_REPLICATES = 5
+ROUNDING_TRY_WITHIN = 0.10  # a miss larger than this fraction of the printed value is judged as computed
+ROUNDING_MAX_INPUTS = 8  # at most this many printed inputs are varied, the most coarsely printed first
+
+
+def rounding_inputs(inputs: dict[str, str], vals: dict[str, Value]) -> list[str]:
+    """The printed inputs whose rounding is carried into a run's result: scalars printed with a
+    precision (never added inputs or other runs' outputs), the most coarsely printed first."""
+    out = []
+    for vid in sorted(set(inputs.values())):
+        v = vals.get(vid)
+        p = v.printed if v is not None else None
+        if v is None or v.kind != "printed" or v.is_table or v.value is None or p is None or not p.has_precision:
+            continue
+        if p.lo is None or p.hi is None or p.hi <= p.lo:
+            continue
+        out.append(((p.hi - p.lo) / max(abs(p.value), 1e-300), vid))
+    return [vid for _, vid in sorted(out, key=lambda t: (-t[0], t[1]))][:ROUNDING_MAX_INPUTS]
 
 
 def _mean_se(xs: list) -> tuple[float | None, float | None]:
@@ -462,6 +488,8 @@ class Builder:
         self.timeout = timeout
         self.figures = {f.id: f for f in self.rec.figures}
         self.figure_results: dict[str, dict] = {}
+        self._rounding_runs: dict[tuple, Any] = {}  # (run, input, end) -> output values, within one build
+        self._rounding_half: dict[str, tuple] = {}  # comparison -> (half-widths in computed units, inputs varied)
 
     # -- values -----------------------------------------------------------
     def _base_values(self, overrides: dict[str, str] | None = None) -> dict[str, Value]:
@@ -546,7 +574,7 @@ class Builder:
                 lo_k, hi_k = "bar_lo", "bar_hi"  # a reading that gives only the bar's ends
             try:
                 y, lo, hi = (U.convert(q, fr.y.unit, d.unit, "linear", d.scale) for q in (r["y"], r[lo_k], r[hi_k]))
-            except U.UnitError:
+            except (U.UnitError, TypeError, ValueError, KeyError):  # a reading without usable numbers has no value
                 v.values.append(None)
                 v.printed_values.append(None)
                 continue
@@ -752,7 +780,83 @@ class Builder:
                     rr.error = f"output id {k} collides with an existing node"
                 vals[k] = v
         comps = {c.id: self._compare(c, vals) for c in self.rec.comparisons}
+        for c in self.rec.comparisons:
+            self._carry_rounding(c, comps[c.id], vals, baseline=not overrides)
         return vals, runs, comps
+
+    # -- rounding of printed inputs (02-boxgraph.md, Verdicts) ---------------
+    def _perturbed(self, run, vid: str, end: float, vals: dict[str, Value], oid: str):
+        key = (run.id, vid, end, oid)
+        if key not in self._rounding_runs:
+            rr, new = self._do_run(run, {**vals, vid: replace(vals[vid], value=end)})
+            v = new.get(oid) if rr.ok else None
+            self._rounding_runs[key] = None if v is None else (v.values if v.is_table else v.value)
+        return self._rounding_runs[key]
+
+    def _carry_rounding(self, c, r: ComparisonResult, vals: dict[str, Value], baseline: bool) -> None:
+        """A result that misses its printed precision by no more than ROUNDING_TRY_WITHIN is judged
+        again with the range its printed inputs' rounding allows: each varied input at either end of
+        its printed range, one at a time, the changes added up. Alternatives of added inputs reuse the
+        baseline's range, so they run nothing more."""
+        if not r.ok or r.verdict not in (P.Verdict.not_reproduced.value, P.Verdict.close.value):
+            return
+        cv, pv = vals[c.computed], vals[c.printed]
+        run = next((x for x in self.rec.runs if x.id == cv.run), None) if cv.kind == "output" else None
+        if run is None:
+            return
+        model = model_by_id(self.lr, run.model)
+        if model is None or model.stochastic:
+            return
+        table = pv.is_table
+        printed = pv.printed_values if table else [pv.printed]
+        comp = r.computed_value if table else [r.computed_value]
+        near = [y is not None and p is not None and p.has_precision and p.value
+                and abs(y - p.value) <= ROUNDING_TRY_WITHIN * abs(p.value) for y, p in zip(comp, printed)]
+        if not any(near):
+            r.input_rounding = {"varied": [], "band": None,
+                                "note": f"not tried: the result is more than {ROUNDING_TRY_WITHIN:.0%} from the printed value"}
+            return
+        if baseline:
+            varied = rounding_inputs(run.inputs, vals)
+            y0 = cv.values if cv.is_table else [cv.value]
+            half = [0.0] * len(y0)
+            for vid in varied:
+                p = vals[vid].printed
+                devs = [0.0] * len(y0)
+                for end in (p.lo, p.hi):
+                    out = self._perturbed(run, vid, end, vals, cv.id)
+                    if out is None:
+                        r.input_rounding = {"varied": varied, "band": None,
+                                            "note": f"not tried: a run with {vid} at {end:g} failed"}
+                        return
+                    out = out if isinstance(out, list) else [out]
+                    devs = [max(d, abs(a - b)) if a is not None and b is not None else d for d, a, b in zip(devs, out, y0)]
+                half = [h + d for h, d in zip(half, devs)]
+            self._rounding_half[c.id] = (half, varied)
+            note = "each varied input at either end of its printed range, one at a time, the changes added up"
+        elif c.id in self._rounding_half:
+            half, varied = self._rounding_half[c.id]
+            note = "the range of the baseline's inputs, carried to this alternative"
+        else:
+            return
+        y0 = cv.values if cv.is_table else [cv.value]
+        bands = []
+        for y, h in zip(y0, half):
+            if y is None:
+                bands.append(None)
+                continue
+            a, b = (U.convert(q, cv.unit, pv.unit, cv.scale, pv.scale) for q in (y - h, y + h))
+            bands.append((min(a, b), max(a, b)))
+        ses = r.computed_se if table else [r.computed_se]
+        per = []
+        for y, p, bd, s in zip(comp, printed, bands, ses or [None] * len(comp)):
+            per.append(P.Verdict.no_verdict if p is None else P.verdict(y, p, se=s or 0.0, band=bd))
+        if table:
+            r.per_value = [v.value for v in per]
+            r.verdict = P.combine(per).value
+        else:
+            r.verdict = per[0].value
+        r.input_rounding = {"varied": varied, "band": bands if table else bands[0], "note": note}
 
     def _refine(self, ref, vals: dict[str, Value]) -> dict:
         run = next((r for r in self.rec.runs if r.id == ref.run), None)
@@ -767,6 +871,9 @@ class Builder:
         base.update(run.settings)
         if ref.setting not in base:
             out["error"] = f"setting {ref.setting!r} is not a setting of run {run.id}"
+            return out
+        if len(ref.factors) < 2 or 1 not in ref.factors:  # no step to judge, or no paper's setting to judge it from
+            out["error"] = f"needs at least two factors, one of them 1 (the paper's own setting); got {ref.factors}"
             return out
         series = []
         for f in ref.factors:
@@ -811,7 +918,7 @@ class Builder:
         # It belongs to the model only if the series settles AND that value is within the
         # tolerance of where the series settles; a result that changes as it is refined
         # belongs to the numerics, even if it settles somewhere else.
-        first = next((x for x in series if x["factor"] == 1), series[0])
+        first = next(x for x in series if x["factor"] == 1)
         out["shift"] = dist(first["value"], series[-1]["value"])
         out["belongs_to"] = "model" if settled and out["shift"] <= tval else "numerics"
         return out

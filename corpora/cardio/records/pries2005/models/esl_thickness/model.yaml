@@ -1,0 +1,21 @@
+id: esl_thickness
+name: diameter- and hematocrit-dependent ESL thickness (Eqs. 8-11)
+role: model
+stated: {page: 2, quote: "functions consisting of a sum of two components", where: "Eqs. 8-11"}
+equation: "Was = 0 (D <= Doff), (D - Doff)/(D + D50 - 2 Doff) Wmax (Doff < D); Wpeak = 0 (D <= Doff), Eamp (D - Doff)/(Dcrit - Doff) (Doff < D <= Dcrit), Eamp e^(-Ewidth (D - Dcrit)) (Dcrit < D); Wph = Was + Wpeak Epeak; Weff = Was + Wpeak [1 + HD EHD]"
+inputs:
+  D: {quantity: vessel_diameter, unit: um}
+  HD: {quantity: discharge_hematocrit, unit: dimensionless}
+  Doff: {quantity: esl_offset_diameter, unit: um}
+  Dcrit: {quantity: esl_critical_diameter, unit: um}
+  D50: {quantity: esl_half_diameter, unit: um}
+  Wmax: {quantity: esl_max_thickness, unit: um}
+  Eamp: {quantity: esl_peak_amplitude, unit: um}
+  Ewidth: {quantity: esl_peak_decay, unit: 1/um}
+  Epeak: {quantity: esl_peak_weight, unit: dimensionless}
+  EHD: {quantity: esl_hematocrit_sensitivity, unit: dimensionless}
+outputs:
+  Weff: {quantity: esl_thickness_effective, unit: um}
+  Wph: {quantity: esl_thickness_physical, unit: um}
+settings: {}
+stochastic: false

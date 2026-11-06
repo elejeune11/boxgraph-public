@@ -1,5 +1,5 @@
-Read the code `{file}` into the BoxGraph record `records/{id}/`. It is the code released with {papers}
-(already read: `records/<paper>/`). {page_note}
+Read the code `{file}` into the BoxGraph record `{records}/{id}/`. It is the code released with {papers}
+(already read: `{records}/<paper>/`). {page_note}
 
 This record is a source of its own, of kind `software`: what the code says, as written, checked
 against what the paper says. Never copy the code into the record: it is someone else's work and is
@@ -28,6 +28,6 @@ never committed. The record holds only short quotes that locate a value, and our
    record): copy the value into this record's `data.yaml` with `from_source`/`from_datum` naming the
    paper's datum, and add runs and `reproduction` comparisons of the code's model against them, so the
    build shows whether the code reproduces the paper.
-5. Validate with `.venv/bin/boxgraph validate records/{id}` until SOUND. Write `notes` in source.yaml
+5. Validate with `.venv/bin/boxgraph validate {records}/{id}` until SOUND. Write `notes` in source.yaml
    last: what the code reproduces, what it does not, and every difference from the paper.
-Run one simple command per shell call (no `cd`, no `&&`). Write only inside `records/{id}/`.
+Run one simple command per shell call (no `cd`, no `&&`). Write only inside `{records}/{id}/`.

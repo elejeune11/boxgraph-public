@@ -1,0 +1,50 @@
+id: bioreactor_eqs5_1_15
+name: lumped-parameter model of the pulsatile bioreactor (Eqs. 5-1 to 5-15), cycle summaries
+role: model
+stated: {page: 4, printed_page: "164", quote: "the concept of hydraulic-electric analogue is used", where: "Section 5.2.2, Eqs. 5-1 to 5-15, Fig. 5-2"}
+equation: >
+  dPcl/dt = (Qci + Qs - Qcl)/Ccl (5-1); dQcl/dt = (Pcl - Pct - rho g hcl - Rcl Qcl)/Lcl (5-2);
+  dPcu/dt = (Qct - Qcu)/Ccu (5-3); dQcu/dt = (Pcu - Pco - rho g hcu - Rcu Qcu)/Lcu (5-4);
+  dPct/dt = (Qcl - Qct)/Cct (5-5); Qct = (Pct - Pcu)/Rct (5-6); dPco/dt = (Qcu - Qco)/Cco (5-7);
+  Qci = CQci tau_ci (Pa - rho g hs - Pcl)/sqrt|Pa - rho g hs - Pcl| (5-8), tau_ci = 1 if Pa - rho g hs >= Pcl else 0 (5-9);
+  Qco = CQco tau_co (Pco - [Pa - rho g (hcl + hcu + hs)])/sqrt|...| (5-10), tau_co = 1 if Pco >= Pa - rho g (hcl + hcu + hs) else 0 (5-11);
+  Ps = Ps,0 + Ps,a sin(2 pi t/T) (5-12); ms d2l/dt2 + kf dl/dt + ke l = (Ps - Pcl) As (5-13);
+  Qs = As dl/dt (5-14); Pa = Patm + rho g ha (5-15)
+inputs:
+  Rcu: {quantity: hydraulic_resistance, unit: mmHg*s/ml}
+  Ccu: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Lcu: {quantity: hydraulic_inertance, unit: mmHg*s^2/ml}
+  hcu: {quantity: segment_height, unit: m}
+  Rct: {quantity: hydraulic_resistance, unit: mmHg*s/ml}
+  Cct: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Rcl: {quantity: hydraulic_resistance, unit: mmHg*s/ml}
+  Ccl: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Lcl: {quantity: hydraulic_inertance, unit: mmHg*s^2/ml}
+  hcl: {quantity: segment_height, unit: m}
+  ms: {quantity: diaphragm_mass, unit: kg}
+  As: {quantity: diaphragm_area, unit: m^2}
+  kf: {quantity: diaphragm_damping, unit: N*s/m}
+  ke: {quantity: diaphragm_stiffness, unit: N/m}
+  hs: {quantity: segment_height, unit: m}
+  Ps0: {quantity: air_pressure_mean, unit: mmHg}
+  Psa: {quantity: air_pressure_amplitude, unit: mmHg}
+  CQci: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQco: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  Cco: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Patm: {quantity: atmospheric_pressure, unit: mmHg}
+  ha: {quantity: reservoir_media_height, unit: m}
+  rho: {quantity: media_density, unit: kg/m^3}
+  T: {quantity: drive_period, unit: s}
+  g: {quantity: gravity, unit: m/s^2}
+outputs:
+  Pct_max: {quantity: peak_tissue_construct_pressure, unit: mmHg}
+  Pct_min: {quantity: min_tissue_construct_pressure, unit: mmHg}
+  Qct_max: {quantity: peak_tissue_construct_flow, unit: ml/s}
+  Qct_min: {quantity: min_tissue_construct_flow, unit: ml/s}
+  l_amp: {quantity: diaphragm_oscillation_amplitude, unit: m}
+  l_offset_air: {quantity: diaphragm_neutral_offset, unit: m}
+settings:
+  dt: 2.0e-5          # added: the chapter names classical Runge-Kutta but not its step
+  n_cycles: 12        # added: the chapter says the solution converges after about ten cycles
+  record_stride: 5    # steps between recorded states of the last cycle
+stochastic: false

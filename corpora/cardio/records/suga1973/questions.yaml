@@ -1,0 +1,155 @@
+- id: q_tmax_e_mean
+  kind: possible_error
+  about: [tmax_e_mean, abs_tmax_e_mean, cmp_tmax_e_mean, cmp_tmax_e_mean_abstract, tmax_e_sd, abs_tmax_e_sd]
+  text: >
+    The mean of the nine per-dog Tmax values under 2 ug/kg/min epinephrine printed in Table 2
+    (125, 152, 145, 145, 144, 121, 215, 128, 143 msec) is 146.4 msec, not the 157 msec printed in
+    the bottom row of Table 2 and again in the abstract; their SD is 27.8 (n - 1) or 26.2 (n),
+    against 26 printed. Rounding of the per-dog means cannot account for 11 msec. The mean of the
+    printed beta column (1.30) does agree with the per-dog values, so either one per-dog entry or the
+    printed mean is in error, or the mean was taken over a different set of beats or dogs.
+  citation: {page: 6, quote: "12.2 ± 4.5 1.8 =t 0.6 157 ± 26", where: "Table 2"}
+- id: q_ttest_load
+  kind: unexplained_difference
+  about: [t1_p_emax_l2, t1_p_emax_l4, t1_p_emax_l5, t1_p_tmax_l2, t1_p_tmax_l4, cmp_p_emax_l2, cmp_p_emax_l4, cmp_p_emax_l5, cmp_p_tmax_l2, cmp_p_tmax_l4]
+  text: >
+    A two-sided paired t-test on the per-dog means printed in Table 1 gives, for Emax, P = 0.056
+    (load 1 vs 2), 0.34 (vs 4) and 0.068 (vs 5), where Table 1 prints P > 0.5 for each; and for
+    Tmax P = 0.57 (vs 2) and 0.55 (vs 4), where it prints P > 0.9. The Tmax P values for loads 3 and
+    5 (0.59, 0.65) are consistent with the printed P > 0.5. The conclusion of no significant
+    difference at the 5% level still holds, but the printed bounds do not follow from the printed
+    table with a paired t-test on per-dog means. The paper may have tested something else (e.g.
+    beat-level data or a one-sided test), which it does not say. Printed '> 0.5' gets no verdict,
+    so this is recorded here.
+  citation: {page: 3, quote: "P values were obtained using a paired i-test", where: "Table 1 legend"}
+- id: q_sd_convention
+  kind: unexplained_difference
+  about: [tmax_c_sd, abs_tmax_c_sd, dpdtp_c_sd, emax_c_sd, cmp_tmax_c_sd, cmp_dpdtp_c_sd, cmp_emax_c_sd, sd_ddof_added]
+  text: >
+    The between-dog SDs computed from the per-dog values of Table 2 do not all match the printed
+    MEAN ± SD row under either convention: Tmax control 31.6 (n - 1) or 29.7 (n) against 29;
+    [(dP/dt)/P]max control 5.66 or 5.33 against 6.0; Emax control 1.15 or 1.08 against 1.2. Other
+    SDs (Vd, Emax enhanced, alpha, beta, gamma, (dP/dt)/P enhanced) reproduce with n - 1. The
+    printed SDs may have been computed from unrounded per-dog means; the paper does not say.
+- id: q_ratio_rounding
+  kind: possible_error
+  about: [alpha_d8, cmp_alpha_d8, gamma_d3, cmp_gamma_d3, gamma_d6, cmp_gamma_d6]
+  text: >
+    Three per-dog ratios in Table 2 differ from the ratio of the printed means in the same row:
+    alpha for dog 8 is 10.7/7.4 = 1.45 against 1.3 printed; gamma for dog 3 is 43/30 = 1.43 against
+    1.5; gamma for dog 6 is 54/35 = 1.54 against 1.6. The gamma differences could come from
+    rounding of the printed (dP/dt)/P means to integers; the alpha of dog 8 (0.15 off) is harder to
+    explain that way. The other 24 ratios reproduce.
+  citation: {page: 6, quote: "14-30 90-205 176 10.7 ± 0.48 1.3 0.001", where: "Table 2"}
+- id: q_tmax_hr_definition
+  kind: unstated_model
+  about: [tmax_hr_epinephrine, tmax_hr_epi_mean, tmax_hr_epi_sd, cmp_tmax_hr_epi_mean, cmp_tmax_hr_epi_sd]
+  text: >
+    The paper does not define how 'the rate of shortening of Tmax per 100-beats/min increase in
+    heart rate caused by epinephrine infusion' (129 ± 56%) was computed. The record's model takes,
+    for each nonpaced dog of Table 2 (1, 2, 4, 5, 6, 8), the percent shortening relative to control
+    Tmax divided by the heart-rate increase in hundreds of beats/min, and averages: 101 ± 49%.
+    Shortening relative to the enhanced Tmax instead gives about 134 ± 68%. Neither reproduces
+    129 ± 56; the per-dog data behind the printed value, or its definition, are not given.
+  citation: {page: 7, quote: "heart rate caused by epinephrine infusion was 129 ± 56%", where: "text, Results"}
+- id: q_en_not_runnable
+  kind: unstated_model
+  about: [elastance_normalized]
+  text: >
+    E(t) = Emax·EN(t/Tmax) cannot be run: the normalized curve EN(tN) is given only as the plotted
+    means (± SD) of Fig. 5, with no formula or table. The four symbol series in Fig. 5 (control,
+    epinephrine, five loads, three heart rates) overlap and are drawn with overlapping SD bars on a
+    small scanned figure, so they were not read.
+  citation: {page: 6, quote: "Comparison of mean values of the magnitude of many", where: "Fig. 5"}
+- id: q_pv_ratio_no_values
+  kind: unstated_input
+  about: [pv_ratio]
+  text: >
+    The definition E(t) = P(t)/[V(t) - Vd] is recorded but never run: the paper prints no paired
+    values of pressure and volume, only traces (Figs. 2-4) and the resulting Emax values, which
+    were computed by an analog divider from the recorded signals.
+- id: q_audit_unrecorded_measurements
+  kind: reading
+  about: [tmax_hr_epi_mean, tmax_hr_epi_sd]
+  text: >
+    Audit (second reading): the record leaves out printed group results that have no per-dog values
+    behind them: the paced heart-rate effects on p. 7 (Tmax shortening 45 ± 10% per 100 beats/min,
+    restated as 45% in the abstract; [(dP/dt)/P]max increase 49 ± 25% per 100 beats/min) and the
+    1 and 4 ug/kg/min epinephrine effects (Emax +69 ± 41%, Tmax -21 ± 9%; Emax +125 ± 58%, Tmax
+    -43 ± 19%). They cannot be reproduced inside this paper, but they are measurements that a model in
+    another paper may predict (e.g. a heart-rate dependence of Tmax), so recording them as measured
+    data would make them available for validation. The 45% of the abstract and 45 ± 10% of the text
+    agree as printed.
+  citation: {page: 7, quote: "pacing was 4 5 ± 1 0 % ( S D ) under both the control", where: "text, Results"}
+- id: q_fig5_symbols
+  kind: reading
+  about: [fig5_s1, fig5_s2, fig5_s3, fig5_s4, en_fig5_s1, en_fig5_s2, en_fig5_s3, en_fig5_s4, elastance_normalized]
+  text: >
+    Fig. 5 is now read with calibrated readings (63 of 64 plotted means with their SD bars). The four
+    symbol series are drawn staggered by about 0.017 in t_N around each nominal t_N = 0, 0.1, ..., 1.5,
+    in the same left-to-right order in every group, so the readings follow that order (fig5_s1 leftmost
+    to fig5_s4 rightmost). In this bilevel scan the symbols themselves (solid circle, open circle, cross,
+    triangle) cannot be told apart, so which series (control, epinephrine, five loads, three heart rates)
+    each reading is remains open; the text lists them in that order, which may or may not be the plotting
+    order. This resolves the reading problem stated in q_en_not_runnable (the curves can be told apart
+    by position) but not the model: EN(tN) is still only plotted, as four sets of means rather than one
+    stated curve, and the record's model would need it as a curve-valued input.
+  citation: {page: 6, quote: "such a comparison. The solid circles and the open", where: "text, Fig. 5"}
+- id: q_load3_emax_cut
+  kind: reading
+  about: [t1_p_emax_l3]
+  text: >
+    The Emax column for load 3 in Table 1 is cut at the page gutter in this copy (only '.0 ± 0.15',
+    '.0 ± 0.52', ... are visible), so the load-3 Emax values were not recorded and the printed
+    P > 0.5 for load 1 vs load 3 could not be checked.
+  citation: {page: 4, quote: ".0 ± 0.15 168 ± 5 140 95", where: "Table 1"}
+- id: q_crossval_westerhof2009
+  kind: unstated_model
+  about: [elastance_normalized, pv_ratio]
+  text: >
+    Cross-validation against westerhof2009 (which cites this paper as ref. 65) found nothing to compare. The
+    measurements there are arterial input impedance (Figs. 4, 6), aortic pressure (Fig. 6) and the isolated
+    cat-heart pressures and flows of Fig. 8. This record's models give E(t) from P, V and Vd, or E(t) from
+    Emax, Tmax and EN (not runnable), plus ratios and statistics of its own data; none outputs an impedance,
+    an aortic pressure or a flow. Predicting Fig. 8 would need E(t) coupled to a windkessel load, a model this
+    paper does not state, with cat-heart Emax, Tmax and Vd that neither paper gives.
+  citation: {page: 8, printed_page: "321", quote: "The mathematical description is given by E(t)", where: "text, Discussion"}
+- id: q_crossval_shi2018
+  kind: unstated_model
+  about: [elastance_normalized, pv_ratio]
+  text: >
+    Cross-validation against shi2018 (which cites this paper as ref. 10, only as an example of a
+    variable-elastance model) found nothing to compare, in either direction. shi2018 holds no
+    measurement: its text values and Fig. 5 readings are all output of its own CellML simulation
+    (its figures.md: "The paper plots no measured data"), so no model here can be validated against
+    it. Its one model that produces results, circulation_fig1d, is not runnable (no equations or
+    parameters printed), and its other models only restate its own text values, so none of them
+    can be run on this paper's canine measurements (Tables 1, 2, Fig. 5).
+  citation: {page: 8, printed_page: "321", quote: "The mathematical description is given by E(t)", where: "text, Discussion"}
+- id: q_crossval_korakianitis2006
+  kind: unstated_model
+  about: [elastance_normalized, pv_ratio]
+  text: >
+    Cross-validation against korakianitis2006 (which cites this paper as the source of its variable
+    elastance model) found nothing to compare, in either direction. korakianitis2006 holds no
+    measurement: its data are model parameters (Tables 1-5) and its figures are all output of its
+    own simulation, so no model here can be validated against it. Its elastance model
+    (elastance_eq2_5) takes Emax- and Tmax-like values as inputs (E_lv,s and T_s1, human values) and
+    gives elastance in mmHg/ml against time in s, not the normalized EN(t/Tmax) of Fig. 5. So the
+    Emax and Tmax of Tables 1 and 2 are inputs there, not predictions. This paper's
+    elastance_normalized is not runnable.
+  citation: {page: 8, printed_page: "321", quote: "The mathematical description is given by E(t)", where: "text, Discussion"}
+- id: q_crossval_shi2013_ch2
+  kind: unstated_model
+  about: [elastance_normalized, pv_ratio, en_fig5_s1, en_fig5_s2, en_fig5_s3, en_fig5_s4]
+  text: >
+    Cross-validation against shi2013_ch2 (which adopts this paper's variable elastance model) found
+    nothing to compare, in either direction. shi2013_ch2's one measurement is a volunteer's LV volume
+    per MRI phase (its Fig. 2-3). pv_ratio gives E(t) from P, V and Vd, and elastance_normalized is not
+    runnable, so neither predicts a volume. In the other direction, shi2013_ch2's elastance_ch2 gives
+    e_lv in mmHg/ml against time in s (Eqs. 2-2, 2-3). That is not the normalized EN = E/Emax against
+    tN = t/Tmax of Fig. 5. Its E_lv,s and T_s1 play the roles of Emax and Tmax, so the Emax and Tmax of
+    Tables 1 and 2 would be its inputs, not predictions. The chapter does not say its activation
+    function was fitted to or compared with Fig. 5. Its circulation model gives pressures, flows and
+    volumes of a human circulation, not this paper's canine Vd, [(dP/dt)/P]max or heart rates.
+  citation: {page: 8, printed_page: "321", quote: "The mathematical description is given by E(t)", where: "text, Discussion"}

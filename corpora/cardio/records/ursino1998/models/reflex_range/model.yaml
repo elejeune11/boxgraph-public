@@ -1,0 +1,50 @@
+id: reflex_range
+name: static reflex changes of the effectors between two carotid sinus pressures
+role: model
+stated: {page: 5, printed_page: "H1737", quote: "The gain factors in the static logarithmic relationship", where: text}
+equation: "theta(P) from the steady state of Eqs. 31, 33-37; dEmax = [Emax,lv(P_low) - Emax,lv(P_high)]/Emax,lv basal; dR = [R(P_low) - R(P_high)]/R(P_high) with R = Rsa + (Rsp + Rsv)||(Rep + Rev) for the total; dVu = |Vu change|/body mass"
+built_from: [reflex_static]
+from_words: true
+inputs:
+  Pn: {quantity: carotid_sinus_pressure, unit: "mmHg"}
+  ka: {quantity: afferent_slope_pressure, unit: "mmHg"}
+  fmin: {quantity: afferent_frequency, unit: "1/s"}
+  fmax: {quantity: afferent_frequency, unit: "1/s"}
+  fes_inf: {quantity: sympathetic_frequency, unit: "1/s"}
+  fes0: {quantity: sympathetic_frequency, unit: "1/s"}
+  kes: {quantity: sympathetic_decay_constant, unit: "s"}
+  fes_min: {quantity: sympathetic_frequency, unit: "1/s"}
+  fev0: {quantity: vagal_frequency, unit: "1/s"}
+  fev_inf: {quantity: vagal_frequency, unit: "1/s"}
+  kev: {quantity: vagal_sigmoid_scale, unit: "1/s"}
+  fcs0: {quantity: afferent_frequency, unit: "1/s"}
+  G_Emax_lv: {quantity: emax_gain, unit: "mmHg*s/ml"}
+  G_Emax_rv: {quantity: emax_gain, unit: "mmHg*s/ml"}
+  G_R_sp: {quantity: resistance_gain, unit: "mmHg*s^2/ml"}
+  G_R_ep: {quantity: resistance_gain, unit: "mmHg*s^2/ml"}
+  G_Vu_sv: {quantity: volume_gain, unit: "ml*s"}
+  G_Vu_ev: {quantity: volume_gain, unit: "ml*s"}
+  G_T_s: {quantity: heart_period_gain, unit: "s^2"}
+  G_T_v: {quantity: heart_period_gain, unit: "s^2"}
+  Emax_lv0: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  Emax_rv0: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  R_sp0: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_ep0: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  Vu_sv0: {quantity: unstressed_volume, unit: "ml"}
+  Vu_ev0: {quantity: unstressed_volume, unit: "ml"}
+  T0: {quantity: heart_period, unit: "s"}
+  P_low: {quantity: carotid_sinus_pressure, unit: "mmHg"}
+  P_high: {quantity: carotid_sinus_pressure, unit: "mmHg"}
+  M: {quantity: body_mass, unit: "kg"}
+  Emax_lv_basal: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  R_sa: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_sv: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_ev: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+outputs:
+  dEmax: {quantity: emax_reflex_change, unit: "percent"}
+  dR_sp: {quantity: splanchnic_resistance_increase, unit: "percent"}
+  dR_tot: {quantity: total_resistance_increase, unit: "percent"}
+  dVu_tot: {quantity: reflex_venous_volume_change_total, unit: "ml/kg"}
+  dVu_sv: {quantity: reflex_venous_volume_change_splanchnic, unit: "ml/kg"}
+settings: {}
+stochastic: false

@@ -1,0 +1,60 @@
+- id: run_nu
+  model: kinematic_viscosity
+  inputs: {mu: mu_blood, rho: rho_blood}
+  outputs: {nu: nu_pred}
+- id: run_j0_zeros
+  model: j0_zeros
+  inputs: {}
+  outputs: {beta1: beta1_pred, beta2: beta2_pred, beta3: beta3_pred}
+- id: run_first_order
+  model: timescales_first_order
+  inputs: {beta1: beta1}
+  outputs: {lambda_q: lambda_q_first_pred, lambda_p: lambda_p_first_pred}
+- id: run_second_order
+  model: timescales_second_order
+  inputs: {beta1: beta1, beta2: beta2}
+  outputs: {lambda_q1: lambda_q1_pred, lambda_q2: lambda_q2_pred, lambda_p1: lambda_p1_pred,
+            lambda_p2: lambda_p2_pred, lambda_q_sum: lambda_q_sum_pred, lambda_p_sum: lambda_p_sum_pred}
+- id: run_R_quasisteady
+  model: tau_crossing_radius
+  inputs: {nu: nu_blood, HR: heart_rate_fig2, lam: lambda_q1_printed}
+  outputs: {R: R_threshold_quasisteady_pred}
+  note: >
+    lambda_q = lambda_q1 = 0.1729 is the largest of the six time-scales in Fig. 2, so tau exceeds
+    all of them for R below the radius where tau equals it (choice of the reader).
+- id: run_R_first_order
+  model: tau_crossing_radius
+  inputs: {nu: nu_blood, HR: heart_rate_fig2, lam: lambda_p1_printed}
+  outputs: {R: R_threshold_first_order_pred}
+  note: >
+    lambda_p1 = 0.0378 is the largest of the time-scales that p. 69 says can be neglected for
+    0.2 < R < 0.5 cm (lambda_q2, lambda_p1, lambda_p2), so tau exceeds all three for R below the
+    radius where tau equals it (choice of the reader).
+- id: run_order_R15
+  model: order_needed
+  inputs: {nu: nu_blood, HR: heart_rate_fig2, R: R_large_vessel}
+  settings: {n_max: 100}
+  outputs: {n: order_needed_R15_pred}
+- id: run_fig2_tau
+  model: tau_vs_radius
+  inputs: {nu: nu_blood, HR: heart_rate_fig2_per_s}
+  sweep: {R: tau_fig2}
+  outputs: {tau: tau_fig2_pred}
+- id: run_fig2_lines
+  model: timescale_lines
+  inputs: {beta1: beta1, beta2: beta2}
+  sweep: {R: lambda_q1_fig2}
+  outputs: {lambda_q1: lambda_q1_fig2_pred, lambda_q2: lambda_q2_fig2_pred, lambda_p: lambda_p_fig2_pred,
+            lambda_p1: lambda_p1_fig2_pred, lambda_p2: lambda_p2_fig2_pred}
+  note: all five line readings are read at the same R positions (0.1 and 0.6 cm), so one sweep serves them all
+- id: run_fig4_eq31
+  model: step_response_eq31
+  inputs: {beta1: beta1}
+  sweep: {t: q_rigid_after_fig4}
+  outputs: {q: q_rigid_eq31_pred}
+- id: run_fig4_eq31_p0
+  model: step_response_eq31_p0
+  inputs: {beta1: beta1, p0: p0_fig4}
+  sweep: {t: q_rigid_after_fig4}
+  outputs: {q: q_rigid_eq31_p0_pred}
+  note: p0 is added from the flat part of the same curve before the step (added p0_fig4)

@@ -1,0 +1,19 @@
+id: windkessel3_p73
+name: input impedance of the three-element windkessel equation (unnumbered, p. 73)
+role: model
+stated: {page: 13, printed_page: "73", quote: "The equation for this circuit is", where: "unnumbered equation, p. 73"}
+equation: "R1 R2 C1/(R1 + R2) dq/dt + q = 1/(R1 + R2) (R2 C1 dp/dt + p); for p, q ~ e^(j omega t): Z = p/q = (R1 + R2 + j omega R1 R2 C1)/(1 + j omega R2 C1), omega = 2 pi f"
+# Helper added by the relation job between this record and westerhof1971: the paper prints the
+# differential equation of the three-element windkessel (Fig. 3D, citing refs. 10, 16, 21, 28, 30, 35).
+# Its steady sinusoidal solution, the ratio p/q, is what westerhof1971/impedance_3el gives, so the
+# helper returns that ratio. No printed result of this paper is computed from it.
+inputs:
+  R1: {quantity: windkessel_resistance, unit: g/cm^4/s}
+  R2: {quantity: windkessel_resistance, unit: g/cm^4/s}
+  C1: {quantity: windkessel_compliance, unit: cm^4*s^2/g}
+  f: {quantity: frequency, unit: Hz}
+outputs:
+  modulus: {quantity: input_impedance_modulus, unit: g/cm^4/s}
+  phase: {quantity: input_impedance_phase, unit: degree}
+settings: {}
+stochastic: false

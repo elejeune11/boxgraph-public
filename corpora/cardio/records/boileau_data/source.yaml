@@ -1,0 +1,62 @@
+id: boileau_data
+kind: software
+title: "Supporting data of 'A benchmark study of numerical schemes for one-dimensional arterial blood flow modelling' (Benchmarks 1-6)"
+authors: [Etienne Boileau, Perumal Nithiarasu, Pablo J. Blanco, Lucas O. Müller, Fredrik Eikeland Fossan, Leif Rune Hellevik, Wouter P. Donders, Wouter Huberts, Marie Willemet, Jordi Alastruey]
+year: 2015
+url: https://doi.org/10.1002/cnm.2732
+version: "sha256:8cc454dcd096bb048cef6c5857ce4843d1512080d96d0d14456ba8da6efb2222"
+licence: none stated
+language: plain-text data
+file: corpus/cardio/code/boileau_data
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-04"}
+notes: >
+  What the source is. The supporting data of boileau2015: six folders Benchmark1-6, 107 plain-text files
+  and one network diagram (Benchmark6_ADAN56/network.pdf, a drawing, not read). Each folder has a README
+  citing the paper and giving file columns and units; NumData holds each scheme's results (DCG, LCG,
+  FEM, FVM, McC, STM; and the 3D solution of [33] for B2-B4); inflow.txt gives the inflow as a Fourier
+  series with its period (ADAN56: a table); B5 adds mesh.txt (the 37-artery network), time_shifts.txt
+  (UTF-16; start and end of the last cycle per site) and ExpData, the in vitro measurements of [45] at
+  eight sites; B6 adds the ADAN56 mesh.txt. There is no code and no entry point; no licence is stated.
+  year and url are the paper's. language: plain-text data.
+
+  How it was read. Values cited by file and line: the README times tini/tend (B2-B4), time_shifts.txt
+  (B5), the inflow periods, every number of B5 mesh.txt (cited against alastruey2011 Table 2 by
+  from_datum) and of B6 mesh.txt (checked against boileau2015 Tables XII-XIII, copied here, by consistency
+  comparisons). The Fourier coefficients feed no model and are not recorded (q_inflow_series). Our own
+  adapters (software: true) read the files from $BOXGRAPH_SOURCE, never copying them: errors_* apply the
+  paper's Eqs. 10-13 to a released 1D waveform against the released 3D or in vitro one; waveform* read a
+  column at given times; peak_loss_single_pulse gives B1's inviscid peak loss. The paper's error Tables IV,
+  VI, VIII and X (792 values, which the paper's record leaves out) are copied as printed, signs from the
+  page images, and each is a reproduction comparison of a run on the released files. The 33 red 3D and in
+  vitro curves read from Figs. 3-9 in boileau2015's record are compared with the released columns as
+  validations (validations.yaml; q_figure_validations).
+
+  The key finding: alignment. Read as the READMEs state (the reference's t = 0 at tini), the RMS and MAX
+  errors of B2 and B3 are tens of times the printed ones. One unstated lag per benchmark reproduces every
+  printed RMS and MAX error to the last digit: 56 ms (B2), 57 ms (B3), 1 ms (B4), -1 ms (B5), plus 1 ms for
+  the files whose clock starts at 0.001 s (q_alignment). These lags are added and fitted to the printed
+  tables, so those comparisons show that one number per solver fits all its values, not that the alignment
+  is known. The alternatives (0, 0.055 s) give the README reading. B3 also needs the solution wrapped by
+  one period past the files' end (q_wrap). SYS and DIAS errors hardly depend on the lag.
+
+  What reproduces. Table IV (carotid): 96 values, all reproduced or close (three FVM values within a
+  rounding step). Table VIII (bifurcation): all 216 reproduced. Table VI (aorta): all except STM E_Q^DIAS,
+  printed 12.95% against 2.95% from the data, possibly a stray digit (q_table6_stm_qdias), and the four
+  FVM diastolic errors (q_b3_fvm_dias). Table X (37 arteries): about 350 of 384 reproduced or close. The
+  exceptions are the right anterior tibial pressure RMS and MAX for every scheme, with the largest errors
+  in the last in vitro samples (q_b5_tibial), and a few small diastolic-pressure errors, mostly at the
+  splenic site (q_b5_pdias); McC keeps a residual misfit of about 0.1 (q_b5_residual). B1: the inviscid peak
+  changes by -0.71% to +0.86% between 0.1 and 1.5 s, within the paper's 'less than 0.9%' (a bound, no
+  verdict; q_b1_peak_reference).
+
+  Differences from the papers. B5 mesh.txt agrees with alastruey2011 Table 2 in all 222 lengths, radii,
+  thicknesses and wave speeds. Its outlet resistances are labelled 'R1 [Pa*s/m3]' but carry Table 2's
+  Rp in GPa s m^-3, so all 16 differ by 10^9 (q_b5_resistance_unit). The B6 mesh agrees with Tables XII-XIII
+  in all 77 lengths and 154 radii and in all 31 R1 and R2. Two of 31 compliances are one off in the last
+  printed digit (q_b6_rounding), and four segment names differ (q_b6_names). The B6 README's time list ends
+  in '1.0' for 10.0 (q_b6_readme_times). The first row of the B4 LCG files is NaN (q_b4_lcg_nan).
+
+  Not checked here: B6 (ADAN56) waveforms and the B1 viscous pulses, which no printed number of the paper
+  rests on except figures its record did not read; the 1D curves of Figs. 3-16; and the in vitro
+  measurements against alastruey2011's own model (a later cross-record job can use ExpData through the
+  waveform models).

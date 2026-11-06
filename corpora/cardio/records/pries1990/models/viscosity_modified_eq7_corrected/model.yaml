@@ -1,0 +1,24 @@
+id: viscosity_modified_eq7_corrected
+name: modified relative apparent viscosity in vivo, Eq. 7 with the fourth power on the whole ratio
+role: model
+stated: {page: 6, quote: "Equations 2 and 3, with a diameter-dependent factor", where: Eq. 7}
+equation: "eta_rel' = eta_rel (D/(D - W))^4"
+inputs:
+  D: {quantity: vessel_diameter, unit: um}
+  HD: {quantity: discharge_hematocrit, unit: dimensionless}
+  W: {quantity: viscosity_width_parameter, unit: um}
+outputs:
+  eta_rel_mod: {quantity: relative_apparent_viscosity, unit: dimensionless}
+settings: {}
+built_from: [viscosity_invitro]
+stochastic: false
+variant_of: viscosity_modified_eq7
+corrections:
+  - equation: Eq. 7
+    change: "factor (D/(D - W))^4 instead of the printed D^4/(D - W)"
+    evidence: >
+      A dimension argument: the printed factor D^4/(D - W) has the dimension of a length cubed, so
+      eta_rel' would not be a relative (dimensionless) viscosity, and with D in um it gives values of
+      order 10^6 at D = 100 um. Fig. 3 (p. 6), drawn with W = 3.5 um, approaches the Fig. 1 curves
+      at large D (e.g. about 4.5 for HD = 0.45 at D = 100 um, where Eq. 2 gives 3.9), the ratio
+      (100/96.5)^4 = 1.15 that the fourth power of D/(D - W) gives.

@@ -1,0 +1,102 @@
+# pries2005's in vitro viscosity law (Eqs. 5-7, vitro_viscosity, described from ref. 27 = pries1992)
+# judged against the in vitro tube viscosities measured or compiled in pries1992. pries2005 (p. 2):
+# "a meta-analysis of experimental data from numerous in vitro studies of red cell suspensions
+# perfused through ~1-mm- down to 3.3-um-diameter glass tubes (27). These data were used to derive a
+# parametric description". The law's constants (Eq. 6 = pries1992 Eq. 2, Eq. 7 = pries1992 Eq. 4)
+# were fitted by pries1992 to exactly these data: the 163 points at HD 0.45 (Figs. 2 and 5) and the C
+# values of the per-diameter data sets of Fig. 3 (Table 2). So none of these is an independent test:
+# all are entered as fit_quality. Points scatter about the fit, so point-by-point misses are expected.
+
+- id: val_eta045_p92_fig5_points
+  model: vitro_viscosity
+  inputs: {HD: pries1992/HctD_045}
+  sweep: {D: pries1992/eta_fig5_points_HD045}
+  output: eta_vitro
+  against: pries1992/eta_fig5_points_HD045
+  purpose: fit_quality
+  quantities:
+    pries1992/tube_diameter: tube_diameter
+    pries1992/discharge_hematocrit: discharge_hematocrit
+    pries1992/relative_apparent_viscosity: relative_viscosity_vitro
+  basis: >
+    Eqs. 5-7 at HD = 0.45 reduce to Eq. 6, pries1992's Eq. 2, which pries1992 fitted to these 163
+    compiled points (pries2005 p. 2: "These data were used to derive a parametric description of
+    relative apparent viscosity"). Fitted: the constants of Eq. 6 (220, 1.3, 3.2, 2.44, 0.06, 0.645).
+
+- id: val_eta_p92_fig3_33um
+  model: vitro_viscosity
+  inputs: {D: D_p92_fig3_3p3}
+  sweep: {HD: pries1992/eta_fig3_33um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_33um_points
+  purpose: fit_quality
+  quantities: &q3 {pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_viscosity_vitro}
+  basis: &fig3basis >
+    Eqs. 5-7 give eta_vitro at any D and HD (p. 2); pries1992 Fig. 3 gives measured eta_rel against HD
+    in one tube diameter per panel. Fitted: Eq. 7's C(D) was fitted by pries1992 to the C values of
+    these per-diameter data sets (its Table 2 and Fig. 4), and Eq. 6 to their values at HD 0.45, so
+    the law at this diameter is a fit to this measurement.
+- id: val_eta_p92_fig3_44um
+  model: vitro_viscosity
+  inputs: {D: D_p92_fig3_4p4}
+  sweep: {HD: pries1992/eta_fig3_44um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_44um_points
+  purpose: fit_quality
+  quantities: *q3
+  basis: *fig3basis
+- id: val_eta_p92_fig3_56um
+  model: vitro_viscosity
+  inputs: {D: D_p92_fig3_5p6}
+  sweep: {HD: pries1992/eta_fig3_56um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_56um_points
+  purpose: fit_quality
+  quantities: *q3
+  basis: *fig3basis
+- id: val_eta_p92_fig3_6um
+  model: vitro_viscosity
+  inputs: {D: D_p92_fig3_6}
+  sweep: {HD: pries1992/eta_fig3_6um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_6um_points
+  purpose: fit_quality
+  quantities: *q3
+  basis: *fig3basis
+- id: val_eta_p92_fig3_9um
+  model: vitro_viscosity
+  inputs: {D: D_p92_fig3_9}
+  sweep: {HD: pries1992/eta_fig3_9um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_9um_points
+  purpose: fit_quality
+  quantities: *q3
+  basis: *fig3basis
+- id: val_eta_p92_fig3_12um
+  model: vitro_viscosity
+  inputs: {D: D_p92_fig3_12}
+  sweep: {HD: pries1992/eta_fig3_12um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_12um_points
+  purpose: fit_quality
+  quantities: *q3
+  basis: *fig3basis
+- id: val_eta_p92_fig3_20um
+  model: vitro_viscosity
+  inputs: {D: pries1992/D_20}
+  sweep: {HD: pries1992/eta_fig3_20um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_20um_points
+  purpose: fit_quality
+  quantities: {pries1992/tube_diameter: tube_diameter, pries1992/discharge_hematocrit: discharge_hematocrit, pries1992/relative_apparent_viscosity: relative_viscosity_vitro}
+  conditions_ok: "the pries1992 20 um data are in a medium of 1.85 cP; eta_rel is relative to that medium, as eta_vitro is relative to the suspending medium, so the relative values compare"
+  basis: *fig3basis
+- id: val_eta_p92_fig3_40um
+  model: vitro_viscosity
+  inputs: {D: D_p92_fig3_40}
+  sweep: {HD: pries1992/eta_fig3_40um_points}
+  output: eta_vitro
+  against: pries1992/eta_fig3_40um_points
+  purpose: fit_quality
+  quantities: *q3
+  basis: *fig3basis

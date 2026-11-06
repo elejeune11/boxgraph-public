@@ -1,0 +1,2364 @@
+- id: run_Z0_printed_inputs
+  model: char_impedance
+  inputs: {Lp: Lp_aorta_printed, Cp: Cp_aorta_printed}
+  outputs: {Z0: Z0_from_printed_pred}
+- id: run_Z0_segment_2a
+  model: char_impedance
+  inputs: {Lp: s2a_Lp_pred, Cp: s2a_Cp_pred}
+  outputs: {Z0: Z0_from_2a_pred}
+- id: run_c_printed_inputs
+  model: phase_velocity
+  inputs: {Lp: Lp_aorta_printed, Cp: Cp_aorta_printed}
+  outputs: {c: c_from_printed_pred}
+- id: run_c_segment_2a
+  model: phase_velocity
+  inputs: {Lp: s2a_Lp_pred, Cp: s2a_Cp_pred}
+  outputs: {c: c_from_2a_pred}
+- id: run_lumping_15cps
+  model: lumping_error
+  inputs: {gdz: gdz_15cps}
+  outputs: {err_L: err_L_pred, err_pi: err_pi_pred}
+- id: run_rc_normal
+  model: rc_decay
+  inputs: {R: R_normal, Ctot: total_compliance_pred, k: k_normal}
+  outputs: {tau: tau_normal_pred}
+- id: run_rc_stiff
+  model: rc_decay
+  inputs: {R: R_normal, Ctot: total_compliance_pred, k: k_stiff}
+  outputs: {tau: tau_stiff_pred}
+- id: run_rc_high_caption
+  model: rc_decay
+  inputs: {R: R_high, Ctot: total_compliance_pred, k: k_normal}
+  outputs: {tau: tau_high_caption_pred}
+- id: run_rc_high_twice
+  model: rc_decay
+  inputs: {R: R_high_twice, Ctot: total_compliance_pred, k: k_normal}
+  outputs: {tau: tau_high_twice_pred}
+- id: run_rc_low
+  model: rc_decay
+  inputs: {R: R_low, Ctot: total_compliance_pred, k: k_normal}
+  outputs: {tau: tau_low_pred}
+- id: run_translation
+  model: unit_translation
+  inputs: {kp: kp_coefficient, kq: kq_printed, kt: kt_printed}
+  outputs: {kR: kR_pred, kL: kL_pred, kC: kC_pred, kV: kV_pred}
+- id: run_Z0_s5c
+  model: char_impedance
+  inputs: {Lp: s5c_Lp_pred, Cp: s5c_Cp_pred}
+  outputs: {Z0: Z0_s5c_pred}
+  note: "Z0 of the last abdominal aorta segment, the mother vessel of the aortic bifurcation (added by the audit)"
+- id: run_Z0_s6a
+  model: char_impedance
+  inputs: {Lp: s6a_Lp_pred, Cp: s6a_Cp_pred}
+  outputs: {Z0: Z0_s6a_pred}
+  note: "Z0 of the common iliac artery (paired, D), the daughters of the aortic bifurcation (added by the audit)"
+- id: run_reflection_aortic_bifurcation
+  model: branch_reflection
+  inputs: {Z0_m: Z0_s5c_pred, Z0_d1: Z0_s6a_pred, Z0_d2: Z0_s6a_pred}
+  outputs: {Gamma: gamma_aortic_bifurcation_pred}
+  note: "Added choice: the aortic bifurcation (5C into two 6A) as an example branch point, daughters loaded by their own Z0 (see q_branch_choice)"
+- id: run_stiffening
+  model: stiffening_increase
+  inputs: {k: k_stiff}
+  outputs: {dZ: dZ_stiff_pred, dc: dc_stiff_pred}
+- id: run_C_s2a
+  model: segment_compliance
+  inputs:
+    r: s2a_r
+    h: s2a_h
+    E: s2a_E
+    dz: s2a_dz
+  outputs:
+    C: s2a_C_pred
+    Cp: s2a_Cp_pred
+- id: run_L_s2a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s2a_r
+    dz: s2a_dz
+  outputs:
+    L: s2a_L_pred
+    Lp: s2a_Lp_pred
+- id: run_R_s2a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s2a_r
+    dz: s2a_dz
+  outputs:
+    R: s2a_R_pred
+- id: run_C_s2b
+  model: segment_compliance
+  inputs:
+    r: s2b_r
+    h: s2b_h
+    E: s2b_E
+    dz: s2b_dz
+  outputs:
+    C: s2b_C_pred
+    Cp: s2b_Cp_pred
+- id: run_L_s2b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s2b_r
+    dz: s2b_dz
+  outputs:
+    L: s2b_L_pred
+    Lp: s2b_Lp_pred
+- id: run_R_s2b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s2b_r
+    dz: s2b_dz
+  outputs:
+    R: s2b_R_pred
+- id: run_C_s3a
+  model: segment_compliance
+  inputs:
+    r: s3a_r
+    h: s3a_h
+    E: s3a_E
+    dz: s3a_dz
+  outputs:
+    C: s3a_C_pred
+    Cp: s3a_Cp_pred
+- id: run_L_s3a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s3a_r
+    dz: s3a_dz
+  outputs:
+    L: s3a_L_pred
+    Lp: s3a_Lp_pred
+- id: run_R_s3a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s3a_r
+    dz: s3a_dz
+  outputs:
+    R: s3a_R_pred
+- id: run_C_s3b
+  model: segment_compliance
+  inputs:
+    r: s3b_r
+    h: s3b_h
+    E: s3b_E
+    dz: s3b_dz
+  outputs:
+    C: s3b_C_pred
+    Cp: s3b_Cp_pred
+- id: run_L_s3b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s3b_r
+    dz: s3b_dz
+  outputs:
+    L: s3b_L_pred
+    Lp: s3b_Lp_pred
+- id: run_R_s3b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s3b_r
+    dz: s3b_dz
+  outputs:
+    R: s3b_R_pred
+- id: run_C_s4a
+  model: segment_compliance
+  inputs:
+    r: s4a_r
+    h: s4a_h
+    E: s4a_E
+    dz: s4a_dz
+  outputs:
+    C: s4a_C_pred
+    Cp: s4a_Cp_pred
+- id: run_L_s4a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s4a_r
+    dz: s4a_dz
+  outputs:
+    L: s4a_L_pred
+    Lp: s4a_Lp_pred
+- id: run_R_s4a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s4a_r
+    dz: s4a_dz
+  outputs:
+    R: s4a_R_pred
+- id: run_C_s4b
+  model: segment_compliance
+  inputs:
+    r: s4b_r
+    h: s4b_h
+    E: s4b_E
+    dz: s4b_dz
+  outputs:
+    C: s4b_C_pred
+    Cp: s4b_Cp_pred
+- id: run_L_s4b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s4b_r
+    dz: s4b_dz
+  outputs:
+    L: s4b_L_pred
+    Lp: s4b_Lp_pred
+- id: run_R_s4b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s4b_r
+    dz: s4b_dz
+  outputs:
+    R: s4b_R_pred
+- id: run_C_s4c
+  model: segment_compliance
+  inputs:
+    r: s4c_r
+    h: s4c_h
+    E: s4c_E
+    dz: s4c_dz
+  outputs:
+    C: s4c_C_pred
+    Cp: s4c_Cp_pred
+- id: run_L_s4c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s4c_r
+    dz: s4c_dz
+  outputs:
+    L: s4c_L_pred
+    Lp: s4c_Lp_pred
+- id: run_R_s4c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s4c_r
+    dz: s4c_dz
+  outputs:
+    R: s4c_R_pred
+- id: run_C_s5a
+  model: segment_compliance
+  inputs:
+    r: s5a_r
+    h: s5a_h
+    E: s5a_E
+    dz: s5a_dz
+  outputs:
+    C: s5a_C_pred
+    Cp: s5a_Cp_pred
+- id: run_L_s5a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s5a_r
+    dz: s5a_dz
+  outputs:
+    L: s5a_L_pred
+    Lp: s5a_Lp_pred
+- id: run_R_s5a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s5a_r
+    dz: s5a_dz
+  outputs:
+    R: s5a_R_pred
+- id: run_C_s5b
+  model: segment_compliance
+  inputs:
+    r: s5b_r
+    h: s5b_h
+    E: s5b_E
+    dz: s5b_dz
+  outputs:
+    C: s5b_C_pred
+    Cp: s5b_Cp_pred
+- id: run_L_s5b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s5b_r
+    dz: s5b_dz
+  outputs:
+    L: s5b_L_pred
+    Lp: s5b_Lp_pred
+- id: run_R_s5b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s5b_r
+    dz: s5b_dz
+  outputs:
+    R: s5b_R_pred
+- id: run_C_s5c
+  model: segment_compliance
+  inputs:
+    r: s5c_r
+    h: s5c_h
+    E: s5c_E
+    dz: s5c_dz
+  outputs:
+    C: s5c_C_pred
+    Cp: s5c_Cp_pred
+- id: run_L_s5c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s5c_r
+    dz: s5c_dz
+  outputs:
+    L: s5c_L_pred
+    Lp: s5c_Lp_pred
+- id: run_R_s5c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s5c_r
+    dz: s5c_dz
+  outputs:
+    R: s5c_R_pred
+- id: run_C_s6a
+  model: segment_compliance
+  inputs:
+    r: s6a_r
+    h: s6a_h
+    E: s6a_E
+    dz: s6a_dz
+  outputs:
+    C: s6a_C_pred
+    Cp: s6a_Cp_pred
+- id: run_L_s6a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s6a_r
+    dz: s6a_dz
+  outputs:
+    L: s6a_L_pred
+    Lp: s6a_Lp_pred
+- id: run_R_s6a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s6a_r
+    dz: s6a_dz
+  outputs:
+    R: s6a_R_pred
+- id: run_C_s7a
+  model: segment_compliance
+  inputs:
+    r: s7a_r
+    h: s7a_h
+    E: s7a_E
+    dz: s7a_dz
+  outputs:
+    C: s7a_C_pred
+    Cp: s7a_Cp_pred
+- id: run_L_s7a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s7a_r
+    dz: s7a_dz
+  outputs:
+    L: s7a_L_pred
+    Lp: s7a_Lp_pred
+- id: run_R_s7a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s7a_r
+    dz: s7a_dz
+  outputs:
+    R: s7a_R_pred
+- id: run_C_s7b
+  model: segment_compliance
+  inputs:
+    r: s7b_r
+    h: s7b_h
+    E: s7b_E
+    dz: s7b_dz
+  outputs:
+    C: s7b_C_pred
+    Cp: s7b_Cp_pred
+- id: run_L_s7b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s7b_r
+    dz: s7b_dz
+  outputs:
+    L: s7b_L_pred
+    Lp: s7b_Lp_pred
+- id: run_R_s7b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s7b_r
+    dz: s7b_dz
+  outputs:
+    R: s7b_R_pred
+- id: run_C_s8a
+  model: segment_compliance
+  inputs:
+    r: s8a_r
+    h: s8a_h
+    E: s8a_E
+    dz: s8a_dz
+  outputs:
+    C: s8a_C_pred
+    Cp: s8a_Cp_pred
+- id: run_L_s8a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s8a_r
+    dz: s8a_dz
+  outputs:
+    L: s8a_L_pred
+    Lp: s8a_Lp_pred
+- id: run_R_s8a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s8a_r
+    dz: s8a_dz
+  outputs:
+    R: s8a_R_pred
+- id: run_C_s8b
+  model: segment_compliance
+  inputs:
+    r: s8b_r
+    h: s8b_h
+    E: s8b_E
+    dz: s8b_dz
+  outputs:
+    C: s8b_C_pred
+    Cp: s8b_Cp_pred
+- id: run_L_s8b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s8b_r
+    dz: s8b_dz
+  outputs:
+    L: s8b_L_pred
+    Lp: s8b_Lp_pred
+- id: run_R_s8b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s8b_r
+    dz: s8b_dz
+  outputs:
+    R: s8b_R_pred
+- id: run_C_s9a
+  model: segment_compliance
+  inputs:
+    r: s9a_r
+    h: s9a_h
+    E: s9a_E
+    dz: s9a_dz
+  outputs:
+    C: s9a_C_pred
+    Cp: s9a_Cp_pred
+- id: run_L_s9a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s9a_r
+    dz: s9a_dz
+  outputs:
+    L: s9a_L_pred
+    Lp: s9a_Lp_pred
+- id: run_R_s9a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s9a_r
+    dz: s9a_dz
+  outputs:
+    R: s9a_R_pred
+- id: run_C_s9b
+  model: segment_compliance
+  inputs:
+    r: s9b_r
+    h: s9b_h
+    E: s9b_E
+    dz: s9b_dz
+  outputs:
+    C: s9b_C_pred
+    Cp: s9b_Cp_pred
+- id: run_L_s9b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s9b_r
+    dz: s9b_dz
+  outputs:
+    L: s9b_L_pred
+    Lp: s9b_Lp_pred
+- id: run_R_s9b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s9b_r
+    dz: s9b_dz
+  outputs:
+    R: s9b_R_pred
+- id: run_C_s9c
+  model: segment_compliance
+  inputs:
+    r: s9c_r
+    h: s9c_h
+    E: s9c_E
+    dz: s9c_dz
+  outputs:
+    C: s9c_C_pred
+    Cp: s9c_Cp_pred
+- id: run_L_s9c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s9c_r
+    dz: s9c_dz
+  outputs:
+    L: s9c_L_pred
+    Lp: s9c_Lp_pred
+- id: run_R_s9c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s9c_r
+    dz: s9c_dz
+  outputs:
+    R: s9c_R_pred
+- id: run_C_s9d
+  model: segment_compliance
+  inputs:
+    r: s9d_r
+    h: s9d_h
+    E: s9d_E
+    dz: s9d_dz
+  outputs:
+    C: s9d_C_pred
+    Cp: s9d_Cp_pred
+- id: run_L_s9d
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s9d_r
+    dz: s9d_dz
+  outputs:
+    L: s9d_L_pred
+    Lp: s9d_Lp_pred
+- id: run_R_s9d
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s9d_r
+    dz: s9d_dz
+  outputs:
+    R: s9d_R_pred
+- id: run_C_s9e
+  model: segment_compliance
+  inputs:
+    r: s9e_r
+    h: s9e_h
+    E: s9e_E
+    dz: s9e_dz
+  outputs:
+    C: s9e_C_pred
+    Cp: s9e_Cp_pred
+- id: run_L_s9e
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s9e_r
+    dz: s9e_dz
+  outputs:
+    L: s9e_L_pred
+    Lp: s9e_Lp_pred
+- id: run_R_s9e
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s9e_r
+    dz: s9e_dz
+  outputs:
+    R: s9e_R_pred
+- id: run_C_s10a
+  model: segment_compliance
+  inputs:
+    r: s10a_r
+    h: s10a_h
+    E: s10a_E
+    dz: s10a_dz
+  outputs:
+    C: s10a_C_pred
+    Cp: s10a_Cp_pred
+- id: run_L_s10a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s10a_r
+    dz: s10a_dz
+  outputs:
+    L: s10a_L_pred
+    Lp: s10a_Lp_pred
+- id: run_R_s10a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s10a_r
+    dz: s10a_dz
+  outputs:
+    R: s10a_R_pred
+- id: run_C_s10b
+  model: segment_compliance
+  inputs:
+    r: s10b_r
+    h: s10b_h
+    E: s10b_E
+    dz: s10b_dz
+  outputs:
+    C: s10b_C_pred
+    Cp: s10b_Cp_pred
+- id: run_L_s10b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s10b_r
+    dz: s10b_dz
+  outputs:
+    L: s10b_L_pred
+    Lp: s10b_Lp_pred
+- id: run_R_s10b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s10b_r
+    dz: s10b_dz
+  outputs:
+    R: s10b_R_pred
+- id: run_C_s10c
+  model: segment_compliance
+  inputs:
+    r: s10c_r
+    h: s10c_h
+    E: s10c_E
+    dz: s10c_dz
+  outputs:
+    C: s10c_C_pred
+    Cp: s10c_Cp_pred
+- id: run_L_s10c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s10c_r
+    dz: s10c_dz
+  outputs:
+    L: s10c_L_pred
+    Lp: s10c_Lp_pred
+- id: run_R_s10c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s10c_r
+    dz: s10c_dz
+  outputs:
+    R: s10c_R_pred
+- id: run_C_s11a
+  model: segment_compliance
+  inputs:
+    r: s11a_r
+    h: s11a_h
+    E: s11a_E
+    dz: s11a_dz
+  outputs:
+    C: s11a_C_pred
+    Cp: s11a_Cp_pred
+- id: run_L_s11a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s11a_r
+    dz: s11a_dz
+  outputs:
+    L: s11a_L_pred
+    Lp: s11a_Lp_pred
+- id: run_R_s11a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s11a_r
+    dz: s11a_dz
+  outputs:
+    R: s11a_R_pred
+- id: run_C_s11b
+  model: segment_compliance
+  inputs:
+    r: s11b_r
+    h: s11b_h
+    E: s11b_E
+    dz: s11b_dz
+  outputs:
+    C: s11b_C_pred
+    Cp: s11b_Cp_pred
+- id: run_L_s11b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s11b_r
+    dz: s11b_dz
+  outputs:
+    L: s11b_L_pred
+    Lp: s11b_Lp_pred
+- id: run_R_s11b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s11b_r
+    dz: s11b_dz
+  outputs:
+    R: s11b_R_pred
+- id: run_C_s11c
+  model: segment_compliance
+  inputs:
+    r: s11c_r
+    h: s11c_h
+    E: s11c_E
+    dz: s11c_dz
+  outputs:
+    C: s11c_C_pred
+    Cp: s11c_Cp_pred
+- id: run_L_s11c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s11c_r
+    dz: s11c_dz
+  outputs:
+    L: s11c_L_pred
+    Lp: s11c_Lp_pred
+- id: run_R_s11c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s11c_r
+    dz: s11c_dz
+  outputs:
+    R: s11c_R_pred
+- id: run_C_s11d
+  model: segment_compliance
+  inputs:
+    r: s11d_r
+    h: s11d_h
+    E: s11d_E
+    dz: s11d_dz
+  outputs:
+    C: s11d_C_pred
+    Cp: s11d_Cp_pred
+- id: run_L_s11d
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s11d_r
+    dz: s11d_dz
+  outputs:
+    L: s11d_L_pred
+    Lp: s11d_Lp_pred
+- id: run_R_s11d
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s11d_r
+    dz: s11d_dz
+  outputs:
+    R: s11d_R_pred
+- id: run_C_s11e
+  model: segment_compliance
+  inputs:
+    r: s11e_r
+    h: s11e_h
+    E: s11e_E
+    dz: s11e_dz
+  outputs:
+    C: s11e_C_pred
+    Cp: s11e_Cp_pred
+- id: run_L_s11e
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s11e_r
+    dz: s11e_dz
+  outputs:
+    L: s11e_L_pred
+    Lp: s11e_Lp_pred
+- id: run_R_s11e
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s11e_r
+    dz: s11e_dz
+  outputs:
+    R: s11e_R_pred
+- id: run_C_s12a
+  model: segment_compliance
+  inputs:
+    r: s12a_r
+    h: s12a_h
+    E: s12a_E
+    dz: s12a_dz
+  outputs:
+    C: s12a_C_pred
+    Cp: s12a_Cp_pred
+- id: run_L_s12a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s12a_r
+    dz: s12a_dz
+  outputs:
+    L: s12a_L_pred
+    Lp: s12a_Lp_pred
+- id: run_R_s12a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s12a_r
+    dz: s12a_dz
+  outputs:
+    R: s12a_R_pred
+- id: run_C_s12b
+  model: segment_compliance
+  inputs:
+    r: s12b_r
+    h: s12b_h
+    E: s12b_E
+    dz: s12b_dz
+  outputs:
+    C: s12b_C_pred
+    Cp: s12b_Cp_pred
+- id: run_L_s12b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s12b_r
+    dz: s12b_dz
+  outputs:
+    L: s12b_L_pred
+    Lp: s12b_Lp_pred
+- id: run_R_s12b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s12b_r
+    dz: s12b_dz
+  outputs:
+    R: s12b_R_pred
+- id: run_C_s12c
+  model: segment_compliance
+  inputs:
+    r: s12c_r
+    h: s12c_h
+    E: s12c_E
+    dz: s12c_dz
+  outputs:
+    C: s12c_C_pred
+    Cp: s12c_Cp_pred
+- id: run_L_s12c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s12c_r
+    dz: s12c_dz
+  outputs:
+    L: s12c_L_pred
+    Lp: s12c_Lp_pred
+- id: run_R_s12c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s12c_r
+    dz: s12c_dz
+  outputs:
+    R: s12c_R_pred
+- id: run_C_s12d
+  model: segment_compliance
+  inputs:
+    r: s12d_r
+    h: s12d_h
+    E: s12d_E
+    dz: s12d_dz
+  outputs:
+    C: s12d_C_pred
+    Cp: s12d_Cp_pred
+- id: run_L_s12d
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s12d_r
+    dz: s12d_dz
+  outputs:
+    L: s12d_L_pred
+    Lp: s12d_Lp_pred
+- id: run_R_s12d
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s12d_r
+    dz: s12d_dz
+  outputs:
+    R: s12d_R_pred
+- id: run_C_s12e
+  model: segment_compliance
+  inputs:
+    r: s12e_r
+    h: s12e_h
+    E: s12e_E
+    dz: s12e_dz
+  outputs:
+    C: s12e_C_pred
+    Cp: s12e_Cp_pred
+- id: run_L_s12e
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s12e_r
+    dz: s12e_dz
+  outputs:
+    L: s12e_L_pred
+    Lp: s12e_Lp_pred
+- id: run_R_s12e
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s12e_r
+    dz: s12e_dz
+  outputs:
+    R: s12e_R_pred
+- id: run_C_s13a
+  model: segment_compliance
+  inputs:
+    r: s13a_r
+    h: s13a_h
+    E: s13a_E
+    dz: s13a_dz
+  outputs:
+    C: s13a_C_pred
+    Cp: s13a_Cp_pred
+- id: run_L_s13a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s13a_r
+    dz: s13a_dz
+  outputs:
+    L: s13a_L_pred
+    Lp: s13a_Lp_pred
+- id: run_R_s13a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s13a_r
+    dz: s13a_dz
+  outputs:
+    R: s13a_R_pred
+- id: run_C_s14a
+  model: segment_compliance
+  inputs:
+    r: s14a_r
+    h: s14a_h
+    E: s14a_E
+    dz: s14a_dz
+  outputs:
+    C: s14a_C_pred
+    Cp: s14a_Cp_pred
+- id: run_L_s14a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s14a_r
+    dz: s14a_dz
+  outputs:
+    L: s14a_L_pred
+    Lp: s14a_Lp_pred
+- id: run_R_s14a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s14a_r
+    dz: s14a_dz
+  outputs:
+    R: s14a_R_pred
+- id: run_C_s14b
+  model: segment_compliance
+  inputs:
+    r: s14b_r
+    h: s14b_h
+    E: s14b_E
+    dz: s14b_dz
+  outputs:
+    C: s14b_C_pred
+    Cp: s14b_Cp_pred
+- id: run_L_s14b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s14b_r
+    dz: s14b_dz
+  outputs:
+    L: s14b_L_pred
+    Lp: s14b_Lp_pred
+- id: run_R_s14b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s14b_r
+    dz: s14b_dz
+  outputs:
+    R: s14b_R_pred
+- id: run_C_s15a
+  model: segment_compliance
+  inputs:
+    r: s15a_r
+    h: s15a_h
+    E: s15a_E
+    dz: s15a_dz
+  outputs:
+    C: s15a_C_pred
+    Cp: s15a_Cp_pred
+- id: run_L_s15a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s15a_r
+    dz: s15a_dz
+  outputs:
+    L: s15a_L_pred
+    Lp: s15a_Lp_pred
+- id: run_R_s15a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s15a_r
+    dz: s15a_dz
+  outputs:
+    R: s15a_R_pred
+- id: run_C_s15b
+  model: segment_compliance
+  inputs:
+    r: s15b_r
+    h: s15b_h
+    E: s15b_E
+    dz: s15b_dz
+  outputs:
+    C: s15b_C_pred
+    Cp: s15b_Cp_pred
+- id: run_L_s15b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s15b_r
+    dz: s15b_dz
+  outputs:
+    L: s15b_L_pred
+    Lp: s15b_Lp_pred
+- id: run_R_s15b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s15b_r
+    dz: s15b_dz
+  outputs:
+    R: s15b_R_pred
+- id: run_C_s16a
+  model: segment_compliance
+  inputs:
+    r: s16a_r
+    h: s16a_h
+    E: s16a_E
+    dz: s16a_dz
+  outputs:
+    C: s16a_C_pred
+    Cp: s16a_Cp_pred
+- id: run_L_s16a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s16a_r
+    dz: s16a_dz
+  outputs:
+    L: s16a_L_pred
+    Lp: s16a_Lp_pred
+- id: run_R_s16a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s16a_r
+    dz: s16a_dz
+  outputs:
+    R: s16a_R_pred
+- id: run_C_s16b
+  model: segment_compliance
+  inputs:
+    r: s16b_r
+    h: s16b_h
+    E: s16b_E
+    dz: s16b_dz
+  outputs:
+    C: s16b_C_pred
+    Cp: s16b_Cp_pred
+- id: run_L_s16b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s16b_r
+    dz: s16b_dz
+  outputs:
+    L: s16b_L_pred
+    Lp: s16b_Lp_pred
+- id: run_R_s16b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s16b_r
+    dz: s16b_dz
+  outputs:
+    R: s16b_R_pred
+- id: run_C_s16c
+  model: segment_compliance
+  inputs:
+    r: s16c_r
+    h: s16c_h
+    E: s16c_E
+    dz: s16c_dz
+  outputs:
+    C: s16c_C_pred
+    Cp: s16c_Cp_pred
+- id: run_L_s16c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s16c_r
+    dz: s16c_dz
+  outputs:
+    L: s16c_L_pred
+    Lp: s16c_Lp_pred
+- id: run_R_s16c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s16c_r
+    dz: s16c_dz
+  outputs:
+    R: s16c_R_pred
+- id: run_C_s16d
+  model: segment_compliance
+  inputs:
+    r: s16d_r
+    h: s16d_h
+    E: s16d_E
+    dz: s16d_dz
+  outputs:
+    C: s16d_C_pred
+    Cp: s16d_Cp_pred
+- id: run_L_s16d
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s16d_r
+    dz: s16d_dz
+  outputs:
+    L: s16d_L_pred
+    Lp: s16d_Lp_pred
+- id: run_R_s16d
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s16d_r
+    dz: s16d_dz
+  outputs:
+    R: s16d_R_pred
+- id: run_C_s17a
+  model: segment_compliance
+  inputs:
+    r: s17a_r
+    h: s17a_h
+    E: s17a_E
+    dz: s17a_dz
+  outputs:
+    C: s17a_C_pred
+    Cp: s17a_Cp_pred
+- id: run_L_s17a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s17a_r
+    dz: s17a_dz
+  outputs:
+    L: s17a_L_pred
+    Lp: s17a_Lp_pred
+- id: run_R_s17a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s17a_r
+    dz: s17a_dz
+  outputs:
+    R: s17a_R_pred
+- id: run_C_s17b
+  model: segment_compliance
+  inputs:
+    r: s17b_r
+    h: s17b_h
+    E: s17b_E
+    dz: s17b_dz
+  outputs:
+    C: s17b_C_pred
+    Cp: s17b_Cp_pred
+- id: run_L_s17b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s17b_r
+    dz: s17b_dz
+  outputs:
+    L: s17b_L_pred
+    Lp: s17b_Lp_pred
+- id: run_R_s17b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s17b_r
+    dz: s17b_dz
+  outputs:
+    R: s17b_R_pred
+- id: run_C_s17c
+  model: segment_compliance
+  inputs:
+    r: s17c_r
+    h: s17c_h
+    E: s17c_E
+    dz: s17c_dz
+  outputs:
+    C: s17c_C_pred
+    Cp: s17c_Cp_pred
+- id: run_L_s17c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s17c_r
+    dz: s17c_dz
+  outputs:
+    L: s17c_L_pred
+    Lp: s17c_Lp_pred
+- id: run_R_s17c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s17c_r
+    dz: s17c_dz
+  outputs:
+    R: s17c_R_pred
+- id: run_C_s17d
+  model: segment_compliance
+  inputs:
+    r: s17d_r
+    h: s17d_h
+    E: s17d_E
+    dz: s17d_dz
+  outputs:
+    C: s17d_C_pred
+    Cp: s17d_Cp_pred
+- id: run_L_s17d
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s17d_r
+    dz: s17d_dz
+  outputs:
+    L: s17d_L_pred
+    Lp: s17d_Lp_pred
+- id: run_R_s17d
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s17d_r
+    dz: s17d_dz
+  outputs:
+    R: s17d_R_pred
+- id: run_C_s18a
+  model: segment_compliance
+  inputs:
+    r: s18a_r
+    h: s18a_h
+    E: s18a_E
+    dz: s18a_dz
+  outputs:
+    C: s18a_C_pred
+    Cp: s18a_Cp_pred
+- id: run_L_s18a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s18a_r
+    dz: s18a_dz
+  outputs:
+    L: s18a_L_pred
+    Lp: s18a_Lp_pred
+- id: run_R_s18a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s18a_r
+    dz: s18a_dz
+  outputs:
+    R: s18a_R_pred
+- id: run_C_s18b
+  model: segment_compliance
+  inputs:
+    r: s18b_r
+    h: s18b_h
+    E: s18b_E
+    dz: s18b_dz
+  outputs:
+    C: s18b_C_pred
+    Cp: s18b_Cp_pred
+- id: run_L_s18b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s18b_r
+    dz: s18b_dz
+  outputs:
+    L: s18b_L_pred
+    Lp: s18b_Lp_pred
+- id: run_R_s18b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s18b_r
+    dz: s18b_dz
+  outputs:
+    R: s18b_R_pred
+- id: run_C_s18c
+  model: segment_compliance
+  inputs:
+    r: s18c_r
+    h: s18c_h
+    E: s18c_E
+    dz: s18c_dz
+  outputs:
+    C: s18c_C_pred
+    Cp: s18c_Cp_pred
+- id: run_L_s18c
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s18c_r
+    dz: s18c_dz
+  outputs:
+    L: s18c_L_pred
+    Lp: s18c_Lp_pred
+- id: run_R_s18c
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s18c_r
+    dz: s18c_dz
+  outputs:
+    R: s18c_R_pred
+- id: run_C_s18d
+  model: segment_compliance
+  inputs:
+    r: s18d_r
+    h: s18d_h
+    E: s18d_E
+    dz: s18d_dz
+  outputs:
+    C: s18d_C_pred
+    Cp: s18d_Cp_pred
+- id: run_L_s18d
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s18d_r
+    dz: s18d_dz
+  outputs:
+    L: s18d_L_pred
+    Lp: s18d_Lp_pred
+- id: run_R_s18d
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s18d_r
+    dz: s18d_dz
+  outputs:
+    R: s18d_R_pred
+- id: run_C_s19a
+  model: segment_compliance
+  inputs:
+    r: s19a_r
+    h: s19a_h
+    E: s19a_E
+    dz: s19a_dz
+  outputs:
+    C: s19a_C_pred
+    Cp: s19a_Cp_pred
+- id: run_L_s19a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s19a_r
+    dz: s19a_dz
+  outputs:
+    L: s19a_L_pred
+    Lp: s19a_Lp_pred
+- id: run_R_s19a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s19a_r
+    dz: s19a_dz
+  outputs:
+    R: s19a_R_pred
+- id: run_C_s20a
+  model: segment_compliance
+  inputs:
+    r: s20a_r
+    h: s20a_h
+    E: s20a_E
+    dz: s20a_dz
+  outputs:
+    C: s20a_C_pred
+    Cp: s20a_Cp_pred
+- id: run_L_s20a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s20a_r
+    dz: s20a_dz
+  outputs:
+    L: s20a_L_pred
+    Lp: s20a_Lp_pred
+- id: run_R_s20a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s20a_r
+    dz: s20a_dz
+  outputs:
+    R: s20a_R_pred
+- id: run_C_s21a
+  model: segment_compliance
+  inputs:
+    r: s21a_r
+    h: s21a_h
+    E: s21a_E
+    dz: s21a_dz
+  outputs:
+    C: s21a_C_pred
+    Cp: s21a_Cp_pred
+- id: run_L_s21a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s21a_r
+    dz: s21a_dz
+  outputs:
+    L: s21a_L_pred
+    Lp: s21a_Lp_pred
+- id: run_R_s21a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s21a_r
+    dz: s21a_dz
+  outputs:
+    R: s21a_R_pred
+- id: run_C_s22a
+  model: segment_compliance
+  inputs:
+    r: s22a_r
+    h: s22a_h
+    E: s22a_E
+    dz: s22a_dz
+  outputs:
+    C: s22a_C_pred
+    Cp: s22a_Cp_pred
+- id: run_L_s22a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s22a_r
+    dz: s22a_dz
+  outputs:
+    L: s22a_L_pred
+    Lp: s22a_Lp_pred
+- id: run_R_s22a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s22a_r
+    dz: s22a_dz
+  outputs:
+    R: s22a_R_pred
+- id: run_C_s23a
+  model: segment_compliance
+  inputs:
+    r: s23a_r
+    h: s23a_h
+    E: s23a_E
+    dz: s23a_dz
+  outputs:
+    C: s23a_C_pred
+    Cp: s23a_Cp_pred
+- id: run_L_s23a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s23a_r
+    dz: s23a_dz
+  outputs:
+    L: s23a_L_pred
+    Lp: s23a_Lp_pred
+- id: run_R_s23a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s23a_r
+    dz: s23a_dz
+  outputs:
+    R: s23a_R_pred
+- id: run_C_s24a
+  model: segment_compliance
+  inputs:
+    r: s24a_r
+    h: s24a_h
+    E: s24a_E
+    dz: s24a_dz
+  outputs:
+    C: s24a_C_pred
+    Cp: s24a_Cp_pred
+- id: run_L_s24a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s24a_r
+    dz: s24a_dz
+  outputs:
+    L: s24a_L_pred
+    Lp: s24a_Lp_pred
+- id: run_R_s24a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s24a_r
+    dz: s24a_dz
+  outputs:
+    R: s24a_R_pred
+- id: run_C_s25aa
+  model: segment_compliance
+  inputs:
+    r: s25aa_r
+    h: s25aa_h
+    E: s25aa_E
+    dz: s25aa_dz
+  outputs:
+    C: s25aa_C_pred
+    Cp: s25aa_Cp_pred
+- id: run_L_s25aa
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s25aa_r
+    dz: s25aa_dz
+  outputs:
+    L: s25aa_L_pred
+    Lp: s25aa_Lp_pred
+- id: run_R_s25aa
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s25aa_r
+    dz: s25aa_dz
+  outputs:
+    R: s25aa_R_pred
+- id: run_C_s25ba
+  model: segment_compliance
+  inputs:
+    r: s25ba_r
+    h: s25ba_h
+    E: s25ba_E
+    dz: s25ba_dz
+  outputs:
+    C: s25ba_C_pred
+    Cp: s25ba_Cp_pred
+- id: run_L_s25ba
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s25ba_r
+    dz: s25ba_dz
+  outputs:
+    L: s25ba_L_pred
+    Lp: s25ba_Lp_pred
+- id: run_R_s25ba
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s25ba_r
+    dz: s25ba_dz
+  outputs:
+    R: s25ba_R_pred
+- id: run_C_s26aa
+  model: segment_compliance
+  inputs:
+    r: s26aa_r
+    h: s26aa_h
+    E: s26aa_E
+    dz: s26aa_dz
+  outputs:
+    C: s26aa_C_pred
+    Cp: s26aa_Cp_pred
+- id: run_L_s26aa
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26aa_r
+    dz: s26aa_dz
+  outputs:
+    L: s26aa_L_pred
+    Lp: s26aa_Lp_pred
+- id: run_R_s26aa
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26aa_r
+    dz: s26aa_dz
+  outputs:
+    R: s26aa_R_pred
+- id: run_C_s26ab
+  model: segment_compliance
+  inputs:
+    r: s26ab_r
+    h: s26ab_h
+    E: s26ab_E
+    dz: s26ab_dz
+  outputs:
+    C: s26ab_C_pred
+    Cp: s26ab_Cp_pred
+- id: run_L_s26ab
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ab_r
+    dz: s26ab_dz
+  outputs:
+    L: s26ab_L_pred
+    Lp: s26ab_Lp_pred
+- id: run_R_s26ab
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ab_r
+    dz: s26ab_dz
+  outputs:
+    R: s26ab_R_pred
+- id: run_C_s26ac
+  model: segment_compliance
+  inputs:
+    r: s26ac_r
+    h: s26ac_h
+    E: s26ac_E
+    dz: s26ac_dz
+  outputs:
+    C: s26ac_C_pred
+    Cp: s26ac_Cp_pred
+- id: run_L_s26ac
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ac_r
+    dz: s26ac_dz
+  outputs:
+    L: s26ac_L_pred
+    Lp: s26ac_Lp_pred
+- id: run_R_s26ac
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ac_r
+    dz: s26ac_dz
+  outputs:
+    R: s26ac_R_pred
+- id: run_C_s26ad
+  model: segment_compliance
+  inputs:
+    r: s26ad_r
+    h: s26ad_h
+    E: s26ad_E
+    dz: s26ad_dz
+  outputs:
+    C: s26ad_C_pred
+    Cp: s26ad_Cp_pred
+- id: run_L_s26ad
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ad_r
+    dz: s26ad_dz
+  outputs:
+    L: s26ad_L_pred
+    Lp: s26ad_Lp_pred
+- id: run_R_s26ad
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ad_r
+    dz: s26ad_dz
+  outputs:
+    R: s26ad_R_pred
+- id: run_C_s26ae
+  model: segment_compliance
+  inputs:
+    r: s26ae_r
+    h: s26ae_h
+    E: s26ae_E
+    dz: s26ae_dz
+  outputs:
+    C: s26ae_C_pred
+    Cp: s26ae_Cp_pred
+- id: run_L_s26ae
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ae_r
+    dz: s26ae_dz
+  outputs:
+    L: s26ae_L_pred
+    Lp: s26ae_Lp_pred
+- id: run_R_s26ae
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ae_r
+    dz: s26ae_dz
+  outputs:
+    R: s26ae_R_pred
+- id: run_C_s26af
+  model: segment_compliance
+  inputs:
+    r: s26af_r
+    h: s26af_h
+    E: s26af_E
+    dz: s26af_dz
+  outputs:
+    C: s26af_C_pred
+    Cp: s26af_Cp_pred
+- id: run_L_s26af
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26af_r
+    dz: s26af_dz
+  outputs:
+    L: s26af_L_pred
+    Lp: s26af_Lp_pred
+- id: run_R_s26af
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26af_r
+    dz: s26af_dz
+  outputs:
+    R: s26af_R_pred
+- id: run_C_s26ag
+  model: segment_compliance
+  inputs:
+    r: s26ag_r
+    h: s26ag_h
+    E: s26ag_E
+    dz: s26ag_dz
+  outputs:
+    C: s26ag_C_pred
+    Cp: s26ag_Cp_pred
+- id: run_L_s26ag
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ag_r
+    dz: s26ag_dz
+  outputs:
+    L: s26ag_L_pred
+    Lp: s26ag_Lp_pred
+- id: run_R_s26ag
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ag_r
+    dz: s26ag_dz
+  outputs:
+    R: s26ag_R_pred
+- id: run_C_s26ah
+  model: segment_compliance
+  inputs:
+    r: s26ah_r
+    h: s26ah_h
+    E: s26ah_E
+    dz: s26ah_dz
+  outputs:
+    C: s26ah_C_pred
+    Cp: s26ah_Cp_pred
+- id: run_L_s26ah
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ah_r
+    dz: s26ah_dz
+  outputs:
+    L: s26ah_L_pred
+    Lp: s26ah_Lp_pred
+- id: run_R_s26ah
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ah_r
+    dz: s26ah_dz
+  outputs:
+    R: s26ah_R_pred
+- id: run_C_s26ai
+  model: segment_compliance
+  inputs:
+    r: s26ai_r
+    h: s26ai_h
+    E: s26ai_E
+    dz: s26ai_dz
+  outputs:
+    C: s26ai_C_pred
+    Cp: s26ai_Cp_pred
+- id: run_L_s26ai
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ai_r
+    dz: s26ai_dz
+  outputs:
+    L: s26ai_L_pred
+    Lp: s26ai_Lp_pred
+- id: run_R_s26ai
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ai_r
+    dz: s26ai_dz
+  outputs:
+    R: s26ai_R_pred
+- id: run_C_s26aj
+  model: segment_compliance
+  inputs:
+    r: s26aj_r
+    h: s26aj_h
+    E: s26aj_E
+    dz: s26aj_dz
+  outputs:
+    C: s26aj_C_pred
+    Cp: s26aj_Cp_pred
+- id: run_L_s26aj
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26aj_r
+    dz: s26aj_dz
+  outputs:
+    L: s26aj_L_pred
+    Lp: s26aj_Lp_pred
+- id: run_R_s26aj
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26aj_r
+    dz: s26aj_dz
+  outputs:
+    R: s26aj_R_pred
+- id: run_C_s26ba
+  model: segment_compliance
+  inputs:
+    r: s26ba_r
+    h: s26ba_h
+    E: s26ba_E
+    dz: s26ba_dz
+  outputs:
+    C: s26ba_C_pred
+    Cp: s26ba_Cp_pred
+- id: run_L_s26ba
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26ba_r
+    dz: s26ba_dz
+  outputs:
+    L: s26ba_L_pred
+    Lp: s26ba_Lp_pred
+- id: run_R_s26ba
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26ba_r
+    dz: s26ba_dz
+  outputs:
+    R: s26ba_R_pred
+- id: run_C_s26bb
+  model: segment_compliance
+  inputs:
+    r: s26bb_r
+    h: s26bb_h
+    E: s26bb_E
+    dz: s26bb_dz
+  outputs:
+    C: s26bb_C_pred
+    Cp: s26bb_Cp_pred
+- id: run_L_s26bb
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26bb_r
+    dz: s26bb_dz
+  outputs:
+    L: s26bb_L_pred
+    Lp: s26bb_Lp_pred
+- id: run_R_s26bb
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26bb_r
+    dz: s26bb_dz
+  outputs:
+    R: s26bb_R_pred
+- id: run_C_s26bc
+  model: segment_compliance
+  inputs:
+    r: s26bc_r
+    h: s26bc_h
+    E: s26bc_E
+    dz: s26bc_dz
+  outputs:
+    C: s26bc_C_pred
+    Cp: s26bc_Cp_pred
+- id: run_L_s26bc
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26bc_r
+    dz: s26bc_dz
+  outputs:
+    L: s26bc_L_pred
+    Lp: s26bc_Lp_pred
+- id: run_R_s26bc
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26bc_r
+    dz: s26bc_dz
+  outputs:
+    R: s26bc_R_pred
+- id: run_C_s26bd
+  model: segment_compliance
+  inputs:
+    r: s26bd_r
+    h: s26bd_h
+    E: s26bd_E
+    dz: s26bd_dz
+  outputs:
+    C: s26bd_C_pred
+    Cp: s26bd_Cp_pred
+- id: run_L_s26bd
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26bd_r
+    dz: s26bd_dz
+  outputs:
+    L: s26bd_L_pred
+    Lp: s26bd_Lp_pred
+- id: run_R_s26bd
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26bd_r
+    dz: s26bd_dz
+  outputs:
+    R: s26bd_R_pred
+- id: run_C_s26be
+  model: segment_compliance
+  inputs:
+    r: s26be_r
+    h: s26be_h
+    E: s26be_E
+    dz: s26be_dz
+  outputs:
+    C: s26be_C_pred
+    Cp: s26be_Cp_pred
+- id: run_L_s26be
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26be_r
+    dz: s26be_dz
+  outputs:
+    L: s26be_L_pred
+    Lp: s26be_Lp_pred
+- id: run_R_s26be
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26be_r
+    dz: s26be_dz
+  outputs:
+    R: s26be_R_pred
+- id: run_C_s26bf
+  model: segment_compliance
+  inputs:
+    r: s26bf_r
+    h: s26bf_h
+    E: s26bf_E
+    dz: s26bf_dz
+  outputs:
+    C: s26bf_C_pred
+    Cp: s26bf_Cp_pred
+- id: run_L_s26bf
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26bf_r
+    dz: s26bf_dz
+  outputs:
+    L: s26bf_L_pred
+    Lp: s26bf_Lp_pred
+- id: run_R_s26bf
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26bf_r
+    dz: s26bf_dz
+  outputs:
+    R: s26bf_R_pred
+- id: run_C_s26bg
+  model: segment_compliance
+  inputs:
+    r: s26bg_r
+    h: s26bg_h
+    E: s26bg_E
+    dz: s26bg_dz
+  outputs:
+    C: s26bg_C_pred
+    Cp: s26bg_Cp_pred
+- id: run_L_s26bg
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26bg_r
+    dz: s26bg_dz
+  outputs:
+    L: s26bg_L_pred
+    Lp: s26bg_Lp_pred
+- id: run_R_s26bg
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26bg_r
+    dz: s26bg_dz
+  outputs:
+    R: s26bg_R_pred
+- id: run_C_s26bh
+  model: segment_compliance
+  inputs:
+    r: s26bh_r
+    h: s26bh_h
+    E: s26bh_E
+    dz: s26bh_dz
+  outputs:
+    C: s26bh_C_pred
+    Cp: s26bh_Cp_pred
+- id: run_L_s26bh
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26bh_r
+    dz: s26bh_dz
+  outputs:
+    L: s26bh_L_pred
+    Lp: s26bh_Lp_pred
+- id: run_R_s26bh
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26bh_r
+    dz: s26bh_dz
+  outputs:
+    R: s26bh_R_pred
+- id: run_C_s26bi
+  model: segment_compliance
+  inputs:
+    r: s26bi_r
+    h: s26bi_h
+    E: s26bi_E
+    dz: s26bi_dz
+  outputs:
+    C: s26bi_C_pred
+    Cp: s26bi_Cp_pred
+- id: run_L_s26bi
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s26bi_r
+    dz: s26bi_dz
+  outputs:
+    L: s26bi_L_pred
+    Lp: s26bi_Lp_pred
+- id: run_R_s26bi
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s26bi_r
+    dz: s26bi_dz
+  outputs:
+    R: s26bi_R_pred
+- id: run_C_s27a
+  model: segment_compliance
+  inputs:
+    r: s27a_r
+    h: s27a_h
+    E: s27a_E
+    dz: s27a_dz
+  outputs:
+    C: s27a_C_pred
+    Cp: s27a_Cp_pred
+- id: run_L_s27a
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s27a_r
+    dz: s27a_dz
+  outputs:
+    L: s27a_L_pred
+    Lp: s27a_Lp_pred
+- id: run_R_s27a
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s27a_r
+    dz: s27a_dz
+  outputs:
+    R: s27a_R_pred
+- id: run_C_s27b
+  model: segment_compliance
+  inputs:
+    r: s27b_r
+    h: s27b_h
+    E: s27b_E
+    dz: s27b_dz
+  outputs:
+    C: s27b_C_pred
+    Cp: s27b_Cp_pred
+- id: run_L_s27b
+  model: segment_inertance
+  inputs:
+    rho: rho_blood
+    r: s27b_r
+    dz: s27b_dz
+  outputs:
+    L: s27b_L_pred
+    Lp: s27b_Lp_pred
+- id: run_R_s27b
+  model: segment_resistance
+  inputs:
+    eta: eta_blood
+    r: s27b_r
+    dz: s27b_dz
+  outputs:
+    R: s27b_R_pred
+- id: run_total_compliance
+  model: total_compliance
+  inputs:
+    C_2A: s2a_C
+    C_2B: s2b_C
+    C_3A: s3a_C
+    C_3B: s3b_C
+    C_4A: s4a_C
+    C_4B: s4b_C
+    C_4C: s4c_C
+    C_5A: s5a_C
+    C_5B: s5b_C
+    C_5C: s5c_C
+    C_6A: s6a_C
+    C_7A: s7a_C
+    C_7B: s7b_C
+    C_8A: s8a_C
+    C_8B: s8b_C
+    C_9A: s9a_C
+    C_9B: s9b_C
+    C_9C: s9c_C
+    C_9D: s9d_C
+    C_9E: s9e_C
+    C_10A: s10a_C
+    C_10B: s10b_C
+    C_10C: s10c_C
+    C_11A: s11a_C
+    C_11B: s11b_C
+    C_11C: s11c_C
+    C_11D: s11d_C
+    C_11E: s11e_C
+    C_12A: s12a_C
+    C_12B: s12b_C
+    C_12C: s12c_C
+    C_12D: s12d_C
+    C_12E: s12e_C
+    C_13A: s13a_C
+    C_14A: s14a_C
+    C_14B: s14b_C
+    C_15A: s15a_C
+    C_15B: s15b_C
+    C_16A: s16a_C
+    C_16B: s16b_C
+    C_16C: s16c_C
+    C_16D: s16d_C
+    C_17A: s17a_C
+    C_17B: s17b_C
+    C_17C: s17c_C
+    C_17D: s17d_C
+    C_18A: s18a_C
+    C_18B: s18b_C
+    C_18C: s18c_C
+    C_18D: s18d_C
+    C_19A: s19a_C
+    C_20A: s20a_C
+    C_21A: s21a_C
+    C_22A: s22a_C
+    C_23A: s23a_C
+    C_24A: s24a_C
+    C_25AA: s25aa_C
+    C_25BA: s25ba_C
+    C_26AA: s26aa_C
+    C_26AB: s26ab_C
+    C_26AC: s26ac_C
+    C_26AD: s26ad_C
+    C_26AE: s26ae_C
+    C_26AF: s26af_C
+    C_26AG: s26ag_C
+    C_26AH: s26ah_C
+    C_26AI: s26ai_C
+    C_26AJ: s26aj_C
+    C_26BA: s26ba_C
+    C_26BB: s26bb_C
+    C_26BC: s26bc_C
+    C_26BD: s26bd_C
+    C_26BE: s26be_C
+    C_26BF: s26bf_C
+    C_26BG: s26bg_C
+    C_26BH: s26bh_C
+    C_26BI: s26bi_C
+    C_27A: s27a_C
+    C_27B: s27b_C
+  outputs:
+    Ctot: total_compliance_pred
+- id: run_total_length
+  model: total_length
+  inputs:
+    dz_2A: s2a_dz
+    dz_2B: s2b_dz
+    dz_3A: s3a_dz
+    dz_3B: s3b_dz
+    dz_4A: s4a_dz
+    dz_4B: s4b_dz
+    dz_4C: s4c_dz
+    dz_5A: s5a_dz
+    dz_5B: s5b_dz
+    dz_5C: s5c_dz
+    dz_6A: s6a_dz
+    dz_7A: s7a_dz
+    dz_7B: s7b_dz
+    dz_8A: s8a_dz
+    dz_8B: s8b_dz
+    dz_9A: s9a_dz
+    dz_9B: s9b_dz
+    dz_9C: s9c_dz
+    dz_9D: s9d_dz
+    dz_9E: s9e_dz
+    dz_10A: s10a_dz
+    dz_10B: s10b_dz
+    dz_10C: s10c_dz
+    dz_11A: s11a_dz
+    dz_11B: s11b_dz
+    dz_11C: s11c_dz
+    dz_11D: s11d_dz
+    dz_11E: s11e_dz
+    dz_12A: s12a_dz
+    dz_12B: s12b_dz
+    dz_12C: s12c_dz
+    dz_12D: s12d_dz
+    dz_12E: s12e_dz
+    dz_13A: s13a_dz
+    dz_14A: s14a_dz
+    dz_14B: s14b_dz
+    dz_15A: s15a_dz
+    dz_15B: s15b_dz
+    dz_16A: s16a_dz
+    dz_16B: s16b_dz
+    dz_16C: s16c_dz
+    dz_16D: s16d_dz
+    dz_17A: s17a_dz
+    dz_17B: s17b_dz
+    dz_17C: s17c_dz
+    dz_17D: s17d_dz
+    dz_18A: s18a_dz
+    dz_18B: s18b_dz
+    dz_18C: s18c_dz
+    dz_18D: s18d_dz
+    dz_19A: s19a_dz
+    dz_20A: s20a_dz
+    dz_21A: s21a_dz
+    dz_22A: s22a_dz
+    dz_23A: s23a_dz
+    dz_24A: s24a_dz
+    dz_25AA: s25aa_dz
+    dz_25BA: s25ba_dz
+    dz_26AA: s26aa_dz
+    dz_26AB: s26ab_dz
+    dz_26AC: s26ac_dz
+    dz_26AD: s26ad_dz
+    dz_26AE: s26ae_dz
+    dz_26AF: s26af_dz
+    dz_26AG: s26ag_dz
+    dz_26AH: s26ah_dz
+    dz_26AI: s26ai_dz
+    dz_26AJ: s26aj_dz
+    dz_26BA: s26ba_dz
+    dz_26BB: s26bb_dz
+    dz_26BC: s26bc_dz
+    dz_26BD: s26bd_dz
+    dz_26BE: s26be_dz
+    dz_26BF: s26bf_dz
+    dz_26BG: s26bg_dz
+    dz_26BH: s26bh_dz
+    dz_26BI: s26bi_dz
+    dz_27A: s27a_dz
+    dz_27B: s27b_dz
+  outputs:
+    Ltot: total_length_pred

@@ -1,0 +1,68 @@
+- id: A0_sp_pi
+  quantity: diastolic_area
+  unit: cm^2
+  printed: "3.14159265"
+  basis: "Table II (p. 7) prints the cross-sectional area as 'pi cm^2', which the printed-value syntax cannot hold; this is pi written out. The single pulse uses Ad = A0 (p. 15). Not a choice: no alternative changes it."
+  alternatives: ["3.1416"]
+  stands_for: "A0 (= Ad) of the single-pulse model, Table II"
+- id: Pd_946_repeating
+  quantity: diastolic_pressure
+  unit: kPa
+  printed: "9.4666667"
+  basis: "Tables V and VII (pp. 11, 13) print the diastolic pressure as 9.46 with a circumflex over the final 6 (visible on the page images; the text layer shows '9:46O'). A circumflex over a digit is read here as a repeating digit, 9.4666... kPa (= 71 mmHg). The printed digits alone, 9.46, are the alternative."
+  alternatives: ["9.46"]
+  stands_for: "P_d of the upper thoracic aorta and the aortic bifurcation"
+- id: Qm_car
+  quantity: mean_flow_rate
+  unit: ml/s
+  printed: "6.5"
+  basis: "Not printed in the paper (the inflow is 'available in the Supporting Information', p. 17). The supporting file boileau_data Benchmark2_CommonCarotidArtery/inflow.txt line 7 gives the inflow as a Fourier series in ml/s whose constant term, its mean over a period, is 6.5."
+  alternatives: ["6.0", "7.0"]
+  stands_for: "mean of Q_in(t), carotid"
+- id: Qm_ao
+  quantity: mean_flow_rate
+  unit: ml/s
+  printed: "103.085"
+  basis: "Not printed in the paper. The supporting file boileau_data Benchmark3_UpperThoracicAorta/inflow.txt line 7 gives the inflow as 500*(0.20617 + sine terms) ml/s; its mean over a period is 500 x 0.20617."
+  alternatives: ["95", "110"]
+  stands_for: "mean of Q_in(t), thoracic aorta"
+- id: Qm_bif
+  quantity: mean_flow_rate
+  unit: ml/s
+  printed: "7.9853"
+  basis: "Not printed in the paper. The supporting file boileau_data Benchmark4_AorticBifurcation/inflow.txt line 7 gives the inflow as 10e5*(7.9853e-06 + sine terms) ml/s; its mean over a period is 10e5 x 7.9853e-06."
+  alternatives: ["7.5", "8.5"]
+  stands_for: "mean of Q_in(t), aortic bifurcation"
+- id: n_one
+  quantity: outlet_count
+  unit: dimensionless
+  printed: "1"
+  basis: "The carotid and thoracic aorta models are single vessels with one terminal Windkessel (pp. 15, 18)."
+  stands_for: "number of terminal Windkessels sharing the mean inflow"
+- id: n_two
+  quantity: outlet_count
+  unit: dimensionless
+  printed: "2"
+  basis: "The bifurcation is symmetric, both iliac arteries coupled to the same Windkessel (Table VII, p. 13; 'symmetric, single-bifurcation model', p. 19), so each takes half the mean inflow."
+  stands_for: "number of terminal Windkessels sharing the mean inflow"
+- id: U_max_sp
+  quantity: flow_velocity
+  unit: m/s
+  printed: "0.0032"
+  basis: "Added by the audit. lambda = max |U + c| in Table I's CFL is not printed for any case. For the single pulse U is at most the peak inflow over the area, 10^-6 m^3/s / (pi x 10^-4 m^2) = 0.0032 m/s (Eq. 14, Table II), and c stays at c0 because the pulse is linear (p. 24: 'In the linear regime'), so lambda = c0 + U to well below the printed precision."
+  alternatives: ["0"]
+  stands_for: "U where |U + c| is largest, single pulse"
+- id: Ts_car
+  quantity: pulse_duration
+  unit: s
+  printed: "0.405"
+  basis: "T_s, 'the period of the systolic part of the inflow wave' (p. 27), is not printed. Read here from the supporting inflow (boileau_data Benchmark2 inflow.txt) as the time between the flow minimum before the systolic upstroke (t = 0.055 s) and the minimum that ends the systolic wave (t = 0.460 s)."
+  alternatives: ["0.35", "0.45"]
+  stands_for: "T_s of the carotid inflow"
+- id: Ts_ao
+  quantity: pulse_duration
+  unit: s
+  printed: "0.31"
+  basis: "T_s is not printed. Read here from the supporting inflow (boileau_data Benchmark3 inflow.txt) as the time from the onset of forward flow (t = 0.00 s) to its end, where the flow first crosses zero (t = 0.312 s)."
+  alternatives: ["0.32", "0.35"]
+  stands_for: "T_s of the thoracic aorta inflow"

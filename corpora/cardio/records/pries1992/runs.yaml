@@ -1,0 +1,139 @@
+# Eq. 4 against the per-data-set C values of Table 2 and the assigned C = 1
+- id: run_eq4_tubes
+  model: eq4_C
+  inputs: {}
+  sweep: {D: C_table2_tubes}
+  outputs: {C: C_eq4_tubes}
+- id: run_eq4_tubes_second
+  model: eq4_C
+  inputs: {}
+  sweep: {D: C_table2_tubes_second}
+  outputs: {C: C_eq4_tubes_second}
+- id: run_eq4_capillaries
+  model: eq4_C
+  inputs: {}
+  sweep: {D: C_assigned_capillaries}
+  outputs: {C: C_eq4_capillaries}
+- id: run_eq4_20um
+  model: eq4_C
+  inputs: {D: D_20}
+  outputs: {C: C_eq4_20um}
+# Eqs. 2 + 4 + 6 against the per-data-set B values of Table 2
+- id: run_eq6_tubes
+  model: eq6_B_diameter
+  inputs: {}
+  sweep: {D: B_table2_tubes}
+  outputs: {B: B_eq6_tubes}
+- id: run_eq6_tubes_second
+  model: eq6_B_diameter
+  inputs: {}
+  sweep: {D: B_table2_tubes_second}
+  outputs: {B: B_eq6_tubes_second}
+- id: run_eq6_20um
+  model: eq6_B_diameter
+  inputs: {D: D_20}
+  outputs: {B: B_eq6_20um}
+# Eq. 2 and Eq. 7 against the approximate values stated in the text
+- id: run_eq2_large
+  model: eq2_eta045
+  inputs: {D: D_large_tubes}
+  outputs: {eta045: eta045_eq2_large}
+- id: run_eq2_minimum
+  model: eq2_eta045
+  inputs: {D: D_minimum}
+  outputs: {eta045: eta045_eq2_minimum}
+- id: run_eq7_minimum
+  model: eq7_eta_combined
+  inputs: {D: D_minimum, HctD: HctD_045}
+  outputs: {eta: eta_eq7_minimum}
+# Round trip: Eq. 10 then Eq. 8 should return the tube hematocrit put in
+- id: run_eq10_fig6
+  model: eq10_discharge_hct
+  inputs: {HctT: HctT_fig6, D: D_fahraeus_check}
+  outputs: {HctD: HctD_eq10_fig6}
+- id: run_eq8_roundtrip
+  model: eq8_tube_hct
+  inputs: {HctD: HctD_eq10_fig6, D: D_fahraeus_check}
+  outputs: {HctT: HctT_eq8_roundtrip}
+
+# ---- Against the calibrated figure readings (figure pass) ---------------------------------
+# Fig. 2: the Eq. 2 line
+- id: run_fig2_eq2
+  model: eq2_eta045
+  inputs: {}
+  sweep: {D: eta_fig2_eq2}
+  outputs: {eta045: eta_eq2_at_fig2}
+# Fig. 4: the Eq. 4 line
+- id: run_fig4_eq4
+  model: eq4_C
+  inputs: {}
+  sweep: {D: C_fig4_eq4}
+  outputs: {C: C_eq4_at_fig4}
+# Fig. 5: Eq. 7 at H_D 0.6 and 0.2, Eq. 2 at 0.45; Eq. 2 at the measured points
+- id: run_fig5_HD060
+  model: eq7_eta_combined
+  inputs: {HctD: HctD_060}
+  sweep: {D: eta_fig5_HD060}
+  outputs: {eta: eta_eq7_at_fig5_HD060}
+- id: run_fig5_HD045
+  model: eq2_eta045
+  inputs: {}
+  sweep: {D: eta_fig5_HD045}
+  outputs: {eta045: eta_eq2_at_fig5_HD045}
+- id: run_fig5_HD020
+  model: eq7_eta_combined
+  inputs: {HctD: HctD_02}
+  sweep: {D: eta_fig5_HD020}
+  outputs: {eta: eta_eq7_at_fig5_HD020}
+- id: run_fig5_points
+  model: eq2_eta045
+  inputs: {}
+  sweep: {D: eta_fig5_points_HD045}
+  outputs: {eta045: eta_eq2_at_fig5_points}
+# Fig. 6: heavy lines (Eq. 10 into Eq. 7 at fixed Hct_T) and thin lines (Eq. 7 at fixed Hct_D)
+- id: run_fig6_HctT06
+  model: eq7_tube_hct
+  inputs: {HctT: HctT_fig6_06}
+  sweep: {D: eta_fig6_HctT06}
+  outputs: {eta: eta_eq7T_at_fig6_HctT06}
+- id: run_fig6_HctT045
+  model: eq7_tube_hct
+  inputs: {HctT: HctT_fig6}
+  sweep: {D: eta_fig6_HctT045}
+  outputs: {eta: eta_eq7T_at_fig6_HctT045}
+- id: run_fig6_HctT02
+  model: eq7_tube_hct
+  inputs: {HctT: HctT_fig6_02}
+  sweep: {D: eta_fig6_HctT02}
+  outputs: {eta: eta_eq7T_at_fig6_HctT02}
+- id: run_fig6_HctD06
+  model: eq7_eta_combined
+  inputs: {HctD: HctD_fig6_06}
+  sweep: {D: eta_fig6_HctD06}
+  outputs: {eta: eta_eq7_at_fig6_HctD06}
+- id: run_fig6_HctD045
+  model: eq7_eta_combined
+  inputs: {HctD: HctD_fig6_045}
+  sweep: {D: eta_fig6_HctD045}
+  outputs: {eta: eta_eq7_at_fig6_HctD045}
+- id: run_fig6_HctD02
+  model: eq7_eta_combined
+  inputs: {HctD: HctD_fig6_02}
+  sweep: {D: eta_fig6_HctD02}
+  outputs: {eta: eta_eq7_at_fig6_HctD02}
+# Fig. 3: Eq. 3 with the Table 2 B and C of each panel, at the line readings and at the points
+- {id: run_fig3_44um_line, model: eq3_eta_hct, inputs: {B: B_tab2_4p4, C: C_tab2_4p4}, sweep: {HctD: eta_fig3_44um_line}, outputs: {eta: eta_eq3_at_fig3_44um_line}}
+- {id: run_fig3_56um_line, model: eq3_eta_hct, inputs: {B: B_tab2_5p6, C: C_tab2_5p6}, sweep: {HctD: eta_fig3_56um_line}, outputs: {eta: eta_eq3_at_fig3_56um_line}}
+- {id: run_fig3_6um_line, model: eq3_eta_hct, inputs: {B: B_tab2_6, C: C_tab2_6}, sweep: {HctD: eta_fig3_6um_line}, outputs: {eta: eta_eq3_at_fig3_6um_line}}
+- {id: run_fig3_9um_line, model: eq3_eta_hct, inputs: {B: B_tab2_9, C: C_tab2_9}, sweep: {HctD: eta_fig3_9um_line}, outputs: {eta: eta_eq3_at_fig3_9um_line}}
+- {id: run_fig3_12um_line, model: eq3_eta_hct, inputs: {B: B_tab2_12, C: C_tab2_12}, sweep: {HctD: eta_fig3_12um_line}, outputs: {eta: eta_eq3_at_fig3_12um_line}}
+- {id: run_fig3_20um_line, model: eq3_eta_hct, inputs: {B: B_20_185cP, C: C_20_185cP}, sweep: {HctD: eta_fig3_20um_line}, outputs: {eta: eta_eq3_at_fig3_20um_line}}
+- {id: run_fig3_40um_line, model: eq3_eta_hct, inputs: {B: B_tab2_40, C: C_tab2_40}, sweep: {HctD: eta_fig3_40um_line}, outputs: {eta: eta_eq3_at_fig3_40um_line}}
+- {id: run_fig3_33um_points, model: eq3_eta_hct, inputs: {B: B_tab2_3p3, C: C_tab2_3p3}, sweep: {HctD: eta_fig3_33um_points}, outputs: {eta: eta_eq3_at_fig3_33um_points}}
+- {id: run_fig3_44um_points, model: eq3_eta_hct, inputs: {B: B_tab2_4p4, C: C_tab2_4p4}, sweep: {HctD: eta_fig3_44um_points}, outputs: {eta: eta_eq3_at_fig3_44um_points}}
+- {id: run_fig3_56um_points, model: eq3_eta_hct, inputs: {B: B_tab2_5p6, C: C_tab2_5p6}, sweep: {HctD: eta_fig3_56um_points}, outputs: {eta: eta_eq3_at_fig3_56um_points}}
+- {id: run_fig3_6um_points, model: eq3_eta_hct, inputs: {B: B_tab2_6, C: C_tab2_6}, sweep: {HctD: eta_fig3_6um_points}, outputs: {eta: eta_eq3_at_fig3_6um_points}}
+- {id: run_fig3_9um_points, model: eq3_eta_hct, inputs: {B: B_tab2_9, C: C_tab2_9}, sweep: {HctD: eta_fig3_9um_points}, outputs: {eta: eta_eq3_at_fig3_9um_points}}
+- {id: run_fig3_12um_points, model: eq3_eta_hct, inputs: {B: B_tab2_12, C: C_tab2_12}, sweep: {HctD: eta_fig3_12um_points}, outputs: {eta: eta_eq3_at_fig3_12um_points}}
+- {id: run_fig3_20um_points, model: eq3_eta_hct, inputs: {B: B_20_185cP, C: C_20_185cP}, sweep: {HctD: eta_fig3_20um_points}, outputs: {eta: eta_eq3_at_fig3_20um_points}}
+- {id: run_fig3_40um_points, model: eq3_eta_hct, inputs: {B: B_tab2_40, C: C_tab2_40}, sweep: {HctD: eta_fig3_40um_points}, outputs: {eta: eta_eq3_at_fig3_40um_points}}

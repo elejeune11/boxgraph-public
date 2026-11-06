@@ -1,0 +1,14 @@
+id: esl_from_viscosity
+name: wall layer thickness that reconciles an in vivo with an in vitro viscosity (Poiseuille, D/Deff)^4
+role: model
+stated: {page: 7, quote: "can be accounted for by assuming a wall layer thickness", where: Discussion}
+equation: "eta_vivo = eta_vitro (D/Deff)^4, Deff = D - 2W  =>  W = [D - D (eta_vitro/eta_vivo)^(1/4)]/2"
+inputs:
+  D: {quantity: vessel_diameter, unit: um}
+  eta_vivo: {quantity: blood_viscosity_vivo, unit: cP}
+  eta_vitro: {quantity: blood_viscosity_vitro, unit: cP}
+outputs:
+  W: {quantity: esl_thickness, unit: um}
+settings: {}
+stochastic: false
+from_words: true

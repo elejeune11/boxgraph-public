@@ -1,6 +1,6 @@
 """The orchestrator runs headless agent jobs in parallel, gates each on a
 validator, feeds validator errors back on retry, and resumes after a restart.
-A fake `claude` binary stands in for the real one."""
+A fake agent command stands in for the real one."""
 
 import asyncio
 import json
@@ -15,7 +15,7 @@ from pipeline.orchestrator import Job, Orchestrator
 
 FAKE = textwrap.dedent('''\
     #!/usr/bin/env python3
-    # Fake claude: writes the file named in the prompt; writes "good" only when
+    # Fake agent: writes the file named in the prompt; writes "good" only when
     # resumed (i.e. after validator feedback) if the prompt contains FAILFIRST.
     import json, sys, os, uuid
     args = sys.argv[1:]
@@ -106,7 +106,7 @@ def calls(log):
 def test_job_passes_first_time(env):
     """A job whose output validates passes after one attempt, with its cost recorded."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=2, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=2, logs=tmp / "logs")
     res = asyncio.run(o.run([make_job(tmp, val, "a")]))
     assert res["a"]["status"] == "passed"
     assert res["a"]["attempts"] == 1
@@ -118,7 +118,7 @@ def test_validator_feedback_is_sent_on_resume(env):
     tmp, fake, val, log = env
     os.environ["FAKE_FIRST_PROMPT_FILE"] = str(tmp / "first.txt")  # reset per test by the env fixture
     (tmp / "first.txt").write_text("")
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=2, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=2, logs=tmp / "logs")
     res = asyncio.run(o.run([make_job(tmp, val, "b", "FAILFIRST")]))
     assert res["b"]["status"] == "passed"
     assert res["b"]["attempts"] == 2
@@ -131,7 +131,7 @@ def test_job_is_parked_after_max_attempts(env):
     tmp, fake, val, log = env
     (tmp / "first.txt").write_text("FAILALWAYS")
     os.environ["FAKE_FIRST_PROMPT_FILE"] = str(tmp / "first.txt")  # reset per test by the env fixture
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=2, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=2, logs=tmp / "logs")
     res = asyncio.run(o.run([make_job(tmp, val, "c", "FAILFIRST")]))
     assert res["c"]["status"] == "parked"
     assert res["c"]["attempts"] == 3
@@ -141,7 +141,7 @@ def test_job_is_parked_after_max_attempts(env):
 def test_jobs_run_in_parallel_and_dependencies_wait(env):
     """Independent jobs run in parallel; a dependent job waits for its dependencies."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=3, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=3, logs=tmp / "logs")
     j1, j2 = make_job(tmp, val, "p1"), make_job(tmp, val, "p2")
     j3 = make_job(tmp, val, "after")
     j3.depends_on = ["p1", "p2"]
@@ -155,9 +155,9 @@ def test_restart_skips_passed_jobs(env):
     """A restarted orchestrator does not rerun jobs that passed."""
     tmp, fake, val, log = env
     db = tmp / "state.db"
-    asyncio.run(Orchestrator(db, claude_bin=str(fake), logs=tmp / "logs").run([make_job(tmp, val, "r")]))
+    asyncio.run(Orchestrator(db, agent_bin=str(fake), logs=tmp / "logs").run([make_job(tmp, val, "r")]))
     n = len(calls(log))
-    res = asyncio.run(Orchestrator(db, claude_bin=str(fake), logs=tmp / "logs").run([make_job(tmp, val, "r")]))
+    res = asyncio.run(Orchestrator(db, agent_bin=str(fake), logs=tmp / "logs").run([make_job(tmp, val, "r")]))
     assert res["r"]["status"] == "passed"
     assert len(calls(log)) == n  # not run again
 
@@ -167,7 +167,7 @@ def test_command_line_restricts_tools_and_budget(env):
     tmp, fake, val, log = env
     j = make_job(tmp, val, "t")
     j.allowed_tools = ["Read", "Write(records/t/**)"]
-    asyncio.run(Orchestrator(tmp / "state.db", claude_bin=str(fake), logs=tmp / "logs").run([j]))
+    asyncio.run(Orchestrator(tmp / "state.db", agent_bin=str(fake), logs=tmp / "logs").run([j]))
     args = calls(log)[0]["args"]
     assert "--permission-mode" in args and args[args.index("--permission-mode") + 1] == "dontAsk"
     assert "Write(records/t/**)" in args
@@ -180,7 +180,7 @@ def test_a_job_can_deny_more_tools(env):
     tmp, fake, val, log = env
     j = make_job(tmp, val, "x")
     j.disallowed_tools = ["Read(//secret/**)"]
-    asyncio.run(Orchestrator(tmp / "state.db", claude_bin=str(fake), logs=tmp / "logs").run([j]))
+    asyncio.run(Orchestrator(tmp / "state.db", agent_bin=str(fake), logs=tmp / "logs").run([j]))
     args = calls(log)[0]["args"]
     assert "Read(//secret/**)" in args[args.index("--disallowedTools") + 1:]
 
@@ -188,7 +188,7 @@ def test_a_job_can_deny_more_tools(env):
 def test_very_long_output_lines_do_not_crash(env):
     """Very long agent output lines do not crash the orchestrator."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), logs=tmp / "logs")
     res = asyncio.run(o.run([make_job(tmp, val, "h", "HUGE")]))
     assert res["h"]["status"] == "passed"
 
@@ -199,7 +199,7 @@ def test_each_job_has_its_own_session_and_a_clean_environment(env, monkeypatch):
     monkeypatch.setenv("CLAUDE_CODE_SESSION_ID", "parent-session")
     (tmp / "first.txt").write_text("")
     os.environ["FAKE_FIRST_PROMPT_FILE"] = str(tmp / "first.txt")  # reset per test by the env fixture
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), logs=tmp / "logs")
     asyncio.run(o.run([make_job(tmp, val, "s", "FAILFIRST")]))
     c = calls(log)
     assert all(x["env_session"] is None for x in c)
@@ -214,7 +214,7 @@ def test_refused_writes_are_reported_back_on_retry(env):
     tmp, fake, val, log = env
     (tmp / "first.txt").write_text("")
     os.environ["FAKE_FIRST_PROMPT_FILE"] = str(tmp / "first.txt")  # reset per test by the env fixture
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), logs=tmp / "logs")
     res = asyncio.run(o.run([make_job(tmp, val, "d", "FAILFIRST DENYEDIT")]))
     c = calls(log)
     assert "Edit x.yaml" in c[1]["prompt"]
@@ -225,7 +225,7 @@ def test_an_interrupted_job_resumes_its_session(env):
     """A job left running when the orchestrator was stopped resumes the session named in its log."""
     tmp, fake, val, log = env
     db = tmp / "state.db"
-    o = Orchestrator(db, claude_bin=str(fake), logs=tmp / "logs")
+    o = Orchestrator(db, agent_bin=str(fake), logs=tmp / "logs")
     o._put("i", kind="read", status="running", attempts=0, cost_usd=0.0, turns=0)
     (tmp / "logs").mkdir(exist_ok=True)
     (tmp / "logs" / "i.attempt1.jsonl").write_text(
@@ -241,7 +241,7 @@ def test_an_interrupted_job_resumes_its_session(env):
 def test_jobs_that_share_a_lock_never_overlap(env):
     """Jobs holding the same lock (two relation jobs editing one record) run one after the other; others run alongside."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=3, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=3, logs=tmp / "logs")
     a, b, c = (make_job(tmp, val, n, "SLOW") for n in ("ab", "ac", "de"))
     a.locks, b.locks, c.locks = ["a", "b"], ["c", "a"], ["d", "e"]
     res = asyncio.run(o.run([a, b, c]))
@@ -260,7 +260,7 @@ def test_a_job_whose_dependency_did_not_pass_is_blocked_not_run(env):
     tmp, fake, val, log = env
     (tmp / "first.txt").write_text("FAILALWAYS")
     os.environ["FAKE_FIRST_PROMPT_FILE"] = str(tmp / "first.txt")  # reset per test by the env fixture
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=2, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=2, logs=tmp / "logs")
     bad = make_job(tmp, val, "bad", "FAILFIRST")
     after = make_job(tmp, val, "after_bad")
     after.depends_on = ["bad"]
@@ -273,7 +273,7 @@ def test_a_job_whose_dependency_did_not_pass_is_blocked_not_run(env):
 def test_a_job_environment_reaches_the_agent_and_a_hung_gate_times_out(env):
     """A job's environment variables reach its agent, and a gate that runs past its time limit fails the attempt with a message."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
     j = make_job(tmp, val, "envjob")
     j.env = {"BOXGRAPH_CACHE": "/shared/cache"}
     j.validate = ["python3", "-c", "import time; time.sleep(5)"]
@@ -287,7 +287,7 @@ def test_a_job_environment_reaches_the_agent_and_a_hung_gate_times_out(env):
 def test_a_reset_job_runs_again_from_scratch(env):
     """Resetting a passed job forgets its state, so the next run starts a fresh agent for it."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
     asyncio.run(o.run([make_job(tmp, val, "again")]))
     o.reset(["again"])
     res = asyncio.run(o.run([make_job(tmp, val, "again")]))
@@ -299,7 +299,7 @@ def test_a_parked_job_stays_parked_until_it_is_reset(env):
     """A job parked for a person is not retried by later runs (nor its cost forgotten) until it is reset."""
     tmp, fake, val, log = env
     (tmp / "first.txt").write_text("FAILALWAYS")
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
     asyncio.run(o.run([make_job(tmp, val, "stuck", "FAILFIRST")]))
     n, cost = len(calls(log)), o._get("stuck")["cost_usd"]
     res = asyncio.run(o.run([make_job(tmp, val, "stuck", "FAILFIRST")]))
@@ -313,7 +313,7 @@ def test_the_budget_is_for_the_whole_job_not_each_attempt(env):
     """Each retry gets only what is left of the job's budget, and a job whose budget is spent stops."""
     tmp, fake, val, log = env
     (tmp / "first.txt").write_text("FAILALWAYS")
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
     j = make_job(tmp, val, "spend", "FAILFIRST")
     j.budget_usd, j.max_attempts = 1.0, 5  # the fake costs 0.5 a call
     res = asyncio.run(o.run([j]))
@@ -325,7 +325,7 @@ def test_the_budget_is_for_the_whole_job_not_each_attempt(env):
 def test_stopping_a_run_stops_its_agents(env):
     """When a run is cancelled, its agents are killed, and their jobs can be resumed by the next run."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
 
     async def go():
         task = asyncio.create_task(o.run([make_job(tmp, val, "long", "PIDFILE HANG")]))
@@ -351,7 +351,7 @@ def test_stopping_a_run_stops_its_agents(env):
 def test_a_dependency_outside_the_run_must_already_have_passed(env):
     """A job whose dependency is not in this run starts only if that dependency is known to have passed."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
     j = make_job(tmp, val, "needs")
     j.depends_on = ["elsewhere"]
     assert asyncio.run(o.run([j]))["needs"]["status"] == "blocked"
@@ -361,7 +361,7 @@ def test_a_dependency_outside_the_run_must_already_have_passed(env):
 def test_a_log_the_gate_requires_must_be_written_by_this_job(env):
     """A file a job must write passes its gate only if this job wrote it, not if it was left by an earlier one."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
     (tmp / "old_log.md").write_text("from an earlier pass")
     j = make_job(tmp, val, "fresh")
     j.max_attempts = 1
@@ -370,10 +370,53 @@ def test_a_log_the_gate_requires_must_be_written_by_this_job(env):
     assert res["fresh"]["status"] == "parked" and "old_log.md" in res["fresh"]["last_validation"]
 
 
+def test_a_resumed_job_keeps_the_logs_it_wrote_before_it_was_interrupted(env):
+    """A job resumed after an interruption counts files it wrote before the interruption as its own, not as left by an earlier job."""
+    import time
+
+    tmp, fake, val, log = env
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o._put("again", kind="read", status="running", attempts=0, cost_usd=0.0, turns=0, started=time.time() - 60)
+    (tmp / "mine.md").write_text("written before the interruption")
+    j = make_job(tmp, val, "again")
+    j.max_attempts = 1
+    j.fresh = [str(tmp / "mine.md")]
+    res = asyncio.run(o.run([j]))
+    assert res["again"]["status"] == "passed", res["again"]["last_validation"]
+
+
+def test_stopping_a_run_stops_its_gate(env):
+    """When a run is cancelled while a job's gate runs, the gate process is killed too."""
+    tmp, fake, val, log = env
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    j = make_job(tmp, val, "gated")
+    pidfile = tmp / "gate.pid"
+    j.validate = ["python3", "-c", f"import os, time; open({str(pidfile)!r}, 'w').write(str(os.getpid())); time.sleep(30)"]
+
+    async def go():
+        task = asyncio.create_task(o.run([j]))
+        for _ in range(200):
+            await asyncio.sleep(0.05)
+            if pidfile.exists() and pidfile.read_text():
+                break
+        task.cancel()
+        try:
+            await task
+        except asyncio.CancelledError:
+            pass
+
+    asyncio.run(go())
+    import time
+    time.sleep(0.2)
+    pid = int(pidfile.read_text())
+    alive = os.path.exists(f"/proc/{pid}") and "zombie" not in open(f"/proc/{pid}/status").read().lower()
+    assert not alive
+
+
 def test_writing_outside_the_jobs_area_fails_the_attempt(env):
     """An agent that writes outside the paths its job may write, by any means, fails that attempt and is told what it wrote."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs", watch=tmp)
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs", watch=tmp)
     j = make_job(tmp, val, "stray", "WRITEOUT")
     j.max_attempts, j.writable = 1, ["stray.txt", "logs/**", "state.db*", "calls.jsonl*", "last_target", "first.txt"]
     res = asyncio.run(o.run([j]))
@@ -385,7 +428,7 @@ def test_page_images_in_a_record_fail_the_attempt(env):
     tmp, fake, val, log = env
     rec = tmp / "records" / "x"
     rec.mkdir(parents=True)
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs", watch=tmp)
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs", watch=tmp)
     j = Job(id="png", kind="read", prompt=f"TARGET={rec / 'notes.txt'} WRITEPNG", cwd=str(tmp),
             validate=["true"], max_attempts=1, writable=["records/x/**", "logs/**", "state.db*", "calls.jsonl*",
                                                           "last_target", "first.txt"])
@@ -396,7 +439,7 @@ def test_page_images_in_a_record_fail_the_attempt(env):
 def test_an_agent_that_dies_without_a_result_is_reported_with_its_error(env):
     """When the agent exits without a result (an API error, an expired login), the job records why."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
     j = make_job(tmp, val, "dies", "CRASH")
     j.max_attempts, j.validate = 1, ["false"]
     res = asyncio.run(o.run([j]))
@@ -407,7 +450,7 @@ def test_each_passed_job_is_reported_as_it_passes(env):
     """The run reports each job as it passes, so its record of finished work is current even if the run is killed."""
     tmp, fake, val, log = env
     seen = []
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs", on_passed=seen.append)
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs", on_passed=seen.append)
     asyncio.run(o.run([make_job(tmp, val, "one"), make_job(tmp, val, "two")]))
     assert sorted(r["id"] for r in seen) == ["one", "two"]
 
@@ -452,7 +495,7 @@ def test_files_changed_by_a_commit_meanwhile_are_not_blamed_on_the_agent(tmp_pat
 def test_the_agent_is_never_told_to_delete_files_it_may_not_have_written(env):
     """The message about stray writes asks the agent to undo only what it wrote, never to delete files outright."""
     tmp, fake, val, log = env
-    o = Orchestrator(tmp / "state.db", claude_bin=str(fake), concurrency=1, logs=tmp / "logs", watch=tmp)
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs", watch=tmp)
     j = make_job(tmp, val, "stray2", "WRITEOUT")
     j.max_attempts, j.writable = 1, ["stray2.txt", "logs/**", "state.db*", "calls.jsonl*", "last_target", "first.txt"]
     res = asyncio.run(o.run([j]))
@@ -488,3 +531,12 @@ def test_stopped_calls_take_each_messages_final_usage_from_the_session_transcrip
     (tr / "s1.jsonl").write_text(ev("m1", 500) + "\n" + ev("m9", 999) + "\n")
     u = unreported_usage(logs, "read:a", transcripts=tr)
     assert u["output_tokens"] == 501 and u["calls"] == 1
+
+
+def test_a_gate_and_a_job_outlast_the_longest_model_run():
+    """A gate may run several models for their full time, and an agent job may run its own checks and its gate."""
+    from boxgraph.engine import RUN_TIMEOUT
+    from pipeline.orchestrator import Job
+
+    j = Job(id="x", kind="read", prompt="p", cwd=".", validate=["true"])
+    assert j.validate_timeout_s >= 3 * RUN_TIMEOUT and j.timeout_s > j.validate_timeout_s

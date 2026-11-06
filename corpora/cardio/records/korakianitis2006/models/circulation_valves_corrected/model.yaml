@@ -1,0 +1,136 @@
+id: circulation_valves_corrected
+name: closed-loop circulation (Eqs. 1-20) with the evident misprints of Eqs. 3, 6, 14 and 18 corrected
+role: model
+stated: {page: 3, printed_page: "1966", quote: "provided in Fig. 1. The system is modelled in three", where: "Eqs. 1-20, Fig. 1"}
+variant_of: circulation_valves
+corrections:
+  - equation: Eq. 3
+    change: "ventricular activation e(t) = 1 - cos(pi t/T_s1) for 0 <= t <= T_s1, 1 + cos(pi (t - T_s1)/(T_s2 - T_s1)) for T_s1 < t <= T_s2, 0 after, instead of the printed cos(pi t/T_s1) and cos(pi (t + T_s2 - T_s1)/T_s1)"
+    evidence: "Fig. 2 (p. 4, reading fig2_elv) shows E(lv) rising smoothly from about 0.1 to 2.5 mmHg/ml at 0.3 s and back by 0.45 s, never negative; Eq. 3 as printed with Eq. 2 gives 1.3 mmHg/ml at t = 0 and -1.1 mmHg/ml at T_s1, a negative elastance. The authors' CellML code has exactly this form: shi_cellml_systemic, EVentricle.cellml line 20 (et = 1 - cos(3.14159 mt/(Ts1 T)), then 1 + cos(3.14159 (mt - Ts1 T)/((Ts2 - Ts1) T)), then 0)."
+  - equation: Eq. 6
+    change: "Q_ao = -CQ_ao AR_ao sqrt(P_sas - P_lv) for P_lv < P_sas (minus sign on the second branch), and likewise for the other three valves"
+    evidence: "The printed second branch is positive, so valve flow could never be negative, yet the paper reports reverse flows of 134.3, 77.3, 298.7 and 306.9 ml/s (p. 13) and plots negative valve flows (Figs. 9(b), 9(e), 13(b)). The authors' CellML code has the minus sign: shi_cellml_systemic, TempCDv.cellml line 48 (Qo = -1 CV Tao |Po - Pi|^0.5 for Pi < Po)."
+  - equation: Eq. 14
+    change: "vortex term K_v Q sin(2 theta) (Eq. 13's form) instead of the printed K_v Q sin(theta)"
+    evidence: "Eq. 13 (p. 6) prints k_v Q sin 2theta, and the text above it says the vortex intensity 'reaches the maximum value when the leaflet is at about 45 deg' and falls below and above 45 deg, which sin(2 theta) does and sin(theta) (maximum at 90 deg) does not. No released code of the valve dynamics exists; the other reading (Eq. 14 as printed) is variant circulation_valves_corrected_sin."
+  - equation: Eq. 18
+    change: "dQ_sat/dt = (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat, P_sat instead of the printed P_sas; the pulmonary loop likewise with P_pat"
+    evidence: "The text says 'the pressure and flow rate changes in the artery are similar to those in the aortic sinus' (p. 6), i.e. Eq. 16's form with the segment's own pressure; with P_sas the artery compliance C_sat is charged but never discharges into the flow it drives. Fig. 1 (p. 4) draws C_sat at the artery's inlet node P_sat and Q_sat leaving that node through R_sat and L_sat. The authors' CellML code drives the artery flow with the artery pressure: shi_cellml_systemic, TempRLC.cellml line 25 (dP/dt = (Qi - Qo)/C; dQo/dt = (Pi - Po - R Qo)/L) applied to Sat, whose Pi is the artery pressure and whose Po is the arteriole inlet (ModelSys.cellml lines 69-79), with the arteriole and capillary in series as pure resistances (TempR.cellml line 19), which gives (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat."
+equation: >
+  as circulation_valves (Eqs. 1-20 as printed) except: e(t) = 1 - cos(pi t/T_s1), 0<=t<=T_s1;
+  1 + cos(pi (t - T_s1)/(T_s2 - T_s1)), T_s1<t<=T_s2; 0, T_s2<t<T (3, corrected);
+  Q_ao = -CQ_ao AR_ao sqrt(P_sas - P_lv), P_lv<P_sas (6, corrected);
+  vortex term -K_v,ao Q_ao sin 2theta, Q_ao>=0 (14, corrected to Eq. 13's form);
+  dQ_sat/dt = (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat (18, corrected), pulmonary loop likewise
+built_from: [circulation_valves]
+inputs:
+  CQao: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQmi: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQpo: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQti: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  Elvs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Elvd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Plv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vlv0: {quantity: chamber_reference_volume, unit: ml}
+  Ela_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ela_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pla0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vla0: {quantity: chamber_reference_volume, unit: ml}
+  Ervs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ervd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Prv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vrv0: {quantity: chamber_reference_volume, unit: ml}
+  Era_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Era_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pra0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vra0: {quantity: chamber_reference_volume, unit: ml}
+  Csas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Csat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rsar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rscp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rsvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Csvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Cpas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Cpat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rpar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpcp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Cpvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Kp_ao: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ao: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_ao: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_ao: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_mi: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_mi: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_mi: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_mi: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_po: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_po: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_po: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_po: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_ti: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ti: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_ti: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_ti: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  theta_max_ao: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ao: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_mi: {quantity: leaflet_max_angle, unit: deg, description: "upper limit of the mitral leaflet angle"}
+  theta_min_mi: {quantity: leaflet_min_angle, unit: deg}
+  theta_ref_mi: {quantity: leaflet_max_angle, unit: deg, description: "theta_max in the denominator of Eq. 8 for the mitral valve"}
+  theta_max_po: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_po: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_ti: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ti: {quantity: leaflet_min_angle, unit: deg}
+  T: {quantity: heart_period, unit: s}
+  Ts1: {quantity: time_peak_systole, unit: s}
+  Ts2: {quantity: time_end_systole, unit: s}
+  Tpwb: {quantity: p_wave_onset, unit: s}
+  Tpww: {quantity: p_wave_duration, unit: s}
+  Vlv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vla_init: {quantity: initial_chamber_volume, unit: ml}
+  Vrv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vra_init: {quantity: initial_chamber_volume, unit: ml}
+  Psas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+outputs:
+  Plv_max: {quantity: peak_lv_pressure, unit: mmHg}
+  Plv_min: {quantity: min_lv_pressure, unit: mmHg}
+  Psas_max: {quantity: peak_aortic_pressure, unit: mmHg}
+  Psas_min: {quantity: min_aortic_pressure, unit: mmHg}
+  Psas_ed: {quantity: end_diastolic_aortic_pressure, unit: mmHg, description: "P_sas at the start of the analysed cycle (t = 10 s), where ventricular activation begins"}
+  Prv_max: {quantity: peak_rv_pressure, unit: mmHg}
+  Ppas_max: {quantity: peak_pulmonary_artery_pressure, unit: mmHg}
+  CO: {quantity: mean_aortic_flow, unit: l/min}
+  Vlv_max: {quantity: lv_volume_max, unit: ml}
+  Vlv_min: {quantity: lv_volume_min, unit: ml}
+  SV: {quantity: stroke_volume, unit: ml}
+  Qao_max: {quantity: peak_aortic_valve_flow, unit: ml/s}
+  Qpo_max: {quantity: peak_pulmonary_valve_flow, unit: ml/s}
+  Qmi_E: {quantity: mitral_E_peak_flow, unit: ml/s, description: "largest mitral flow between T_s2 and T_pb in the cycle"}
+  Qti_E: {quantity: tricuspid_E_peak_flow, unit: ml/s, description: "largest tricuspid flow between T_s2 and T_pb"}
+  Qmi_A: {quantity: mitral_A_peak_flow, unit: ml/s, description: "largest mitral flow after T_pb"}
+  Qmi_dmin: {quantity: mitral_diastolic_min_flow, unit: ml/s, description: "smallest mitral flow between the E peak and T_pb"}
+  Qao_rev: {quantity: aortic_reverse_flow_peak, unit: ml/s, description: "minus the smallest aortic valve flow in the cycle"}
+  Qpo_rev: {quantity: pulmonary_reverse_flow_peak, unit: ml/s}
+  Qmi_rev: {quantity: mitral_reverse_flow_peak, unit: ml/s}
+  Qti_rev: {quantity: tricuspid_reverse_flow_peak, unit: ml/s}
+settings:
+  dt: 0.0001            # Table 5, DT
+  t_end: 11.0           # "the period from the 10th to 11th s ... is selected"
+  t_window: 10.0
+  valve_model: dynamic  # dynamic: Eqs. 8 and 14; on_off: Eq. 7
+  vortex_angle_factor: 2  # the Eq. 14 correction: sin(2 theta), as in Eq. 13
+  scheme: rk4           # added, as in circulation_valves (q_scheme)
+stochastic: false

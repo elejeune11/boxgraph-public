@@ -1,0 +1,28 @@
+id: structured_tree_impedance
+name: root input impedance of an asymmetric structured tree (Eqs. 6, 12-17, 19-21)
+role: model
+stated: {page: 6, printed_page: "H262", quote: "we can use Eqs. 16 and 17 recursively to find the input", where: "Eqs. 16-17"}
+equation: >
+  Z(0,w) = [i g^-1 sin(wL/c) + Z(L,w) cos(wL/c)] / [cos(wL/c) + i g Z(L,w) sin(wL/c)] (16);
+  1/Z_p = 1/Z_d1 + 1/Z_d2 (17); c = sqrt(A0 K/(rho C)), g = sqrt(C A0 K/rho);
+  C = 3 A0 r0/(2 E h); K = 1 - 2 i^-1/2 w^-1 for w > 4, (4/3 - 8 i w^-2)^-1 for w <= 4, w = r (omega/nu)^1/2 (12);
+  Eh/r0 = k1 exp(k2 r0) + k3 (6); daughters alpha r, beta r with alpha = (1 + gamma^(xi/2))^(-1/xi), beta = alpha sqrt(gamma);
+  L = lambda r; a branch ends when its radius is less than r_min, with zero impedance at the leaves;
+  Z(0,0) = 8 mu lambda/(pi r0^3) + Z(L,0) (18)
+inputs:
+  r_root: {quantity: tree_root_radius, unit: cm}
+  r_min: {quantity: tree_minimum_radius, unit: cm}
+  lrr: {quantity: length_to_radius_ratio, unit: dimensionless}
+  xi: {quantity: radius_exponent, unit: dimensionless}
+  gamma: {quantity: asymmetry_ratio, unit: dimensionless}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  omega: {quantity: angular_frequency, unit: 1/s}
+outputs:
+  Zmod: {quantity: input_impedance_modulus, unit: g/s/cm^4}
+  Zphase: {quantity: input_impedance_phase, unit: degree}
+settings: {}
+stochastic: false

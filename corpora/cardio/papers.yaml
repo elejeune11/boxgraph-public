@@ -1,0 +1,167 @@
+- id: westerhof1969
+  file: corpus/cardio/1969_Westerhof.pdf
+  pages: [1, 26]
+  note: 'a scanned paper: its text layer has recognition errors, so read values from the page images'
+- id: westerhof1971
+  file: corpus/cardio/1971_Westerhof.pdf
+  pages: [1, 6]
+  relate_with: [westerhof1969]
+- id: suga1973
+  file: corpus/cardio/1973_Suga.pdf
+  pages: [1, 9]
+  note: page 10 of the file is a separate abstract card, not part of the article
+- id: stergiopulos1999
+  file: corpus/cardio/1999_Stergiopulos.pdf
+  pages: [1, 8]
+  relate_with: [westerhof1971]
+- id: korakianitis2006
+  file: corpus/cardio/2006_Korakianitis.pdf
+  pages: [1, 19]
+  relate_with: [suga1973]
+- id: westerhof2009
+  file: corpus/cardio/2009_Westerhof.pdf
+  pages: [1, 11]
+  note: 'a review: record the models it defines and the values it states, and which earlier paper each
+    comes from'
+  relate_with: [westerhof1971, stergiopulos1999]
+- id: shi2018
+  file: corpus/cardio/2018_Shi.pdf
+  pages: [2, 8]
+  note: page 1 of the file is the publisher's cover sheet
+  relate_with: [korakianitis2006]
+- id: shi_cellml_windkessel
+  kind: software
+  file: corpus/cardio/code/shi_cellml_windkessel
+  papers: [shi2018]
+  url: https://models.physiomeproject.org/workspace/cardiovascular_circulation_windkessel (changeset a47dc58c5d9b)
+  note: 'CellML 1.x, the workspace at changeset a47dc58c5d9b: MainWindKessel.cellml imports the other
+    files; the .ai, .png and .svg files are diagrams of the circuit. CellML is not run here: port its
+    equations to Python, citing each value by file and line.'
+- id: shi_cellml_systemic
+  kind: software
+  file: corpus/cardio/code/shi_cellml_systemic
+  papers: [shi2018, korakianitis2006]
+  url: https://models.physiomeproject.org/workspace/cardiovascular_circulation_systemic (changeset 1f1189e668a0)
+  note: 'CellML 1.x, the workspace at changeset 1f1189e668a0: MainSystemic.cellml imports the other files;
+    the .ai, .png and .svg files are diagrams of the circuit. CellML is not run here: port its equations
+    to Python, citing each value by file and line.'
+- id: smith2004
+  file: corpus/cardio/2004_Smith.pdf
+  pages: [2, 10]
+- id: ursino1998
+  file: corpus/cardio/1998_Ursino.pdf
+  pages: [1, 15]
+- id: olufsen2004
+  file: corpus/cardio/2004_Olufsen.pdf
+  pages: [1, 20]
+- id: smith_cellml
+  kind: software
+  file: corpus/cardio/code/smith_cellml
+  papers: [smith2004]
+  url: https://models.physiomeproject.org/workspace/smith_chase_nokes_shaw_wake_2004
+  note: CellML Model Repository, changeset 910ec922c5ea. A single CellML file the curators based on the
+    authors' MATLAB code; its documentation says it 'will only simulate 14 heart beats'.
+- id: stergiopulos1992
+  file: corpus/cardio/1992_Stergiopulos.pdf
+  pages: [1, 12]
+  note: 1D model of the arterial tree (J. Biomech. 25(12):1477-1488, 1992); a heavier simulation than
+    the 0D papers.
+- id: korakianitis_cellml
+  kind: software
+  file: corpus/cardio/code/korakianitis_cellml
+  papers: [korakianitis2006]
+  url: https://models.physiomeproject.org/workspace/shi_hose_2009 (changeset a679cdc2e974)
+  note: 'CellML Model Repository, workspace shi_hose_2009 at changeset a679cdc2e974: ''Zero dimensional
+    (lumped parameter) modelling of native human cardiovascular dynamics'', whose documentation cites
+    Korakianitis and Shi 2006 (J. Biomech. 39(11):1964-82). Closed loop with heart, systemic and pulmonary
+    circulations.'
+- id: shi_cellml_westkessel
+  kind: software
+  file: corpus/cardio/code/shi_cellml_westkessel
+  papers: [shi2018]
+  url: https://models.physiomeproject.org/workspace/cardiovascular_circulation_westkessel (changeset f04b7307a5bf)
+  note: 'CellML Model Repository, changeset f04b7307a5bf: ''Lumped-parameter cardiovascular model with
+    Westkessel after-load'', the third of the Shi 2018 CellML models beside the windkessel and systemic
+    ones.'
+- id: shi2013_ch2
+  file: corpus/cardio/2013_Shi_ch2.pdf
+  pages: [1, 54]
+  note: 'Chapter 2 of Y. Shi, PhD thesis, University of Sheffield, 2013 (thesis PDF pages 65-118): lumped-parameter
+    model of the cardiovascular system with heart, valves and circulation; the model of korakianitis2006
+    and the Shi CellML code. Chapters are separate records; the thesis''s other chapters are not read.'
+  relate_with: [korakianitis2006, korakianitis_cellml, shi2018]
+- id: shi2013_ch5
+  file: corpus/cardio/2013_Shi_ch5.pdf
+  pages: [1, 14]
+  note: 'Chapter 5 of Y. Shi, PhD thesis, University of Sheffield, 2013 (thesis PDF pages 177-190): a
+    pulsatile in vitro bioreactor and its lumped-parameter model. Chapters are separate records; the thesis''s
+    other chapters are not read.'
+  relate_with: [korakianitis2006, shi2013_ch2]
+- id: boileau2015
+  file: corpus/cardio/2015_Boileau.pdf
+  pages: [1, 33]
+  note: Benchmark of six 1D arterial blood flow solvers on six test cases (Int. J. Numer. Meth. Biomed.
+    Engng. 31:e02732, 2015); its supporting datasets are attached as boileau_data.
+  relate_with: [stergiopulos1992, stergiopulos1999]
+- id: alastruey2011
+  file: corpus/cardio/2011_Alastruey.pdf
+  pages: [1, 9]
+  note: 1D model of a 37-artery in vitro network compared with measured pressure and flow (J. Biomech.
+    44:2250-2258, 2011); the network and measurements are Benchmark 5 of boileau2015, whose data are attached
+    as boileau_data.
+  relate_with: [boileau2015, stergiopulos1992]
+- id: reymond2009
+  file: corpus/cardio/2009_Reymond.pdf
+  pages: [1, 15]
+  note: 1D model of the systemic arterial tree with a ventricle and cerebral circulation, validated against
+    in vivo measurements (Am J Physiol Heart Circ Physiol 297:H208-H222, 2009).
+  relate_with: [stergiopulos1992, stergiopulos1999, boileau2015]
+- id: olufsen1999
+  file: corpus/cardio/1999_Olufsen.pdf
+  pages: [1, 12]
+  note: Structured-tree outflow condition for 1D models of the large arteries (Am J Physiol Heart Circ
+    Physiol 276:H257-H268, 1999).
+  relate_with: [olufsen2004, westerhof1969]
+- id: olufsen2000
+  file: corpus/cardio/2000_Olufsen.pdf
+  pages: [1, 19]
+  note: 1D model of the large systemic arteries with structured-tree outflow, validated against MR flow
+    measurements (Ann. Biomed. Eng. 28:1281-1299, 2000).
+  relate_with: [olufsen1999, olufsen2004]
+- id: formaggia2003
+  file: corpus/cardio/2003_Formaggia.pdf
+  pages: [1, 26]
+  note: Derivation and numerics of 1D models of blood flow in arteries (J. Eng. Math. 47:251-276, 2003).
+  relate_with: [boileau2015, stergiopulos1992]
+- id: boileau_data
+  kind: software
+  file: corpus/cardio/code/boileau_data
+  papers: [boileau2015, alastruey2011]
+  url: https://doi.org/10.1002/cnm.2732 (supporting information)
+  note: 'The supporting datasets of boileau2015, Benchmarks 1-6: model parameters, inflow data and each
+    solver''s results as plain-text files (107 .txt files, one network diagram). They are data, not code;
+    the pipeline takes a folder only as kind software, so cite values by file and lines. Benchmark 5 holds
+    the in vitro measurements of alastruey2011.'
+- id: pries1992
+  file: corpus/cardio/1992_Pries.pdf
+  pages: [1, 9]
+  note: Pries, Neuhaus & Gaehtgens 1992, Am J Physiol 263:H1770-H1778. In vitro apparent blood viscosity
+    vs tube diameter and hematocrit; empirical fitting equations.
+- id: pries2005
+  file: corpus/cardio/2005_Pries.pdf
+  pages: [1, 8]
+  note: Pries & Secomb 2005, Am J Physiol Heart Circ Physiol 289:H2657-H2664. In vivo microvascular viscosity
+    law with an endothelial surface layer, built on the 1992 in vitro law.
+  relate_with: [pries1992]
+- id: pries1990
+  file: corpus/cardio/1990_Pries.pdf
+  pages: [1, 9]
+  note: Pries et al. 1990, Circ Res 67:826-834. Network flow simulation vs measurements in rat mesentery.
+    Page 1 carries a download-site banner of related-paper titles above the article; ignore it.
+  relate_with: [pries1992, pries2005]
+- id: olufsen2012
+  file: corpus/cardio/2012_Olufsen.pdf
+  pages: [1, 26]
+  note: Olufsen et al. 2012, J Fluid Mech 705:280-305. Structured-tree outflow model applied to rarefaction
+    and blood pressure in systemic and pulmonary arteries.
+  relate_with: [olufsen1999, olufsen2000, olufsen2004, pries1992]

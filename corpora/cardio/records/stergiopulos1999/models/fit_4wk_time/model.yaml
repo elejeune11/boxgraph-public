@@ -1,0 +1,19 @@
+id: fit_4wk_time
+name: time-domain fit of the four-element windkessel to aortic pressure with aortic flow as input
+role: fit
+stated: {page: 2, printed_page: "H82", quote: "the time domain with use of aortic flow as input and adjust", where: "Methods, Data analysis"}
+equation: "minimize RMSE between measured pressure and the pressure of (R_c || L) + (R_p || C) driven by measured aortic flow; R_p = mean pressure / mean flow fixed; fitted: L, Z_c, C"
+from_words: true
+runnable: false
+not_runnable_reason: >-
+  The fit needs the measured aortic pressure and flow waves of each beat, which the paper prints only as plots
+  (Figs. 1 and 4, and not at all for six of the seven dogs), and the fitting procedure is given only by reference (15, 18).
+inputs:
+  Rp: {quantity: peripheral_resistance, unit: mmHg*s/ml}
+outputs:
+  Rc: {quantity: characteristic_impedance, unit: mmHg*s/ml}
+  C: {quantity: total_arterial_compliance, unit: ml/mmHg}
+  L: {quantity: total_arterial_inertance, unit: mmHg*s**2/ml}
+  RMSE: {quantity: pressure_rmse, unit: mmHg}
+settings: {}
+stochastic: false

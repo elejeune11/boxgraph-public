@@ -1,0 +1,60 @@
+id: korakianitis_cellml
+kind: software
+title: Zero dimensional (lumped parameter) modelling of native human cardiovascular dynamics (CellML)
+authors: [Yubing Shi, Rod Hose]
+year: 2006
+url: https://models.physiomeproject.org/workspace/shi_hose_2009
+version: "sha256:49f1cd1547d408f8da63c72f5742f1dca9569ce4d17dffa47c53e9830a041f55"
+licence: none stated
+language: cellml
+file: corpus/cardio/code/korakianitis_cellml
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-03"}
+notes: >
+  What the code is. CellML 1.1 files from the CellML Model Repository, workspace shi_hose_2009 at
+  changeset a679cdc2e974, of the closed-loop circulation of korakianitis2006: four heart chambers as
+  variable-elastance chambers with on-off (diode) valves and orifice-law flow, a systemic and a
+  pulmonary loop each of five segments (sinus and artery R-L-C, arteriole and capillary R, vein R-C).
+  Entry point ModelMain.cellml (documentation, the four loop connections) imports ModelHeart.cellml
+  (LA, RA = TempCDa; LV, RV = TempCDv; Ela, Era = EAtrium; Elv, Erv = EVentricle; ParaHeart imported
+  twice, for the left and right sides), ModelSys.cellml and ModelPul.cellml (TempRLC, TempR, TempRC;
+  parameters ParaSys, ParaPul); Units.cellml sets UnitP = 133 Pa and UnitV = 1 mL. Every .cellml file
+  is used; CSysBase.png is the circuit schematic. No licence file or header. Authors from the RDF
+  metadata (Shi, Hose); the code states no year, so the year is the paper's (the workspace name
+  carries 2009). The documentation cites korakianitis2006 and two other 2006 papers by the same
+  authors, and says the C original's valve dynamics "have been simplified". The template and
+  systemic files hold the same equations as the sibling record shi_cellml_systemic (only the unit
+  label of pi differs), which is this model's left heart and systemic loop alone.
+
+  How it was read. CellML cannot run here, so the equations of the fifteen files are ported line by
+  line to Python (models/closed_loop_onoff, our code; files and lines in its model.yaml), and the 63
+  values the model uses are cited by file and line. The CellML has no solver settings: the port uses
+  RK4 at the paper's DT = 0.1 ms and reports the 10th to 11th s, the cycle the paper analyses
+  (q_solver; refinements on dt and simulated time).
+
+  Against the paper. 43 values are linked to korakianitis2006 Tables 1-2 and its period (from_datum).
+  All elastances, reference pressures and volumes, the four valve coefficients, the period and every
+  R, C, L of both loops agree as written, except two: R_pvn is 0.0006 in the code against 0.006
+  printed (q_rpvn), and the initial LV volume is 500 mL against Table 2's V_lv0 = 800 ml (the initial
+  RV volume, 500, agrees). Hidden choices printed nowhere in the paper: the other initial values
+  (atria 20 mL, systemic arteries 100 mmHg, pulmonary arteries 30 mmHg, veins 0 mmHg), which fix a
+  circulating volume of 1327.4 mL (q_initial_values); Ts2 = 0.45 T and activation times as fractions
+  of T (q_timing_fractions); the atrial wrap into the next cycle (q_atrial_wrap); pi = 3.14159 and
+  UnitP = 133 Pa (q_pi, q_unit_pressure). Where the paper's printed equations look misprinted, the
+  code takes the form its record suspected: the ventricular activation is 1 - cos / 1 + cos, not Eq. 3
+  as printed (q_elastance_form), and the artery flows are driven by the artery pressure, not by the
+  sinus pressure of Eq. 18 (q_eq18_code). The valves are on-off with no backflow (q_valves_simplified),
+  so the code can produce only the paper's Section 3.1 (on-off valve) results; the vena cava
+  compliances are absent (q_vena_cava).
+
+  What it reproduces. Fifteen Section 3.1 results are copied from korakianitis2006 and compared with
+  the code run as released (run_code_values) and with the code using the paper's R_pvn
+  (run_code_rpvn_paper), purpose reproduction; the build gives the verdicts. As released the code
+  gives about: LV pressure 7.9-127.4 mmHg (printed 0-130, peak 126.4), aortic pressure 87.5-127.3
+  (printed 90-130, peak 126.4), RV and pulmonary artery peaks 48 mmHg (printed 26.8; q_right_side),
+  LV volume 55-139 mL (printed about 50-120), stroke volume 84 mL (70), mean flow 5.06 L/min (about
+  5), peak aortic flow 1066 mL/s (983.4), mitral and tricuspid E peaks 948 and 609 mL/s (702.9 and
+  631.7). With the paper's R_pvn the mitral E peak drops to about 823 mL/s and the rest moves by a
+  few percent. So the code lands close (about 1%) on mean flow and the left-side pressure peaks, but not on the minimum LV pressure, stroke volume, peak aortic and mitral flows or
+  the right-side pressures (q_differences_from_paper). The documentation's claim of validation
+  against the C program cannot be checked (q_validation_claim_code). The paper's Fig. 5 curves are
+  not compared here (q_figures_not_compared).

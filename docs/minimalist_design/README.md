@@ -33,7 +33,7 @@ checkable.
 2. [BoxGraph](02-boxgraph.md): its nodes and edges, how one paper becomes a
    graph, verdicts, and the model against its numerics.
 3. [ModelAtlas](03-modelatlas.md): models as stated, relations, families.
-4. [The Synthesis](04-synthesis.md): what it holds, and the two kinds of
+4. [The Synthesis](04-synthesis.md): what it holds, and the three kinds of
    check.
 5. [How it is built](05-building.md): requirements on the build itself,
    test-driven development and reading figures.

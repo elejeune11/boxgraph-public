@@ -1,0 +1,298 @@
+# Values as printed in Olufsen 1999. Figure-read data are at the end.
+
+# --- Boundary layer estimate (p. 2) ---
+- id: nu_blood
+  quantity: kinematic_viscosity
+  unit: cm^2/s
+  origin: reported
+  printed: "0.046"
+  citation: {page: 2, printed_page: "H258", quote: "0.046 cm2/s is the kinematic viscosity", where: text}
+- id: T_heartbeat
+  quantity: cardiac_period
+  unit: s
+  origin: reported
+  printed: "1.25"
+  citation: {page: 2, printed_page: "H258", quote: "T 5 1.25 s is the period of one heartbeat", where: text}
+- id: delta_bl_estimate
+  quantity: boundary_layer_thickness
+  unit: cm
+  origin: predicted
+  printed: "≈ 0.01"
+  citation: {page: 2, printed_page: "H258", quote: "larger arteries can be estimated from", where: text}
+  note: "Printed as (nu/omega)^(1/2) = [nu T/(2 pi)]^2 ≈ 0.01 cm; the page image shows the exponent 2 and the sign ≈."
+- id: delta_bl_constant
+  quantity: boundary_layer_thickness
+  unit: mm
+  origin: reported
+  printed: "1"
+  citation: {page: 2, printed_page: "H258", quote: "the boundary layer remains constant (1 mm)", where: text}
+
+# --- Inflow scaling (p. 4, p. 11) ---
+- id: co_measured
+  quantity: cardiac_output
+  unit: l/min
+  origin: measured
+  printed: "4.14"
+  citation: {page: 4, printed_page: "H260", quote: "4.14 to 4.03 l/min, a reduction of 3%", where: text}
+  from_source: ref-20
+- id: co_scaled
+  quantity: cardiac_output
+  unit: l/min
+  origin: reported
+  printed: "4.03"
+  citation: {page: 4, printed_page: "H260", quote: "4.14 to 4.03 l/min, a reduction of 3%", where: text}
+- id: co_reduction_printed
+  quantity: cardiac_output_reduction
+  unit: percent
+  origin: derived
+  printed: "3"
+  citation: {page: 4, printed_page: "H260", quote: "4.14 to 4.03 l/min, a reduction of 3%", where: text}
+- id: co_reduction_discussion
+  quantity: cardiac_output_reduction
+  unit: percent
+  origin: derived
+  printed: "~3"
+  citation: {page: 11, printed_page: "H267", quote: "reduce cardiac output with ,3% to achieve these results", where: text}
+
+# --- Wall stiffness fit, Eq. 6 (p. 3) ---
+- id: k1_fit
+  quantity: stiffness_fit_amplitude
+  unit: g/s^2/cm
+  origin: fitted
+  printed: "2.00 x 10^7"
+  citation: {page: 3, printed_page: "H259", quote: "we obtain k1 5 2.00 3 107", where: text}
+- id: k2_fit
+  quantity: stiffness_fit_rate
+  unit: 1/cm
+  origin: fitted
+  printed: "-22.53"
+  citation: {page: 3, printed_page: "H259", quote: "k2 5 222.53 cm21, and k3 5 8.65 3 105", where: text}
+  note: "The OCR reads 222.53; the page image shows k2 = -22.53 cm^-1."
+- id: k3_fit
+  quantity: stiffness_fit_offset
+  unit: g/s^2/cm
+  origin: fitted
+  printed: "8.65 x 10^5"
+  citation: {page: 3, printed_page: "H259", quote: "k2 5 222.53 cm21, and k3 5 8.65 3 105", where: text}
+
+# --- Order of the structured tree (p. 6) ---
+- id: d_arteriole
+  quantity: arteriolar_diameter
+  unit: um
+  origin: reported
+  printed: "50"
+  citation: {page: 6, printed_page: "H262", quote: "according to the organ in question. At a diameter of 50", where: text}
+  from_source: ref-27
+- id: A_arteriolar_bed
+  quantity: arteriolar_total_area
+  unit: cm^2
+  origin: reported
+  printed: "~55"
+  citation: {page: 6, printed_page: "H262", quote: "the total cross-sectional area is ,55", where: text}
+  conditions: {arteriolar_diameter: "50 um"}
+  from_source: ref-27
+- id: n_terminal_printed
+  quantity: terminal_branch_count
+  unit: dimensionless
+  origin: derived
+  printed: "~2.8 x 10^6"
+  citation: {page: 6, printed_page: "H262", quote: "In case of a symmetric tree this gives ,2.8 3 106", where: text}
+  conditions: {arteriolar_diameter: "50 um"}
+- id: n_subtrees
+  quantity: subtree_count
+  unit: dimensionless
+  origin: reported
+  printed: "21"
+  citation: {page: 6, printed_page: "H262", quote: "there are 21 subtrees, and we", where: text}
+- id: gen_printed
+  quantity: generation_count
+  unit: dimensionless
+  origin: derived
+  printed: "~17"
+  citation: {page: 6, printed_page: "H262", quote: "therefore need ,17 generations, because", where: text}
+  conditions: {arteriolar_diameter: "50 um"}
+
+# --- Geometry of the structured tree (pp. 6-7) ---
+- id: xi_chosen
+  quantity: radius_exponent
+  unit: dimensionless
+  origin: reported
+  printed: "2.76"
+  citation: {page: 6, printed_page: "H262", quote: "on the basis of these reports we have chosen j 5 2.76", where: text}
+- id: eta_chosen
+  quantity: area_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "1.16"
+  citation: {page: 7, printed_page: "H263", quote: "throughout the tree at a value of 1.16, giving an asymmetry", where: text}
+- id: gamma_printed
+  quantity: asymmetry_ratio
+  unit: dimensionless
+  origin: derived
+  printed: "0.41"
+  citation: {page: 7, printed_page: "H263", quote: "ratio of g 5 0.41. Using these relations we are able to", where: text}
+- id: lrr_iberall
+  quantity: length_to_radius_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "50 ± 10"
+  note: "Printed as l/r ≈ 50 ± 10; the sign ≈ is left out here only because the value cannot carry both marks."
+  citation: {page: 7, printed_page: "H263", quote: "to-radius ratio lrr 5 l/r < 50 6 10", where: text}
+  from_source: ref-17
+
+# --- Brachiocephalic structured tree for Fig. 9 (p. 8) ---
+- id: lrr_brachio
+  quantity: length_to_radius_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "130"
+  citation: {page: 8, printed_page: "H264", quote: "we had to modify the length-to-radius ratio from 50 to 130", where: text}
+- id: r_root_brachio
+  quantity: tree_root_radius
+  unit: cm
+  origin: reported
+  printed: "0.5"
+  citation: {page: 8, printed_page: "H264", quote: "root radius of 0.5 cm and a minimum radius of 0.025", where: text}
+- id: r_min_brachio
+  quantity: tree_minimum_radius
+  unit: cm
+  origin: reported
+  printed: "0.025"
+  citation: {page: 8, printed_page: "H264", quote: "root radius of 0.5 cm and a minimum radius of 0.025", where: text}
+
+# --- Added in the audit: default length-to-radius ratio, minimum radii of the Fig. 1 trees and
+#     the DC-impedance scaling claim (pp. 8-9) ---
+- id: lrr_default
+  quantity: length_to_radius_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {page: 8, printed_page: "H264", quote: "we had to modify the length-to-radius ratio from 50 to 130", where: text}
+- id: r_min_r0
+  quantity: tree_minimum_radius
+  unit: cm
+  origin: reported
+  printed: "0.06"
+  citation: {page: 9, printed_page: "H265", quote: "are r0 5 0.06 cm, r1 5 0.04 cm, r2 5 0.02 cm", where: text}
+- id: r_min_r1
+  quantity: tree_minimum_radius
+  unit: cm
+  origin: reported
+  printed: "0.04"
+  citation: {page: 9, printed_page: "H265", quote: "are r0 5 0.06 cm, r1 5 0.04 cm, r2 5 0.02 cm", where: text}
+- id: r_min_r2
+  quantity: tree_minimum_radius
+  unit: cm
+  origin: reported
+  printed: "0.02"
+  citation: {page: 9, printed_page: "H265", quote: "are r0 5 0.06 cm, r1 5 0.04 cm, r2 5 0.02 cm", where: text}
+- id: r_min_r3
+  quantity: tree_minimum_radius
+  unit: cm
+  origin: reported
+  printed: "0.01"
+  citation: {page: 9, printed_page: "H265", quote: "r2 5 0.02 cm, and r3 5 0.01 cm", where: text}
+- id: dc_radius_power_printed
+  quantity: dc_impedance_radius_power
+  unit: dimensionless
+  origin: predicted
+  printed: "≈ 3"
+  citation: {page: 9, printed_page: "H265", quote: "approximately inversely proportional to the root radius", where: text}
+  note: "Printed in words ('approximately inversely proportional to the root radius to the third power'); 'The agreement is not exact'."
+
+# --- Read from Fig. 3 and Fig. 4 (p. 3) ---
+- id: Eh_r0_fit_fig3
+  quantity: wall_stiffness_Eh_over_r0
+  unit: g/s^2/cm
+  origin: fitted
+  figure: fig3_fit
+  citation: {page: 3, printed_page: "H259", where: "Fig. 3", quote: "Young's modulus E times wall thickness (h) relative to radius"}
+- id: Eh_r0_data_fig3
+  quantity: wall_stiffness_Eh_over_r0
+  unit: g/s^2/cm
+  origin: estimated
+  figure: fig3_data
+  citation: {page: 3, printed_page: "H259", where: "Fig. 3", quote: "The data and the fitted curve are shown in Fig. 3"}
+  note: "Estimates of Eh/r0 from r0 and volume compliances Cvol of refs. 53, 46, 45 via Cvol ≈ 3 r0/(2 Eh) (p. 3)."
+- id: inflow_fig4
+  quantity: inflow_rate
+  unit: cm^3/s
+  origin: measured
+  figure: fig4_inflow
+  citation: {page: 3, printed_page: "H259", where: "Fig. 4", quote: "Inflow (q) as a function of time over 3 periods"}
+  from_source: ref-20
+  note: "The magnetic-resonance measurement of ref. 20, made periodic, smoothed and scaled to a cardiac output of 4.03 l/min (p. 4)."
+
+# --- Read from Fig. 9 (p. 9): the structured-tree curves ---
+- id: Zmod_st_fig9b
+  quantity: input_impedance_modulus
+  unit: g/s/cm^4
+  origin: predicted
+  figure: fig9b_st
+  citation: {page: 9, printed_page: "H265", where: "Fig. 9(B)", quote: "solid lines indicate results from structured tree (st)"}
+- id: Zphase_st_fig9c
+  quantity: input_impedance_phase
+  unit: degree
+  origin: predicted
+  figure: fig9c_st
+  citation: {page: 9, printed_page: "H265", where: "Fig. 9(C)", quote: "solid lines indicate results from structured tree (st)"}
+
+# --- Read from Fig. 9 (p. 9), second pass: the measured impedances md 0 and md 1 (Mills et al.) ---
+- id: Zmod_md0_fig9b
+  quantity: input_impedance_modulus
+  unit: g/s/cm^4
+  origin: measured
+  figure: fig9b_md0
+  citation: {page: 9, printed_page: "H265", where: "Fig. 9(B)", quote: "dashed lines indicate measured results (md 0 and md 1)"}
+  from_source: ref-26
+  note: "The dash-dot line labelled md 0 in the legend of Fig. 9(A). Measured in man; the caption names Mills et al. (ref-26), the text of p. 8 'Nichols and O'Rourke (27)' (ref-27; see q_fig9_data_source). The paper compares it with the brachiocephalic structured tree."
+- id: Zmod_md1_fig9b
+  quantity: input_impedance_modulus
+  unit: g/s/cm^4
+  origin: measured
+  figure: fig9b_md1
+  citation: {page: 9, printed_page: "H265", where: "Fig. 9(B)", quote: "dashed lines indicate measured results (md 0 and md 1)"}
+  from_source: ref-26
+  note: "The dashed line labelled md 1 in the legend of Fig. 9(A). Source as for md 0: ref-26 (caption) or ref-27 (text, p. 8)."
+- id: Zphase_md0_fig9c
+  quantity: input_impedance_phase
+  unit: degree
+  origin: measured
+  figure: fig9c_md0
+  citation: {page: 9, printed_page: "H265", where: "Fig. 9(C)", quote: "dashed lines indicate measured results (md 0 and md 1)"}
+  from_source: ref-26
+  note: "The dash-dot line md 0. Source: ref-26 (caption) or ref-27 (text, p. 8)."
+- id: Zphase_md1_fig9c
+  quantity: input_impedance_phase
+  unit: degree
+  origin: measured
+  figure: fig9c_md1
+  citation: {page: 9, printed_page: "H265", where: "Fig. 9(C)", quote: "dashed lines indicate measured results (md 0 and md 1)"}
+  from_source: ref-26
+  note: "The dashed line md 1. Source: ref-26 (caption) or ref-27 (text, p. 8)."
+
+# --- Read from Fig. 12 (p. 11): measured pressures of Remington and Wood ---
+- id: p_aortic_fig12a
+  quantity: arterial_pressure
+  unit: mmHg
+  origin: measured
+  figure: fig12a_aortic
+  citation: {page: 11, printed_page: "H267", where: "Fig. 12(A)", quote: "Measured data for pressure p(x, t) in aorta (A)"}
+  from_source: ref-41
+  note: "The thick line 'Aortic'; time from the origin of the figure's own axis (not the time axis of Figs. 10-11)."
+- id: p_0cm_fig12b
+  quantity: arterial_pressure
+  unit: mmHg
+  origin: measured
+  figure: fig12b_0cm
+  citation: {page: 11, printed_page: "H267", where: "Fig. 12(B)", quote: "vian and brachial arteries (B) are from Ref. 41"}
+  from_source: ref-41
+  note: "The thick line '0 cm withdrawal' of the subclavian-brachial pull-back."
+- id: p_radial_fig12b
+  quantity: arterial_pressure
+  unit: mmHg
+  origin: measured
+  figure: fig12b_radial
+  citation: {page: 11, printed_page: "H267", where: "Fig. 12(B)", quote: "vian and brachial arteries (B) are from Ref. 41"}
+  from_source: ref-41
+  note: "The 'Radial' curve, read around its peak."

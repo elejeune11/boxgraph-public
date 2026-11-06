@@ -1,0 +1,109 @@
+id: circulation_baroreflex
+name: pulsating heart and circulation under carotid baroreflex control, closed loop (Eqs. 1-42), mean values at steady state
+role: model
+stated: {page: 12, printed_page: "H1744", quote: "APPENDIX: QUANTITATIVE MODEL DESCRIPTION", where: "Eqs. 1-42"}
+equation: "Eqs. 1-11 (eight vascular compartments, Psv from total volume Eq. 9); Eqs. 12-29 (atria, valves, Pmax = phi Emax (V - Vu) + (1 - phi) P0 (exp(kE V) - 1), R = kR Pmax, phi = sin^2(pi T u/Tsys), Tsys = Tsys,0 - ksys/T); Eqs. 30-31 (tau_p dP~/dt = Pcs + tau_z dPcs/dt - P~; fcs = [fmin + fmax exp((P~ - Pn)/ka)]/[1 + exp((P~ - Pn)/ka)]); Eqs. 33-34 (fes, fev); Eqs. 35-42 (sigma = G ln[fes(t - D) - fes,min + 1], d dtheta/dt = (-dtheta + sigma)/tau, theta = dtheta + theta0; T = dTs + dTv + T0, sigma_Tv = G_Tv fev(t - D_Tv))"
+inputs:
+  C_sa: {quantity: compliance, unit: "ml/mmHg"}
+  C_sp: {quantity: compliance, unit: "ml/mmHg"}
+  C_ep: {quantity: compliance, unit: "ml/mmHg"}
+  C_sv: {quantity: compliance, unit: "ml/mmHg"}
+  C_ev: {quantity: compliance, unit: "ml/mmHg"}
+  C_pa: {quantity: compliance, unit: "ml/mmHg"}
+  C_pp: {quantity: compliance, unit: "ml/mmHg"}
+  C_pv: {quantity: compliance, unit: "ml/mmHg"}
+  Vu_sa: {quantity: unstressed_volume, unit: "ml"}
+  Vu_sp: {quantity: unstressed_volume, unit: "ml"}
+  Vu_ep: {quantity: unstressed_volume, unit: "ml"}
+  Vu_pa: {quantity: unstressed_volume, unit: "ml"}
+  Vu_pp: {quantity: unstressed_volume, unit: "ml"}
+  Vu_pv: {quantity: unstressed_volume, unit: "ml"}
+  R_sa: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_sv: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_ev: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_pa: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_pp: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_pv: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  L_sa: {quantity: inertance, unit: "mmHg*s^2/ml"}
+  L_pa: {quantity: inertance, unit: "mmHg*s^2/ml"}
+  Vt: {quantity: total_blood_volume, unit: "ml"}
+  C_la: {quantity: compliance, unit: "ml/mmHg"}
+  Vu_la: {quantity: unstressed_volume, unit: "ml"}
+  R_la: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  P0_lv: {quantity: ed_pressure_scale, unit: "mmHg"}
+  kE_lv: {quantity: ed_stiffness, unit: "1/ml"}
+  Vu_lv: {quantity: ventricle_unstressed_volume, unit: "ml"}
+  kR_lv: {quantity: ventricle_viscosity_coefficient, unit: "s/ml"}
+  C_ra: {quantity: compliance, unit: "ml/mmHg"}
+  Vu_ra: {quantity: unstressed_volume, unit: "ml"}
+  R_ra: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  P0_rv: {quantity: ed_pressure_scale, unit: "mmHg"}
+  kE_rv: {quantity: ed_stiffness, unit: "1/ml"}
+  Vu_rv: {quantity: ventricle_unstressed_volume, unit: "ml"}
+  kR_rv: {quantity: ventricle_viscosity_coefficient, unit: "s/ml"}
+  ksys: {quantity: systole_rate_coefficient, unit: "s^2"}
+  Tsys0: {quantity: systole_duration, unit: "s"}
+  Pn: {quantity: carotid_sinus_pressure, unit: "mmHg"}
+  ka: {quantity: afferent_slope_pressure, unit: "mmHg"}
+  fmin: {quantity: afferent_frequency, unit: "1/s"}
+  fmax: {quantity: afferent_frequency, unit: "1/s"}
+  tau_z: {quantity: afferent_time_constant, unit: "s"}
+  tau_p: {quantity: afferent_time_constant, unit: "s"}
+  fes_inf: {quantity: sympathetic_frequency, unit: "1/s"}
+  fes0: {quantity: sympathetic_frequency, unit: "1/s"}
+  kes: {quantity: sympathetic_decay_constant, unit: "s"}
+  fes_min: {quantity: sympathetic_frequency, unit: "1/s"}
+  fev0: {quantity: vagal_frequency, unit: "1/s"}
+  fev_inf: {quantity: vagal_frequency, unit: "1/s"}
+  kev: {quantity: vagal_sigmoid_scale, unit: "1/s"}
+  fcs0: {quantity: afferent_frequency, unit: "1/s"}
+  G_Emax_lv: {quantity: emax_gain, unit: "mmHg*s/ml"}
+  G_Emax_rv: {quantity: emax_gain, unit: "mmHg*s/ml"}
+  G_R_sp: {quantity: resistance_gain, unit: "mmHg*s^2/ml"}
+  G_R_ep: {quantity: resistance_gain, unit: "mmHg*s^2/ml"}
+  G_Vu_sv: {quantity: volume_gain, unit: "ml*s"}
+  G_Vu_ev: {quantity: volume_gain, unit: "ml*s"}
+  G_T_s: {quantity: heart_period_gain, unit: "s^2"}
+  G_T_v: {quantity: heart_period_gain, unit: "s^2"}
+  Emax_lv0: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  Emax_rv0: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  R_sp0: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_ep0: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  Vu_sv0: {quantity: unstressed_volume, unit: "ml"}
+  Vu_ev0: {quantity: unstressed_volume, unit: "ml"}
+  T0: {quantity: heart_period, unit: "s"}
+  tau_Emax_lv: {quantity: effector_time_constant, unit: "s"}
+  tau_Emax_rv: {quantity: effector_time_constant, unit: "s"}
+  tau_R_sp: {quantity: effector_time_constant, unit: "s"}
+  tau_R_ep: {quantity: effector_time_constant, unit: "s"}
+  tau_Vu_sv: {quantity: effector_time_constant, unit: "s"}
+  tau_Vu_ev: {quantity: effector_time_constant, unit: "s"}
+  tau_T_s: {quantity: effector_time_constant, unit: "s"}
+  tau_T_v: {quantity: effector_time_constant, unit: "s"}
+  D_Emax_lv: {quantity: effector_delay, unit: "s"}
+  D_Emax_rv: {quantity: effector_delay, unit: "s"}
+  D_R_sp: {quantity: effector_delay, unit: "s"}
+  D_R_ep: {quantity: effector_delay, unit: "s"}
+  D_Vu_sv: {quantity: effector_delay, unit: "s"}
+  D_Vu_ev: {quantity: effector_delay, unit: "s"}
+  D_T_s: {quantity: effector_delay, unit: "s"}
+  D_T_v: {quantity: effector_delay, unit: "s"}
+outputs:
+  CO: {quantity: cardiac_output, unit: "ml/s"}
+  F_sp: {quantity: splanchnic_flow, unit: "ml/s"}
+  sp_fraction: {quantity: splanchnic_flow_fraction, unit: "percent"}
+  SAP: {quantity: mean_arterial_pressure, unit: "mmHg"}
+  T: {quantity: heart_period, unit: "s"}
+  Emax_lv: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  Emax_rv: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  R_sp: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_ep: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  Vu_sv: {quantity: unstressed_volume, unit: "ml"}
+  Vu_ev: {quantity: unstressed_volume, unit: "ml"}
+settings: {dt: 0.002, t_settle: 150.0, t_average: 20.0}
+stochastic: false
+# Closed loop (Pcs = Psa). Integrated from a fixed starting state near the basal state for t_settle seconds,
+# then outputs are trapezoidal time averages over the whole heart periods completed in the next
+# t_average seconds (the paper: a 20-s tracing in stationary conditions, an integer number of heart
+# periods, trapezoidal rule). Integration is classical fixed-step Runge-Kutta (the paper used adaptive
+# RKF45 with steps up to 0.01 s and tolerance 1e-6); pure delays read the efferent frequency stored at t - D.

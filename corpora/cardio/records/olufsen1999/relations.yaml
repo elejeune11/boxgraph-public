@@ -1,0 +1,21 @@
+# The paper cites Stergiopulos et al. (ref. 46) among works that use a windkessel outflow condition and
+# states the three-element windkessel as Eq. 7; stergiopulos1992's terminal condition is that windkessel
+# (R1 in series with R2 parallel to CT, R1 + R2 = RT). Units: dyn*s/cm^5 = g/s/cm^4, cm^5/dyn = cm^4*s^2/g.
+- id: rel_windkessel_stergiopulos1992
+  kind: same_as
+  a: stergiopulos1992/terminal_impedance_eq7
+  b: olufsen1999/windkessel_eq7
+  mapping: {R1: "R1r*RT", R2: "(1 - R1r)*RT", CT: "CT", omega: "2*pi*f"}
+  output_map: {Zmod: mod}
+  regime: {RT: [500, 100000], R1r: [0.05, 0.5], CT: [1.0e-6, 1.0e-3], f: [0, 20]}
+  provenance: stated
+  citation: {page: 4, quote: "outflow boundary (see, e.g., Refs. 40, 46, 52), among others", where: "text before Eq. 7"}
+- id: rel_windkessel_phase_stergiopulos1992
+  kind: same_as
+  a: stergiopulos1992/terminal_impedance_eq7
+  b: olufsen1999/windkessel_eq7
+  mapping: {R1: "R1r*RT", R2: "(1 - R1r)*RT", CT: "CT", omega: "2*pi*f"}
+  output_map: {Zphase: phase}
+  regime: {RT: [500, 100000], R1r: [0.05, 0.5], CT: [1.0e-6, 1.0e-3], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 4, quote: "outflow boundary (see, e.g., Refs. 40, 46, 52), among others", where: "text before Eq. 7"}

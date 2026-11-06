@@ -1,0 +1,14 @@
+id: afferent_transfer
+name: frequency response of the afferent first-order dynamics (Eq. 30), from carotid sinus pressure to P~
+role: model
+stated: {page: 13, printed_page: "H1745", quote: "ment of a linear derivative first-order dynamic block", where: "Eq. 30"}
+equation: "tau_p dP~/dt = Pcs + tau_z dPcs/dt - P~; so P~/Pcs = (1 + j w tau_z)/(1 + j w tau_p), w = 2 pi f"
+inputs:
+  tau_z: {quantity: afferent_time_constant, unit: s}
+  tau_p: {quantity: afferent_time_constant, unit: s}
+  f: {quantity: carotid_pressure_frequency, unit: Hz}
+outputs:
+  modulus: {quantity: afferent_gain_normalized, unit: dimensionless, description: "|P~/Pcs|, which is 1 at zero frequency, so already normalized"}
+  phase: {quantity: afferent_phase, unit: degree}
+settings: {}
+stochastic: false

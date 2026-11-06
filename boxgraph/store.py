@@ -4,7 +4,7 @@ records/<source-id>/
   source.yaml                  the Source (with its reader)
   quantities.yaml data.yaml added.yaml runs.yaml comparisons.yaml
   refinements.yaml questions.yaml references.yaml relations.yaml
-  correspondences.yaml         each a YAML list (any may be absent)
+  figures.yaml cited.yaml validations.yaml     each a YAML list (any may be absent)
   models/<model-id>/model.yaml + model.py
   text/page-NNN.txt            extracted page text (git-ignored), for citation checks
 
@@ -33,7 +33,6 @@ LIST_FILES = {
     "references": "references.yaml",
     "relations": "relations.yaml",
     "figures": "figures.yaml",
-    "correspondences": "correspondences.yaml",
     "cited": "cited.yaml",
     "validations": "validations.yaml",
 }

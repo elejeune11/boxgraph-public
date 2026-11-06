@@ -1,0 +1,41 @@
+- id: run_windkessel_code_values
+  model: windkessel_left_heart
+  inputs:
+    ElaMax: ElaMax_code
+    ElaMin: ElaMin_code
+    PlaIni: PlaIni_code
+    VlaIni: VlaIni_code
+    ElvMax: ElvMax_code
+    ElvMin: ElvMin_code
+    PlvIni: PlvIni_code
+    VlvIni: VlvIni_code
+    T: T_code
+    Tpwb: Tpwb_code
+    Tpww: Tpww_code
+    Ts1: Ts1_code
+    Ts2: Ts2_code
+    CVao: CVao_code
+    CVmi: CVmi_code
+    Vlv0: Vlv0_code
+    Vla0: Vla0_code
+    Cwk: Cwk_code
+    Rwk: Rwk_code
+    P0: P0wk_code
+    pi: pi_code_ventricle
+  settings: {dt: 0.0001, t_end: 10.0}
+  outputs:
+    P_lv_max: wk_plv_max
+    P_lv_min: wk_plv_min
+    P_art_max: wk_part_max
+    P_art_min: wk_part_min
+    V_lv_max: wk_vlv_max
+    V_lv_min: wk_vlv_min
+    SV: wk_sv
+    Q_ao_mean: wk_qao_mean
+    Q_mi_mean: wk_qmi_mean
+    Q_ao_peak: wk_qao_peak
+    Q_mi_peak: wk_qmi_peak
+  note: >
+    All inputs as written in the code. Solver settings are ours (the CellML holds none): classical
+    RK4, dt = 0.1 ms, 10 s simulated from the code's initial values, results over the 10th beat
+    (the cycle is periodic to < 0.01% by then; see q_solver and ref_dt).

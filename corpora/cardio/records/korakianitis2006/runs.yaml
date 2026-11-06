@@ -1,0 +1,1675 @@
+# The circulation model's inputs are the same in every run except where a run overrides them
+# (YAML merge key). All initial conditions not printed are in added.yaml.
+- id: run_simplified
+  model: circulation_valves
+  inputs: &base
+    CQao: CQao
+    CQmi: CQmi
+    CQpo: CQpo
+    CQti: CQti
+    Elvs: Elvs
+    Elvd: Elvd
+    Plv0: Plv0
+    Vlv0: Vlv0
+    Ela_max: Ela_max
+    Ela_min: Ela_min
+    Pla0: Pla0
+    Vla0: Vla0
+    Ervs: Ervs
+    Ervd: Ervd
+    Prv0: Prv0
+    Vrv0: Vrv0
+    Era_max: Era_max
+    Era_min: Era_min
+    Pra0: Pra0
+    Vra0: Vra0
+    Csas: Csas
+    Rsas: Rsas
+    Lsas: Lsas
+    Csat: Csat
+    Rsat: Rsat
+    Lsat: Lsat
+    Rsar: Rsar
+    Rscp: Rscp
+    Rsvn: Rsvn
+    Csvn: Csvn
+    Cpas: Cpas
+    Rpas: Rpas
+    Lpas: Lpas
+    Cpat: Cpat
+    Rpat: Rpat
+    Lpat: Lpat
+    Rpar: Rpar
+    Rpcp: Rpcp
+    Rpvn: Rpvn
+    Cpvn: Cpvn
+    Kp_ao: Kp_ao
+    Kf_ao: Kf_ao
+    Kb_ao: Kb_ao
+    Kv_ao: Kv_ao
+    Kp_mi: Kp_mi
+    Kf_mi: Kf_mi
+    Kb_mi: Kb_mi
+    Kv_mi: Kv_mi
+    Kp_po: Kp_po
+    Kf_po: Kf_po
+    Kb_po: Kb_po
+    Kv_po: Kv_po
+    Kp_ti: Kp_ti
+    Kf_ti: Kf_ti
+    Kb_ti: Kb_ti
+    Kv_ti: Kv_ti
+    theta_max_ao: theta_max_ao
+    theta_min_ao: theta_min_ao
+    theta_max_mi: theta_max_mi
+    theta_min_mi: theta_min_mi
+    theta_ref_mi: theta_max_mi
+    theta_max_po: theta_max_po
+    theta_min_po: theta_min_po
+    theta_max_ti: theta_max_ti
+    theta_min_ti: theta_min_ti
+    T: T_period
+    Ts1: Ts1_added
+    Ts2: Ts2_added
+    Tpwb: Tpwb
+    Tpww: Tpww
+    Vlv_init: Vlv_init_table2
+    Vla_init: Vla_init_added
+    Vrv_init: Vrv_init_table2
+    Vra_init: Vra_init_added
+    Psas_init: Psas_init_added
+    Psat_init: Psat_init_added
+    Psvn_init: Psvn_init_added
+    Ppas_init: Ppas_init_added
+    Ppat_init: Ppat_init_added
+    Ppvn_init: Ppvn_init_added
+  settings: {valve_model: on_off}
+  outputs:
+    Plv_max: plv_max_simplified_pred
+    Plv_min: plv_min_simplified_pred
+    Psas_max: psas_max_simplified_pred
+    Psas_min: psas_min_simplified_pred
+    Prv_max: prv_max_simplified_pred
+    Ppas_max: ppas_max_simplified_pred
+    CO: co_simplified_pred
+    Vlv_max: vlv_max_simplified_pred
+    Vlv_min: vlv_min_simplified_pred
+    SV: sv_simplified_pred
+    Qao_max: qao_max_simplified_pred
+    Qmi_E: qmi_E_simplified_pred
+    Qti_E: qti_E_simplified_pred
+  note: "Section 3.1: on-off valves (Eq. 7); the leaflet-angle inputs are carried but unused."
+
+- id: run_normal
+  model: circulation_valves
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  outputs:
+    Plv_max: plv_max_normal_pred
+    Psas_max: psas_max_normal_pred
+    Psas_ed: psas_ed_normal_pred
+    Prv_max: prv_max_normal_pred
+    Ppas_max: ppas_max_normal_pred
+    Vlv_max: vlv_max_normal_pred
+    Qao_max: qao_max_normal_pred
+    Qmi_E: qmi_E_normal_pred
+    Qti_E: qti_E_normal_pred
+    Qao_rev: qao_rev_normal_pred
+    Qpo_rev: qpo_rev_normal_pred
+    Qmi_rev: qmi_rev_normal_pred
+    Qti_rev: qti_rev_normal_pred
+  note: "Section 3.2, Fig. 9: leaflet dynamics with the vortex term as printed in Eq. 14 (K_v Q sin theta)."
+
+- id: run_normal_eq13
+  model: circulation_valves
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 2}
+  outputs:
+    Plv_max: plv_max_normal_eq13_pred
+    Qao_max: qao_max_normal_eq13_pred
+    Qao_rev: qao_rev_normal_eq13_pred
+    Qmi_rev: qmi_rev_normal_eq13_pred
+    Qmi_E: qmi_E_normal_eq13_pred
+  note: "Section 3.2 with the vortex term as printed in Eq. 13 (k_v Q sin 2 theta); see q_eq13_eq14."
+
+- id: run_stenosis
+  model: circulation_valves
+  inputs:
+    <<: *base
+    theta_max_mi: theta_stenosis_mi
+    theta_ref_mi: theta_max_mi
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  outputs:
+    Plv_max: plv_max_stenosis_pred
+    Qmi_E: qmi_E_stenosis_pred
+    Qmi_dmin: qmi_dmin_stenosis_pred
+    Qmi_A: qmi_A_stenosis_pred
+  note: "Section 3.3.1: mitral leaflet limited at 50 deg; Eq. 8 keeps the healthy 75 deg in its denominator (added reading, q_stenosis_eq8)."
+
+- id: run_regurgitation
+  model: circulation_valves
+  inputs:
+    <<: *base
+    theta_min_ao: theta_regurgitation_ao
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  outputs:
+    Psas_ed: psas_ed_regurgitation_pred
+    Qao_max: qao_max_regurgitation_pred
+    Vlv_max: vlv_max_regurgitation_pred
+  note: "Section 3.3.2: minimum aortic leaflet angle 25 deg."
+
+- id: run_area_stenosis
+  model: valve_area_eq8
+  inputs: {theta: theta_stenosis_mi, theta_max: theta_max_mi}
+  outputs: {AR: area_fraction_stenosis_pred}
+
+- id: run_sv_printed
+  model: stroke_volume
+  inputs: {Vmax: vlv_max_simplified, Vmin: vlv_min_simplified}
+  outputs: {SV: sv_from_printed_range}
+  note: "the paper's own arithmetic on its printed volume range"
+
+- id: run_drop_printed
+  model: pressure_drop
+  inputs: {P_normal: psas_ed_normal, P_case: psas_ed_regurgitation}
+  outputs: {drop: drop_from_printed_pressures}
+  note: "the paper's own arithmetic on its printed end-diastolic aortic pressures"
+# ==== Figure readings (figure-reading pass) ====
+- id: run_fig2_elv
+  model: elastance_eq2_5
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1_added, Ts2: Ts2_added, Tpwb: Tpwb, Tpww: Tpww}
+  sweep: {t: fig2_elv_read}
+  outputs: {Elv: fig2_elv_pred}
+  note: "Fig. 2: Eqs. 2, 3 and 5 as printed, at the times read off Fig. 2"
+- id: run_fig2_ela
+  model: elastance_eq2_5
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1_added, Ts2: Ts2_added, Tpwb: Tpwb, Tpww: Tpww}
+  sweep: {t: fig2_ela_read}
+  outputs: {Ela: fig2_ela_pred}
+  note: "Fig. 2: Eqs. 2, 3 and 5 as printed, at the times read off Fig. 2"
+- id: run_fig5a_pao
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5a_pao_read}
+  outputs: {Psas: fig5a_pao_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(a)"
+- id: run_fig5a_pla
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5a_pla_read}
+  outputs: {Pla: fig5a_pla_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(a)"
+- id: run_fig5a_plv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5a_plv_read}
+  outputs: {Plv: fig5a_plv_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(a)"
+- id: run_fig5b_qao
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5b_qao_read}
+  outputs: {Qao: fig5b_qao_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(b)"
+- id: run_fig5b_qmi
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5b_qmi_read}
+  outputs: {Qmi: fig5b_qmi_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(b)"
+- id: run_fig5c_vlv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5c_vlv_read}
+  outputs: {Vlv: fig5c_vlv_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(c)"
+- id: run_fig5c_vla
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5c_vla_read}
+  outputs: {Vla: fig5c_vla_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(c)"
+- id: run_fig5d_ppo
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5d_ppo_read}
+  outputs: {Ppas: fig5d_ppo_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(d)"
+- id: run_fig5d_pra
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5d_pra_read}
+  outputs: {Pra: fig5d_pra_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(d)"
+- id: run_fig5d_prv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5d_prv_read}
+  outputs: {Prv: fig5d_prv_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(d)"
+- id: run_fig5e_qpa
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5e_qpa_read}
+  outputs: {Qpo: fig5e_qpa_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(e)"
+- id: run_fig5e_qti
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5e_qti_read}
+  outputs: {Qti: fig5e_qti_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(e)"
+- id: run_fig5f_vrv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5f_vrv_read}
+  outputs: {Vrv: fig5f_vrv_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(f)"
+- id: run_fig5f_vra
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5f_vra_read}
+  outputs: {Vra: fig5f_vra_pred}
+  note: "Fig. 5: on-off valves (Eq. 7), as run_simplified; at the times read off Fig. 5(f)"
+- id: run_fig6a_ao
+  model: circulation_waveform
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig6a_ao_read}
+  outputs: {th_ao: fig6a_ao_pred}
+  note: "Fig. 6: leaflet dynamics with K_v,ao, K_v,mi, K_v,po and K_v,ti set to zero; at the times read off Fig. 6(a)"
+- id: run_fig6a_mi
+  model: circulation_waveform
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig6a_mi_read}
+  outputs: {th_mi: fig6a_mi_pred}
+  note: "Fig. 6: leaflet dynamics with K_v,ao, K_v,mi, K_v,po and K_v,ti set to zero; at the times read off Fig. 6(a)"
+- id: run_fig6b_po
+  model: circulation_waveform
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig6b_po_read}
+  outputs: {th_po: fig6b_po_pred}
+  note: "Fig. 6: leaflet dynamics with K_v,ao, K_v,mi, K_v,po and K_v,ti set to zero; at the times read off Fig. 6(b)"
+- id: run_fig6b_ti
+  model: circulation_waveform
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig6b_ti_read}
+  outputs: {th_ti: fig6b_ti_pred}
+  note: "Fig. 6: leaflet dynamics with K_v,ao, K_v,mi, K_v,po and K_v,ti set to zero; at the times read off Fig. 6(b)"
+- id: run_fig7a_ao
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig7a_ao_read}
+  outputs: {th_ao: fig7a_ao_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 7(a)"
+- id: run_fig7a_mi
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig7a_mi_read}
+  outputs: {th_mi: fig7a_mi_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 7(a)"
+- id: run_fig7b_po
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig7b_po_read}
+  outputs: {th_po: fig7b_po_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 7(b)"
+- id: run_fig7b_ti
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig7b_ti_read}
+  outputs: {th_ti: fig7b_ti_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 7(b)"
+- id: run_fig8a_pressure
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig8a_pressure_read}
+  outputs: {acc_p_mi: fig8a_pressure_pred}
+  note: "Fig. 8: as run_normal, on the 11-12 s axis of Fig. 8; at the times read off Fig. 8(a)"
+- id: run_fig8b_pressure
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig8b_pressure_read}
+  outputs: {acc_p_mi: fig8b_pressure_pred}
+  note: "Fig. 8: as run_normal, on the 11-12 s axis of Fig. 8; at the times read off Fig. 8(b)"
+- id: run_fig8b_velocity
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig8b_velocity_read}
+  outputs: {acc_b_mi: fig8b_velocity_pred}
+  note: "Fig. 8: as run_normal, on the 11-12 s axis of Fig. 8; at the times read off Fig. 8(b)"
+- id: run_fig8b_vortex
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig8b_vortex_read}
+  outputs: {acc_v_mi: fig8b_vortex_pred}
+  note: "Fig. 8: as run_normal, on the 11-12 s axis of Fig. 8; at the times read off Fig. 8(b)"
+- id: run_fig9a_pao
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9a_pao_read}
+  outputs: {Psas: fig9a_pao_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(a)"
+- id: run_fig9a_pla
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9a_pla_read}
+  outputs: {Pla: fig9a_pla_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(a)"
+- id: run_fig9a_plv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9a_plv_read}
+  outputs: {Plv: fig9a_plv_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(a)"
+- id: run_fig9b_qao
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9b_qao_read}
+  outputs: {Qao: fig9b_qao_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(b)"
+- id: run_fig9b_qmi
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9b_qmi_read}
+  outputs: {Qmi: fig9b_qmi_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(b)"
+- id: run_fig9c_vlv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9c_vlv_read}
+  outputs: {Vlv: fig9c_vlv_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(c)"
+- id: run_fig9c_vla
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9c_vla_read}
+  outputs: {Vla: fig9c_vla_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(c)"
+- id: run_fig9d_ppo
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9d_ppo_read}
+  outputs: {Ppas: fig9d_ppo_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(d)"
+- id: run_fig9d_pra
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9d_pra_read}
+  outputs: {Pra: fig9d_pra_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(d)"
+- id: run_fig9d_prv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9d_prv_read}
+  outputs: {Prv: fig9d_prv_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(d)"
+- id: run_fig9e_qti
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9e_qti_read}
+  outputs: {Qti: fig9e_qti_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(e)"
+- id: run_fig9e_qpa
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9e_qpa_read}
+  outputs: {Qpo: fig9e_qpa_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(e)"
+- id: run_fig9f_vrv
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9f_vrv_read}
+  outputs: {Vrv: fig9f_vrv_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(f)"
+- id: run_fig9f_vra
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig9f_vra_read}
+  outputs: {Vra: fig9f_vra_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 9(f)"
+- id: run_fig10_normal
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig10_normal_read}
+  outputs: {th_mi: fig10_normal_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 10"
+- id: run_fig10_stenosis
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig10_stenosis_read}
+  outputs: {th_mi: fig10_stenosis_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 10"
+- id: run_fig12_normal
+  model: circulation_waveform
+  inputs: *base
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig12_normal_read}
+  outputs: {th_ao: fig12_normal_pred}
+  note: "Figs. 7, 9, 10, 12: leaflet dynamics with the vortex term of Eq. 14, as run_normal; at the times read off Fig. 12"
+- id: run_fig12_regurgitation
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig12_regurgitation_read}
+  outputs: {th_ao: fig12_regurgitation_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 12"
+- id: run_fig11a_pao
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11a_pao_read}
+  outputs: {Psas: fig11a_pao_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(a)"
+- id: run_fig11a_pla
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11a_pla_read}
+  outputs: {Pla: fig11a_pla_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(a)"
+- id: run_fig11a_plv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11a_plv_read}
+  outputs: {Plv: fig11a_plv_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(a)"
+- id: run_fig11b_qmi
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11b_qmi_read}
+  outputs: {Qmi: fig11b_qmi_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(b)"
+- id: run_fig11b_qao
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11b_qao_read}
+  outputs: {Qao: fig11b_qao_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(b)"
+- id: run_fig11c_vlv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11c_vlv_read}
+  outputs: {Vlv: fig11c_vlv_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(c)"
+- id: run_fig11c_vla
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11c_vla_read}
+  outputs: {Vla: fig11c_vla_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(c)"
+- id: run_fig11d_ppo
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11d_ppo_read}
+  outputs: {Ppas: fig11d_ppo_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(d)"
+- id: run_fig11d_pra
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11d_pra_read}
+  outputs: {Pra: fig11d_pra_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(d)"
+- id: run_fig11d_prv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11d_prv_read}
+  outputs: {Prv: fig11d_prv_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(d)"
+- id: run_fig11e_qti
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11e_qti_read}
+  outputs: {Qti: fig11e_qti_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(e)"
+- id: run_fig11e_qpa
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11e_qpa_read}
+  outputs: {Qpo: fig11e_qpa_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(e)"
+- id: run_fig11f_vrv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11f_vrv_read}
+  outputs: {Vrv: fig11f_vrv_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(f)"
+- id: run_fig11f_vra
+  model: circulation_waveform
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, theta_ref_mi: theta_max_mi}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig11f_vra_read}
+  outputs: {Vra: fig11f_vra_pred}
+  note: "Figs. 10, 11: mitral stenosis, as run_stenosis; at the times read off Fig. 11(f)"
+- id: run_fig13a_pao
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13a_pao_read}
+  outputs: {Psas: fig13a_pao_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(a)"
+- id: run_fig13a_pla
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13a_pla_read}
+  outputs: {Pla: fig13a_pla_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(a)"
+- id: run_fig13a_plv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13a_plv_read}
+  outputs: {Plv: fig13a_plv_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(a)"
+- id: run_fig13b_qao
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13b_qao_read}
+  outputs: {Qao: fig13b_qao_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(b)"
+- id: run_fig13b_qmi
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13b_qmi_read}
+  outputs: {Qmi: fig13b_qmi_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(b)"
+- id: run_fig13c_vlv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13c_vlv_read}
+  outputs: {Vlv: fig13c_vlv_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(c)"
+- id: run_fig13c_vla
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13c_vla_read}
+  outputs: {Vla: fig13c_vla_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(c)"
+- id: run_fig13d_ppo
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13d_ppo_read}
+  outputs: {Ppas: fig13d_ppo_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(d)"
+- id: run_fig13d_pra
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13d_pra_read}
+  outputs: {Pra: fig13d_pra_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(d)"
+- id: run_fig13d_prv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13d_prv_read}
+  outputs: {Prv: fig13d_prv_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(d)"
+- id: run_fig13e_qti
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13e_qti_read}
+  outputs: {Qti: fig13e_qti_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(e)"
+- id: run_fig13e_qpa
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13e_qpa_read}
+  outputs: {Qpo: fig13e_qpa_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(e)"
+- id: run_fig13f_vrv
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13f_vrv_read}
+  outputs: {Vrv: fig13f_vrv_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(f)"
+- id: run_fig13f_vra
+  model: circulation_waveform
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic, vortex_angle_factor: 1}
+  sweep: {t: fig13f_vra_read}
+  outputs: {Vra: fig13f_vra_pred}
+  note: "Figs. 12, 13: aortic regurgitation, as run_regurgitation; at the times read off Fig. 13(f)"
+
+# ==== Revisit: corrected variants (circulation_valves_corrected, _corrected_sin; see audit.md) ====
+- id: run_simplified_corr
+  model: circulation_valves_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  outputs: {Plv_max: plv_max_simplified_corr_pred, Plv_min: plv_min_simplified_corr_pred, Psas_max: psas_max_simplified_corr_pred, Psas_min: psas_min_simplified_corr_pred, Prv_max: prv_max_simplified_corr_pred, Ppas_max: ppas_max_simplified_corr_pred, CO: co_simplified_corr_pred, Vlv_max: vlv_max_simplified_corr_pred, Vlv_min: vlv_min_simplified_corr_pred, SV: sv_simplified_corr_pred, Qao_max: qao_max_simplified_corr_pred, Qmi_E: qmi_E_simplified_corr_pred, Qti_E: qti_E_simplified_corr_pred}
+  note: "as run_simplified, corrected variant (Eqs. 3, 6, 18; Eq. 14 has no effect with on-off valves)"
+- id: run_normal_corr
+  model: circulation_valves_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_normal_corr_pred, Psas_max: psas_max_normal_corr_pred, Psas_ed: psas_ed_normal_corr_pred, Prv_max: prv_max_normal_corr_pred, Ppas_max: ppas_max_normal_corr_pred, Vlv_max: vlv_max_normal_corr_pred, Qao_max: qao_max_normal_corr_pred, Qmi_E: qmi_E_normal_corr_pred, Qti_E: qti_E_normal_corr_pred, Qao_rev: qao_rev_normal_corr_pred, Qpo_rev: qpo_rev_normal_corr_pred, Qmi_rev: qmi_rev_normal_corr_pred, Qti_rev: qti_rev_normal_corr_pred}
+  note: "as run_normal, corrected variant with the vortex term sin(2 theta)"
+- id: run_normal_corr_sin
+  model: circulation_valves_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_normal_corr_sin_pred, Psas_max: psas_max_normal_corr_sin_pred, Psas_ed: psas_ed_normal_corr_sin_pred, Prv_max: prv_max_normal_corr_sin_pred, Ppas_max: ppas_max_normal_corr_sin_pred, Vlv_max: vlv_max_normal_corr_sin_pred, Qao_max: qao_max_normal_corr_sin_pred, Qmi_E: qmi_E_normal_corr_sin_pred, Qti_E: qti_E_normal_corr_sin_pred, Qao_rev: qao_rev_normal_corr_sin_pred, Qpo_rev: qpo_rev_normal_corr_sin_pred, Qmi_rev: qmi_rev_normal_corr_sin_pred, Qti_rev: qti_rev_normal_corr_sin_pred}
+  note: "as run_normal, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_stenosis_corr
+  model: circulation_valves_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_stenosis_corr_pred, Qmi_E: qmi_E_stenosis_corr_pred, Qmi_dmin: qmi_dmin_stenosis_corr_pred, Qmi_A: qmi_A_stenosis_corr_pred}
+  note: "as run_stenosis, corrected variant with the vortex term sin(2 theta)"
+- id: run_stenosis_corr_sin
+  model: circulation_valves_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_stenosis_corr_sin_pred, Qmi_E: qmi_E_stenosis_corr_sin_pred, Qmi_dmin: qmi_dmin_stenosis_corr_sin_pred, Qmi_A: qmi_A_stenosis_corr_sin_pred}
+  note: "as run_stenosis, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_regurgitation_corr
+  model: circulation_valves_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  outputs: {Psas_ed: psas_ed_regurgitation_corr_pred, Qao_max: qao_max_regurgitation_corr_pred, Vlv_max: vlv_max_regurgitation_corr_pred}
+  note: "as run_regurgitation, corrected variant with the vortex term sin(2 theta)"
+- id: run_regurgitation_corr_sin
+  model: circulation_valves_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  outputs: {Psas_ed: psas_ed_regurgitation_corr_sin_pred, Qao_max: qao_max_regurgitation_corr_sin_pred, Vlv_max: vlv_max_regurgitation_corr_sin_pred}
+  note: "as run_regurgitation, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_simplified_corr_ic
+  model: circulation_valves_corrected
+  inputs: {<<: *base, Vlv_init: Vlv_init_cellml}
+  settings: {valve_model: on_off}
+  outputs: {Plv_max: plv_max_simplified_corr_ic_pred, Plv_min: plv_min_simplified_corr_ic_pred, Psas_max: psas_max_simplified_corr_ic_pred, Psas_min: psas_min_simplified_corr_ic_pred, Prv_max: prv_max_simplified_corr_ic_pred, Ppas_max: ppas_max_simplified_corr_ic_pred, CO: co_simplified_corr_ic_pred, Vlv_max: vlv_max_simplified_corr_ic_pred, Vlv_min: vlv_min_simplified_corr_ic_pred, SV: sv_simplified_corr_ic_pred, Qao_max: qao_max_simplified_corr_ic_pred, Qmi_E: qmi_E_simplified_corr_ic_pred, Qti_E: qti_E_simplified_corr_ic_pred}
+  note: "as run_simplified_corr with the initial LV volume of the authors' CellML code (Vlv_init_cellml)"
+- id: run_normal_corr_ic
+  model: circulation_valves_corrected
+  inputs: {<<: *base, Vlv_init: Vlv_init_cellml}
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_normal_corr_ic_pred, Psas_max: psas_max_normal_corr_ic_pred, Psas_ed: psas_ed_normal_corr_ic_pred, Prv_max: prv_max_normal_corr_ic_pred, Ppas_max: ppas_max_normal_corr_ic_pred, Vlv_max: vlv_max_normal_corr_ic_pred, Qao_max: qao_max_normal_corr_ic_pred, Qmi_E: qmi_E_normal_corr_ic_pred, Qti_E: qti_E_normal_corr_ic_pred, Qao_rev: qao_rev_normal_corr_ic_pred, Qpo_rev: qpo_rev_normal_corr_ic_pred, Qmi_rev: qmi_rev_normal_corr_ic_pred, Qti_rev: qti_rev_normal_corr_ic_pred}
+  note: "as run_normal_corr with the initial LV volume of the authors' CellML code (Vlv_init_cellml)"
+- id: run_normal_corr_sin_ic
+  model: circulation_valves_corrected_sin
+  inputs: {<<: *base, Vlv_init: Vlv_init_cellml}
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_normal_corr_sin_ic_pred, Psas_max: psas_max_normal_corr_sin_ic_pred, Psas_ed: psas_ed_normal_corr_sin_ic_pred, Prv_max: prv_max_normal_corr_sin_ic_pred, Ppas_max: ppas_max_normal_corr_sin_ic_pred, Vlv_max: vlv_max_normal_corr_sin_ic_pred, Qao_max: qao_max_normal_corr_sin_ic_pred, Qmi_E: qmi_E_normal_corr_sin_ic_pred, Qti_E: qti_E_normal_corr_sin_ic_pred, Qao_rev: qao_rev_normal_corr_sin_ic_pred, Qpo_rev: qpo_rev_normal_corr_sin_ic_pred, Qmi_rev: qmi_rev_normal_corr_sin_ic_pred, Qti_rev: qti_rev_normal_corr_sin_ic_pred}
+  note: "as run_normal_corr_sin with the initial LV volume of the authors' CellML code (Vlv_init_cellml)"
+- id: run_stenosis_corr_ic
+  model: circulation_valves_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, Vlv_init: Vlv_init_cellml}
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_stenosis_corr_ic_pred, Qmi_E: qmi_E_stenosis_corr_ic_pred, Qmi_dmin: qmi_dmin_stenosis_corr_ic_pred, Qmi_A: qmi_A_stenosis_corr_ic_pred}
+  note: "as run_stenosis_corr with the initial LV volume of the authors' CellML code (Vlv_init_cellml)"
+- id: run_stenosis_corr_sin_ic
+  model: circulation_valves_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi, Vlv_init: Vlv_init_cellml}
+  settings: {valve_model: dynamic}
+  outputs: {Plv_max: plv_max_stenosis_corr_sin_ic_pred, Qmi_E: qmi_E_stenosis_corr_sin_ic_pred, Qmi_dmin: qmi_dmin_stenosis_corr_sin_ic_pred, Qmi_A: qmi_A_stenosis_corr_sin_ic_pred}
+  note: "as run_stenosis_corr_sin with the initial LV volume of the authors' CellML code (Vlv_init_cellml)"
+- id: run_regurgitation_corr_ic
+  model: circulation_valves_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao, Vlv_init: Vlv_init_cellml}
+  settings: {valve_model: dynamic}
+  outputs: {Psas_ed: psas_ed_regurgitation_corr_ic_pred, Qao_max: qao_max_regurgitation_corr_ic_pred, Vlv_max: vlv_max_regurgitation_corr_ic_pred}
+  note: "as run_regurgitation_corr with the initial LV volume of the authors' CellML code (Vlv_init_cellml)"
+- id: run_regurgitation_corr_sin_ic
+  model: circulation_valves_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao, Vlv_init: Vlv_init_cellml}
+  settings: {valve_model: dynamic}
+  outputs: {Psas_ed: psas_ed_regurgitation_corr_sin_ic_pred, Qao_max: qao_max_regurgitation_corr_sin_ic_pred, Vlv_max: vlv_max_regurgitation_corr_sin_ic_pred}
+  note: "as run_regurgitation_corr_sin with the initial LV volume of the authors' CellML code (Vlv_init_cellml)"
+- id: run_fig2_elv_corr
+  model: elastance_eq2_5_corrected
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1_added, Ts2: Ts2_added, Tpwb: Tpwb, Tpww: Tpww}
+  settings: {}
+  sweep: {t: fig2_elv_read}
+  outputs: {Elv: fig2_elv_corr_pred}
+  note: "Fig. 2: Eqs. 2 and 5 as printed, Eq. 3 corrected"
+- id: run_fig2_ela_corr
+  model: elastance_eq2_5_corrected
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1_added, Ts2: Ts2_added, Tpwb: Tpwb, Tpww: Tpww}
+  settings: {}
+  sweep: {t: fig2_ela_read}
+  outputs: {Ela: fig2_ela_corr_pred}
+  note: "Fig. 2: Eqs. 2 and 5 as printed, Eq. 3 corrected"
+- id: run_fig5a_pao_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5a_pao_read}
+  outputs: {Psas: fig5a_pao_corr_pred}
+  note: "as run_fig5a_pao, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5a_pla_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5a_pla_read}
+  outputs: {Pla: fig5a_pla_corr_pred}
+  note: "as run_fig5a_pla, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5a_plv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5a_plv_read}
+  outputs: {Plv: fig5a_plv_corr_pred}
+  note: "as run_fig5a_plv, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5b_qao_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5b_qao_read}
+  outputs: {Qao: fig5b_qao_corr_pred}
+  note: "as run_fig5b_qao, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5b_qmi_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5b_qmi_read}
+  outputs: {Qmi: fig5b_qmi_corr_pred}
+  note: "as run_fig5b_qmi, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5c_vlv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5c_vlv_read}
+  outputs: {Vlv: fig5c_vlv_corr_pred}
+  note: "as run_fig5c_vlv, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5c_vla_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5c_vla_read}
+  outputs: {Vla: fig5c_vla_corr_pred}
+  note: "as run_fig5c_vla, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5d_ppo_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5d_ppo_read}
+  outputs: {Ppas: fig5d_ppo_corr_pred}
+  note: "as run_fig5d_ppo, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5d_pra_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5d_pra_read}
+  outputs: {Pra: fig5d_pra_corr_pred}
+  note: "as run_fig5d_pra, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5d_prv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5d_prv_read}
+  outputs: {Prv: fig5d_prv_corr_pred}
+  note: "as run_fig5d_prv, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5e_qpa_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5e_qpa_read}
+  outputs: {Qpo: fig5e_qpa_corr_pred}
+  note: "as run_fig5e_qpa, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5e_qti_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5e_qti_read}
+  outputs: {Qti: fig5e_qti_corr_pred}
+  note: "as run_fig5e_qti, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5f_vrv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5f_vrv_read}
+  outputs: {Vrv: fig5f_vrv_corr_pred}
+  note: "as run_fig5f_vrv, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig5f_vra_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: on_off}
+  sweep: {t: fig5f_vra_read}
+  outputs: {Vra: fig5f_vra_corr_pred}
+  note: "as run_fig5f_vra, corrected variant (on-off valves: the Eq. 14 reading has no effect)"
+- id: run_fig6a_ao_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig6a_ao_read}
+  outputs: {th_ao: fig6a_ao_corr_pred}
+  note: "as run_fig6a_ao, corrected variant (K_v = 0: the Eq. 14 reading has no effect)"
+- id: run_fig6a_mi_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig6a_mi_read}
+  outputs: {th_mi: fig6a_mi_corr_pred}
+  note: "as run_fig6a_mi, corrected variant (K_v = 0: the Eq. 14 reading has no effect)"
+- id: run_fig6b_po_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig6b_po_read}
+  outputs: {th_po: fig6b_po_corr_pred}
+  note: "as run_fig6b_po, corrected variant (K_v = 0: the Eq. 14 reading has no effect)"
+- id: run_fig6b_ti_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, Kv_ao: Kv_zero, Kv_mi: Kv_zero, Kv_po: Kv_zero, Kv_ti: Kv_zero}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig6b_ti_read}
+  outputs: {th_ti: fig6b_ti_corr_pred}
+  note: "as run_fig6b_ti, corrected variant (K_v = 0: the Eq. 14 reading has no effect)"
+- id: run_fig7a_ao_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7a_ao_read}
+  outputs: {th_ao: fig7a_ao_corr_pred}
+  note: "as run_fig7a_ao, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig7a_ao_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7a_ao_read}
+  outputs: {th_ao: fig7a_ao_corr_sin_pred}
+  note: "as run_fig7a_ao, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig7a_mi_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7a_mi_read}
+  outputs: {th_mi: fig7a_mi_corr_pred}
+  note: "as run_fig7a_mi, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig7a_mi_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7a_mi_read}
+  outputs: {th_mi: fig7a_mi_corr_sin_pred}
+  note: "as run_fig7a_mi, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig7b_po_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7b_po_read}
+  outputs: {th_po: fig7b_po_corr_pred}
+  note: "as run_fig7b_po, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig7b_po_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7b_po_read}
+  outputs: {th_po: fig7b_po_corr_sin_pred}
+  note: "as run_fig7b_po, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig7b_ti_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7b_ti_read}
+  outputs: {th_ti: fig7b_ti_corr_pred}
+  note: "as run_fig7b_ti, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig7b_ti_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig7b_ti_read}
+  outputs: {th_ti: fig7b_ti_corr_sin_pred}
+  note: "as run_fig7b_ti, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig8a_pressure_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8a_pressure_read}
+  outputs: {acc_p_mi: fig8a_pressure_corr_pred}
+  note: "as run_fig8a_pressure, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig8a_pressure_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8a_pressure_read}
+  outputs: {acc_p_mi: fig8a_pressure_corr_sin_pred}
+  note: "as run_fig8a_pressure, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig8b_pressure_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8b_pressure_read}
+  outputs: {acc_p_mi: fig8b_pressure_corr_pred}
+  note: "as run_fig8b_pressure, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig8b_pressure_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8b_pressure_read}
+  outputs: {acc_p_mi: fig8b_pressure_corr_sin_pred}
+  note: "as run_fig8b_pressure, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig8b_velocity_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8b_velocity_read}
+  outputs: {acc_b_mi: fig8b_velocity_corr_pred}
+  note: "as run_fig8b_velocity, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig8b_velocity_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8b_velocity_read}
+  outputs: {acc_b_mi: fig8b_velocity_corr_sin_pred}
+  note: "as run_fig8b_velocity, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig8b_vortex_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8b_vortex_read}
+  outputs: {acc_v_mi: fig8b_vortex_corr_pred}
+  note: "as run_fig8b_vortex, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig8b_vortex_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig8b_vortex_read}
+  outputs: {acc_v_mi: fig8b_vortex_corr_sin_pred}
+  note: "as run_fig8b_vortex, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9a_pao_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9a_pao_read}
+  outputs: {Psas: fig9a_pao_corr_pred}
+  note: "as run_fig9a_pao, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9a_pao_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9a_pao_read}
+  outputs: {Psas: fig9a_pao_corr_sin_pred}
+  note: "as run_fig9a_pao, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9a_pla_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9a_pla_read}
+  outputs: {Pla: fig9a_pla_corr_pred}
+  note: "as run_fig9a_pla, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9a_pla_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9a_pla_read}
+  outputs: {Pla: fig9a_pla_corr_sin_pred}
+  note: "as run_fig9a_pla, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9a_plv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9a_plv_read}
+  outputs: {Plv: fig9a_plv_corr_pred}
+  note: "as run_fig9a_plv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9a_plv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9a_plv_read}
+  outputs: {Plv: fig9a_plv_corr_sin_pred}
+  note: "as run_fig9a_plv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9b_qao_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9b_qao_read}
+  outputs: {Qao: fig9b_qao_corr_pred}
+  note: "as run_fig9b_qao, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9b_qao_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9b_qao_read}
+  outputs: {Qao: fig9b_qao_corr_sin_pred}
+  note: "as run_fig9b_qao, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9b_qmi_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9b_qmi_read}
+  outputs: {Qmi: fig9b_qmi_corr_pred}
+  note: "as run_fig9b_qmi, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9b_qmi_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9b_qmi_read}
+  outputs: {Qmi: fig9b_qmi_corr_sin_pred}
+  note: "as run_fig9b_qmi, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9c_vlv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9c_vlv_read}
+  outputs: {Vlv: fig9c_vlv_corr_pred}
+  note: "as run_fig9c_vlv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9c_vlv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9c_vlv_read}
+  outputs: {Vlv: fig9c_vlv_corr_sin_pred}
+  note: "as run_fig9c_vlv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9c_vla_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9c_vla_read}
+  outputs: {Vla: fig9c_vla_corr_pred}
+  note: "as run_fig9c_vla, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9c_vla_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9c_vla_read}
+  outputs: {Vla: fig9c_vla_corr_sin_pred}
+  note: "as run_fig9c_vla, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9d_ppo_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9d_ppo_read}
+  outputs: {Ppas: fig9d_ppo_corr_pred}
+  note: "as run_fig9d_ppo, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9d_ppo_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9d_ppo_read}
+  outputs: {Ppas: fig9d_ppo_corr_sin_pred}
+  note: "as run_fig9d_ppo, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9d_pra_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9d_pra_read}
+  outputs: {Pra: fig9d_pra_corr_pred}
+  note: "as run_fig9d_pra, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9d_pra_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9d_pra_read}
+  outputs: {Pra: fig9d_pra_corr_sin_pred}
+  note: "as run_fig9d_pra, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9d_prv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9d_prv_read}
+  outputs: {Prv: fig9d_prv_corr_pred}
+  note: "as run_fig9d_prv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9d_prv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9d_prv_read}
+  outputs: {Prv: fig9d_prv_corr_sin_pred}
+  note: "as run_fig9d_prv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9e_qti_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9e_qti_read}
+  outputs: {Qti: fig9e_qti_corr_pred}
+  note: "as run_fig9e_qti, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9e_qti_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9e_qti_read}
+  outputs: {Qti: fig9e_qti_corr_sin_pred}
+  note: "as run_fig9e_qti, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9e_qpa_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9e_qpa_read}
+  outputs: {Qpo: fig9e_qpa_corr_pred}
+  note: "as run_fig9e_qpa, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9e_qpa_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9e_qpa_read}
+  outputs: {Qpo: fig9e_qpa_corr_sin_pred}
+  note: "as run_fig9e_qpa, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9f_vrv_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9f_vrv_read}
+  outputs: {Vrv: fig9f_vrv_corr_pred}
+  note: "as run_fig9f_vrv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9f_vrv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9f_vrv_read}
+  outputs: {Vrv: fig9f_vrv_corr_sin_pred}
+  note: "as run_fig9f_vrv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig9f_vra_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9f_vra_read}
+  outputs: {Vra: fig9f_vra_corr_pred}
+  note: "as run_fig9f_vra, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig9f_vra_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig9f_vra_read}
+  outputs: {Vra: fig9f_vra_corr_sin_pred}
+  note: "as run_fig9f_vra, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig10_normal_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig10_normal_read}
+  outputs: {th_mi: fig10_normal_corr_pred}
+  note: "as run_fig10_normal, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig10_normal_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig10_normal_read}
+  outputs: {th_mi: fig10_normal_corr_sin_pred}
+  note: "as run_fig10_normal, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig10_stenosis_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig10_stenosis_read}
+  outputs: {th_mi: fig10_stenosis_corr_pred}
+  note: "as run_fig10_stenosis, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig10_stenosis_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig10_stenosis_read}
+  outputs: {th_mi: fig10_stenosis_corr_sin_pred}
+  note: "as run_fig10_stenosis, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig12_normal_corr
+  model: circulation_waveform_corrected
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig12_normal_read}
+  outputs: {th_ao: fig12_normal_corr_pred}
+  note: "as run_fig12_normal, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig12_normal_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: *base
+  settings: {valve_model: dynamic}
+  sweep: {t: fig12_normal_read}
+  outputs: {th_ao: fig12_normal_corr_sin_pred}
+  note: "as run_fig12_normal, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig12_regurgitation_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig12_regurgitation_read}
+  outputs: {th_ao: fig12_regurgitation_corr_pred}
+  note: "as run_fig12_regurgitation, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig12_regurgitation_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig12_regurgitation_read}
+  outputs: {th_ao: fig12_regurgitation_corr_sin_pred}
+  note: "as run_fig12_regurgitation, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11a_pao_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11a_pao_read}
+  outputs: {Psas: fig11a_pao_corr_pred}
+  note: "as run_fig11a_pao, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11a_pao_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11a_pao_read}
+  outputs: {Psas: fig11a_pao_corr_sin_pred}
+  note: "as run_fig11a_pao, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11a_pla_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11a_pla_read}
+  outputs: {Pla: fig11a_pla_corr_pred}
+  note: "as run_fig11a_pla, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11a_pla_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11a_pla_read}
+  outputs: {Pla: fig11a_pla_corr_sin_pred}
+  note: "as run_fig11a_pla, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11a_plv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11a_plv_read}
+  outputs: {Plv: fig11a_plv_corr_pred}
+  note: "as run_fig11a_plv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11a_plv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11a_plv_read}
+  outputs: {Plv: fig11a_plv_corr_sin_pred}
+  note: "as run_fig11a_plv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11b_qmi_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11b_qmi_read}
+  outputs: {Qmi: fig11b_qmi_corr_pred}
+  note: "as run_fig11b_qmi, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11b_qmi_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11b_qmi_read}
+  outputs: {Qmi: fig11b_qmi_corr_sin_pred}
+  note: "as run_fig11b_qmi, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11b_qao_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11b_qao_read}
+  outputs: {Qao: fig11b_qao_corr_pred}
+  note: "as run_fig11b_qao, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11b_qao_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11b_qao_read}
+  outputs: {Qao: fig11b_qao_corr_sin_pred}
+  note: "as run_fig11b_qao, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11c_vlv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11c_vlv_read}
+  outputs: {Vlv: fig11c_vlv_corr_pred}
+  note: "as run_fig11c_vlv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11c_vlv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11c_vlv_read}
+  outputs: {Vlv: fig11c_vlv_corr_sin_pred}
+  note: "as run_fig11c_vlv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11c_vla_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11c_vla_read}
+  outputs: {Vla: fig11c_vla_corr_pred}
+  note: "as run_fig11c_vla, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11c_vla_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11c_vla_read}
+  outputs: {Vla: fig11c_vla_corr_sin_pred}
+  note: "as run_fig11c_vla, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11d_ppo_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11d_ppo_read}
+  outputs: {Ppas: fig11d_ppo_corr_pred}
+  note: "as run_fig11d_ppo, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11d_ppo_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11d_ppo_read}
+  outputs: {Ppas: fig11d_ppo_corr_sin_pred}
+  note: "as run_fig11d_ppo, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11d_pra_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11d_pra_read}
+  outputs: {Pra: fig11d_pra_corr_pred}
+  note: "as run_fig11d_pra, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11d_pra_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11d_pra_read}
+  outputs: {Pra: fig11d_pra_corr_sin_pred}
+  note: "as run_fig11d_pra, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11d_prv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11d_prv_read}
+  outputs: {Prv: fig11d_prv_corr_pred}
+  note: "as run_fig11d_prv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11d_prv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11d_prv_read}
+  outputs: {Prv: fig11d_prv_corr_sin_pred}
+  note: "as run_fig11d_prv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11e_qti_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11e_qti_read}
+  outputs: {Qti: fig11e_qti_corr_pred}
+  note: "as run_fig11e_qti, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11e_qti_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11e_qti_read}
+  outputs: {Qti: fig11e_qti_corr_sin_pred}
+  note: "as run_fig11e_qti, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11e_qpa_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11e_qpa_read}
+  outputs: {Qpo: fig11e_qpa_corr_pred}
+  note: "as run_fig11e_qpa, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11e_qpa_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11e_qpa_read}
+  outputs: {Qpo: fig11e_qpa_corr_sin_pred}
+  note: "as run_fig11e_qpa, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11f_vrv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11f_vrv_read}
+  outputs: {Vrv: fig11f_vrv_corr_pred}
+  note: "as run_fig11f_vrv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11f_vrv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11f_vrv_read}
+  outputs: {Vrv: fig11f_vrv_corr_sin_pred}
+  note: "as run_fig11f_vrv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig11f_vra_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11f_vra_read}
+  outputs: {Vra: fig11f_vra_corr_pred}
+  note: "as run_fig11f_vra, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig11f_vra_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_max_mi: theta_stenosis_mi}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig11f_vra_read}
+  outputs: {Vra: fig11f_vra_corr_sin_pred}
+  note: "as run_fig11f_vra, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13a_pao_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13a_pao_read}
+  outputs: {Psas: fig13a_pao_corr_pred}
+  note: "as run_fig13a_pao, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13a_pao_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13a_pao_read}
+  outputs: {Psas: fig13a_pao_corr_sin_pred}
+  note: "as run_fig13a_pao, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13a_pla_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13a_pla_read}
+  outputs: {Pla: fig13a_pla_corr_pred}
+  note: "as run_fig13a_pla, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13a_pla_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13a_pla_read}
+  outputs: {Pla: fig13a_pla_corr_sin_pred}
+  note: "as run_fig13a_pla, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13a_plv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13a_plv_read}
+  outputs: {Plv: fig13a_plv_corr_pred}
+  note: "as run_fig13a_plv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13a_plv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13a_plv_read}
+  outputs: {Plv: fig13a_plv_corr_sin_pred}
+  note: "as run_fig13a_plv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13b_qao_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13b_qao_read}
+  outputs: {Qao: fig13b_qao_corr_pred}
+  note: "as run_fig13b_qao, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13b_qao_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13b_qao_read}
+  outputs: {Qao: fig13b_qao_corr_sin_pred}
+  note: "as run_fig13b_qao, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13b_qmi_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13b_qmi_read}
+  outputs: {Qmi: fig13b_qmi_corr_pred}
+  note: "as run_fig13b_qmi, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13b_qmi_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13b_qmi_read}
+  outputs: {Qmi: fig13b_qmi_corr_sin_pred}
+  note: "as run_fig13b_qmi, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13c_vlv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13c_vlv_read}
+  outputs: {Vlv: fig13c_vlv_corr_pred}
+  note: "as run_fig13c_vlv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13c_vlv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13c_vlv_read}
+  outputs: {Vlv: fig13c_vlv_corr_sin_pred}
+  note: "as run_fig13c_vlv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13c_vla_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13c_vla_read}
+  outputs: {Vla: fig13c_vla_corr_pred}
+  note: "as run_fig13c_vla, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13c_vla_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13c_vla_read}
+  outputs: {Vla: fig13c_vla_corr_sin_pred}
+  note: "as run_fig13c_vla, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13d_ppo_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13d_ppo_read}
+  outputs: {Ppas: fig13d_ppo_corr_pred}
+  note: "as run_fig13d_ppo, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13d_ppo_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13d_ppo_read}
+  outputs: {Ppas: fig13d_ppo_corr_sin_pred}
+  note: "as run_fig13d_ppo, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13d_pra_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13d_pra_read}
+  outputs: {Pra: fig13d_pra_corr_pred}
+  note: "as run_fig13d_pra, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13d_pra_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13d_pra_read}
+  outputs: {Pra: fig13d_pra_corr_sin_pred}
+  note: "as run_fig13d_pra, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13d_prv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13d_prv_read}
+  outputs: {Prv: fig13d_prv_corr_pred}
+  note: "as run_fig13d_prv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13d_prv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13d_prv_read}
+  outputs: {Prv: fig13d_prv_corr_sin_pred}
+  note: "as run_fig13d_prv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13e_qti_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13e_qti_read}
+  outputs: {Qti: fig13e_qti_corr_pred}
+  note: "as run_fig13e_qti, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13e_qti_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13e_qti_read}
+  outputs: {Qti: fig13e_qti_corr_sin_pred}
+  note: "as run_fig13e_qti, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13e_qpa_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13e_qpa_read}
+  outputs: {Qpo: fig13e_qpa_corr_pred}
+  note: "as run_fig13e_qpa, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13e_qpa_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13e_qpa_read}
+  outputs: {Qpo: fig13e_qpa_corr_sin_pred}
+  note: "as run_fig13e_qpa, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13f_vrv_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13f_vrv_read}
+  outputs: {Vrv: fig13f_vrv_corr_pred}
+  note: "as run_fig13f_vrv, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13f_vrv_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13f_vrv_read}
+  outputs: {Vrv: fig13f_vrv_corr_sin_pred}
+  note: "as run_fig13f_vrv, corrected variant with Eq. 14 as printed (sin theta)"
+- id: run_fig13f_vra_corr
+  model: circulation_waveform_corrected
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13f_vra_read}
+  outputs: {Vra: fig13f_vra_corr_pred}
+  note: "as run_fig13f_vra, corrected variant with the vortex term sin(2 theta)"
+- id: run_fig13f_vra_corr_sin
+  model: circulation_waveform_corrected_sin
+  inputs: {<<: *base, theta_min_ao: theta_regurgitation_ao}
+  settings: {valve_model: dynamic}
+  sweep: {t: fig13f_vra_read}
+  outputs: {Vra: fig13f_vra_corr_sin_pred}
+  note: "as run_fig13f_vra, corrected variant with Eq. 14 as printed (sin theta)"

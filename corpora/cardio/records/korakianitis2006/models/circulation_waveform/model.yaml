@@ -1,0 +1,123 @@
+id: circulation_waveform
+name: waveforms of the closed-loop circulation (Eqs. 1-20) at an instant t, as plotted in Figs. 4-13
+role: model
+stated: {page: 3, printed_page: "1966", quote: "provided in Fig. 1. The system is modelled in three", where: "Eqs. 1-20; Figs. 4-13"}
+equation: >
+  the equations of circulation_valves (Eqs. 1-20 as printed), integrated from t = 0; the state,
+  valve flows and leaflet angles at time t; and, for the mitral leaflet, the four terms of Eq. 14:
+  pressure effect (P_la - P_lv) K_p cos theta, friction effect -K_f dtheta/dt, velocity (blood motion)
+  effect K_b Q cos theta, vortex effect -K_v Q sin theta (Q >= 0)
+built_from: [circulation_valves]
+inputs:
+  CQao: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQmi: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQpo: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQti: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  Elvs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Elvd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Plv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vlv0: {quantity: chamber_reference_volume, unit: ml}
+  Ela_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ela_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pla0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vla0: {quantity: chamber_reference_volume, unit: ml}
+  Ervs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ervd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Prv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vrv0: {quantity: chamber_reference_volume, unit: ml}
+  Era_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Era_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pra0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vra0: {quantity: chamber_reference_volume, unit: ml}
+  Csas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Csat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rsar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rscp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rsvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Csvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Cpas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Cpat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rpar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpcp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Cpvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Kp_ao: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ao: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_ao: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_ao: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_mi: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_mi: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_mi: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_mi: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_po: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_po: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_po: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_po: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_ti: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ti: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_ti: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_ti: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  theta_max_ao: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ao: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_mi: {quantity: leaflet_max_angle, unit: deg, description: "upper limit of the mitral leaflet angle"}
+  theta_min_mi: {quantity: leaflet_min_angle, unit: deg}
+  theta_ref_mi: {quantity: leaflet_max_angle, unit: deg, description: "theta_max in the denominator of Eq. 8 for the mitral valve"}
+  theta_max_po: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_po: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_ti: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ti: {quantity: leaflet_min_angle, unit: deg}
+  T: {quantity: heart_period, unit: s}
+  Ts1: {quantity: time_peak_systole, unit: s}
+  Ts2: {quantity: time_end_systole, unit: s}
+  Tpwb: {quantity: p_wave_onset, unit: s}
+  Tpww: {quantity: p_wave_duration, unit: s}
+  Vlv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vla_init: {quantity: initial_chamber_volume, unit: ml}
+  Vrv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vra_init: {quantity: initial_chamber_volume, unit: ml}
+  Psas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  t: {quantity: time, unit: s, description: "time since the start of the simulation (the figures' t axis)"}
+outputs:
+  Plv: {quantity: lv_pressure, unit: mmHg}
+  Pla: {quantity: la_pressure, unit: mmHg}
+  Psas: {quantity: aortic_pressure, unit: mmHg, description: "P_sas, labelled P(ao) in the figures"}
+  Prv: {quantity: rv_pressure, unit: mmHg}
+  Pra: {quantity: ra_pressure, unit: mmHg}
+  Ppas: {quantity: pulmonary_artery_pressure, unit: mmHg, description: "P_pas, labelled P(po) in the figures"}
+  Qmi: {quantity: mitral_flow, unit: ml/s}
+  Qao: {quantity: aortic_valve_flow, unit: ml/s}
+  Qti: {quantity: tricuspid_flow, unit: ml/s}
+  Qpo: {quantity: pulmonary_valve_flow, unit: ml/s, description: "labelled Q(pa) in the figures"}
+  Vlv: {quantity: lv_volume, unit: ml}
+  Vla: {quantity: la_volume, unit: ml}
+  Vrv: {quantity: rv_volume, unit: ml}
+  Vra: {quantity: ra_volume, unit: ml}
+  th_ao: {quantity: aortic_leaflet_angle, unit: deg, description: "NaN for on-off valves (no leaflet in Eq. 7)"}
+  th_mi: {quantity: mitral_leaflet_angle, unit: deg}
+  th_po: {quantity: pulmonary_leaflet_angle, unit: deg}
+  th_ti: {quantity: tricuspid_leaflet_angle, unit: deg}
+  acc_p_mi: {quantity: leaflet_pressure_effect, unit: rad/s^2}
+  acc_f_mi: {quantity: leaflet_friction_effect, unit: rad/s^2}
+  acc_b_mi: {quantity: leaflet_velocity_effect, unit: rad/s^2}
+  acc_v_mi: {quantity: leaflet_vortex_effect, unit: rad/s^2}
+settings:
+  dt: 0.0001            # Table 5, DT
+  t_end: 12.2           # added: long enough for every plotted window (Figs. 5-13: 9.8-11.2 s; Figs. 4, 8: 10.9-12.1 s)
+  t_record: 9.7
+  valve_model: dynamic  # dynamic: Eqs. 8 and 14; on_off: Eq. 7
+  vortex_angle_factor: 1
+  scheme: rk4           # added, as in circulation_valves (q_scheme)
+stochastic: false

@@ -1,0 +1,48 @@
+id: bioreactor_waveform
+name: lumped-parameter model of the pulsatile bioreactor (Eqs. 5-1 to 5-15), states at an instant of the periodic solution
+role: model
+stated: {page: 11, printed_page: "171", quote: "The equations are solved using the classical Runge", where: "Section 5.3, Figs. 5-4 to 5-6"}
+equation: "Eqs. 5-1 to 5-15 as in bioreactor_eqs5_1_15, evaluated at time t"
+built_from: [bioreactor_eqs5_1_15]
+inputs:
+  Rcu: {quantity: hydraulic_resistance, unit: mmHg*s/ml}
+  Ccu: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Lcu: {quantity: hydraulic_inertance, unit: mmHg*s^2/ml}
+  hcu: {quantity: segment_height, unit: m}
+  Rct: {quantity: hydraulic_resistance, unit: mmHg*s/ml}
+  Cct: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Rcl: {quantity: hydraulic_resistance, unit: mmHg*s/ml}
+  Ccl: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Lcl: {quantity: hydraulic_inertance, unit: mmHg*s^2/ml}
+  hcl: {quantity: segment_height, unit: m}
+  ms: {quantity: diaphragm_mass, unit: kg}
+  As: {quantity: diaphragm_area, unit: m^2}
+  kf: {quantity: diaphragm_damping, unit: N*s/m}
+  ke: {quantity: diaphragm_stiffness, unit: N/m}
+  hs: {quantity: segment_height, unit: m}
+  Ps0: {quantity: air_pressure_mean, unit: mmHg}
+  Psa: {quantity: air_pressure_amplitude, unit: mmHg}
+  CQci: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQco: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  Cco: {quantity: hydraulic_compliance, unit: ml/mmHg}
+  Patm: {quantity: atmospheric_pressure, unit: mmHg}
+  ha: {quantity: reservoir_media_height, unit: m}
+  rho: {quantity: media_density, unit: kg/m^3}
+  T: {quantity: drive_period, unit: s}
+  g: {quantity: gravity, unit: m/s^2}
+  t: {quantity: time, unit: s}
+outputs:
+  Pct: {quantity: tissue_construct_pressure, unit: mmHg}
+  Qct: {quantity: tissue_construct_flow, unit: ml/s}
+  l: {quantity: diaphragm_displacement, unit: m}
+  u: {quantity: diaphragm_velocity, unit: m/s}
+  Pcl: {quantity: lower_chamber_pressure, unit: mmHg}
+  Pcu: {quantity: upper_chamber_pressure, unit: mmHg}
+  Ps: {quantity: air_chamber_pressure, unit: mmHg}
+  Qci: {quantity: inlet_valve_flow, unit: ml/s}
+  Qs: {quantity: diaphragm_flow, unit: ml/s}
+settings:
+  dt: 2.0e-5
+  n_cycles: 12
+  record_stride: 5
+stochastic: false

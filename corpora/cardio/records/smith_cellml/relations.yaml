@@ -1,0 +1,189 @@
+# Relations between the CellML encoding and the closed-loop model of smith2004.
+# mapping: each input of b (the CellML port, pressures in the file's declared kPa) as an expression in
+# the inputs of a (smith2004/closed_loop, pressures in mmHg); 7.500616827 is mmHg per kPa.
+# Model parameters the paper's model does not have are given the file's own numbers (lines 95, 97,
+# 1157-1160), scaled like every other pressure-carrying number so the file's ratios are kept.
+- id: rel_file_recreates_paper_co
+  kind: same_as
+  a: smith2004/closed_loop
+  b: smith_cellml/cellml_closed_loop
+  mapping: &map
+    R_mt: "R_mt/7.500616827"
+    R_av: "R_av/7.500616827"
+    R_tc: "R_tc/7.500616827"
+    R_pv: "R_pv/7.500616827"
+    R_pul: "R_pul/7.500616827"
+    R_sys: "R_sys/7.500616827"
+    L_tc: "8.0093e-5/7.500616827"
+    L_pv: "L_pv/7.500616827"
+    L_mt: "7.6968e-5/7.500616827"
+    L_av: "L_av/7.500616827"
+    P_th: "P_th/7.500616827"
+    A: "A"
+    B: "B"
+    C: "C"
+    period: "60/HR"
+    P_0_pcd: "P0_pcd/7.500616827"
+    V_0_pcd: "V0_pcd"
+    lambda_pcd: "lam_pcd"
+    E_es_lvf: "E_lvf/7.500616827"
+    V_d_lvf: "Vd_lvf"
+    P_0_lvf: "P0_lvf/7.500616827"
+    lambda_lvf: "lam_lvf"
+    V_0_lvf: "V0_lvf"
+    E_es_rvf: "E_rvf/7.500616827"
+    V_d_rvf: "Vd_rvf"
+    P_0_rvf: "P0_rvf/7.500616827"
+    lambda_rvf: "lam_rvf"
+    V_0_rvf: "V0_rvf"
+    E_es_spt: "E_spt/7.500616827"
+    V_d_spt: "Vd_spt"
+    P_0_spt: "P0_spt/7.500616827"
+    lambda_spt: "lam_spt"
+    V_0_spt: "V0_spt"
+    one: "1"
+    E_es_pa: "E_pa/7.500616827"
+    V_d_pa: "Vd_pa"
+    E_es_pu: "E_pu/7.500616827"
+    V_d_pu: "Vd_pu"
+    E_es_ao: "E_ao/7.500616827"
+    V_d_ao: "Vd_ao"
+    E_es_vc: "E_vc/7.500616827"
+    V_d_vc: "Vd_vc"
+    V_lv_init: "V_tot*94.6812/1500"
+    V_rv_init: "V_tot*90.7302/1500"
+    V_pa_init: "V_tot*43.0123/1500"
+    V_pu_init: "V_tot*808.4579/1500"
+    V_ao_init: "V_tot*133.3381/1500"
+    V_vc_init: "V_tot*329.7803/1500"
+    Q_mt_init: "245.5813"
+    Q_av_init: "0"
+    Q_tc_init: "190.0661"
+    Q_pv_init: "0"
+  output_map: {CO: CO}
+  regime: &file_regime
+    E_lvf: [2.59, 3.17]
+    Vd_lvf: [0, 0]
+    P0_lvf: [0.108, 0.132]
+    lam_lvf: [0.0297, 0.0363]
+    V0_lvf: [0, 0]
+    E_rvf: [0.527, 0.644]
+    Vd_rvf: [0, 0]
+    P0_rvf: [0.194, 0.237]
+    lam_rvf: [0.0207, 0.0253]
+    V0_rvf: [0, 0]
+    E_spt: [43.9, 53.6]
+    Vd_spt: [1.8, 2.2]
+    P0_spt: [1.0, 1.22]
+    lam_spt: [0.392, 0.479]
+    V0_spt: [1.8, 2.2]
+    P0_pcd: [0.45, 0.55]
+    lam_pcd: [0.027, 0.033]
+    V0_pcd: [180, 220]
+    P_th: [-4, 0]
+    E_ao: [0.622, 0.760]
+    Vd_ao: [0, 0]
+    E_vc: [0.00531, 0.00649]
+    Vd_vc: [0, 0]
+    E_pa: [0.332, 0.406]
+    Vd_pa: [0, 0]
+    E_pu: [0.00657, 0.00803]
+    Vd_pu: [0, 0]
+    R_mt: [0.0142, 0.0174]
+    R_av: [0.0162, 0.0198]
+    R_tc: [0.0213, 0.0261]
+    R_pv: [0.00495, 0.00605]
+    R_sys: [0.98, 2.18]
+    R_pul: [0.140, 0.171]
+    L_av: [0.00011, 0.000134]
+    L_pv: [0.000134, 0.000164]
+    HR: [80, 80]
+    V_tot: [1350, 1650]
+    A: [0.9, 1.0]
+    B: [72, 88]
+    C: [0.35, 0.40]
+    pth_pulm: [1, 1]
+  tolerance: 0.01
+  provenance: stated
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "27", quote: "This model will run in COR, PCEnv and OpenCell to recreate the published results. It is based off the original Matlab code obtained from the model authors."}
+  assumptions:
+    - "the file as written: pressures in its declared kPa (converted exactly, so the claim is tested in the units the file states), 13 beats as its driver allows; the paper's model at its record's 100 beats"
+    - "regime: within 10% of the parameter set both records use (the file's numbers), with P_th over the paper's -4 to 0 mmHg and R_sys from the baseline to its doubled value; tolerance 1%, below the precision of the printed results (9%, 120/80 mmHg)"
+    - "HR fixed at the paper's 80 beats/min (the file's period 0.75 s): the file defines its driver for 13 periods only, and at other periods the fixed 0.2 ms step grid ends past 13 periods, where the file's model is undefined"
+    - "pth_pulm fixed at 1 and the free walls' V_d, V_0 fixed at 0: the file adds P_th to the pulmonary pressures and leaves the free walls' V_d, V_0 out of its septum equation, so a's switch and those inputs are held where the file's form is the paper's"
+    - "the file's mitral and tricuspid inertances (lines 95, 97) and initial valve flows (lines 1157-1160), which the paper's model does not have, at the file's values; its initial volumes as the share of V_tot the file gives (they add up to 1500 ml)"
+- id: rel_file_recreates_paper_pao
+  kind: same_as
+  a: smith2004/closed_loop
+  b: smith_cellml/cellml_closed_loop
+  mapping: *map
+  output_map: {Pao_sys: Pao_sys}
+  regime: *file_regime
+  tolerance: 0.01
+  provenance: stated
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "27", quote: "This model will run in COR, PCEnv and OpenCell to recreate the published results. It is based off the original Matlab code obtained from the model authors."}
+  assumptions:
+    - "as rel_file_recreates_paper_co, for the aortic systolic pressure (the file's kPa converted to the paper's mmHg)"
+- id: rel_cyclic_approximates_paper_co
+  kind: approximated_by
+  a: smith2004/closed_loop
+  b: smith_cellml/cellml_closed_loop_mmhg_cyclic
+  mapping: *map
+  output_map: {CO: CO}
+  regime:
+    E_lvf: [2.59, 3.17]
+    Vd_lvf: [0, 0]
+    P0_lvf: [0.108, 0.132]
+    lam_lvf: [0.0297, 0.0363]
+    V0_lvf: [0, 0]
+    E_rvf: [0.527, 0.644]
+    Vd_rvf: [0, 0]
+    P0_rvf: [0.194, 0.237]
+    lam_rvf: [0.0207, 0.0253]
+    V0_rvf: [0, 0]
+    E_spt: [43.9, 53.6]
+    Vd_spt: [1.8, 2.2]
+    P0_spt: [1.0, 1.22]
+    lam_spt: [0.392, 0.479]
+    V0_spt: [1.8, 2.2]
+    P0_pcd: [0.45, 0.55]
+    lam_pcd: [0.027, 0.033]
+    V0_pcd: [180, 220]
+    P_th: [-4, 0]
+    E_ao: [0.622, 0.760]
+    Vd_ao: [0, 0]
+    E_vc: [0.00531, 0.00649]
+    Vd_vc: [0, 0]
+    E_pa: [0.332, 0.406]
+    Vd_pa: [0, 0]
+    E_pu: [0.00657, 0.00803]
+    Vd_pu: [0, 0]
+    R_mt: [0.0142, 0.0174]
+    R_av: [0.0162, 0.0198]
+    R_tc: [0.0213, 0.0261]
+    R_pv: [0.00495, 0.00605]
+    R_sys: [0.98, 2.18]
+    R_pul: [0.140, 0.171]
+    L_av: [0.00011, 0.000134]
+    L_pv: [0.000134, 0.000164]
+    HR: [72, 88]
+    V_tot: [1350, 1650]
+    A: [0.9, 1.0]
+    B: [72, 88]
+    C: [0.35, 0.40]
+    pth_pulm: [1, 1]
+  tolerance: 0.05
+  provenance: proposed
+  reason: >-
+    The file encodes the paper's closed loop (its line 27; same equations and, per the paper's record,
+    the same parameter values), but adds inertia and the open-on-pressure, close-on-flow law at the
+    mitral and tricuspid valves, where the paper's Fig. 1 and its record have none, and freezes a
+    closing valve's flow at a small negative value. No limit of a's inputs removes those terms, so
+    the run-to-periodic-state reading of the file (no 13-beat cut-off) is an approximation of the
+    paper's model, not the same model. Tolerance 5%: about the precision the paper prints its
+    cardiac-output result with (a 9% drop). The output is the cardiac output because the model is
+    homogeneous in its pressure unit, so the variant's kPa-or-mmHg reading of its numbers leaves
+    volumes and flows unchanged under the exact unit conversion of the mapping; its pressure ports,
+    labelled mmHg with kPa inputs, are not compared.
+  assumptions:
+    - "as rel_file_recreates_paper_co (fixed inputs, the file's extra inertances and initial values), with HR over 72-88 beats/min since the cyclic driver is defined at every time; the variant runs 60 beats, the paper's model 100"

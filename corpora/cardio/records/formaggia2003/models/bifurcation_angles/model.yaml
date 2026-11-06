@@ -1,0 +1,39 @@
+id: bifurcation_angles
+name: 1D network model of a bifurcation with angle-dependent losses (Eqs. 2-3, 9-10, 18-19, 23, 35-37), A, W1, W2 at the vessel midpoints at time t (Figs. 6-8)
+role: model
+stated: {page: 14, printed_page: "264", quote: "Some numerical tests have been done to investigate the effect of the bifurcation angles", where: "Section 3.1; Eqs. 13-23, 35-37"}
+equation: "dA/dt + dQ/dz = 0; dQ/dt + d(alpha Q^2/A)/dz + (A/rho) dP/dz + K_R Q/A = 0; P = beta (sqrt(A) - sqrt(A0))/A0, beta = E h0 sqrt(pi); W1,2 = Q/A +- 4 sqrt(beta/(2 rho A0)) A^(1/4); at the branch point Q1 = Q2 + Q3 and p_t,1 - sign(u1) f1(u1) = p_t,i + sign(ui) fi(ui, alpha_i), f1 = gamma1 u^2, fi = gamma_i u^2 sqrt(2(1 - cos alpha_i))"
+inputs:
+  E: {quantity: young_modulus, unit: dyne/cm^2}
+  h0: {quantity: wall_thickness, unit: cm}
+  R0_1: {quantity: reference_radius, unit: cm, description: "Omega_1 (parent)"}
+  R0_2: {quantity: reference_radius, unit: cm, description: "Omega_2 (branch at angle alpha_2)"}
+  R0_3: {quantity: reference_radius, unit: cm, description: "Omega_3 (branch at angle alpha_3)"}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  alpha: {quantity: momentum_correction_coefficient, unit: dimensionless}
+  L: {quantity: vessel_length, unit: cm, description: "length of each of the three domains"}
+  P_amp: {quantity: inlet_pressure_amplitude, unit: dyne/cm^2}
+  T_pulse: {quantity: inlet_pulse_period, unit: s, description: "the half-sine P_amp sin(pi t/T) lasts 0 <= t <= T"}
+  gamma_1: {quantity: loss_coefficient, unit: dimensionless}
+  gamma_2: {quantity: loss_coefficient, unit: dimensionless}
+  gamma_3: {quantity: loss_coefficient, unit: dimensionless}
+  alpha_2: {quantity: bifurcation_angle, unit: rad}
+  alpha_3: {quantity: bifurcation_angle, unit: rad}
+  t: {quantity: time, unit: s}
+outputs:
+  A_1: {quantity: cross_section_area, unit: cm^2}
+  W1_1: {quantity: characteristic_w1, unit: cm/s}
+  W2_1: {quantity: characteristic_w2, unit: cm/s}
+  A_2: {quantity: cross_section_area, unit: cm^2}
+  W1_2: {quantity: characteristic_w1, unit: cm/s}
+  W2_2: {quantity: characteristic_w2, unit: cm/s}
+  A_3: {quantity: cross_section_area, unit: cm^2}
+  W1_3: {quantity: characteristic_w1, unit: cm/s}
+  W2_3: {quantity: characteristic_w2, unit: cm/s}
+# dt and the mesh are not stated for this test: dt = 1e-5 s is the paper's step for its other tests
+# (pp. 16, 20); 100 elements (h = 0.1 cm) per 10 cm vessel, as the paper's viscoelastic test (p. 21).
+# newton_tol: 'a tolerance of 10^-8 on the relative increment' (p. 13). inlet: 'pressure' (P(t)
+# imposed, as printed) or 'characteristic' (W1 = g1(t), Eq. 25). K_R = 8 pi nu (p. 4).
+settings: {dt: 1.0e-5, n_elements: 100, t_end: 0.18, newton_tol: 1.0e-8, inlet: pressure}
+stochastic: false

@@ -1,0 +1,41 @@
+id: alastruey2011
+kind: article
+title: "Pulse wave propagation in a model human arterial network: Assessment of 1-D visco-elastic simulations against in vitro measurements"
+authors: [Jordi Alastruey, Ashraf W. Khir, Koen S. Matthys, Patrick Segers, Spencer J. Sherwin, Pascal R. Verdonck, Kim H. Parker, Joaquim Peiró]
+year: 2011
+venue: J. Biomech. 44, 2250-2258
+doi: 10.1016/j.jbiomech.2011.05.041
+file: corpus/cardio/2011_Alastruey.pdf
+page_range: [1, 9]
+pages: {1: "2250", 2: "2251", 3: "2252", 4: "2253", 5: "2254", 6: "2255", 7: "2256", 8: "2257", 9: "2258"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-04"}
+notes: >
+  In scope: the nonlinear 1-D model of Eqs. 1 and 5 on the 37-segment silicone network (network_1d, run in
+  its purely elastic and visco-elastic forms), every value of Table 2, the closed forms of Eq. 5 that
+  produce Table 2 numbers, and the printed scalars these models give. Gamma of Table 2 is reproduced from
+  Gamma = (2/3) sqrt(pi) phi h with phi = 3.0 kPa s (37 comparisons, reproduction). Table 2's measured
+  wave speeds are compared with the c0 Eq. 5 gives from the single Young's modulus 1.2 MPa, h and r0
+  (59 comparisons, consistency; q_c0_E). phi = 24 kPa s (p. 8) is checked against the 8 phi of Fig. 5.
+  The visco-elastic run is compared with the bound 'less than 6.5%' for the ascending aorta's diameter
+  change (no verdict, a bound; q_dD_bound) and refined in dx and dt together (ref_visc_dx).
+  network_1d is the reader's own solver (q_scheme): a second-order finite-volume scheme, not the paper's
+  spectral/hp DG; the junction and terminal conditions of Matthys et al. (2007) are not given here and
+  are the reader's reading of them (q_bc_junctions); the inflow, its period and the outflow pressure are
+  added from boileau_data and boileau2015 Table IX (q_inflow). While building it the reader checked the
+  elastic solver privately against boileau_data's DCG waveforms (Alastruey's code on this network) and
+  found close agreement; no number from that check is in the record. The model reports P and Q at the
+  midpoints of the 8 sites with in vitro data in boileau_data and the 4 sites of Fig. 3, at time t_cycle
+  of the last cycle, so a later job can sweep it against those measurements.
+  Left out: Tables 3 and 4 and the error averages of the abstract and p. 5, which need in vitro waveforms
+  this paper does not print (q_error_tables; Eq. 10's root is also questionable, q_rms_formula); Table 1
+  (notation); the uniaxial-test settings (rates, extension, 1 kN cell), which feed no model; the p values;
+  sigma = 0.5, which Eq. 5's 4/3 and 2/3 already contain; the numerical settings of the DG scheme, which
+  are recorded only in q_scheme. Figures 2-5 were not read because the figure tools were refused in
+  this session (figures.md, q_figures_unread).
+  A later figure pass (2026-11-04) read Figs. 2-5 with calibrated readings by the record's own code
+  (figures.yaml, figures.md, q_figures_read): all three curves of Fig. 3's eight panels, told apart by
+  stroke, with network_1d swept over their times in both formulations and compared with the paper's
+  curves (reproduction) and the measured ones (validation; time origin q_fig3_time_origin); Fig. 4's
+  markers as data only (q_fig4_frequencies, q_fig4_spectrum); Fig. 5's elastic A-P line against Eq. 5
+  with Gamma = 0 (tube_law_mid, tube_law_mid_E; q_fig5_tube_law) and the 8 phi loop's branches; Fig. 2's
+  holds and load-extension loop as measured data.

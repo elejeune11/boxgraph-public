@@ -1,0 +1,24 @@
+id: larger_arteries_1d
+name: nonlinear 1D model of the larger arteries with structured-tree, windkessel or resistance outflow (Eqs. 3-5, 7-11)
+role: model
+stated: {page: 7, printed_page: "H263", quote: "in which we solve Eqs. 3-5 in the", where: "Eqs. 3-11"}
+equation: >
+  dA/dt + dq/dx = 0 (3); dq/dt + d(q^2/A)/dx + (A/rho) dp/dx = -2 R pi nu q/(delta A) (4);
+  p - p0 = (4/3)(Eh/r0)(1 - sqrt(A0/A)) (5); inflow q(0, t) from Fig. 4; outflow p = (1/T) int z(x, t - tau) q(x, tau) dtau (9)
+  with z the inverse transform of the structured-tree root impedance (Eqs. 16-17), or the windkessel (7) or a pure resistance;
+  bifurcations q_pa = q_d1 + q_d2 (10), p_pa = p_d1 = p_d2 (11); Lax-Wendroff (Richtmyer two-step)
+inputs:
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  T: {quantity: cardiac_period, unit: s}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+outputs:
+  p: {quantity: arterial_pressure, unit: mmHg, description: "pressure p(x, t), plotted in Figs. 7, 8, 10, 11"}
+runnable: false
+not_runnable_reason: >
+  The geometry of the arterial tree of Fig. 1 (lengths, radii, taper of each segment) is taken from
+  Segers et al. (ref. 45) and not printed; the inflow is the plotted, smoothed and rescaled curve of
+  Fig. 4 only; the windkessel parameters (R1, R2, CT) for Figs. 7-8 are fitted but not printed; and
+  the numerical settings (mesh, time step) are not stated. The printed results of this model are
+  pressure surfaces and overlapping curves (Figs. 7, 8, 10, 11) with no tabulated values.

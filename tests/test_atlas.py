@@ -116,6 +116,32 @@ def test_a_symbolic_form_that_disagrees_with_the_code_is_not_trusted(atlas):
     assert "symbolic" in r.detail
 
 
+def test_a_model_that_gives_no_value_is_never_evidence_against_a_relation(tmp_path):
+    """Where a model gives no value (NaN) everywhere the relation is unverifiable; where it does at some points, those are reported and left out."""
+    import shutil
+    from pathlib import Path
+
+    fx = Path(__file__).parent / "fixtures"
+    for n in ("toy", "toy2"):
+        shutil.copytree(fx / n, tmp_path / n)
+    for mid, cond in (("blank", "True"), ("gappy", "i['f'] > 10")):
+        d = tmp_path / "toy2" / "models" / mid
+        d.mkdir()
+        (d / "model.yaml").write_text((fx / "toy2" / "models" / "lifetime" / "model.yaml").read_text()
+                                      .replace("id: lifetime", f"id: {mid}"))
+        (d / "model.py").write_text("import math\ndef run(i, s):\n"
+                                    f"    return {{'tau': float('nan') if {cond} else i['tau0'] * math.exp(-i['f'] / i['fb'])}}\n")
+    recs = {r.id: r for r in (load_record(tmp_path / "toy"), load_record(tmp_path / "toy2"))}
+    base = next(r for r in recs["toy2"].record.relations if r.id == "rel_same")
+    from boxgraph.schema import RelationKind
+
+    for kind in (RelationKind.same_as, RelationKind.approximated_by):
+        blank = check(base.model_copy(update={"b": "toy2/blank", "kind": kind}), recs, cache_dir=tmp_path / "c")
+        assert blank.status == "unverifiable" and "no value" in blank.detail, blank
+        gappy = check(base.model_copy(update={"b": "toy2/gappy", "kind": kind}), recs, cache_dir=tmp_path / "c")
+        assert gappy.status == "ambiguous" and "no value from toy2/gappy" in gappy.detail, gappy
+
+
 def test_a_symbolic_form_with_a_special_function_is_checked_against_the_code(atlas):
     """A symbolic form using a special function (Lambert W) is evaluated and compared with the code, not rejected."""
     r = atlas[2]["rel_lambert"]

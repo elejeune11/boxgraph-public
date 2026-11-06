@@ -1,0 +1,43 @@
+# Two input sets for the bioreactor model:
+#  - printed: every Table 5-1 value with its printed unit (ke 1.5e4 mmHg·m, kf 25 mmHg·m·s);
+#    explicit RK4 needs a step under about 5.7e-6 s with this damping (kf/ms = 4.9e5 1/s), so
+#    these runs use dt = 4e-6 s;
+#  - ke_kf_SI: the same, except ke and kf taken as 1.5e4 N/m and 25 N·s/m (added.yaml).
+# g is added (9.81 m/s^2) in both. Initial state: rest (all zero); results from the 12th cycle.
+- id: run_printed
+  model: bioreactor_eqs5_1_15
+  inputs: &printed {Rcu: Rcu, Ccu: Ccu, Lcu: Lcu, hcu: hcu, Rct: Rct, Cct: Cct, Rcl: Rcl, Ccl: Ccl, Lcl: Lcl, hcl: hcl, ms: ms, As: As, kf: kf, ke: ke, hs: hs, Ps0: Ps0, Psa: Psa, CQci: CQci, CQco: CQco, Cco: Cco, Patm: Patm, ha: ha, rho: rho, T: T_period, g: g_added}
+  settings: &printed_set {dt: 4.0e-6, n_cycles: 12, record_stride: 25}
+  outputs: {Pct_max: Pct_max_printed, Pct_min: Pct_min_printed, Qct_max: Qct_max_printed, Qct_min: Qct_min_printed, l_amp: l_amp_printed, l_offset_air: l_offset_printed}
+  note: "Table 5-1 as printed, units included"
+- id: run_ke_kf_SI
+  model: bioreactor_eqs5_1_15
+  inputs: &si {Rcu: Rcu, Ccu: Ccu, Lcu: Lcu, hcu: hcu, Rct: Rct, Cct: Cct, Rcl: Rcl, Ccl: Ccl, Lcl: Lcl, hcl: hcl, ms: ms, As: As, kf: kf_as_N_s_per_m, ke: ke_as_N_per_m, hs: hs, Ps0: Ps0, Psa: Psa, CQci: CQci, CQco: CQco, Cco: Cco, Patm: Patm, ha: ha, rho: rho, T: T_period, g: g_added}
+  outputs: {Pct_max: Pct_max_si, Pct_min: Pct_min_si, Qct_max: Qct_max_si, Qct_min: Qct_min_si, l_amp: l_amp_si, l_offset_air: l_offset_si}
+  note: "Table 5-1 with ke and kf read in N/m and N·s/m (added alternative reading)"
+
+# ---- waveforms at the times read off the figures ----
+- {id: run_fig5_3_eq5_12, model: air_pressure_eq5_12, inputs: {Ps0: Ps0, Psa: Psa, T: T_period}, sweep: {t: Ps_fig5_3}, outputs: {Ps: Ps_fig5_3_pred}}
+- {id: run_fig5_4a_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Pct_fig5_4a}, outputs: {Pct: Pct_fig5_4a_printed}}
+- {id: run_fig5_4b_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Qct_fig5_4b}, outputs: {Qct: Qct_fig5_4b_printed}}
+- {id: run_fig5_5a_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: l_fig5_5a}, outputs: {l: l_fig5_5a_printed}}
+- {id: run_fig5_5b_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: u_fig5_5b}, outputs: {u: u_fig5_5b_printed}}
+- {id: run_fig5_6a_pcl_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Pcl_fig5_6a}, outputs: {Pcl: Pcl_fig5_6a_printed}}
+- {id: run_fig5_6a_pcu_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Pcu_fig5_6a}, outputs: {Pcu: Pcu_fig5_6a_printed}}
+- {id: run_fig5_6b_qci_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Qci_fig5_6b}, outputs: {Qci: Qci_fig5_6b_printed}}
+- {id: run_fig5_6b_qs_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Qs_fig5_6b}, outputs: {Qs: Qs_fig5_6b_printed}}
+- {id: run_fig5_4a_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Pct_fig5_4a}, outputs: {Pct: Pct_fig5_4a_si}}
+- {id: run_fig5_4b_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Qct_fig5_4b}, outputs: {Qct: Qct_fig5_4b_si}}
+- {id: run_fig5_5a_si, model: bioreactor_waveform, inputs: *si, sweep: {t: l_fig5_5a}, outputs: {l: l_fig5_5a_si}}
+- {id: run_fig5_5b_si, model: bioreactor_waveform, inputs: *si, sweep: {t: u_fig5_5b}, outputs: {u: u_fig5_5b_si}}
+- {id: run_fig5_6a_pcl_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Pcl_fig5_6a}, outputs: {Pcl: Pcl_fig5_6a_si}}
+- {id: run_fig5_6a_pcu_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Pcu_fig5_6a}, outputs: {Pcu: Pcu_fig5_6a_si}}
+- {id: run_fig5_6b_qci_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Qci_fig5_6b}, outputs: {Qci: Qci_fig5_6b_si}}
+- {id: run_fig5_6b_qs_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Qs_fig5_6b}, outputs: {Qs: Qs_fig5_6b_si}}
+# ---- further readings of Fig. 5-6(a) (second figure pass) ----
+- {id: run_fig5_6a_pcl_late_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Pcl_fig5_6a_late}, outputs: {Pcl: Pcl_fig5_6a_late_printed}}
+- {id: run_fig5_6a_pcu_late_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Pcu_fig5_6a_late}, outputs: {Pcu: Pcu_fig5_6a_late_printed}}
+- {id: run_fig5_6a_pcu_mid_printed, model: bioreactor_waveform, inputs: *printed, settings: *printed_set, sweep: {t: Pcu_fig5_6a_mid}, outputs: {Pcu: Pcu_fig5_6a_mid_printed}}
+- {id: run_fig5_6a_pcl_late_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Pcl_fig5_6a_late}, outputs: {Pcl: Pcl_fig5_6a_late_si}}
+- {id: run_fig5_6a_pcu_late_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Pcu_fig5_6a_late}, outputs: {Pcu: Pcu_fig5_6a_late_si}}
+- {id: run_fig5_6a_pcu_mid_si, model: bioreactor_waveform, inputs: *si, sweep: {t: Pcu_fig5_6a_mid}, outputs: {Pcu: Pcu_fig5_6a_mid_si}}

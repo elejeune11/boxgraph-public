@@ -106,15 +106,6 @@ class RelationKind(str, Enum):
     approximated_by = "approximated_by"
 
 
-class RelationStatus(str, Enum):
-    verified = "verified"
-    ambiguous = "ambiguous"
-    refuted = "refuted"
-    not_verified = "not_verified"
-    pending = "pending"
-    unverifiable = "unverifiable"
-
-
 class Provenance(str, Enum):
     stated = "stated"
     proposed = "proposed"
@@ -298,6 +289,14 @@ class Port(Strict):
     description: str | None = None
 
 
+class Correction(Strict):
+    """One evident misprint a variant model corrects: never applied to the printed model itself."""
+
+    equation: str  # which printed equation, e.g. "Eq. 3"
+    change: str  # what the variant changes
+    evidence: str  # why the printed form is evidently a misprint: the paper's own figure, text or code, or a sign or dimension argument
+
+
 class Model(Strict):
     """A model as the paper states it. It computes; it holds no values."""
 
@@ -316,6 +315,8 @@ class Model(Strict):
     from_words: bool = False  # made runnable from a description in words
     stochastic: bool = False
     software: bool = False  # runs the source's own code (a software record): its outputs have origin run
+    variant_of: str | None = None  # the printed model this one corrects; its verdicts are reported apart
+    corrections: list[Correction] = []  # what a variant corrects, each with its evidence
 
     @model_validator(mode="after")
     def _reason_if_not_runnable(self) -> Model:
@@ -405,16 +406,6 @@ class Relation(Strict):
         return self
 
 
-class Correspondence(Strict):
-    """Two quantities, in two sources, that may be the same physical thing.
-    Listed with evidence, never merged."""
-
-    id: str
-    a: str  # '<source-id>/<quantity-id>'
-    b: str
-    evidence: str
-
-
 class CitedLink(Strict):
     """Which value of the cited source a cited datum is, named after both are in the record.
     It adds a link; the datum itself, as printed, is not changed."""
@@ -465,6 +456,5 @@ class Record(Strict):
     references: list[Reference] = []
     figures: list[FigureReading] = []
     relations: list[Relation] = []
-    correspondences: list[Correspondence] = []
     cited: list[CitedLink] = []
     validations: list[CrossValidation] = []

@@ -19,6 +19,8 @@ OUT = ROOT / "docs" / "TESTS.md"
 
 AREAS = {
     "test_precision.py": "Verdicts at printed precision",
+    "test_rounding.py": "Verdicts that carry the rounding of printed inputs",
+    "test_variants.py": "Corrected variants of misprinted equations",
     "test_units.py": "Units and quantities",
     "test_engine.py": "Building one record",
     "test_validate.py": "Soundness of a record",
@@ -38,6 +40,7 @@ AREAS = {
     "test_orchestrator.py": "Running agents in parallel",
     "test_pipeline_jobs.py": "The corpus job graph",
     "test_corpus.py": "Adding papers: the corpus list and the ledger",
+    "test_corpora.py": "Several corpora side by side",
     "test_pairs.py": "Which papers are related to which",
     "test_pipeline_e2e.py": "The whole pipeline, end to end",
     "test_sources.py": "Code and data as sources",

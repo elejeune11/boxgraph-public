@@ -1,0 +1,106 @@
+- id: q_eq13_factor
+  kind: possible_error
+  about: [fahraeus_vivo, fahraeus_vivo_core]
+  text: "Eq. 13 multiplies (HT/HD)vitro at Dph by (D/Dph)^2 >= 1, which raises HT/HD in vivo above the in vitro value at the free-flow diameter, whereas the text (p. 5) and Fig. 4 bottom show a deeper minimum in vivo than in vitro near 10 um. Red cells confined to a core of diameter Dph fill a fraction (Dph/D)^2 of the anatomic cross section, so the factor was probably meant as (Dph/D)^2 (variant fahraeus_vivo_core). With no figure reading in this record, neither form is compared with a printed value."
+  citation: {page: 3, quote: "and multiplying by a factor to reflect the difference", where: "Eq. 13"}
+- id: q_eq14_ratio
+  kind: possible_error
+  about: [network_simulation]
+  text: "Eq. 14 gives cell velocity Vc = Vb (HT/HD)vivo. Since HT/HD < 1 (Fahraeus effect: red cells move faster than the mean blood velocity), continuity of red cell flux gives Vc = Vb (HD/HT); the printed form makes cells slower than blood. Eq. 14 feeds only the non-runnable network fit, so no printed number tests it."
+  citation: {page: 3, quote: "Cell velocity was then calculated as follows", where: "Eq. 14"}
+- id: q_intro_hd40
+  kind: possible_error
+  about: [eta_large_tube_printed, eta_small_tube_printed, HD_intro]
+  text: "The introduction gives relative viscosities of ~3.2 (tubes above ~1 mm) and ~1.25 (6-7 um) for a discharge hematocrit of 40%. These are the values of eta_0.45 (Eq. 6), i.e. for HD = 45%: at HD = 40% Eqs. 5-7 give about 2.8 at 1 mm. The '40%' may be a slip for 45%."
+  citation: {page: 1, quote: "fraction of red blood cells or discharge hematocrit of 40%"}
+- id: q_hd_unstated
+  kind: unstated_input
+  about: [HD_vitro_minimum, HD_figure]
+  text: "The statements on the location of the in vitro viscosity minimum, the peak of the effective ESL thickness, the abstract's thickness range and the minimum of in vivo viscosity give no hematocrit; 0.45 was added, with alternatives. The peak location and Wph do not depend on HD in Eqs. 8-10."
+- id: q_network_data
+  kind: unstated_input
+  about: [network_simulation, Doff_fit, Dcrit_fit, D50_fit, Eamp_fit, Ewidth_fit, Epeak_fit, EHD_fit]
+  text: "The network simulation and the fit that produced the parameters of Eqs. 8-11, and the deviation parameters VERR, HERR and NINV of Fig. 1, need the three measured network data sets, which are not published; the fitted parameters cannot be checked here."
+- id: q_eamp_units
+  kind: reading
+  about: [Eamp_fit, Ewidth_fit, Eamp_fit_hd_independent]
+  text: "Eamp and Ewidth are printed without units. They were read as um and 1/um because Eamp is the height of a thickness (Eq. 9) and the paper states that all diameters are given in micrometres."
+- id: q_range_ends
+  kind: reading
+  about: [Wph_abstract_lo, Wph_abstract_hi, W_transition_lo, W_transition_hi]
+  text: "The printed ranges '~0.8-1 um for 10- to 40-um vessels' and 'ESL thickness of ~0.5-0.7 um' with '7 to 9 um' -> '8-10.4 um' were split end to end (low with low, high with high), which is the reading under which the paper's 8 and 10.4 follow; the abstract's range was read as Wph at 10 and at 40 um."
+- id: q_vivo_min_range
+  kind: choice
+  about: [run_vivo_minimum]
+  text: "The minimum of in vivo effective viscosity was sought above 11 um (just above Dcrit), to exclude the small-diameter branch below the ESL peak seen in Fig. 4; the text does not state the range searched."
+- id: q_figures
+  kind: reading
+  about: [esl_thickness, vivo_viscosity, fahraeus_vivo]
+  text: "Figs. 1, 2 and 4 carry the paper's main plotted results (deviation parameters, Weff and Wph against diameter, in vivo and in vitro viscosity and HT/HD against diameter). The figure tools could not be run in this job, so they were not read; a later reading should add them and compare them with the runs of esl_thickness, vivo_viscosity, vitro_viscosity, fahraeus_vitro and both forms of Eq. 13."
+# ---- figure pass (2026-11-04)
+- id: q_eq12_constants
+  kind: possible_error
+  about: [fahraeus_vitro, cmp_f4bot_vitro_hd60, cmp_f4bot_vitro_hd45, cmp_f4bot_vitro_hd30, cmp_f4bot_vitro_hd20, cmp_f4bot_vitro_hd10]
+  text: "The thin (glass-tube) HT/HD curves of Fig. 4 bottom are not reproduced by Eq. 12 as printed (exponents -0.415 D and -0.011 D): the printed form lies below the curves at small diameters (by several hundredths near 5 um) and differs in shape up to ~200 um, while the thin viscosity curves of Fig. 4 top are reproduced by Eqs. 5-7 at every read point. The readings agree with the same expression with exponents -0.35 D and -0.01 D, the form of this parametric relation in the earlier literature the paper cites (ref. 27 and its predecessors); this was checked by hand outside the record and is not entered as a variant, since it changes printed numbers. Either Eq. 12's constants are misprinted or the figure was drawn with the older constants. Since fahraeus_vivo and fahraeus_vivo_core use Eq. 12 inside, their comparisons with Fig. 4 bottom carry this difference too."
+  citation: {page: 3, quote: "A previously published parametric", where: "Eq. 12"}
+- id: q_eq13_figure
+  kind: possible_error
+  about: [fahraeus_vivo, fahraeus_vivo_core, q_eq13_factor]
+  text: "Fig. 4 bottom, read in this pass, bears on q_eq13_factor: Eq. 13 as printed (factor (D/Dph)^2) misses every read point of all five thick HT/HD curves (cmp_f4bot_vivo_hd*), its values lying above the in vitro curves where the figure has them below; the variant with (Dph/D)^2 (cmp_f4bot_vivo_hd*_core) reproduces most points, more for the higher hematocrits, and the rest differ in the way the Eq. 12 constants do (q_eq12_constants). The figure supports the corrected direction of the factor."
+  citation: {page: 6, where: "Fig. 4 (bottom)", quote: "Thick black lines, present results for different HD values"}
+- id: q_vivo_small_diameters
+  kind: unexplained_difference
+  about: [vivo_viscosity, cmp_f4top_vivo_hd60, cmp_f4top_vivo_hd45, cmp_f4top_vivo_hd30, cmp_f4top_vivo_hd20]
+  text: "The thick viscosity curves of Fig. 4 top are reproduced by eta_vivo = eta_vitro(Dph) (D/Deff)^4 with Eqs. 5-11 from ~6 um to 1000 um at every hematocrit, and at all diameters for HD 10%, but below ~5 um (3.2-5 um, where the free-flow diameter Dph falls toward 3 um) the model lies 10-30% above the curves for HD 20-60%, more for higher hematocrit. The readings there sit on the curves in the overlays. The text does not say how the curves were computed at the smallest diameters (e.g. whether the 2.8-um red-cell constraint of Fig. 2, or a lower limit on Dph in the in vitro law, was applied)."
+  citation: {page: 6, where: "Fig. 4 (top)", quote: "Thick black lines, present results for different HD values"}
+- id: q_no_validation_smith2004
+  kind: choice
+  about: [ref-18, diameter_percentiles_fig, vivo_viscosity, esl_thickness]
+  text: >-
+    (Cross-validation job, pries2005 + smith2004.) No validation is added in either direction. The
+    paper's ref. 18 is Long, Smith, Pries, Ley & Damiano 2004 (PNAS 101: 10060-5, microviscometry),
+    and ref. 44 is Smith, Long, Damiano & Ley (near-wall micro-PIV); neither is the record smith2004
+    (Smith, Chase, Nokes, Shaw & Wake, a lumped heart-and-circulation model, Med Eng Phys 26), which
+    this paper does not cite. The ESL estimates of refs. 18 and 44 are cited in the Discussion but are
+    not in smith2004. This record's only measurement is the distribution of vessel diameters in the
+    networks (diameter_percentiles_fig, Fig. 2); no smith2004 model outputs a vessel diameter, an
+    in vivo viscosity, an ESL thickness or a hematocrit ratio. smith2004 holds no measurement (its
+    figures are simulation output, its typical pressures and stroke volume are reported from other
+    sources), and this record's models (viscosity, ESL thickness, Fahraeus relations) output none of its
+    quantities: its resistances are lumped parameters, not computed from a vessel diameter and viscosity.
+  citation: {page: 7, quote: "velocimetry, Long et al. (18) and Smith et al. (44) estimated", where: text}
+- id: q_p92_validations_are_fits
+  kind: choice
+  about: [vitro_viscosity, vitro_minimum, fahraeus_vitro]
+  text: >
+    Added by the validation job against pries1992. Eqs. 5-7 are pries1992's Eqs. 2, 4 and 7 (ref. 27),
+    whose constants pries1992 fitted to the very tube data it plots in Figs. 3 and 5, so the nine
+    validations against pries1992's measured points are entered as fit_quality, not as tests. Not
+    used: pries1992's eye-stated measurements ~3.2 (large tubes), ~1.25 and ~7 um (the minimum) at HD
+    0.45, which are approximate (no verdict) and are already restated here as eta_large_tube_printed
+    and eta_small_tube_printed with comparisons; pries1992's Fig. 2 inset (residuals from Eq. 2, a
+    quantity no model here outputs). pries1992 measures no tube hematocrit, so Eq. 12 (fahraeus_vitro)
+    has nothing there to be judged against. The Fig. 3 panel diameters are added (D_p92_fig3_*) since
+    pries1992 prints them only as panel labels.
+  citation: {page: 2, quote: "These data were used to derive a parametric"}
+- id: q_no_validation_pries1990
+  kind: choice
+  about: [ref-31, diameter_percentiles_fig, network_simulation, vivo_viscosity, fahraeus_vitro, eta_lipowsky]
+  text: >-
+    (Cross-validation job, pries1990 + pries2005.) No validation is added in either direction.
+    pries2005 cites pries1990 (ref. 31) for its phase-separation approach (p. 2, "according to the
+    approach described earlier (31) with modifications"), for the in vitro Fahraeus relation Eq. 12
+    (p. 3) and for mechanisms proposed earlier (p. 6); it does not say that its models explain or
+    are compared with any pries1990 measurement. pries1990's measurements are network data (Table 3
+    segment hematocrits, Fig. 5 hematocrit distributions, Fig. 6 AV velocities of its ref. 17, Fig. 7
+    pressures of its refs. 25-26), inflow hematocrits and segment counts, and Fig. 2's FQE against
+    FQB at one bifurcation whose diameters and hematocrit are not printed. The only model here that
+    produces such quantities is network_simulation, which is not runnable (q_network_data); the
+    closed-form laws (vitro_viscosity, vivo_viscosity, esl_thickness, fahraeus_vitro, fahraeus_vivo)
+    output viscosities, layer thicknesses and HT/HD ratios, none of which pries1990 measures (its
+    Figs. 1 and 3 are drawn from its own Eqs. 1-3 and 7, origin predicted). This record's only
+    measurement, the vessel-diameter distribution of Fig. 2 (diameter_percentiles_fig), is predicted
+    by no pries1990 model. Lipowsky's 4.2 cP at ~30 um (eta_lipowsky) is reported from ref. 16, not
+    measured by either paper, is absolute rather than relative to plasma, and has no stated
+    hematocrit, so pries1990's in vivo law (Eq. 7) cannot be run on its conditions; it was not used.
+  citation: {page: 2, quote: "approach described earlier (31) with modifications to render"}

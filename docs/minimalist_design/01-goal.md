@@ -52,10 +52,12 @@ Three names go with it:
 - **The Synthesis** is the whole graph read as a review: what each paper
   states, and what checks out within and across papers.
 
-ModelAtlas and the Synthesis are filled from papers. There is one of each,
-across all fields: splitting by field in advance would cut
-  exactly the links that are most interesting. The same rate law appears in
-  bond rupture, chemical kinetics and fracture.
+ModelAtlas and the Synthesis are filled from papers. Their rules are the
+same in every field. A review may keep a field as a corpus of its own, so
+that it reads as one whole; each corpus then has its own ModelAtlas and
+Synthesis. Links between fields are worth having (the same rate law appears
+in bond rupture, chemical kinetics and fracture), and joining corpora is a
+decision left for when two fields need it.
 
 ## Principles
 

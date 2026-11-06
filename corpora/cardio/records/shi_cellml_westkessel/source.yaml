@@ -1,0 +1,69 @@
+id: shi_cellml_westkessel
+kind: software
+title: Lumped-parameter cardiovascular model with Westkessel after-load (CellML)
+authors: [Yubing Shi, Rod Hose]
+year: 2019
+url: https://models.physiomeproject.org/cardiovascular_circulation
+version: "sha256:93b92a44fcd1ae1064ab545be3a53d170f43f26ccb5d047246a9ded2a3e49c7b"
+licence: none stated
+language: cellml
+file: corpus/cardio/code/shi_cellml_westkessel
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-03"}
+notes: >
+  What the code is. A CellML 1.1 model (CellML Model Repository, changeset f04b7307a5bf) of the
+  Fig. 1(b) model of shi2018, "Systemic model with Westerhoff afterload": a left atrium and left
+  ventricle as variable-elastance chambers with on-off (diode) mitral and aortic valves, driving a
+  three-element Westerhof afterload (characteristic resistance Rc in series with a compliance Cv
+  and a peripheral resistance Rv). Its outflow returns directly to the left atrium, and there is
+  no pulmonary loop. The code calls it a "Westkessel" model. The entry point is
+  MainWestkessel.cellml. It imports ModelLeftHeart.cellml (LA = TempCDa, LV = TempCDv,
+  Ela = EAtrium, Elv = EVentricle, parameters ParaLeftHeart) and ModelWestkessel.cellml
+  (Zc = TempR, Zv = TempRC, parameters ParaWestkessel). Units.cellml defines the units
+  (UnitP = 133 Pa, UnitV = 1 mL). The left-heart files are byte-identical to those of
+  shi_cellml_windkessel. The folder also holds ParaSys.cellml, which is not imported and so not
+  recorded, and an unused UnitL unit (q_unused_units). The weskessel.ai, .png and .svg files are
+  the circuit diagram. There is no licence file or header. The authors come from the RDF
+  metadata (Shi, Hose). The year is the paper's, since the code gives none, and the url is
+  shi2018 ref [19].
+
+  How it was read. CellML is not run here. The equations of the eleven imported files are ported
+  line by line to Python (models/westkessel_left_heart, our code; the ported files and lines are
+  listed in a comment in model.yaml). The 23 parameter values, initial values and constants the
+  model uses are cited by file and line. The aortic valve and Rc form an algebraic loop, which
+  the port solves in closed form (q_algebraic_loop). The CellML has no solver settings, so the
+  port uses RK4 at dt = 0.1 ms for 10 s and reports the 10th beat (q_solver). Refinements in dt
+  and t_end change the results by less than 0.01%.
+
+  Against the papers. shi2018 prints no parameter value and says they are those of ref [5]
+  (korakianitis2006), so the heart parameters are linked to korakianitis2006 Tables 1, 2 and 5.
+  The elastances, reference pressures and volumes, CQao/CQmi and T agree as written. Differences
+  and hidden choices:
+  - the initial LV volume is 500 mL in the code against V_lv0 = 800 ml in korakianitis2006
+    Table 2, and the initial LA volume (20 mL) and initial compliance pressure (0) are printed
+    nowhere (q_vlv0_initial);
+  - Rc = 0.005, Rv = 0.65 mmHg s/mL and Cv = 2.6 mL/mmHg are printed in neither paper. They are
+    not lumped sums of the korakianitis2006 segments, and they differ from the sibling Windkessel
+    code's R = 0.55 and C = 2.8 (q_westkessel_values);
+  - the activation times are fractions of T, and Ts2 = 0.45 T is printed nowhere
+    (q_timing_fractions);
+  - the ventricular activation function differs from korakianitis2006 Eq. 3 as recorded there
+    (q_elastance_form);
+  - the valves are on-off (q_valves_simplified);
+  - pi is written as 3.14159 and UnitP is 133 Pa (q_pi, q_unit_pressure).
+  shi2018 says only Fig. 1(a, d) were put in CellML, yet this Fig. 1(b) code exists
+  (q_name_westkessel).
+
+  What it reproduces. shi2018 prints no result of the Fig. 1(b) model, so nothing here is a
+  reproduction (q_no_printed_results). That is the validator's one warning. The paper's
+  Section 3 results are for the Fig. 1(d) model; they are copied here (from_datum) and compared
+  with the code's run as an approximation. Run as released, the code gives:
+  - LV pressure about 9.6-132 mmHg and afterload-inlet pressure about 87-130 mmHg, against the
+    printed 0-120 and 80-120 mmHg;
+  - LV volume about 56-197 mL and stroke volume about 141 mL, against the printed 55-130 mL and
+    75 mL;
+  - mean flow about 8.5 L/min, against about 5 L/min;
+  - peak aortic and mitral flows about 1460 and 1230 mL/s, against about 1000 and 800 mL/s.
+  The build gives the exact values and verdicts. Against the Windkessel code, the larger total
+  resistance gives higher pressures and slightly lower flow. The code's claim that it was
+  validated against published data is not borne out for flows and volumes
+  (q_validation_claim_code).

@@ -27,6 +27,9 @@ PURPOSES = {
     "approximation": "A simpler model against the one it approximates.",
     "fit_quality": "A fitted curve against the data it was fitted to.",
 }
+# a comparison computed by a corrected variant of a misprinted model is kept apart from the paper as printed
+PURPOSES |= {f"{p}, corrected": f"{d[:-1]}, computed with a corrected variant of a misprinted model: what the stated correction explains."
+             for p, d in list(PURPOSES.items())}
 VERDICTS = ("reproduced", "close", "not reproduced", "no verdict")
 EVIDENCE = ("comparison", "relation", "cited", "cross_check", "validation", "figure", "refinement", "family", "question")
 
@@ -52,6 +55,27 @@ def _fmt(v) -> str | None:
 
 def _cited_record(c: dict) -> str | None:
     return c.get("cited_record") or c.get("from_source")
+
+
+def _label(p: dict, sid: str) -> str:
+    """A source's short name: authors and year, with ', code' or ', data' for released code and data."""
+    last = lambda n: str(n).split()[-1] if str(n).split() else str(n)  # noqa: E731
+    a = p.get("authors") or []
+    who = sid if not a else last(a[0]) if len(a) == 1 else f"{last(a[0])} & {last(a[1])}" if len(a) == 2 else f"{last(a[0])} et al."
+    who += {"software": ", code", "dataset": ", data"}.get(p.get("kind") or "", "")
+    return who + (f" {p['year']}" if p.get("year") else "")
+
+
+def _labels(papers: dict) -> dict[str, str]:
+    """Labels that two sources share are told apart as in a reference list (Shi 2013a, Shi 2013b)."""
+    by: dict[str, list[str]] = defaultdict(list)
+    for sid in sorted(papers):
+        by[_label(papers[sid], sid)].append(sid)
+    out = {}
+    for lab, ids in by.items():
+        for i, sid in enumerate(ids):
+            out[sid] = lab if len(ids) == 1 else lab + "abcdefghijklmnopqrstuvwxyz"[i] if lab[-1:].isdigit() else f"{lab} ({sid})"
+    return out
 
 
 def overview_data(syn: dict) -> dict:
@@ -102,22 +126,28 @@ def overview_data(syn: dict) -> dict:
         x.setdefault("verdicts", Counter())[v.get("verdict") or "no verdict"] += 1
 
     sources = []
+    labels = _labels(papers)
     for sid in sorted(papers, key=lambda k: (papers[k].get("year") or 0, k)):
         p = papers[sid]
         kind = p.get("kind") or "article"
-        models = [{"id": mid, "name": m.get("name"), "role": m.get("role"),
+        pv = p.get("variants") or {}
+        models = [{"id": mid, "name": m.get("name"), "role": m.get("role"), "variant_of": (pv.get(mid) or {}).get("of"),
                    "relations": sorted(rel_of.get(f"{sid}/{mid}", []), key=lambda r: (r["other"], r["kind"], r["status"]))}
                   for mid, m in sorted(p.get("models", {}).items())]
+        variants = [{"model": mid, "of": v["of"],
+                     "corrections": [{k: c.get(k) for k in ("equation", "change", "evidence")} for c in v.get("corrections", [])],
+                     "tally": {k: v.get("tally", {}).get(k, 0) for k in VERDICTS}}
+                    for mid, v in sorted(pv.items())]
         verdicts = [{"comparison": v["comparison"], "purpose": v["purpose"], "printed": v.get("printed_text"),
                      "computed": _fmt(v.get("computed_value")), "verdict": v.get("verdict") or "no verdict",
                      "page": v.get("page")}
                     for v in sorted(p.get("verdicts", []), key=lambda v: (v["purpose"], v["comparison"]))]
         sources.append({
-            "id": sid, "kind": kind, "title": p.get("title"), "authors": p.get("authors") or [],
+            "id": sid, "label": labels[sid], "kind": kind, "title": p.get("title"), "authors": p.get("authors") or [],
             "year": p.get("year"), "venue": p.get("venue"),
             "tally": p.get("tally", {}), "by_purpose": p.get("tally_by_purpose", {}),
             "checked": {v: sum(tp.get(v, 0) for tp in (p.get("tally_by_purpose") or {}).values()) for v in VERDICTS},
-            "counts": p.get("counts", {}), "models": models, "verdicts": verdicts,
+            "counts": p.get("counts", {}), "models": models, "variants": variants, "verdicts": verdicts,
             "questions": [{"id": q["id"], "kind": q.get("kind"), "text": q.get("text")} for q in p.get("questions", [])],
             "of": sorted(taken[sid]) if kind in ("software", "dataset") else [],
             "takes_from": sorted(taken[sid]),
@@ -391,6 +421,7 @@ def render_overview(syn: dict, outdir: str | Path, title: str = "Synthesis overv
         shutil.rmtree(outdir / "img")
     outdir.mkdir(parents=True, exist_ok=True)
     content = content or {}
+    title = content.get("title") or title  # the overview's text may name the page
     data = overview_data(syn)
     data["positions"] = layout(data)
     data["full"] = full_graph(data, syn)
@@ -523,6 +554,7 @@ tbody tr.go { cursor: pointer; } tbody tr.go:hover td { background: var(--accent
 .back { font-size: 14px; }
 .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 14px; }
 .purposes { display: grid; gap: 12px; }
+.fix { display: grid; gap: 10px; padding: 14px 0; border-top: 1px solid var(--rule); }
 .purpose { display: grid; grid-template-columns: 140px minmax(0, 1fr) 300px; gap: 14px; align-items: center; }
 @media (max-width: 700px) { .purpose { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
 .purpose .what { font-size: 13px; color: var(--muted); }
@@ -564,7 +596,8 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
                  scales_as: "scales as", approximated_by: "approximated by"};
   var statusName = {verified: "verified", not_verified: "not verified", refuted: "refuted", unverifiable: "could not be tested"};
 
-  function short(s) {
+  function short(s) { return s.label || baseShort(s); }
+  function baseShort(s) {
     var a = s.authors || [];
     var last = function (n) { var p = String(n).trim().split(/\s+/); return p[p.length - 1]; };
     var who = a.length === 0 ? s.id : a.length === 1 ? last(a[0]) : a.length === 2 ? last(a[0]) + " & " + last(a[1]) : last(a[0]) + " et al.";
@@ -804,6 +837,14 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
     app.querySelectorAll("tr.go").forEach(function (tr) { tr.addEventListener("click", function (ev) { if (ev.target.tagName !== "A") location.hash = tr.dataset.href; }); });
   }
 
+  // values read from a figure each carry their interval and where they were read; show the values, name the figure once
+  function plist(p) {
+    if (!Array.isArray(p)) return esc(p);
+    var m = /read from (.+)$/.exec(String(p[0] || ""));
+    var v = p.slice(0, 6).map(function (x) { return String(x).split(" [")[0]; });
+    return esc("[" + v.join(", ") + (p.length > 6 ? ", …" : "") + "]") + (m ? ' <span class="muted">read from ' + esc(m[1]) + "</span>" : "");
+  }
+
   function sourceView(id) {
     var s = S[id];
     if (!s) return home();
@@ -815,9 +856,13 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
     var models = s.models.map(function (m) {
       var rels = m.relations.map(function (r) { var o = r.other.split("/")[0];
         return '<div>' + esc(relName[r.kind] || r.kind) + ' <a href="#source-' + esc(o) + '">' + esc(short(S[o])) + "</a> <span class=\"mono\">" + esc(r.other.split("/")[1]) + "</span> · " + esc(statusName[r.status] || r.status) + (r.stated ? " (stated by the paper)" : "") + "</div>"; }).join("");
-      return "<tr><td>" + esc(m.name || m.id) + '<div class="mono muted">' + esc(m.id) + "</div></td><td>" + esc(m.role || "") + "</td><td>" + (rels || '<span class="muted">none tested</span>') + "</td></tr>"; }).join("");
+      return "<tr><td>" + esc(m.name || m.id) + '<div class="mono muted">' + esc(m.id) + "</div></td><td>" + (m.variant_of ? "corrected variant of <span class=\"mono\">" + esc(m.variant_of) + "</span>" : esc(m.role || "")) + "</td><td>" + (rels || '<span class="muted">none tested</span>') + "</td></tr>"; }).join("");
     var vrows = s.verdicts.map(function (v) {
       return '<tr><td class="mono">' + esc(v.comparison) + "</td><td>" + esc(v.purpose.replace("_", " ")) + '</td><td class="mono">' + esc(v.printed) + '</td><td class="mono">' + esc(v.computed) + "</td><td>" + pill(v.verdict) + '</td><td class="num">' + esc(v.page || "") + "</td></tr>"; }).join("");
+    var fixes = (s.variants || []).map(function (v) {
+      var cs = v.corrections.map(function (c) { return '<div class="q"><div class="eyebrow">' + esc(c.equation) + "</div><div><b>" + esc(c.change) + '</b></div><div class="muted">' + esc(c.evidence) + "</div></div>"; }).join("");
+      return '<div class="fix"><div class="row"><span class="mono">' + esc(v.model) + '</span> <span class="muted">corrects</span> <span class="mono">' + esc(v.of) + "</span></div>" + cs +
+        "<div>" + bar(v.tally) + '<div class="counts">' + counts(v.tally) + " (comparisons computed with the corrected variant)</div></div></div>"; }).join("");
     var qs = s.questions.map(function (q) { return '<div class="q"><div class="eyebrow">' + esc((q.kind || "").replace(/_/g, " ")) + '</div><div>' + esc(q.text) + "</div></div>"; }).join("");
     var from = (s.takes_from || []).map(function (t) { return '<a href="#source-' + esc(t) + '">' + esc(short(S[t])) + "</a>"; }).join(", ");
     app.innerHTML = '<a class="back" href="#overview">← Back to the overview</a>' +
@@ -826,6 +871,7 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       '<section><h2>What was checked</h2>' + KEY + '<div class="purposes">' + (purposes || '<p class="muted">Nothing in this source is compared with a computed value.</p>') + "</div>" +
       (from ? "<p>Takes values from " + from + ", each checked against the source it comes from.</p>" : "") + "</section>" +
       '<section><h2>Models</h2><div class="tbl"><table><thead><tr><th>Model</th><th>Role</th><th>Tested relations to other sources</th></tr></thead><tbody>' + (models || '<tr><td colspan="3" class="muted">No models.</td></tr>') + "</tbody></table></div></section>" +
+      (fixes ? '<section><h2>Corrections</h2><p class="muted" style="max-width:70ch">Where an equation is evidently misprinted, the record keeps the model as printed and adds a corrected variant beside it, with the evidence for the correction. The paper\'s own tally above counts only the model as printed.</p>' + fixes + "</section>" : "") +
       '<section><h2>Every comparison</h2><details><summary>' + s.verdicts.length + ' comparisons, each with the printed and the computed value</summary><div><div class="tbl"><table><thead><tr><th>Comparison</th><th>Purpose</th><th>Printed</th><th>Computed</th><th>Verdict</th><th class="num">Page</th></tr></thead><tbody>' + vrows + "</tbody></table></div></div></details></section>" +
       '<section><h2>Open questions</h2><details><summary>' + s.questions.length + " questions the record leaves open</summary><div>" + qs + "</div></details></section>";
     window.scrollTo(0, 0);
@@ -839,7 +885,7 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
     if (!e) return "";
     var src = function (k) { var sid = k.split("/")[0]; return S[sid] ? '<a href="#source-' + esc(sid) + '">' + esc(short(S[sid])) + "</a>" : esc(sid); };
     if (e.kind === "comparison") return '<div class="ev"><div class="row"><span class="eyebrow">' + esc(e.purpose.replace("_", " ")) + "</span>" + src(e.source) + (e.page ? '<span class="muted">p. ' + esc(e.page) + "</span>" : "") + "</div>" +
-      '<div class="row"><span>Printed <span class="big">' + (Array.isArray(e.printed) ? esc(e.printed.join(", ")) : esc(e.printed)) + '</span></span><span>Computed <span class="big">' + esc(e.computed) + (e.computed_2se ? " ± " + esc(e.computed_2se) : "") + "</span></span>" + pill(e.verdict) + "</div>" +
+      '<div class="row"><span>Printed <span class="big">' + plist(e.printed) + '</span></span><span>Computed <span class="big">' + esc(e.computed) + (e.computed_2se ? " ± " + esc(e.computed_2se) : "") + "</span></span>" + pill(e.verdict) + "</div>" +
       (e.quote ? '<div class="detail">“' + esc(e.quote) + "”</div>" : "") + "</div>";
     if (e.kind === "relation") return '<div class="ev"><div class="row"><span class="eyebrow">' + esc(relName[e.relation] || e.relation) + (e.stated ? " · stated by the paper" : " · proposed by the reader") + "</span></div>" +
       '<div class="row"><span class="mono">' + esc(e.a) + "</span> → <span class=\"mono\">" + esc(e.b) + "</span><span>" + esc(statusName[e.status] || e.status) + "</span></div>" +
@@ -849,11 +895,11 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       (e.convention ? '<div class="detail">' + esc(e.convention) + "</div>" : "") + "</div>";
     if (e.kind === "cross_check") return '<div class="ev"><div class="row"><span class="eyebrow">A model run on another source\'s inputs</span></div>' +
       '<div class="row"><span class="mono">' + esc(e.model) + "</span> on the inputs of " + src(e.on_inputs_of + "/") + "</div>" +
-      '<div class="row"><span>Printed <span class="big">' + esc(e.printed) + '</span></span><span>Computed <span class="big">' + esc(e.computed) + "</span></span>" + pill(e.verdict) + "</div>" +
+      '<div class="row"><span>Printed <span class="big">' + plist(e.printed) + '</span></span><span>Computed <span class="big">' + esc(e.computed) + "</span></span>" + pill(e.verdict) + "</div>" +
       (e.added.length ? '<div class="detail">Inputs added: ' + esc(e.added.join("; ")) + "</div>" : "") + "</div>";
     if (e.kind === "validation") return '<div class="ev"><div class="row"><span class="eyebrow">A model against another paper\'s measurement</span></div>' +
       '<div class="row"><span class="mono">' + esc(e.model) + "</span> against " + src(e.against) + ' <span class="mono">' + esc(e.against.split("/").slice(1).join("/")) + "</span></div>" +
-      (e.status === "checked" ? '<div class="row"><span>Measured <span class="big">' + (Array.isArray(e.printed) ? esc(e.printed.join(", ")) : esc(e.printed)) + '</span></span><span>Predicted <span class="big">' + esc(e.computed) + "</span></span>" + pill(e.verdict) + "</div>"
+      (e.status === "checked" ? '<div class="row"><span>Measured <span class="big">' + plist(e.printed) + '</span></span><span>Predicted <span class="big">' + esc(e.computed) + "</span></span>" + pill(e.verdict) + "</div>"
         : '<div class="detail">' + esc(e.status) + "</div>") +
       '<div class="detail">Why this model should predict it: ' + esc(e.basis) + "</div>" +
       (e.correspondences.length ? '<div class="detail">Taken as the same quantity: ' + esc(e.correspondences.join("; ")) + "</div>" : "") + "</div>";

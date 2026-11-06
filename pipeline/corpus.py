@@ -1,16 +1,16 @@
-"""The corpus list (pipeline/papers.yaml) and the ledger of finished jobs.
+"""A corpus's list of papers (corpora/<name>/papers.yaml) and its ledger of finished jobs.
 
 An entry in the corpus list:
 
-  - id: smith2015            # lower case, letters, digits and _; becomes records/<id>/
-    file: corpus/Smith.pdf   # under the project root
+  - id: smith2015            # lower case, letters, digits and _; becomes corpora/<name>/records/<id>/
+    file: corpus/<name>/Smith.pdf   # under the project root
     pages: [1, 12]           # PDF pages that belong to the paper (supplement included)
     note: "..."              # optional: what the reader should know about the file
     relate_with: [bell1978]  # optional: records to relate it to, beyond those found
 
-The ledger (pipeline/completed.yaml) lists every job that passed its gate,
+The ledger (corpora/<name>/completed.yaml) lists every job that passed its gate,
 with its date and cost. It is committed with the records, so a fresh clone
-knows what is done; the SQLite state in pipeline_state/ is only this
+knows what is done; the SQLite state in pipeline_state/<name>/ is only this
 machine's progress within a run.
 """
 
@@ -18,15 +18,47 @@ from __future__ import annotations
 
 import re
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
 
 ID_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+RESERVED = {"cache", "overview", "figures", "relate-check", "validate-check", "logs"}  # the build's and state's own folders
+
+
+@dataclass(frozen=True)
+class Layout:
+    """Where one corpus keeps its files. Paths that agents and gates name are relative to the project
+    root (records, build, state, sources); the files the pipeline reads and writes itself are absolute."""
+    papers: Path     # the corpus list
+    ledger: Path     # jobs that passed, committed with the records
+    overview: Path   # the overview's words (optional)
+    records: str     # committed records
+    build: str       # the build's output (ignored by git)
+    state: str       # this machine's run state (ignored by git)
+    sources: str     # PDFs, released code and data (ignored by git)
+
+
+def layout(root: Path, name: str | None = None) -> Layout:
+    """A corpus lives in corpora/<name>/, with its sources, build and run state in a subfolder of their own, so
+    corpora are reviewed side by side without mixing. Without a name, the same files sit at the root of a
+    project that holds one corpus (tests use this); every corpus of this repository has a name."""
+    root = Path(root)
+    if name is None:
+        return Layout(root / "pipeline" / "papers.yaml", root / "pipeline" / "completed.yaml",
+                      root / "overview" / "content.yaml", "records", "build", "pipeline_state", "corpus")
+    if not ID_RE.match(name) or name in RESERVED:
+        raise ValueError(f"corpus name {name!r}: use lower-case letters, digits and _, starting with a letter "
+                         f"(and not one of {', '.join(sorted(RESERVED))})")
+    d = root / "corpora" / name
+    return Layout(d / "papers.yaml", d / "completed.yaml", d / "overview.yaml", f"corpora/{name}/records",
+                  f"build/{name}", f"pipeline_state/{name}", f"corpus/{name}")
 
 
 def load_papers(path: Path) -> list[dict]:
-    return yaml.safe_load(Path(path).read_text()) or []
+    path = Path(path)
+    return (yaml.safe_load(path.read_text()) or []) if path.exists() else []
 
 
 def pdf_pages(pdf: Path) -> int:

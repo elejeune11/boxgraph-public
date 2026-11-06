@@ -77,13 +77,27 @@ def test_adding_a_paper_appends_a_checked_entry(tmp_path):
 def test_the_add_command_copies_a_pdf_into_the_corpus(tmp_path):
     """`python -m pipeline.add` copies a PDF from elsewhere into corpus/ and registers it."""
     src = _pdf(tmp_path / "elsewhere" / "Paper.pdf", pages=2)
-    (tmp_path / "pipeline").mkdir()
-    (tmp_path / "pipeline" / "papers.yaml").write_text("[]\n")
-    r = subprocess.run([sys.executable, "-m", "pipeline.add", str(src), "--id", "new2020", "--root", str(tmp_path)],
+    (tmp_path / "corpora" / "c").mkdir(parents=True)
+    (tmp_path / "corpora" / "c" / "papers.yaml").write_text("[]\n")
+    r = subprocess.run([sys.executable, "-m", "pipeline.add", str(src), "--id", "new2020", "--corpus", "c", "--root", str(tmp_path)],
                        capture_output=True, text=True, cwd=ROOT)
     assert r.returncode == 0, r.stdout + r.stderr
-    assert (tmp_path / "corpus" / "Paper.pdf").exists()
-    assert load_papers(tmp_path / "pipeline" / "papers.yaml")[0]["file"] == "corpus/Paper.pdf"
+    assert (tmp_path / "corpus" / "c" / "Paper.pdf").exists()
+    assert load_papers(tmp_path / "corpora" / "c" / "papers.yaml")[0]["file"] == "corpus/c/Paper.pdf"
+
+
+@needs_poppler
+def test_a_paper_that_is_not_added_leaves_no_copy_behind(tmp_path):
+    """When `python -m pipeline.add` refuses an entry (a bad id, a bad page range), the PDF is not left copied into corpus/."""
+    src = _pdf(tmp_path / "elsewhere" / "Paper.pdf", pages=2)
+    (tmp_path / "corpora" / "c").mkdir(parents=True)
+    (tmp_path / "corpora" / "c" / "papers.yaml").write_text("[]\n")
+    for extra in (["--id", "Bad-Id"], ["--id", "new2020", "--pages", "x"], ["--id", "new2020", "--pages", "1-9"]):
+        r = subprocess.run([sys.executable, "-m", "pipeline.add", str(src), *extra, "--corpus", "c", "--root", str(tmp_path)],
+                           capture_output=True, text=True, cwd=ROOT)
+        assert r.returncode == 1 and "Traceback" not in r.stderr, (extra, r.stdout + r.stderr)
+        assert not (tmp_path / "corpus" / "c" / "Paper.pdf").exists(), extra
+    assert load_papers(tmp_path / "corpora" / "c" / "papers.yaml") == []
 
 
 def test_the_ledger_records_finished_jobs_and_merges(tmp_path):
@@ -100,18 +114,23 @@ def test_the_ledger_records_finished_jobs_and_merges(tmp_path):
 
 
 def test_the_repository_ledger_covers_the_corpus_already_read():
-    """The committed ledger lists every per-paper job of every committed record, so a fresh clone does not redo them."""
-    r = subprocess.run(["git", "ls-files", "records"], capture_output=True, text=True, cwd=ROOT)
-    if r.returncode != 0:
-        pytest.skip("not a git checkout")
-    committed = {f.split("/")[1] for f in r.stdout.splitlines() if f.endswith("/source.yaml")}
-    done = load_completed(ROOT / "pipeline" / "completed.yaml")
-    for p in load_papers(ROOT / "pipeline" / "papers.yaml"):
-        if p["id"] in committed:  # a record still being read is not committed yet
-            from pipeline.run_papers import stages_of
+    """Each corpus's committed ledger lists every per-paper job of its committed records, so a fresh clone does not redo them."""
+    from pipeline.corpus import layout
+    from pipeline.run_papers import stages_of
 
-            for stage in stages_of(p):  # a paper: read, audit, digitize; its released code or data: read
-                assert f"{stage}:{p['id']}" in done, (stage, p["id"])
+    names = sorted(d.name for d in (ROOT / "corpora").iterdir() if d.is_dir())
+    assert names, "the repository keeps its corpora in corpora/<name>/"
+    for name in names:
+        lay = layout(ROOT, name)
+        r = subprocess.run(["git", "ls-files", lay.records], capture_output=True, text=True, cwd=ROOT)
+        if r.returncode != 0:
+            pytest.skip("not a git checkout")
+        committed = {f.split("/")[-2] for f in r.stdout.splitlines() if f.endswith("/source.yaml")}
+        done = load_completed(lay.ledger)
+        for p in load_papers(lay.papers):
+            if p["id"] in committed:  # a record still being read is not committed yet
+                for stage in stages_of(p):  # a paper: read, audit, digitize; its released code or data: read
+                    assert f"{stage}:{p['id']}" in done, (name, stage, p["id"])
 
 
 def test_the_ledger_is_written_whole_or_not_at_all(tmp_path, monkeypatch):
@@ -146,9 +165,9 @@ def test_the_attach_command_registers_code_and_data_safely(tmp_path):
     a zip whose paths leave its folder is refused."""
     import zipfile
 
-    (tmp_path / "pipeline").mkdir()
-    _pdf(tmp_path / "corpus" / "a.pdf")
-    (tmp_path / "pipeline" / "papers.yaml").write_text("- {id: smith2015, file: corpus/a.pdf, pages: [1, 3]}\n")
+    (tmp_path / "corpora" / "c").mkdir(parents=True)
+    _pdf(tmp_path / "corpus" / "c" / "a.pdf")
+    (tmp_path / "corpora" / "c" / "papers.yaml").write_text("- {id: smith2015, file: corpus/c/a.pdf, pages: [1, 3]}\n")
     z = tmp_path / "up" / "code.zip"
     z.parent.mkdir()
     with zipfile.ZipFile(z, "w") as f:
@@ -156,23 +175,23 @@ def test_the_attach_command_registers_code_and_data_safely(tmp_path):
         f.writestr("__MACOSX/._run.m", "junk")
     run = [sys.executable, "-m", "pipeline.attach"]
     r = subprocess.run([*run, str(z), "--id", "smith_code", "--kind", "software", "--papers", "smith2015",
-                        "--root", str(tmp_path)], capture_output=True, text=True, cwd=ROOT)
+                        "--corpus", "c", "--root", str(tmp_path)], capture_output=True, text=True, cwd=ROOT)
     assert r.returncode == 0, r.stdout + r.stderr
-    assert (tmp_path / "corpus" / "code" / "smith_code" / "run.m").exists()
-    assert not (tmp_path / "corpus" / "code" / "smith_code" / "__MACOSX").exists()
-    e = load_papers(tmp_path / "pipeline" / "papers.yaml")[-1]
-    assert e == {"id": "smith_code", "kind": "software", "file": "corpus/code/smith_code", "papers": ["smith2015"]}
+    assert (tmp_path / "corpus" / "c" / "code" / "smith_code" / "run.m").exists()
+    assert not (tmp_path / "corpus" / "c" / "code" / "smith_code" / "__MACOSX").exists()
+    e = load_papers(tmp_path / "corpora" / "c" / "papers.yaml")[-1]
+    assert e == {"id": "smith_code", "kind": "software", "file": "corpus/c/code/smith_code", "papers": ["smith2015"]}
     bad = tmp_path / "up" / "bad.zip"
     with zipfile.ZipFile(bad, "w") as f:
         f.writestr("../escape.txt", "x")
     r = subprocess.run([*run, str(bad), "--id", "bad_code", "--kind", "software", "--papers", "smith2015",
-                        "--root", str(tmp_path)], capture_output=True, text=True, cwd=ROOT)
+                        "--corpus", "c", "--root", str(tmp_path)], capture_output=True, text=True, cwd=ROOT)
     assert r.returncode != 0 and not (tmp_path / "escape.txt").exists()
     x = tmp_path / "up" / "data.xlsx"
     x.write_bytes(b"PK")
     r = subprocess.run([*run, str(x), "--id", "smith_data", "--kind", "dataset", "--papers", "smith2015",
-                        "--root", str(tmp_path)], capture_output=True, text=True, cwd=ROOT)
-    assert r.returncode == 0 and (tmp_path / "corpus" / "data" / "smith_data.xlsx").exists()
+                        "--corpus", "c", "--root", str(tmp_path)], capture_output=True, text=True, cwd=ROOT)
+    assert r.returncode == 0 and (tmp_path / "corpus" / "c" / "data" / "smith_data.xlsx").exists()
 
 
 def test_missing_sources_lists_what_a_fresh_clone_lacks_and_where_to_get_it(tmp_path):
@@ -191,3 +210,33 @@ def test_missing_sources_lists_what_a_fresh_clone_lacks_and_where_to_get_it(tmp_
     assert [m["id"] for m in out] == ["gone", "gone_code"]
     assert out[0]["where"] == "https://doi.org/10.1000/xyz" and out[0]["file"] == "corpus/gone.pdf"
     assert out[1]["where"] == "https://example.org/code" and out[1]["title"] == "gone_code title"
+
+
+def test_a_tar_gz_of_code_is_unpacked_as_safely_as_a_zip(tmp_path):
+    """A .tar.gz of code is unpacked into its folder with its single top folder unwrapped; one with a path leaving the folder or a link is refused."""
+    import io
+    import tarfile
+
+    from pipeline.attach import unpack
+
+    def tgz(path, members):
+        with tarfile.open(path, "w:gz") as t:
+            for name, data, kind in members:
+                ti = tarfile.TarInfo(name)
+                if kind == "link":
+                    ti.type, ti.linkname = tarfile.SYMTYPE, "/etc/passwd"
+                    t.addfile(ti)
+                else:
+                    ti.size = len(data)
+                    t.addfile(ti, io.BytesIO(data))
+        return path
+
+    ok = tgz(tmp_path / "ok.tar.gz", [("ws-1f11/Main.cellml", b"<model/>", "file"),
+                                       ("ws-1f11/sub/Units.cellml", b"<units/>", "file")])
+    unpack(ok, tmp_path / "out")
+    assert (tmp_path / "out" / "Main.cellml").read_bytes() == b"<model/>"
+    assert (tmp_path / "out" / "sub" / "Units.cellml").exists()
+    for bad in ([("../escape.txt", b"x", "file")], [("ws/link", b"", "link")]):
+        with pytest.raises(ValueError):
+            unpack(tgz(tmp_path / "bad.tar.gz", bad), tmp_path / "bad_out")
+        assert not (tmp_path / "escape.txt").exists()

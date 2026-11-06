@@ -1,0 +1,78 @@
+# ---- quality factor and tube impedance --------------------------------------------
+- {id: run_q_3hz, model: q_eq2, inputs: {d: bore_diameter, mu: viscosity, rho: density, f: f_3hz}, outputs: {Q: q_3hz_pred, Qf: qf_pred}}
+- {id: run_imp_3hz, model: impedance_eq10, inputs: {Qf: qf_eq10, f: f_3hz}, outputs: {Q: q_3hz_eq10_pred}}
+- {id: run_imp_15hz, model: impedance_eq10, inputs: {Qf: qf_eq10, f: f_15hz}, outputs: {dmod: dmod_15hz_pred, phase: phase_15hz_pred}}
+
+# ---- minimum-length criteria ---------------------------------------------------------
+- {id: run_eq7a, model: lmin_eq7a, inputs: {Re: re_max, d: bore_diameter, rho: density, mu: viscosity}, outputs: {c7a: c7a_pred, k11a: k11a_pred}}
+- {id: run_eq7b, model: lmin_eq7b, inputs: {a: inlet_coeff, eps: nonlinearity_eq5, d: bore_diameter, rho: density, mu: viscosity}, outputs: {k11b: k11b_pred}}
+- {id: run_l_rp_syst, model: lmin_eq11b, inputs: {k: k11b_printed, dP: dp_rp_syst}, outputs: {l: l_rp_syst_pred}}
+- {id: run_l_rp_pulm, model: lmin_eq11b, inputs: {k: k11b_printed, dP: dp_rp_pulm}, outputs: {l: l_rp_pulm_pred}}
+- {id: run_l_rc_syst, model: lmin_eq11b, inputs: {k: k11b_printed, dP: dp_rc_syst}, outputs: {l: l_rc_syst_pred}}
+
+# ---- Poiseuille constant and numbers of tubes (Table 1) ----------------------------------
+- {id: run_k8b, model: k_eq8b, inputs: {d: bore_diameter, mu: viscosity}, outputs: {K: k8b_pred}}
+- {id: run_n_rc_man_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_syst_tab, R: rc_man_syst}, outputs: {N: n_rc_man_syst_pred}}
+- {id: run_n_rc_man_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_pulm_tab, R: rc_man_pulm}, outputs: {N: n_rc_man_pulm_pred}}
+- {id: run_n_rc_dog_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_syst_tab, R: rc_dog_syst}, outputs: {N: n_rc_dog_syst_pred}}
+- {id: run_n_rc_dog_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_pulm_tab, R: rc_dog_pulm}, outputs: {N: n_rc_dog_pulm_pred}}
+- {id: run_n_rc_cat_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_syst_tab, R: rc_cat_syst}, outputs: {N: n_rc_cat_syst_pred}}
+- {id: run_n_rc_cat_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_pulm_tab, R: rc_cat_pulm}, outputs: {N: n_rc_cat_pulm_pred}}
+- {id: run_n_rc_rat_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_syst_tab, R: rc_rat_syst}, outputs: {N: n_rc_rat_syst_pred}}
+- {id: run_n_rc_rat_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rc_pulm_tab, R: rc_rat_pulm}, outputs: {N: n_rc_rat_pulm_pred}}
+- {id: run_n_rp_man_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_syst_tab, R: rp_man_syst}, outputs: {N: n_rp_man_syst_pred}}
+- {id: run_n_rp_man_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_pulm_tab, R: rp_man_pulm}, outputs: {N: n_rp_man_pulm_pred}}
+- {id: run_n_rp_dog_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_syst_tab, R: rp_dog_syst}, outputs: {N: n_rp_dog_syst_pred}}
+- {id: run_n_rp_dog_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_pulm_tab, R: rp_dog_pulm}, outputs: {N: n_rp_dog_pulm_pred}}
+- {id: run_n_rp_cat_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_syst_tab, R: rp_cat_syst}, outputs: {N: n_rp_cat_syst_pred}}
+- {id: run_n_rp_cat_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_pulm_tab, R: rp_cat_pulm}, outputs: {N: n_rp_cat_pulm_pred}}
+- {id: run_n_rp_rat_syst, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_syst_tab, R: rp_rat_syst}, outputs: {N: n_rp_rat_syst_pred}}
+- {id: run_n_rp_rat_pulm, model: tubes_eq8b, inputs: {K: k8b_printed, l: lmin_rp_pulm_tab, R: rp_rat_pulm}, outputs: {N: n_rp_rat_pulm_pred}}
+
+# ---- d-c input resistance of the models in Figs. 2-5 (Eq. 1a with Table 1) ------------------
+- {id: run_rdc_dog_syst, model: rdc_eq1a, inputs: {Rc: rc_dog_syst, Rp: rp_dog_syst}, outputs: {Zdc: rdc_dog_syst_pred}}
+- {id: run_rdc_dog_pulm, model: rdc_eq1a, inputs: {Rc: rc_dog_pulm, Rp: rp_dog_pulm}, outputs: {Zdc: rdc_dog_pulm_pred}}
+- {id: run_rdc_cat_syst, model: rdc_eq1a, inputs: {Rc: rc_cat_syst, Rp: rp_cat_syst}, outputs: {Zdc: rdc_cat_syst_pred}}
+- {id: run_rdc_cat_pulm, model: rdc_eq1a, inputs: {Rc: rc_cat_pulm, Rp: rp_cat_pulm}, outputs: {Zdc: rdc_cat_pulm_pred}}
+
+# ---- tau = Rp C (Table 1) ---------------------------------------------------------------
+- {id: run_tau_man_syst, model: tau_rpc, inputs: {Rp: rp_man_syst, C: c_man_syst}, outputs: {tau: tau_man_syst_pred}}
+- {id: run_tau_man_pulm, model: tau_rpc, inputs: {Rp: rp_man_pulm, C: c_man_pulm}, outputs: {tau: tau_man_pulm_pred}}
+- {id: run_tau_dog_syst, model: tau_rpc, inputs: {Rp: rp_dog_syst, C: c_dog_syst}, outputs: {tau: tau_dog_syst_pred}}
+- {id: run_tau_dog_pulm, model: tau_rpc, inputs: {Rp: rp_dog_pulm, C: c_dog_pulm}, outputs: {tau: tau_dog_pulm_pred}}
+- {id: run_tau_cat_syst, model: tau_rpc, inputs: {Rp: rp_cat_syst, C: c_cat_syst}, outputs: {tau: tau_cat_syst_pred}}
+- {id: run_tau_cat_pulm, model: tau_rpc, inputs: {Rp: rp_cat_pulm, C: c_cat_pulm}, outputs: {tau: tau_cat_pulm_pred}}
+- {id: run_tau_rat_syst, model: tau_rpc, inputs: {Rp: rp_rat_syst, C: c_rat_syst}, outputs: {tau: tau_rat_syst_pred}}
+- {id: run_tau_rat_pulm, model: tau_rpc, inputs: {Rp: rp_rat_pulm, C: c_rat_pulm}, outputs: {tau: tau_rat_pulm_pred}}
+
+# ---- air volumes (Eq. 9, Table 1) ---------------------------------------------------------
+- {id: run_vair_man_syst, model: air_volume_eq9, inputs: {C: c_man_syst, Patm: p_atm_added, Pmean: pmean_syst}, outputs: {V: vair_man_syst_pred}}
+- {id: run_vair_dog_syst, model: air_volume_eq9, inputs: {C: c_dog_syst, Patm: p_atm_added, Pmean: pmean_syst}, outputs: {V: vair_dog_syst_pred}, note: "The systemic mean pressure printed for man (about 100 mm Hg) is used for every species."}
+- {id: run_vair_cat_syst, model: air_volume_eq9, inputs: {C: c_cat_syst, Patm: p_atm_added, Pmean: pmean_syst}, outputs: {V: vair_cat_syst_pred}, note: "The systemic mean pressure printed for man (about 100 mm Hg) is used for every species."}
+- {id: run_vair_rat_syst, model: air_volume_eq9, inputs: {C: c_rat_syst, Patm: p_atm_added, Pmean: pmean_syst}, outputs: {V: vair_rat_syst_pred}, note: "The systemic mean pressure printed for man (about 100 mm Hg) is used for every species."}
+- {id: run_vair_man_pulm, model: air_volume_eq9, inputs: {C: c_man_pulm, Patm: p_atm_added, Pmean: pmean_pulm_added}, outputs: {V: vair_man_pulm_pred}}
+- {id: run_vair_dog_pulm, model: air_volume_eq9, inputs: {C: c_dog_pulm, Patm: p_atm_added, Pmean: pmean_pulm_added}, outputs: {V: vair_dog_pulm_pred}}
+- {id: run_vair_cat_pulm, model: air_volume_eq9, inputs: {C: c_cat_pulm, Patm: p_atm_added, Pmean: pmean_pulm_added}, outputs: {V: vair_cat_pulm_pred}}
+- {id: run_vair_rat_pulm, model: air_volume_eq9, inputs: {C: c_rat_pulm, Patm: p_atm_added, Pmean: pmean_pulm_added}, outputs: {V: vair_rat_pulm_pred}}
+
+# ---- the three-element model (Fig. 1A) over the frequencies of the figure readings ----
+- {id: run_fig2_mod_line, model: impedance_3el, inputs: {Rc: rc_dog_syst, Rp: rp_dog_syst, C: c_dog_syst}, sweep: {f: f2_mod_line_read}, outputs: {modulus: f2_mod_line_read_3el}}
+- {id: run_fig2_mod_dots, model: impedance_3el, inputs: {Rc: rc_dog_syst, Rp: rp_dog_syst, C: c_dog_syst}, sweep: {f: f2_mod_dots_read}, outputs: {modulus: f2_mod_dots_read_3el}}
+- {id: run_fig2_ph_line, model: impedance_3el, inputs: {Rc: rc_dog_syst, Rp: rp_dog_syst, C: c_dog_syst}, sweep: {f: f2_ph_line_read}, outputs: {phase: f2_ph_line_read_3el}}
+- {id: run_fig2_ph_dots, model: impedance_3el, inputs: {Rc: rc_dog_syst, Rp: rp_dog_syst, C: c_dog_syst}, sweep: {f: f2_ph_dots_read}, outputs: {phase: f2_ph_dots_read_3el}}
+- {id: run_fig3_mod_line, model: impedance_3el, inputs: {Rc: rc_dog_pulm, Rp: rp_dog_pulm, C: c_dog_pulm}, sweep: {f: f3_mod_line_read}, outputs: {modulus: f3_mod_line_read_3el}}
+- {id: run_fig3_mod_dots, model: impedance_3el, inputs: {Rc: rc_dog_pulm, Rp: rp_dog_pulm, C: c_dog_pulm}, sweep: {f: f3_mod_dots_read}, outputs: {modulus: f3_mod_dots_read_3el}}
+- {id: run_fig3_ph_line, model: impedance_3el, inputs: {Rc: rc_dog_pulm, Rp: rp_dog_pulm, C: c_dog_pulm}, sweep: {f: f3_ph_line_read}, outputs: {phase: f3_ph_line_read_3el}}
+- {id: run_fig3_ph_dots, model: impedance_3el, inputs: {Rc: rc_dog_pulm, Rp: rp_dog_pulm, C: c_dog_pulm}, sweep: {f: f3_ph_dots_read}, outputs: {phase: f3_ph_dots_read_3el}}
+- {id: run_fig4_mod_line, model: impedance_3el, inputs: {Rc: rc_cat_syst, Rp: rp_cat_syst, C: c_cat_syst}, sweep: {f: f4_mod_line_read}, outputs: {modulus: f4_mod_line_read_3el}}
+- {id: run_fig4_mod_circles, model: impedance_3el, inputs: {Rc: rc_cat_syst, Rp: rp_cat_syst, C: c_cat_syst}, sweep: {f: f4_mod_circles_read}, outputs: {modulus: f4_mod_circles_read_3el}}
+- {id: run_fig4_mod_crosses, model: impedance_3el, inputs: {Rc: rc_cat_syst, Rp: rp_cat_syst, C: c_cat_syst}, sweep: {f: f4_mod_crosses_read}, outputs: {modulus: f4_mod_crosses_read_3el}}
+- {id: run_fig4_ph_line, model: impedance_3el, inputs: {Rc: rc_cat_syst, Rp: rp_cat_syst, C: c_cat_syst}, sweep: {f: f4_ph_line_read}, outputs: {phase: f4_ph_line_read_3el}}
+- {id: run_fig4_ph_circles, model: impedance_3el, inputs: {Rc: rc_cat_syst, Rp: rp_cat_syst, C: c_cat_syst}, sweep: {f: f4_ph_circles_read}, outputs: {phase: f4_ph_circles_read_3el}}
+- {id: run_fig4_ph_crosses, model: impedance_3el, inputs: {Rc: rc_cat_syst, Rp: rp_cat_syst, C: c_cat_syst}, sweep: {f: f4_ph_crosses_read}, outputs: {phase: f4_ph_crosses_read_3el}}
+- {id: run_fig5_mod_line, model: impedance_3el, inputs: {Rc: rc_cat_pulm, Rp: rp_cat_pulm, C: c_cat_pulm}, sweep: {f: f5_mod_line_read}, outputs: {modulus: f5_mod_line_read_3el}}
+- {id: run_fig5_mod_circles, model: impedance_3el, inputs: {Rc: rc_cat_pulm, Rp: rp_cat_pulm, C: c_cat_pulm}, sweep: {f: f5_mod_circles_read}, outputs: {modulus: f5_mod_circles_read_3el}}
+- {id: run_fig5_mod_crosses, model: impedance_3el, inputs: {Rc: rc_cat_pulm, Rp: rp_cat_pulm, C: c_cat_pulm}, sweep: {f: f5_mod_crosses_read}, outputs: {modulus: f5_mod_crosses_read_3el}}
+- {id: run_fig5_ph_line, model: impedance_3el, inputs: {Rc: rc_cat_pulm, Rp: rp_cat_pulm, C: c_cat_pulm}, sweep: {f: f5_ph_line_read}, outputs: {phase: f5_ph_line_read_3el}}
+- {id: run_fig5_ph_circles, model: impedance_3el, inputs: {Rc: rc_cat_pulm, Rp: rp_cat_pulm, C: c_cat_pulm}, sweep: {f: f5_ph_circles_read}, outputs: {phase: f5_ph_circles_read_3el}}
+- {id: run_fig5_ph_crosses, model: impedance_3el, inputs: {Rc: rc_cat_pulm, Rp: rp_cat_pulm, C: c_cat_pulm}, sweep: {f: f5_ph_crosses_read}, outputs: {phase: f5_ph_crosses_read_3el}}

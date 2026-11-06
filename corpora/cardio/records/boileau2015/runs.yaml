@@ -1,0 +1,175 @@
+# ---- single pulse (4.1)
+- id: run_c0_sp
+  model: pwv_eq5_reference
+  inputs: {Ad: A0_sp_pi, E: E_sp, h: h_sp, rho: rho_sp}
+  outputs: {c: c0_sp_pred}
+- id: run_qpeak_sp
+  model: gaussian_inflow_eq14
+  inputs: {amp: q_amp_eq14, k: k_eq14, t0: t0_eq14, t: t0_eq14}
+  outputs: {Q: q_peak_sp_pred}
+  note: "Eq. 14 evaluated at its centre t = t0 = 0.05 s, where it peaks"
+- id: run_decay_outlet_sp
+  model: peak_decay_eq15
+  inputs: {zeta: zeta_sp, mu: mu_sp, rho: rho_sp, c0: c0_sp, A0: A0_sp_pi, x: L_sp}
+  outputs: {ratio: decay_outlet_sp_pred}
+  note: "Eq. 15 at the outlet, x = L = 10 m: the end of the thick black line in each panel of Fig. 2. No value is printed for it; Fig. 2 was not read (see figures.md)."
+- id: run_wavelength_sp
+  model: wavelength
+  inputs: {c: c0_sp_text, T: width_sp}
+  outputs: {lam: wavelength_sp_pred}
+
+# ---- Table I CFL numbers, single pulse (added by the audit); lambda = c0 + U
+- id: run_cfl_sp_dcg
+  model: cfl_table1
+  inputs: {c: c0_sp, U: U_max_sp, dt: dt_sp_dcg, dx: dx_sp_dcg}
+  outputs: {CFL: cfl_sp_dcg_pred}
+- id: run_cfl_sp_lcg
+  model: cfl_table1
+  inputs: {c: c0_sp, U: U_max_sp, dt: dt_sp_lcg, dx: dx_sp_lcg}
+  outputs: {CFL: cfl_sp_lcg_pred}
+- id: run_cfl_sp_fvm
+  model: cfl_table1
+  inputs: {c: c0_sp, U: U_max_sp, dt: dt_sp_fvm, dx: dx_sp_fvm}
+  outputs: {CFL: cfl_sp_fvm_pred}
+- id: run_cfl_sp_mcc
+  model: cfl_table1
+  inputs: {c: c0_sp, U: U_max_sp, dt: dt_sp_mcc, dx: dx_sp_mcc}
+  outputs: {CFL: cfl_sp_mcc_pred}
+
+# ---- diastolic areas from radii
+- id: run_Ad_car
+  model: circle_area
+  inputs: {rd: rd_car}
+  outputs: {Ad: Ad_car_pred}
+- id: run_Ad_ao
+  model: circle_area
+  inputs: {rd: rd_ao}
+  outputs: {Ad: Ad_ao_pred}
+- id: run_Ad_bao
+  model: circle_area
+  inputs: {rd: rd_bao}
+  outputs: {Ad: Ad_bao_pred}
+- id: run_Ad_il
+  model: circle_area
+  inputs: {rd: rd_il}
+  outputs: {Ad: Ad_il_pred}
+
+# ---- initial areas, Eq. 16
+- id: run_A0_car
+  model: initial_area_eq16
+  inputs: {Ad: Ad_car, Pd: Pd_car, E: E_car, h: h_car}
+  outputs: {A0: A0_car_pred}
+- id: run_A0_ao
+  model: initial_area_eq16
+  inputs: {Ad: Ad_ao, Pd: Pd_946_repeating, E: E_ao, h: h_ao}
+  outputs: {A0: A0_ao_pred}
+- id: run_A0_bao
+  model: initial_area_eq16
+  inputs: {Ad: Ad_bao, Pd: Pd_946_repeating, E: E_bao, h: h_bao}
+  outputs: {A0: A0_bao_pred}
+- id: run_A0_il
+  model: initial_area_eq16
+  inputs: {Ad: Ad_il, Pd: Pd_946_repeating, E: E_il, h: h_il}
+  outputs: {A0: A0_il_pred}
+
+# ---- R1 as characteristic impedance (p. 5)
+- id: run_R1_car
+  model: characteristic_impedance
+  inputs: {Ad: Ad_car, E: E_car, h: h_car, rho: rho_car}
+  outputs: {R1: R1_car_pred}
+- id: run_R1_ao
+  model: characteristic_impedance
+  inputs: {Ad: Ad_ao, E: E_ao, h: h_ao, rho: rho_ao}
+  outputs: {R1: R1_ao_pred}
+- id: run_R1_il
+  model: characteristic_impedance
+  inputs: {Ad: Ad_il, E: E_il, h: h_il, rho: rho_bif}
+  outputs: {R1: R1_il_pred}
+- id: run_R1_adan_xii
+  model: adan56_terminal_impedance
+  inputs: {E: E_adan, rho: rho_adan, a: a_eq17, b: b_eq17, c: c_eq17, d: d_eq17}
+  sweep: {R0: R1_adan_xii}
+  outputs: {R1: R1_adan_xii_pred}
+- id: run_R1_adan_xiii
+  model: adan56_terminal_impedance
+  inputs: {E: E_adan, rho: rho_adan, a: a_eq17, b: b_eq17, c: c_eq17, d: d_eq17}
+  sweep: {R0: R1_adan_xiii}
+  outputs: {R1: R1_adan_xiii_pred}
+
+# ---- wave speed at mean pressure (Tables III, V, VII footnotes)
+- id: run_Pm_car
+  model: windkessel_mean_pressure
+  inputs: {Q: Qm_car, n: n_one, R1: R1_car, R2: R2_car, Pout: Pout_car}
+  outputs: {P: Pm_car_pred}
+- id: run_cm_car
+  model: pwv_at_pressure
+  inputs: {P: Pm_car_pred, Pd: Pd_car, Ad: Ad_car, E: E_car, h: h_car, rho: rho_car}
+  outputs: {c: cm_car_pred}
+- id: run_Pm_ao
+  model: windkessel_mean_pressure
+  inputs: {Q: Qm_ao, n: n_one, R1: R1_ao, R2: R2_ao, Pout: Pout_ao}
+  outputs: {P: Pm_ao_pred}
+- id: run_cm_ao
+  model: pwv_at_pressure
+  inputs: {P: Pm_ao_pred, Pd: Pd_946_repeating, Ad: Ad_ao, E: E_ao, h: h_ao, rho: rho_ao}
+  outputs: {c: cm_ao_pred}
+- id: run_Pm_bif
+  model: windkessel_mean_pressure
+  inputs: {Q: Qm_bif, n: n_two, R1: R1_il, R2: R2_il, Pout: Pout_il}
+  outputs: {P: Pm_bif_pred}
+  note: "the mean pressure in both iliacs and, neglecting the small mean pressure drop along the vessels, in the aorta"
+- id: run_cm_bao
+  model: pwv_at_pressure
+  inputs: {P: Pm_bif_pred, Pd: Pd_946_repeating, Ad: Ad_bao, E: E_bao, h: h_bao, rho: rho_bif}
+  outputs: {c: cm_bao_pred}
+- id: run_cm_il
+  model: pwv_at_pressure
+  inputs: {P: Pm_bif_pred, Pd: Pd_946_repeating, Ad: Ad_il, E: E_il, h: h_il, rho: rho_bif}
+  outputs: {c: cm_il_pred}
+
+# ---- wavelengths Ts cm (p. 27), on the printed cm
+- id: run_wavelength_car
+  model: wavelength
+  inputs: {c: cm_car, T: Ts_car}
+  outputs: {lam: wavelength_car_pred}
+- id: run_wavelength_ao
+  model: wavelength
+  inputs: {c: cm_ao, T: Ts_ao}
+  outputs: {lam: wavelength_ao_pred}
+# ---------------------------------------------------------------- figure readings (figures.yaml)
+- id: run_eq15_fig2a
+  model: peak_decay_eq15
+  inputs: {zeta: zeta_sp, mu: mu_sp, rho: rho_sp, c0: c0_sp, A0: A0_sp_pi}
+  sweep: {x: fig2a_eq15_curve}
+  outputs: {ratio: eq15_fig2a_pred}
+  note: "Eq. 15 at the x positions read off the thick line of Fig. 2(a)"
+- id: run_eq15_fig2b
+  model: peak_decay_eq15
+  inputs: {zeta: zeta_sp, mu: mu_sp, rho: rho_sp, c0: c0_sp, A0: A0_sp_pi}
+  sweep: {x: fig2b_eq15_curve}
+  outputs: {ratio: eq15_fig2b_pred}
+  note: "Eq. 15 at the x positions read off the thick line of Fig. 2(b)"
+- id: run_eq15_fig2c
+  model: peak_decay_eq15
+  inputs: {zeta: zeta_sp, mu: mu_sp, rho: rho_sp, c0: c0_sp, A0: A0_sp_pi}
+  sweep: {x: fig2c_eq15_curve}
+  outputs: {ratio: eq15_fig2c_pred}
+  note: "Eq. 15 at the x positions read off the thick line of Fig. 2(c)"
+- id: run_eq15_fig2d
+  model: peak_decay_eq15
+  inputs: {zeta: zeta_sp, mu: mu_sp, rho: rho_sp, c0: c0_sp, A0: A0_sp_pi}
+  sweep: {x: fig2d_eq15_curve}
+  outputs: {ratio: eq15_fig2d_pred}
+  note: "Eq. 15 at the x positions read off the thick line of Fig. 2(d)"
+- id: run_eq15_fig2e
+  model: peak_decay_eq15
+  inputs: {zeta: zeta_sp, mu: mu_sp, rho: rho_sp, c0: c0_sp, A0: A0_sp_pi}
+  sweep: {x: fig2e_eq15_curve}
+  outputs: {ratio: eq15_fig2e_pred}
+  note: "Eq. 15 at the x positions read off the thick line of Fig. 2(e)"
+- id: run_eq15_fig2f
+  model: peak_decay_eq15
+  inputs: {zeta: zeta_sp, mu: mu_sp, rho: rho_sp, c0: c0_sp, A0: A0_sp_pi}
+  sweep: {x: fig2f_eq15_curve}
+  outputs: {ratio: eq15_fig2f_pred}
+  note: "Eq. 15 at the x positions read off the thick line of Fig. 2(f)"

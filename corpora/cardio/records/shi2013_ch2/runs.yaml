@@ -1,0 +1,755 @@
+# The circulation model's inputs are the same in every run (YAML anchor); the runs differ in the
+# settings that switch atrial contraction, KG diaphragm motion and valve dynamics on, as the
+# chapter introduces them one by one (Section 2.3). Initial values not printed are in added.yaml.
+- id: run_simplified
+  model: circulation_ch2
+  inputs: &base
+    CQao: CQao
+    CQmi: CQmi
+    CQpo: CQpo
+    CQti: CQti
+    Elvs: Elvs
+    Elvd: Elvd
+    Plv0: Plv0
+    Vlv0: Vlv0
+    Ela_max: Ela_max
+    Ela_min: Ela_min
+    Pla0: Pla0
+    Vla0: Vla0
+    Ervs: Ervs
+    Ervd: Ervd
+    Prv0: Prv0
+    Vrv0: Vrv0
+    Era_max: Era_max
+    Era_min: Era_min
+    Pra0: Pra0
+    Vra0: Vra0
+    Csas: Csas
+    Rsas: Rsas
+    Lsas: Lsas
+    Csat: Csat
+    Rsat: Rsat
+    Lsat: Lsat
+    Rsar: Rsar
+    Rscp: Rscp
+    Rsvn: Rsvn
+    Csvn: Csvn
+    Cpas: Cpas
+    Rpas: Rpas
+    Lpas: Lpas
+    Cpat: Cpat
+    Rpat: Rpat
+    Lpat: Lpat
+    Rpar: Rpar
+    Rpcp: Rpcp
+    Rpvn: Rpvn
+    Cpvn: Cpvn
+    Kst_la: Kst_la
+    Kst_lv: Kst_lv
+    Kf_sav: Kf_sav
+    Ke_sav: Ke_sav
+    m_sav: m_sav
+    A_sav: A_sav
+    Kst_ra: Kst_ra
+    Kst_rv: Kst_rv
+    Kf_pav: Kf_pav
+    Ke_pav: Ke_pav
+    m_pav: m_pav
+    A_pav: A_pav
+    Kp_ao: Kp_ao
+    Kf_ao: Kf_ao
+    Kp_mi: Kp_mi
+    Kf_mi: Kf_mi
+    Kp_po: Kp_po
+    Kf_po: Kf_po
+    Kp_ti: Kp_ti
+    Kf_ti: Kf_ti
+    theta_max_ao: theta_max_added
+    theta_min_ao: theta_closed
+    theta_max_mi: theta_max_added
+    theta_min_mi: theta_closed
+    theta_max_po: theta_max_added
+    theta_min_po: theta_closed
+    theta_max_ti: theta_max_added
+    theta_min_ti: theta_closed
+    T: T_period
+    Ts1: Ts1
+    Ts2: Ts2
+    Tpwb: Tpwb
+    Tpww: Tpww
+    Vlv_init: Vlv_init
+    Vla_init: Vla_init_added
+    Vrv_init: Vrv_init
+    Vra_init: Vra_init_added
+    Psas_init: Psas_init_added
+    Psat_init: Psat_init_added
+    Psvn_init: Psvn_init_added
+    Ppas_init: Ppas_init_added
+    Ppat_init: Ppat_init_added
+    Ppvn_init: Ppvn_init_added
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10}
+  outputs:
+    Plv_max: plv_max_simplified_pred
+    Plv_min: plv_min_simplified_pred
+    Psas_max: psas_max_simplified_pred
+    Psas_min: psas_min_simplified_pred
+    Prv_max: prv_max_simplified_pred
+    Ppas_max: ppas_max_simplified_pred
+    CO: co_simplified_pred
+    Vlv_max: vlv_max_simplified_pred
+    Vlv_min: vlv_min_simplified_pred
+    SV: sv_simplified_pred
+    Vla_max: vla_max_simplified_pred
+    Qao_max: qao_max_simplified_pred
+    Qmi_max: qmi_max_simplified_pred
+    Qpo_max: qpo_max_simplified_pred
+    Qti_max: qti_max_simplified_pred
+    Qmi_E: qmi_E_simplified_pred
+    Qti_E: qti_E_simplified_pred
+  note: "Section 2.3.1: on-off valves (Eq. 2-14), constant atrial elastance E_la,min, no KG diaphragm motion"
+- id: run_atrial
+  model: circulation_ch2
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: true, kg_motion: false, valve_dynamics: false, kg_form: eq2_10}
+  outputs:
+    Plv_max: plv_max_atrial_pred
+    Psas_max: psas_max_atrial_pred
+    Psas_min: psas_min_atrial_pred
+    EA_mi: ea_mi_atrial_pred
+  note: "Section 2.3.2: atrial contraction alone (Eqs. 2-5, 2-6)"
+- id: run_kg
+  model: circulation_ch2
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: false, kg_motion: true, valve_dynamics: false, kg_form: eq2_10}
+  outputs:
+    Plv_max: plv_max_kg_pred
+    Psas_max: psas_max_kg_pred
+    Prv_max: prv_max_kg_pred
+    Ppas_max: ppas_max_kg_pred
+    Vlv_min: vlv_min_kg_pred
+    Vla_max: vla_max_kg_pred
+  note: "Section 2.3.2: KG diaphragm motion alone (Eqs. 2-10 to 2-12), Eq. 2-10 with M_sav as printed"
+- id: run_kg_atrial
+  model: circulation_ch2
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10}
+  outputs:
+    l_min: l_min_kg_atrial_pred
+    l_max: l_max_kg_atrial_pred
+    Vlv_pwb: vlv_pwb_kg_atrial_pred
+    Vlv_max: vlv_max_kg_atrial_pred
+    Vrv_pwb: vrv_pwb_kg_atrial_pred
+    Vrv_max: vrv_max_kg_atrial_pred
+    Vla_pwb: vla_pwb_kg_atrial_pred
+    Vla_trough: vla_trough_kg_atrial_pred
+    Vra_pwb: vra_pwb_kg_atrial_pred
+    Vra_trough: vra_trough_kg_atrial_pred
+    EA_mi: ea_mi_kg_atrial_pred
+    EA_ti: ea_ti_kg_atrial_pred
+  note: "Section 2.3.2: KG diaphragm motion with atrial contraction (Figs. 2-12 to 2-14)"
+- id: run_valves
+  model: circulation_ch2
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10}
+  outputs:
+    Plv_max: plv_max_valves_pred
+    Psas_max: psas_max_valves_pred
+    Prv_max: prv_max_valves_pred
+    Ppas_max: ppas_max_valves_pred
+    Qmi_E: qmi_E_valves_pred
+    Qti_E: qti_E_valves_pred
+    Qao_max: qao_max_valves_pred
+    Qti_max: qti_max_valves_pred
+  note: "Section 2.3.3: leaflet dynamics alone (Eqs. 2-15, 2-17), Eq. 2-13 as printed"
+- id: run_valves_signed
+  model: circulation_ch2_signed
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10}
+  outputs:
+    Plv_max: plv_max_valves_signed_pred
+    Psas_max: psas_max_valves_signed_pred
+    Prv_max: prv_max_valves_signed_pred
+    Ppas_max: ppas_max_valves_signed_pred
+    Qmi_E: qmi_E_valves_signed_pred
+    Qti_E: qti_E_valves_signed_pred
+    Qao_max: qao_max_valves_signed_pred
+    Qti_max: qti_max_valves_signed_pred
+  note: "as run_valves, with the corrected sign of Eq. 2-13"
+- id: run_all
+  model: circulation_ch2
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10}
+  outputs:
+    Plv_max: plv_max_all_pred
+    Qao_max: qao_max_all_pred
+    Qmi_max: qmi_max_all_pred
+    Qpo_max: qpo_max_all_pred
+    Qti_max: qti_max_all_pred
+    EA_mi: ea_mi_all_pred
+    EA_ti: ea_ti_all_pred
+  note: "Section 2.3.4: all features, Eq. 2-13 as printed"
+- id: run_all_signed
+  model: circulation_ch2_signed
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10}
+  outputs:
+    Plv_max: plv_max_all_signed_pred
+    Qao_max: qao_max_all_signed_pred
+    Qmi_max: qmi_max_all_signed_pred
+    Qpo_max: qpo_max_all_signed_pred
+    Qti_max: qti_max_all_signed_pred
+    EA_mi: ea_mi_all_signed_pred
+    EA_ti: ea_ti_all_signed_pred
+  note: "as run_all, with the corrected sign of Eq. 2-13"
+
+# ---- annulus fibrosus geometry (p. 21) ----
+- id: run_annulus_geometry
+  model: annulus_geometry
+  inputs: {d: d_annulus, h: h_annulus, rho: rho_tissue}
+  outputs: {A: A_annulus_pred, m: m_annulus_pred}
+- id: run_annulus_mass_printed_area
+  model: annulus_mass
+  inputs: {A: A_annulus_text, h: h_annulus, rho: rho_tissue}
+  outputs: {m: m_annulus_from_printed_area_pred}
+  note: "the printed mass recomputed from the printed area"
+
+# ==== figure readings (calibrated, figures.yaml) ====
+- id: run_fig2_6_elv
+  model: elastance_ch2
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1, Ts2: Ts2, Tpwb: Tpwb, Tpww: Tpww}
+  settings: {}
+  sweep: {t: fig2_6_elv_read}
+  outputs: {elv: fig2_6_elv_pred}
+  note: "Eqs. 2-2, 2-3, 2-5, 2-6 at the times read off Fig. 2-6"
+- id: run_fig2_6_ela
+  model: elastance_ch2
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1, Ts2: Ts2, Tpwb: Tpwb, Tpww: Tpww}
+  settings: {}
+  sweep: {t: fig2_6_ela_read}
+  outputs: {ela: fig2_6_ela_pred}
+  note: "Eqs. 2-2, 2-3, 2-5, 2-6 at the times read off Fig. 2-6"
+- id: run_fig2_9a_psas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9a_psas_read}
+  outputs: {Psas: fig2_9a_psas_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(a)"
+- id: run_fig2_9a_pla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9a_pla_read}
+  outputs: {Pla: fig2_9a_pla_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(a)"
+- id: run_fig2_9b_qao
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9b_qao_read}
+  outputs: {Qao: fig2_9b_qao_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(b)"
+- id: run_fig2_9b_qmi
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9b_qmi_read}
+  outputs: {Qmi: fig2_9b_qmi_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(b)"
+- id: run_fig2_9c_vlv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9c_vlv_read}
+  outputs: {Vlv: fig2_9c_vlv_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(c)"
+- id: run_fig2_9c_vla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9c_vla_read}
+  outputs: {Vla: fig2_9c_vla_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(c)"
+- id: run_fig2_9d_ppas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9d_ppas_read}
+  outputs: {Ppas: fig2_9d_ppas_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(d)"
+- id: run_fig2_9d_pra
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9d_pra_read}
+  outputs: {Pra: fig2_9d_pra_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(d)"
+- id: run_fig2_9e_qpo
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9e_qpo_read}
+  outputs: {Qpo: fig2_9e_qpo_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(e)"
+- id: run_fig2_9e_qti
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9e_qti_read}
+  outputs: {Qti: fig2_9e_qti_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(e)"
+- id: run_fig2_9f_vrv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9f_vrv_read}
+  outputs: {Vrv: fig2_9f_vrv_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(f)"
+- id: run_fig2_9f_vra
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_9f_vra_read}
+  outputs: {Vra: fig2_9f_vra_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-9(f)"
+- id: run_fig2_10a_psas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_10a_psas_read}
+  outputs: {Psas: fig2_10a_psas_pred}
+  note: "atrial contraction alone, at the times read off Fig. 2-10(a)"
+- id: run_fig2_10b_qao
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_10b_qao_read}
+  outputs: {Qao: fig2_10b_qao_pred}
+  note: "atrial contraction alone, at the times read off Fig. 2-10(b)"
+- id: run_fig2_10b_qmi
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_10b_qmi_read}
+  outputs: {Qmi: fig2_10b_qmi_pred}
+  note: "atrial contraction alone, at the times read off Fig. 2-10(b)"
+- id: run_fig2_10c_vlv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_10c_vlv_read}
+  outputs: {Vlv: fig2_10c_vlv_pred}
+  note: "atrial contraction alone, at the times read off Fig. 2-10(c)"
+- id: run_fig2_10c_vla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_10c_vla_read}
+  outputs: {Vla: fig2_10c_vla_pred}
+  note: "atrial contraction alone, at the times read off Fig. 2-10(c)"
+- id: run_fig2_10d_ppas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_10d_ppas_read}
+  outputs: {Ppas: fig2_10d_ppas_pred}
+  note: "atrial contraction alone, at the times read off Fig. 2-10(d)"
+- id: run_fig2_11a_psas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_11a_psas_read}
+  outputs: {Psas: fig2_11a_psas_pred}
+  note: "KG diaphragm motion alone, at the times read off Fig. 2-11(a)"
+- id: run_fig2_11c_vlv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_11c_vlv_read}
+  outputs: {Vlv: fig2_11c_vlv_pred}
+  note: "KG diaphragm motion alone, at the times read off Fig. 2-11(c)"
+- id: run_fig2_11c_vla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_11c_vla_read}
+  outputs: {Vla: fig2_11c_vla_pred}
+  note: "KG diaphragm motion alone, at the times read off Fig. 2-11(c)"
+- id: run_fig2_11d_ppas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_11d_ppas_read}
+  outputs: {Ppas: fig2_11d_ppas_pred}
+  note: "KG diaphragm motion alone, at the times read off Fig. 2-11(d)"
+- id: run_fig2_12_l
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_12_l_read}
+  outputs: {l: fig2_12_l_pred}
+  note: "KG diaphragm motion and atrial contraction, at the times read off Fig. 2-12"
+- id: run_fig2_13_elv
+  model: elastance_ch2
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1, Ts2: Ts2, Tpwb: Tpwb, Tpww: Tpww}
+  settings: {}
+  sweep: {t: fig2_13_elv_read}
+  outputs: {elv: fig2_13_elv_pred}
+  note: "Eqs. 2-2, 2-3, 2-5, 2-6 at the times read off Fig. 2-13"
+- id: run_fig2_13_ela
+  model: elastance_ch2
+  inputs: {Elvs: Elvs, Elvd: Elvd, Ela_max: Ela_max, Ela_min: Ela_min, T: T_period, Ts1: Ts1, Ts2: Ts2, Tpwb: Tpwb, Tpww: Tpww}
+  settings: {}
+  sweep: {t: fig2_13_ela_read}
+  outputs: {ela: fig2_13_ela_pred}
+  note: "Eqs. 2-2, 2-3, 2-5, 2-6 at the times read off Fig. 2-13"
+- id: run_fig2_14a_psas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_14a_psas_read}
+  outputs: {Psas: fig2_14a_psas_pred}
+  note: "KG diaphragm motion and atrial contraction, at the times read off Fig. 2-14(a)"
+- id: run_fig2_14c_vlv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_14c_vlv_read}
+  outputs: {Vlv: fig2_14c_vlv_pred}
+  note: "KG diaphragm motion and atrial contraction, at the times read off Fig. 2-14(c)"
+- id: run_fig2_14c_vla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_14c_vla_read}
+  outputs: {Vla: fig2_14c_vla_pred}
+  note: "KG diaphragm motion and atrial contraction, at the times read off Fig. 2-14(c)"
+- id: run_fig2_14f_vrv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_14f_vrv_read}
+  outputs: {Vrv: fig2_14f_vrv_pred}
+  note: "KG diaphragm motion and atrial contraction, at the times read off Fig. 2-14(f)"
+- id: run_fig2_14f_vra
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_14f_vra_read}
+  outputs: {Vra: fig2_14f_vra_pred}
+  note: "KG diaphragm motion and atrial contraction, at the times read off Fig. 2-14(f)"
+- id: run_fig2_15a_ao
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 12.3, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_15a_ao_read}
+  outputs: {th_ao: fig2_15a_ao_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-15(a)"
+- id: run_fig2_15a_mi
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 12.3, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_15a_mi_read}
+  outputs: {th_mi: fig2_15a_mi_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-15(a)"
+- id: run_fig2_15b_po
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 12.3, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_15b_po_read}
+  outputs: {th_po: fig2_15b_po_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-15(b)"
+- id: run_fig2_15b_ti
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 12.3, atrial_contraction: false, kg_motion: false, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_15b_ti_read}
+  outputs: {th_ti: fig2_15b_ti_pred}
+  note: "simplified model (Section 2.3.1), at the times read off Fig. 2-15(b)"
+- id: run_fig2_16a_ao
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_16a_ao_read}
+  outputs: {th_ao: fig2_16a_ao_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-16(a)"
+- id: run_fig2_16a_ao_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_16a_ao_read}
+  outputs: {th_ao: fig2_16a_ao_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-16(a)"
+- id: run_fig2_16a_mi
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_16a_mi_read}
+  outputs: {th_mi: fig2_16a_mi_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-16(a)"
+- id: run_fig2_16a_mi_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_16a_mi_read}
+  outputs: {th_mi: fig2_16a_mi_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-16(a)"
+- id: run_fig2_16b_po
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_16b_po_read}
+  outputs: {th_po: fig2_16b_po_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-16(b)"
+- id: run_fig2_16b_po_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_16b_po_read}
+  outputs: {th_po: fig2_16b_po_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-16(b)"
+- id: run_fig2_16b_ti
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_16b_ti_read}
+  outputs: {th_ti: fig2_16b_ti_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-16(b)"
+- id: run_fig2_16b_ti_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_16b_ti_read}
+  outputs: {th_ti: fig2_16b_ti_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-16(b)"
+- id: run_fig2_17a_psas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_17a_psas_read}
+  outputs: {Psas: fig2_17a_psas_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-17(a)"
+- id: run_fig2_17a_psas_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_17a_psas_read}
+  outputs: {Psas: fig2_17a_psas_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-17(a)"
+- id: run_fig2_17c_vlv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_17c_vlv_read}
+  outputs: {Vlv: fig2_17c_vlv_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-17(c)"
+- id: run_fig2_17c_vlv_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_17c_vlv_read}
+  outputs: {Vlv: fig2_17c_vlv_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-17(c)"
+- id: run_fig2_17c_vla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_17c_vla_read}
+  outputs: {Vla: fig2_17c_vla_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-17(c)"
+- id: run_fig2_17c_vla_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_17c_vla_read}
+  outputs: {Vla: fig2_17c_vla_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-17(c)"
+- id: run_fig2_17d_ppas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_17d_ppas_read}
+  outputs: {Ppas: fig2_17d_ppas_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-17(d)"
+- id: run_fig2_17d_ppas_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_17d_ppas_read}
+  outputs: {Ppas: fig2_17d_ppas_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-17(d)"
+- id: run_fig2_17d_pra
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_17d_pra_read}
+  outputs: {Pra: fig2_17d_pra_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-17(d)"
+- id: run_fig2_17d_pra_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_17d_pra_read}
+  outputs: {Pra: fig2_17d_pra_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-17(d)"
+- id: run_fig2_17f_vrv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_17f_vrv_read}
+  outputs: {Vrv: fig2_17f_vrv_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-17(f)"
+- id: run_fig2_17f_vrv_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_17f_vrv_read}
+  outputs: {Vrv: fig2_17f_vrv_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-17(f)"
+- id: run_fig2_17f_vra
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_17f_vra_read}
+  outputs: {Vra: fig2_17f_vra_pred}
+  note: "valve dynamics alone, Eq. 2-13 as printed, at the times read off Fig. 2-17(f)"
+- id: run_fig2_17f_vra_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: false, kg_motion: false, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_17f_vra_read}
+  outputs: {Vra: fig2_17f_vra_signed_pred}
+  note: "valve dynamics alone, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-17(f)"
+- id: run_fig2_18_l_all
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_18_l_all_read}
+  outputs: {l: fig2_18_l_all_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-18"
+- id: run_fig2_18_l_all_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_18_l_all_read}
+  outputs: {l: fig2_18_l_all_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-18"
+- id: run_fig2_18_l_kgat
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: false, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_18_l_kgat_read}
+  outputs: {l: fig2_18_l_kgat_pred}
+  note: "KG diaphragm motion and atrial contraction, at the times read off Fig. 2-18"
+- id: run_fig2_20a_psas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_20a_psas_read}
+  outputs: {Psas: fig2_20a_psas_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-20(a)"
+- id: run_fig2_20a_psas_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_20a_psas_read}
+  outputs: {Psas: fig2_20a_psas_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-20(a)"
+- id: run_fig2_20c_vlv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_20c_vlv_read}
+  outputs: {Vlv: fig2_20c_vlv_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-20(c)"
+- id: run_fig2_20c_vlv_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_20c_vlv_read}
+  outputs: {Vlv: fig2_20c_vlv_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-20(c)"
+- id: run_fig2_20c_vla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_20c_vla_read}
+  outputs: {Vla: fig2_20c_vla_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-20(c)"
+- id: run_fig2_20c_vla_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_20c_vla_read}
+  outputs: {Vla: fig2_20c_vla_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-20(c)"
+- id: run_fig2_20d_ppas
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_20d_ppas_read}
+  outputs: {Ppas: fig2_20d_ppas_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-20(d)"
+- id: run_fig2_20d_ppas_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_20d_ppas_read}
+  outputs: {Ppas: fig2_20d_ppas_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-20(d)"
+- id: run_fig2_20d_pra
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_20d_pra_read}
+  outputs: {Pra: fig2_20d_pra_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-20(d)"
+- id: run_fig2_20d_pra_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_20d_pra_read}
+  outputs: {Pra: fig2_20d_pra_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-20(d)"
+- id: run_fig2_20f_vrv
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_20f_vrv_read}
+  outputs: {Vrv: fig2_20f_vrv_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-20(f)"
+- id: run_fig2_20f_vrv_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_20f_vrv_read}
+  outputs: {Vrv: fig2_20f_vrv_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-20(f)"
+- id: run_fig2_20f_vra
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_20f_vra_read}
+  outputs: {Vra: fig2_20f_vra_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-20(f)"
+- id: run_fig2_20f_vra_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_20f_vra_read}
+  outputs: {Vra: fig2_20f_vra_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-20(f)"
+- id: run_fig2_21_pla
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: false}
+  sweep: {t: fig2_21_pla_read}
+  outputs: {Pla: fig2_21_pla_pred}
+  note: "all features, Eq. 2-13 as printed, at the times read off Fig. 2-21"
+- id: run_fig2_21_pla_signed
+  model: circulation_ch2_waveform
+  inputs: *base
+  settings: {dt: 0.0001, t_end: 11.0, t_window: 10.0, t_from: 9.9, t_to: 11.2, atrial_contraction: true, kg_motion: true, valve_dynamics: true, kg_form: eq2_10, signed: true}
+  sweep: {t: fig2_21_pla_read}
+  outputs: {Pla: fig2_21_pla_signed_pred}
+  note: "all features, Eq. 2-13 with the corrected sign, at the times read off Fig. 2-21"

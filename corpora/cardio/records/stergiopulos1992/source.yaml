@@ -1,0 +1,49 @@
+id: stergiopulos1992
+kind: article
+title: Computer simulation of arterial flow with applications to arterial and aortic stenoses
+authors: [N. Stergiopulos, D. F. Young, T. R. Rogge]
+year: 1992
+venue: J. Biomechanics 25(12), 1477-1488
+file: corpus/cardio/1992_Stergiopulos.pdf
+page_range: [1, 12]
+pages: {1: "1477", 2: "1478", 3: "1479", 4: "1480", 5: "1481", 6: "1482", 7: "1483", 8: "1484", 9: "1485",
+        10: "1486", 11: "1487", 12: "1488"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-03"}
+notes: >
+  A 1D nonlinear model of the 55-segment arterial tree (Eqs. 1-9, Tables 1-2, Fig. 1) applied to arterial
+  and aortic stenoses. Recorded: all of Table 1 (length, proximal and distal radius, volume compliance of
+  the 55 segments) and Table 2 (total resistance and computed terminal compliance of the 28 terminals), p0,
+  R1/RT, the total compliance from Burton, the stenosis lengths and L/D ratios, the PI values of Fig. 7
+  (Gosling et al.) and the ratios computed from them, and the printed simulation claims: normal leg/brachial
+  systolic ratio 1.1 to 1.2, about 80% resistance reduction for a 94% abdominal stenosis, and dt_max of order
+  0.001 s.
+  Arithmetic models: the sum of segment compliances (0.8342 against the printed 0.835, close); the residual
+  compliance (reproduced); the terminal compliances C_Ti = C_res R_total/R_Ti (all 28 in the right
+  proportions but every printed value is 1.12 times the formula, not reproduced; see q_terminal_compliance);
+  the stenosis L/D (abdominal not reproduced, femoral only within rounding); the PI ratios (reproduced).
+  Simulation: the tree as printed with the quadratic Eq. 4 cannot run. Its compliance vanishes at
+  2 p0 = 194 mmHg, which the peripheral systolic pressures exceed (arterial_tree_eq4, not runnable;
+  eq4_zero_compliance). The runnable model arterial_tree_1d uses Eq. 9 itself, with the reader's explicit
+  staggered scheme. It adds blood properties, the shear coefficients, the stenosis coefficients of
+  Eq. 8 and a half-sine inflow read by eye from Fig. 2(b), all in added.yaml. The thigh/brachial systolic
+  ratio is inside 1.1 to 1.2, but knee and ankle (1.31, 1.30) are not. The 94% abdominal stenosis needs a
+  71% resistance reduction against the printed ~80% (no verdict). dt_max is 6.7e-4 s with dx = 1 cm (no
+  verdict). The dt and dx refinements settle.
+  Left out: all plotted results (Figs. 2-6 and 8-11). The figure-rendering commands were not available in
+  this job, so nothing was digitised (figures.md). Also left out: the aortic-stenosis cases (their input
+  pressure waveforms are only plotted), the approximate critical-stenosis values (about 85% and 60%, read
+  from Fig. 3), the "approximately 30% longer" buildup time, the 2.5-3.5 and 0.5-1.0 cm^2 valve areas
+  (background), and the Fronek et al. systolic indices, which are measured data that no model here predicts
+  site by site.
+  Audit (second reading, see audit.md): no transcription error found. Added the Fig. 7 PI labels 3.0, 6.1,
+  5.9 and the Fronek et al. systolic indices (p. 9) as measured data; the normal-subject indices are
+  compared with the control-case thigh, knee and ankle ratios as validations.
+  Figure pass (figures.yaml, figures.md): calibrated readings by the record's own code of Fig. 2(a)
+  (femoral peaks), Fig. 2(b) (the inflow boundary condition), Fig. 3 (all three lines), Fig. 4 (the 85% and
+  90% lines), Fig. 6 (both lines), Fig. 8 (three flat lines to 55%, one band beyond) and Fig. 9 (three lines
+  apart from the crossing region). The whole lines are recorded as data. Figs. 3, 6, 8 and 9 are compared
+  at one stenosis level per line (cost, q_figure_sweeps) with arterial_tree_1d, autoregulated where the
+  paper says it was, and, for the 0.2 RT line of Fig. 3, with the new model arterial_tree_1d_dilated.
+  Fig. 3's solid line is reproduced at 90%. The 0.2 RT line (2.46 against 3.91, q_fig3_elevated_flow) and the
+  stenosed systolic and PI ratios (q_fig_stenosis_ratios) are not. Figs. 1, 5, 7, 10 and 11 are left
+  out (figures.md gives why).

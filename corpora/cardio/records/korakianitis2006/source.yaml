@@ -1,0 +1,60 @@
+id: korakianitis2006
+kind: article
+title: Numerical simulation of cardiovascular dynamics with healthy and diseased heart valves
+authors: [Theodosios Korakianitis, Yubing Shi]
+year: 2006
+venue: Journal of Biomechanics 39, 1964-1982
+doi: 10.1016/j.jbiomech.2005.06.016
+file: corpus/cardio/2006_Korakianitis.pdf
+page_range: [1, 19]
+pages: {1: "1964", 2: "1965", 3: "1966", 4: "1967", 5: "1968", 6: "1969", 7: "1970", 8: "1971", 9: "1972", 10: "1973", 11: "1974", 12: "1975", 13: "1976", 14: "1977", 15: "1978", 16: "1979", 17: "1980", 18: "1981", 19: "1982"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-02"}
+notes: >
+  Scope: the paper's single quantitative model, a closed-loop concentrated parameter model of
+  the four heart chambers (variable elastance, Eqs. 1-5), four valves (orifice law Eq. 6 with
+  either the on-off opening of Eq. 7 or the leaflet-dynamics opening of Eqs. 8-14) and the
+  systemic and pulmonary loops (Eqs. 15-20), with the parameters of Tables 1-5. It is recorded
+  as one model, circulation_valves, run in five configurations the paper reports: on-off valves
+  (Section 3.1), leaflet dynamics with the vortex term (Section 3.2, two runs: the vortex term
+  as printed in Eq. 14, sin(theta), and as printed in Eq. 13, sin(2 theta)), mitral stenosis
+  (theta_max,mi = 50 deg) and aortic regurgitation (theta_min,ao = 25 deg). Every scalar result
+  printed in the text that a run produces is compared: peak and minimum pressures, peak and
+  reverse valve flows, mean aortic flow, ventricular volumes. A small model of Eq. 8 checks the
+  printed "24% of the original valve area", and a difference model checks two printed
+  differences (stroke volume 70 ml; aortic pressure drop 17 mmHg). Two consistency comparisons
+  check values printed twice.
+
+  The model is implemented exactly as printed, and the printed equations contain several
+  apparent misprints that are recorded as questions, not corrected: the ventricular activation
+  Eq. 3 (cos(t/Ts1 pi) ranges from +1 to -1, giving negative elastance, unlike the paper's
+  Fig. 2); the reverse-flow branch of Eq. 6 carries no minus sign; Eq. 13 has sin(2 theta) but
+  Eq. 14 has sin(theta); Eq. 18 drives the artery flow with the sinus pressure Psas; units of
+  K_b, K_v and K_p,mi in Table 3 are dimensionally inconsistent with Eq. 14. Much the model
+  needs is also unstated: the activation times Ts1 and Ts2 (only "Ts = 0.3 s" is given), all
+  initial conditions (which in a closed loop fix the circulating volume and hence every
+  pressure), the integration scheme, how the leaflet angle is held between its limits, and
+  whether Eq. 8 keeps the healthy theta_max in the stenosis case. These are added inputs or
+  choices with alternatives. Table 2's "V_lv0 = 800 ml" and "V_rv0 = 500 ml" are read as initial
+  ventricular volumes (subscript 0 = initial value in the nomenclature); C_svc and C_pvc appear
+  in no equation and feed nothing.
+
+  Left out: all figures (Figs. 2, 4-13: elastance, leaflet angle, pressure, flow and volume
+  waveforms, and force terms). Figure-reading tools were not available to this reading job, so
+  no figure reading was recorded; Fig. 2 in particular would allow a direct check of Eq. 3 and
+  should be read in a later pass. Also left out are timing statements read off the figures
+  (valve opening/closing times and delays, "0.04 s earlier"), approximate differences between
+  runs stated in words (e.g. "about 8 mmHg", "0.2-0.9 mmHg", "about 6 mmHg", "about 2.2 mmHg",
+  "about 50 ml"), the persistent aortic regurgitant flow "about 47.9 ml/s" (its statistic is not
+  defined), the "peak tricuspid flow ... from 712.1 to 844.1 ml/s" said to occur in early systole
+  (when the tricuspid valve is closed; see the reading question), and clinical thresholds quoted
+  from textbooks (mitral area 4-6 cm2, left atrial pressure 18-20 mmHg) that feed no model.
+
+  Figure-reading pass (2026-11-02): Figs. 2 and 4-13 are now read with calibrated code readings
+  (figures.yaml, figures/, method in figures/_kor.py; 78 readings, see figures.md), each a datum
+  `<reading>_read`. Two models produce the curves: circulation_waveform (circulation_valves
+  evaluated at an instant, with the Eq. 14 terms) and elastance_eq2_5 (Eqs. 2, 3, 5); runs
+  each reading's run run_<reading> sweeps its read times, and every reading except Fig. 4's (no
+  model gives on-off leaflet angles) has a reproduction comparison cmp_<reading>. Figs. 1 and 3
+  are drawings. The figures bear on several open questions (new questions q_fig2_eq3,
+  q_fig2_elvd, q_fig_closed_angle, q_fig10_stenosis_angle, q_fig5_values, q_fig8_valve,
+  q_fig_time_window).

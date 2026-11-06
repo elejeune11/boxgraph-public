@@ -1,0 +1,130 @@
+- id: q_units_kpa
+  kind: possible_error
+  about: [P_th_code, cellml_closed_loop, cellml_closed_loop_mmhg, cellml_closed_loop_mmhg_cyclic]
+  text: >-
+    The file declares its pressure unit as kilopascal (units kPa, lines 50-52, used by every
+    pressure, elastance, resistance and inertance), but its numbers are those of a model in mmHg:
+    P_th is -4, the paper's normal thoracic pressure of -4 mmHg (the build's check of P_th_code
+    against smith2004/Pth_normal shows the difference), and the paper gives all pressures in mmHg.
+    Taken as declared, every pressure of the model is 7.5 times what the paper means. The record
+    keeps the declared units on every datum and on the printed model, and adds two variants that
+    read the pressure numbers as mmHg (no number changed).
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "50-52", quote: 'name="kPa"'}
+- id: q_beat_count
+  kind: numerics
+  about: [cellml_closed_loop, run_code_pth0, run_code_rsys2, cellml_closed_loop_mmhg_cyclic, ref_code_beats_pth0]
+  text: >-
+    The driver's tau is a piecewise of 13 pieces (time <= period, ..., time <= 13 period, lines
+    114-359) with no otherwise, so the file defines the model for 13 beats (9.75 s), not the 14
+    its documentation says. Started from the file's initial values, the cases with P_th = 0 or
+    2 x R_sys are still changing at the 13th beat (refinements ref_code_beats_pth0 and
+    ref_code_beats_rsys2 compare the 12th and 13th beats), so the file as released cannot give
+    the periodic state the paper's results describe for them. The variant
+    cellml_closed_loop_mmhg_cyclic takes tau as the remainder, as the documentation says the
+    if statements stand for, and reports the 60th beat (ref_cyc_beats_* check 120 beats).
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "27", quote: "it will only simulate 14 heart beats"}
+- id: q_driver_C
+  kind: unexplained_difference
+  about: [C_code, A_code, B_code]
+  text: >-
+    The code's driver has A = 1 and B = 80 as printed in smith2004, but C = 0.375 s, half the
+    0.75 s period, against the printed C = 0.27 of the paper's Fig. 3 driver. The paper does not
+    say which C its closed-loop runs use (smith2004 q_driver_C_closed); the code settles it as
+    0.375. The code's driver is therefore not the Fig. 3 curve, and it is not compared with the
+    Fig. 3 reading here.
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "107", quote: 'name="C" units="second" initial_value="0.375"'}
+- id: q_parameters_not_in_paper
+  kind: unstated_input
+  about: [E_es_lvf_code, E_es_rvf_code, E_es_spt_code, P_0_pcd_code, R_sys_code, L_av_code, L_pv_code, E_es_ao_code, V_lv_init_code]
+  text: >-
+    Every elastance, end-diastolic parameter, resistance, inertance and initial value in the file
+    (46 of its values) is printed nowhere in smith2004, which says only that its parameters are
+    "extrapolated from those found over several references". They cannot be checked against the
+    paper: they are hidden choices that the code makes for it. The paper's record takes them from
+    this file as added inputs. The file's documentation says it is based on the authors' MATLAB
+    code, which is not in the corpus.
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "27", quote: "It is based off the original Matlab code obtained from the model authors"}
+- id: q_inlet_inertance
+  kind: unexplained_difference
+  about: [L_mt_code, L_tc_code, cellml_closed_loop]
+  text: >-
+    The code gives all four valves an inertance and the open-on-pressure, close-on-flow law
+    (lines 1205-1408), including the mitral (L_mt) and tricuspid (L_tc) valves. The paper's Fig. 1
+    draws inductors only at the aortic and pulmonary valves and its text puts inertia "around the
+    ventricle exit valves" (smith2004 q_inlet_inertia).
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "95-98", quote: 'name="L_mt"'}
+- id: q_pth_pulmonary
+  kind: unexplained_difference
+  about: [cellml_closed_loop, P_th_code]
+  text: >-
+    The code adds P_th to the pulmonary artery and vein pressures (lines 934-947, 997-1010) as well
+    as to the pericardium (lines 434-442), while the paper's Eq. 14 applies it to the pericardium
+    only (smith2004 q_pth_pulmonary). Raising P_th from -4 to 0 thus also raises the pulmonary
+    pressures in the code; this bears on the 9% decrease of cardiac output compared here.
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "934-947", quote: "<ci>P_th</ci>"}
+- id: q_valve_negative_flow
+  kind: numerics
+  about: [cellml_closed_loop]
+  text: >-
+    The valve law of the code holds dQ/dt = 0 while the gradient is negative and Q < 0 (lines
+    1214-1254 and the three like it), but does not reset Q to zero: a closing valve's flow
+    overshoots zero by however far the solver's last step carries it, and is then frozen at that
+    small negative value until the valve reopens. The volume equations count a negative valve flow
+    as zero (lines 514-557 etc.). The frozen value depends on the solver; the port's fixed-step
+    RK4 makes it of order dt dQ/dt, and the dt refinements bound its effect on the results.
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1214-1234", quote: "<lt/>"}
+- id: q_septum_vd
+  kind: choice
+  about: [cellml_closed_loop, V_d_lvf_code, V_0_lvf_code, V_d_rvf_code, V_0_rvf_code]
+  text: >-
+    The septum equation (lines 794-916) writes the free-wall pressures with V_lv - V_spt and
+    V_rv + V_spt directly, leaving out the free walls' V_d and V_0 that lvf_calculator and
+    rvf_calculator use. Since all four are 0 in the file, the two agree; with other values they
+    would not, and the septum would no longer balance P_lvf - P_rvf as Eq. 15 of the paper says.
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "846-851", quote: "<ci>V_spt</ci>"}
+- id: q_vtot
+  kind: unexplained_difference
+  about: [V_tot_code, Vtot_paper, cons_initial_volume_total]
+  text: >-
+    The file declares V_tot = 5.5 in mL (line 99) and uses it in no equation. It is not the
+    paper's 1500 ml stressed volume, and as 5.5 mL it is not a blood volume at all; 5.5 L would be
+    a total blood volume. The circulating volume of the code is set instead by the six initial
+    chamber volumes, which the consistency comparison cons_initial_volume_total sets against the
+    paper's 1500 ml.
+  citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "99", quote: 'name="V_tot" units="mL" initial_value="5.5"'}
+- id: q_solver
+  kind: numerics
+  about: [cellml_closed_loop, run_code_normal, run_cyc_normal]
+  text: >-
+    The CellML file holds no solver settings; its documentation names COR, PCEnv and OpenCell. The
+    port integrates with classical RK4 at a fixed dt = 0.2 ms and solves the septum's algebraic
+    equation by Newton's method at every evaluation, starting from the previous solution (first
+    guess 2 mL); the outputs are taken over the last simulated beat. Refinements in dt check this
+    choice.
+- id: q_outputs_not_in_code
+  kind: choice
+  about: [cellml_closed_loop, co_decrease]
+  text: >-
+    The file computes the states and pressures but none of the summary numbers the paper prints.
+    The port defines them: stroke volume = max - min of V_lv over the last beat, cardiac output =
+    stroke volume / period, systolic and diastolic = max and min, mean = average over the beat; the
+    9% decrease is 1 - CO(P_th = 0)/CO(P_th = -4), and doubling R_sys multiplies the file's R_sys
+    by the paper's factor 2.
+- id: q_two_chamber_absent
+  kind: unstated_model
+  about: [vspt_swing_paper, cmp_code_vspt_swing]
+  text: >-
+    The paper's 3 ml septal swing is from its two-chamber model with constant inlet and outlet
+    pressures (Fig. 6). The code has only the closed loop, so the swing is compared, as an
+    approximation, with the closed loop's septum swing.
+- id: q_no_cross_validation_smith2004
+  kind: choice
+  about: [cellml_closed_loop, sv_typical_paper, pao_sys_typical_paper, ppu_typical_paper]
+  text: >-
+    (Cross-validation job, smith2004 + smith_cellml.) No validation of this record's models against
+    smith2004's measurements is added, because smith2004 has none: its figures are simulation output
+    (origin predicted), and its typical values come from ref. 8 and medical references (origin
+    reported). They are already validation comparisons here (val_cyc_*_typical, through the copied
+    *_typical_paper data), and the code's agreement with the paper's predicted results is
+    reproduction (this record's comparisons). This file holds no measurement smith2004's models
+    could be validated against.

@@ -18,10 +18,12 @@ from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 from pathlib import Path
 
+import networkx as nx
+
 from . import precision as P
 from . import units as U
 from .engine import Builder, parse_tolerance
-from .schema import ComparisonPurpose, Origin
+from .schema import AUTHORED_ORIGINS, ComparisonPurpose, Origin
 from .sources import code_lines, read_cells, tree_digest
 from .store import LoadedRecord, RecordLoadError, load_record
 
@@ -214,6 +216,9 @@ def validate(lr: LoadedRecord, run: bool = True, cache_dir: Path | None = None) 
         check_unit(where, d.unit, d.quantity)
         check_citation(where, d.citation)
         check_cells(where, d)
+        if d.origin not in AUTHORED_ORIGINS:
+            E(f"{where}: origin {d.origin.value!r} is given only by a run of the record, never written into it; "
+              f"use one of {sorted(o.value for o in AUTHORED_ORIGINS)}")
         texts = [d.printed] if d.printed is not None else list(d.table.values) if d.table is not None else []
         if d.figure is not None:
             fr = next((f for f in rec.figures if f.id == d.figure), None)
@@ -339,6 +344,23 @@ def validate(lr: LoadedRecord, run: bool = True, cache_dir: Path | None = None) 
             ref.run in {r.id for r in rec.runs if r.model == m.id} for ref in rec.refinements
         ):
             W(f"{where}: stochastic, but no run of it is refined")
+        if m.variant_of is not None:
+            base = next((x for x in rec.models if x.id == m.variant_of), None)
+            if base is None or base.id == m.id or base.variant_of is not None:
+                E(f"{where}: a variant of {m.variant_of!r}, which is not a printed model of this record")
+            if not m.corrections:
+                E(f"{where}: a variant needs its corrections (equation, change, evidence)")
+        elif m.corrections:
+            E(f"{where}: corrections belong to a variant: name the printed model it corrects in variant_of")
+        for k, cr in enumerate(m.corrections):
+            for f in ("equation", "change", "evidence"):
+                if not str(getattr(cr, f) or "").strip():
+                    E(f"{where}: correction {k + 1} needs its {f}")
+
+    built = nx.DiGraph((m.id, b) for m in rec.models for b in m.built_from)
+    cycles = {tuple(c[c.index(min(c)):] + c[:c.index(min(c))]) for c in nx.simple_cycles(built)}
+    for c in sorted(cycles):
+        E(f"model {c[0]}: built_from forms a cycle: {' -> '.join([*c, c[0]])}")
 
     # ---- runs, comparisons, refinements --------------------------------------
     node_ids = {k for k, v in ids.items() if v in ("datum", "added", "output")}
@@ -393,6 +415,9 @@ def validate(lr: LoadedRecord, run: bool = True, cache_dir: Path | None = None) 
             E(f"refinement {ref.id}: unknown run {ref.run!r}")
         if not ref.tolerance_basis:
             E(f"refinement {ref.id}: the tolerance needs a stated basis")
+        if len(ref.factors) < 2 or 1 not in ref.factors:
+            E(f"refinement {ref.id}: needs at least two factors, one of them 1 (the paper's own setting); "
+              f"got {ref.factors}")
         try:
             parse_tolerance(ref.tolerance)
         except ValueError as e:

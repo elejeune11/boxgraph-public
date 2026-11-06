@@ -1,0 +1,37 @@
+id: odde_code
+kind: software
+title: "Motor-clutch model with event stepping (MATLAB scripts motorclutch1_1.m and motorclutch2_3.m, Odde lab)"
+authors: [Benjamin Bangasser]
+year: 2010
+venue: Odde lab website (University of Minnesota), code released with Chan and Odde 2008 and Bangasser et al. 2013
+url: https://oddelab.umn.edu/software
+file: corpus/motor_clutch/code/odde_code
+version: "sha256:8721f53550cdb54633727cef9ae17aa1752e02f20d167452cd832e48a5aa670c"
+licence: none stated
+language: matlab
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "read_code-1", date: "2026-11-01"}
+notes: >
+  Two MATLAB scripts. motorclutch2_3.m sweeps the substrate stiffness (10 values, 1e5 events each) and
+  computes flow, traction, failure frequency, cycle time, engaged clutches and clutch tension.
+  motorclutch1_1.m runs one stiffness (1e4 events) and plots the trajectory and a hazard analysis of the
+  cycle times. Both are an event-stepping (Gillespie) motor-clutch simulation. MATLAB cannot run here, so
+  the record ports the event loop and statistics of motorclutch2_3.m line by line to Python
+  (models/mc_event_port). It adds a locator of the optimal stiffness (models/optimum_port), which the code
+  does not have.
+  The parameters of motorclutch2_3.m are Bangasser et al. 2013's base set (nm = nc = 50, kon = 0.3 /s,
+  Kc = 0.8 pN/nm), not Chan and Odde's Table S1 set, although the header says it reduplicates the Chan
+  model. Its signs follow Chan and Odde (vu, Fm, Fb negative); see cited.yaml.
+  Reproduced: Bangasser et al. 2013 Fig. 2B (traction) and 2C (flow), Fig. 6B (ensemble clutch
+  stiffness, which the port forms as Kc times the code's mean engaged number) and 6D (cycle time), all on
+  the base set. With Chan's four values copied in, the port also reproduces Bangasser's Fig. S1A
+  event-stepping curve.
+  Not reproduced: Chan and Odde 2008 Fig. 1D (flow, and traction on both soft and stiff substrates) at
+  Chan's own parameters. The event-stepping code gives the S1A curve, not Chan's time-stepped one
+  (q_chan_algorithm). Also not reproduced: the base-set optimal stiffness at Bangasser's Fig. 2C dashed
+  line. The n = 25 optimum of Bangasser et al. 2013b comes out close.
+  Differences from the papers: the gain term in the off-rate (0 here, so no effect); a fixed event count
+  instead of a fixed simulated time, with the start-up included; the code's update order; a cycle time
+  measured between zero-engagement states; a vestigial initial 5 ms step; and an unseeded MATLAB rand
+  (the port uses numpy seeds and replicates). The motorclutch1_1.m set (kon = 1 with nm = nc = 50,
+  Kc = 0.8) matches no paper; it is run once and not compared. Plots and outputs that no paper prints were
+  not ported (q_not_ported). No code was copied into the record.

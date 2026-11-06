@@ -1,0 +1,106 @@
+- id: rel_wk4_to_wk3
+  kind: reduces_to
+  a: stergiopulos1999/zin_4wk
+  b: stergiopulos1999/zin_3wk
+  mapping: {Rp: "Rp", Rc: "Rc", C: "C", f: "f"}
+  output_map: {mod: mod, phase: phase}
+  limit: {L: "oo"}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20], L: [0.005, 0.06]}
+  provenance: stated
+  citation: {page: 6, printed_page: "H86", quote: "inertance is very large, its influence with respect to Zc is", where: Discussion}
+# High-frequency limit of the windkessel input impedance -> aortic characteristic impedance of westerhof1969.
+# Z0 = sqrt(Lp/Cp); with Lp = Z0/c and Cp = 1/(Z0 c) for any wave speed c (a nominal 500 cm/s, which cancels),
+# Z0 = Rc. Unit factor: 1 mmHg*s/ml = 1333.22387415 g/cm^4/s.
+- id: rel_wk4_highfreq_to_w69_z0
+  kind: reduces_to
+  a: stergiopulos1999/zin_4wk
+  b: westerhof1969/char_impedance
+  mapping: {Lp: "1333.22387415*Rc/500", Cp: "1/(1333.22387415*Rc*500)"}
+  output_map: {Z0: mod}
+  limit: {f: "oo"}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], L: [0.005, 0.06], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 6, printed_page: "H86", quote: "the aorta behaves as a reflectionless tube with an", where: Discussion}
+  assumptions:
+    - "the paper says that at high frequencies reflections cancel and the impedance equals aortic Zc, citing ref. 21, and that at high frequencies Zc determines the four-element windkessel's impedance"
+    - "Rc is identified with Westerhof's Z0 = sqrt(L'/C') of the ascending aorta; the split of Z0 into L' and C' uses a nominal wave speed of 500 cm/s, which cancels"
+- id: rel_wk3_highfreq_to_w69_z0
+  kind: reduces_to
+  a: stergiopulos1999/zin_3wk
+  b: westerhof1969/char_impedance
+  mapping: {Lp: "1333.22387415*Rc/500", Cp: "1/(1333.22387415*Rc*500)"}
+  output_map: {Z0: mod}
+  limit: {f: "oo"}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20]}
+  provenance: proposed
+  reason: >-
+    The three-element windkessel's Rc was introduced as the aortic characteristic impedance (p. 6, citing ref. 21);
+    as f grows the R_p || C branch vanishes and Z_in tends to Rc, which is Westerhof's Z0 = sqrt(L'/C') under the
+    mapping (the nominal wave speed of 500 cm/s used to split Z0 into L' and C' cancels).
+# The three-element windkessel used here is the one Westerhof et al. (ref. 22 = westerhof1971) introduced:
+# Zc (Rc) in series with the two-element windkessel (Rp || C). Unit factors: 1 mmHg*s/ml = 1333.22387415 g/cm^4/s;
+# 1 ml/mmHg = 1/1333.22387415 cm^4*s^2/g = 1e6/1333.22387415 cm^4*s^2/Mg. Outputs convert automatically.
+- id: rel_wk3_same_as_w71_3el
+  kind: same_as
+  a: stergiopulos1999/zin_3wk
+  b: westerhof1971/impedance_3el
+  mapping: {Rc: "1333.22387415*Rc", Rp: "1333.22387415*Rp", C: "1000000*C/1333.22387415", f: "f"}
+  output_map: {modulus: mod}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 1, printed_page: "H81", quote: "two-element windkessel model, Westerhof et al. (22), on", where: Introduction}
+  assumptions:
+    - "the paper says Westerhof et al. (22) introduced the three-element windkessel, with Zc connected in series with the two-element windkessel; its Rc is that model's characteristic impedance R_c"
+- id: rel_wk3_same_as_w71_3el_phase
+  kind: same_as
+  a: stergiopulos1999/zin_3wk
+  b: westerhof1971/impedance_3el
+  mapping: {Rc: "1333.22387415*Rc", Rp: "1333.22387415*Rp", C: "1000000*C/1333.22387415", f: "f"}
+  output_map: {phase: phase}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 1, printed_page: "H81", quote: "two-element windkessel model, Westerhof et al. (22), on", where: Introduction}
+  assumptions:
+    - "as rel_wk3_same_as_w71_3el, for the impedance phase"
+# The three-element windkessel as the peripheral load of the distributed model of ref. 17 = stergiopulos1992,
+# whose terminals are a resistance R1 in series with R2 || CT (Eq. 7; helper model terminal_impedance_eq7, with
+# that paper's own parameters RT = R1 + R2, R1/RT and CT). Unit factors: 1 mmHg*s/ml = 1333.22387415 dyn*s/cm^5;
+# 1 ml/mmHg = 1/1333.22387415 cm^5/dyn. Outputs convert automatically.
+- id: rel_wk3_same_as_s92_terminal
+  kind: same_as
+  a: stergiopulos1999/zin_3wk
+  b: stergiopulos1992/terminal_impedance_eq7
+  mapping: {RT: "1333.22387415*(Rc + Rp)", R1r: "Rc/(Rc + Rp)", CT: "C/1333.22387415", f: "f"}
+  output_map: {mod: mod}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 1, printed_page: "H81", quote: "models they may serve as peripheral load (3, 17)", where: Introduction}
+  assumptions:
+    - "the paper says lumped-parameter (windkessel) models serve as peripheral load in arterial models, citing ref. 17; the load of ref. 17 is its modified windkessel, R1 in series with R2 || CT, identified here with the three-element windkessel Rc + (Rp || C)"
+- id: rel_wk3_same_as_s92_terminal_phase
+  kind: same_as
+  a: stergiopulos1999/zin_3wk
+  b: stergiopulos1992/terminal_impedance_eq7
+  mapping: {RT: "1333.22387415*(Rc + Rp)", R1r: "Rc/(Rc + Rp)", CT: "C/1333.22387415", f: "f"}
+  output_map: {phase: phase}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20]}
+  provenance: stated
+  citation: {page: 1, printed_page: "H81", quote: "models they may serve as peripheral load (3, 17)", where: Introduction}
+  assumptions:
+    - "as rel_wk3_same_as_s92_terminal, for the impedance phase"
+# Eq. 1 (segment inertance) from the distributed model of ref. 17 = stergiopulos1992: the inertial term of that
+# model's momentum equation (Eq. 6), cu dQ/dt against (A0/rho) dp/dx, is an inertance per length cu rho/A0, and
+# integrating it over a segment gives Eq. 1. Shown for segment 1 of the tree (the ascending aorta), taken uniform.
+- id: rel_eq1_from_s92_momentum
+  kind: derived_from
+  a: stergiopulos1992/arterial_tree_1d
+  b: stergiopulos1999/inertance_eq1_uniform
+  mapping: {cu: "cu", rho: "rho", ls: "L_1", R: "rp_1"}
+  steps:
+    - "the inertial and pressure-gradient terms of the momentum equation (Eq. 6 of ref. 17), cu dQ/dt + (A0/rho) dp/dx, give a pressure drop per length (cu rho/A0) dQ/dt, an inertance per length cu rho/A0"
+    - "integrating cu rho/A(x) over the segment length ls gives Eq. 1; with A = pi R^2 constant, L_i = cu rho ls/(pi R^2)"
+  provenance: stated
+  citation: {page: 2, printed_page: "H82", quote: "model of the human systemic circulation (17) was used", where: Methods}
+  assumptions:
+    - "the paper derives the inertance of each segment of the distributed model of ref. 17 by Eq. 1; that the inertance per length is the momentum equation's cu rho/A0 is the reader's reading of how Eq. 1 follows from that model"
+    - "cu of Eq. 1 (velocity profile coefficient, 4/3 in the paper) is identified with the shear inertia coefficient cu of ref. 17's Eq. 6; the quantities are not merged"

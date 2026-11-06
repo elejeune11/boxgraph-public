@@ -1,0 +1,217 @@
+- id: q_Eh_r0_pulmonary
+  kind: possible_error
+  about: [Eh_r0_pulmonary, epsilon_pulmonary, stiffness_eq28]
+  text: >
+    Eq. 2.8 with epsilon ≈ 0.02 mmHg^-1 gives Eh/r0 = 3/(4 x 0.02) = 37.5 mmHg, but the paper states it uses 34.5 mmHg.
+    Either the printed 34.5 is a misprint for 37.5, or a different epsilon (about 0.0217 mmHg^-1) was used. Which value
+    entered the simulations is not stated.
+  citation: {page: 7, printed_page: "286", quote: "for the pulmonary vessels, we use Eh/r0 = 34.5 mmHg"}
+- id: q_gamma_definition
+  kind: possible_error
+  about: [gamma_base, area_ratio_eq218, area_ratio_eq216_217]
+  text: >
+    Eq. 2.17 prints gamma = r_d1/r_d2, but the right-hand form of Eq. 2.18, (1 + gamma)/(1 + gamma^(xi/2))^(2/xi), follows
+    from Eqs. 2.16 and the left-hand form only if gamma = (r_d2/r_d1)^2 (the definition used in Olufsen 1999). With gamma = 0.41
+    as printed, the two forms give different eta (about 1.17 and 1.10). Since alpha > beta (p. 13), r_d1/r_d2 would exceed 1
+    if d1 is the alpha daughter, which 0.41 does not.
+- id: q_eta_base
+  kind: unexplained_difference
+  about: [eta_base, xi_base, gamma_base]
+  text: >
+    With xi = 2.76 and gamma = 0.41, the right-hand form of Eq. 2.18 gives eta ≈ 1.171, not the printed 1.16; the left-hand
+    form with gamma read literally from Eq. 2.17 gives ≈ 1.10. The printed triple (xi, eta, gamma) is not consistent under
+    either reading at the printed precision.
+- id: q_fig5_small_slope
+  kind: possible_error
+  about: [fig5_slope_small, fig5_intercept_small]
+  text: >
+    The dashed line of Fig. 5 is labelled log(l) = 0.04733 log(r) + 0.6309, but the drawn line rises from about -1.6 at
+    log(r) ≈ -4.6 to about -0.8 at log(r) = -3, a slope near 0.47; with 0.6309 as intercept a slope of 0.4733 gives -0.79 at
+    log(r) = -3 while 0.04733 gives +0.49. The printed slope may have lost a digit. Not checked by a figure reading (see figures.md).
+  citation: {page: 10, printed_page: "289", quote: "using least-squares fitting are shown on the graph"}
+- id: q_FA_plateau
+  kind: unexplained_difference
+  about: [FA_pulse_plateau, table2_FA_pulse]
+  text: >
+    The text says the femoral artery pulse pressure 'increases to a plateau of around 33 mmHg' with rarefaction, but Table 2
+    gives femoral pulse pressures of 34.0, 42.0 and 43.8 mmHg for xi = 3.0, 2.6, 2.2: the plateau is near 43-44 mmHg, and
+    33 mmHg is below even the least rarefied value.
+  citation: {page: 19, printed_page: "298", quote: "of around 33 mmHg as the vascular bed becomes more rarefied"}
+- id: q_PuA_pulse_eq42
+  kind: unexplained_difference
+  about: [table2_PuA_pulse_vs_mean, pulse_pressure_eq42]
+  text: >
+    The clinical relation Eq. 4.2 predicts pulse pressure rising with mean pulmonary pressure (about 5, 9 and 27 mmHg at
+    means of 5, 10, 33 mmHg), while Table 2 gives 12, 12 and 3 mmHg. The paper notes the opposite trend (p. 24) and attributes
+    it to fixed cardiac output. A mean pulmonary pressure of 5 mmHg at xi = 3.0 is also well below the ~15 mmHg the paper calls
+    typical (p. 6).
+- id: q_network_not_runnable
+  kind: unstated_input
+  about: [network_1d_structured_tree, table2_PA_mean, table2_PA_pulse, table2_FA_mean, table2_FA_pulse, table2_PuA_mean, table2_PuA_pulse]
+  text: >
+    The 1D network with structured-tree outflow cannot be rerun from the paper: the inflows are only plotted (Fig. 3), blood
+    density, viscosity and boundary-layer thickness, structured-tree root radii, and the numerical settings are not printed.
+    Table 2, Eq. 3.1 and Figs. 6-13 are therefore not compared.
+- id: q_tree_counts
+  kind: unstated_input
+  about: [network_1d_structured_tree]
+  text: >
+    Figs. 8(b,c) and 9 give the number of vessels and end branches of a structured tree as a function of xi, gamma and eta, but
+    the root radius of the tree they are computed for is not stated, so the counts cannot be recomputed.
+- id: q_xi_range
+  kind: reading
+  about: [xi_base]
+  text: >
+    Eq. 2.16 restricts 2.33 <= xi <= 3, but the rarefaction study (Table 2, Figs. 10-11) uses xi = 2.2, outside that range.
+- id: q_inflow_samples
+  kind: reading
+  about: [network_1d_structured_tree]
+  text: >
+    The text (p. 7) says flow was measured at 45 equally spaced time points for 'these studies', while the caption of Fig. 3
+    says the aortic profile was sampled at 32 and the pulmonary at 45 points per period.
+  citation: {page: 8, printed_page: "287", quote: "were interpolated from MRI measurements sampled at 32"}
+- id: q_table2_trend_claims
+  kind: overstated_claim
+  about: [table2_PA_mean, table2_PuA_mean, table2_PuA_pulse]
+  text: >
+    p. 18 says that for the proximal arteries the increase in mean pressure with decreasing xi is 'almost linear', and the
+    Table 2 caption says the pulmonary artery pulse pressure 'goes down with increased rarefaction'. In Table 2 the aortic
+    mean rises 90, 108, 130 (steps 18 and 22, near linear), but the main pulmonary artery mean rises 5, 10, 33 (steps 5 and
+    23), and its pulse pressure is 12, 12, 3: unchanged from xi = 3.0 to 2.6, then falling. Added by the audit.
+  citation: {page: 18, printed_page: "297", quote: "the increase is almost linear with the decrease in"}
+- id: q_eq31_scope
+  kind: reading
+  about: [eq31_sys_slope, eq31_sys_intercept, eq31_pulm_slope, eq31_pulm_intercept, network_1d_structured_tree]
+  text: >
+    Audit: the first reading left Eq. 3.1 out. Its coefficients are now recorded as fitted data so that a figure reading
+    of the centre lines of Fig. 7(d) can be checked against them (by a fit of the read curve), even though the network
+    model that produced the curves is not runnable. Whether that comparison belongs in this record's scope is left open.
+  citation: {page: 15, printed_page: "294", quote: "These are approximately linear, giving the following relations"}
+
+# Added by the figure reading (see figures.md)
+- id: q_fig5_dashed_line_drawn
+  kind: possible_error
+  about: [fig5_slope_small, fig5_intercept_small, lnl_fig5_line_small, lnl_fig5_points_small, q_fig5_small_slope]
+  text: >
+    Figure reading: the dashed line of Fig. 5 as drawn (fig5_line_small) rises from about -1.46 at log(r) = -4.4 to about
+    -0.96 at log(r) = -3.35, a slope of about 0.47, with an intercept of about 0.63. Its printed label, slope 0.04733 and
+    intercept 0.6309, does not reproduce the drawn line (cmp_fig5_line_small) or the red points (cmp_fig5_points_small).
+    A slope of 0.4733 with the printed intercept would. This supports q_fig5_small_slope: the printed slope appears to have
+    lost a digit. The solid line and its label 1.103 / 2.5193 agree (cmp_fig5_line_large).
+  citation: {page: 10, printed_page: "289", quote: "using least-squares fitting are shown on the graph"}
+- id: q_fig5_point_count
+  kind: reading
+  about: [lnl_fig5_points_large, lnl_fig5_points_small]
+  text: >
+    The text says the points of Fig. 5 are averages for 'each of 15 orders', and the caption gives orders 1-4 and 4-12. The
+    figure shows 13 markers: 4 red squares and 9 blue diamonds. The figure does not show which order each marker is, or
+    whether some markers overlap.
+  citation: {page: 10, printed_page: "289", quote: "The points represent the averaged lengths and radii for each of 15 orders"}
+- id: q_fig8a_gamma_form
+  kind: reading
+  about: [q_gamma_definition, area_ratio_eq218, area_ratio_eq216_217, eta_fig8a_g025, eta_fig8a_g05, eta_fig8a_g075, eta_fig8a_g1]
+  text: >
+    Figure reading: the four curves of Fig. 8(a), read at xi = 2.4, 2.6, 2.8, are reproduced by the right-hand form of
+    Eq. 2.18, (1 + gamma)/(1 + gamma^(xi/2))^(2/xi), within about 0.002. They are not reproduced by the left-hand form with
+    gamma = r_d1/r_d2 as Eq. 2.17 prints it (except at gamma = 1, where the two forms coincide). So the paper's own
+    computations use gamma as the right-hand form defines it (gamma = (r_d2/r_d1)^2, as in Olufsen 1999). This bears on
+    q_gamma_definition. It does not settle q_eta_base: with that form, xi = 2.76 and gamma = 0.41 give 1.171, not the printed 1.16.
+- id: q_fig8c_extra_points
+  kind: unexplained_difference
+  about: [nvessels_fig8b_g025, nvessels_fig8c_g025, nends_fig9a_g025, nends_fig9b_g025, eta_fig8a_g025]
+  text: >
+    Figure reading: Figs. 8(c) and 9 (right) plot the same tree counts as Figs. 8(b) and 9 (left), against eta instead of
+    xi. But for gamma = 0.25, Fig. 8(a) gives eta of at most about 1.155 (at xi = 3), while the dotted curves of Figs. 8(c)
+    and 9 (right) continue to eta of about 1.17. There they reach about 3.2 x 10^5 vessels and 1.6 x 10^5 end branches.
+    The maxima in Figs. 8(b) and 9 (left) at xi = 3 are about 1.55 x 10^5 and 7.7 x 10^4. The other curves of the (c)
+    panels also extend past the eta that Fig. 8(a) gives at xi = 3. So the panels against eta appear to include a
+    computed point beyond xi = 3, or to use different trees. The paper does not say which.
+- id: q_eq31_pulm_fit
+  kind: unexplained_difference
+  about: [eq31_pulm_slope, eq31_pulm_intercept, pmean_fig7d_pulm_centre, pressure_log_radius_eq31]
+  text: >
+    Figure reading: the centre line of Fig. 7(d), right, falls from about 5.6 mmHg at log10 r = 2.9 to about 3.6 mmHg at
+    log10 r = 2.1. That is a slope of about 2.6 mmHg per decade and an intercept near -2 mmHg. Eq. 3.1 prints
+    p_pulm = 14 log10 r_pulm - 25, which gives 15.6 mmHg at log10 r = 2.9 and 4.4 mmHg at 2.1 (cmp_eq31_pulm_fig7d).
+    The systemic relation, 60 log10 r - 110, lies close to the systemic centre line (cmp_eq31_sys_fig7d). This bears on
+    q_eq31_scope.
+  citation: {page: 15, printed_page: "294", quote: "psys = 60 log10 rsys − 110, ppulm = 14 log10 rpulm − 25"}
+- id: q_fig6a_vs_fig3
+  kind: unexplained_difference
+  about: [q_fig6a_aorta, q_fig3a_aorta, q_fig6a_pulm, q_fig3b_pulm]
+  text: >
+    Figure reading: Fig. 6(a) is captioned as the 'inflow to the systemic and pulmonary arteries', and Fig. 3 gives the
+    measured inflows the model is driven with. But the aortic curve of Fig. 6(a) peaks near 405 cm^3/s, where Fig. 3(a)
+    peaks near 426 cm^3/s, and it differs by up to about 45 cm^3/s on the upstroke (t = 0.1 s). The pulmonary curve peaks
+    near 462 cm^3/s, where Fig. 3(b) peaks near 485 cm^3/s. Fig. 6(a) may show the flow at a point downstream of the inlet;
+    the paper does not say where.
+  citation: {page: 16, printed_page: "295", quote: "inflow to the systemic and pulmonary arteries from two different individuals"}
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [network_1d_structured_tree, stiffness_eq28, pulse_pressure_eq42, pressure_log_radius_eq31, lnl_fig5_points_large, lnl_fig5_points_small, q_fig3a_aorta, q_fig3b_pulm]
+  text: >
+    No validation against olufsen1999 is entered, in either direction (cross-validation job 2026-11-04).
+    This paper takes the 1999 model as its point of departure (p. 20) and its tree parameters xi, gamma, eta
+    from it (p. 9; cited.yaml), but it never sets a result of its own against a 1999 measurement. The
+    measurements of olufsen1999 are the cardiac output of ref. 20 (co_measured), the inflow of Fig. 4, the
+    measured input impedance modulus and phase of Fig. 9 (md 0, md 1; Mills et al. / Nichols and O'Rourke) and
+    the aortic, subclavian-brachial and radial pressure waves of Fig. 12 (Remington and Wood). Here the only
+    model that gives systemic pressures or flows is network_1d_structured_tree, which is not runnable, and no
+    model gives an input impedance. The runnable models are the area-ratio relations (Eqs. 2.16-2.18), the
+    pulmonary length-radius fit and its prefactor (Fig. 5, Eq. 2.19), the pulmonary wall stiffness 3/(4 epsilon)
+    (Eq. 2.8), the Eq. 3.1 pressure-radius fit to this paper's own simulation and the pulmonary pulse-pressure
+    regression of Syyed et al. (Eq. 4.2): none gives a quantity 1999 measured at 1999's conditions. In
+    particular, Eq. 2.8 is pulmonary and constant in r0, while the 1999 Eh/r0 points of Fig. 3 are systemic
+    (and estimated, not measured), and the 2012 systemic stiffness Eq. 2.5 exists only inside the non-runnable
+    network; Eq. 4.2 is a pulmonary regression, while all 1999 pressures are systemic. In the other direction,
+    the measurements here are the Huang et al. pulmonary length-radius points (Fig. 5) and the MRI inflows of
+    Fig. 3 (model inputs); no 1999 model gives a vessel length (its tree only fixes L = lrr r) or a flow
+    waveform (its 1D model is not runnable). See olufsen1999 q_no_validation_vs_olufsen2012.
+  citation: {page: 20, printed_page: "299", quote: "The systemic arteries model originally developed by Olufsen (1999) has been"}
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [network_1d_structured_tree, stiffness_eq28, pulse_pressure_eq42, pressure_log_radius_eq31, length_radius_loglinear_fig5, area_ratio_eq218, q_fig3a_aorta]
+  text: >
+    No model of this record is validated against olufsen2000 (cross-validation job 2026-11-04). This paper takes
+    its systemic geometry, systemic inflow and numerical solver from olufsen2000 (pp. 4, 7) and refers to it for
+    the large-artery pressures and flows (p. 14), but it never sets its own results against olufsen2000's
+    measurements. Those are the MR flows at nine sites of Fig. 7 (dashed), the ascending-aortic inflow of Fig. 3,
+    the cuff pressures 120/80 mmHg, the heart rate of 51 per minute, the period of 1.1 s and the inlet radius of
+    Table 1. The only model here that gives systemic flows or pressures is network_1d_structured_tree. It is not
+    runnable (q_network_not_runnable), and it would also need the Fig. 3 inflow as its input. The runnable models
+    are the area-ratio relations (Eqs. 2.16-2.18), the pulmonary length-radius fit and prefactor (Fig. 5, Eq. 2.19),
+    the pulmonary wall stiffness (Eq. 2.8), the Eq. 3.1 fit to this paper's own simulated tree pressures and the
+    pulmonary pulse-pressure regression (Eq. 4.2). None of them gives a quantity olufsen2000 measured: Eq. 4.2 is
+    pulmonary, while the cuff pressures are systemic (brachial), and olufsen2000 measured no area ratio, vessel
+    length or tree pressure. Fig. 3(a) here is the olufsen2000 inflow re-plotted (p. 7). It is a model input in both
+    papers, not a prediction of either, so it is a shared measurement and not a validation. The reverse direction is
+    in olufsen2000/q_no_validation_vs_olufsen2012.
+  citation: {page: 7, printed_page: "286", quote: "the inflow into the network is taken from measurements reported in Olufsen"}
+- id: q_no_validation_vs_olufsen2004
+  kind: choice
+  about: [network_1d_structured_tree, stiffness_eq28, pulse_pressure_eq42, pulse_coefficients_eq42, pressure_log_radius_eq31, length_radius_loglinear_fig5, prefactor_eq219, area_ratio_eq218, area_ratio_eq216_217, lnl_fig5_points_large, lnl_fig5_points_small, q_fig3a_aorta, q_fig3b_pulm]
+  text: >
+    No validation against olufsen2004 (Olufsen and Nadim, lumped rigid-vessel models) is entered, in either
+    direction (cross-validation job 2026-11-04). This paper does not cite olufsen2004, and neither paper says
+    that a model of one explains or predicts the other's data. olufsen2004 is analytical and measures nothing:
+    its printed numbers are blood properties, zeros of J0, dimensionless time-scales and radius thresholds, so
+    no model here can be judged against it. In the other direction, the measurements here are the Huang et
+    al. pulmonary length-radius points (Fig. 5) and the MRI inflows (Fig. 3, inputs of the network model). No
+    olufsen2004 model gives a vessel length or a flow waveform at measured conditions: it gives dimensionless
+    time-scales, a radius at which tau crosses a time-scale, a model order, a dimensionless step response, a
+    vessel inductance (length is its input) and a windkessel input impedance, which is not measured here. See
+    olufsen2004 q_no_validation_vs_olufsen2012.
+- id: q_no_validation_vs_pries1992
+  kind: choice
+  about: [network_1d_structured_tree, stiffness_eq28, pulse_pressure_eq42, pulse_coefficients_eq42, pressure_log_radius_eq31, length_radius_loglinear_fig5, prefactor_eq219, area_ratio_eq218, area_ratio_eq216_217, lnl_fig5_points_large, lnl_fig5_points_small, q_fig3a_aorta, q_fig3b_pulm]
+  text: >
+    No validation against pries1992 (Pries, Neuhaus and Gaehtgens, tube-flow viscosity) is entered, in
+    either direction (cross-validation job 2026-11-04). This paper does not cite pries1992 (it cites Pries,
+    Secomb and Gaehtgens 1995 only for where the pressure drop occurs), and neither paper says that a model
+    of one explains or predicts the other's data. The models here give wall stiffness, area ratios, the
+    length-radius law, small-artery pressure and pulse pressure; none gives a relative apparent viscosity,
+    so none can be judged against pries1992's measured viscosities (Figs. 2, 3, 5). The only viscosity here
+    is the kinematic viscosity nu of the network model, which is not runnable and whose value is not printed.
+    In the other direction, the measurements here are the Huang et al. pulmonary length-radius points
+    (Fig. 5) and the MRI inflows (Fig. 3); pries1992's models give only relative viscosity, its fitting
+    parameters and tube hematocrit, none of which is measured here. See pries1992 q_no_validation_vs_olufsen2012.

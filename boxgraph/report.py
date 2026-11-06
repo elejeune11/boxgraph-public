@@ -75,6 +75,8 @@ def build_index(syn: dict) -> dict[str, str]:
             add(f"{sid}/{aid}", a)
         for mid, m in (p.get("models") or {}).items():
             add(f"{sid}/{mid}", m)
+        for mid, v in (p.get("variants") or {}).items():
+            add(f"variant:{sid}/{mid}", v)
         for v in p.get("verdicts", []):
             add(f"{sid}/{v['comparison']}", v)
             add(f"{sid}/{v['printed']}", v)
@@ -152,6 +154,24 @@ def _fmt_computed(x, se) -> str:
     return _fmt(x)
 
 
+def _purpose_text(v: dict) -> str:
+    """A comparison's purpose, naming the equations a corrected variant changes."""
+    var = v.get("variant")
+    if not var:
+        return v["purpose"]
+    return f"{v['purpose']} ({', '.join(c['equation'] for c in var['corrections'])})"
+
+
+def _verdict_text(v: dict) -> str:
+    """A comparison's verdict, saying when the range of its inputs' rounding was used to reach it."""
+    if not v["verdict"]:
+        return f"error: {v['error']}"
+    r = v.get("input_rounding") or {}
+    if v["verdict"] in ("reproduced", "close") and r.get("band") is not None and r.get("varied"):
+        return f"{v['verdict']}, with the inputs' rounding ({', '.join(r['varied'])})"
+    return v["verdict"]
+
+
 def review(syn: dict) -> list[Sentence]:
     S: list[Sentence] = []
     papers = syn["papers"]
@@ -169,6 +189,13 @@ def review(syn: dict) -> list[Sentence]:
         S.append(Sentence(
             f"Against itself, {sid} has {t['reproduced']} results reproduced, {t['close']} close, "
             f"{t['not reproduced']} not reproduced and {t['no verdict']} without a verdict.", [f"paper:{sid}"], "papers"))
+        for model, var in (p.get("variants") or {}).items():
+            n = var["tally"]
+            what = "; ".join(f"{c['equation']} corrected ({c['change']}; evidence: {c['evidence']})" for c in var["corrections"])
+            S.append(Sentence(
+                f"{model} is {var['of']} with {what}, added by the reader and never replacing the printed model: "
+                f"{n['reproduced']} reproduced, {n['close']} close, {n['not reproduced']} not reproduced.",
+                [f"paper:{sid}", f"variant:{sid}/{model}"], "papers"))
         for purpose, tp in (p.get("tally_by_purpose") or {}).items():
             if purpose == "reproduction":
                 continue
@@ -238,8 +265,8 @@ def render_markdown(syn: dict, sentences: list[Sentence]) -> str:
             continue
         out += ["| comparison | purpose | printed | computed | verdict | page |", "|---|---|---|---|---|---|"]
         for v in p["verdicts"]:
-            out.append(f"| {v['comparison']} | {v['purpose']} | {_fmt(v['printed_text'])} | {_fmt_computed(v['computed_value'], v.get('computed_se'))} | "
-                       f"{v['verdict'] or 'error: ' + str(v['error'])} | {v['page'] or ''} |")
+            out.append(f"| {v['comparison']} | {_purpose_text(v)} | {_fmt(v['printed_text'])} | {_fmt_computed(v['computed_value'], v.get('computed_se'))} | "
+                       f"{_verdict_text(v)} | {v['page'] or ''} |")
         out.append("")
         if p["cannot_check"]:
             out += ["Cannot be checked:", ""] + [f"- {next(iter(c.values()))}: {c['why']}" for c in p["cannot_check"]] + [""]
@@ -329,8 +356,8 @@ def render_html(syn: dict, sentences: list[Sentence], title: str = "BoxGraph Syn
             continue
         o.append("<div class=tbl><table><tr><th>comparison</th><th>purpose</th><th>printed</th><th>computed</th><th>verdict</th><th>page</th></tr>")
         for v in p["verdicts"]:
-            verdict = v["verdict"] or f"error: {v['error']}"
-            o.append(f"<tr><td><code>{e(v['comparison'])}</code></td><td>{e(v['purpose'])}</td><td>{e(_fmt(v['printed_text']))}</td>"
+            verdict = _verdict_text(v)
+            o.append(f"<tr><td><code>{e(v['comparison'])}</code></td><td>{e(_purpose_text(v))}</td><td>{e(_fmt(v['printed_text']))}</td>"
                      f"<td>{e(_fmt_computed(v['computed_value'], v.get('computed_se')))}</td><td class='{_vcls(v['verdict'])}'>{e(verdict)}</td><td>{e(str(v['page'] or ''))}</td></tr>")
         o.append("</table></div>")
         if p.get("figures"):

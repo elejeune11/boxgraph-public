@@ -1,0 +1,391 @@
+- id: q_eq4_not_runnable
+  kind: unstated_model
+  about: [arterial_tree_eq4, eq4_zero_compliance, p_star_eq4, arterial_tree_1d]
+  text: >
+    Eq. 4 with the coefficients the paper takes from Eq. 9 (C0' = K/p0, C1' = -K/(2 p0^2), p0 = 97 mmHg) has
+    dA/dp = A0 K (2 p0 - p)/p0^2, which vanishes at p = 2 p0 = 194 mmHg and is negative above it (model
+    eq4_zero_compliance). In the reader's implementation of the tree the arm and leg systolic pressures pass
+    194 mmHg in the first beat and the explicit scheme diverges, so the model as stated cannot be run here.
+    Fig. 2(a) itself shows a peripheral (femoral) peak near 27 kPa by eye, about 200 mmHg, above 2 p0. The
+    paper's own code (Stergiopulos 1990 thesis) must therefore treat the wall law differently from Eq. 4 as
+    printed, or keep pressures below 194 mmHg in a way the paper does not describe. The runnable model
+    arterial_tree_1d uses Eq. 9 itself, which Eq. 4 approximates.
+  citation: {page: 3, printed_page: "1479", quote: "This relationship can be expanded in a series", where: "Eqs. 4 and 9"}
+- id: q_compliance_sum
+  kind: unexplained_difference
+  about: [cmp_compliance_sum, Csum_printed]
+  text: >
+    The 55 volume compliances of Table 1 add to 625.688 x 10^-6 cm^5/dyn, which is 0.8342 ml/mmHg with
+    1 mmHg = 1333.22 dyn/cm^2; the paper prints 0.835. The difference (0.1%) is in the last printed digit; it
+    could come from a different mmHg conversion (about 1334.5 dyn/cm^2 would give 0.835) or from rounding.
+- id: q_terminal_compliance
+  kind: unexplained_difference
+  about: [cmp_CT_6, run_terminal_compliance, terminal_compliance, Cres_printed]
+  text: >
+    The terminal compliances of Table 2 are in the proportions of C_Ti = C_vol,res R_total/R_Ti (each R_Ti
+    of Table 2), but every printed C_Ti is 1.120 times what the formula gives with C_vol,res = 0.165 ml/mmHg
+    and R_total the parallel combination of the 28 terminal resistances. The 28 printed C_Ti add to about
+    0.185 ml/mmHg, not the 0.165 the text says is distributed. Taking R_total as the input resistance of the
+    whole tree (adding Poiseuille resistances of the segments, mu = 0.035-0.045 P) raises R_total by only 4-5%,
+    so it does not explain the factor. Which residual compliance or R_total the table was computed with is not
+    stated.
+  citation: {page: 3, printed_page: "1479", quote: "where R,, is the total resistance of the arterial system", where: "text"}
+- id: q_R_total
+  kind: choice
+  about: [terminal_compliance]
+  text: >
+    R_total is described as "the total resistance of the arterial system". The model takes it as the parallel
+    combination of the terminal resistances, so the C_Ti sum to C_vol,res as the text says they should.
+- id: q_LD
+  kind: unexplained_difference
+  about: [cmp_LD_abdominal, cmp_LD_femoral, xi_mid]
+  text: >
+    The printed length-to-diameter ratios 1.6 (abdominal, Ls = 1.5 cm) and 4.8 (femoral, Ls = 2 cm) imply
+    diameters of 0.94 cm and 0.42 cm. Table 1 gives segment 39 a diameter of 1.16 to 1.10 cm and segment 46 a
+    diameter of 0.52 to 0.38 cm, so Ls/D at the midpoint is 1.33 and 4.45, and no single position in the
+    segments gives both printed ratios (the abdominal ratio would need a diameter below any in segment 39).
+    The paper does not say which diameter it uses. The femoral ratio counts as reproduced only because
+    "2 cm" is printed with one significant digit, and the rounding band of the inputs (3.3 to 5.6) covers 4.8.
+  citation: {page: 5, printed_page: "1481", quote: "1.5 cm, giving a length to diameter ratio of 1.6", where: "text"}
+- id: q_inflow
+  kind: unstated_input
+  about: [T_added, Ts_added, Qmax_added, arterial_tree_1d]
+  text: >
+    The proximal boundary condition (the aortic flow pulse) is only plotted (Fig. 2b), with a small backflow
+    after ejection. The record uses a half-sine pulse with period, duration and peak read by eye from that
+    figure and no backflow. The mean pressures, and to a smaller degree the systolic ratios, depend on it.
+  citation: {page: 6, printed_page: "1482", quote: "Proximal Boundary Condition", where: "Fig. 2(b)"}
+- id: q_numerics
+  kind: choice
+  about: [arterial_tree_1d, run_tree_control, ref_tree_dt, ref_tree_dx]
+  text: >
+    The paper's scheme ("simple explicit", first order, upwind convective term) is detailed only in the
+    Stergiopulos (1990) thesis; dx and dt are not printed (only dt_max of the order of 0.001 s). The record's
+    scheme is a staggered forward-backward Euler scheme with flows on cell faces, friction and stenosis losses
+    semi-implicit, convective term upwinded inside segments and dropped on faces at bifurcations, dx = 1 cm and
+    dt = 5e-5 s (1e-4 s diverged when dx was refined to 0.25 cm), three heart cycles from a uniform pressure equal to mean inflow times total terminal resistance
+    (the paper runs two or three cycles from arbitrary values).
+- id: q_shear
+  kind: unstated_input
+  about: [cu_added, cv_added]
+  text: >
+    The shear stress coefficients c_u and c_v are functions of the frequency parameter (p. 2) whose values are
+    not given; the record takes the quasi-steady Poiseuille values. The paper says the predicted waveforms were
+    fairly insensitive to the shear stress model.
+  citation: {page: 5, printed_page: "1481", quote: "flow conditions, the predicted waveforms were fairly", where: "text"}
+- id: q_sys_ratio_knee_ankle
+  kind: unexplained_difference
+  about: [cmp_sys_ratio_knee, cmp_sys_ratio_ankle, cmp_sys_ratio_thigh]
+  text: >
+    In the record's tree (Eq. 9 wall law, half-sine inflow, added rho, mu, c_u, c_v), the normal systolic
+    pressure over the brachial systolic pressure is 1.20 at the upper thigh, inside the printed range of 1.1
+    to 1.2. At the knee and the ankle it is 1.31 and 1.30, above that range. The distal ratios depend on the
+    unstated inflow waveform, wave speeds, viscosity and the choice of sites, and on the wall law the paper's
+    code really used (q_eq4_not_runnable). The paper's model cannot be run as printed, so this difference
+    cannot be traced to any one of them.
+- id: q_blood
+  kind: unstated_input
+  about: [rho_blood, mu_blood]
+  text: Blood density and viscosity enter Eqs. 2-8 but are not printed.
+- id: q_sites
+  kind: choice
+  about: [run_tree_control, cmp_sys_ratio_thigh, cmp_sys_ratio_knee, cmp_sys_ratio_ankle]
+  text: >
+    The paper reports systolic pressures at "upper thigh, knee and ankle" and the brachial artery without
+    saying which segment positions these are. The record takes the proximal and distal ends of the L. femoral
+    (46), the distal end of the L. posterior tibial (48), and the middle of the R. subclavian B (7, which
+    contains the brachial artery).
+  citation: {page: 9, printed_page: "1485", quote: "the results are reported at three locations: upper thigh", where: "text"}
+- id: q_stenosis_coefficients
+  kind: unstated_input
+  about: [Kt_added, Ku_added, kva_added, kvb_added, xi_mid]
+  text: >
+    The coefficients Kv, Kt and Ku of the stenosis equation (Eq. 8) are not printed, nor where in segment 39
+    or 46 the stenosis sits. The record uses the values of the Young group (Kt = 1.52, Ku = 1.2,
+    Kv = 32 (0.83 Ls + 1.64 Ds)/D0 (A0/As)^2) and the segment midpoint.
+- id: q_autoregulation
+  kind: choice
+  about: [run_tree_abdominal94_autoreg, cmp_rt_reduction_94]
+  text: >
+    "Distal vasodilation ... to maintain normal flow" is read as one common scaling of the total terminal
+    resistances of all beds downstream of the stenosed segment (the terminal compliances unchanged), adjusted
+    until the mean flow through the stenosed segment equals its normal value. The paper does not say whether
+    R1/RT or CT change with vasodilation.
+  citation: {page: 6, printed_page: "1482", quote: "of approximately 80% in the total terminal resistance", where: "text"}
+- id: q_R1_ratio
+  kind: reading
+  about: [R1_ratio_printed]
+  text: R1/RT is printed as "approximately 0.2"; the model uses 0.2 for every terminal.
+- id: q_topology
+  kind: choice
+  about: [arterial_tree_1d]
+  text: >
+    The connections between the 55 segments are given only by the drawing of Fig. 1. The record's tree
+    (which segment feeds which) follows the drawing and the segment names; its 28 terminal segments are
+    exactly the 28 segments of Table 2.
+  citation: {page: 3, printed_page: "1479", quote: "Fig. 1. Model of the human arterial system", where: "Fig. 1"}
+- id: q_figures
+  kind: reading
+  about: [arterial_tree_1d]
+  text: >
+    The paper's results are mostly plotted (Figs. 2-6 and 8-11). The figure-rendering commands were not
+    available in this job, so no figure was digitised; the plotted curves are not compared. See figures.md.
+- id: q_fig6_side
+  kind: possible_error
+  about: [arterial_tree_1d, PI_ratio_ankle_control]
+  text: >
+    The text says the stenosis is in the left femoral artery and PI is read at the distal end of the left
+    posterior tibial artery, but the legend of Fig. 6 reads "Distal End of R. Posterior Tibial Artery
+    (Ankle)". A right-side site would be unaffected by a left femoral stenosis, so the legend is probably a
+    misprint for "L.", but the paper does not say.
+  citation: {page: 8, printed_page: "1484", quote: "Effect of femoral stenosis severity on pulsatility index", where: "Fig. 6"}
+- id: q_fig2a_femoral_peak
+  kind: reading
+  about: [fig2a_femoral_peak_values, q_eq4_not_runnable, p_star_eq4]
+  text: >
+    The calibrated reading of Fig. 2(a) (fig2a_femoral_peaks) puts the femoral peak of the control case at
+    27.5 kPa (interval 27.4-27.6) in the first cycle and 24.9 kPa in the second, i.e. about 206 and 187 mmHg.
+    The first is above 2 p0 = 194 mmHg (25.9 kPa), where the compliance of Eq. 4 as printed vanishes. This
+    settles the "by eye" statement of q_eq4_not_runnable: the paper's own plotted pressure passes the limit of
+    its printed wall law.
+  citation: {page: 6, printed_page: "1482", quote: "Predicted waveforms for the control case", where: "Fig. 2(a)"}
+- id: q_fig2b_inflow
+  kind: reading
+  about: [fig2b_inflow_curve, fig2b_inflow_peak_values, T_added, Ts_added, Qmax_added, q_inflow]
+  text: >
+    The calibrated reading of the proximal boundary condition in Fig. 2(b) gives peaks of 504 and 503 ml/s at
+    0.331 and 1.333 s, so the period is 1.00 s, and the rise starts near 0.21 s (34 ml/s at 1.22 s, 180 ml/s at
+    1.24 s). The added inputs Qmax = 500 ml/s and T = 1.0 s agree with this. The plotted pulse is not a half
+    sine: it rises in about 0.12 s and falls more slowly. It then swings to about -80 ml/s near 0.53 s (that
+    backflow was not read, because the other lines cross it there). Its shape stays an unstated input
+    (q_inflow); the readings are recorded for a later model of the inflow.
+  citation: {page: 6, printed_page: "1482", quote: "Proximal Boundary Condition", where: "Fig. 2(b)"}
+- id: q_fig6_side_figure
+  kind: reading
+  about: [fig6_ankle_curve, q_fig6_side, cmp_fig6_ankle]
+  text: >
+    Fig. 6 itself bears on q_fig6_side. The dashed "R. Posterior Tibial" line falls with the femoral stenosis
+    together with the "Distal to Stenosis" line (PI/PIn about 0.48 at 90 %, fig6_ankle). A site in the leg
+    without the stenosis would not fall like that. The plotted line is therefore the stenosed (left) side, as
+    the text says, and "R." in the legend is a misprint. The record compares it with the model's left
+    posterior tibial.
+  citation: {page: 8, printed_page: "1484", quote: "Effect of femoral stenosis severity on pulsatility index", where: "Fig. 6"}
+- id: q_fig8_band
+  kind: reading
+  about: [fig8_band_curve, cmp_fig8_band_thigh, cmp_fig8_band_knee, cmp_fig8_band_ankle]
+  text: >
+    In Fig. 8 the three lines (thigh, knee, ankle) meet near 58 % and cross each other down to 95 %. Their dash
+    patterns cannot be told apart reliably there, so beyond 60 % they are read together as one band, whose
+    interval holds all three lines. The comparisons beyond 60 % therefore check only that each computed ratio
+    falls inside that band. The text's statement that the effect "is essentially uniform" at the three sites is
+    what the band shows.
+  citation: {page: 9, printed_page: "1485", quote: "Effect of abdominal stenosis severity on systolic", where: "Fig. 8"}
+- id: q_fig8_legend
+  kind: reading
+  about: [fig8_thigh_curve, fig8_knee_curve, fig8_ankle_curve]
+  text: >
+    The legend of Fig. 8 is faint. The lines are assigned as Upper Thigh = solid (lowest flat line, 1.10-1.11),
+    Knee = short dashes (top, 1.14-1.16) and Ankle = long dash with dots (middle, 1.11-1.13). In Fig. 9 the same
+    order holds (thigh solid and lowest, knee dashed and top, ankle dash-dot in the middle), and its legend is
+    clear.
+  citation: {page: 9, printed_page: "1485", quote: "Effect of abdominal stenosis severity on systolic", where: "Fig. 8"}
+- id: q_fig4_calibration
+  kind: reading
+  about: [fig4_s90_curve, fig4_s85_curve]
+  text: >
+    Fig. 4 has no y tick marks that can be found, so its y axis is calibrated on the centres of the labels
+    25-0. In the other figures of the paper a label centre lies 0-20 px (900 dpi) from its tick, so these
+    readings carry an extra +-15 px (about +-0.27 kPa). Only the 85 % and 90 % lines are read. The normal, 60 %
+    and 75 % lines overlap and cross, and no model output in the record is a posterior tibial pressure waveform,
+    so the two readings are recorded without a comparison.
+  citation: {page: 7, printed_page: "1483", quote: "Effect of severity of femoral stenosis on left posterior", where: "Fig. 4"}
+- id: q_figure_sweeps
+  kind: numerics
+  about: [run_fig3_constant, run_fig3_reduced, run_fig8_flat, run_fig8_band, run_fig6_fig9, arterial_tree_1d]
+  text: >
+    Each figure line is read at many stenosis levels and recorded whole as data (fig*_curve). The comparisons
+    use one level per line, read by the same code (fig*_pt): 90 % for the solid line of Fig. 3, 20 % for its
+    dashed line, 30 % (flat lines) and 80 % (band) for Fig. 8, and 80 % for Figs. 6 and 9. The reason is
+    cost. One autoregulated point takes 5-10 simulations of about 4 s each. Every build repeats each run for
+    18 alternatives of the added inputs and 16 rounding ends of the printed inputs, so a whole-curve sweep
+    would take several hours to build. The whole-curve data stay recorded for a cheaper model or a later
+    build. Fig. 3's dotted line (resting flow with vasodilation) is not compared: the record's autoregulation
+    holds Q/Qn at 1 by construction.
+- id: q_fig3_elevated_flow
+  kind: unexplained_difference
+  about: [cmp_fig3_reduced, arterial_tree_1d_dilated, fig3_reduced_pt, q_inflow]
+  text: >
+    With every terminal resistance distal to the abdominal stenosis at 20 % of its value, the record's tree
+    gives Q/Qn = 2.46 through segment 39 at 20 % stenosis. Fig. 3 plots 3.91 (and 3.94 near 0 %). The record
+    prescribes the aortic inflow, so the cardiac output is fixed and dilating the leg beds only draws flow
+    away from the other beds. Nearly four times the normal flow through the abdominal aorta needs the total
+    inflow to rise. Either the paper drove this case with a prescribed pressure rather than the flow pulse of
+    Fig. 2(b), or "distal" covers more beds than those fed through segment 39. The paper says neither.
+  citation: {page: 5, printed_page: "1481", quote: "supplied by the stenosed artery, at 20% of the original", where: "text (Fig. 3)"}
+- id: q_fig_stenosis_ratios
+  kind: unexplained_difference
+  about: [cmp_fig8_thigh, cmp_fig8_knee, cmp_fig8_ankle, cmp_fig8_band_thigh, cmp_fig6_distal, cmp_fig6_ankle,
+          cmp_fig9_thigh, cmp_fig9_knee, cmp_fig9_ankle, q_sys_ratio_knee_ankle]
+  text: >
+    At 30 % abdominal stenosis the record's tree gives systolic ratios of 1.19, 1.29 and 1.29 (thigh, knee,
+    ankle) where Fig. 8 shows 1.11, 1.15 and 1.12. This is the same offset as the control case
+    (q_sys_ratio_knee_ankle). At 80 % it gives 0.79, 0.80 and 0.78, below the band of Fig. 8 (0.85-0.90).
+    With an 80 % femoral stenosis it gives PI/PIn of 0.46 just distal and 0.44 at the ankle, where Fig. 6
+    shows 0.69 and 0.70. Its knee and ankle ratios of 0.77 and 0.76 compare with 0.89 and 0.86 in Fig. 9, and
+    its upper thigh with 1.36 against 1.14. The record's model drops faster with stenosis than the paper's.
+    Candidates are the unstated stenosis coefficients and position (q_stenosis_coefficients), the record's
+    autoregulation (q_autoregulation), the inflow and the wall law. The figures do not tell which.
+- id: q_fronek_not_compared
+  kind: reading
+  about: [sys_ratio_thigh_fronek_aortoiliac, sys_ratio_thigh_fronek_femoropopliteal, sys_ratio_thigh_fronek_normal]
+  text: >
+    The first reading left out the Fronek et al. (1973) systolic indices as data no model predicts. The model's
+    normal case does predict the normal-subject indices at the same three sites, so the audit added them with
+    validation comparisons. The paper's own claim is only that the model agrees with them "in qualitative"
+    terms and that the normal model ratio is 1.1 to 1.2, below the measured 1.34 and 1.26 at thigh and knee.
+    The aortoiliac and femoropopliteal group means have no stenosis severity, so they are recorded but not
+    compared.
+  citation: {page: 9, printed_page: "1485", quote: "The experimental data show more variation than the computer model", where: "text"}
+- id: q_no_validation_vs_olufsen2004
+  kind: choice
+  about: [arterial_tree_1d, terminal_impedance_eq7]
+  text: >
+    (Cross-validation with olufsen2004, which cites this paper as ref. 27.) No model of this record is
+    validated against a measurement of olufsen2004: that paper is analytical and measures nothing (its data
+    are blood properties, Bessel zeros, derived time-scales and its own model curves). It cites this paper
+    only among one-dimensional network models with windkessel outflow conditions. Its own models give no
+    pulsatility index or systolic pressure ratio, so none of them predicts the Gosling et al. or Fronek et al.
+    measurements recorded here (see olufsen2004 q_no_validation_vs_stergiopulos1992).
+- id: q_no_validation_vs_stergiopulos1999
+  kind: choice
+  about: [arterial_tree_1d, terminal_impedance_eq7, compliance_sum]
+  text: >
+    (Cross-validation with stergiopulos1999, which cites this paper as ref. 17.) No model of this record is
+    validated against a measurement of stergiopulos1999, and no model of that record against the Gosling et al.
+    or Fronek et al. measurements here. stergiopulos1999 uses this paper's tree only to generate model aortic
+    pressure and flow (its Table 3, model values, not measurements). Its measurements are R_p, Z_c, C and the
+    aortic input impedance and waves of seven dogs and two human beats of Murgo et al.; arterial_tree_1d is a
+    generic adult tree with its own inflow (Fig. 2(b)) and outputs no input impedance, Z_c or C, and
+    terminal_impedance_eq7 is the impedance of one terminal bed (terminal_impedance_modulus), not the aortic input
+    impedance of a whole animal, so mapping the two would join quantities that share only a dimension. The
+    stergiopulos1999 windkessels give only aortic impedance or pressure, never the peripheral pulsatility
+    indices or systolic pressure ratios recorded here.
+  citation: {page: 2, printed_page: '1478', quote: The impedance model used is the modified windkessel model, where: Eq. 7}
+- id: q_no_validation_vs_westerhof1969
+  kind: choice
+  about: [arterial_tree_1d, arterial_tree_1d_dilated, compliance_sum, terminal_impedance_eq7, PI0_knee_gosling, sys_ratio_thigh_fronek_normal]
+  text: >
+    (Cross-validation with westerhof1969, cited here as ref-westerhof1969.) No validation is entered in either
+    direction. This paper takes westerhof1969's segment volume compliances as inputs (p. 3, cited.yaml) and
+    names it only as a similar model without coronary circulation (p. 11); it never says its model explains
+    or is compared with westerhof1969's measurements. Those measurements are the decay times of the analog
+    (0.8, 0.4, 1.66, about 0.5 s), the stiff-system rises of input impedance level and wave velocity ("about
+    50 per cent", no verdict in any case) and the apparent wave velocities of Luchsinger et al. and Gabe et al.
+    in man (Fig. 7). None of this record's models outputs a decay time, an impedance level or an apparent
+    (phase-delay) wave velocity: arterial_tree_1d gives systolic pressure ratios, PI ratios, flow ratios,
+    aortic pressures and dt_max, and its dt_max (dx/c) is a numerical bound, not the measured apparent
+    velocity. Mapping any of them would join quantities that share only a dimension (the time-shaped ports of
+    arterial_tree_1d and westerhof1969/rc_decay are a resistance and a compliance, but the tree has no decay-time
+    output). The decay times are moreover measured on westerhof1969's analog, with its own resistances, not
+    on this tree. In the other direction, westerhof1969's runnable models (char_impedance, phase_velocity,
+    total_compliance, rc_decay, ...) give no pulsatility index or systolic pressure ratio, and its network
+    (arterial_tree_analog) is not runnable, so none predicts the Gosling et al. or Fronek et al. measurements
+    recorded here.
+  citation: {page: 11, printed_page: '1487', quote: "other similar models (i.e. Westerhof et al., 1969)", where: text}
+
+- id: q_no_validation_vs_boileau2015
+  kind: choice
+  about: [arterial_tree_1d, PI_aorta_gosling, sys_ratio_thigh_fronek_normal]
+  text: >
+    (Cross-validation with boileau2015, which cites this paper as ref. 7 in a list of key 1D studies.)
+    No model of this record is validated against a measurement of boileau2015, and no model of that record
+    against the Gosling et al. or Fronek et al. measurements here. boileau2015's measurements are the in
+    vitro pressure and flow waveforms of the 37-artery silicone network of Matthys et al. (its Figs. 6-9);
+    arterial_tree_1d is hard-wired to the 55-segment human tree of Table 1 with its own inflow (Fig. 2(b))
+    and blood, and gives scalar ratios and ascending-aortic pressures, not waveforms at the silicone
+    network's sites. The geometry, fluid and inflow of that network are printed in neither record, so the
+    model cannot be run on the measurement's conditions. boileau2015's runnable models (windkessel mean
+    pressure, wave speeds, areas, impedances, wavelengths, Eq. 15 peak decay) give no pulsatility index or
+    systolic pressure ratio, and windkessel_mean_pressure shares only a dimensional shape with
+    arterial_tree_1d.
+  citation: {page: 2, printed_page: '1478', quote: Governing equations. The mathematical model is, where: Eqs. 1-9}
+- id: q_no_validation_vs_reymond2009
+  kind: choice
+  about: [arterial_tree_1d, sys_ratio_thigh_fronek_normal, PI_aorta_gosling]
+  text: >
+    (Cross-validation with reymond2009, which cites this paper as ref. 64 and builds on its tree; cross-validation
+    job 2026-11-04.) No model of this record is validated against a measurement of reymond2009, and no model of
+    that record against the Fronek et al. or Gosling et al. measurements here. arterial_tree_1d gives
+    leg/brachial systolic ratios, PI ratios, a mean-flow ratio and ascending-aortic systolic, diastolic and mean
+    pressure. reymond2009 measures flows at the aorta, iliac, femoral and cerebral sites (Table 4, Figs. 4-5) and
+    pressures at the radial, common carotid and superficial temporal arteries (Table 5, Figs. 4F, 5B, 5F). None of
+    these is an output of the model. Adding such outputs would change the model, which this job may not do. The arterial_tree_1d of
+    reymond2009 has the same dimensional shape but is not runnable, and its other models give no PI or systolic
+    ratio.
+  citation: {page: 2, printed_page: '1478', quote: Governing equations. The mathematical model is, where: Eqs. 1-9}
+- id: q_no_validation_vs_formaggia2003
+  kind: choice
+  about: [arterial_tree_1d, PI_aorta_gosling, sys_ratio_thigh_fronek_normal]
+  text: >
+    (Cross-validation with formaggia2003; cross-validation job 2026-11-04.) Neither paper cites the other.
+    No model of this record is validated against a measurement of formaggia2003: that paper is a methods paper
+    and measures nothing (its plotted values are all model output, recorded as predicted). No model of
+    formaggia2003 is validated against the Gosling et al. or Fronek et al. measurements here: its models give
+    a momentum-correction coefficient, A and the characteristic variables at the midpoints of idealized
+    bifurcated channels, and pressure from area by an algebraic wall law, but no pulsatility index or
+    leg/brachial systolic ratio. That its tube_law_eq9 and arterial_tree_1d both give a pressure is a
+    relation between models, not a validation against data.
+  citation: {page: 9, printed_page: '1485', quote: 'for the normal subjects 1.34, 1.26, and 1.08, respective'}
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [arterial_tree_1d, arterial_tree_1d_dilated, PI_aorta_gosling, sys_ratio_thigh_fronek_normal]
+  text: >
+    (Cross-validation with olufsen2000, which cites this paper as its ref. 28; cross-validation job 2026-11-04.)
+    No model of this record is validated against a measurement of olufsen2000. That paper measures MR flow
+    in time at the ascending aorta and nine other sites (its Figs. 3, 7), a cuff pressure of 120/80 mmHg, a heart
+    rate of 51/min and an ascending-aortic radius. arterial_tree_1d gives none of these as an output: it gives
+    ascending-aortic systolic, diastolic and mean pressure (not the brachial cuff pressure), leg/brachial
+    systolic and PI ratios and a mean-flow ratio, and no flow waveform at a named site. Its geometry, terminal
+    impedances and inflow are a generic adult's, not olufsen2000's subject, so it could not be run on that
+    measurement's conditions in any case. Adding such outputs would change the model, which this job may not
+    do. olufsen2000/network_1d, which has the same dimensional shape, is not runnable, so it cannot be run on
+    the Gosling et al. or Fronek et al. measurements here, and olufsen2000's runnable models give no PI or
+    systolic ratio. olufsen2000 cites this paper for geometry, viscous stress, compliance, pressure
+    continuity at bifurcations and the windkessel, not as data
+    either model explains.
+  citation: {page: 9, printed_page: '1485', quote: 'for the normal subjects 1.34, 1.26, and 1.08, respective'}
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [arterial_tree_1d, arterial_tree_1d_dilated, terminal_impedance_eq7, PI_aorta_gosling, sys_ratio_thigh_fronek_normal, Cv_1]
+  text: >
+    (Cross-validation with olufsen1999, which cites this paper as its ref. 46; cross-validation job 2026-11-04.)
+    No model of this record is validated against a measurement of olufsen1999, and no olufsen1999 model
+    against the Gosling et al. or Fronek et al. measurements here. olufsen1999 measures (from refs. 20, 26/27,
+    41) an inflow curve (Fig. 4, a model input there), a cardiac output, the ascending-aortic input-impedance
+    modulus and phase in man (Fig. 9) and aortic, subclavian and radial pressure waveforms (Fig. 12, read only
+    on stretches of the waveforms). arterial_tree_1d gives no impedance spectrum and no pressure waveform, only
+    ascending-aortic systolic, diastolic and mean pressure and leg/brachial ratios, and its geometry,
+    terminals and inflow are not those subjects'. terminal_impedance_eq7 is the impedance of one terminal
+    windkessel, not the root impedance of the ascending aorta. olufsen1999's runnable models give Eh/r0, root
+    input impedance, tree counts, a boundary-layer thickness and a cardiac-output reduction, but no pulsatility
+    index or systolic ratio, and its 1D model is not runnable. olufsen1999 uses this paper's Table 1 volume
+    compliances (origin reported here, not measured) to estimate Eh/r0; that is the use of an input, not a
+    validation.
+  citation: {page: 9, printed_page: '1485', quote: 'for the normal subjects 1.34, 1.26, and 1.08, respective'}
+- id: q_no_validation_vs_alastruey2011
+  kind: choice
+  about: [arterial_tree_1d, arterial_tree_1d_dilated, arterial_tree_eq4, sys_ratio_thigh_fronek_normal, PI_aorta_gosling]
+  text: >
+    (Cross-validation with alastruey2011, which cites this paper; cross-validation job 2026-11-04.) No model
+    of this record is validated against a measurement of alastruey2011. Its measurements were made on a 1:1
+    silicone replica of 37 conduit arteries: the silicone's Young's modulus and wall viscosity, the
+    load-extension records (Fig. 2), the wave speeds of Table 2, the pressure and flow waveforms at four
+    sites (Fig. 3) and the area-pressure loop (Fig. 5). arterial_tree_1d (and _dilated, and the
+    not-runnable _eq4) is wired to this paper's 55-segment human tree, with Table 1 volume compliances, the
+    logarithmic wall law of Eq. 9 and WK3 terminals. It cannot take the silicone network's 37-segment
+    branching or its purely resistive terminals, and it outputs no waveforms, only ascending-aortic pressures
+    and leg/brachial and PI ratios, none of which alastruey2011 measures. The arithmetic models (compliance
+    sums, terminal compliances, L/D, PI ratios) give quantities that alastruey2011 does not measure. Nor do
+    alastruey2011's models predict this record's in vivo Gosling or Fronek indices; see
+    alastruey2011/q_no_validation_vs_stergiopulos1992.
+  citation: {page: 9, printed_page: '1485', quote: 'for the normal subjects 1.34, 1.26, and 1.08, respective'}

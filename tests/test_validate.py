@@ -51,6 +51,22 @@ def test_duplicate_ids(work):
     assert any("duplicate id" in e for e in errors_of(work))
 
 
+def test_built_from_may_not_form_a_cycle(work):
+    """A model built from itself, or from a model built from it, makes the record unsound."""
+    edit(work / "models" / "drift" / "model.yaml", lambda m: m.update(built_from=["drift"]))
+    edit(work / "models" / "decay" / "model.yaml", lambda m: m.update(built_from=["euler"]))
+    edit(work / "models" / "euler" / "model.yaml", lambda m: m.update(built_from=["decay"]))
+    errs = validate(load_record(work), run=False).errors
+    assert any("cycle" in e and "drift" in e for e in errs), errs
+    assert any("cycle" in e and "decay" in e and "euler" in e for e in errs), errs
+
+
+def test_an_authored_datum_cannot_claim_a_computed_origin(work):
+    """A datum in data.yaml may not have an origin only a run gives (assessed): results are produced, never asserted."""
+    edit(work / "data.yaml", lambda d: d[0].update(origin="assessed"))
+    assert any("origin" in e and "assessed" in e for e in errors_of(work))
+
+
 def test_unreadable_printed_value(work):
     """A printed value that cannot be read makes the record unsound."""
     edit(work / "data.yaml", lambda d: d[0].update(printed="several"))

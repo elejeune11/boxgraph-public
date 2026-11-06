@@ -1,0 +1,45 @@
+# The 1-D model of this paper is stated (p. 9, Discussion) to improve the 1-D model of ref. 64 = stergiopulos1992,
+# with its main tree "based on the model of Stergiopulos et al." (Fig. 2A, p. 5; geometry p. 4) and its peripheral
+# resistances "based on data by Stergiopulos et al." (p. 5). The steps are given in words only, and this paper's
+# model is not runnable, so the relation stands on the paper's words (unverifiable by the test).
+# Only b's inputs that a also has are mapped: rho (g/cm^3 -> kg/m^3, factor 1000) and heart rate from the
+# cardiac period (HR [1/min] = 60/T [s]). b's heart-model inputs (Emax, Emin, V0, t_max, kappa, P_end_dia, R_ven)
+# and P_csf are new in this paper: a has no counterpart for them.
+- id: rel_tree_1d_improves_s92
+  kind: derived_from
+  a: stergiopulos1992/arterial_tree_1d
+  b: reymond2009/arterial_tree_1d
+  mapping: {rho: "1000*rho", HR: "60/T"}
+  steps:
+    - "the prescribed aortic inflow of ref. 64 is replaced by a varying-elastance heart model with internal resistance (Eqs. 17-20)"
+    - "a simple coronary model is included (Eq. 21, Fig. 2B)"
+    - "the cerebral circulation is extended to include all major vessels around the circle of Willis (Fig. 2D)"
+    - "viscoelasticity is added onto the nonlinear elastic wall properties (Eqs. 7-10)"
+    - "convective acceleration and wall friction are described by the Witzig-Womersley theory instead of a quasi-steady profile (Eqs. 11-12)"
+  provenance: stated
+  citation: {page: 9, printed_page: "H216", quote: "the 1-D model of Stergiopulos et al. that we developed earlier", where: Discussion}
+  assumptions:
+    - "the paper lists the improvements in words (p. 9): a heart model, a simple coronary model, the extended cerebral circulation, viscoelasticity, and Witzig-Womersley convective acceleration and friction; the steps above are those words, tied to the equations of this paper"
+    - "this paper's wall law (Eqs. 3-6, Cpe(P) from PWV, Eq. 22) also differs from ref. 64's logarithmic law A = A0(1 + K ln(p/p0)) (Eq. 9 of ref. 64), and its R1/RT comes from minimal reflection (Eq. 14) where ref. 64 fixed 0.2 (p. 3); the paper does not list these as improvements"
+    - "rho of both papers is blood density; heart rate is identified with 60/T for ref. 64's cardiac period T; the quantities are not merged"
+# The arterial tree of this paper is stated (p. 4, Geometry) to descend from the Noordergraaf tree "later adapted by
+# Westerhof et al. (71)" = westerhof1969, through Stergiopulos et al. (64). The lineage is in words only and both
+# tree models are not runnable, so the relation stands on the paper's words (unverifiable by the test).
+# a's only input is the total peripheral resistance; b has no input that measures it (its terminal resistances are
+# per WK3 terminal and are not ports), so no input of b can be written in a's symbols: the mapping is empty.
+- id: rel_tree_1d_from_westerhof_analog
+  kind: derived_from
+  a: westerhof1969/arterial_tree_analog
+  b: reymond2009/arterial_tree_1d
+  mapping: {}
+  steps:
+    - "the dimensions of the Noordergraaf tree as adapted by Westerhof et al. (ref. 71) were adapted again by Stergiopulos et al. (ref. 64; Fig. 2A, p. 5)"
+    - "the main afferent and efferent vessels around the circle of Willis are added (Fig. 2D, p. 4)"
+    - "the reflection sites are optimized: the abnormally high reflection coefficients at the aortic bifurcations of the original Noordergraaf-Westerhof tree are removed (pp. 3 and 13)"
+    - "the electrical analog segments (R', L', C' per length, Fig. 1 of ref. 71) are replaced by the nonlinear viscoelastic 1-D equations (Eqs. 1-12), the peripheral resistances by WK3 terminals (Eq. 13), and a heart and coronary model are added (Eqs. 17-21)"
+  provenance: stated
+  citation: {page: 4, printed_page: "H211", quote: "Noordergraaf tree (40), which was later adapted by Westerhof et al.", where: "Geometry"}
+  assumptions:
+    - "the paper states only that the geometry descends from the Westerhof et al. tree, through Stergiopulos et al. (64); steps 2-4 are the differences the paper names, not a derivation it prints"
+    - "p. 3: 'Earlier wave reflection analysis on the original Noordergraaf/Westerhof tree (71), subsequently modified by Stergiopulos et al. (64) has shown that significant nonphysiological reflections arise in the aorta'; p. 13: the reflection sites were optimized to remove them"
+    - "the lumped-segment equations of ref. 71 (char_impedance Z0 = sqrt(L'/C'), phase_velocity c = 1/sqrt(L'C') with L' = rho/(pi r^2)) give Z0 = rho c / A, the form this paper uses for ZC in Eq. 14 (r1_minimal_reflection); the paper does not attribute that form to ref. 71, and the two models have different outputs (Z0 against R1/RT), so no separate relation is entered"

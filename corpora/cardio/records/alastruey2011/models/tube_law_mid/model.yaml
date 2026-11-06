@@ -1,0 +1,17 @@
+id: tube_law_mid
+name: area against pressure at a segment's midpoint from the elastic tube law (Eq. 5 with Gamma = 0), beta from Table 2's c0
+role: model
+stated: {page: 2, printed_page: "2251", quote: "Expressing Z as a function of A", where: Eq. 5}
+equation: "P = Pext + (beta/A0)(sqrt(A) - sqrt(A0)) (Eq. 5, elastic: Gamma = 0), so A = (sqrt(A0) + (P - Pext) A0/beta)^2; beta = 2 rho c0^2 sqrt(A0) (the c0 of Eq. 5 at A = A0, as network_1d takes it, q_beta_source); r0 and c0 linear from inlet to outlet, read at the midpoint"
+inputs:
+  P: {quantity: midpoint_pressure, unit: Pa}
+  r0in: {quantity: initial_lumen_radius, unit: m}
+  r0out: {quantity: initial_lumen_radius, unit: m}
+  c0in: {quantity: initial_wave_speed, unit: m/s}
+  c0out: {quantity: initial_wave_speed, unit: m/s}
+  rho: {quantity: fluid_density, unit: kg/m^3}
+  Pext: {quantity: external_pressure, unit: Pa}
+outputs:
+  A: {quantity: lumen_area, unit: m^2}
+settings:
+  xi: 0.5   # position along the segment, as a fraction of its length: the midpoint

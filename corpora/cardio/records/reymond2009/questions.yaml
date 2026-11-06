@@ -1,0 +1,345 @@
+- id: q_1d_not_runnable
+  kind: unstated_input
+  about: [arterial_tree_1d, qsys_model_asc_aorta, qmean_model_asc_aorta, qsys_model_thor_aorta, qmean_model_thor_aorta, qsys_model_abd_aorta, qmean_model_abd_aorta, qsys_model_iliac, qmean_model_iliac, qsys_model_femoral, qmean_model_femoral, qsys_model_cca, qmean_model_cca, qsys_model_ica, qmean_model_ica, qsys_model_va, qmean_model_va, qsys_model_mca, qmean_model_mca, psys_model_radial, pdia_model_radial, psys_model_cca, pdia_model_cca, psys_model_temporal, pdia_model_temporal, t6_p_thor_visco, t6_q_thor_visco, t6_p_iliac_visco, t6_q_iliac_visco, t6_p_mca_visco, t6_q_mca_visco]
+  text: >
+    The full 1-D tree model that produces Tables 4-6 cannot be rerun from the paper: the tree's connectivity is only
+    drawn (Fig. 2), the isovolumic elastance curve E*N is derived from Senzaki et al.'s curve and an unprinted averaged
+    aortic flow, the coronary constants epsilon, alpha, beta, delta of Eq. 21 are not given, volume compliances were
+    "finally adjusted" to an unprinted literature total, daughter-branch areas were "slightly" adjusted to keep
+    |Gamma| < 0.1, and no time step or grid is given. Its printed results (Tables 4-6) are therefore only checked for
+    internal consistency (pulse pressures, the p. 8 discrepancy statistics, the Table 6 percentages).
+  citation: {page: 5, quote: "Volume compliances were finally adjusted so that the total systemic", where: "p. 5"}
+- id: q_mean_diameter
+  kind: choice
+  about: [distensibility_eq22_eq6, viscoelastic_eq9]
+  text: >
+    Eqs. 6, 9 and 22 use the "mean arterial lumen diameter" of a segment; the paper does not say how it is formed
+    from Table 2's proximal and distal diameters. The arithmetic mean of the two is used. With it, 52 of the 73 Table 2
+    distensibilities agree with Eqs. 22 + 6 to the printed digit; the rest agree only within the rounding band of the
+    printed inputs, which is wide because b2 is printed as "0.3".
+- id: q_eq22_units
+  kind: unstated_input
+  about: [a2, b2, distensibility_eq22_eq6, r1_minimal_reflection]
+  text: >
+    Eq. 22 is printed with a2 = 13.3 and b2 = 0.3 and no units. The record reads PWV in m/s for d in mm; with this
+    reading Eqs. 22 and 6 reproduce Table 2's distensibilities, which supports it.
+  citation: {page: 5, quote: "obtained from the best fit are a2", where: "Eq. 22, p. 5"}
+- id: q_table2_units
+  kind: reading
+  about: [D_s1, CT_s8_22]
+  text: >
+    Table 2's column headers read "Distensibility, 10^-3 l/mmHg" and "Terminal Compliance (CT), 10-5 ml/mmHg". The first
+    is read as 10^-3 1/mmHg (a distensibility; "l" for "1"), recorded with the unit 1/meter_Hg (= 10^-3 1/mmHg); the
+    second as 10^-5 ml/mmHg, recorded with the unit ml/hectometer_Hg (= 10^-5 ml/mmHg). The printed digits are kept.
+  citation: {page: 6, quote: "Geometry, distensibility, viscoelastic properties, and peripheral resistances", where: "Table 2 header"}
+- id: q_D_pca2
+  kind: unexplained_difference
+  about: [D_s64_65, cmp_D_s64_65]
+  text: >
+    Post. cerebral 2 (64/65, 2.0 to 1.8 mm) is printed with distensibility 1.12 x 10^-3 /mmHg; Eqs. 22 and 6 give 1.06,
+    the same as Post. cerebral 1 (1.9 mm, printed 1.05). The comparison passes only within the wide rounding band of b2.
+    Every other segment of that size follows the fit to 0.01-0.02.
+- id: q_visc_aorta_floor
+  kind: unexplained_difference
+  about: [cmp_va_s1, cmp_va_s2, cmp_va_s3, cmp_va_s14, cmp_va_s18, cmp_va_s95, viscoelastic_eq9]
+  text: >
+    With the printed a3 = -0.0062 /mm and b3 = 0.16, Eq. 9 gives ã of -0.022 for the ascending aorta, 0.008 for arch A,
+    0.029 for arch B, 0.039 for thoracic aorta A, 0.042 for the brachiocephalic. All are printed as 0.05 in Table 2. The table
+    seems to apply an unstated lower bound of 0.05 to ã. Every other non-cerebral segment follows Eq. 9.
+- id: q_visc_cerebral_b3
+  kind: reading
+  about: [cmp_va_s100_102, cmp_va_s101_103, b3_cerebral]
+  text: >
+    The paper says b3 = 0.34 for "cerebral arteries". The record applies it to the intracranial segments (56-82 and
+    100-103). Table 2 follows it for 56-82 (ã 0.31-0.33) but not for Ant. choroidal (100/102, printed 0.15) or ICA distal
+    cnt. chor.-M1 (101/103, printed 0.13). Those two follow b3 = 0.16, while the neighbouring ICA distal PCo-ant. chor.
+    segment (66/67) is printed 0.31. Which segments the paper counts as cerebral is not stated.
+  citation: {page: 5, quote: "to match the carotid viscoelasticity value", where: "Viscoelastic properties, p. 5"}
+- id: q_r1_range
+  kind: unexplained_difference
+  about: [r1_fraction_range, r1_minimal_reflection, cmp_r1_s71_74, cmp_r1_s72_75, cmp_r1_s80_82, cmp_r1_s98, cmp_r1_s88_90, cmp_r1_s84_86]
+  text: >
+    The paper sets R1 = ZC = rho PWV/A at each terminal site and says R1/RT then lies in [0.05-0.4]. Taking PWV from Eq. 22
+    and A at the distal diameter of the terminal segment, with Table 2's RT, R1/RT stays in the range for most systemic
+    beds. It exceeds 0.4 for the anterior tibial (0.47) and most head and cerebral beds (0.43-0.71). It exceeds 1, which
+    would make R2 = RT - R1 negative, for MCA M2 (1.77), ophthalmic (3.27) and LAD (1.16). The paper says Eq. 22 underestimates
+    PWV in small arteries, which would raise these ratios further. So either the printed RT of these beds or the stated rule
+    and range do not hold for them.
+  citation: {page: 3, quote: "implies that the ratio R1-to-RT varies in", where: "p. 3"}
+- id: q_r1_diameter
+  kind: choice
+  about: [r1_minimal_reflection]
+  text: >
+    ZC is "the characteristic impedance of the last arterial segment"; where along the segment it is taken is not stated.
+    The distal diameter is used for both A and PWV. With the mean diameter for PWV, the ratios change by under 15%
+    (e.g. MCA M2 1.57 instead of 1.77, ophthalmic 2.90 instead of 3.27). The verdicts do not change.
+- id: q_ct_eq15
+  kind: unexplained_difference
+  about: [terminal_compliance_eq15, CT_s8_22, cmp_ct_s10, cmp_ct_s26, cmp_ct_s57_58, cmp_ct_s96]
+  text: >
+    Eq. 15 makes each terminal compliance proportional to the area compliance of its terminal vessel at the distal end.
+    Scaled from the right radial bed with Table 2's distensibility and distal diameter, it reproduces none of the other
+    Table 2 compliances (e.g. interosseous 172 vs printed 44.0; intercostals 13468 vs 2670.1; superior cerebellar 89 vs 3.6,
+    in 10^-5 ml/mmHg). Instead, for every systemic (non-head, non-coronary) bed in Table 2, RT x CT = 0.278-0.280 s. So CT
+    appears to have been set inversely proportional to RT with one time constant, not by Eq. 15. The head, cerebral and
+    coronary beds have other, smaller products (0.0008-0.023 s). The paper also says compliances were "finally
+    adjusted", which may explain part of this.
+  citation: {page: 3, quote: "is assumed to be proportional to the area compliance", where: "Eq. 15"}
+- id: q_ct_eq15_distensibility
+  kind: choice
+  about: [terminal_compliance_eq15]
+  text: >
+    Eq. 15 needs the area compliance at the distal end of the terminal vessel. The record uses the segment's
+    Table 2 distensibility times the distal lumen area. Using the local distensibility at the distal diameter (Eq. 22)
+    would change the ratios by a few percent, far less than the differences found (q_ct_eq15).
+- id: q_discrepancy_norm
+  kind: unstated_model
+  about: [w_norm_added, discrepancy_sysflow, discrepancy_meanflow, discrepancy_psys, discrepancy_pdia]
+  text: >
+    The discrepancies on p. 8 (22 ± 16% peak systolic flow, 12 ± 11% mean flow, 9 ± 6% systolic and 12 ± 5% diastolic
+    pressure) are reproduced from Tables 4-5 as the mean and sample SD of |model - in vivo| divided by the mean of model
+    and in vivo values (w = 0.5). Relative to in vivo (w = 0), the flow statistics come out as 19 ± 13% and 11 ± 9%.
+    Relative to the model (w = 1), they come out as 25 ± 21% and 13 ± 13%. The paper does not state the denominator.
+  citation: {page: 8, quote: "for peak systolic flow", where: "Results, p. 8"}
+- id: q_table6_iliac_flow
+  kind: possible_error
+  about: [t6_qpct_iliac_conv, t6_qpct_iliac_all, cmp_t6_q_iliac_conv, cmp_t6_q_iliac_all]
+  text: >
+    In Table 6, common iliac flow, the first two rows give 1.4 (15%) and 1.5 (16%), a reference of about 9.3 ml/s. The
+    last two give 4.4 (4.6%) and 4.8 (5.1%), a reference of about 95 ml/s, which no iliac flow approaches (Table 4 mean
+    7.8 ml/s). With one reference per column, the last two percentages would be about 47% and 51%. Either a decimal point
+    is misplaced or the absolute values belong to another column.
+  citation: {page: 12, quote: "1.3 (1.3%) 11.3 (12%) 6.3 (6.6%)", where: "Table 6"}
+- id: q_table6_mca_pressure
+  kind: possible_error
+  about: [t6_p_mca_visco, t6_ppct_mca_visco, t6_p_mca_wss, t6_ppct_mca_wss]
+  text: >
+    In Table 6, the middle cerebral artery pressure entries of the first two rows, 2.3 (2.4%) and 2.0 (2.1%), are the same as
+    the common iliac pressure entries of the same rows. The last two rows differ (2.1 vs 6.3; 3.7 vs 6.8). The repetition may
+    be a copying error; the record cannot tell.
+- id: q_table6_reference_row
+  kind: choice
+  about: [table6_relative_pressure, table6_relative_flow]
+  text: >
+    The Table 6 percentages are checked against the reference magnitude implied by the first row (viscoelasticity only)
+    of each column. With any other row as reference, the same two iliac flow entries stand out (q_table6_iliac_flow).
+- id: q_figures
+  kind: choice
+  about: [a2, b2]
+  text: >
+    No figure was read. Fig. 3 plots literature PWV against lumen diameter, with SDs from six sources, to which Eq. 22 was
+    fitted (R2 = 0.6). Reading it would allow a fit_quality check of a2 and b2. Figs. 4-6 overlay waveforms of individual
+    volunteers and the model; their maxima, minima and means are printed in Tables 4-5, which are recorded. See figures.md.
+- id: q_rho_printed
+  kind: reading
+  about: [rho]
+  text: >
+    The density is printed "1,050 (kg/m3)" with a thousands separator. It is recorded as "1050", and its precision is
+    taken as the unit digit.
+- id: q_pmean_one_third
+  kind: unexplained_difference
+  about: [mean_pressure_dia_pp, cmp_pmean_vivo_radial, cmp_pmean_vivo_cca, cmp_pmean_vivo_temporal, pmean_vivo_cca, pmean_vivo_temporal]
+  citation: {page: 7, quote: "Mean sphygmomanometer pressure is calculated as"}
+  text: >
+    (Audit.) The paper gives Pmean = Pdiastole + PP/3 for the cuff pressure that calibrates the tonometry. It also
+    assumes that mean and diastolic pressure vary little between the brachial artery and the radial, carotid and
+    temporal sites (p. 7). Applied to Table 5's in vivo diastolic and pulse pressures, the rule gives 86.7 mmHg at the
+    radial artery (printed 87), 79 at the CCA (printed 85) and 82.7 at the temporal artery (printed 87). The printed in
+    vivo means are probably time averages of the calibrated waveforms, not the one-third rule. If so, the CCA and temporal
+    waves are fuller in shape than the rule assumes. The paper does not say how the Table 5 means were obtained. Also, a
+    calibration to one brachial mean and diastolic value would give the same values at the three sites. The printed
+    values differ (diastolic 69, 68, 71; mean 87, 85, 87). This suggests a separate calibration per site or per subject
+    subgroup, which the paper does not describe.
+- id: q_table3_vs_table4_cerebral
+  kind: unexplained_difference
+  about: [qmean_vivo_ica, qmean_vivo_mca, qmean_vivo_cca, qmean_vivo_va]
+  citation: {page: 7, quote: "Mean flow rate chosen", where: "Table 3"}
+  text: >
+    (Audit; Table 3 is not recorded as data.) The "Ultrasound" row of Table 3 gives the paper's own mean cerebral flows
+    (page image): CCA 4.9/6.5, ICA 3.7/4.5, MCA 2.2, VA 1.2 ml/s. Table 4's in vivo means are CCA 6.5, ICA 3.6, VA 1.2,
+    MCA 2.5. CCA (right) and VA agree. ICA 3.6 matches neither side nor their mean (4.1). MCA 2.5 differs from the
+    ultrasound 2.2 and equals Table 3's "Mean flow rate chosen" (2.5) instead. The two tables may average different
+    subjects or cycles, but the paper does not say so.
+- id: q_fig_time_origin
+  kind: choice
+  about: [time_from_scale_bar]
+  text: >
+    (Figure pass.) The waveform panels of Figs. 4-6 print no time axis, only a 0.8 s scale bar under each panel. The
+    readings measure time from the left end tick of that bar. In Figs. 4-5 the in vivo (top) and model (bottom) lines of
+    a panel are read on the same bar, which assumes they are drawn on one time base; the paper says only that all pulses
+    are plotted in their natural time scale (p. 8) and that the in vivo cycles were aligned at the foot of the
+    end-diastolic flow (p. 7). How the model cycle is aligned with the in vivo one is not stated, so the readings are not
+    compared point by point.
+  citation: {page: 8, quote: "plotted in their natural time scale"}
+- id: q_fig1b_origin
+  kind: choice
+  about: [EN_measured_fig1b, EN_isovolumic_fig1b]
+  text: >
+    (Figure pass.) Fig. 1B labels only the ticks 1 on each axis and a single 0 under the corner. The reading takes
+    E = 0 at the x axis and tN = 0 at the y axis. If the y axis did not start at 0, every value except those near 1
+    would shift.
+  citation: {page: 4, quote: "time varying elastance (EN, E*N) as function of", where: "Fig. 1B"}
+- id: q_fig3_shared_bars
+  kind: reading
+  about: [pwv_lit_fig3]
+  text: >
+    (Figure pass.) In Fig. 3, three markers at d of about 29 mm ([MU], [LU] and the shared [BA], [LA] marker) sit on one
+    vertical stem carrying six caps, so which cap belongs to which source cannot be told from the figure; their SD bars
+    are not read. The [BA], [LA] marker stands for two sources plotted at one point. The bar of [BA] at d of about 15 mm
+    runs into the [LA] marker below and is read as symmetric about its marker.
+  citation: {page: 7, quote: "SD are shown", where: "Fig. 3"}
+- id: q_fig5f_vivo_vs_table5
+  kind: unexplained_difference
+  about: [wave5f_p_vivo_fig, psys_vivo_cca, pdia_vivo_cca, pmean_vivo_cca]
+  text: >
+    (Figure pass.) The averaged in vivo common carotid pressure in Fig. 5F (top, thick line) stays between the 80 and 120
+    mmHg ticks over the whole cycle: its lowest point is near the 80 tick. Table 5 prints the in vivo CCA pressure as
+    101 systolic and 68 diastolic mmHg, a diastolic value well below the 80 tick. The figure's extremes are closer to the
+    model's Table 5 values (115/81). Either the figure or the table row differs from the stated measurement, or the
+    averaged line was calibrated differently; the paper does not say. See figures.md.
+  citation: {page: 10, quote: "Pressure was measured with applanation tonometry in the", where: "Fig. 5F"}
+- id: q_fig_model_pressure_vs_table5
+  kind: unexplained_difference
+  about: [wave4f_p_model_fig, wave5b_p_model_fig, wave5f_p_model_fig, psys_model_radial, psys_model_temporal, pdia_model_temporal, psys_model_cca]
+  text: >
+    (Figure pass.) The model pressure waves drawn in Figs. 4F and 5B do not reach the systolic values of Table 5. The radial
+    model wave peaks at the 120 mmHg tick, while Table 5 prints 125. The temporal model wave peaks below the 120 tick
+    (Table 5: 119) and falls below the 80 tick (Table 5 diastolic: 79). The model flow waves of Figs. 4-5 match Table 4's
+    systolic flows to within a few percent. The figures may show a different model run, or a different cycle, from
+    the one tabulated. Read values are in the build's figure readings; see figures.md.
+  citation: {page: 9, quote: "Radial artery 122 125 69 74 87 90", where: "Table 5 and Figs. 4F, 5B"}
+- id: q_no_validation_vs_stergiopulos1992
+  kind: choice
+  about: [arterial_tree_1d, pwv_eq22, pulse_pressure, mean_pressure_dia_pp, qsys_vivo_asc_aorta, psys_vivo_radial, wave5f_p_vivo_fig]
+  text: >
+    (Cross-validation with stergiopulos1992, ref. 64, cross-validation job 2026-11-04.) No validation is entered in
+    either direction. This record's 1-D model, the one that would predict stergiopulos1992's measurements (the Fronek
+    et al. leg/brachial systolic indices and the Gosling et al. pulsatility indices), is not runnable
+    (q_1d_not_runnable), and its listed outputs are flows and pressures, not those ratios. This record's runnable
+    models (Eqs. 6, 9, 15, 22, R1 = ZC, PP, the one-third mean rule, the discrepancy and Table 6 statistics) take
+    pressures, diameters or this paper's own tables. stergiopulos1992 measures no PWV, distensibility or absolute
+    pressure for them to act on. In the other direction, stergiopulos1992/arterial_tree_1d outputs leg/brachial
+    systolic ratios, PI ratios, a mean-flow ratio and ascending-aortic pressures. This paper measures flows (Table 4,
+    Figs. 4-5) and radial, carotid and temporal pressures (Table 5), but neither ascending-aortic pressure nor leg or
+    brachial pressure. The paper's own use of the Stergiopulos et al. tree (Fig. 6, p. 9) is a modified control model
+    with WK3 cerebral terminals, compared with the in vivo carotid flow only qualitatively ("compare also with in vivo
+    measurement in Fig. 5"). It is not stergiopulos1992's model.
+  citation: {page: 9, quote: "the 1-D model of Stergiopulos et al. that we developed earlier", where: "Discussion"}
+- id: q_no_validation_vs_stergiopulos1999
+  kind: choice
+  about: [ref-62, arterial_tree_1d, r1_minimal_reflection, pwv_eq22, pulse_pressure, mean_pressure_dia_pp, qsys_vivo_asc_aorta, wave4a_f_vivo_fig]
+  text: >
+    (Cross-validation with stergiopulos1999, job 2026-11-04.) No validation is entered in either direction.
+    The pair was chosen because ref. 62 is a Stergiopulos 1999 paper, but ref. 62 is Stergiopulos, Segers and Westerhof,
+    "Use of pulse pressure method for estimating total arterial compliance in vivo", AJP 276: H424-H428. stergiopulos1999
+    is Stergiopulos, Westerhof and Westerhof, "Total arterial inertance as the fourth element of the windkessel model",
+    AJP 276: H81-H88. That paper is not in this reference list, and no in-text citation of ref. 62 turns up in the page text.
+    This paper says nothing about the four-element windkessel or the dog and Murgo et al. beats analysed there.
+    This record's 1-D model, the one that could give aortic input impedance or aortic waves, is not runnable
+    (q_1d_not_runnable). Its runnable models (Eqs. 6, 9, 15, 22, R1 = ZC, PP, the one-third rule, the discrepancy
+    and Table 6 statistics) need segment diameters, PWV, terminal-bed values or systolic/diastolic pressures.
+    stergiopulos1999 measures none of these: it measures whole-body R_p, Z_c, C_PPM, C_AR and heart rate of seven dogs,
+    aortic pressure and flow waves, and dog 71's input impedance. The R1 = ZC rule applies to a terminal bed's WK3, not to
+    the whole-body Z_c/R_p of a dog, and that ratio is not printed as a measurement there.
+    In the other direction, stergiopulos1999's runnable models (zin_3wk, zin_4wk: input impedance against frequency;
+    Eq. 1 inertance; statistics on its own Table 1) predict no quantity measured here. This paper measures flows and
+    radial, carotid and temporal pressures in time (Tables 4-5, Figs. 4-5) and literature PWV against diameter (Fig. 3),
+    and it measures no input impedance. Its terminal WK3 values (Table 2) are model inputs, not measurements.
+  citation: {page: 1, quote: "vessels are terminated with three-element windkessels", where: abstract}
+- id: q_no_validation_vs_westerhof1969
+  kind: choice
+  about: [ref-71, arterial_tree_1d, pwv_eq22, distensibility_eq22_eq6, pwv_lit_fig3, EN_measured_fig1b, qsys_vivo_asc_aorta, psys_vivo_radial]
+  text: >
+    (Cross-validation with westerhof1969, ref. 71, job 2026-11-04.) No validation is entered in either direction.
+    This paper cites ref. 71 for the tree geometry it builds on (p. 4) and for the finding that the original
+    Noordergraaf/Westerhof tree gives nonphysiological aortic reflections (p. 3); it says nowhere that either model
+    predicts or is compared with the other paper's measurements.
+    westerhof1969's measurements are (a) decay time constants, input-impedance and wave-velocity increases measured on
+    its own electrical analog (tau_normal, tau_stiff, tau_high, tau_low, dZin_stiff_printed, dc_stiff_printed), which
+    are model outputs of that analog and quantities no model here gives; and (b) the apparent wave velocity in man of
+    Luchsinger et al. and Gabe et al. against frequency (Fig. 7). Apparent (phase) velocity at each harmonic is not the
+    foot-to-foot PWV of pwv_eq22, and pwv_eq22 takes a diameter, not a frequency, so it has no input for those
+    conditions; the full 1-D model that could give phase delays is not runnable (q_1d_not_runnable).
+    In the other direction, westerhof1969's runnable models give per-segment R, L, C, Z0, phase velocity
+    1/sqrt(L'C'), reflection coefficients, the total compliance and the RC decay time; its full analog is not runnable.
+    This paper measures flows and radial, carotid and temporal pressures in time (Tables 4-5, Figs. 4-5), Senzaki
+    et al.'s normalized elastance (Fig. 1B) and literature PWV against diameter (Fig. 3). Only the last is a
+    quantity a Westerhof model gives, but westerhof1969/phase_velocity takes a segment's L' and C', not a diameter,
+    so it cannot be run at Fig. 3's diameters, and no single Fig. 3 point belongs to a named Westerhof segment.
+  citation: {page: 4, quote: "which was later adapted by Westerhof et al", where: "Geometry, p. 4"}
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [ref-44, arterial_tree_1d, pwv_eq22, distensibility_eq22_eq6, r1_minimal_reflection, pulse_pressure, mean_pressure_dia_pp, qsys_vivo_asc_aorta, qmean_vivo_asc_aorta, psys_vivo_radial, wave4a_f_vivo_fig, pwv_lit_fig3]
+  text: >
+    (Cross-validation with olufsen2000, ref. 44, job 2026-11-04.) No validation is entered in either direction.
+    This paper cites ref. 44 only as one of the 1-D models of the tree "under various physiological" conditions (p. 1)
+    and as a row of its Table 1 survey (p. 2: complete tree, approximated velocity profiles, structured-tree outflow).
+    It does not say that its model explains or is compared with Olufsen et al.'s measurements, nor the reverse.
+    The pair shares a shape: olufsen2000/network_1d and this record's arterial_tree_1d both map a tree to flows and
+    pressures in time. Neither is runnable (q_1d_not_runnable here; olufsen2000/q_network_not_runnable). So this
+    model cannot be run on olufsen2000's MR flows (Figs. 3, 7), cuff pressures (120/80 mmHg), inlet radius or 1.1 s
+    cycle, and olufsen2000's model cannot be run on Tables 4-5 or Figs. 4-5.
+    Neither record's runnable models give a quantity the other paper measures. Here, Eq. 22 (PWV), Eqs. 6 and 9
+    (distensibility, viscoelastic coefficient), Eq. 15, R1 = ZC, PP = Ps - Pd, the one-third mean rule and the
+    discrepancy and Table 6 statistics either take diameters and give PWV or wall properties, or act on this paper's
+    own tables. olufsen2000 measures no PWV, distensibility or wall property. Its cuff 120/80 is a systolic/diastolic
+    pair, but it prints no measured pulse or mean pressure for PP or the one-third rule to predict.
+    olufsen2000's runnable models (nu = mu/rho, the Lighthill boundary layer, Eqs. 21-22 gamma, alpha and beta,
+    the Eq. 14 tube law, A = pi R^2, T = 1/HR) give viscosity, layer thickness, tree ratios, pressure from area,
+    area from radius and period from heart rate. This paper measures none of these. It prints no measured lumen
+    area or cycle length, and its Fig. 3 PWV points are literature values that no olufsen2000 model gives.
+    A runnable version of either 1-D model would make the Table 4 / Fig. 7 flows testable across the pair.
+  citation: {page: 1, quote: "arterial tree (6, 48, 50, 69) under various physiological (44,", where: Introduction}
+
+# Added by the cross-validation job with olufsen1999.
+- id: q_no_cross_validation_olufsen1999
+  kind: unstated_model
+  about: [arterial_tree_1d, pwv_eq22, distensibility_eq22_eq6, pwv_lit_fig3, qsys_vivo_asc_aorta, qmean_vivo_asc_aorta]
+  text: >
+    Cross-validation with olufsen1999 (ref. 43, cited only in Table 1 as the source of the structured-tree
+    outflow, footnote f) found no pair to test, in either direction; the paper does not say that either model
+    explains the other's data. olufsen1999 measures (from refs. 20, 26/27, 41) the cardiac output, the
+    ascending-aorta inflow curve, the input impedance of Fig. 9 and pressure waves of Fig. 12. No runnable
+    model here gives these: the 1-D tree that would is not runnable (q_1d_not_runnable), and the runnable
+    ones give PWV, distensibility, viscoelastic coefficients, R1/RT, terminal compliance and pressure rules
+    from systolic and diastolic values that olufsen1999 does not print. Its Fig. 3 points are estimates of
+    Eh/r0, not PWV, so pwv_eq22 is not run against them. In the other direction, olufsen1999's runnable
+    models (Eq. 6 Eh/r0, structured-tree and windkessel impedance, tree ratios) give no quantity measured
+    here; see olufsen1999/questions.yaml, q_no_cross_validation_reymond2009. No validation was added.
+  citation: {page: 2, quote: "f structured tree from Ref. 43", where: "Table 1, footnotes"}
+
+# Added by the cross-validation job with boileau2015.
+- id: q_no_validation_vs_boileau2015
+  kind: choice
+  about: [arterial_tree_1d, pwv_eq22, mean_pressure_dia_pp, pulse_pressure, pmean_vivo_radial, pmean_vivo_cca, pmean_vivo_temporal, pwv_lit_fig3]
+  text: >
+    Cross-validation with boileau2015 (which cites this paper as ref. 66, only for the small role of the
+    dynamic pressure term) found no pair to test, in either direction. boileau2015's measurements are the in
+    vitro pressure and flow waveforms of [45] at sites of a 37-vessel silicone network (its Figs. 6-9). The 1-D
+    tree that would predict such waveforms is not runnable here (q_1d_not_runnable) and describes the human
+    tree, not that network; the runnable models (Eq. 22 PWV, distensibility, viscoelastic coefficients,
+    R1/RT, terminal compliance, pulse pressure and the one-third mean pressure rule) give quantities those
+    curves do not quantify (no PWV, no printed systolic/diastolic pair is measured there). In the other
+    direction, boileau2015/windkessel_mean_pressure shares the shape of arterial_tree_1d, but the Table 5
+    pressure sites are not Windkessel inlets with a measured inflow, and the terminal resistances here were
+    estimated from the measured mean flow distribution, so its mean pressure would be circular; its Eq. 5 wave
+    speed models need E, h and an area per artery that neither paper prints for the Fig. 3 literature points
+    (boileau2015 q_no_validation_vs_reymond2009). No validation was added.
+  citation: {page: 3, quote: "measured mean flow distribution in the major arterial beds", where: "Eq. 13 text"}
+- id: q_no_validation_vs_alastruey2011
+  kind: choice
+  about: [arterial_tree_1d, pwv_eq22, distensibility_eq22_eq6, viscoelastic_eq9, r1_minimal_reflection, terminal_compliance_eq15]
+  text: >
+    No validation against alastruey2011 is entered, in either direction (cross-validation job 2026-11-04).
+    alastruey2011 (which cites this paper only qualitatively) measures a 37-segment silicone network in
+    vitro: the fluid's density and viscosity, silicone E and viscosity, segment lengths, radii, thicknesses
+    and wave speeds (Table 2), and midpoint pressure and flow waveforms. arterial_tree_1d is not runnable
+    (q_1d_not_runnable) and models a human tree, not that network. Eq. 22 (pwv_eq22) is an empirical fit of
+    PWV to diameter over human arteries (Fig. 3); swept over the silicone tubes' radii it would not predict
+    their wave speeds, which follow from the silicone's E and h, so such a comparison would not test the
+    model. distensibility_eq22_eq6, r1_minimal_reflection and terminal_compliance_eq15 rest on the same
+    human fit, and viscoelastic_eq9 gives a coefficient not measured there. In the other direction,
+    alastruey2011/network_1d is the silicone network and cannot be run on this human tree without inputs
+    neither paper prints, and its algebraic models need a wall E and h not printed here. See
+    alastruey2011/q_no_validation_vs_reymond2009.
+  citation: {page: 5, quote: "To that effect, we fitted an empirical", where: "Eq. 22"}

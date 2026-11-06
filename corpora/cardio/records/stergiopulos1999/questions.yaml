@@ -1,0 +1,311 @@
+- id: q_hr_unit
+  kind: possible_error
+  about: [hr_d71, hr_d72, hr_d74, hr_d76, hr_d77, hr_d78, hr_d79]
+  text: >-
+    The heart-rate column of Table 1 is headed "beats/min", but its values (1.56-2.53) are dog heart rates only in
+    beats/s (94-152 beats/min). The values are recorded with the printed unit. The sample counts n_d71...n_d79 read
+    them as beats/s.
+  citation: {page: 3, printed_page: "H83", quote: "Rate, beats/min", where: Table 1 header}
+- id: q_sample_count
+  kind: unstated_input
+  about: [n_d71, n_d72, n_d74, n_d76, n_d77, n_d78, n_d79, n_hA, n_hC, info_criteria_eq2_3]
+  text: >-
+    Eqs. 2-3 need N, the number of samples per heart cycle, which is not printed for any beat; nor is the sampling
+    rate. The added N (200 Hz times the heart period for the dogs, rounded; 101 for the human beats) were chosen to
+    be consistent with the printed AIC, so the AIC comparisons check one common sampling rate per data set rather
+    than each value independently. With these N the computed AIC fall 1-7 below the printed values (at most 1.2%):
+    the non-integer N that would match each printed AIC exactly (84.9, 104.2, 127.0, 89.3, 79.8, 128.3, 111.2 for the
+    dogs, 101.2-101.4 for the humans) are the same for the three- and four-element fit of a beat, which supports
+    Eq. 2 as applied, but no integer N matches them all; dogs 71 and 77 match with N one higher (85, 80). The SC
+    comparisons are the more independent test (question q_sc_inconsistent).
+- id: q_sc_inconsistent
+  kind: unexplained_difference
+  about: [sc_3wk_d72, sc_4wk_d72, sc_3wk_d76, sc_4wk_d76, sc_3wk_d78, sc_4wk_d78, sc_3wk_d79, sc_4wk_d79, sc_3wk_hA, sc_4wk_hA, sc_3wk_hC, sc_4wk_hC]
+  text: >-
+    By Eqs. 2-3, SC - AIC = P (ln N - 2), which depends on N alone. For dogs 71, 74 and 77 the printed differences
+    (5-6 for the three-element, 7-9 for the four-element windkessel) agree with the N that reproduces the AIC. For
+    dogs 72, 76, 78 and 79 and both human beats the printed SC - AIC is 7-8 and 10-11, which would need N of about
+    250-400, far from the N (89-128) that the printed AIC and RMSE imply. Either SC was computed with a different N
+    or a different definition than Eq. 3.
+  citation: {page: 2, printed_page: "H82", quote: "AIC and SC are defined as follows", where: "Eqs. 2-3"}
+- id: q_sc_d79_4wk
+  kind: possible_error
+  about: [sc_4wk_d79, aic_4wk_d79]
+  text: >-
+    For dog 79 the four-element windkessel has SC = 707 and AIC = 706. With three parameters Eq. 3 minus Eq. 2 gives
+    SC - AIC = 3 ln N - 6, which is 1 only for N of about 10, while the other columns of the paper imply N of about 111.
+    707 may be a misprint (e.g. of 717). Recorded as printed.
+  citation: {page: 3, printed_page: "H83", quote: "79 17.5 1.80 5.46 0.597 0.114 0.130", where: Table 1}
+- id: q_c_reference
+  kind: choice
+  about: [ttest_c, p_c3_results, p_c4_results, p_c3_abstract, p_c4_abstract, dev_c_4wk_human, over_c_3wk_hA, over_c_3wk_hC]
+  text: >-
+    The paper compares windkessel C with "the actual values" derived by the area and the pulse pressure methods but
+    does not say which of the two (or what combination) each P value and percentage uses. Both are run: against
+    C_PPM and against C_AR. The human percentages (36%, 108%) follow from C_PPM, not C_AR.
+  citation: {page: 1, printed_page: "H81", quote: "with the values derived from the area and the pulse pressure", where: abstract}
+- id: q_p_abstract_results
+  kind: unexplained_difference
+  about: [p_c3_abstract, p_c3_results, p_rc3_abstract, p_rc3_results]
+  text: >-
+    The abstract gives P = 0.0047 for the overestimate of C by the three-element windkessel and P = 0.0017 for its
+    underestimate of Z_c; the Results give P = 0.0029 and P = 0.0014 for the same tests. A paired t-test on the
+    rounded Table 1 values gives about 0.0028 (C against C_PPM), 0.0036 (against C_AR) and 0.0013 (Z_c).
+- id: q_p_c4
+  kind: unexplained_difference
+  about: [p_c4_results, p_c4_abstract]
+  text: >-
+    P = 0.81 for the four-element windkessel C is not reproduced by a paired t-test on Table 1 against either
+    C_PPM (about 0.78) or C_AR (about 0.15). How the "actual" C was formed for this test is not stated.
+- id: q_p_rounding
+  kind: numerics
+  about: [p_rc3_results, p_rc4_results, p_c3_results]
+  text: >-
+    The t-tests here run on Table 1 as printed (three decimals); the paper presumably used unrounded estimates.
+    The small differences (0.0013 vs 0.0014, 0.0293 vs 0.031, 0.0028 vs 0.0029) are of the size such rounding can
+    cause, unlike those of q_p_c4 and q_p_abstract_results.
+- id: q_c4_human_dev
+  kind: overstated_claim
+  about: [dev_c_4wk_human]
+  text: >-
+    "For C the deviations are <4% for the four-element windkessel": with Table 2, the type A beat gives
+    (1.22 - 1.28)/1.28 = -4.7% against C_PPM and -17% against C_AR, so the bound is exceeded for type A
+    whichever standard value is meant. The type C beat is within 4% only against C_PPM (+2%).
+- id: q_rc4_human_dev
+  kind: unexplained_difference
+  about: [under_rc_4wk_human]
+  text: >-
+    "The four-element windkessel underestimates Z_c by 22%" is one figure for two beats; Table 2 gives 20% for
+    type A (0.056 vs 0.070) and 22% for type C (0.045 vs 0.058).
+- id: q_fit_not_runnable
+  kind: unstated_input
+  about: [fit_3wk_time, fit_4wk_time]
+  text: >-
+    The windkessel parameters, RMSE values and the sensitivity analysis (a 10% increase in Z_c, C and L raises the
+    RMSE of dog 71 by 11, 20 and 5%) all come from time-domain fits to measured pressure and flow waves that are
+    given only as plots (dog 71 in Fig. 1, human beats in Fig. 4) or not at all (the other six dogs). They cannot be
+    rerun from the paper; the fitted values are recorded as printed and checked only through Eqs. 2-3, the t-tests
+    and the percentages.
+  citation: {page: 4, printed_page: "H84", quote: "that a 10% increase in Zc, C, and L led to an increase in", where: text}
+- id: q_eq1_inputs
+  kind: unstated_input
+  about: [inertance_eq1, l_true_dm]
+  text: >-
+    The summed inertance of the distributed model (0.0070, Table 3) is computed with Eq. 1 from segment geometry of
+    ref. 17 that this paper does not print, so it cannot be recomputed here.
+- id: q_figures_unread
+  kind: reading
+  about: [zin_3wk, zin_4wk]
+  text: >-
+    Fig. 5 plots the input impedance of the three- and four-element windkessels for dog 71 with the standard Z_c and
+    C (and the measured impedance), and Fig. 2 the dog averages and standard errors of Table 1. Both could check the
+    models (zin_3wk, zin_4wk) and Table 1, but the page-rendering commands needed for calibrated readings were not
+    available when this record was made, so they are not read yet. For Fig. 5 the paper also leaves unstated which
+    standard C (PPM or AR) and which L were used, and whether the three-element R_p is R_p or R_p - Z_c.
+- id: q_sc_param_count
+  kind: unexplained_difference
+  about: [sc_3wk_d72, sc_4wk_d72, sc_3wk_d76, sc_4wk_d76, sc_3wk_d78, sc_4wk_d78, sc_3wk_d79, sc_3wk_hA, sc_4wk_hA, sc_3wk_hC, sc_4wk_hC, p_3wk, p_4wk, p_3wk_with_rp, p_4wk_with_rp]
+  text: >-
+    (Audit.) The printed SC - AIC = P (ln N - 2) splits the beats into two groups. Dogs 71, 74 and 77 fit P = 2 and 3
+    (only the estimated parameters, as the record reads p_3wk, p_4wk). Dogs 72, 76, 78, 79 (three-element) and both
+    human beats fit P = 3 and 4, i.e. R_p counted as a parameter too: their printed SC - AIC of 8 and 11 give N of about
+    106 and 116, close to the 89-128 that the printed AIC and RMSE imply. Run directly with the record's added N,
+    P = 3 and 4 give SC within about 1 of the printed value for dogs 72, 76, 78, 79 (three-element) and both human
+    beats, within 1.5-3 for dogs 71 and 77, while dog 74 matches P = 2 and 3 (938.4 and 894.8 against 938 and 895)
+    and is about 5 off with P = 3 and 4. The record runs Eqs. 2-3 both ways (run_ic_*_prp). Whether P was counted differently for different beats, or some other cause, is not stated.
+    Dog 79, four-element (SC - AIC = 1) fits neither (q_sc_d79_4wk).
+  citation: {page: 2, printed_page: "H82", quote: "where P is the number of parameters and N is the number of", where: "Eqs. 2-3"}
+- id: q_l_body_mass
+  kind: overstated_claim
+  about: [mass_d71, mass_d72, mass_d74, mass_d76, mass_d77, mass_d78, mass_d79, l_4wk_d71, l_4wk_d72, l_4wk_d74, l_4wk_d76, l_4wk_d77, l_4wk_d78, l_4wk_d79]
+  text: >-
+    (Audit.) "In the dogs, inertance appears to decrease with increasing body mass (Table 1)." Over the seven dogs of
+    Table 1 the correlation of L with body mass is negative but weak (Pearson r about -0.61, Spearman about -0.61,
+    two-sided P about 0.14-0.15 for n = 7); the paper gives no test. The claim is hedged ("appears"), but Table 1 alone
+    does not establish it.
+  citation: {page: 6, printed_page: "H86", quote: "In the dogs, inertance appears to decrease with increas", where: Discussion}
+- id: q_sensitivity_unrecorded
+  kind: reading
+  about: [fit_4wk_time, fit_3wk_time]
+  text: >-
+    (Audit.) The sensitivity results of dog 71 (a 10% increase in Z_c, C and L raises the RMSE by 11, 20 and 5%, p. 4)
+    are printed results of the four-element windkessel but are not recorded as data. They need the dog 71 flow and
+    pressure waves of Fig. 1; once the figure job reads them, a time-domain 4WK model driven by the read flow could
+    reproduce these three numbers (and the dog 71 RMSE 1.23). Left to the first reader's scope; noted for later.
+  citation: {page: 4, printed_page: "H84", quote: "that a 10% increase in Zc, C, and L led to an increase in", where: text}
+# ---- figure pass (2026-11-02) ----
+- id: q_fig5_phase_legend
+  kind: possible_error
+  about: [fig5_ph_dotted_fig, fig5_ph_solid_fig, zin_3wk, zin_4wk, cmp_fig5_ph_3wk_legend, cmp_fig5_ph_4wk_legend, cmp_fig5_ph_3wk_swapped, cmp_fig5_ph_4wk_swapped]
+  text: >-
+    (Figure pass.) In the phase panel of Fig. 5 the line styles appear to be swapped relative to the legend. With the
+    dog 71 standard R_p, Z_c, C_PPM and L = 0.019 (Table 1), the modulus panel matches the legend (dotted =
+    three-element, solid = four-element; both reproduced at all 22-23 read frequencies). In the phase panel the
+    dotted line is reproduced by the four-element windkessel (minimum about -75 deg near 1 Hz, about -3 deg at 12 Hz)
+    and the solid line by the three-element windkessel (minimum about -61 deg, about -13 deg at 12 Hz), at every read
+    frequency; read as the legend says, neither is reproduced. Recorded as printed: the legend is not corrected.
+  citation: {page: 6, printed_page: "H86", quote: "Input impedance modulus (top) and phase (bottom) deter", where: "Fig. 5"}
+- id: q_fig5_standard_values
+  kind: reading
+  about: [zin_3wk, zin_4wk, cppm_d71, car_d71, l_4wk_d71, cmp_fig5_mod_3wk_ppm, cmp_fig5_mod_4wk_ppm, cmp_fig5_mod_3wk_ar, cmp_fig5_mod_4wk_ar]
+  text: >-
+    (Figure pass; bears on q_figures_unread.) Fig. 5 does not say which standard C, which L or which R_p its curves
+    use. The calibrated modulus readings settle C: with C_PPM = 0.208 the two windkessel curves are reproduced at all
+    read frequencies; with C_AR = 0.239 both are not reproduced below about 4-6 Hz. L = 0.019 (the four-element fit
+    of dog 71, Table 1) reproduces the four-element curve. Whether the three-element R_p is R_p or R_p - Z_c cannot
+    be told from the figure (they differ by under 0.3% in modulus above 1 Hz); the record runs R_p.
+  citation: {page: 6, printed_page: "H86", quote: "element windkessel with characteristic impedance and total arte", where: "Fig. 5 caption"}
+- id: q_fig5_harmonics_hr
+  kind: reading
+  about: [fig5_mod_measured_fig, fig5_ph_measured_fig, hr_d71]
+  text: >-
+    (Figure pass; bears on q_hr_unit.) The measured impedance of dog 71 is plotted at 2.39, 4.78, 7.15, 9.53 and
+    11.91 Hz (read +- 0.03 Hz), the first five multiples of 2.38 Hz. The heart rate of dog 71 in Table 1, 2.38, is
+    therefore in beats/s (Hz), not beats/min as the column header says.
+  citation: {page: 3, printed_page: "H83", quote: "Rate, beats/min", where: Table 1 header}
+- id: q_fig5_vs_measured
+  kind: reading
+  about: [cmp_fig5_mod_3wk_vs_measured, cmp_fig5_mod_4wk_vs_measured, cmp_fig5_ph_3wk_vs_measured, cmp_fig5_ph_4wk_vs_measured]
+  text: >-
+    (Figure pass.) Against the measured squares of Fig. 5, the four-element windkessel (standard Z_c, C_PPM, L = 0.019)
+    is within about 0.02 mmHg s/ml in modulus up to the 4th harmonic but 0.04 below the 5th (0.266 vs 0.306), and its
+    phase is 3-14 deg less negative than measured at harmonics 2-5; the three-element windkessel overestimates the
+    first-harmonic modulus by 85% (0.436 vs 0.236). The validation comparisons are therefore not reproduced point by
+    point; the paper claims only that the four-element windkessel describes the impedance better, which the
+    first-harmonic modulus bears out.
+- id: q_waves_model
+  kind: unstated_model
+  about: [fig1_flow_d71_fig, fig1_p_d71_meas_fig, fig1_p_d71_3wk_fig, fig1_p_d71_4wk_fig, fig3_p_3wk_std_fig, fig3_p_4wk_std_fig, fig4c_p_3wk_A_fig, fig4c_p_3wk_C_fig, fig4d_p_4wk_A_fig, fig4d_p_4wk_C_fig]
+  text: >-
+    (Figure pass.) The measured flow and pressure waves of Figs. 1 and 4 and the windkessel pressures of Figs. 1, 3
+    and 4 are now read. A time-domain windkessel driven by the read flow wave could reproduce the plotted model
+    pressures (Fig. 3 with the standard values, Figs. 1, 4 with the Tables 1-2 fits) and the RMSE and sensitivity
+    numbers (q_sensitivity_unrecorded), but a run here takes scalar inputs swept over one curve, so a model that needs a
+    whole input wave is not built in this pass. The paper also does not state the initial pressure or how the
+    periodic solution was obtained, which such a model needs.
+- id: q_no_validation_westerhof1969
+  kind: choice
+  about: [zin_3wk, zin_4wk, inertance_eq1, fit_3wk_time, fit_4wk_time]
+  text: >-
+    (Cross-validation with westerhof1969, ref. 21.) No model of this record is validated against a measurement of
+    Westerhof et al. 1969. This paper cites ref. 21 only qualitatively (p. 6: the aorta as a reflectionless tube with
+    impedance equal to aortic Z_c; inertia in transmission-line models); its distributed model is ref. 17, not the
+    1969 analog. The 1969 measurements recorded are decay times and 'about 50 per cent' changes measured on the
+    analog itself, and apparent wave velocities in man (Luchsinger, Gabe; Fig. 7). zin_3wk and zin_4wk give input
+    impedance only, not a decay time or a wave velocity; the 1969 measured human input impedances (Fig. 6) are not
+    read in that record. inertance_eq1 could sum the 1969 Table 1 segments, but the 1969 paper measures no total
+    inertance to compare with. The reverse direction (the 1969 models against this record's human Z_c and C,
+    Table 2) is entered in westerhof1969/validations.yaml.
+- id: q_no_validation_westerhof1971
+  kind: choice
+  about: [zin_3wk, zin_4wk]
+  text: >-
+    (Cross-validation with westerhof1971, ref. 22.) No model of this record is validated against a measurement of
+    Westerhof et al. 1971. This paper cites ref. 22 only as the origin of the three-element windkessel and among the
+    works where it 'can fit experimental data well (15, 18, 22)' (p. 1); it compares nothing with that paper's data.
+    The 1971 measurements are the input impedances (modulus and phase, its Figs. 2-5) and d-c resistances of
+    hydraulic three-element models. zin_3wk run with the 1971 Table 1 elements would predict them, but that record
+    names both R_c and R_p by one quantity (resistor_resistance, a resistor of the mock system), which cannot be
+    mapped both to characteristic_impedance and to peripheral_resistance here; entering the 1971 values as added
+    inputs would copy another paper's printed values as assumptions, so it is not done. The same network run the
+    other way (westerhof1971/impedance_3el against this record's dog 71 impedance, Fig. 5) is entered in
+    westerhof1971/validations.yaml. zin_4wk would also need an inertance L that the 1971 paper does not state for
+    its hydraulic models.
+  citation: {page: 1, printed_page: "H81", quote: "can fit experimental data well (15, 18, 22)", where: text}
+- id: q_val_murgo_beat_in_average
+  kind: choice
+  about: [zin_3wk, zin_4wk, rp_hA, rp_hC, rc_std_hA, rc_std_hC, rc_3wk_hA, rc_3wk_hC, c_3wk_hA, c_3wk_hC, rc_4wk_hA, rc_4wk_hC, c_4wk_hA, c_4wk_hC, l_4wk_hA, l_4wk_hC]
+  text: >-
+    (Cross-validation with westerhof2009.) The Table 2 parameters are for one type A and one type C beat taken from
+    Murgo et al. 1980 (ref. 12); westerhof2009 Fig. 6 plots the averaged impedance of type A and type C beats from
+    the same study. Neither paper says whether the analysed beat is one of those averaged. If it is, the averaged
+    curve shares data with the beat the parameters came from and the validations are partly circular; they are
+    entered as validations because the parameters were not fitted to the averaged curve. The comparisons are point by
+    point at the reading precision of the Fig. 6 crosses; one beat's windkessel is not expected to match a group
+    mean within those bars, so a 'not reproduced' says the single-beat windkessel is outside the type average's
+    bars, not that the model is wrong for its beat. Of the twelve, only the three-element fit of the type C modulus
+    comes out close.
+  citation: {page: 2, printed_page: "H82", quote: "waves were taken from a previous study (12)", where: text}
+- id: q_val_murgo_c_choice
+  kind: choice
+  about: [zin_3wk, zin_4wk, cppm_hA, car_hA, cppm_hC, car_hC, l_4wk_hA, l_4wk_hC]
+  text: >-
+    (Cross-validation with westerhof2009.) The standard-value validations use C_PPM (pulse pressure method), as
+    Fig. 5 does for dog 71 (q_fig5_standard_values); C_AR (area method; 1.47 and 2.79 ml/mmHg for types A and C) is
+    the alternative. Run with standard values, zin_4wk would also need L, which exists only as a windkessel fit to
+    the beat's pressure (Table 2); that mixed set (standard Z_c and C with fitted L, as in Fig. 5) is not entered, the
+    fully fitted four-element set is.
+  citation: {page: 2, printed_page: "H82", quote: "mated using the area method (11, 14) and the pulse pressure", where: text}
+- id: q_no_validation_olufsen2004
+  kind: choice
+  about: [zin_3wk, zin_4wk, inertance_eq1, inertance_eq1_uniform]
+  text: >-
+    (Cross-validation with olufsen2004.) No model of this record is validated against a measurement of Olufsen &
+    Nadim 2004: that paper is analytical and records no measured value (its data are blood properties, zeros of
+    J0, its own time-scales and radius thresholds, and readings of its own model curves). The other direction, its
+    three-element windkessel run with dog 71's Table 1 values against this record's measured impedance (Fig. 5),
+    is entered in olufsen2004/validations.yaml.
+- id: q_no_validation_smith2004
+  kind: choice
+  about: [zin_3wk, zin_4wk, inertance_eq1, inertance_eq1_uniform, fit_3wk_time, fit_4wk_time]
+  text: >-
+    (Cross-validation with smith2004.) No model of this record is validated against smith2004, and no smith2004
+    model against this record's measurements. smith2004 does not cite this paper: its ref. 27 is the other
+    Stergiopulos et al. 1999 paper (pulse pressure method, H424-8). smith2004 measures nothing (its figures are
+    simulation output and its 120/80 mmHg, 70 ml targets are reported from other sources), so the windkessels here
+    have no measurement there to predict; its closed-loop heart models need a whole human parameter set that
+    neither paper gives for this paper's dogs or beats, and output no Z_c, C or input impedance (smith2004
+    question q_no_validation_stergiopulos1999).
+- id: q_no_validation_stergiopulos1992
+  kind: choice
+  about: [zin_3wk, zin_4wk, inertance_eq1, inertance_eq1_uniform, rp_dm, rc_true_dm, c_true_dm, l_true_dm]
+  text: >-
+    (Cross-validation with stergiopulos1992, ref. 17.) No model of this record is validated against a measurement
+    of Stergiopulos et al. 1992, and no 1992 model against this record's measurements. This paper uses ref. 17 only
+    as the distributed model whose computed aortic pressure and flow it fits (p. 2, Table 3; recorded here as
+    reported model values, not measurements) and as a peripheral-load example (p. 1). The 1992 measurements are
+    the pulsatility indices of Gosling et al. (Fig. 7) and the segmental systolic pressure indices of Fronek et
+    al., all at peripheral sites (groin, thigh, knee, ankle); zin_3wk and zin_4wk give only the aortic input
+    impedance (and, through the unrunnable fits, aortic pressure), so they predict neither. The other way, the
+    1992 models do not give this record's measured quantities for its dogs or the Murgo et al. beats:
+    arterial_tree_1d is a generic adult tree with its own inflow and outputs pressure ratios, flows and resistance
+    reductions, not Z_c, C, R_p or input impedance; terminal_impedance_eq7 gives the impedance of one terminal bed
+    (terminal_impedance_modulus, terminal_resistance, terminal_compliance), which is not the aortic input impedance
+    measured in Fig. 5 even though the circuit has the same shape, and running it with dog 71's whole-body values
+    would only repeat this record's own zin_3wk comparison under quantities mapped by dimension alone.
+  citation: {page: 2, printed_page: "H82", quote: "uted model of the human systemic circulation (17) was used", where: text}
+
+- id: q_no_validation_vs_boileau2015
+  kind: choice
+  about: [zin_3wk, zin_4wk, fit_3wk_time, fit_4wk_time, inertance_eq1_uniform, rc_std_d71, fig5_mod_measured_fig, fig4b_p_A_fig]
+  text: >
+    No validation against boileau2015 is entered, in either direction (cross-validation job 2026-11-04).
+    Neither paper cites the other; the only shared source is Murgo et al. 1980 (ref. 12 here, ref. 64 there),
+    whose beats are analysed here and which only inspired boileau2015's ADAN56 inflow (no ADAN56 output is
+    recorded there, and the inflow is not a measurement). The measurements of boileau2015 are in vitro pressure
+    and flow waveforms in time at sites of a 37-vessel silicone network (its Figs. 6-9, from its ref. 45); this
+    record's runnable models give input impedance modulus and phase against frequency (zin_3wk, zin_4wk), a
+    segment inertance and test statistics, and the time-domain windkessel fits that would give a pressure wave
+    are not runnable (q_fit_not_runnable), so none predicts those waveforms. In the other direction, boileau2015's
+    models (areas, wave speeds, rho c / A, a time-averaged Windkessel pressure, an inflow pulse, a peak decay,
+    wavelengths) need vessel radius, wall thickness and Young modulus, which this paper does not print for any
+    dog or human beat; a Z_c from them would rest wholly on added inputs, and its mean Windkessel pressure would
+    be circular against R_p, defined here as mean pressure over mean flow.
+  citation: {page: 2, printed_page: "H82", where: text, quote: "Human ascending aortic pressure and flow"}
+
+- id: q_no_validation_vs_reymond2009
+  kind: choice
+  about: [zin_3wk, zin_4wk, inertance_eq1_uniform, rc_std_d71, rp_d71, cppm_d71, fig5_mod_measured_fig]
+  text: >
+    (Cross-validation with reymond2009, job 2026-11-04.) No validation is entered in either direction. reymond2009's
+    ref. 62 is a different Stergiopulos 1999 paper: the pulse pressure method paper, AJP 276: H424-H428, not this
+    one (H81-H88). reymond2009 does not cite this paper. Its measurements are
+    in vivo flows (Table 4, Figs. 4-5) and radial, carotid and temporal pressures (Table 5) in time. It also has
+    literature PWV against diameter (Fig. 3) and a normalized elastance curve (Fig. 1B). It measures no aortic input
+    impedance, Z_c, C or inertance. This record's runnable models give input impedance against frequency (zin_3wk,
+    zin_4wk), a segment inertance and statistics on Table 1. The time-domain fits that would give a pressure wave are
+    not runnable (q_fit_not_runnable), so no model here predicts those measurements. In the other direction,
+    reymond2009's runnable models need segment diameters, PWV, terminal-bed values or systolic/diastolic pressures that
+    this paper does not print for its dogs or beats, and its 1-D model is not runnable (reymond2009 question
+    q_no_validation_vs_stergiopulos1999).
+  citation: {page: 2, printed_page: "H82", where: text, quote: "Human ascending aortic pressure and flow"}

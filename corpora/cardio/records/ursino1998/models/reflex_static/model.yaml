@@ -1,0 +1,47 @@
+id: reflex_static
+name: open-loop static baroreflex at a constant carotid sinus pressure (steady state of Eqs. 30-42)
+role: model
+stated: {page: 14, printed_page: "H1746", quote: "includes a pure latency, a monotonic logarithmic static function", where: "Eqs. 31, 33-42"}
+equation: "fcs = [fmin + fmax exp((Pcs - Pn)/ka)]/[1 + exp((Pcs - Pn)/ka)]; fes = fes,inf + (fes,0 - fes,inf) exp(-kes fcs); fev = [fev,0 + fev,inf exp((fcs - fcs,0)/kev)]/[1 + exp((fcs - fcs,0)/kev)]; theta = theta0 + G ln(fes - fes,min + 1); T = G_Ts ln(fes - fes,min + 1) + G_Tv fev + T0"
+inputs:
+  Pn: {quantity: carotid_sinus_pressure, unit: "mmHg"}
+  ka: {quantity: afferent_slope_pressure, unit: "mmHg"}
+  fmin: {quantity: afferent_frequency, unit: "1/s"}
+  fmax: {quantity: afferent_frequency, unit: "1/s"}
+  fes_inf: {quantity: sympathetic_frequency, unit: "1/s"}
+  fes0: {quantity: sympathetic_frequency, unit: "1/s"}
+  kes: {quantity: sympathetic_decay_constant, unit: "s"}
+  fes_min: {quantity: sympathetic_frequency, unit: "1/s"}
+  fev0: {quantity: vagal_frequency, unit: "1/s"}
+  fev_inf: {quantity: vagal_frequency, unit: "1/s"}
+  kev: {quantity: vagal_sigmoid_scale, unit: "1/s"}
+  fcs0: {quantity: afferent_frequency, unit: "1/s"}
+  G_Emax_lv: {quantity: emax_gain, unit: "mmHg*s/ml"}
+  G_Emax_rv: {quantity: emax_gain, unit: "mmHg*s/ml"}
+  G_R_sp: {quantity: resistance_gain, unit: "mmHg*s^2/ml"}
+  G_R_ep: {quantity: resistance_gain, unit: "mmHg*s^2/ml"}
+  G_Vu_sv: {quantity: volume_gain, unit: "ml*s"}
+  G_Vu_ev: {quantity: volume_gain, unit: "ml*s"}
+  G_T_s: {quantity: heart_period_gain, unit: "s^2"}
+  G_T_v: {quantity: heart_period_gain, unit: "s^2"}
+  Emax_lv0: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  Emax_rv0: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  R_sp0: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_ep0: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  Vu_sv0: {quantity: unstressed_volume, unit: "ml"}
+  Vu_ev0: {quantity: unstressed_volume, unit: "ml"}
+  T0: {quantity: heart_period, unit: "s"}
+  Pcs: {quantity: carotid_sinus_pressure, unit: "mmHg"}
+outputs:
+  Emax_lv: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  Emax_rv: {quantity: end_systolic_elastance, unit: "mmHg/ml"}
+  R_sp: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  R_ep: {quantity: hydraulic_resistance, unit: "mmHg*s/ml"}
+  Vu_sv: {quantity: unstressed_volume, unit: "ml"}
+  Vu_ev: {quantity: unstressed_volume, unit: "ml"}
+  T: {quantity: heart_period, unit: "s"}
+  fcs: {quantity: afferent_frequency, unit: "1/s"}
+  fes: {quantity: sympathetic_frequency, unit: "1/s"}
+  fev: {quantity: vagal_frequency, unit: "1/s"}
+settings: {}
+stochastic: false

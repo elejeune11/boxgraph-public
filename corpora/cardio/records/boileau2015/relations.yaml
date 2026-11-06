@@ -1,0 +1,74 @@
+- id: rel_c0_eq5_alastruey2011
+  kind: same_as
+  a: alastruey2011/wave_speed_eq5
+  b: boileau2015/pwv_eq5_reference
+  mapping: {Ad: "pi*r0**2", E: "E", h: "h", rho: "rho"}
+  output_map: {c: c0}
+  regime: {E: [1.0e5, 2.0e6], h: [3.0e-4, 2.0e-3], r0: [1.0e-3, 1.5e-2], rho: [1000, 1100]}
+  provenance: proposed
+  reason: >
+    Both are the wave speed of the same elastic tube law, beta = (4/3) sqrt(pi) E h (Alastruey 2011 Eq. 5,
+    Boileau 2015 Eq. 3), evaluated at the reference area: c = sqrt(beta/(2 rho)) A^(1/4)/sqrt(Ad) at A = Ad
+    (Boileau Eq. 5) and c0 = sqrt(beta/(2 rho sqrt(A0))) with A0 = pi r0^2 (Alastruey). Boileau's 37-artery
+    case uses Eq. 3 with Ad = A0 and Pd = 0 (p. 20) and refers to [30] = alastruey2011 for its parameters,
+    but neither paper states this equivalence of the two expressions, so it is proposed.
+# a: Boileau's Eq. 3 (SI); b: Formaggia's Eqs. 9-10 (CGS). x = sqrt(Ad) Pd / beta with beta = (4/3) sqrt(pi) E h:
+# Formaggia's reference area is the zero-pressure area A0 = Ad (1 - x)^2 (Boileau's own Eq. 16), and its beta,
+# E h0 sqrt(pi), must equal beta (1 - x)^2, so E_F = (4/3) E (1 - x)^2. Factors: m -> cm 100, m^2 -> cm^2 1e4,
+# Pa -> dyne/cm^2 10.
+- id: rel_tube_law_formaggia2003
+  kind: same_as
+  a: boileau2015/tube_law_eq3
+  b: formaggia2003/tube_law_eq9
+  mapping:
+    A: "1e4*A"
+    R0: "100*sqrt(Ad/pi)*(1 - 3*sqrt(Ad)*Pd/(4*sqrt(pi)*E*h))"
+    E: "10*(4/3)*E*(1 - 3*sqrt(Ad)*Pd/(4*sqrt(pi)*E*h))**2"
+    h0: "100*h"
+    Pext: "10*Pext"
+  regime: {A: [1.0e-5, 1.0e-3], Ad: [3.0e-5, 5.0e-4], Pd: [1000, 13000], E: [3.0e5, 2.0e6], h: [5.0e-4, 2.0e-3], Pext: [1, 2000]}
+  provenance: stated
+  citation: {page: 3, quote: "we consider a relationship of the form [10]", where: Eq. 3}
+  assumptions:
+    - "Boileau writes the law about the diastolic state (Pd, Ad), Formaggia about the zero-transmural-pressure state (A0 = pi R0^2). Both are linear in sqrt(A) with two parameters, so one becomes the other when A0 is the area at P - Pext = 0, which is Boileau's Eq. 16 (p. 15); the regime keeps sqrt(Ad) Pd/beta below 1, where that area exists."
+    - "Boileau's beta = (4/3) sqrt(pi) E h; Formaggia's beta = E h0 sqrt(pi) with kappa = 1, and notes kappa may be 3/4 (p. 5), which gives Boileau's 4/3. The mapping folds that factor and the change of reference state into E; it joins the forms, not the quantities: Formaggia's E here is not Boileau's Young's modulus."
+# a: Boileau's circular lumen area (SI, m -> m^2); b: Olufsen 2000's A = pi R^2 (CGS, cm -> cm^2): R = 100 rd.
+- id: rel_circle_area_olufsen2000
+  kind: same_as
+  a: boileau2015/circle_area
+  b: olufsen2000/circle_area
+  mapping: {R: "100*rd"}
+  regime: {rd: [5.0e-4, 1.5e-2]}
+  provenance: proposed
+  reason: >
+    Both records compute a vessel's cross-sectional area from its radius as a circle, pi r^2 (Boileau Table III
+    and Eq. 16 use Ad = pi rd^2; Olufsen 2000 p. 3, above Eq. 4, A = pi R^2). Boileau cites Olufsen 2000 (ref. 9)
+    only as a 1D model with structured-tree outflow and a Lax-Wendroff scheme (pp. 2, 5, 30) and states no relation
+    to any model recorded here, so this is proposed. It is a plain product form; it joins the two charts' area
+    computations, not their quantities (Boileau's rd is the radius at diastolic pressure, Olufsen's R a radius at
+    any state).
+# a: Reymond 2009's R1/RT with R1 = ZC = rho PWV / A (Eq. 14, PWV from Eq. 22, d in mm, A = pi d^2/4);
+# b: Boileau's R1 = rho c / Ad (p. 5, c from Eq. 5 with beta of Eq. 3, SI). Ad = pi (d/1000)^2/4 m^2.
+# Eq. 5 at A = Ad gives c^2 = beta / (2 rho sqrt(Ad)), so c equals a2/d^b2 when beta = 2 rho PWV^2 sqrt(Ad);
+# with beta = (4/3) sqrt(pi) E h that is E h = 3 rho PWV^2 sqrt(Ad) / (2 sqrt(pi)), folded into E with h = 1.
+- id: rel_r1_characteristic_impedance_reymond2009
+  kind: scales_as
+  a: reymond2009/r1_minimal_reflection
+  b: boileau2015/characteristic_impedance
+  mapping:
+    Ad: "pi*(d/1000)**2/4"
+    E: "3*rho*(a2/d**b2)**2*sqrt(pi*(d/1000)**2/4)/(2*sqrt(pi))"
+    h: "1"
+    rho: "rho"
+  output_map: {R1: ratio}
+  regime: {d: [1.0, 30.0], a2: [5.0, 15.0], b2: [0.2, 0.5], rho: [1000, 1100], RT: [1.0e8, 1.0e11]}
+  provenance: proposed
+  reason: >
+    Both papers set the proximal resistance of a three-element windkessel terminal to the characteristic
+    impedance of the terminal vessel, R1 = ZC = rho c / A, to minimise reflections (Boileau p. 5, citing [49];
+    Reymond Eq. 14, p. 3). Boileau cites Reymond 2009 (ref. 66) only for the observation that the dynamic
+    pressure term is unimportant (p. 30), not for this choice, so the relation is proposed. Reymond's record
+    outputs R1/RT and Boileau's R1, so they share their dependence on the vessel (d, a2, b2, rho) but differ
+    by the factor 1/RT: scales_as, not same_as.
+  assumptions:
+    - "The mapping joins the forms, not the quantities: Boileau's E here carries the whole stiffness E h that makes its Eq. 5 wave speed equal Reymond's empirical PWV of Eq. 22 at the same diameter (h = 1 m); it is not a Young's modulus."

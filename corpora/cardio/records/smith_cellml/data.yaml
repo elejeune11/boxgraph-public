@@ -1,0 +1,95 @@
+# Values written in smith_chase_nokes_shaw_wake_2004.cellml that its model uses, with the units the
+# file declares for them (pressure "kPa", volume mL, time s: lines 50-83). The numbers read as mmHg
+# (q_units_kpa). smith2004 prints none of the elastances, end-diastolic parameters, resistances,
+# inertances or initial values (q_parameters_not_in_paper); where it prints the same parameter
+# (P_th, A, B, C), the datum names the paper's datum.
+
+# --- heart_parameters, lines 88-101
+- {id: R_mt_code, quantity: flow_resistance, unit: kPa*s/mL, origin: reported, printed: "0.0158", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "89", quote: 'name="R_mt" units="kPa_second_per_mL" initial_value="0.0158"'}}
+- {id: R_av_code, quantity: flow_resistance, unit: kPa*s/mL, origin: reported, printed: "0.0180", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "90", quote: 'name="R_av" units="kPa_second_per_mL" initial_value="0.0180"'}}
+- {id: R_tc_code, quantity: flow_resistance, unit: kPa*s/mL, origin: reported, printed: "0.0237", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "91", quote: 'name="R_tc" units="kPa_second_per_mL" initial_value="0.0237"'}}
+- {id: R_pv_code, quantity: flow_resistance, unit: kPa*s/mL, origin: reported, printed: "0.0055", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "92", quote: 'name="R_pv" units="kPa_second_per_mL" initial_value="0.0055"'}}
+- {id: R_pul_code, quantity: flow_resistance, unit: kPa*s/mL, origin: reported, printed: "0.1552", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "93", quote: 'name="R_pul" units="kPa_second_per_mL" initial_value="0.1552"'}}
+- {id: R_sys_code, quantity: flow_resistance, unit: kPa*s/mL, origin: reported, printed: "1.0889", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "94", quote: 'name="R_sys" units="kPa_second_per_mL" initial_value="1.0889"'}}
+- {id: L_tc_code, quantity: inertance, unit: kPa*s^2/mL, origin: reported, printed: "8.0093 x 10^-5", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "95", quote: 'name="L_tc" units="kPa_second2_per_mL" initial_value="8.0093e-5"'}, note: "an inertance at the tricuspid valve, which Fig. 1 of the paper does not draw (q_inlet_inertance)"}
+- {id: L_pv_code, quantity: inertance, unit: kPa*s^2/mL, origin: reported, printed: "1.4868 x 10^-4", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "96", quote: 'name="L_pv" units="kPa_second2_per_mL" initial_value="1.4868e-4"'}}
+- {id: L_mt_code, quantity: inertance, unit: kPa*s^2/mL, origin: reported, printed: "7.6968 x 10^-5", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "97", quote: 'name="L_mt" units="kPa_second2_per_mL" initial_value="7.6968e-5"'}, note: "an inertance at the mitral valve, which Fig. 1 of the paper does not draw (q_inlet_inertance)"}
+- {id: L_av_code, quantity: inertance, unit: kPa*s^2/mL, origin: reported, printed: "1.2189 x 10^-4", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "98", quote: 'name="L_av" units="kPa_second2_per_mL" initial_value="1.2189e-4"'}}
+- {id: V_tot_code, quantity: total_blood_volume, unit: mL, origin: reported, printed: "5.5", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "99", quote: 'name="V_tot" units="mL" initial_value="5.5"'}, note: "declared and exported but used by no equation of the file (q_vtot)"}
+- {id: P_th_code, quantity: thoracic_pressure, unit: kPa, origin: reported, printed: "-4", from_source: smith2004, from_datum: Pth_normal, citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "100", quote: 'name="P_th" units="kPa" initial_value="-4"'}, note: "the paper's normal thoracic pressure is -4 mmHg; the file declares kPa (q_units_kpa)"}
+
+# --- driver_function, lines 102-109
+- {id: A_code, quantity: driver_amplitude, unit: dimensionless, origin: reported, printed: "1", from_source: smith2004, from_datum: A_driver, citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "105", quote: 'name="A" units="dimensionless" initial_value="1"'}}
+- {id: B_code, quantity: driver_width_coefficient, unit: 1/s^2, origin: reported, printed: "80", from_source: smith2004, from_datum: B_driver, citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "106", quote: 'name="B" units="per_second2" initial_value="80"'}}
+- {id: C_code, quantity: driver_peak_time, unit: s, origin: reported, printed: "0.375", from_source: smith2004, from_datum: C_driver, citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "107", quote: 'name="C" units="second" initial_value="0.375"'}, note: "the paper prints C = 0.27 for its Fig. 3 driver (q_driver_C)"}
+- {id: period_code, quantity: heart_period, unit: s, origin: reported, printed: "0.75", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "109", quote: 'name="period" units="second" initial_value="0.75"'}, note: "checked against the paper's 80 beats/min by run_period_rate"}
+
+# --- pericardium, lines 397-399
+- {id: P_0_pcd_code, quantity: ed_pressure_scale, unit: kPa, origin: reported, printed: "0.5003", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "397", quote: 'name="P_0_pcd" units="kPa" initial_value="0.5003"'}}
+- {id: V_0_pcd_code, quantity: ed_reference_volume, unit: mL, origin: reported, printed: "200", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "398", quote: 'name="V_0_pcd" units="mL" initial_value="200"'}}
+- {id: lambda_pcd_code, quantity: ed_stiffness, unit: 1/mL, origin: reported, printed: "0.03", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "399", quote: 'name="lambda_pcd" units="per_mL" initial_value="0.03"'}}
+
+# --- left ventricle free wall, lines 564-569
+- {id: E_es_lvf_code, quantity: es_elastance, unit: kPa/mL, origin: reported, printed: "2.8798", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "564", quote: 'name="E_es_lvf" units="kPa_per_mL" initial_value="2.8798"'}}
+- {id: V_d_lvf_code, quantity: zero_pressure_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "566", quote: 'name="V_d_lvf" units="mL" initial_value="0"'}}
+- {id: P_0_lvf_code, quantity: ed_pressure_scale, unit: kPa, origin: reported, printed: "0.1203", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "567", quote: 'name="P_0_lvf" units="kPa" initial_value="0.1203"'}}
+- {id: lambda_lvf_code, quantity: ed_stiffness, unit: 1/mL, origin: reported, printed: "0.033", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "568", quote: 'name="lambda_lvf" units="per_mL" initial_value="0.033"'}}
+- {id: V_0_lvf_code, quantity: ed_reference_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "569", quote: 'name="V_0_lvf" units="mL" initial_value="0"'}}
+
+# --- right ventricle free wall, lines 729-734
+- {id: E_es_rvf_code, quantity: es_elastance, unit: kPa/mL, origin: reported, printed: "0.585", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "729", quote: 'name="E_es_rvf" units="kPa_per_mL" initial_value="0.585"'}}
+- {id: V_d_rvf_code, quantity: zero_pressure_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "731", quote: 'name="V_d_rvf" units="mL" initial_value="0"'}}
+- {id: P_0_rvf_code, quantity: ed_pressure_scale, unit: kPa, origin: reported, printed: "0.2157", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "732", quote: 'name="P_0_rvf" units="kPa" initial_value="0.2157"'}}
+- {id: lambda_rvf_code, quantity: ed_stiffness, unit: 1/mL, origin: reported, printed: "0.023", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "733", quote: 'name="lambda_rvf" units="per_mL" initial_value="0.023"'}}
+- {id: V_0_rvf_code, quantity: ed_reference_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "734", quote: 'name="V_0_rvf" units="mL" initial_value="0"'}}
+
+# --- septum, lines 780-785
+- {id: E_es_spt_code, quantity: es_elastance, unit: kPa/mL, origin: reported, printed: "48.754", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "780", quote: 'name="E_es_spt" units="kPa_per_mL" initial_value="48.754"'}}
+- {id: V_d_spt_code, quantity: zero_pressure_volume, unit: mL, origin: reported, printed: "2", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "781", quote: 'name="V_d_spt" units="mL" initial_value="2"'}}
+- {id: P_0_spt_code, quantity: ed_pressure_scale, unit: kPa, origin: reported, printed: "1.1101", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "782", quote: 'name="P_0_spt" units="kPa" initial_value="1.1101"'}}
+- {id: lambda_spt_code, quantity: ed_stiffness, unit: 1/mL, origin: reported, printed: "0.435", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "783", quote: 'name="lambda_spt" units="per_mL" initial_value="0.435"'}}
+- {id: V_0_spt_code, quantity: ed_reference_volume, unit: mL, origin: reported, printed: "2", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "784", quote: 'name="V_0_spt" units="mL" initial_value="2"'}}
+- {id: one_code, quantity: unit_constant, unit: dimensionless, origin: reported, printed: "1", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "785", quote: 'name="one" units="dimensionless" initial_value="1"'}, note: "the number one, written as a variable in the septum equation"}
+
+# --- vessels, lines 921-923, 984-986, 1044-1046, 1102-1104
+- {id: E_es_pa_code, quantity: vessel_elastance, unit: kPa/mL, origin: reported, printed: "0.369", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "921", quote: 'name="E_es_pa" units="kPa_per_mL" initial_value="0.369"'}}
+- {id: V_d_pa_code, quantity: zero_pressure_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "923", quote: 'name="V_d_pa" units="mL" initial_value="0"'}}
+- {id: E_es_pu_code, quantity: vessel_elastance, unit: kPa/mL, origin: reported, printed: "0.0073", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "984", quote: 'name="E_es_pu" units="kPa_per_mL" initial_value="0.0073"'}}
+- {id: V_d_pu_code, quantity: zero_pressure_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "986", quote: 'name="V_d_pu" units="mL" initial_value="0"'}}
+- {id: E_es_ao_code, quantity: vessel_elastance, unit: kPa/mL, origin: reported, printed: "0.6913", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1044", quote: 'name="E_es_ao" units="kPa_per_mL" initial_value="0.6913"'}}
+- {id: V_d_ao_code, quantity: zero_pressure_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1046", quote: 'name="V_d_ao" units="mL" initial_value="0"'}}
+- {id: E_es_vc_code, quantity: vessel_elastance, unit: kPa/mL, origin: reported, printed: "0.0059", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1102", quote: 'name="E_es_vc" units="kPa_per_mL" initial_value="0.0059"'}}
+- {id: V_d_vc_code, quantity: zero_pressure_volume, unit: mL, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1104", quote: 'name="V_d_vc" units="mL" initial_value="0"'}}
+
+# --- initial values of the state variables
+- {id: V_lv_init_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "94.6812", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "449", quote: 'name="V_lv" units="mL" initial_value="94.6812"'}}
+- {id: V_rv_init_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "90.7302", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "614", quote: 'name="V_rv" units="mL" initial_value="90.7302"'}}
+- {id: V_pa_init_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "43.0123", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "922", quote: 'name="V_pa" units="mL" initial_value="43.0123"'}}
+- {id: V_pu_init_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "808.4579", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "985", quote: 'name="V_pu" units="mL" initial_value="808.4579"'}}
+- {id: V_ao_init_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "133.3381", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1045", quote: 'name="V_ao" units="mL" initial_value="133.3381"'}}
+- {id: V_vc_init_code, quantity: initial_chamber_volume, unit: mL, origin: reported, printed: "329.7803", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1103", quote: 'name="V_vc" units="mL" initial_value="329.7803"'}}
+- {id: Q_mt_init_code, quantity: initial_valve_flow, unit: mL/s, origin: reported, printed: "245.5813", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1157", quote: 'name="Q_mt" units="mL_per_second" initial_value="245.5813"'}}
+- {id: Q_av_init_code, quantity: initial_valve_flow, unit: mL/s, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1158", quote: 'name="Q_av" units="mL_per_second" initial_value="0"'}}
+- {id: Q_tc_init_code, quantity: initial_valve_flow, unit: mL/s, origin: reported, printed: "190.0661", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1159", quote: 'name="Q_tc" units="mL_per_second" initial_value="190.0661"'}}
+- {id: Q_pv_init_code, quantity: initial_valve_flow, unit: mL/s, origin: reported, printed: "0", citation: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "1160", quote: 'name="Q_pv" units="mL_per_second" initial_value="0"'}}
+
+# --- inputs and results printed in smith2004, copied from the paper's record (from_datum) so the
+# code's runs can be judged against them
+- {id: Pth_raised_paper, quantity: thoracic_pressure, unit: mmHg, origin: reported, printed: "0", from_source: smith2004, from_datum: Pth_raised, citation: {none: "printed in smith2004 p. 8 (raised thoracic pressure, Fig. 8), not in the code"}}
+- {id: rsys_factor_paper, quantity: resistance_factor, unit: dimensionless, origin: reported, printed: "2", from_source: smith2004, from_datum: rsys_factor_double, citation: {none: "printed in smith2004 p. 2 ('systemic resistance is doubled'), not in the code"}}
+- {id: HR_paper, quantity: heart_rate, unit: 1/min, origin: reported, printed: "80", from_source: smith2004, from_datum: HR_printed, citation: {none: "printed in smith2004 p. 7, not in the code"}}
+- {id: Vtot_paper, quantity: stressed_blood_volume, unit: ml, origin: reported, printed: "1500", from_source: smith2004, from_datum: Vtot_printed, citation: {none: "printed in smith2004 p. 7, not in the code"}}
+- {id: co_decrease_paper, quantity: cardiac_output_decrease, unit: percent, origin: predicted, printed: "9", from_source: smith2004, from_datum: co_decrease_printed, citation: {none: "printed in smith2004 p. 2 and p. 8 (P_th from -4 to 0 mmHg), not in the code"}}
+- {id: pao_sys_base_paper, quantity: aortic_systolic_pressure, unit: mmHg, origin: predicted, printed: "120", from_source: smith2004, from_datum: pao_sys_base_printed, citation: {none: "printed in smith2004 p. 2, not in the code"}}
+- {id: pao_dia_base_paper, quantity: aortic_diastolic_pressure, unit: mmHg, origin: predicted, printed: "80", from_source: smith2004, from_datum: pao_dia_base_printed, citation: {none: "printed in smith2004 p. 2, not in the code"}}
+- {id: pao_sys_double_paper, quantity: aortic_systolic_pressure, unit: mmHg, origin: predicted, printed: "165", from_source: smith2004, from_datum: pao_sys_double_printed, citation: {none: "printed in smith2004 p. 2 (2 x R_sys), not in the code"}}
+- {id: pao_dia_double_paper, quantity: aortic_diastolic_pressure, unit: mmHg, origin: predicted, printed: "130", from_source: smith2004, from_datum: pao_dia_double_printed, citation: {none: "printed in smith2004 p. 2 (2 x R_sys), not in the code"}}
+- {id: sv_fig7_paper, quantity: stroke_volume, unit: ml, origin: predicted, printed: "70", from_source: smith2004, from_datum: sv_fig7_label, citation: {none: "the label SV=70 of smith2004 Fig. 7 (p. 8), not in the code"}}
+- {id: vspt_swing_paper, quantity: septal_volume_swing, unit: ml, origin: predicted, printed: "3", from_source: smith2004, from_datum: vspt_swing_printed, citation: {none: "printed in smith2004 p. 7 for its two-chamber model (Fig. 6), not in the code"}}
+- {id: sv_typical_paper, quantity: stroke_volume, unit: ml, origin: reported, printed: "~70", from_source: smith2004, from_datum: sv_typical, citation: {none: "typical value printed in smith2004 p. 7, not in the code"}}
+- {id: pao_sys_typical_paper, quantity: aortic_systolic_pressure, unit: mmHg, origin: reported, printed: "~120", from_source: smith2004, from_datum: pao_sys_typical, citation: {none: "typical value printed in smith2004 p. 7, not in the code"}}
+- {id: pao_dia_typical_paper, quantity: aortic_diastolic_pressure, unit: mmHg, origin: reported, printed: "~80", from_source: smith2004, from_datum: pao_dia_typical, citation: {none: "typical value printed in smith2004 p. 7, not in the code"}}
+- {id: ppa_sys_typical_paper, quantity: pa_systolic_pressure, unit: mmHg, origin: reported, printed: "~25", from_source: smith2004, from_datum: ppa_sys_typical, citation: {none: "typical value printed in smith2004 p. 8, not in the code"}}
+- {id: ppa_dia_typical_paper, quantity: pa_diastolic_pressure, unit: mmHg, origin: reported, printed: "~8", from_source: smith2004, from_datum: ppa_dia_typical, citation: {none: "typical value printed in smith2004 p. 8, not in the code"}}
+- {id: pvc_typical_paper, quantity: vena_cava_pressure, unit: mmHg, origin: reported, printed: "~0", from_source: smith2004, from_datum: pvc_typical, citation: {none: "typical value printed in smith2004 p. 8, not in the code"}}
+- {id: ppu_typical_paper, quantity: pulmonary_vein_pressure, unit: mmHg, origin: reported, printed: "1 to 5", from_source: smith2004, from_datum: ppu_typical, citation: {none: "typical range printed in smith2004 p. 8, not in the code"}}

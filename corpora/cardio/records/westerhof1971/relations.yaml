@@ -1,0 +1,16 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_tau_rpc_rc_decay
+  kind: same_as
+  a: westerhof1969/rc_decay
+  b: westerhof1971/tau_rpc
+  mapping: {Rp: "R", C: "Ctot/k"}
+  regime: {R: [100, 200000], Ctot: [1.0e-6, 2.0e-3], k: [1, 2]}
+  provenance: proposed
+  reason: >
+    Both papers take the diastolic pressure decay time as the product of the total peripheral
+    resistance and the total arterial compliance (1971 p. 780: exp(-t/RpC) = exp(-t/tau); 1969
+    p. 136: the decay time equals the RC of the model, with C the sum of all capacitors). The 1971
+    three-element model is the reduction of the 1969 analog (1971 p. 776, refs. 26 and 27), with
+    Rp the lumped peripheral resistance and C the lumped compliance; the 1969 factor k, by which all
+    capacitors are divided, enters as C = Ctot/k. Neither paper states this identity in so many
+    words, so it is proposed.

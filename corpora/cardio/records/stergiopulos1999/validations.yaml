@@ -1,0 +1,132 @@
+# Cross-validation against westerhof2009 (2026-11-02). This paper's two windkessel impedances, run with its
+# Table 2 values for the type A and type C human beats taken from Murgo et al. 1980 (ref. 12), judged against
+# the averaged type A and type C aortic input impedance of the same study, plotted in westerhof2009 Fig. 6
+# (adapted from its ref. 39, the same Murgo et al. 1980). The parameters come from one beat's waves and the
+# measurement is a type average, so these are validations (conditions_ok; q_val_murgo_beat_in_average).
+# C is C_PPM for the standard set (q_val_murgo_c_choice).
+
+# ---- three-element windkessel, standard ("actual") values of Table 2 ----
+- id: val_3wk_std_typeA_mod_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hA, Rc: rc_std_hA, C: cppm_hA}
+  sweep: {f: 'westerhof2009/fig6_A_mod_data_fig'}
+  output: mod
+  against: 'westerhof2009/fig6_A_mod_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_modulus': input_impedance_modulus}
+  conditions_ok: &condA "The parameters are this paper's for one type A beat taken from Murgo et al. (ref. 12); the measurement is the averaged input impedance of type A beats of the same study (westerhof2009 Fig. 6, 'The (averaged) human aortic input impedance of type A beats'). Same beat type and same study, so the one-beat windkessel should approximate the type average; whether that beat is among those averaged is open (q_val_murgo_beat_in_average)."
+  basis: &b3std "p. 2: 'Human ascending aortic pressure and flow waves were taken from a previous study (12). We have analyzed a type A and a type C beat'; ref. 12 is Murgo et al. 1980, the source of westerhof2009 Fig. 6 (its ref. 39). The three-element windkessel (Fig. 1) with the standard-technique Rp, Z_c and C_PPM of that beat (Table 2, 'actual' values, none fitted by a windkessel) gives its aortic input impedance, as Fig. 5 does for dog 71."
+- id: val_3wk_std_typeA_ph_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hA, Rc: rc_std_hA, C: cppm_hA}
+  sweep: {f: 'westerhof2009/fig6_A_ph_data_fig'}
+  output: phase
+  against: 'westerhof2009/fig6_A_ph_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_phase': input_impedance_phase}
+  conditions_ok: *condA
+  basis: *b3std
+- id: val_3wk_std_typeC_mod_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hC, Rc: rc_std_hC, C: cppm_hC}
+  sweep: {f: 'westerhof2009/fig6_C_mod_data_fig'}
+  output: mod
+  against: 'westerhof2009/fig6_C_mod_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_modulus': input_impedance_modulus}
+  conditions_ok: &condC "The parameters are this paper's for one type C beat taken from Murgo et al. (ref. 12); the measurement is the averaged input impedance of type C beats of the same study (westerhof2009 Fig. 6, 'The (averaged) human aortic input impedance of type A beats and type C beats'). Same beat type and same study, so the one-beat windkessel should approximate the type average; whether that beat is among those averaged is open (q_val_murgo_beat_in_average)."
+  basis: *b3std
+- id: val_3wk_std_typeC_ph_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hC, Rc: rc_std_hC, C: cppm_hC}
+  sweep: {f: 'westerhof2009/fig6_C_ph_data_fig'}
+  output: phase
+  against: 'westerhof2009/fig6_C_ph_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_phase': input_impedance_phase}
+  conditions_ok: *condC
+  basis: *b3std
+
+# ---- three-element windkessel, values fitted to the beat's pressure (Table 2) ----
+- id: val_3wk_fit_typeA_mod_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hA, Rc: rc_3wk_hA, C: c_3wk_hA}
+  sweep: {f: 'westerhof2009/fig6_A_mod_data_fig'}
+  output: mod
+  against: 'westerhof2009/fig6_A_mod_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_modulus': input_impedance_modulus}
+  conditions_ok: *condA
+  basis: &b3fit "p. 4: 'Figure 4, C and D, shows the fit of the three- and four-element windkessel models to the type A and type C pulses' of Murgo et al. (ref. 12, westerhof2009's ref. 39). Rp given and Z_c, C of the three-element windkessel fitted in the time domain to one beat's pressure (Table 2); the fit is to that beat's pressure wave, not to the averaged impedance plotted in westerhof2009, so it is a test of the fitted windkessel against the type average."
+- id: val_3wk_fit_typeA_ph_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hA, Rc: rc_3wk_hA, C: c_3wk_hA}
+  sweep: {f: 'westerhof2009/fig6_A_ph_data_fig'}
+  output: phase
+  against: 'westerhof2009/fig6_A_ph_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_phase': input_impedance_phase}
+  conditions_ok: *condA
+  basis: *b3fit
+- id: val_3wk_fit_typeC_mod_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hC, Rc: rc_3wk_hC, C: c_3wk_hC}
+  sweep: {f: 'westerhof2009/fig6_C_mod_data_fig'}
+  output: mod
+  against: 'westerhof2009/fig6_C_mod_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_modulus': input_impedance_modulus}
+  conditions_ok: *condC
+  basis: *b3fit
+- id: val_3wk_fit_typeC_ph_vs_murgo
+  model: zin_3wk
+  inputs: {Rp: rp_hC, Rc: rc_3wk_hC, C: c_3wk_hC}
+  sweep: {f: 'westerhof2009/fig6_C_ph_data_fig'}
+  output: phase
+  against: 'westerhof2009/fig6_C_ph_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_phase': input_impedance_phase}
+  conditions_ok: *condC
+  basis: *b3fit
+
+# ---- four-element windkessel, values fitted to the beat's pressure (Table 2) ----
+- id: val_4wk_fit_typeA_mod_vs_murgo
+  model: zin_4wk
+  inputs: {Rp: rp_hA, Rc: rc_4wk_hA, C: c_4wk_hA, L: l_4wk_hA}
+  sweep: {f: 'westerhof2009/fig6_A_mod_data_fig'}
+  output: mod
+  against: 'westerhof2009/fig6_A_mod_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_modulus': input_impedance_modulus}
+  conditions_ok: *condA
+  basis: &b4fit "p. 4: 'Figure 4, C and D, shows the fit of the three- and four-element windkessel models to the type A and type C pulses' of Murgo et al. (ref. 12, westerhof2009's ref. 39); westerhof2009 p. 4 cites this paper for the four-element windkessel ('a fourth element of the Windkessel has been proposed [63]'). Rp given and Z_c, C, L fitted in the time domain to one beat's pressure (Table 2); the fit is to that beat's pressure wave, not to the averaged impedance plotted in westerhof2009."
+- id: val_4wk_fit_typeA_ph_vs_murgo
+  model: zin_4wk
+  inputs: {Rp: rp_hA, Rc: rc_4wk_hA, C: c_4wk_hA, L: l_4wk_hA}
+  sweep: {f: 'westerhof2009/fig6_A_ph_data_fig'}
+  output: phase
+  against: 'westerhof2009/fig6_A_ph_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_phase': input_impedance_phase}
+  conditions_ok: *condA
+  basis: *b4fit
+- id: val_4wk_fit_typeC_mod_vs_murgo
+  model: zin_4wk
+  inputs: {Rp: rp_hC, Rc: rc_4wk_hC, C: c_4wk_hC, L: l_4wk_hC}
+  sweep: {f: 'westerhof2009/fig6_C_mod_data_fig'}
+  output: mod
+  against: 'westerhof2009/fig6_C_mod_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_modulus': input_impedance_modulus}
+  conditions_ok: *condC
+  basis: *b4fit
+- id: val_4wk_fit_typeC_ph_vs_murgo
+  model: zin_4wk
+  inputs: {Rp: rp_hC, Rc: rc_4wk_hC, C: c_4wk_hC, L: l_4wk_hC}
+  sweep: {f: 'westerhof2009/fig6_C_ph_data_fig'}
+  output: phase
+  against: 'westerhof2009/fig6_C_ph_data_fig'
+  purpose: validation
+  quantities: {'westerhof2009/frequency': frequency, 'westerhof2009/input_impedance_phase': input_impedance_phase}
+  conditions_ok: *condC
+  basis: *b4fit

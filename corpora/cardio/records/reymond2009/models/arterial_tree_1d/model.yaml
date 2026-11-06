@@ -1,0 +1,34 @@
+id: arterial_tree_1d
+name: 1-D model of the systemic arterial tree with varying-elastance LV, WK3 terminals, coronary and cerebral trees (Eqs. 1-21)
+role: model
+stated: {page: 2, quote: "Governing equations. Arteries are considered as straight long", where: "Eqs. 1-21, pp. 2-4"}
+equation: >
+  dA/dt + dQ/dx + Psi = 0 (Eq. 1); momentum Eq. 2 with Witzig-Womersley friction and convection (Eqs. 11-12);
+  A = Ae[P] + Av (Eqs. 3-10, Cpe(P) = a1 + b1/(1 + ((P - PmaxC)/Pwidth)^2)); WK3 terminals (Eq. 13);
+  E(t) = E*(t)[1 - kappa Q(t)] (Eqs. 17-20); coronary Eq. 21; implicit finite differences, Newton-Raphson.
+inputs:
+  Emax: {quantity: maximal_elastance, unit: mmHg/ml}
+  Emin: {quantity: minimal_elastance, unit: mmHg/ml}
+  V0: {quantity: ventricular_dead_volume, unit: ml}
+  t_max: {quantity: time_to_max_elastance, unit: ms}
+  HR: {quantity: heart_rate, unit: 1/min}
+  kappa: {quantity: internal_resistance_coefficient, unit: s/ml}
+  P_end_dia: {quantity: end_diastolic_pressure, unit: mmHg}
+  R_ven: {quantity: venous_resistance, unit: mmHg*s/ml}
+  rho: {quantity: blood_density, unit: kg/m^3}
+  P_csf: {quantity: csf_pressure, unit: mmHg}
+outputs:
+  Qsys: {quantity: systolic_flow_rate, unit: ml/s}
+  Qmean: {quantity: mean_flow_rate, unit: ml/s}
+  Psys: {quantity: systolic_pressure, unit: mmHg}
+  Pdia: {quantity: diastolic_pressure, unit: mmHg}
+settings: {}
+stochastic: false
+runnable: false
+not_runnable_reason: >
+  Needs inputs the paper does not print: the tree's connectivity (shown only in the Fig. 2 drawing), the
+  normalized isovolumic elastance curve E*N (derived from Senzaki et al.'s Fig. 1B curve and an unprinted
+  averaged aortic flow), the coronary constants epsilon, alpha, beta, delta of Eq. 21, the final volume
+  compliances after the adjustment to a literature total (p. 5), the bifurcation area adjustments that keep
+  |Gamma| < 0.1 (p. 4), and the time step and grid. Each segment-level ingredient that is printed is checked
+  separately (Eqs. 6, 9, 15, 22 and R1 = ZC).

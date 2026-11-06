@@ -1,0 +1,29 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_eq8_is_pries1990_eq1
+  kind: same_as
+  a: pries1990/fahraeus_eq1
+  b: pries1992/eq8_ratio
+  mapping: {HctD: "HD", D: "D"}
+  regime: {D: [3, 100], HD: [0.1, 0.8]}
+  provenance: stated
+  citation: {page: 7, quote: "the present context, a previously compiled (40)", where: Eq. 8}
+  assumptions:
+    - "the diameter D (um) and discharge hematocrit of the two papers are the same quantities"
+    - "the regime is that of pries1990 Fig. 1 (D 3-100 um, HD 0.1-0.8)"
+- id: rel_eq1_rat_scaling_of_eq8
+  kind: approximated_by
+  a: pries1992/eq8_ratio
+  b: pries1990/fahraeus_eq1
+  mapping: {HD: "HctD", D: "D*(55/92)**(1/3)"}
+  regime: {HctD: [0.1, 0.8], D: [3, 100]}
+  tolerance: 0.03
+  provenance: proposed
+  reason: >
+    pries1990 (p. 4) says its Eq. 1 is a human-blood description adapted to rat blood by scaling the
+    diameter-dependent exponents with the cube root of mean red cell volume (human 92 fl, rat 55 fl);
+    pries1992 Eq. 8 prints the human coefficients (0.35, 0.01). Evaluating the rat form at the
+    diameter scaled by (55/92)^(1/3) should then give the human form, up to the rounding of the printed
+    exponents (0.35 x 1.187 = 0.415 as printed; 0.01 x 1.187 = 0.0119, printed 0.011). The tolerance of
+    3% is chosen as the size that rounding 0.0119 to 0.011 can produce in the ratio over D up to 100 um.
+  assumptions:
+    - "the human description adapted in pries1990 is the one pries1992 prints as Eq. 8"

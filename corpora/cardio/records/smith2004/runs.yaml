@@ -1,0 +1,412 @@
+- id: run_driver_fig3
+  model: driver_eq5
+  inputs: {A: A_driver, B: B_driver, C: C_driver}
+  sweep: {t: e_fig3}
+  outputs: {e: e_fig3_pred}
+
+- id: run_closed_normal
+  model: closed_loop
+  inputs: &closed
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    P_th: Pth_normal
+    E_ao: E_ao_added
+    Vd_ao: Vd_ao_added
+    E_vc: E_vc_added
+    Vd_vc: Vd_vc_added
+    E_pa: E_pa_added
+    Vd_pa: Vd_pa_added
+    E_pu: E_pu_added
+    Vd_pu: Vd_pu_added
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    R_sys: R_sys_added
+    R_pul: R_pul_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    V_tot: Vtot_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    pth_pulm: pth_pulm_added
+  outputs:
+    SV_lv: sv_normal_pred
+    SV_rv: sv_rv_normal_pred
+    CO: co_normal_pred
+    Pao_sys: pao_sys_normal_pred
+    Pao_dia: pao_dia_normal_pred
+    Ppa_sys: ppa_sys_normal_pred
+    Ppa_dia: ppa_dia_normal_pred
+    Pvc_mean: pvc_normal_pred
+    Ppu_mean: ppu_normal_pred
+  note: "Fig. 7 and the baseline of Figs. 8-10: P_th = -4 mmHg, R_sys as given"
+
+- id: run_closed_pth0
+  model: closed_loop
+  inputs:
+    <<: *closed
+    P_th: Pth_raised
+  outputs:
+    SV_lv: sv_pth0_pred
+    CO: co_pth0_pred
+  note: "Fig. 8, P_th raised to 0 mmHg"
+
+- id: run_co_decrease
+  model: co_decrease
+  inputs: {CO_ref: co_normal_pred, CO_test: co_pth0_pred}
+  outputs: {decrease: co_decrease_pred}
+
+- id: run_rsys_double
+  model: scale_resistance
+  inputs: {R: R_sys_added, factor: rsys_factor_double}
+  outputs: {R_scaled: R_sys_double}
+
+- id: run_closed_rsys2
+  model: closed_loop
+  inputs:
+    <<: *closed
+    R_sys: R_sys_double
+  outputs:
+    Pao_sys: pao_sys_rsys2_pred
+    Pao_dia: pao_dia_rsys2_pred
+  note: "Figs. 9 and 10, 2 x R_sys"
+
+- id: run_two_chamber
+  model: two_chamber
+  inputs:
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    P_th: Pth_normal
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    P_pu: P_pu_tc_added
+    P_ao: P_ao_tc_added
+    P_vc: P_vc_tc_added
+    P_pa: P_pa_tc_added
+  outputs: {Vspt_swing: vspt_swing_pred, Vspt_swing_pct: vspt_swing_pct_pred}
+  note: "Fig. 6; the paper does not say which P_th, heart rate or driver the two-chamber run used: the closed-loop ones are taken"
+
+# --- figure readings (figure job, 2026-11-03) ---
+- id: run_fig7_trace
+  model: closed_loop_trace
+  inputs:
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    P_th: Pth_normal
+    E_ao: E_ao_added
+    Vd_ao: Vd_ao_added
+    E_vc: E_vc_added
+    Vd_vc: Vd_vc_added
+    E_pa: E_pa_added
+    Vd_pa: Vd_pa_added
+    E_pu: E_pu_added
+    Vd_pu: Vd_pu_added
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    R_sys: R_sys_added
+    R_pul: R_pul_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    V_tot: Vtot_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    pth_pulm: pth_pulm_added
+  sweep: {t: fig7_vlv_data}
+  outputs: {V_lv: fig7_vlv_pred, V_rv: fig7_vrv_pred, P_ao: fig7_pao_pred, P_pu: fig7_ppu_pred, P_pa: fig7_ppa_pred, P_vc: fig7_pvc_pred}
+  note: "Fig. 7 waveforms at the times read off the figure; t is taken as time within the beat of the driver (the figure's time origin is not stated)"
+- id: run_fig7_trace_b
+  model: closed_loop_trace
+  inputs:
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    P_th: Pth_normal
+    E_ao: E_ao_added
+    Vd_ao: Vd_ao_added
+    E_vc: E_vc_added
+    Vd_vc: Vd_vc_added
+    E_pa: E_pa_added
+    Vd_pa: Vd_pa_added
+    E_pu: E_pu_added
+    Vd_pu: Vd_pu_added
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    R_sys: R_sys_added
+    R_pul: R_pul_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    V_tot: Vtot_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    pth_pulm: pth_pulm_added
+  sweep: {t: fig7_plv_data}
+  outputs: {P_lv: fig7_plv_pred, P_rv: fig7_prv_pred}
+  note: "as run_fig7_trace, at the times where P_lv and P_rv are read"
+- id: run_fig6_trace
+  model: two_chamber_trace
+  inputs:
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    P_th: Pth_normal
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    P_pu: P_pu_tc_added
+    P_ao: P_ao_tc_added
+    P_vc: P_vc_tc_added
+    P_pa: P_pa_tc_added
+  sweep: {t: fig6_vspt_data}
+  outputs: {V_spt: fig6_vspt_pred}
+  note: "Fig. 6 at the times read off the figure, with the boundary pressures and driver of run_two_chamber"
+- id: run_fig8_loops
+  model: closed_loop_loops
+  inputs:
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    E_ao: E_ao_added
+    Vd_ao: Vd_ao_added
+    E_vc: E_vc_added
+    Vd_vc: Vd_vc_added
+    E_pa: E_pa_added
+    Vd_pa: Vd_pa_added
+    E_pu: E_pu_added
+    Vd_pu: Vd_pu_added
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    R_sys: R_sys_added
+    R_pul: R_pul_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    V_tot: Vtot_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    pth_pulm: pth_pulm_added
+    rsys_factor: rsys_factor_one
+    ees_factor: ees_factor_one
+    ees_septum: ees_septum_added
+  sweep: {P_th: fig8_lv_edv_data}
+  outputs: {EDV_lv: fig8_lv_edv_pred, ESV_lv: fig8_lv_esv_pred, Plv_max: fig8_lv_pmax_pred, EDV_rv: fig8_rv_edv_pred, ESV_rv: fig8_rv_esv_pred, Prv_max: fig8_rv_pmax_pred}
+  note: "Fig. 8: P_th -4 and 0 mmHg"
+- id: run_fig9_loops
+  model: closed_loop_loops
+  inputs:
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    P_th: Pth_normal
+    E_ao: E_ao_added
+    Vd_ao: Vd_ao_added
+    E_vc: E_vc_added
+    Vd_vc: Vd_vc_added
+    E_pa: E_pa_added
+    Vd_pa: Vd_pa_added
+    E_pu: E_pu_added
+    Vd_pu: Vd_pu_added
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    R_sys: R_sys_added
+    R_pul: R_pul_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    V_tot: Vtot_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    pth_pulm: pth_pulm_added
+    ees_factor: ees_factor_one
+    ees_septum: ees_septum_added
+  sweep: {rsys_factor: fig9_lv_edv_data}
+  outputs: {EDV_lv: fig9_lv_edv_pred, ESV_lv: fig9_lv_esv_pred, Plv_max: fig9_lv_pmax_pred, EDV_rv: fig9_rv_edv_pred, Pao_sys: fig10_pao_max_pred, Pao_dia: fig10_pao_min_pred}
+  note: "Figs. 9 and 10: 0.5, 1 and 2 x R_sys"
+- id: run_fig11_loops
+  model: closed_loop_loops
+  inputs:
+    E_lvf: E_lvf_added
+    Vd_lvf: Vd_lvf_added
+    P0_lvf: P0_lvf_added
+    lam_lvf: lam_lvf_added
+    V0_lvf: V0_lvf_added
+    E_rvf: E_rvf_added
+    Vd_rvf: Vd_rvf_added
+    P0_rvf: P0_rvf_added
+    lam_rvf: lam_rvf_added
+    V0_rvf: V0_rvf_added
+    E_spt: E_spt_added
+    Vd_spt: Vd_spt_added
+    P0_spt: P0_spt_added
+    lam_spt: lam_spt_added
+    V0_spt: V0_spt_added
+    P0_pcd: P0_pcd_added
+    lam_pcd: lam_pcd_added
+    V0_pcd: V0_pcd_added
+    P_th: Pth_normal
+    E_ao: E_ao_added
+    Vd_ao: Vd_ao_added
+    E_vc: E_vc_added
+    Vd_vc: Vd_vc_added
+    E_pa: E_pa_added
+    Vd_pa: Vd_pa_added
+    E_pu: E_pu_added
+    Vd_pu: Vd_pu_added
+    R_mt: R_mt_added
+    R_av: R_av_added
+    R_tc: R_tc_added
+    R_pv: R_pv_added
+    R_sys: R_sys_added
+    R_pul: R_pul_added
+    L_av: L_av_added
+    L_pv: L_pv_added
+    HR: HR_printed
+    V_tot: Vtot_printed
+    A: A_driver
+    B: B_driver
+    C: C_closed_added
+    pth_pulm: pth_pulm_added
+    rsys_factor: rsys_factor_one
+    ees_septum: ees_septum_added
+  sweep: {ees_factor: fig11_lv_edv_data}
+  outputs: {EDV_lv: fig11_lv_edv_pred, ESV_lv: fig11_lv_esv_pred, Plv_max: fig11_lv_pmax_pred, EDV_rv: fig11_rv_edv_pred, ESV_rv: fig11_rv_esv_pred, Prv_max: fig11_rv_pmax_pred}
+  note: "Fig. 11: 0.5, 1 and 2 x E_es"

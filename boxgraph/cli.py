@@ -46,11 +46,12 @@ def _build(args) -> int:
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    syn = build_synthesis(Path(args.records), cache_dir=out / "cache")
+    cache = Path(args.cache) if args.cache else out / "cache"  # a shared cache reuses runs made elsewhere
+    syn = build_synthesis(Path(args.records), cache_dir=cache)
     (out / "records").mkdir(exist_ok=True)
     for sid, b in syn["builds"].items():
         (out / "records" / f"{sid}.json").write_text(json.dumps(b, indent=1, default=str))
-    (out / "synthesis.json").write_text(json.dumps(to_json(syn), indent=1, default=str))
+    (out / "synthesis.json").write_text(json.dumps(to_json(syn), indent=1, sort_keys=True, default=str))
     sents = review(syn)
     problems = trace_check(sents, build_index(syn))
     (out / "review.json").write_text(json.dumps([vars(s) for s in sents], indent=1))
@@ -268,6 +269,7 @@ def main(argv=None) -> int:
     b.add_argument("--title", default="BoxGraph Synthesis")
     b.add_argument("--standalone", action="store_true", help="embed the explorer's images in the page (one file)")
     b.add_argument("--overview", help="YAML with the overview's introduction, links and case studies")
+    b.add_argument("--cache", help="cache directory for model runs (default: OUT/cache)")
     b.set_defaults(fn=_build)
     vl = sub.add_parser("validations", help="judge the models of some records against measurements in the others")
     vl.add_argument("records")

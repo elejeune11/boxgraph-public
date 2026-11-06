@@ -1,0 +1,194 @@
+- id: q_basal_vs_table3
+  kind: unexplained_difference
+  about: [Emax_lv_basal, Emax_rv_basal, R_sp_basal, R_ep_basal, Vu_sv_basal, Vu_ev_basal, T_basal, Emax_lv0, Emax_rv0, R_sp0, R_ep0, Vu_sv0, Vu_ev0, T0]
+  text: >
+    Tables 1 and 2 give basal values of the controlled parameters (Emax,lv 2.95, Emax,rv 1.75,
+    Rsp 3.307, Rep 1.407, Vu,sv 1121, Vu,ev 1375, T 0.833 s) and Table 3 gives their values in the
+    absence of innervation and the gains; Eqs. 35-37 link them through one basal sympathetic
+    frequency. The paper does not say at which operating point the two tables agree. Solving each
+    pair for ln(fes - fes,min + 1) gives 1.175, 1.199, 1.176, 1.183, 1.185 and 1.223: not one value,
+    so no single basal state reproduces every Table 1/2 entry exactly. The comparisons
+    cmp_basal_* (closed-loop basal state) and cmp_static_Pn_* (static point at Pn) show how close each
+    comes.
+- id: q_vu_ratio
+  kind: possible_error
+  about: [ratio_Vu_rv_lv, Vu_rv, Vu_lv]
+  text: >
+    The text says the ratio Vu,rv/Vu,lv = 2.45 was applied to the human left-ventricle value, but
+    Table 2 gives Vu,rv = 40.8 and Vu,lv = 16.77, a ratio of 2.43; 2.45 x 16.77 would give 41.1 ml.
+    Either the ratio or Vu,rv is rounded or misprinted.
+- id: q_vurv_unit
+  kind: reading
+  about: [Vu_rv]
+  text: "Table 2 prints Vu,rv = 40.8 with no unit; ml is assumed, as for every other volume in the table."
+- id: q_gain_units
+  kind: possible_error
+  about: [G_Emax_lv, G_Emax_rv, G_R_sp, G_R_ep, G_Vu_sv, G_Vu_ev, G_T_s]
+  text: >
+    Table 3 prints the gains of the logarithmic static functions per spikes/s (e.g. mmHg·ml^-1·v^-1),
+    but in Eqs. 35 and 38 they multiply ln[fes - fes,min + 1], which is dimensionless only if fes is a
+    pure number; the "+ 1" adds a number to a frequency. The record takes fes in spikes/s as a number
+    inside the logarithm and stores each gain with the printed unit; only G_T,v (Eq. 40, linear in fev)
+    is dimensionally consistent as printed.
+- id: q_integrator
+  kind: choice
+  about: [circulation_baroreflex, run_basal, run_pacing]
+  text: >
+    The paper integrated with adaptive fifth-order Runge-Kutta-Fehlberg in SIMNON, steps up to 0.01 s,
+    tolerance 1e-6. The record uses classical fixed-step RK4 with dt = 0.002 s, the pure delays read
+    from the stored efferent frequencies, and a fixed starting state near the basal state followed by
+    150 s of settling; refinements check dt, settling time and averaging window. The starting state
+    is not stated by the paper but does not affect the settled values.
+- id: q_pacing_start
+  kind: unstated_input
+  about: [pacing_dCO, HR_pacing_low]
+  text: >
+    "a 30% increase in heart rate causing only 15% increase in cardiac output" (p. 10) is stated for
+    the range 60-90 beats/min without the starting rate. The record starts at 60 beats/min (to 78);
+    starting at 69.2 beats/min (to 90) gives a smaller change.
+- id: q_total_resistance
+  kind: unstated_model
+  about: [total_resistance_target, reflex_range]
+  text: >
+    "total systemic resistance in vagotomized animals increases by ~200-210% when carotid sinus
+    pressure is lowered from 200 to 50 mmHg" does not say how total systemic resistance is formed in
+    the model, nor whether "increases by 200%" means an increase of 200% or a rise to 200% of the
+    initial value. The record takes Rsa + (Rsp + Rsv)||(Rep + Rev) and the relative increase; the
+    printed value is approximate, so the comparison has no verdict.
+- id: q_range_pressures
+  kind: unstated_input
+  about: [sp_resistance_target, vu_total_target, vu_sp_target, Pcs_full_low, Pcs_full_high]
+  text: >
+    The splanchnic resistance increase (70%) is said to hold "over the whole baroreceptor sensitivity
+    range", and the venous unstressed-volume changes (15 and 10 ml/kg) are "total reflex" changes,
+    without carotid pressures. The record uses pressures far outside the sigmoid (0 and 250 mmHg);
+    with 50 and 200 mmHg the changes are slightly smaller.
+- id: q_figures_not_read
+  kind: reading
+  about: [circulation_baroreflex, reflex_static]
+  text: >
+    Almost all of the paper's results are only plotted (Figs. 2-9): the afferent sigmoid with and
+    without pulsation, the baroreceptor transfer function, the heart-rate grid of Fig. 4, the Starling
+    curves of Fig. 5, the pacing curves of Fig. 6, the open-loop responses of Fig. 7, the pulsatility
+    effect of Fig. 8 and the hemorrhage bars of Fig. 9. The figure-reading tools were not available to
+    this reading job, so none is read yet; the models in the record (circulation_baroreflex,
+    reflex_static) can produce most of them once they are.
+- id: q_inertance_unit
+  kind: possible_error
+  about: [L_sa, L_pa]
+  text: >
+    The Table 1 column header prints the inertance unit as mmHg·ml·s^-2 (page image). That is not
+    the dimension of an inertance in Eqs. 2 and 6, where L dF/dt is a pressure, so the unit must be
+    mmHg·s^2·ml^-1. The record stores L_sa and L_pa in mmHg·s^2/ml, the unit the equations need. It
+    treats the printed header as a misprint, not as the unit of the printed numbers.
+  citation: {page: 4, quote: "mmHg · ml · s22", where: Table 1 header}
+- id: q_eq35_condition
+  kind: reading
+  about: [circulation_baroreflex, reflex_static]
+  text: >
+    Eqs. 35 and 38 put the delayed frequency fes(t - D) inside the logarithm, but they print the
+    switching condition as "if fes >= fes,min" without the delay. The record applies the condition
+    to the delayed value, which keeps the logarithm defined. The other reading (the current fes)
+    differs only while fes is crossing fes,min. With the Table 3 values, fes approaches fes,min only
+    near the upper saturation of the afferent sigmoid, so the static comparisons are hardly affected.
+  citation: {page: 14, quote: "fes,min 1 1] if fes $ fes,min", where: "Eq. 35"}
+- id: q_vu_two_thirds
+  kind: reading
+  about: [vu_sp_target, vu_total_target, G_Vu_sv, G_Vu_ev]
+  text: >
+    The text says the splanchnic 10 ml/kg "is two-thirds of the total reflex response" (p. 5). It is
+    not compared as a datum of its own because the paper prints the value in words. In the static
+    model (Eqs. 35-37), the splanchnic share of the venous unstressed-volume change is
+    G_Vu,sv/(G_Vu,sv + G_Vu,ev) at every sympathetic frequency, so it can be checked from Table 3
+    alone. The comparisons cmp_vu_splanchnic and cmp_vu_total check the two absolute values.
+  citation: {page: 5, quote: "which is two-thirds of the total reflex response"}
+- id: q_fig3_pp60
+  kind: unexplained_difference
+  about: [fig3top_pp60_d, afferent_pulsatile, A_pp60]
+  text: >
+    The dotted line of Fig. 3 top (1.5-Hz pulsation of 60 mmHg peak to peak) is nearly straight, from
+    about 14 spikes/s at 10% to about 36 at 187%. Eqs. 30-31 at periodic steady state with the Table 3
+    parameters give the same line in the middle of the range but a curve that bends further at both
+    ends (about 13 spikes/s at 30% and 41 at 187%), while the 20 and 40 mmHg lines are reproduced
+    closely. The paper does not say how the 60 mmHg curve was computed (for instance whether the
+    pressure was limited at zero); the comparison cmp_fig3_pp60 shows the difference.
+  citation: {page: 6, quote: "dotted line, 60 mmHg peak to peak", where: Fig. 3 legend}
+- id: q_fig3_percent
+  kind: unstated_input
+  about: [P_ref_fig3, fig3top_static_d, fig3top_circles_d, fig3top_asterisks_d]
+  text: >
+    Fig. 3 top gives intrasinus pressure in percent without saying of what. The record takes 100% =
+    92 mmHg, the central point of the sigmoid (p. 4); with it the static line is reproduced within
+    the reading precision, which supports that choice.
+  citation: {page: 4, quote: "assuming that the central point lies at 92", where: text}
+- id: q_fig7_axes
+  kind: unstated_input
+  about: [P_norm_fig7, P_ref_vol, P_ref_T, F_ep_added, fig7a_model_d, fig7b_model_d, fig7c_model_d, fig7d_model_d, fig7e_intact_d, fig7f_intact_d]
+  text: >
+    Fig. 7 gives intrasinus pressure 'norm.' without the pressure it is divided by, and normalizes
+    SAP, CO and resistance without saying at which pressure. The record divides by Pn = 92 mmHg and
+    normalizes at Pcs = Pn, takes the volume shifts as zero at 150 mmHg and the heart period change as
+    zero at 40 mmHg (the ends of the simulated range, p. 8), and holds the extrasplanchnic flow at
+    3.73 l/min (1.6 l/min being about 30% of cardiac output). The middle-left panel is also labelled
+    'norm.' but its axis runs 0-150 like a pressure in mmHg; the record reads it in mmHg (q_fig7c_axis).
+  citation: {page: 8, quote: "given different constant values ranging between 40 and"}
+- id: q_fig7c_axis
+  kind: reading
+  about: [fig7c_model_d, fig7c_eckberg_d]
+  text: >
+    The x axis of Fig. 7 middle left is labelled 'Intrasinus Pressure (norm.)' like the other panels,
+    but its ticks are 0, 50, 100, 150, where the other panels run 0-2. The record reads it as carotid
+    sinus pressure in mmHg: with that reading the model's heart period change (Eqs. 31-42) rises where
+    the plotted line does, whereas as percent of 92 mmHg it would rise about 8 mmHg too late.
+  citation: {page: 8, quote: "Middle left: comparison of model heart", where: Fig. 7}
+- id: q_fig7_volume_shift
+  kind: unstated_model
+  about: [static_volume_shift, fig7a_model_d, fig7b_model_d]
+  text: >
+    The volume shifts of Fig. 7 top are said only to be computed at constant venous pressures and
+    flows. The record takes the change of each bed's volume as the change of its venous unstressed
+    volume plus its peripheral compliance times flow times the change of its peripheral resistance
+    (the venous stressed volume being fixed). Without the second term the splanchnic shift at low
+    pressure would be about 9.3 ml/kg instead of the plotted 7.
+  citation: {page: 8, quote: "puted by maintaining constant venous pressures and"}
+- id: q_figures_read
+  kind: reading
+  about: [circulation_baroreflex, reflex_static, pacing_co_change]
+  text: >
+    The figures are now read with calibrated code (figures.yaml, figures.md), answering most of
+    q_figures_not_read. Figs. 5 top (Starling curves at fixed right atrial and arterial pressure),
+    8 A (open loop with a pulsating carotid pressure) and 9 (hemorrhage) are read but have no model
+    run: circulation_baroreflex would need a fixed-Pra/fixed-SAP preparation, a time-varying carotid
+    pressure, and the hemorrhage input I(t) of Eq. 11. Fig. 6 top also lets the pacing statement of
+    p. 10 (q_pacing_start) be checked on the paper's own curve: its points read at 60 and 80
+    beats/min (+33% in rate) differ by about +16% in cardiac output, those at 70 and 90 beats/min
+    (+29%) by about +12%; both are near the stated 15%, so the curve does not fix the starting rate.
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [circulation_baroreflex]
+  text: >
+    Cross-validation against korakianitis2006 finds nothing to test in either direction.
+    korakianitis2006 holds no measurement: every figure in it is output of its own model (see its
+    figures.md), so no model here can be validated against it. The reverse direction is answered
+    in korakianitis2006 (q_no_cross_validation_ursino1998). That paper cites this one only for
+    loop parameters. Its model has no baroreflex and predicts none of the measurements recorded
+    here, all of which are responses to carotid sinus pressure or the reflex, or a normalized
+    dSV/dHR that no model there outputs. The shared shape of circulation_baroreflex and
+    korakianitis2006/circulation_valves is a relation between models, left for the later job.
+  citation: {none: "the absence of measurements is a fact of the other record; this 1998 paper cannot cite the later korakianitis2006"}
+- id: q_no_cross_validation_shi2013_ch2
+  kind: unstated_model
+  about: [circulation_baroreflex, pacing_curve, open_loop_static]
+  text: >
+    Cross-validation against shi2013_ch2 finds nothing to test in this direction. shi2013_ch2 has
+    one measurement, fig2_3_vlv_mri_read: one volunteer's left-ventricular volume at each of 33 MRI
+    phases, with no stated phase-to-time mapping or heart period. No model here gives a
+    left-ventricular volume against time or phase. circulation_baroreflex and the models built on it
+    output whole-period means (CO, SAP, T, effector values), and the record has no waveform model.
+    Its parameters are also for a generic 70-kg subject, not that volunteer. The reverse direction
+    is answered in shi2013_ch2 (q_no_cross_validation_ursino1998): that chapter cites this paper
+    only for loop parameters, and its model has no baroreflex, so it predicts none of the
+    measurements recorded here. The shared shape of circulation_baroreflex and
+    shi2013_ch2/circulation_ch2 is a relation between models, left for the later job. No validation
+    was added.
+  citation: {none: "the absence of a predictable measurement is a fact of the other record; this 1998 paper cannot cite the 2013 thesis"}

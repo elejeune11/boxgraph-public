@@ -31,19 +31,31 @@ def test_validate_unsound_record(tmp_path):
 
 
 def test_build_writes_synthesis_and_report(tmp_path):
-    """`boxgraph build` writes the Synthesis, per-record builds, the report and the explorer."""
+    """`boxgraph build` writes the Synthesis (keys sorted, so two builds compare line by line), per-record builds, the report and the explorer."""
     root = tmp_path / "records"
     for n in ("toy", "toy2"):
         shutil.copytree(FX / n, root / n)
     out = tmp_path / "build"
     r = cli("build", str(root), "--out", str(out))
     assert r.returncode == 0, r.stdout + r.stderr
-    syn = json.loads((out / "synthesis.json").read_text())
+    text = (out / "synthesis.json").read_text()
+    syn = json.loads(text)
+    assert text == json.dumps(syn, indent=1, sort_keys=True)
     assert set(syn["papers"]) == {"toy", "toy2"}
     assert (out / "report.md").exists() and (out / "report.html").exists()
     assert (out / "records" / "toy.json").exists()
     assert "toy2" in (out / "explorer.html").read_text()
     assert "toy2" in (out / "overview" / "index.html").read_text()
+
+
+def test_build_can_share_a_model_cache_kept_outside_its_output(tmp_path):
+    """`boxgraph build --cache DIR` keeps model runs in DIR, so a corpus built elsewhere reuses the runs its agents made."""
+    root = tmp_path / "records"
+    shutil.copytree(FX / "toy", root / "toy")
+    out, shared = tmp_path / "build" / "named", tmp_path / "shared_cache"
+    r = cli("build", str(root), "--out", str(out), "--cache", str(shared))
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert any(shared.rglob("*")) and not (out / "cache").exists()
 
 
 def test_build_takes_the_overviews_text_and_case_studies_from_a_content_file(tmp_path):

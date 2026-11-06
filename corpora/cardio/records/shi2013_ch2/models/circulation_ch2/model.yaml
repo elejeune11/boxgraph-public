@@ -1,0 +1,141 @@
+id: circulation_ch2
+name: closed-loop circulation with variable-elastance chambers, KG diaphragm motion and on-off or leaflet-dynamics valves (Eqs. 2-1 to 2-23)
+role: model
+stated: {page: 11, printed_page: "59", quote: "Components of the whole circulation system are modelled as illustrated in Figure 2-5", where: "Eqs. 2-1 to 2-23, Fig. 2-5"}
+equation: >
+  dV_lv/dt = Q_mi - Q_ao (2-1); e_lv(t) = E_lv,d + (E_lv,s - E_lv,d)/2 ebar_lv(t) (2-2);
+  ebar_lv = 1 - cos(t/T_s1 pi), 0<=t<T_s1; 1 + cos((t - T_s1)/(T_s2 - T_s1) pi), T_s1<=t<T_s2; 0, T_s2<=t<T (2-3);
+  P_lv = P_lv,0 + e_lv (V_lv - V_lv,0) (2-4); without atrial contraction e_la = E_la,min;
+  with it e_la(t) = E_la,min + (E_la,max - E_la,min)/2 ebar_la(t) (2-5),
+  ebar_la = 1 - cos((t - T_pwb + T)/T_pww 2pi), 0<=t<T_pwb+T_pww-T; 0; 1 - cos((t - T_pwb)/T_pww 2pi), T_pwb<=t<T (2-6);
+  M_sav d2l/dt2 = K_e,la e_la - K_e,lv e_lv + (P_lv - P_la) A_sav - k_f,sav dl/dt - k_e,sav l (2-10);
+  V_lv = V_lv + A_sav l (2-11); V_la = V_la - A_sav l (2-12);
+  Q_ao = CQ_ao AR_ao sqrt(P_lv - P_sas), P_lv>=P_sas; CQ_ao AR_ao sqrt(P_sas - P_lv), P_lv<P_sas (2-13);
+  AR_ao = 1 if P_lv>=P_sas else 0 (2-14) or AR_ao = (1 - cos theta)^2/(1 - cos theta_max)^2 (2-15);
+  d2theta/dt2 = K_p,ao (P_lv - P_sas) cos theta - K_f,ao dtheta/dt (2-17);
+  dP_sas/dt = (Q_ao - Q_sas)/C_sas (2-18); dQ_sas/dt = (P_sas - P_sat - R_sas Q_sas)/L_sas (2-19);
+  dP_sat/dt = (Q_sas - Q_sat)/C_sat (2-20); dQ_sat/dt = (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat (2-21);
+  dP_svn/dt = (Q_sat - Q_svn)/C_svn (2-22); Q_svn = (P_svn - P_ra)/R_svn (2-23);
+  right heart, other valves and pulmonary loop "similar"
+inputs:
+  CQao: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQmi: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQpo: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQti: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  Elvs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Elvd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Plv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vlv0: {quantity: chamber_reference_volume, unit: ml}
+  Ela_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ela_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pla0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vla0: {quantity: chamber_reference_volume, unit: ml}
+  Ervs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ervd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Prv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vrv0: {quantity: chamber_reference_volume, unit: ml}
+  Era_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Era_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pra0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vra0: {quantity: chamber_reference_volume, unit: ml}
+  Csas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Csat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rsar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rscp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rsvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Csvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Cpas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Cpat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rpar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpcp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Cpvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Kst_la: {quantity: kg_tissue_coefficient, unit: m/(s^2*mmHg)}
+  Kst_lv: {quantity: kg_tissue_coefficient, unit: m/(s^2*mmHg)}
+  Kf_sav: {quantity: kg_friction_coefficient, unit: 1/s}
+  Ke_sav: {quantity: kg_elastic_coefficient, unit: 1/s^2}
+  m_sav: {quantity: annulus_mass, unit: kg}
+  A_sav: {quantity: annulus_area, unit: m^2}
+  Kst_ra: {quantity: kg_tissue_coefficient, unit: m/(s^2*mmHg)}
+  Kst_rv: {quantity: kg_tissue_coefficient, unit: m/(s^2*mmHg)}
+  Kf_pav: {quantity: kg_friction_coefficient, unit: 1/s}
+  Ke_pav: {quantity: kg_elastic_coefficient, unit: 1/s^2}
+  m_pav: {quantity: annulus_mass, unit: kg}
+  A_pav: {quantity: annulus_area, unit: m^2}
+  Kp_ao: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ao: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kp_mi: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_mi: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kp_po: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_po: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kp_ti: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ti: {quantity: valve_friction_coefficient, unit: 1/s}
+  theta_max_ao: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ao: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_mi: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_mi: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_po: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_po: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_ti: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ti: {quantity: leaflet_min_angle, unit: deg}
+  T: {quantity: heart_period, unit: s}
+  Ts1: {quantity: time_peak_systole, unit: s}
+  Ts2: {quantity: time_end_systole, unit: s}
+  Tpwb: {quantity: p_wave_onset, unit: s}
+  Tpww: {quantity: p_wave_duration, unit: s}
+  Vlv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vla_init: {quantity: initial_chamber_volume, unit: ml}
+  Vrv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vra_init: {quantity: initial_chamber_volume, unit: ml}
+  Psas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+outputs:
+  Plv_max: {quantity: peak_lv_pressure, unit: mmHg}
+  Plv_min: {quantity: min_lv_pressure, unit: mmHg}
+  Psas_max: {quantity: peak_aortic_pressure, unit: mmHg}
+  Psas_min: {quantity: min_aortic_pressure, unit: mmHg}
+  Prv_max: {quantity: peak_rv_pressure, unit: mmHg}
+  Ppas_max: {quantity: peak_pulmonary_artery_pressure, unit: mmHg}
+  CO: {quantity: mean_aortic_flow, unit: l/min}
+  Vlv_max: {quantity: lv_volume_max, unit: ml, description: "chamber volumes include the KG diaphragm term of Eqs. 2-11, 2-12"}
+  Vlv_min: {quantity: lv_volume_min, unit: ml}
+  SV: {quantity: stroke_volume, unit: ml}
+  Vla_max: {quantity: la_volume_max, unit: ml}
+  Vrv_max: {quantity: rv_volume_max, unit: ml}
+  Vlv_pwb: {quantity: lv_volume_p_wave, unit: ml}
+  Vla_pwb: {quantity: la_volume_p_wave, unit: ml}
+  Vrv_pwb: {quantity: rv_volume_p_wave, unit: ml}
+  Vra_pwb: {quantity: ra_volume_p_wave, unit: ml}
+  Vla_trough: {quantity: la_volume_trough, unit: ml}
+  Vra_trough: {quantity: ra_volume_trough, unit: ml}
+  Qao_max: {quantity: peak_aortic_valve_flow, unit: ml/s}
+  Qmi_max: {quantity: peak_mitral_valve_flow, unit: ml/s}
+  Qpo_max: {quantity: peak_pulmonary_valve_flow, unit: ml/s}
+  Qti_max: {quantity: peak_tricuspid_valve_flow, unit: ml/s}
+  Qmi_E: {quantity: mitral_E_peak_flow, unit: ml/s}
+  Qti_E: {quantity: tricuspid_E_peak_flow, unit: ml/s}
+  EA_mi: {quantity: mitral_EA_ratio, unit: dimensionless, description: "largest mitral flow between T_s2 and T_pwb over the largest during atrial activation; a flow ratio standing for the velocity ratio"}
+  EA_ti: {quantity: tricuspid_EA_ratio, unit: dimensionless}
+  l_min: {quantity: kg_displacement_min, unit: m}
+  l_max: {quantity: kg_displacement_max, unit: m}
+settings:
+  dt: 0.0001                 # Table 2-5
+  t_end: 11.0                # "the converged solution of the 11th period, from the 10th to the 11th second"
+  t_window: 10.0
+  atrial_contraction: false  # true: Eqs. 2-5, 2-6; false: e_la = E_la,min
+  kg_motion: false           # true: Eqs. 2-10 to 2-12
+  valve_dynamics: false      # true: Eqs. 2-15, 2-17; false: Eq. 2-14
+  kg_form: eq2_10            # eq2_10: Eq. 2-10 with M_sav as printed; per_mass: Table 2-3 units (q_kg_units)
+stochastic: false

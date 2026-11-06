@@ -1,0 +1,32 @@
+- id: p_atm_added
+  quantity: atmospheric_pressure
+  unit: mmHg
+  printed: "760"
+  basis: >
+    Eq. 9 uses the absolute reservoir pressure, which the paper says is atmospheric pressure plus mean
+    arterial pressure (p. 3) but gives no number for atmospheric pressure; standard sea-level value
+    (Amsterdam).
+  alternatives: ["750", "770"]
+  stands_for: atmospheric part of P in Eq. 9 (C = V/P)
+- id: pmean_pulm_added
+  quantity: mean_arterial_pressure
+  unit: mmHg
+  printed: "15"
+  basis: >
+    The paper gives no normal mean pulmonary arterial pressure; it states only that the pulmonary
+    model should be linear up to a mean pressure of 40 mm Hg (p. 3). 15 mm Hg is a typical normal mean
+    pulmonary arterial pressure.
+  alternatives: ["30", "40"]
+  stands_for: mean-pressure part of P in Eq. 9 for the pulmonary models
+- id: c_man_syst_halved
+  quantity: total_arterial_compliance
+  unit: cm^4*s^2/Mg
+  printed: "400"
+  basis: >
+    (Cross-validation with westerhof1969, val_tau_man_vs_analog_stiff.) The 1969 stiff setting divides
+    every capacitance of the analog by 2 (westerhof1969 k_stiff, p. 136). Neither paper states the total
+    compliance of man for that setting; this is Table 1's C x 10^6 for man, systemic (800), divided by 2.
+    The alternatives span the uncertainty of the base estimate, whose source is not given
+    (q_parameter_estimation).
+  alternatives: ["300", "500"]
+  stands_for: C in tau = Rp C for the 1969 analog with all capacitors halved

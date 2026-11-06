@@ -1,0 +1,110 @@
+- id: run_stiffness_pulmonary
+  model: stiffness_eq28
+  inputs: {epsilon: epsilon_pulmonary}
+  outputs: {Eh_r0: Eh_r0_pulmonary_pred}
+- id: run_eta_base
+  model: area_ratio_eq218
+  inputs: {xi: xi_base, gamma: gamma_base}
+  outputs: {eta: eta_base_pred}
+- id: run_eta_base_definitions
+  model: area_ratio_eq216_217
+  inputs: {xi: xi_base, gamma: gamma_base}
+  outputs: {eta: eta_base_definitions_pred}
+- id: run_prefactor_eq219
+  model: prefactor_eq219
+  inputs: {b: eq219_ln_prefactor}
+  outputs: {c: eq219_prefactor_pred}
+- id: run_prefactor_fig5
+  model: prefactor_eq219
+  inputs: {b: fig5_intercept_large}
+  outputs: {c: fig5_prefactor_pred}
+- id: run_pulse_coefficients
+  model: pulse_coefficients_eq42
+  inputs: {aS: eq41_systolic_slope, bS: eq41_systolic_intercept, aD: eq41_diastolic_slope, bD: eq41_diastolic_intercept}
+  outputs: {a_pulse: eq42_pulse_slope_pred, b_pulse: eq42_pulse_intercept_pred}
+- id: run_pulse_PuA_table2
+  model: pulse_pressure_eq42
+  inputs: {a: eq42_pulse_slope, b: eq42_pulse_intercept}
+  sweep: {pbar: table2_PuA_pulse_vs_mean}
+  outputs: {pulse: PuA_pulse_eq42_pred}
+
+# Fig. 8(a): Eq. 2.18 swept over the read xi positions
+- id: run_eta_fig8a_g025
+  model: area_ratio_eq218
+  inputs: {gamma: gamma_fig8_g025}
+  sweep: {xi: eta_fig8a_g025}
+  outputs: {eta: eta_fig8a_g025_pred}
+- id: run_eta_fig8a_g025_definitions
+  model: area_ratio_eq216_217
+  inputs: {gamma: gamma_fig8_g025}
+  sweep: {xi: eta_fig8a_g025}
+  outputs: {eta: eta_fig8a_g025_definitions_pred}
+- id: run_eta_fig8a_g05
+  model: area_ratio_eq218
+  inputs: {gamma: gamma_fig8_g05}
+  sweep: {xi: eta_fig8a_g05}
+  outputs: {eta: eta_fig8a_g05_pred}
+- id: run_eta_fig8a_g05_definitions
+  model: area_ratio_eq216_217
+  inputs: {gamma: gamma_fig8_g05}
+  sweep: {xi: eta_fig8a_g05}
+  outputs: {eta: eta_fig8a_g05_definitions_pred}
+- id: run_eta_fig8a_g075
+  model: area_ratio_eq218
+  inputs: {gamma: gamma_fig8_g075}
+  sweep: {xi: eta_fig8a_g075}
+  outputs: {eta: eta_fig8a_g075_pred}
+- id: run_eta_fig8a_g075_definitions
+  model: area_ratio_eq216_217
+  inputs: {gamma: gamma_fig8_g075}
+  sweep: {xi: eta_fig8a_g075}
+  outputs: {eta: eta_fig8a_g075_definitions_pred}
+- id: run_eta_fig8a_g1
+  model: area_ratio_eq218
+  inputs: {gamma: gamma_fig8_g1}
+  sweep: {xi: eta_fig8a_g1}
+  outputs: {eta: eta_fig8a_g1_pred}
+- id: run_eta_fig8a_g1_definitions
+  model: area_ratio_eq216_217
+  inputs: {gamma: gamma_fig8_g1}
+  sweep: {xi: eta_fig8a_g1}
+  outputs: {eta: eta_fig8a_g1_definitions_pred}
+
+# Fig. 5: the printed line labels and Eq. 2.19 swept over the read log(r) positions
+- id: run_fig5_line_large
+  model: length_radius_loglinear_fig5
+  inputs: {a: fig5_slope_large, b: fig5_intercept_large}
+  sweep: {lnr: lnl_fig5_line_large}
+  outputs: {lnl: lnl_fig5_line_large_pred}
+- id: run_fig5_line_small
+  model: length_radius_loglinear_fig5
+  inputs: {a: fig5_slope_small, b: fig5_intercept_small}
+  sweep: {lnr: lnl_fig5_line_small}
+  outputs: {lnl: lnl_fig5_line_small_pred}
+- id: run_fig5_points_large
+  model: length_radius_loglinear_fig5
+  inputs: {a: fig5_slope_large, b: fig5_intercept_large}
+  sweep: {lnr: lnl_fig5_points_large}
+  outputs: {lnl: lnl_fig5_points_large_pred}
+- id: run_fig5_points_small
+  model: length_radius_loglinear_fig5
+  inputs: {a: fig5_slope_small, b: fig5_intercept_small}
+  sweep: {lnr: lnl_fig5_points_small}
+  outputs: {lnl: lnl_fig5_points_small_pred}
+- id: run_eq219_points_large
+  model: length_radius_loglinear_fig5
+  inputs: {a: eq219_exponent, b: eq219_ln_prefactor}
+  sweep: {lnr: lnl_fig5_points_large}
+  outputs: {lnl: lnl_eq219_points_large_pred}
+
+# Eq. 3.1 swept over the read radii of the Fig. 7(d) centre lines
+- id: run_eq31_sys_fig7d
+  model: pressure_log_radius_eq31
+  inputs: {a: eq31_sys_slope, b: eq31_sys_intercept}
+  sweep: {log10r: pmean_fig7d_sys_centre}
+  outputs: {p: pmean_eq31_sys_pred}
+- id: run_eq31_pulm_fig7d
+  model: pressure_log_radius_eq31
+  inputs: {a: eq31_pulm_slope, b: eq31_pulm_intercept}
+  sweep: {log10r: pmean_fig7d_pulm_centre}
+  outputs: {p: pmean_eq31_pulm_pred}

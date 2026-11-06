@@ -10,6 +10,10 @@ from . import precision as P
 from .schema import FigureReading
 
 
+def _num(v) -> bool:
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
 def _from_code(fr: FigureReading, img, code_reader, res: dict, overlay_to) -> dict:
     """A reading by the record's own code: run it, check what it returns, draw it."""
     if code_reader is None:
@@ -23,26 +27,32 @@ def _from_code(fr: FigureReading, img, code_reader, res: dict, overlay_to) -> di
         return res
     rows = []
     for i, r in enumerate(raw):
+        if not isinstance(r, dict) or not _num(r.get("x")):
+            res["errors"].append(f"figure {fr.id}: reading {i} has no numeric x")
+            continue
         x, y = r.get("x"), r.get("y")
         found = bool(r.get("found", y is not None)) and y is not None
         row = {"x": x, "y": y if found else None, "lo": r.get("lo") if found else None,
                "hi": r.get("hi") if found else None, "found": found, "note": str(r.get("note", ""))}
-        for k in ("bar_lo", "bar_hi", "bar_lo_outer", "bar_hi_outer"):
-            if r.get(k) is not None:
-                row[k] = r[k]
-        if not isinstance(x, (int, float)):
-            res["errors"].append(f"figure {fr.id}: reading {i} has no numeric x")
-            continue
+        bars = {k: r[k] for k in ("bar_lo", "bar_hi", "bar_lo_outer", "bar_hi_outer") if r.get(k) is not None}
+        why = None
+        if found and not (_num(y) and _num(row["lo"]) and _num(row["hi"]) and row["lo"] <= y <= row["hi"]):
+            why = "needs an interval lo <= y <= hi"
+        elif found and (not all(_num(v) for v in bars.values()) or ("bar_lo" in bars) != ("bar_hi" in bars)):
+            why = "error bar ends (bar_lo and bar_hi) must both be numbers"
+        if why:  # a value without a usable interval is not a reading
+            row.update(y=None, lo=None, hi=None, found=False, note=why)
+            found = False
+        else:
+            row.update(bars)
         if found:
-            if row["lo"] is None or row["hi"] is None or not (row["lo"] <= y <= row["hi"]):
-                res["errors"].append(f"figure {fr.id}: x = {x:g}: needs an interval lo <= y <= hi")
             px = r.get("px")
-            if not (isinstance(px, list) and len(px) == 2):
+            if not (isinstance(px, list) and len(px) == 2 and all(_num(p) for p in px)):
                 res["errors"].append(f"figure {fr.id}: x = {x:g}: no pixel position `px` [column, row], so it "
                                      f"cannot be checked on the overlay")
             else:
                 row["px"] = [float(px[0]), float(px[1])]
-                if r.get("px_lo") is not None and r.get("px_hi") is not None:
+                if _num(r.get("px_lo")) and _num(r.get("px_hi")):
                     row["px_span"] = [float(r["px_lo"]), float(r["px_hi"])]
         elif not row["note"]:
             row["note"] = "not found"

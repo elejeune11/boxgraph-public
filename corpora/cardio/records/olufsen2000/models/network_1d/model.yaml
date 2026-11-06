@@ -1,0 +1,37 @@
+id: network_1d
+name: nonlinear 1D model of the large systemic arteries with structured-tree outflow (Eqs. 6, 13-18, 19-38; Appendix B)
+role: model
+stated: {page: 5, printed_page: "1285", quote: "Equations 共6兲 and 共13兲 constitute our basic one-", where: "Eqs. 6, 13, 14"}
+equation: >
+  dq/dx + dA/dt = 0 (6); dq/dt + d(q^2/A + B)/dx = -2 pi nu q R/(delta A) + (dB/dr0)(dr0/dx) (13);
+  p - p0 = (4/3)(Eh/r0)(1 - sqrt(A0/A)) (14), Eh/r0 = k1 exp(k2 r0) + k3 (15); r0(x) = rt exp(log(rb/rt) x/L);
+  inflow q(0, t) from Fig. 3; bifurcations q_pa = q_d1 + q_d2 (16), p_pa = p_d1 = p_d2 (18) except (17) with K5 = 0.75, K2 = 0
+  at the ascending aorta; outflow p(x, t) = int_{t-T}^{t} q(x, tau) z(x, t - tau) dtau (38) with z the inverse transform of the
+  structured-tree root impedance (Eqs. 19-22, 27, 33, 35-37, r_min of Table 1, l_rr = 50); two-step Lax-Wendroff (B1-B8)
+described_from: ref-21
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  mu: {quantity: dynamic_viscosity, unit: g/cm/s}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  delta: {quantity: boundary_layer_thickness, unit: cm}
+  T: {quantity: cardiac_period, unit: s}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  K5: {quantity: bifurcation_loss_coefficient, unit: dimensionless}
+  xi: {quantity: radius_exponent, unit: dimensionless}
+  gamma: {quantity: asymmetry_ratio, unit: dimensionless}
+  lrr: {quantity: length_to_radius_ratio, unit: dimensionless}
+outputs:
+  q: {quantity: volumetric_flow_rate, unit: cm^3/s, description: "q(x, t), plotted (simulated) in Fig. 7"}
+  p: {quantity: arterial_pressure, unit: mmHg, description: "p(x, t), plotted in Figs. 4, 5, 8, B5"}
+  p_mean: {quantity: mean_arterial_pressure, unit: mmHg, description: "mean pressure along the aorta, Fig. 6"}
+runnable: false
+not_runnable_reason: >
+  The inflow boundary condition is the MR-measured ascending-aortic flow, given only as the plotted curve of
+  Fig. 3 (a model port takes a scalar, and the curve is not tabulated); the connectivity of the 24 large-artery
+  segments is given only by the drawing of Fig. 1; the diastolic reference pressure p0, the numerical settings
+  (grid spacing or points per vessel, time step, number of timesteps per period N used for the impedance and the
+  convolution, number of periods run) and the treatment of the vessels just below r_min are not stated; and the
+  paper's own results of this model are curves (Figs. 4-8, B5) with no tabulated values. Rebuilding it would add
+  most of the numerics, so it is recorded as stated and its plotted outputs are recorded as figure data.

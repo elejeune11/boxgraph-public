@@ -176,3 +176,16 @@ def test_error_bars_read_by_code_give_the_values_interval_even_when_their_kind_i
     v = b.values["t_fig"]
     assert all(p is not None and math.isclose(p.hi - p.lo, 2.0, rel_tol=1e-6) for p in v.printed_values)
     assert "bar" in v.printed_values[0].text
+
+
+@needs_poppler
+def test_a_code_reading_without_its_interval_is_not_found_and_never_crashes_a_build(tmp_path):
+    """A value read by code without a usable interval (lo/hi missing or not numbers) is not found, with why; the build goes on."""
+    for extra in ("", ", 'lo': 'a', 'hi': 'b'", ", 'bar_lo': 'a', 'bar_hi': 'b', 'lo': 0.5, 'hi': 1.5"):
+        rec = make(tmp_path / str(len(extra)), reader="def read(image, at):\n    return [{'x': x, 'y': 1.0, "
+                   f"'px': [1, 1]{extra}}} for x in at]\n")
+        b = Builder(load_record(rec), cache_dir=tmp_path / "build" / "cache").build()
+        rows = b.figures["fig1_blue"]["readings"]
+        assert not any(r["found"] for r in rows), rows
+        assert any("fig1_blue" in p and ("interval" in p or "bar" in p) for p in b.problems), b.problems
+        assert b.values["t_fig"].values == [None] * 4

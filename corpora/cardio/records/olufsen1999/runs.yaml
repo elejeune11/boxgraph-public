@@ -1,0 +1,89 @@
+- id: run_boundary_layer
+  model: boundary_layer_lighthill
+  inputs: {nu: nu_blood, T: T_heartbeat}
+  outputs: {delta: delta_bl_computed}
+- id: run_co_reduction
+  model: cardiac_output_reduction
+  inputs: {co_measured: co_measured, co_scaled: co_scaled}
+  outputs: {reduction: co_reduction_computed}
+- id: run_terminal_count
+  model: terminal_branch_count
+  inputs: {A_total: A_arteriolar_bed, d: d_arteriole}
+  outputs: {N: n_terminal_computed}
+- id: run_generations
+  model: generation_count
+  inputs: {N: n_terminal_printed, n_sub: n_subtrees}
+  outputs: {gen: gen_computed}
+- id: run_asymmetry
+  model: asymmetry_eq21
+  inputs: {xi: xi_chosen, eta: eta_chosen}
+  outputs: {gamma: gamma_computed}
+- id: run_eq6_fig3_fit
+  model: stiffness_eq6
+  inputs: {k1: k1_fit, k2: k2_fit, k3: k3_fit}
+  sweep: {r0: Eh_r0_fit_fig3}
+  outputs: {Eh_r0: Eh_r0_eq6_at_fit}
+- id: run_eq6_fig3_data
+  model: stiffness_eq6
+  inputs: {k1: k1_fit, k2: k2_fit, k3: k3_fit}
+  sweep: {r0: Eh_r0_data_fig3}
+  outputs: {Eh_r0: Eh_r0_eq6_at_data}
+- id: run_tree_fig9b
+  model: structured_tree_impedance
+  inputs: {r_root: r_root_brachio, r_min: r_min_brachio, lrr: lrr_brachio, xi: xi_chosen, gamma: gamma_printed,
+           k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  sweep: {omega: Zmod_st_fig9b}
+  outputs: {Zmod: Zmod_tree_fig9b, Zphase: Zphase_tree_fig9b_grid}
+- id: run_tree_fig9c
+  model: structured_tree_impedance
+  inputs: {r_root: r_root_brachio, r_min: r_min_brachio, lrr: lrr_brachio, xi: xi_chosen, gamma: gamma_printed,
+           k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  sweep: {omega: Zphase_st_fig9c}
+  outputs: {Zmod: Zmod_tree_fig9c_grid, Zphase: Zphase_tree_fig9c}
+# Added in the audit: the DC scaling claim of p. 9, for each printed minimum radius r0-r3, l/r = 50.
+- id: run_dc_power_r0
+  model: dc_root_radius_power
+  inputs: {r_lo: r_root_lo_added, r_hi: r_root_hi_added, r_min: r_min_r0, lrr: lrr_default, xi: xi_chosen,
+           gamma: gamma_printed, k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  outputs: {p: dc_power_r0}
+- id: run_dc_power_r1
+  model: dc_root_radius_power
+  inputs: {r_lo: r_root_lo_added, r_hi: r_root_hi_added, r_min: r_min_r1, lrr: lrr_default, xi: xi_chosen,
+           gamma: gamma_printed, k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  outputs: {p: dc_power_r1}
+- id: run_dc_power_r2
+  model: dc_root_radius_power
+  inputs: {r_lo: r_root_lo_added, r_hi: r_root_hi_added, r_min: r_min_r2, lrr: lrr_default, xi: xi_chosen,
+           gamma: gamma_printed, k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  outputs: {p: dc_power_r2}
+- id: run_dc_power_r3
+  model: dc_root_radius_power
+  inputs: {r_lo: r_root_lo_added, r_hi: r_root_hi_added, r_min: r_min_r3, lrr: lrr_default, xi: xi_chosen,
+           gamma: gamma_printed, k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  outputs: {p: dc_power_r3}
+# Added in the figure pass: the brachiocephalic tree at the omegas where the measured curves of
+# Fig. 9 (md 0, md 1; Mills et al.) were read.
+- id: run_tree_md0_fig9b
+  model: structured_tree_impedance
+  inputs: {r_root: r_root_brachio, r_min: r_min_brachio, lrr: lrr_brachio, xi: xi_chosen, gamma: gamma_printed,
+           k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  sweep: {omega: Zmod_md0_fig9b}
+  outputs: {Zmod: Zmod_tree_at_md0, Zphase: Zphase_tree_at_md0_mod_grid}
+- id: run_tree_md1_fig9b
+  model: structured_tree_impedance
+  inputs: {r_root: r_root_brachio, r_min: r_min_brachio, lrr: lrr_brachio, xi: xi_chosen, gamma: gamma_printed,
+           k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  sweep: {omega: Zmod_md1_fig9b}
+  outputs: {Zmod: Zmod_tree_at_md1, Zphase: Zphase_tree_at_md1_mod_grid}
+- id: run_tree_md0_fig9c
+  model: structured_tree_impedance
+  inputs: {r_root: r_root_brachio, r_min: r_min_brachio, lrr: lrr_brachio, xi: xi_chosen, gamma: gamma_printed,
+           k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  sweep: {omega: Zphase_md0_fig9c}
+  outputs: {Zmod: Zmod_tree_at_md0_phase_grid, Zphase: Zphase_tree_at_md0}
+- id: run_tree_md1_fig9c
+  model: structured_tree_impedance
+  inputs: {r_root: r_root_brachio, r_min: r_min_brachio, lrr: lrr_brachio, xi: xi_chosen, gamma: gamma_printed,
+           k1: k1_fit, k2: k2_fit, k3: k3_fit, nu: nu_blood, rho: rho_blood_added}
+  sweep: {omega: Zphase_md1_fig9c}
+  outputs: {Zmod: Zmod_tree_at_md1_phase_grid, Zphase: Zphase_tree_at_md1}

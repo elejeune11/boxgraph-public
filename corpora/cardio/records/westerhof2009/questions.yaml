@@ -1,0 +1,181 @@
+- id: q_table2_definition
+  kind: possible_error
+  about: [sens_r_systolic, sens_c_systolic, normalized_sensitivity]
+  text: >
+    The Table 2 footnote defines sensitivity as "100(Y/X)/(Y/X)", which as printed is identically 100.
+    The intended definition is presumably 100 (DY/Y)/(DX/X), with the deltas lost in print; the record
+    reads the table that way.
+  citation: {page: 6, printed_page: "136", quote: "Sensitivity is expressed as 100(Y/X)/(Y/X) where Y is systolic", where: "Table 2 footnote"}
+- id: q_table2_unsigned
+  kind: reading
+  about: [sens_t_sv]
+  text: >
+    The heart period / stroke volume entry is printed "28" without a sign, while every other non-zero entry
+    carries + or -. It is recorded as printed (positive); the sign intended is not known.
+  citation: {page: 6, printed_page: "136", quote: "Sensitivity to independent arterial and cardiac parameters", where: Table 2}
+- id: q_factor4_which_pressure
+  kind: reading
+  about: [factor4_printed, sensitivity_ratio, cmp_factor_systolic, cmp_factor_diastolic]
+  text: >
+    "the resistance contributes a factor 4 more to pressure" does not say which pressure, and the
+    compliance sensitivities have opposite signs for systolic (-10) and diastolic (+22) pressure.
+    The factor is read as the ratio of magnitudes; 41/10 and 90/22 both give 4.1.
+- id: q_delay_approximate
+  kind: reading
+  about: [delay_coeff_printed, delay_phase_10hz_printed]
+  text: >
+    The paper prints "≈ 2.9 f" and "about 30°", so neither gets a verdict. The model gives 2.88 deg/Hz and
+    28.8 deg at 10 Hz, consistent with both as approximations.
+- id: q_b_unit
+  kind: unstated_input
+  about: [b_often_assumed]
+  text: >
+    The coefficient b = -0.01 is printed without a unit. It is recorded in 1/mmHg, the unit in which the
+    exponential pressure-volume relation is usually written; the paper does not say so.
+- id: q_wk_impedance_formulas
+  kind: unstated_model
+  about: [wk2_impedance, wk3_impedance, wk4_impedance]
+  text: >
+    The paper prints no impedance formula for the two-, three- and four-element windkessels; the models are
+    built from the circuits of Fig. 5 (electrical presentation). For the four-element model, Fig. 5 draws L
+    in parallel with Zc, which is the arrangement used.
+- id: q_wk2_limit_inputs
+  kind: choice
+  about: [r_added, c_added, f_high_added, cmp_wk2_phase_limit]
+  text: >
+    "its phase angle reaches -90°" is a high-frequency limit stated without parameters. The comparison uses
+    added typical human R and C at 100 Hz; at 12 Hz (the end of the Fig. 4 axis) the phase would be about -89 deg.
+- id: q_area_method_inputs
+  kind: unstated_input
+  about: [area_method]
+  text: The area method acts on a measured diastolic pressure waveform; no waveform or result is given, so it is not run.
+- id: q_two_area_inputs
+  kind: unstated_input
+  about: [two_area_method]
+  text: The two-area method acts on measured pressure and flow waveforms; none are given, so it is not run.
+- id: q_pulse_pressure_inputs
+  kind: unstated_input
+  about: [pulse_pressure_method]
+  text: The pulse pressure method fits a two-element windkessel driven by a measured flow waveform; none is given, so it is not run.
+- id: q_svpp_bound
+  kind: reading
+  about: [svpp_overestimation]
+  text: '"may be as large as 60%" is an upper bound from refs 50 and 56, recorded as printed; it is not a typical value.'
+- id: q_decay_intercept_p0
+  kind: reading
+  about: [decay_intercept, diastolic_start_pressure]
+  text: >
+    (Audit.) As printed, P(t) = P0 e^(-t/RC) + Pi gives P(0) = P0 + Pi, so P0 in this fit is not the
+    pressure at the start of the decay. The text before it says the analysis starts "at pressure P0"
+    (for the fit without Pi). The record gives P0 in decay_intercept the quantity diastolic_start_pressure,
+    the same as Pes and the P0 of the fit without Pi. With Pi present, P0 measures the start pressure minus
+    the intercept, so it may need a quantity of its own. This is left to the first reader's judgement.
+  citation: {page: 7, printed_page: "137", quote: "it would be better to fit diastolic pressure", where: "Eq. P(t) = P0 e^-t/RC + Pi"}
+- id: q_symbolic_limits_uncompared
+  kind: reading
+  about: [wk3_impedance, wk4_impedance, burattini_impedance, wk2_impedance, zc_fraction_r]
+  text: >
+    (Audit.) The paper makes several statements about its models that the record does not compare, because
+    they are symbolic, with no number printed. (1) At 0 Hz the three-element windkessel gives R + Zc, not R
+    (p. 4; Table 1 "Resistance + charact imp"). (2) The four-element windkessel gives R at 0 Hz (Table 1).
+    (3) Burattini's model gives the peripheral resistance correctly at 0 Hz (p. 5). (4) The two-element
+    modulus "reduces to negligible values" at high frequency (p. 3). The wk3/wk4 models do give these
+    limits, and (1) with Zc = 5-7% of R is the low-frequency error the paper calls small. A later job could
+    test (1)-(3) as stated relations or limit checks.
+  citation: {page: 4, printed_page: "134", quote: "mean flow (i.e. 0 Hz) which equals R, is in the three", where: text}
+- id: q_fig6_line_identity
+  kind: reading
+  about: [fig6_pA_black_fig, fig6_pA_grey_fig, fig6_pC_black_fig, fig6_pC_grey_fig, fig6_A_mod_wk3_fig, fig6_A_ph_wk3_fig, fig6_C_mod_wk3_fig, fig6_C_ph_wk3_fig]
+  text: >
+    Fig. 6 has no legend. In the pressure panels the caption names a measured pressure and one derived from
+    measured flow with the three-element windkessel, without saying which line is which; the black line is
+    read as measured and the grey as derived (the convention of Figs. 3 and 4, and of the impedance panels
+    below). In the impedance panels the caption gives the windkessel as the "thick line"; the line read as
+    the windkessel is the smooth light-grey one, which has the windkessel's form (phase 0 at 0 Hz, a
+    negative dip, a slow return toward 0), while the black line joins the measured crosses and is not
+    visibly thinner. If the assignment is wrong, origins measured and predicted swap between the readings.
+  citation: {page: 4, printed_page: "134", quote: "together with the input impedance of the three-element Windkessel", where: "Fig. 6 caption"}
+- id: q_fig6_bars
+  kind: reading
+  about: [fig6_A_mod_data_fig, fig6_A_ph_data_fig, fig6_C_mod_data_fig, fig6_C_ph_data_fig]
+  text: >
+    The averaged impedance points of Fig. 6 are crosses with a vertical and a horizontal bar. The caption
+    does not say what the bars are (SD, SEM or range); the vertical bar is recorded as the error bar
+    (unstated), and the horizontal bar, whose width grows with frequency, is given in each point's note. It
+    may be the spread of harmonic frequencies over beats of different heart rate; the paper does not say.
+  citation: {page: 4, printed_page: "134", quote: "human aortic input impedance of type A beats and type C beats", where: "Fig. 6 caption"}
+- id: q_fig8_scales
+  kind: reading
+  about: [fig8_R22_pmax_fig, fig8_R46_pmax_fig, fig8_R103_pmax_fig, fig8_R22_qmax_fig, fig8_R46_qmax_fig, fig8_R103_qmax_fig]
+  text: >
+    Fig. 8 draws its pressure scale (0 and 100 mmHg) beside the top row only and its flow scale (0 and
+    10 ml/s) beside the bottom row only. The readings carry each scale to the other rows at the same
+    offset from each row's bottom edge (the panels have equal heights, and the 0 mmHg tick lies on the top
+    row's bottom edge). Values in the rows without a drawn scale rest on that carry-over.
+  citation: {page: 6, printed_page: "136", quote: "Example of the use of an ejecting isolated (cat) heart", where: "Fig. 8"}
+- id: q_crossval_suga1973
+  kind: unstated_model
+  about: [wk2_impedance, wk3_impedance, wk4_impedance, fig8_R22_pmax_fig, fig8_R46_pmax_fig, fig8_R103_pmax_fig]
+  text: >
+    Cross-validation against suga1973 (ref. 65) found nothing to compare. This record's models are arterial
+    windkessel impedances, decay and compliance estimates; suga1973 measures only left-ventricular quantities
+    (Emax, Tmax, Vd, [(dP/dt)/P]max, heart rate, the normalized E(t) of Fig. 5), none of which a windkessel
+    model produces. Ref. 65 is cited only as a study of cardiac pump function with a windkessel load
+    ("The Windkessel parameters may be changed to study cardiac pump function"), not as data a model here
+    explains. In the other direction, the Fig. 8 isolated-heart pressures and flows would need a ventricle
+    (time-varying elastance) coupled to a windkessel; no such coupled model is stated in either record,
+    suga1973's E(t) model is not runnable, and Fig. 8 is a cat heart (ref. 15), not suga1973's dogs.
+  citation: {page: 5, quote: "parameters may be changed to study cardiac pump", where: text}
+- id: q_no_validation_on_westerhof1971
+  kind: choice
+  about: [wk2_impedance, wk3_impedance, wk4_impedance, burattini_impedance, resistance_mean]
+  text: >
+    (Cross-validation with westerhof1971, ref. 73.) No model of this record is judged against westerhof1971's
+    measurements. The candidate is wk3_impedance on the measured input impedances of the hydraulic models
+    (westerhof1971 Figs. 2-5) and their d-c resistances, with the Table 1 values there. But (1) wk3_impedance
+    is the three-element model this paper cites to ref. 73 itself, and westerhof1971 already compares its own
+    copy of that model (impedance_3el) with every one of those measurements, so the run would repeat that
+    test; (2) westerhof1971 gives both resistors one quantity (resistor_resistance), while wk3_impedance needs
+    two different ones here (characteristic_impedance for Zc, peripheral_resistance for R), and one quantity
+    there cannot honestly be named as both. wk2_impedance and wk4_impedance would need values westerhof1971
+    does not give for those set-ups (a lumped R for the whole load; a total inertance L), burattini_impedance
+    needs its constants b and c, and resistance_mean needs mean pressures and flows not printed for the
+    measured models. The other direction is entered in westerhof1971/validations.yaml (its three-element
+    model with the man estimates against Figs. 4 and 6 here). The Fig. 8 isolated cat-heart pressures and
+    flows need a heart model, which neither record has.
+  citation: {page: 3, printed_page: "133", quote: "in the three-element Windkessel [71, 73], can be seen as a", where: text}
+- id: q_no_validation_on_westerhof1969
+  kind: choice
+  about: [wk2_impedance, wk3_impedance, wk4_impedance, wk2_diastolic_decay, decay_intercept, area_method, zc_wave]
+  text: >
+    (Cross-validation with westerhof1969, ref. 71.) No model of this record is judged against
+    westerhof1969's measurements. Those measurements are (1) the pressure decay time constants measured on
+    the electrical analog (0.8, 0.4, 1.66 and about 0.5 s); (2) the stiff-system 'about 50 per cent'
+    increases in input impedance level and wave velocity, which are approximate and get no verdict; and
+    (3) the apparent wave velocities in man of Luchsinger and Gabe (its Fig. 7). The models here that deal
+    with diastolic decay (wk2_diastolic_decay, decay_intercept) give a pressure at a time, not a decay time
+    constant, and westerhof1969 prints no decay waveform to run them on. The area method gives RC from a
+    measured diastolic waveform but is not runnable. No windkessel here produces a wave velocity. The
+    measured human input impedances that westerhof1969 plots (Patel, Gabe; its Figs. 5 and 6) were not
+    read (westerhof1969 figures.md), so no impedance curve is available to run the windkessels against.
+    Its impedance curves that were read are the analog's own predictions, not measurements. This paper cites ref. 71 only as a distributed model and for the
+    characteristic impedance in the three-element windkessel; it compares none of its models with ref. 71's data.
+    The decay times are already validated by westerhof1971's tau = Rp C (westerhof1971/val_tau_man_vs_analog_*).
+  citation: {page: 1, printed_page: "131", quote: "anatomically based distributed models", where: text}
+- id: q_val_stergiopulos_fit_only
+  kind: choice
+  about: [wk3_impedance, wk4_impedance, burattini_impedance, wk2_diastolic_decay, decay_intercept]
+  text: >-
+    (Cross-validation with stergiopulos1999, ref. 63.) The only stergiopulos1999 measurement a model here predicts as
+    a number is the dog 71 input impedance (its Fig. 5), and every dog 71 parameter set printed there comes from dog
+    71's own pressure and flow: the windkessel fits directly, and the standard Rp and Z_c from this same impedance (0
+    Hz value; mean modulus of harmonics 3-10). So all six entries are fit_quality, none a test. Not used:
+    burattini_impedance, whose a, b, c neither paper prints (deriving them from the windkessel values would assert
+    computed numbers); wk2_diastolic_decay and decay_intercept against the measured dog 71 and human pressure waves
+    (stergiopulos1999 Figs. 1, 4), which would need a start pressure and start time read off the measured curve
+    itself as added inputs, i.e. a fit; the Fig. 2 averages and Table 1/2 standard Z_c, C, which are estimates, not
+    outputs of a model here run on independent inputs. The other direction (stergiopulos1999's windkessels against
+    this record's Murgo type A/C impedance, Fig. 6) is in stergiopulos1999/validations.yaml; this record's Fig. 4
+    (ref. 76) and Fig. 8 (ref. 15) measurements are not predicted by stergiopulos1999's models, which have no
+    parameters for those subjects and no heart model.
+  citation: {page: 4, printed_page: "134", quote: "a fourth element of the Windkessel has been proposed [63]", where: text}

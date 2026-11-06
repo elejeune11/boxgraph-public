@@ -1,0 +1,21 @@
+id: vivo_viscosity
+name: ESL-based in vivo viscosity law (Eqs. 5-11 with eta_vivo = eta_vitro (D/Deff)^4)
+role: model
+stated: {page: 3, quote: "the effective viscosity in each segment of the", where: "text after Eq. 11"}
+equation: "eta_vivo = eta_vitro(Dph, HD) (D/Deff)^4; Deff = D - 2 Weff; Dph = D - 2 Wph"
+inputs:
+  D: {quantity: vessel_diameter, unit: um}
+  HD: {quantity: discharge_hematocrit, unit: dimensionless}
+  Doff: {quantity: esl_offset_diameter, unit: um}
+  Dcrit: {quantity: esl_critical_diameter, unit: um}
+  D50: {quantity: esl_half_diameter, unit: um}
+  Wmax: {quantity: esl_max_thickness, unit: um}
+  Eamp: {quantity: esl_peak_amplitude, unit: um}
+  Ewidth: {quantity: esl_peak_decay, unit: 1/um}
+  Epeak: {quantity: esl_peak_weight, unit: dimensionless}
+  EHD: {quantity: esl_hematocrit_sensitivity, unit: dimensionless}
+outputs:
+  eta_vivo: {quantity: relative_viscosity_vivo, unit: dimensionless}
+settings: {}
+stochastic: false
+built_from: [vitro_viscosity, esl_thickness]

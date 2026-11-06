@@ -1,0 +1,60 @@
+id: shi2013_ch2
+kind: thesis
+title: "Chapter 2: Development of a Lumped Parameter Model for the Human Cardiovascular System Including Heart Valve Dynamics and Atrio-ventricular Interaction"
+authors: [Yubing Shi]
+year: 2013
+venue: PhD thesis, University of Sheffield, Chapter 2 (thesis pp. 49-101; PDF pages 65-118 of the thesis)
+file: corpus/cardio/2013_Shi_ch2.pdf
+page_range: [1, 54]
+pages: {1: "49", 2: "50", 3: "51", 4: "52", 5: "53", 6: "54", 7: "55", 8: "56", 9: "57", 10: "58", 11: "59", 12: "60", 13: "61", 14: "62", 15: "63", 16: "64", 17: "65", 18: "66", 19: "67", 20: "68", 21: "69", 22: "70", 23: "71", 24: "72", 25: "73", 26: "74", 27: "75", 28: "76", 29: "77", 30: "78", 31: "79", 32: "80", 33: "81", 34: "82", 35: "83", 36: "84", 37: "85", 38: "86", 39: "87", 40: "88", 41: "89", 42: "90", 43: "91", 44: "92", 45: "93", 46: "94", 47: "95", 48: "96", 49: "97", 50: "98", 51: "99", 52: "100", 53: "101"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-03"}
+notes: >
+  Scope: the chapter's one quantitative model, the closed-loop lumped-parameter circulation of
+  Section 2.2.3 (adapted from the authors' two 2006 Medical Engineering & Physics papers, the model
+  family of korakianitis2006): four variable-elastance chambers (Eqs. 2-1 to 2-6), KG diaphragm
+  (annulus fibrosus) motion coupled to the atrial and ventricular volumes (Eqs. 2-7 to 2-12), four
+  valves with the orifice law (Eq. 2-13) and either on-off opening (Eq. 2-14) or leaflet dynamics
+  (Eqs. 2-15, 2-17), and systemic and pulmonary R-L-C loops (Eqs. 2-18 to 2-23), with Tables 2-1 to
+  2-5. It is recorded as one model, circulation_ch2, whose settings switch each feature on as the
+  chapter does: simplified (run_simplified), atrial contraction alone (run_atrial), KG diaphragm
+  alone (run_kg), KG diaphragm with atrial contraction (run_kg_atrial), valve dynamics alone
+  (run_valves) and all features (run_all). Every scalar result the text prints for these runs is
+  compared: peak and minimum pressures, peak valve flows, E peaks and E/A ratios, ventricular and
+  atrial volumes, KG displacement extremes. A small model (annulus_geometry, from words) checks the
+  printed annulus area and mass (p. 21), annulus_mass recomputes the mass from the printed area,
+  and consistency comparisons check the simplified-model values the chapter prints more than once
+  with different digits (117.2 / 117.4 mmHg, 25.6 / 25.7 mmHg, 879.4 / 920.8 ml/s), and Table 2-3's
+  A_sav and m_sav against the text.
+
+  As printed, Eq. 2-13 has no minus sign on its reverse branch, so no valve can carry regurgitant
+  flow; with leaflet dynamics this gives grossly unphysical results (peak aortic pressure about 250
+  mmHg). The record keeps the printed model and adds the variant circulation_ch2_signed with the
+  sign corrected (evidence: the chapter's own regurgitation results, the authors' CellML code), run
+  for the valve-dynamics and all-features configurations. Eq. 2-10 and Table 2-3 disagree in units
+  (q_kg_units): the record runs Eq. 2-10 as printed, with M_sav, which gives a KG displacement of
+  about -5 mm in systole against the printed -0.0286 m; the per-unit-mass reading the Table 2-3
+  units suggest diverges and is left as a setting, not a run. Much is unstated: theta_max (75 deg
+  from Figs. 2-15/2-16), all initial values except the ventricular volumes (taken from the authors'
+  CellML code: atria 20 ml, systemic arteries 100 mmHg, pulmonary arteries 30 mmHg, veins 0 mmHg;
+  they fix the circulating volume, so the pulmonary pressures come out near 40 mmHg against the
+  printed 25 mmHg), how leaflet angles are held at their limits. Readings of ambiguous text are
+  questions (Table 2-1's right-heart labels, Table 2-2's V_lv0/V_rv0 as initial volumes, the step
+  volumes 120.9 -> 133.6 ml etc. read within one run, the "peak tricuspid flow" in early systole).
+  The tissue density, annulus diameter and thickness are the author's assumptions (origin assumed).
+
+  Figures (a later pass, figures.yaml and figures.md): 58 calibrated readings, read by code from the
+  page images, of Figs. 2-3 (measured LV volume per MRI phase, origin measured, no model), 2-6 and 2-13
+  (elastances, against the closed-form model elastance_ch2), 2-9 to 2-18, 2-20 and 2-21 (pressure,
+  flow, volume, KG displacement and leaflet-angle waveforms, against circulation_ch2_waveform: the
+  circulation model evaluated at the figures' times, in each figure's configuration, and for valve
+  dynamics also with the corrected Eq. 2-13). In the comparison figures only the primed curves are
+  read, where they can be told apart; figures.md says what was left out and why. New questions from
+  the figures: q_fig_regurgitant_flow, q_fig_elvd. Also left out:
+  percentage changes and differences stated approximately in words ("about 10%", "about 15%",
+  "about 20%", "about 25% of stroke volume", "about 30%", "about 0.9 mmHg", "about 16 mmHg",
+  "1 ~ 2.7 mmHg", "0.8 ~ 3.1 mmHg", "about 20 mmHg", "about 5 ml", "about 2 ml"), valve timing read
+  off figures ("about 0.1 s", "0.15 s earlier", "0.02 s earlier", ...), the MRI acquisition settings
+  and the measured KG displacement range "0.02 ~ 0.03 m" and its "8 ~ 12 ml" volume (they set
+  parameters but feed no model as printed), and textbook ranges (E/A 1 to 2 as a normal range,
+  atrial kick 20% to 30%) used only for qualitative comparison. The chapter's reference list is in
+  the thesis bibliography, outside these pages; references.yaml lists the cited works as cited.

@@ -1,0 +1,19 @@
+id: liu_compliance
+name: pressure-dependent total arterial compliance from the exponential pressure-volume relation
+role: model
+stated: {page: 7, printed_page: "137", quote: "The expression for the compliance (C) at any pressure is", where: "Eq. C(P), p. 7"}
+equation: "C(P) = b SV e^(bP) / [((As + Ad)/Ad - Zc SV/Ad)(e^(bPs) - e^(bPd))]; from V = a e^(bP) + c"
+described_from: ref-82
+inputs:
+  b: {quantity: nonlinear_pv_coefficient, unit: 1/mmHg}
+  SV: {quantity: stroke_volume, unit: ml}
+  P: {quantity: aortic_pressure, unit: mmHg}
+  As: {quantity: pressure_area, unit: mmHg*s, description: area under the systolic part of the pressure wave}
+  Ad: {quantity: pressure_area, unit: mmHg*s, description: area under the diastolic part of the pressure wave}
+  Zc: {quantity: characteristic_impedance, unit: mmHg*s/ml}
+  Ps: {quantity: end_systolic_pressure, unit: mmHg}
+  Pd: {quantity: end_diastolic_pressure, unit: mmHg}
+outputs:
+  C: {quantity: total_arterial_compliance, unit: ml/mmHg}
+settings: {}
+stochastic: false

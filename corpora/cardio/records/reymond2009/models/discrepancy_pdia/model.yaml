@@ -1,0 +1,18 @@
+id: discrepancy_pdia
+name: mean and SD of the relative model-measurement discrepancy in diastolic pressure (Tables 4-5)
+role: processing
+stated: {page: 8, quote: "for peak systolic flow", where: "Results, p. 8"}
+equation: "discrepancy = |model - in vivo| / reference, reported as means ± SD over the locations of Tables 4-5"
+inputs:
+  v1: {quantity: diastolic_pressure, unit: mmHg, description: "in vivo value at location 1"}
+  v2: {quantity: diastolic_pressure, unit: mmHg, description: "in vivo value at location 2"}
+  v3: {quantity: diastolic_pressure, unit: mmHg, description: "in vivo value at location 3"}
+  m1: {quantity: diastolic_pressure, unit: mmHg, description: "model value at location 1"}
+  m2: {quantity: diastolic_pressure, unit: mmHg, description: "model value at location 2"}
+  m3: {quantity: diastolic_pressure, unit: mmHg, description: "model value at location 3"}
+  w: {quantity: discrepancy_normalization_weight, unit: dimensionless, description: 'denominator (1 - w) in vivo + w model'}
+outputs:
+  mean: {quantity: relative_discrepancy_mean, unit: percent}
+  sd: {quantity: relative_discrepancy_sd, unit: percent}
+settings: {}
+stochastic: false

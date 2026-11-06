@@ -48,7 +48,7 @@ def ingest(pdf: Path, sid: str, records_root: Path, pages: tuple[int, int] | Non
             stem = d / "pages" / f"page-{p:03d}"
             subprocess.run(["pdftoppm", "-f", str(p), "-l", str(p), "-r", str(dpi), "-png", "-singlefile",
                             str(pdf), str(stem)], check=True, capture_output=True)
-    meta = {"file": str(pdf), "sha256": hashlib.sha256(pdf.read_bytes()).hexdigest(), "pages": n,
+    meta = {"file": pdf.name, "sha256": hashlib.sha256(pdf.read_bytes()).hexdigest(), "pages": n,
             "page_range": [first, last], "dpi": dpi if images else None}
     (d / "ingest.json").write_text(json.dumps(meta, indent=1))
     return d

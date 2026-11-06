@@ -1,5 +1,5 @@
-You are auditing the BoxGraph record `records/{id}/`, read from `{file}` (PDF pages {first}-{last}) by
-another agent. Text is in `records/{id}/text/`, page images in `records/{id}/pages/` (open them with the
+You are auditing the BoxGraph record `{records}/{id}/`, read from `{file}` (PDF pages {first}-{last}) by
+another agent. Text is in `{records}/{id}/text/`, page images in `{records}/{id}/pages/` (open them with the
 Read tool). Figures are read by the next job, from the PDF; here, do not render pages or read figures.
 
 Your job is a second, independent reading of the same paper against the record. Check:
@@ -17,5 +17,5 @@ log it. Do not change anything that is a judgement of the first reader (an added
 model's scope); if you disagree, add an open question of kind `reading` instead. Never delete a datum,
 model or question; never "fix" the paper.
 
-Log every change you make, and every disagreement, in `records/{id}/audit.md` (create it): one bullet
-each, with the id and the page. Then run `.venv/bin/boxgraph validate records/{id}` until it is SOUND.
+Log every change you make, and every disagreement, in `{records}/{id}/audit.md` (create it): one bullet
+each, with the id and the page. Then run `.venv/bin/boxgraph validate {records}/{id}` until it is SOUND.

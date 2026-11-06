@@ -1,0 +1,278 @@
+- id: q_no_cross_validation_data
+  kind: choice
+  about: [fig6a_P_exp_curve, fig3a_P_3d_curve, tube_law_eq3, pwv_eq5_reference, windkessel_mean_pressure, peak_decay_eq15]
+  text: >
+    No model of this record is validated against a measurement of boileau_data. That record (the
+    supporting data) holds no datum of origin measured: its values are reported file entries (mesh,
+    periods, start times) and the paper's error tables, and its in vitro records (ExpData) are read
+    only through its own adapters. The closed-form models here (Eqs. 3, 5, 9, 14-16, impedances,
+    wavelengths) predict wave speeds, areas, mean pressures and the single-pulse peak decay, none of
+    which boileau_data measures. The other direction is entered there: the six schemes' released
+    waveforms against this record's in vitro curves of Figs. 6-9 (boileau_data q_b5_scheme_validations).
+    The red 3D curves of Figs. 3-5 are model output of [33], not measurements, and are not used.
+- id: q_pd_circumflex
+  kind: reading
+  about: [Pd_ao, Pd_bif, Pd_946_repeating]
+  text: >
+    Tables V and VII print the diastolic pressure as 9.46 with a circumflex over the last 6. The record
+    reads it as a repeating digit (9.4666... kPa, i.e. 71 mmHg) and runs the printed digits 9.46 as the
+    alternative. Eq. 16 run on the repeating reading gives the printed initial areas A0 (3.0605, 1.8062,
+    0.94787 cm^2) to within about one unit of their last digit; with 9.46 kPa the aorta's A0 comes out
+    near 3.0614 cm^2. Both readings are judged reproduced once the rounding of the printed wall
+    thicknesses (1.2 mm, 1.032 mm, 0.72 mm) is allowed for, so the record cannot tell the readings apart.
+  citation: {page: 11, where: Table V, quote: "Diastolic pressure, Pd 9:46O kPa"}
+- id: q_mu_units
+  kind: possible_error
+  about: [mu_sp]
+  text: >
+    The text gives the viscous case as 'mu = 4 mPa s^-1' (p. 15), a unit that is not a viscosity; Table II
+    (p. 7) gives '4 mPa s'. The record uses Table II's value and unit.
+  citation: {page: 15, where: text, quote: "viscous problem"}
+- id: q_cm_mean_pressure
+  kind: unstated_input
+  about: [cm_car, cm_ao, cm_bao, cm_il, windkessel_mean_pressure, Qm_car, Qm_ao, Qm_bif]
+  text: >
+    The wave speeds 'at mean pressure' (Tables III, V, VII) are printed without the mean pressure or how
+    it was obtained. The record takes the time-averaged Windkessel inlet pressure, Pout + Qmean (R1+R2)
+    (Eq. 9 averaged over a period), with the mean inflow from the supporting inflow files, and neglects the
+    mean pressure drop along the vessel; the 3D or 1D time-averaged pressure at the midpoint (in the
+    supporting data) would differ by a few tens of pascals.
+- id: q_ts_unstated
+  kind: unstated_input
+  about: [wavelength_car, wavelength_ao, Ts_car, Ts_ao]
+  text: >
+    The systolic period Ts used for 'Ts cm = 2.7 m' (carotid) and '1.8 m' (aorta) is not printed. Read
+    from the supporting inflows (Ts about 0.405 s carotid, 0.31 s aorta), 2.7 m follows but 1.8 m would
+    need Ts of about 0.35 s, longer than the aorta inflow's forward-flow period (0.31 s) and shorter than
+    its period of ejection plus backflow. The printed 1.8 m is not explained by a definition of Ts the
+    record could identify.
+  citation: {page: 27, where: text, quote: "These lengths can be approximated by multiplying the period"}
+- id: q_z0_definition
+  kind: unstated_model
+  about: [characteristic_impedance, adan56_terminal_impedance]
+  text: >
+    'The resistance R1 is equal to the characteristic impedance of the end point' (p. 5) is stated without
+    a formula or the state at which it is evaluated. The record takes Z0 = rho c / A at A = Ad with c from
+    Eq. 5, the usual 1D definition.
+  citation: {page: 5, where: text after Eq. 9, quote: "The resistance R1 is equal to the characteristic impedance of the"}
+- id: q_adan56_r1
+  kind: unexplained_difference
+  about: [R1_adan_xii, R1_adan_xiii, adan56_terminal_impedance]
+  text: >
+    For the carotid, aorta and iliac Windkessels the printed R1 equals rho c / Ad (p. 5's rule), but the
+    ADAN56 terminal R1 of Tables XII-XIII do not: computed with E = 225 kPa, rho = 1040 kg m^-3, the wall
+    thickness of Eq. 17 and A = pi R0^2, the characteristic impedances differ from the printed R1 by factors
+    from about 1 to over 20 (e.g. posterior intercostal arteries, printed R1 about 2.5 x 10^5 dyn s cm^-5).
+    In these tables R1/(R1+R2) is 0.2 for every terminal, which suggests R1 was set as a fixed fraction of
+    the total peripheral resistance, as in [22], not as the characteristic impedance. The paper does not say
+    which rule ADAN56 uses.
+  citation: {page: 23, where: Table XII, quote: "Parameter data set for the ADAN56 model"}
+- id: q_overstated_carotid
+  kind: overstated_claim
+  about: [quantity:relative_rms_error]
+  text: >
+    For the carotid the text says 'Relative root mean square errors are smaller than 1.0% for pressure, flow
+    and change in radius' (p. 18), but Table IV (p. 11) prints E^RMS for the change in radius as 1.00 (LCG),
+    1.00 (FEM), 1.07 (FVM) and 1.01 (McC).
+  citation: {page: 18, where: text, quote: "Relative root mean square errors are smaller than"}
+- id: q_overstated_bifurcation
+  kind: overstated_claim
+  about: [quantity:relative_rms_error]
+  text: >
+    For the aortic bifurcation the text says relative RMS errors 'are all smaller than 1.2% for the pressure
+    and flow' (p. 19); Table VIII (p. 14) prints E_Q^RMS = 1.20 for DCG at the end point of the aorta, equal
+    to, not smaller than, the bound. A borderline wording issue.
+  citation: {page: 19, where: text, quote: "square errors are all smaller than 1.2% for the pressure and flow"}
+- id: q_error_tables
+  kind: choice
+  about: [quantity:relative_rms_error]
+  text: >
+    The relative errors of Tables IV, VI, VIII and X (Eqs. 10-13) are computed from the six solvers' outputs
+    against the 3D solutions of [33] and the in vitro measurements of [45]. Those waveforms are released in
+    the supporting datasets (record boileau_data); recomputing the tables belongs with that record, where
+    the waveforms are data. They are not recorded here. Note that the text layer drops the minus signs of
+    the SYS and DIAS rows (e.g. Table IV E^SYS are all negative on the page).
+- id: q_fig2_unread
+  kind: reading
+  about: [peak_decay_eq15, decay_outlet_sp_pred]
+  text: >
+    Eq. 15 is the only check the paper offers for the viscous single pulse, and its result is only plotted
+    (thick black line, Fig. 2). Fig. 2 was not read in this record (figure tools unavailable to the
+    reader); the model gives P/Ppeak of about 0.51 at the outlet, which the plotted line appears to reach
+    by eye, but that is not a verdict. A figure reading of Fig. 2(a) is still owed.
+  citation: {page: 8, where: Fig. 2 caption, quote: "the theoretical solution of the exponential peak magnitude decay"}
+- id: q_cfl_dcg_sp
+  kind: unexplained_difference
+  about: [cfl_sp_dcg, cmp_cfl_sp_dcg, cfl_table1]
+  text: >
+    (Audit.) Table I's footnote defines CFL = lambda Delta t / Omega_e with lambda = max |U + c|. For the
+    single pulse lambda is c0 = 6.17 m/s to well below the printed precision, and the LCG, FVM and McC
+    entries follow (about 0.031, 0.90 and 0.99 against the printed 0.03, 0.9 and 0.99). The DCG entry
+    (Delta t = 0.1 ms, Omega_e = 2.00 cm) gives about 0.031, not the printed 0.18, roughly six times less.
+    A high-order DCG scheme (5th order in space) probably measures its CFL against a node spacing inside
+    the element rather than the element size, but the paper does not say so, and the footnote's formula
+    as printed does not give 0.18.
+  citation: {page: 6, where: "Table I", quote: "Single DCG 0.1 2.00 0.18 5th 2nd"}
+- id: q_cfl_other_cases
+  kind: choice
+  about: [cfl_table1]
+  text: >
+    (Audit.) Only the single-pulse CFL numbers of Table I are checked: there lambda = max |U + c| is c0. For
+    the other five cases lambda depends on the largest U + c the solver reaches, which is not printed (it
+    could be taken from the supporting waveforms, record boileau_data). As a rough check, the carotid FVM
+    entry (Delta t = 3.27 ms, Omega_e = 2.00 cm, CFL 0.9) implies lambda of about 5.5 m/s, below the printed
+    cm = 6.74 m/s, and the aorta McC entry (0.5 ms, 0.71 cm, 0.35) implies about 5.0 m/s, below cm = 5.17
+    m/s; the FVM time step is adaptive (p. 7), so its printed Delta t may be a representative value.
+  citation: {page: 6, where: "Table I footnote", quote: "is the maximum absolute eigenvalue over"}
+- id: q_eq16_wording
+  kind: possible_error
+  about: [initial_area_eq16]
+  text: >
+    (Audit.) The text says Eq. 16 'follows from Equation (3) by considering P = 0, A = Ad and solving for
+    A0' (p. 17). Eq. 16 follows from Eq. 3 with P = 0 and A = A0 (Ad, Pd being the reference state); with
+    A = Ad, Eq. 3 gives P = Pd, not 0. A slip in the wording; the equation itself, as modelled, is
+    consistent with Eq. 3 and reproduces the printed A0.
+  citation: {page: 17, where: text, quote: "This expression follows from Equation (3) by considering"}
+- id: q_caption_fem_fvm
+  kind: possible_error
+  about: [quantity:relative_rms_error]
+  text: >
+    The captions of Figures 11 and 15 (pp. 25, 29) expand FEM as 'finite element method' and FVM as
+    'Galerkin least-squares finite element method', swapping the descriptions given elsewhere (FVM is the
+    finite volume method, Section 3.4). Table I's footnote (p. 6) also runs the two together.
+  citation: {page: 25, where: Fig. 11 caption, quote: "FVM, Galerkin least-squares"}
+- id: q_fig2_read
+  kind: reading
+  about: [q_fig2_unread, peak_decay_eq15, fig2a_eq15_curve, fig2b_tips_points]
+  text: >
+    (Figure reading.) The figure reading owed by q_fig2_unread is now made: the thick black line of each
+    panel of Fig. 2 is read by code at 14 positions x = 0.7 to 9.9 m (figures fig2a_eq15 to fig2f_eq15,
+    calibrated on the plot frame and the dotted grid, misfit under 1 px, intervals about +-0.004), and
+    Eq. 15 run with Table II's inputs at those positions is compared with each reading
+    (cmp_eq15_fig2a to cmp_eq15_fig2f); the comparisons settle whether the drawn line is Eq. 15 as printed.
+    The dashed viscous peaks themselves cannot be read apart from the thin inviscid pulse lines and the
+    thick line that cross them, so the paper's 'good agreement' of the schemes' viscous peaks with Eq. 15
+    is still not checked. The tips of the inviscid pulses (fig2a_tips to fig2f_tips) bear on the text's
+    'decreases by less than 0.9%' (p. 15): most tips reach the plot's top frame (within about 0.5% of 1),
+    but in panel (b), LCG, the tip at 1.5 s reads 0.991 [0.990, 0.992], a decrease of 0.8-1.0%, at the
+    edge of the stated bound; the figure neither confirms nor contradicts it.
+  citation: {page: 15, where: text, quote: "decreases by less than 0.9%, relative to the peak magnitude at the inlet"}
+- id: q_no_validation_vs_stergiopulos1992
+  kind: choice
+  about: [windkessel_mean_pressure, characteristic_impedance, pwv_at_pressure, fig6a_P_exp_curve, fig6b_P_exp_curve]
+  text: >
+    (Cross-validation with stergiopulos1992, cited here as ref. 7 only in a list of key 1D studies, p. 2.)
+    No model of this record is validated against a measurement of stergiopulos1992, and no model of that
+    record against the in vitro measurements of [45] recorded here (Figs. 6-9). The measurements of
+    stergiopulos1992 are pulsatility indices (Gosling et al.) and leg/brachial systolic pressure ratios
+    (Fronek et al.) in patients; this record's models give a time-averaged Windkessel pressure, wave
+    speeds, areas, impedances, wavelengths and a viscous peak decay, none of which is a pulsatility index
+    or a systolic pressure ratio. windkessel_mean_pressure shares only the shape (pressure from flow and
+    resistances) of stergiopulos1992/arterial_tree_1d, and its mean pressure belongs to one terminal of
+    this paper's networks, not to any measured site there. In the other direction, arterial_tree_1d is
+    hard-wired to the 55-segment human tree of Table 1 (its outputs: systolic and PI ratios, mean flow
+    ratio, ascending aortic systolic, diastolic and mean pressure) and cannot be run on the 37 silicone
+    vessels of [45], whose geometry, fluid and inflow neither record prints; its aortic pressures are for
+    a different system than the aortic arch II waveforms of Fig. 6(a), so mapping them would compare two
+    networks, not test a model.
+  citation: {page: 19, where: text, quote: "The tree is made up of 37 silicone vessels representing"}
+
+- id: q_no_validation_vs_stergiopulos1999
+  kind: choice
+  about: [windkessel_mean_pressure, characteristic_impedance, adan56_terminal_impedance, pwv_at_pressure, gaussian_inflow_eq14, fig6a_P_exp_curve, fig6a_Q_exp_curve]
+  text: >
+    No validation against stergiopulos1999 is entered, in either direction (cross-validation job 2026-11-04).
+    Neither paper cites the other or uses the other's data; the only shared source is Murgo et al. 1980
+    (ref. 64 here), which inspired the ADAN56 inflow (p. 21) and supplies the two human beats of
+    stergiopulos1999, but no ADAN56 result is recorded here and the inflow is not a measurement. The
+    measurements of stergiopulos1999 are Table 1-2 values of R_p, Z_c and C for seven dogs and two human beats,
+    aortic pressure and flow waves (Figs. 1, 4) and the dog 71 aortic input impedance (Fig. 5). This record's
+    models give areas, wave speeds, a terminal impedance rho c / A, a time-averaged Windkessel pressure, a
+    Gaussian inflow, a viscous peak decay and wavelengths, all from vessel geometry and wall properties (radius,
+    E, h) that stergiopulos1999 does not print for any dog or beat; running characteristic_impedance for its Z_c
+    would rest wholly on added inputs, and windkessel_mean_pressure for its mean pressure is circular, since R_p
+    there is defined as mean pressure over mean flow. In the other direction, the runnable models of
+    stergiopulos1999 (zin_3wk, zin_4wk, inertance_eq1_uniform and its statistics) give input impedance in the
+    frequency domain, a segment inertance and test statistics; the in vitro measurements recorded here (Figs. 6-9,
+    from [45]) are pressure and flow waveforms in time at sites of a 37-vessel silicone network, which none of
+    them produces, and its time-domain windkessel fits are recorded as not runnable.
+  citation: {page: 21, where: text, quote: "inflow boundary condition Qin .t / is inspired from one of the inflow signals reported in [64]"}
+
+- id: q_no_validation_vs_alastruey2011
+  kind: choice
+  about: [pwv_eq5_reference, tube_law_eq3, pwv_at_pressure, characteristic_impedance, gaussian_inflow_eq14, fig6a_P_exp_curve]
+  text: >
+    No model of this record is validated against alastruey2011 (cross-validation job 2026-11-04); the other
+    direction is entered there (alastruey2011/validations.yaml: network_1d against the in vitro curves of
+    Figs. 6-9 here, in both of its formulations). The measurements of alastruey2011 are the fluid's rho and mu,
+    E = 1.2 MPa, phi from a uniaxial test (Fig. 2 holds and load-extension loop), the Table 2 geometry, wave
+    speeds and Rp of the 37 silicone vessels, the in vitro P and Q waveforms of its Fig. 3 at Segments 3, 15, 24
+    and 30, and the flow harmonics of Fig. 4. This record's solvers, which would predict the waveforms and
+    harmonics, are not models here (source notes). gaussian_inflow_eq14 is the single-pulse inflow and predicts
+    no measurement. pwv_eq5_reference would predict Table 2's measured c0 from E, h and the diastolic area, but
+    alastruey2011 prints radii, not areas, so a validation would need an area per segment that neither paper
+    prints (a value the build must compute, not one to add), and it would repeat alastruey2011's own comparison
+    of the same Eq. 5 with the same inputs (q_c0_E there). tube_law_eq3, pwv_at_pressure and
+    characteristic_impedance give pressure, wave speed and R1 from geometry, none of them a quantity measured
+    there (Fig. 5's A-P curves are simulated, and Rp is a terminal resistance from mean pressure and flow, not
+    rho c / A).
+  citation: {page: 20, where: text, quote: "the flow rate measured in vitro is prescribed as the inflow boundary condition"}
+
+- id: q_no_validation_vs_formaggia2003
+  kind: choice
+  about: [initial_area_eq16, tube_law_eq3, pwv_eq5_reference, pwv_at_pressure, fig6a_P_exp_curve, fig6a_Q_exp_curve]
+  text: >
+    No validation against formaggia2003 is entered, in either direction (cross-validation job
+    2026-11-04). formaggia2003 holds no measured datum: every plotted value there (Figs. 6-8, 11-18) is
+    the output of its own 1D simulations, so no model of this record can be validated against it. This
+    record cites it (ref. 10) for the form of the tube law (p. 3), a shared model, not a shared
+    measurement; initial_area_eq16 and formaggia2003's bifurcation_angles share only the dimensions of
+    their inputs and output. In the other direction, this record's measurements (the in vitro waveforms
+    of [45], Figs. 6-9) are pressure and flow in time in a 37-artery network that no formaggia2003 model
+    simulates (formaggia2003 q_no_validation_vs_boileau2015).
+  citation: {page: 3, where: text, quote: "Here, we consider a relationship of the form [10]"}
+
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [tube_law_eq3, windkessel_mean_pressure, pwv_at_pressure, characteristic_impedance, fig6a_P_exp_curve, fig6a_Q_exp_curve]
+  text: >
+    No validation against olufsen2000 is entered, in either direction (cross-validation job 2026-11-04).
+    This paper cites olufsen2000 (ref. 9) only as background: among earlier 1D models (p. 2), for the
+    Lax-Wendroff scheme (p. 2) and for structured-tree impedance outflow conditions (p. 5); it compares
+    none of its models with olufsen2000's data. olufsen2000's measurements are the MR flows of one subject
+    (its Figs. 3 and 7), his heart rate, a cuff pressure of 120/80 mmHg and an ascending-aortic radius.
+    None of this record's runnable models gives a flow waveform. tube_law_eq3 has the same shape as
+    olufsen2000/tube_law_eq14, but to predict a pressure it needs a lumen area at that pressure, and
+    olufsen2000 prints no measured area at the cuff pressures (nor E and h for that subject);
+    pwv_at_pressure and characteristic_impedance give a wave speed and an impedance that olufsen2000 does
+    not measure; windkessel_mean_pressure would need terminal resistances R1, R2 for that subject that
+    neither paper states, so its value would rest on added fits, not be a prediction. In the other
+    direction, this record's measurements (the in vitro waveforms of [45], Figs. 6-9) are in a 37-artery
+    silicone network that olufsen2000's network_1d does not describe and cannot run (it is not runnable;
+    olufsen2000 q_no_validation_vs_boileau2015).
+  citation: {page: 5, where: text, quote: "structured-tree networks and impedance boundary conditions"}
+
+- id: q_no_validation_vs_reymond2009
+  kind: choice
+  about: [windkessel_mean_pressure, pwv_eq5_reference, pwv_at_pressure, characteristic_impedance, fig6a_P_exp_curve, fig6a_Q_exp_curve]
+  text: >
+    No validation against reymond2009 is entered, in either direction (cross-validation job 2026-11-04).
+    This paper cites reymond2009 (ref. 66) only for the observation that the dynamic pressure term matters
+    little (p. 30); it compares none of its models with reymond2009's data. reymond2009 measures in vivo
+    systolic, mean and diastolic flows at nine sites (Table 4), systolic, diastolic, pulse and mean pressures at
+    the radial, carotid and temporal arteries (Table 5), averaged waveforms (Figs. 4-5), Senzaki's normalized
+    elastance (Fig. 1B) and literature PWV against diameter (Fig. 3). windkessel_mean_pressure shares the shape
+    of reymond2009/arterial_tree_1d (pressure from flow and resistances), but the three pressure sites are not
+    Windkessel inlets with a measured inflow: no flow is measured at the radial or temporal terminals, and the
+    carotid is not a terminal; and reymond2009's terminal resistances RT = R1 + R2 were themselves estimated
+    from the measured mean flow distribution (reymond2009 p. 3), so a mean pressure from them would be circular,
+    not a test. pwv_eq5_reference and pwv_at_pressure would need E and h for each artery of Fig. 3, which
+    neither paper gives for those literature points (ADAN56's E = 225 kPa and Eq. 17 thickness belong to this
+    paper's network, and no model here takes a diameter), and they take an area, not the diameter Fig. 3 is
+    indexed by. No model here gives a flow, a pulse pressure or an elastance. In the other direction, the in
+    vitro waveforms of [45] (Figs. 6-9) are pressures and flows in time in a 37-vessel silicone network;
+    reymond2009's 1-D tree is not runnable and describes the human tree, and its runnable models (Eq. 22 PWV,
+    distensibility, viscoelastic coefficients, R1/RT, terminal compliance, pulse and mean pressure from
+    systolic and diastolic values) give no quantity these curves quantify (reymond2009
+    q_no_validation_vs_boileau2015).
+  citation: {page: 30, where: text, quote: "in accordance with previous observations"}

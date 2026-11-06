@@ -1,0 +1,32 @@
+# Neither paper prints a result of this model. The code is shi2018's Fig. 1(c) model (left heart and
+# the systemic loop, venous return straight to the left atrium); shi2018 prints results only for its
+# Fig. 1(d) model, and korakianitis2006 for its full circulation (both loops, both hearts). The same
+# heart and systemic parameters are used in all three, so these comparisons judge how closely the
+# code, run as released, approximates the printed full-circulation results (purpose approximation).
+
+# --- against shi2018 Section 3 (Fig. 1(d) model, CellML in OpenCell)
+- {id: cmp_plv_max_shi, purpose: approximation, computed: sys_plv_max, printed: lv_pressure_max_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model: same heart and systemic parameters, no pulmonary loop"}
+- {id: cmp_plv_min_shi, purpose: approximation, computed: sys_plv_min, printed: lv_pressure_min_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model: same heart and systemic parameters, no pulmonary loop"}
+- {id: cmp_part_max_shi, purpose: approximation, computed: sys_psat_max, printed: arterial_pressure_max_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model; the systemic artery pressure P_sat stands for the arterial pressure (q_arterial_pressure)"}
+- {id: cmp_part_min_shi, purpose: approximation, computed: sys_psat_min, printed: arterial_pressure_min_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model; the systemic artery pressure P_sat stands for the arterial pressure (q_arterial_pressure)"}
+- {id: cmp_qao_mean_shi, purpose: approximation, computed: sys_qao_mean, printed: mean_flow_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model", note: "printed as about 5 L/min: no verdict"}
+- {id: cmp_qmi_mean_shi, purpose: approximation, computed: sys_qmi_mean, printed: mean_flow_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model", note: "printed as about 5 L/min: no verdict"}
+- {id: cmp_qao_peak_shi, purpose: approximation, computed: sys_qao_peak, printed: peak_aortic_flow_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model", note: "printed as about 1000 mL/s: no verdict"}
+- {id: cmp_qmi_peak_shi, purpose: approximation, computed: sys_qmi_peak, printed: peak_mitral_flow_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model", note: "printed as about 800 mL/s: no verdict"}
+- {id: cmp_vlv_max_shi, purpose: approximation, computed: sys_vlv_max, printed: lv_volume_max_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model: same heart and systemic parameters"}
+- {id: cmp_vlv_min_shi, purpose: approximation, computed: sys_vlv_min, printed: lv_volume_min_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model: same heart and systemic parameters"}
+- {id: cmp_sv_shi, purpose: approximation, computed: sys_sv, printed: stroke_volume_shi2018, conditions_ok: "Fig. 1(c) reduction of the Fig. 1(d) model: same heart and systemic parameters"}
+
+# --- against korakianitis2006 Section 3.1 (full circulation, on-off valves, the authors' C program)
+- {id: cmp_plv_max_k2006, purpose: approximation, computed: sys_plv_max, printed: plv_max_k2006, conditions_ok: "same heart and systemic parameters and on-off valve law; the paper's model also has the right heart and pulmonary loop"}
+- {id: cmp_plv_peak_k2006, purpose: approximation, computed: sys_plv_max, printed: plv_peak_k2006, conditions_ok: "same heart and systemic parameters and on-off valve law; the paper's model also has the right heart and pulmonary loop"}
+- {id: cmp_plv_min_k2006, purpose: approximation, computed: sys_plv_min, printed: plv_min_k2006, conditions_ok: "same heart and systemic parameters and on-off valve law; the paper's model also has the right heart and pulmonary loop"}
+- {id: cmp_psas_max_k2006, purpose: approximation, computed: sys_psas_max, printed: psas_max_k2006, conditions_ok: "aortic sinus pressure on both sides; the paper's model also has the pulmonary loop"}
+- {id: cmp_psas_peak_k2006, purpose: approximation, computed: sys_psas_max, printed: psas_peak_k2006, conditions_ok: "aortic sinus pressure on both sides; the paper's model also has the pulmonary loop"}
+- {id: cmp_psas_min_k2006, purpose: approximation, computed: sys_psas_min, printed: psas_min_k2006, conditions_ok: "aortic sinus pressure on both sides; the paper's model also has the pulmonary loop"}
+- {id: cmp_co_k2006, purpose: approximation, computed: sys_qao_mean, printed: co_k2006, conditions_ok: "mean aortic valve flow on both sides", note: "printed as about 5 l/min: no verdict"}
+- {id: cmp_vlv_max_k2006, purpose: approximation, computed: sys_vlv_max, printed: vlv_max_k2006, conditions_ok: "same heart parameters", note: "printed as approximately 120 ml: no verdict"}
+- {id: cmp_vlv_min_k2006, purpose: approximation, computed: sys_vlv_min, printed: vlv_min_k2006, conditions_ok: "same heart parameters", note: "printed as approximately 50 ml: no verdict"}
+- {id: cmp_sv_k2006, purpose: approximation, computed: sys_sv, printed: sv_k2006, conditions_ok: "same heart parameters; the paper's model also has the pulmonary loop"}
+- {id: cmp_qao_peak_k2006, purpose: approximation, computed: sys_qao_peak, printed: qao_peak_k2006, conditions_ok: "same aortic valve law and coefficient; the paper's model also has the pulmonary loop"}
+- {id: cmp_qmi_peak_k2006, purpose: approximation, computed: sys_qmi_peak, printed: qmi_E_k2006, conditions_ok: "with on-off valves the largest mitral flow of the cycle is the E peak the paper reports"}

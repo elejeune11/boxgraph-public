@@ -54,16 +54,27 @@ def _load(root: Path) -> tuple[dict[str, LoadedRecord], dict[str, dict]]:
 def _paper_summary(lr: LoadedRecord, b: RecordBuild, rep) -> dict:
     rec = lr.record
     verdicts = []
+    models_by_id = {m.id: m for m in rec.models}
+    run_model = {r.id: r.model for r in rec.runs}
     for c in rec.comparisons:
         if b is None:  # not sound: nothing was built
             break
         cr = b.comparisons.get(c.id)
         pd = _datum(lr, c.printed)
+        # a comparison computed by a corrected variant is reported apart from the paper as printed
+        cval = b.values.get(c.computed)
+        vm = models_by_id.get(run_model.get(cval.run)) if cval is not None and cval.run else None
+        variant = None
+        if vm is not None and vm.variant_of:
+            variant = {"model": vm.id, "of": vm.variant_of,
+                       "corrections": [cx.model_dump() for cx in vm.corrections]}
         verdicts.append({
-            "comparison": c.id, "purpose": c.purpose.value, "computed": c.computed, "printed": c.printed,
+            "comparison": c.id, "purpose": c.purpose.value + (", corrected" if variant else ""), "variant": variant,
+            "computed": c.computed, "printed": c.printed,
             "verdict": cr.verdict if cr and cr.ok else None, "error": None if cr is None or cr.ok else cr.error,
             "computed_value": cr.computed_value if cr else None, "printed_text": cr.printed_text if cr else None,
             "per_value": cr.per_value if cr else None, "computed_se": cr.computed_se if cr else None,
+            "input_rounding": cr.input_rounding if cr else None,
             "page": pd.citation.page if pd else None, "quote": pd.citation.quote if pd else None,
         })
     compared = {c.printed for c in rec.comparisons}
@@ -86,6 +97,13 @@ def _paper_summary(lr: LoadedRecord, b: RecordBuild, rep) -> dict:
             tally[v["verdict"] or "error"] += 1
         t = by_purpose.setdefault(v["purpose"], {"reproduced": 0, "close": 0, "not reproduced": 0, "no verdict": 0, "error": 0})
         t[v["verdict"] or "error"] += 1
+    variants: dict[str, dict] = {}
+    for v in verdicts:
+        if v["variant"]:
+            e = variants.setdefault(v["variant"]["model"], {"of": v["variant"]["of"], "corrections": v["variant"]["corrections"],
+                                                            "tally": {"reproduced": 0, "close": 0, "not reproduced": 0,
+                                                                      "no verdict": 0, "error": 0}})
+            e["tally"][v["verdict"] or "error"] += 1
     data = {d.id: {"printed": d.printed if d.printed is not None else d.table.values if d.table is not None
                    else f"read from figure {d.figure}", "unit": d.unit,
                    "scale": d.scale, "quantity": d.quantity, "origin": d.origin.value, "page": d.citation.page,
@@ -100,6 +118,7 @@ def _paper_summary(lr: LoadedRecord, b: RecordBuild, rep) -> dict:
                   "role": m.role.value} for m in rec.models}
     return {
         "tally": tally, "tally_by_purpose": dict(sorted(by_purpose.items())), "data": data, "added": added, "models": models,
+        "variants": dict(sorted(variants.items())),
         "id": rec.source.id, "kind": rec.source.kind.value, "title": rec.source.title, "authors": rec.source.authors,
         "year": rec.source.year, "venue": rec.source.venue,
         "reader": rec.source.reader.model_dump(), "digest": b.digest if b else None,
@@ -281,10 +300,11 @@ def _own_verdict(builds: dict, sid: str, cid: str) -> str | None:
 def _correspondences(rel, sa: str, ma, sb: str, mb) -> list[str]:
     """Every pairing of quantities a cross-paper run relies on: listed, never merged."""
     pairs = []
+    syms = {n: sp.Symbol(n) for n in ma.inputs}  # an input named gamma is the input, not the function
     for bs, expr in sorted(rel.mapping.items()):
         if bs not in mb.inputs:
             continue
-        for asym in sorted(s.name for s in sp.sympify(expr).free_symbols):
+        for asym in sorted(s.name for s in sp.sympify(expr, locals=syms).free_symbols):
             if asym in ma.inputs:
                 pairs.append(f"{g(sb, mb.inputs[bs].quantity)} ↔ {g(sa, ma.inputs[asym].quantity)}")
     return sorted(set(pairs))
@@ -339,6 +359,9 @@ def _cross_checks(records, sound, rel_results, rels, evaluated, cache_dir=None) 
             except (BuildError, KeyError) as e:
                 out.append({**base, "status": f"not checked: {e}"})
                 continue
+            if y is None:
+                out.append({**base, "status": f"not checked: {rel.a} gives no value on these inputs"})
+                continue
             out_id = rr.outputs.get(bo)
             for c in _comparisons_on(lb, out_id):
                 pd = _datum(lb, c.printed)
@@ -361,13 +384,20 @@ def _cross_checks(records, sound, rel_results, rels, evaluated, cache_dir=None) 
             rr = builds[sa][1].get(r.id)
             if not rr or not rr.ok:
                 continue
-            b_in = {bs: f(*[rr.inputs[n] for n in ma.inputs]) for bs, f in funcs.items() if bs in mb.inputs}
+            base = {"relation": g(rsrc, rel.id), "model": rel.b, "on_inputs_of": sa, "run": g(sa, r.id)}
+            try:
+                b_in = {bs: f(*[rr.inputs[n] for n in ma.inputs]) for bs, f in funcs.items() if bs in mb.inputs}
+            except (ArithmeticError, ValueError, TypeError) as e:
+                out.append({**base, "status": f"not checked: the mapping cannot be evaluated on these inputs ({e})"})
+                continue
             try:
                 y = execute(lb.model_code[mb_id], [{"inputs": b_in, "settings": dict(mb.settings)}],
                             cache_dir=cache_dir)[0][bo]
             except (BuildError, KeyError) as e:
-                out.append({"relation": g(rsrc, rel.id), "model": rel.b, "on_inputs_of": sa, "run": g(sa, r.id),
-                            "status": f"not checked: {e}"})
+                out.append({**base, "status": f"not checked: {e}"})
+                continue
+            if y is None:
+                out.append({**base, "status": f"not checked: {rel.b} gives no value on these inputs"})
                 continue
             out_id = rr.outputs.get(ao)
             for c in _comparisons_on(la, out_id):
@@ -376,8 +406,7 @@ def _cross_checks(records, sound, rel_results, rels, evaluated, cache_dir=None) 
                     continue
                 pp = P.parse(pd.printed)
                 yv = U.convert(y, mb.outputs[bo].unit, pd.unit, mb.outputs[bo].scale, pd.scale)
-                out.append({"relation": g(rsrc, rel.id), "model": rel.b, "on_inputs_of": sa, "run": g(sa, r.id),
-                            "status": "checked", "printed": g(sa, c.printed), "printed_text": pd.printed,
+                out.append({**base, "status": "checked", "printed": g(sa, c.printed), "printed_text": pd.printed,
                             "computed_value": yv, "verdict": P.verdict(yv, pp).value,
                             "own_verdict": _own_verdict(builds, sa, c.id), "own_comparison": g(sa, c.id),
                             "correspondences": _correspondences(rel, sa, ma, sb, mb),
@@ -562,18 +591,39 @@ def build_synthesis(root: str | Path, cache_dir: Path | None = None) -> dict:
     findings = []
     for sid in sorted(sound):
         lr, b = records[sid], builds[sid]
+        # comparisons computed by a corrected variant say what a correction explains; they make no finding of their own
+        mods = {m.id: m for m in lr.record.models}
+        run_model = {r.id: r.model for r in lr.record.runs}
+
+        def variant_of(c, _b=b, _mods=mods, _rm=run_model):
+            v = _b.values.get(c.computed)
+            m = _mods.get(_rm.get(v.run)) if v is not None and v.run else None
+            return m if m is not None and m.variant_of else None
+
+        rescued: dict[str, list[str]] = {}
+        for c in lr.record.comparisons:
+            cr, vm = b.comparisons.get(c.id), variant_of(c)
+            if vm is not None and cr and cr.ok and cr.verdict in ("reproduced", "close"):
+                eqs = ", ".join(x.equation for x in vm.corrections)
+                rescued.setdefault(c.printed, []).append(f"{cr.verdict} by {vm.id}, which corrects {eqs}")
         for c in lr.record.comparisons:
             cr = b.comparisons.get(c.id)
+            if variant_of(c) is not None:
+                continue
             if c.purpose == ComparisonPurpose.reproduction and cr and cr.ok and cr.verdict == "not reproduced":
                 pd = _datum(lr, c.printed)
+                detail = _not_reproduced_detail(cr, pd, b.values.get(c.printed))
+                if c.printed in rescued:
+                    detail += "; " + "; ".join(sorted(rescued[c.printed]))
                 findings.append({
                     "kind": "not_reproduced", "subject": g(sid, c.printed), "source": sid,
-                    "detail": _not_reproduced_detail(cr, pd, b.values.get(c.printed)),
+                    "detail": detail,
                     "page": pd.citation.page if pd else None, "quote": pd.citation.quote if pd else None,
                     "trace": sorted({g(sid, c.id), g(sid, c.computed), g(sid, c.printed)}),
                 })
         for ref in b.refinements.values():
             if ref.get("belongs_to") == "numerics":
+                at_one = next(x for x in ref["series"] if x["factor"] == 1)  # the paper's own setting
                 findings.append({
                     "kind": "belongs_to_numerics", "subject": g(sid, ref["id"]), "source": sid,
                     "detail": (f"output {ref['output']} of {ref['run']} keeps changing as {ref['setting']} is refined "
@@ -581,7 +631,7 @@ def build_synthesis(root: str | Path, cache_dir: Path | None = None) -> dict:
                     if not ref["settles"] else
                               (f"output {ref['output']} of {ref['run']} settles as {ref['setting']} is refined, but at "
                                f"{_fmt(ref['series'][-1]['value'])}, a change of {_shift(ref)} from "
-                               f"{_fmt(ref['series'][0]['value'])} at the paper's setting (tolerance {ref['tolerance']})"),
+                               f"{_fmt(at_one['value'])} at the paper's setting (tolerance {ref['tolerance']})"),
                     "trace": [g(sid, ref["run"])],
                 })
         for alt in b.alternatives:

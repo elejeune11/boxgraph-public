@@ -1,0 +1,16 @@
+id: errors_flow
+name: relative flow errors of a released 1D waveform against the released reference (boileau2015 Eqs. 10-13, flow forms)
+role: processing
+software: true
+stated: {file: Benchmark2_CommonCarotidArtery/README.txt, lines: "16-24", quote: "col 3: flow rate [ml/s]"}
+equation: "E_Q^RMS = sqrt(1/n sum ((Q_i^1D - Q_i)/max_j Q_j)^2); E_Q^MAX = max_i |(Q_i^1D - Q_i)/max_j Q_j|; E_Q^SYS = (max Q^1D - max Q)/max Q; E_Q^DIAS = (min Q^1D - min Q)/max Q"
+inputs:
+  t_ini: {quantity: time, unit: s, description: "start of the last 1D cardiac cycle, as the README or time_shifts.txt gives it"}
+  t_lag: {quantity: time_lag, unit: s, description: "where t = 0 of the reference record falls after t_ini (added)"}
+  period: {quantity: cardiac_period, unit: s, description: "period of the inflow; a time past t_ini + period is taken one period earlier"}
+outputs:
+  rms: {quantity: flow_rms_error, unit: percent}
+  max: {quantity: flow_max_error, unit: percent}
+  sys: {quantity: flow_systolic_error, unit: percent}
+  dias: {quantity: flow_diastolic_error, unit: percent}
+settings: {reference_file: "", reference_column: 3, solution_file: "", solution_column: 3}

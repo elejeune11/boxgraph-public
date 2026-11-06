@@ -28,10 +28,14 @@ that review traces back to the records.
   predict it, and names every quantity of the other paper it takes as the
   same as one of its own. A paper written to explain another's data is
   checked against that data.
-- **Findings:** a value that doesn't follow from its own inputs, a stated
-  relation that is refuted, a result that belongs to its numerics rather
-  than its model, a conflict inside a family. Each traces to the page and
-  to the parts of the record behind it.
+- **Findings:** a value that doesn't follow from its own inputs, a result
+  that depends on an added input, a stated relation that is refuted, a
+  result that belongs to its numerics rather than its model, a conflict
+  inside a family, a cited value that travelled wrongly. Each traces to the
+  page and to the parts of the record behind it. A corrected variant of a
+  misprinted model (see [BoxGraph](02-boxgraph.md)) makes no finding of its
+  own; its results are reported apart, and say which correction explains a
+  miss.
 - **Implications:** what a finding puts in doubt elsewhere: every result
   that runs through it, in the same paper and in others.
 - **References:** every work the papers cite, whether it is in the record,

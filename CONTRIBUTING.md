@@ -7,13 +7,14 @@ to it when you make one.
 ## Rules for the code
 
 - `boxgraph/` is generic: never name a field, a model, a quantity or a paper
-  in it (principle 12). Field content lives only in `records/`.
+  in it (principle 12). Field content lives only in `corpora/<name>/`.
 - Results are produced, never asserted: nothing computed is written into a
   record; the build derives it. Verdicts are computed when asked.
 - Nothing is corrected or overwritten. A printed value stays as printed.
 - Builds are deterministic and order-independent: sort everything.
 - Papers are copyrighted: never commit a PDF, page text, page image or figure
-  crop (`corpus/`, `records/*/{text,pages,figwork}/` are ignored). Records
+  crop (`corpus/` and `corpora/*/records/*/{text,pages,figwork}/` are
+  ignored). Records
   hold only short quotes that locate a value, and our own code and numbers.
 
 ## Working method
@@ -36,9 +37,11 @@ guide, not the records, when agents get something systematically wrong.
 
 ```bash
 .venv/bin/python -m pytest -q
-.venv/bin/boxgraph validate records/<id>
-.venv/bin/boxgraph build records --out build
-.venv/bin/python -m pipeline.add path/to/paper.pdf --id smith2015
-.venv/bin/python -m pipeline.run_papers --plan
-.venv/bin/python -m pipeline.run_papers --papers smith2015
+.venv/bin/boxgraph validate corpora/motor_clutch/records/bell1978
+.venv/bin/boxgraph build corpora/motor_clutch/records --out build/motor_clutch --cache build/cache
+make build site CORPUS=motor_clutch     # the same build with its overview text, copied to site/motor_clutch/
+.venv/bin/python -m pipeline.add path/to/paper.pdf --id smith2015 --corpus motor_clutch
+.venv/bin/python -m pipeline.run_papers --corpus motor_clutch --plan
+.venv/bin/python -m pipeline.run_papers --corpus motor_clutch --papers smith2015
+.venv/bin/python -m pipeline.run_papers --corpus cardio --plan   # every corpus lives in corpora/<name>/
 ```

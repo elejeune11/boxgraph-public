@@ -1,0 +1,250 @@
+- id: q_approx_sign
+  kind: reading
+  about: [qf_eq10, q_3hz_printed, k8b_printed]
+  text: >
+    The paper writes "Q ≅ 25/f", "Q ≅ 8" and "R ≅ 1.5 10^5 l/N" with the sign ≅, which it uses as the
+    relation sign of its derived formulas. The numbers are recorded with their printed digits, so they
+    get verdicts at that precision; read as approximate values they would get none.
+- id: q_eq11_coefficients
+  kind: unexplained_difference
+  about: [k11a_printed, k11b_printed, lmin_eq7a, lmin_eq7b, bore_diameter]
+  text: >
+    With the printed bore (0.45 mm, r = 0.225 mm), viscosity (1.4 x 10^-2 poise) and density (1.05 g/cm^3),
+    Eq. 7a gives l/DeltaP of about 9.2 x 10^-3 cm/mmHg and Eq. 7b gives l^2/DeltaP of about 0.31 cm^2/mmHg,
+    against the printed 8.5 x 10^-3 (Eq. 11a) and 0.28 (Eq. 11b). Eq. 7a's own constant (1.14 x 10^-4 =
+    1/(8 x 1100)) is reproduced, so the gap lies in the substitution. Both ratios (0.92 on r^3, 0.89 on r^4)
+    would fit a radius near 0.218 mm instead of 0.225 mm, but the paper does not say so.
+  citation: {page: 3, printed_page: "778", quote: "From equation 7 it follows that the minimum length", where: Eqs. 11a and 11b}
+- id: q_eq8b_constant
+  kind: unexplained_difference
+  about: [k8b_printed, k_eq8b]
+  text: >
+    Eq. 8b with r = 0.225 mm and mu = 1.4 x 10^-2 poise gives 8 mu/(pi r^4) of about 1.39 x 10^5
+    g cm^-5 sec^-1, against the printed constant 1.5 x 10^5. The units of the printed constant are not
+    stated and are inferred from Table 1 (R) and Eq. 11 (l in cm). The numbers of tubes in Table 1 follow
+    the printed 1.5 x 10^5, not the value from Eq. 8b.
+- id: q_lmin_pulm_rp
+  kind: possible_error
+  about: [lmin_rp_pulm_text, lmin_rp_pulm_tab, dp_rp_pulm]
+  text: >
+    The text gives 0.92 cm as the minimum length of the pulmonary R_p from Eq. 11b with a maximum DeltaP of
+    about 30 mm Hg, but Eq. 11b as printed (l^2 >= 0.28 DeltaP) gives about 2.9 cm; 0.92 cm is what
+    l^2 = 0.028 DeltaP would give (a slipped decimal?). Table 1 prints 0.92 cm for the pulmonary R_c and
+    1.3 cm for the pulmonary R_p; 1.3 cm would need DeltaP of about 6 mm Hg with the 0.28 coefficient. The
+    text, the table and Eq. 11b do not agree with one another.
+  citation: {page: 3, printed_page: "778", quote: "of this arterial bed should therefore be 0.92 cm", where: text}
+- id: q_lmin_pulm_rc
+  kind: unstated_input
+  about: [lmin_rc_pulm_tab]
+  text: >
+    Table 1 gives 0.92 cm for the pulmonary R_c, but the paper states no maximum pressure drop over the
+    pulmonary R_c ("A similar estimation can be made for the pulmonary tree"), so this length is not
+    compared.
+  citation: {page: 4, printed_page: "779", quote: "A similar estimation can be", where: text}
+- id: q_tube_impedance_15hz
+  kind: unexplained_difference
+  about: [dmod_15hz_printed, phase_15hz_printed, impedance_eq10]
+  text: >
+    With Q = R/(omega L) = 1/tan(phi) and Q = 25/f, at 15 Hz Q = 1.67, so |Z_t|/R = sqrt(1 + 1/Q^2) = 1.17
+    (an increase of about 17%) and phi = 31 degrees; the paper prints 15% and +30 degrees. The paper may have
+    used Womersley's exact tube impedance rather than the R + j omega L reading of Eq. 10, which it does not
+    write out.
+- id: q_table_rounding
+  kind: reading
+  about: [n_rc_man_syst, n_rc_dog_syst, n_rc_dog_pulm, n_rc_cat_syst, n_rc_cat_pulm, n_rp_man_syst, n_rp_dog_syst, n_rp_dog_pulm, vair_man_syst, vair_man_pulm, vair_dog_pulm, vair_cat_pulm, tau_dog_syst, tau_dog_pulm, tau_cat_syst]
+  text: >
+    Many Table 1 entries look rounded to two significant figures (6,100; 880; 2,500; 1,800; 1,050), so their
+    trailing zeros are probably not significant, while the verdict reads them as exact integers. The number
+    of tubes computed from R = 1.5 10^5 l/N with the table's own lengths and resistances is within about 3% of
+    every printed number. The time constants for dog (4500 x 260 10^-6 = 1.17 s; 600 x 1000 10^-6 = 0.60 s)
+    and cat systemic (21000 x 55 10^-6 = 1.16 s) are printed as 1.1, 0.5 and 1.1 s.
+- id: q_air_volume_pressure
+  kind: unstated_input
+  about: [air_volume_eq9, p_atm_added, pmean_pulm_added, pmean_syst]
+  text: >
+    Eq. 9 (C = V/P) needs the absolute reservoir pressure, which the paper describes as atmospheric plus mean
+    arterial pressure but never gives as a number for any species. The printed air volumes imply P of about
+    1.15 x 10^6 dyne/cm^2 (about 860 mm Hg) for the systemic models and about 1.05 x 10^6 dyne/cm^2 (about
+    790 mm Hg) for the pulmonary ones. The added inputs 760 + 100 and 760 + 15 mm Hg are a reading of the
+    words; the pulmonary mean pressure in particular could change these verdicts.
+  citation: {page: 3, printed_page: "778", quote: "mospheric pressure plus mean arterial pressure", where: text}
+- id: q_dc_resistance
+  kind: unexplained_difference
+  about: [rdc_dog_syst_meas, rdc_dog_pulm_meas, rdc_cat_syst_meas, rdc_cat_pulm_meas]
+  text: >
+    The d-c resistances measured on the constructed models (Figs. 2-5) are compared with R_c + R_p from the
+    Table 1 design values. The cat pulmonary model matches exactly (3,750); the dog systemic (4,700 vs 4,720),
+    dog pulmonary (800 vs 780) and cat systemic (21,300 vs 22,200) models differ by 0.4-4%. The paper says
+    resistors are milled to the desired value but does not say whether the models in the figures were set to
+    exactly the Table 1 values.
+- id: q_parameter_estimation
+  kind: unstated_input
+  about: [rc_dog_syst, rc_dog_pulm, c_man_syst]
+  text: >
+    The dog characteristic impedances were estimated from Z0 = rho c/(pi r^2) with c = 4.5 m/sec (aorta) and
+    2.7 m/sec (pulmonary artery), and the compliances from the diastolic decay exp(-t/RpC), but the radii and
+    the decay data are not given, so these Table 1 entries cannot be recomputed and are used as inputs.
+  citation: {page: 5, printed_page: "780", quote: "The phase velocity (c&) is assumed to be 4.5 m/set for the aorta", where: text}
+- id: q_figures_not_read
+  kind: reading
+  about: [rdc_dog_syst_meas, rdc_cat_syst_meas]
+  text: >
+    The measured input impedance moduli and phases of the hydraulic models (Figs. 2-5) and the literature
+    data plotted with them were not digitized in this reading: the figure-rendering commands were not
+    available to this job. The theoretical curves in Figs. 4 and 5 (three-element model with Table 1 values)
+    and the measured points could be read and compared in a later pass.
+- id: q_implied_bore
+  kind: unexplained_difference
+  about: [bore_diameter, k8b_printed, k11a_printed, k11b_printed, qf_eq10]
+  text: >
+    (Audit.) The three constants that do not reproduce from the printed bore all point to the same
+    smaller bore. With the printed viscosity and density, the 8.5 x 10^-3 of Eq. 11a implies r of about
+    0.219 mm, the 0.28 of Eq. 11b about 0.219 mm, and the 1.5 x 10^5 of Eq. 8b about 0.221 mm, so a bore
+    of about 0.44 mm in each case. Q ≅ 25/f (Eq. 10) instead comes from r of about 0.226 mm, which is the
+    printed 0.45 mm. The text says the bore is "about 0.45 mm" (p. 3). The paper may have used a
+    slightly different bore for the length and resistance constants, but it does not say so. This
+    links questions q_eq11_coefficients and q_eq8b_constant.
+  citation: {page: 3, printed_page: "778", quote: "conduits with a bore of about 0.45 mm", where: text}
+- id: q_eq7b_coefficient_not_compared
+  kind: reading
+  about: [lmin_eq7b, inlet_coeff, nonlinearity_eq5]
+  text: >
+    (Audit.) Eq. 7b prints its constant as the fraction 11/64, which equals (1.1/8)/(0.1 x 8) from Eq. 5
+    and Eq. 6. The printed-value grammar cannot read a fraction, so this constant is not entered as a
+    datum or compared. The model lmin_eq7b builds it from the 1.1 and 0.1 of Eq. 5.
+  citation: {page: 2, printed_page: "777", quote: "Substitution of equations 6 and 3 into equation 5 gives", where: Eq. 7b}
+# ---- added in the figure pass ---------------------------------------------------------------
+- id: q_figures_read
+  kind: reading
+  about: [f2_mod_line_read, f2_ph_line_read, f3_mod_line_read, f3_ph_line_read, f4_mod_line_read, f4_ph_line_read, f5_mod_line_read, f5_ph_line_read]
+  text: >
+    (Figure pass.) Figs. 2-5 are now read with calibrated readings (figures.yaml, figures.md): the
+    drawn lines at 1-14 Hz, the literature dots of Figs. 2-3, and the crosses and circles of Figs.
+    4-5, each compared with the three-element model (impedance_3el) run with the Table 1 values.
+    This answers the gap named in q_figures_not_read. Not every symbol is read: symbols merged with
+    the line on its steep low-frequency part, some crosses hidden in the line or a ring, a few
+    clusters of touching dots, and the first circle of Fig. 5 (on the ordinate line) are missing
+    (figures.md lists them).
+- id: q_fig4_theory_rc
+  kind: unexplained_difference
+  about: [f4_mod_line_read, f4_ph_line_read, rc_cat_syst, impedance_3el]
+  text: >
+    (Figure pass.) The "theoretical impedance" of Fig. 4 (cat systemic model, "Values of parameters
+    are given in Table 1") levels off at |Z| of about 1.13 x 10^3 g cm^-4 sec^-1 at 9-14 Hz, below
+    the R_c of 1,200 that Table 1 gives and that the three-element model approaches (about 1.22 x
+    10^3 at 14 Hz); its phase is 2-3 degrees more negative than that model from 3 to 14 Hz. At 2-3 Hz
+    the line and the model agree. A three-element impedance with R_c near 1.1 x 10^3 would follow the
+    drawn line; the measured d-c resistance (21,300, against R_c + R_p = 22,200 from Table 1; see
+    q_dc_resistance) also suggests the drawn theory was not computed with exactly the Table 1 values.
+    The paper does not say which values were used.
+  citation: {page: 4, printed_page: "779", quote: "impedance is fully drawn", where: Fig. 4 caption}
+- id: q_fig5_theory_level
+  kind: reading
+  about: [f5_mod_line_read, rc_cat_pulm]
+  text: >
+    (Figure pass.) The theoretical line of Fig. 5 levels off at about 0.72-0.74 x 10^3 g cm^-4
+    sec^-1, 2-4% under R_c = 750 (Table 1), while its phase agrees with the three-element model. The
+    modulus axis of Fig. 5 is hand drawn and its scale near the bottom depends on whether the
+    printed 0 at the frequency axis is used as a mark (the four ticks 1-4 alone extrapolate to 0.03
+    at the axis); the reading uses it, which widens the interval. The small gap may be the drawing,
+    not the calculation.
+- id: q_hydraulic_inertance
+  kind: unexplained_difference
+  about: [f2_mod_line_read, f2_ph_line_read, f3_mod_line_read, f3_ph_line_read, f4_mod_crosses_read, f4_ph_crosses_read, f5_mod_crosses_read, f5_ph_crosses_read, f4_mod_circles_read, f4_ph_circles_read, f5_mod_circles_read, f5_ph_circles_read, impedance_3el]
+  text: >
+    (Figure pass.) The validations of the measured hydraulic models (lines of Figs. 2-3, crosses and
+    circles of Figs. 4-5) use the three-element model with the Table 1 values. Above a few hertz the
+    measured modulus rises and the phase turns positive (e.g. Fig. 2: about +2 degrees at 8 Hz and
+    +23 at 14 Hz, against -19 and -11 for the three-element model), which the three-element model
+    cannot do. The paper attributes this to the inertance of the resistor tubes (Eq. 10, a phase of
+    +30 degrees at 15 Hz), of the connecting tubes and of the adapter (circles); none of these is in
+    the three-element model, so these comparisons are expected not to reproduce at high frequency.
+  citation: {page: 5, printed_page: "780", quote: "They have a considerable influence on the input impedance for higher frequencies", where: text}
+- id: q_literature_dots
+  kind: reading
+  about: [f2_mod_dots_read, f2_ph_dots_read, f3_mod_dots_read, f3_ph_dots_read]
+  text: >
+    (Figure pass.) The dots of Figs. 2-3 are in vivo input impedances of dog systemic and pulmonary
+    trees "as reported in the literature" (refs. 1, 14-17, 25 are cited for them on p. 5). The figure
+    does not say which dot comes from which study or animal, so the dots are recorded as one
+    measured set per panel and the three-element model with the Table 1 values is compared with all
+    of them; the spread of the data is much larger than the reading intervals.
+- id: q_fig4_species_man
+  kind: choice
+  about: [rc_man_syst, rp_man_syst, c_man_syst, impedance_3el]
+  text: >
+    (Cross-validation with westerhof2009; validations val_3el_man_vs_review_fig4_mod and _phase.) westerhof2009's Fig. 4 is "an example of measured aortic input
+    impedance" adapted from a textbook (its ref. 76), with no species, subject or condition named. It is
+    compared here with the three-element model run on Table 1's man (systemic) estimates, because its
+    scale (about 1 mmHg s/ml near 0 Hz) is that of the human systemic tree. If the example is from another
+    species, the dog or cat columns of Table 1 would be the ones to use, and the verdict would change.
+- id: q_val_human_impedance
+  kind: unexplained_difference
+  about: [rc_man_syst, rp_man_syst, c_man_syst, impedance_3el]
+  text: >
+    (Cross-validation with westerhof2009; validations val_3el_man_vs_murgo_* and val_3el_man_vs_review_fig4_*.) Run with the Table 1 man estimates, the three-element model does
+    not reproduce the human aortic input impedance plotted in westerhof2009 (Fig. 6, Murgo et al., type A
+    and type C beats; Fig. 4). Two differences are of a kind the model cannot remove at any single frequency:
+    its high-frequency plateau, set by R_c = 90 g cm^-4 sec^-1, lies well above the measured plateau of
+    both beat types, while it lies below the Fig. 4 plateau; and the measured modulus and phase oscillate
+    (a minimum near 3-4 Hz and positive phase above it), which the three-element model does not represent,
+    as westerhof2009 itself says on p. 3 ("The oscillations seen on the impedance modulus and phase are not
+    represented by the three-element Windkessel"). The Table 1 man values are generic estimates whose
+    sources are not given (q_parameter_estimation), not fits to these subjects, so a not-reproduced verdict
+    says the estimates differ from these measurements, not that either paper is in error.
+- id: q_val_analog_decay
+  kind: unexplained_difference
+  about: [c_man_syst, c_man_syst_halved, tau_rpc]
+  text: >
+    (Cross-validation with westerhof1969: validations val_tau_man_vs_analog_normal, _high_caption,
+    _high_twice, _low and _stiff.) tau = Rp C, run with the 1969 analog's peripheral resistance
+    for each setting and Table 1's C for man (800 x 10^-6), gives decay times about 40% above those
+    measured on the analog (0.8, 0.4 s; 1.66 s with the text's doubled R, more with the caption's 3600);
+    the 'about 0.5 s' of the low-resistance setting is approximate and gets no verdict. The excess is
+    nearly the same at every setting, so it says Table 1's C for man is larger than the analog's summed
+    capacitance, not that tau = Rp C fails. Possible reasons, none stated: the analog leaves out arteries
+    below about 0.15 cm radius (westerhof1969 p. 137), and this paper's C came from diastolic decay data
+    of refs. 22, 26 and 27 that are not given (q_parameter_estimation), so whether any of it was the 1969
+    analog's decay (which would make these fits rather than tests) is open; the printed tau = 1.0 s for
+    man is not the 0.8 s measured on the analog, so it was not fitted to that value. Which resistance
+    belongs to the 1969 high setting (caption R = 3600 or the text's 'twice as large') is open in the
+    1969 record; both are entered. The stiff setting rests on the added c_man_syst_halved.
+  citation: {page: 5, printed_page: "780", quote: "The total arterial capacitance (C) was calculated assuming a", where: text}
+- id: q_val_stergiopulos_fit
+  kind: choice
+  about: [impedance_3el]
+  text: >
+    (Cross-validation with stergiopulos1999: validations val_3el_dog71_cppm_mod, _cppm_phase, _car_mod,
+    _car_phase.) The Fig. 1A model is run with stergiopulos1999's dog 71 elements and judged against
+    that dog's measured input impedance (its Fig. 5 squares, harmonics 1-5). Two choices are open.
+    (1) Fit or test: the standard Z_c is the mean measured modulus over harmonics 3-10, which includes
+    three of the five plotted harmonics, and R_p is the zero-frequency impedance of the same recording;
+    the modulus comparisons are entered as fit_quality and the phase comparisons, from which no element
+    was taken, as validation. The modulus at harmonics 1-2 could also be called a test. (2) Which C:
+    stergiopulos1999 gives two 'actual' compliances (C_PPM, C_AR) and does not say which its Fig. 5 lines
+    use; its record finds that C_PPM reproduces them. Both are entered. No model of stergiopulos1999 is
+    validated against this paper's measurements (stergiopulos1999/q_no_validation_westerhof1971).
+- id: q_no_cross_validation_shi2018
+  kind: unstated_model
+  about: [impedance_3el]
+  text: >
+    Cross-validation with shi2018 (which cites this paper as its ref [3]) finds nothing to test.
+    shi2018 prints no measurement: its values are all output of its own circulation model (left
+    ventricular and arterial pressures, flows, volumes), so no model of this paper can be
+    validated against them; impedance_3el outputs input impedance, which shi2018 neither measures
+    nor plots. The other way, no runnable model of shi2018 outputs an impedance, d-c resistance,
+    viscosity or density, so none can be judged against this paper's measurements
+    (shi2018/q_no_cross_validation_westerhof1971).
+- id: q_no_cross_validation_shi_cellml_westkessel
+  kind: unstated_model
+  about: [impedance_3el, air_volume_eq9]
+  text: >
+    Cross-validation with shi_cellml_westkessel (CellML code that cites this paper for its
+    three-element afterload) finds nothing to test. That record is code: its data are parameter
+    values written in the code (origin reported) and shi2018's simulated Fig. 1(d) results
+    (predicted, derived), with no measurement and no figure readings, so no model of this paper
+    can be validated against it. air_volume_eq9 shares only the shape of the code's model (a
+    volume from a compliance and a pressure): it gives a reservoir's air volume, which the code
+    does not have. The other way, the code's model outputs no impedance, d-c resistance, viscosity
+    or density, so it cannot be judged against this paper's measurements
+    (shi_cellml_westkessel/q_no_cross_validation_westerhof1971).

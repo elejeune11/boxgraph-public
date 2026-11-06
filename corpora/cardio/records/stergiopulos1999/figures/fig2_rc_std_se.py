@@ -1,0 +1,12 @@
+"""Fig. 2 (top, p. 4): Standard (average impedance modulus, 3rd-10th harmonic): length of the SE bar above the bar (see _fig2.py for the method and intervals).
+The bar is chosen by its position from the left, given in `at`; 10 y tick positions are expected."""
+import importlib.util
+import os
+
+_spec = importlib.util.spec_from_file_location("_fig2", os.path.join(os.path.dirname(os.path.abspath(__file__)), "_fig2.py"))
+_f = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_f)
+
+
+def read(image, at):
+    return _f.read_se(image, at, 10)

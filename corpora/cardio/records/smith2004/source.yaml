@@ -1,0 +1,39 @@
+id: smith2004
+kind: article
+title: Minimal haemodynamic system model including ventricular interaction and valve dynamics
+authors: [Bram W. Smith, J. Geoffrey Chase, Roger I. Nokes, Geoffrey M. Shaw, Graeme Wake]
+year: 2004
+venue: Medical Engineering & Physics 26, 131-139
+doi: 10.1016/j.medengphy.2003.10.001
+file: corpus/cardio/2004_Smith.pdf
+page_range: [2, 10]
+pages: {2: "131", 3: "132", 4: "133", 5: "134", 6: "135", 7: "136", 8: "137", 9: "138", 10: "139"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-03"}
+notes: >
+  Scope: the driver function (Eq. 5) with its printed A, B, C against Fig. 3; the
+  closed-loop model (Fig. 1, Eqs. 1-20, valve law of Sec. 2.4.2) against the results the
+  paper prints from it (9% drop in cardiac output for P_th -4 -> 0 mmHg; aortic pressure
+  120/80 -> 165/130 mmHg when R_sys is doubled; the SV=70 label of Fig. 7), and against the
+  typical values it compares Fig. 7 with (validation); the two-chamber model against the
+  3 ml septal swing of Fig. 6. The paper prints no parameter table: every elastance,
+  end-diastolic parameter, resistance and inertance is added from the CellML encoding of
+  this model (corpus/cardio/code/smith_cellml, record smith_cellml), with line numbers, so
+  those verdicts test the printed results against that parameter set. Two modelling
+  choices the paper leaves open are added with alternatives: the driver peak time C of the
+  closed-loop runs (0.375 s, CellML; alternative 0.27 s, Fig. 3) and whether P_th also acts
+  on the pulmonary vessels (no, as Eq. 14 states; alternative yes, as in CellML). The model
+  follows Fig. 1 in putting inertia only at the aortic and pulmonary valves (CellML also
+  has mitral and tricuspid inertances). The solver, step, beat count and initial volumes
+  are the reader's (fixed-step RK4, 0.2 ms, 100 beats), checked by refinements. Left out:
+  the single-chamber model of Fig. 5 (no parameters printed; claims qualitative, including
+  L = 10^-6 mmHg s^2/ml giving the same result), the PV-loop trends of Figs. 8, 9 and 11
+  (qualitative), and curve readings of Figs. 5-11 (see figures.md). The figure commands
+  were not permitted in the reading session, so the Fig. 3 reading code was tested only on
+  the low-resolution page image and its overlay was not inspected (q_fig3_unchecked).
+  Figure job (2026-11-03): every panel with values in Figs. 3 and 5-11 is now read with
+  calibrated code (figures.md), and its overlay inspected. The Fig. 6-11 curves and loop
+  features are compared with three models built on the record's own: closed_loop_trace
+  (Fig. 7 waveforms), two_chamber_trace (Fig. 6) and closed_loop_loops (loop volumes and
+  peaks, R_sys and E_es scaled, Figs. 8-11). Fig. 5 is recorded as data only. The readings
+  confirm the 9% and 120/80 -> 165/130 mmHg statements against the paper's own figures and
+  show that the test baselines (Figs. 8, 9, 11) differ from Fig. 7 (q_fig_baselines).

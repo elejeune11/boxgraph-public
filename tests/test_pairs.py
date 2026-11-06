@@ -82,7 +82,7 @@ def test_unrelated_records_and_missing_records_make_no_pair(tmp_path):
 
 def test_the_real_corpus_pairs_every_related_paper():
     """On the three papers read so far, every pair the relate agent linked is found."""
-    root = Path(__file__).resolve().parents[1] / "records"
+    root = Path(__file__).resolve().parents[1] / "corpora" / "motor_clutch" / "records"
     got = candidate_pairs(root, ["bell1978", "chan2008", "erdmann2004"])
     assert set(got) == {("bell1978", "chan2008"), ("bell1978", "erdmann2004"), ("chan2008", "erdmann2004")}
 

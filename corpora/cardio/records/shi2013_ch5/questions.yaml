@@ -1,0 +1,135 @@
+- id: q_diaphragm_units
+  kind: possible_error
+  about: [ke, kf, ke_as_N_per_m, kf_as_N_s_per_m, bioreactor_eqs5_1_15]
+  text: >
+    Table 5-1 gives ke = 1.5e4 mmHg·m and kf = 25 mmHg·m·s; with ms in kg and As in m^2, Eq. 5-13
+    is then a force balance in which ke = 2.0e6 N/m and kf = 3333 N·s/m. With these the diaphragm
+    barely moves (static deflection Ps,a·As/ke ≈ 7.5e-5 m), against the 0.0065 m amplitude printed
+    on p. 12 and plotted in Fig. 5-5(a), and the flow at the tissue construct is a few ml/s instead
+    of ~400 ml/s. Reading the same numbers in N/m and N·s/m (pressure force in newtons) gives
+    results of the reported size. The printed unit labels of ke and kf may be wrong, or the program
+    may have mixed units; the chapter does not say which.
+  citation: {page: 8, printed_page: "168", quote: "ke 1.5e4 mmHg m", where: Table 5-1}
+- id: q_pcu_level
+  kind: unexplained_difference
+  about: [Pcu_fig5_6a, bioreactor_eqs5_1_15]
+  text: >
+    Fig. 5-6(a) shows Pcu at about -6 mmHg while ~390 ml/s flows through the upper chamber, and the
+    text says Pcu "maintains at a small value throughout the cycle". By Eq. 5-4 at that flow,
+    Pcu exceeds Pco by rho g hcu + Rcu Qcu ≈ 3.7 + 19.5 mmHg, and Pco is at least the outlet
+    reservoir pressure, -5.2 mmHg (Eqs. 5-10, 5-11, 5-15); so Eqs. 5-4, 5-7 and 5-10 with Table 5-1
+    put Pcu near +17 mmHg at peak flow. The plotted Pcu cannot follow from the printed equations
+    and values.
+  citation: {page: 13, printed_page: "173", quote: "Pressure in the upper media chamber maintains at a small value", where: text}
+- id: q_range_vs_figure
+  kind: unexplained_difference
+  about: [Pct_max_text, Pct_fig5_4a]
+  text: >
+    The text gives the pressure change at the tissue construct as 0 ~ 120 mmHg, while Fig. 5-4(a),
+    which the text describes, peaks at about 95 mmHg and dips to about -5 mmHg; the flow range
+    0 ~ 400 ml/s matches Fig. 5-4(b) (peak ~390 ml/s) more closely. The 120 mmHg may be the
+    general physiological range quoted in the same paragraph rather than the simulated one.
+  citation: {page: 12, printed_page: "172", quote: "produces a pressure change of 0 ~ 120 mmHg", where: text}
+- id: q_gravity
+  kind: unstated_input
+  about: [g_added]
+  text: "g in the hydrostatic terms is not stated; 9.81 m/s^2 is used (the hydrostatic terms are a few mmHg, so the choice matters little)."
+- id: q_solver_settings
+  kind: numerics
+  about: [bioreactor_eqs5_1_15, bioreactor_waveform]
+  text: >
+    The chapter names classical Runge-Kutta but gives no step size, initial state or simulated
+    duration beyond "converges ... after about ten cycles" and figures at 35-38 s. The record starts
+    from rest, simulates 12 cycles and takes values at the same phase in the 12th cycle; dt is
+    2e-5 s, or 4e-6 s for the printed-unit stiffness (the explicit scheme is unstable at larger
+    steps there). Refinements over dt and the number of cycles check these choices.
+- id: q_cci_unused
+  kind: reading
+  about: [bioreactor_eqs5_1_15]
+  text: >
+    Table 5-1 lists Cci = 0.015 ml/mmHg for the inlet valve, but no equation uses it: p. 6 says the
+    inlet tubing elasticity is lumped into Ccl. Cci is left out of the model.
+  citation: {page: 6, printed_page: "166", quote: "it has been lumped into the general capacitance effect", where: text}
+- id: q_fig5_3_phase
+  kind: reading
+  about: [Ps_fig5_3]
+  text: >
+    The zero crossings of Ps read off Fig. 5-3 fall about 0.01 s later than Eq. 5-12 places them
+    (e.g. -8.6 mmHg at t = 36.0 s, +7.4 mmHg at 36.5 s), at the steepest part of the curve; this may
+    be the plotting of the embedded raster or a real phase in the plotted output.
+- id: q_sodian_validation
+  kind: overstated_claim
+  about: [bioreactor_eqs5_1_15]
+  text: >
+    The chapter says the model is validated by agreement with Sodian et al.'s measurements (pp. 12,
+    14), but compares only the waveform pattern; Sodian et al.'s bioreactor ran at -12 ~ 23 mmHg with
+    an 18 s cycle, a different design and condition, and no simulation of it is shown.
+  citation: {page: 14, printed_page: "174", quote: "This validates the current mathematical model", where: text}
+- id: q_amplitude_definition
+  kind: reading
+  about: [l_amp_text, l_offset_text, bioreactor_eqs5_1_15]
+  text: >
+    (Audit.) The record takes "an amplitude of 0.0065 m around its neutral position" as half the
+    range of l over a cycle, and the neutral position as the range's mid-point. The chapter does not
+    define either. Other readings are possible: the largest excursion from the cycle-mean of l, or
+    the mean of l as the neutral position. With the skewed Qs waveform (p. 13) these differ, so
+    verdicts on l_amp_text and l_offset_text depend on this choice.
+  citation: {page: 12, printed_page: "172", quote: "oscillates with an amplitude of 0.0065 m around its neutral position", where: text}
+- id: q_flow_phase_claims
+  kind: reading
+  about: [bioreactor_eqs5_1_15, bioreactor_waveform]
+  text: >
+    (Audit.) The chapter states results of the model in words that the record does not compare:
+    Qcl, Qct and Qco stay at zero while Qs is negative, and Qci stays at zero while Qs is positive
+    (p. 13); Pcl and Pct exceed Ps during the rising phase of Ps, and are clipped at a lower limit in
+    the later half of its falling phase (p. 13). Only Qct_min = 0 is compared (through the printed
+    range 0 ~ 400 ml/s). These are qualitative claims with no printed number. Checking them would
+    need new model outputs (for example the flow through each valve during the Qs < 0 part of the
+    cycle).
+  citation: {page: 13, printed_page: "173", quote: "when Q s becomes negative, Qcl , Qct and Qco maintain at zero", where: text}
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [air_pressure_eq5_12, bioreactor_eqs5_1_15, bioreactor_waveform]
+  text: >
+    Cross-validation against korakianitis2006 finds nothing to test, in either direction.
+    korakianitis2006 holds no measurement: its data are Tables 1-5 parameters and the results of its
+    circulation model, and all its figures are model output (korakianitis2006 figures.md: "it shows
+    no measurements"). The models here simulate the bioreactor, not the human circulation, so none
+    could predict a circulation measurement even if there were one. This chapter cites Korakianitis
+    and Shi (2006) only as published data from which the chamber resistances, compliances and
+    inertances are "scaled" (p. 9), not as data the model reproduces. This record holds no
+    measurement either: every datum is a Table 5-1 parameter or a model result, and the only
+    measurements it mentions (Sodian et al., -12 ~ 23 mmHg at an 18 s period) are of another
+    bioreactor and not recorded. air_pressure_eq5_12 shares a shape with
+    korakianitis2006/circulation_onoff_corrected (pressure against time) but is a prescribed drive;
+    how the two relate is for the later job, not a validation.
+  citation: {page: 9, printed_page: "169", quote: "numerical models for the human cardiovascular system (Shi and Korakianitis 2006", where: text}
+- id: q_no_cross_validation_shi2013_ch2
+  kind: unstated_model
+  about: [air_pressure_eq5_12, bioreactor_eqs5_1_15, bioreactor_waveform]
+  text: >
+    Cross-validation against shi2013_ch2 (the human circulation chapter) finds nothing to test.
+    shi2013_ch2's only measurement is a volunteer's left-ventricular volume over 33 MRI phases
+    (shi2013_ch2/fig2_3_vlv_mri_read, Fig. 2-3). The models here simulate the bioreactor's chambers,
+    diaphragm and air drive and output no ventricular volume, so none of them predicts it. This
+    record holds no measurement for shi2013_ch2's circulation model to predict. This chapter cites
+    the authors' human circulation models (Shi and Korakianitis 2006) only as published values from
+    which the chamber resistances, capacitances and inductances are "scaled" (p. 9), not as results
+    to reproduce. air_pressure_eq5_12 has the same shape as shi2013_ch2/circulation_ch2 (a pressure
+    against time), but it is a prescribed drive, not a prediction. How the two relate is for the
+    later job. No validation was added.
+  citation: {page: 9, printed_page: "169", quote: "are scaled from these published data", where: text}
+- id: q_no_cross_validation_korakianitis_cellml
+  kind: unstated_model
+  about: [air_pressure_eq5_12, bioreactor_eqs5_1_15, bioreactor_waveform]
+  text: >
+    Cross-validation against korakianitis_cellml (the CellML code of the 2006 closed-loop
+    circulation) finds nothing to test. That record is code and holds no measured datum: its
+    values are parameters and initial values from the code and the run outputs it predicts. This
+    chapter has no measured data either (figures.md), so closed_loop_onoff has nothing here to
+    predict. The thesis uses Shi and Korakianitis 2006 only as published values from which the
+    lower and upper chamber resistances, capacitances and inductances "are scaled" (p. 9), not as
+    results to reproduce. air_pressure_eq5_12 has the same shape as
+    korakianitis_cellml/closed_loop_onoff (a pressure against time), but it is a prescribed drive,
+    not a prediction. How the two relate is for the later job. No validation was added.
+  citation: {page: 9, printed_page: "169", quote: "are scaled from these published data", where: text}

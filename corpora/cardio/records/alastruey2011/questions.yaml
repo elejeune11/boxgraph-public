@@ -1,0 +1,319 @@
+- id: q_error_tables
+  kind: unstated_input
+  about: [network_1d]
+  text: >
+    The paper's main results, the relative errors of Tables 3 and 4 (and their averages in the abstract and on
+    p. 5), are computed by Eqs. 10-11 against in vitro waveforms that the paper does not print (only four sites are
+    plotted, in Fig. 3, as overlapping lines). They are not recorded or recomputed here. The waveforms at eight of
+    the 70 sites (Segments 7, 10, 11, 14, 17, 20, 29, 34) are in boileau_data (Benchmark 5, ExpData); a job
+    joining this record with boileau_data can sweep network_1d over time (input t_cycle, outputs P_mid_* and
+    Q_mid_*) against them and recompute those rows of Table 3 for both formulations.
+  citation: {page: 7, printed_page: "2256", quote: "Relative errors (in %) of the numerical pulse waveforms calculated", where: Table 3 caption}
+- id: q_rms_formula
+  kind: possible_error
+  about: [network_1d]
+  text: >
+    Eq. 10 prints E_P = (1/N) sum_i sqrt(((P_i^exp - P_i)/P_i^exp)^2) and likewise E_Q: the square root is taken
+    of each term, which makes it a mean absolute relative error, while the abstract and p. 4 call these
+    'relative root-mean-square errors'. Eq. 11 has the same form. Either the root belongs over the whole sum or
+    the errors are mean absolute errors; the tables do not say which was computed.
+  citation: {page: 4, printed_page: "2253", quote: "the following relative errors were calculated at each measuring", where: Eq. 10}
+- id: q_inflow
+  kind: unstated_input
+  about: [Qa0_added, T_added]
+  text: >
+    The inflow prescribed at the aortic root (the in vitro flow measured there) is neither printed nor plotted.
+    The record takes the 20-harmonic Fourier series of boileau_data's Benchmark 5 (inflow.txt), whose period is
+    0.827 s; the paper says the pump ran at 70 beats per minute (p. 7), a period of 0.857 s, which is kept as the
+    alternative of T_added. The 41 Fourier coefficients have no alternatives: no other version of this inflow
+    is known to the reader.
+  citation: {page: 7, printed_page: "2256", quote: "than the experimental inﬂow imposed by the pump (70", where: text}
+- id: q_bc_junctions
+  kind: unstated_model
+  about: [network_1d, Pout_added]
+  text: >
+    The boundary conditions and junctions 'were implemented as described in Matthys et al. (2007, Section
+    2.2.3)' and are not given here. The reader's model uses an inflow Qin(t) at the root, conservation of mass
+    and continuity of total pressure at junctions, and a pure resistance Rp to an outflow pressure at each
+    terminal, A U = (P - Pout)/Rp, with Pout = 432.6 Pa from boileau2015 Table IX (alternative 0). Whether
+    Rp of Table 2 was computed from mean pressure relative to zero or to Pout is not stated either.
+  citation: {page: 4, printed_page: "2253", quote: "the junctions, which were implemented as described in Matthys", where: text}
+- id: q_topology
+  kind: reading
+  about: [network_1d]
+  text: >
+    The connectivity of the 37 segments is not tabulated; it is read from Fig. 1 (right), the segment names of
+    Table 2 and the terminal segments that carry an Rp. It agrees with the node list of boileau_data's mesh.txt.
+- id: q_beta_source
+  kind: choice
+  about: [network_1d, E_silicone]
+  text: >
+    The elastic parameter beta of Eq. 5 could be built from the single Young's modulus (1.2 MPa, 'approximately
+    constant') and h, or from Table 2's measured wave speeds c0. The model takes beta = 2 rho c0^2 sqrt(A0) from
+    Table 2, which lists c0 as one of the data 'required by the elastic and visco-elastic formulations'; r0 and c0
+    vary linearly along each segment. Gamma is taken from Table 2. The comparisons cmp_c0* show how far the two
+    routes to beta differ.
+  citation: {page: 4, printed_page: "2253", quote: "Table 2 shows the geometry, elasticity and boundary conditions required", where: text}
+- id: q_scheme
+  kind: choice
+  about: [network_1d, run_network_elastic, run_network_visc]
+  text: >
+    The paper solves Eqs. 1 and 5 with a spectral/hp discontinuous Galerkin scheme (2 cm elements, polynomial and
+    quadrature order 3, order 2 below 1.5 cm) and second-order Adams-Bashforth steps of 100 us (elastic) and
+    20 us (visco-elastic), explicit throughout. The reader's model uses a second-order finite-volume
+    (MUSCL-Hancock) scheme with Riemann-invariant upwinding, about 1 cm cells, a 0.2 ms step for both
+    formulations, and an implicit step for the visco-elastic flux; these are settings dx, dt_dx of network_1d,
+    and ref_visc_dx refines dx and dt together. The visco-elastic flux is set to zero at segment ends, which is
+    how the reader takes 'visco-elasticity was neglected at the boundary conditions of the network and the junctions'.
+  citation: {page: 4, printed_page: "2253", quote: "The time step was Dt ¼ 100 ms for the elastic case", where: text}
+- id: q_cycles
+  kind: choice
+  about: [network_1d]
+  text: >
+    The number of cardiac cycles simulated before the analysed one is not stated (only that zero pressures and
+    velocities are the initial conditions). The model runs 18 cycles and reports the last, as boileau_data's DCG
+    waveforms (Alastruey's code on this network) run to 15 s; the network's time constant (total resistance times
+    total compliance) is of the order of 1.5 s.
+  citation: {page: 4, printed_page: "2253", quote: "Zero pressures and velocities were considered as initial conditions", where: text}
+- id: q_figures_unread
+  kind: reading
+  about: [network_1d, dD_asc_printed]
+  text: >
+    Figs. 2-5 were not read: the figure tools were refused in this session. Fig. 4 (flow harmonics at the left
+    renal midpoint, elastic, visco-elastic and measured) and Fig. 5 (the elastic A-P line at the thoracic aorta I
+    midpoint, which is Eq. 5 with Gamma = 0) hold printed model results that the record could check; Fig. 3's
+    three black lines per panel cross throughout and may not be separable (figures.md).
+- id: q_dD_bound
+  kind: reading
+  about: [dD_asc_printed, cmp_dD_asc]
+  text: >
+    'Changes in the diameter of the ascending aorta over the cardiac cycle are less than 6.5% of its mean
+    diameter' is a bound, so cmp_dD_asc gets no verdict. The reader takes the change as (Dmax - Dmin)/Dmean
+    over the last cycle at each cell of Segment 1 and reports the largest; the paper does not define it.
+- id: q_tab4_caption
+  kind: possible_error
+  about: [EP_elas_tab4]
+  text: >
+    Table 4's caption says 'Single errors were calculated as described in Table 2', but Table 2 holds the network's
+    parameters; the errors are defined in Eqs. 10-11 and tabulated per site in Table 3. Probably 'Table 3' or
+    'Eqs. (10) and (11)' was meant. (Audit.)
+  citation: {page: 7, printed_page: "2256", quote: "Single errors were calculated as described in Table 2", where: Table 4 caption}
+- id: q_all_sites_claim
+  kind: overstated_claim
+  about: [EP_elas_tab4, EQ_elas_tab4]
+  text: >
+    p. 5 says 'Wall visco-elasticity reduces relative errors for pressure and the flow rate in the time domain for
+    all the 70 measurement sites'. Table 3 (34 midpoints) shows E_Q equal, 0.0 and 0.0, at the ascending aorta
+    (Segment 1, where the flow is the imposed inflow), and the mean-value errors rising at two midpoints (mean
+    pressure 0.7 to 0.8 at Segment 3; mean flow 10.6 to 10.7 at Segment 28). Whether 'relative errors' there means
+    only E_P and E_Q, and how ties count, is not said; the other 36 sites are not printed. (Audit.)
+  citation: {page: 5, printed_page: "2254", quote: "in the time domain for all the 70 measurement sites", where: text}
+- id: q_tables_not_recorded
+  kind: reading
+  about: [network_1d]
+  text: >
+    Audit disagreement with the first reader's scope, recorded rather than changed: Table 3's per-site errors (34
+    midpoints x 16 columns) and the other rows of Table 4 are printed results of the paper's models that a job
+    joining this record with boileau_data could compare against for the eight sites with released waveforms
+    (q_error_tables). They are not entered as data here; only Table 4's 'All' averages are, to check them against
+    the abstract and p. 5.
+- id: q_c0_E
+  kind: reading
+  about: [E_silicone]
+  text: >
+    The paper says the Young's modulus was 'approximately constant (1.2 MPa)'; Table 2's c0 were measured per
+    segment (Matthys et al. 2007). cmp_c0* compare each c0 with Eq. 5 at E = 1.2 MPa, h and r0 of Table 2, so a
+    difference there measures how far the single E is from each segment's own, not an error in either.
+# --- figure pass: fig245_questions
+- id: q_figures_read
+  kind: reading
+  about: [network_1d]
+  text: >
+    A figure pass has now read Figs. 2-5 with calibrated readings (figures.yaml, figures.md), which q_figures_unread
+    left for later: Fig. 3's eight panels (all three curves, q_fig3_read), Fig. 4's markers, Fig. 5's elastic
+    line and the two branches of the 8 phi loop, and Fig. 2's holds and load-extension loop. Fig. 1 is a drawing
+    and a photograph. The visco-elastic loop of Fig. 5 is not read (q_fig5_visc).
+- id: q_fig4_frequencies
+  kind: reading
+  about: [Qhat24_exp_fig4, Qhat24_elas_fig4, Qhat24_visc_fig4]
+  text: >
+    Fig. 4's markers are drawn at multiples of about 0.978 Hz (the twentieth harmonic at about 19.56 Hz), which is
+    a period of about 1.02 s. The waveforms of Fig. 3 last about 0.83 s (harmonics 1.21 Hz apart), and the pump's
+    70 beats per minute (p. 7) give 1.17 Hz. The spacing is close to 1 kHz / 1024 = 0.977 Hz, as from a 1024-point
+    discrete Fourier transform of waveforms sampled every millisecond; the paper does not say how the harmonics
+    were computed (q_fig4_spectrum). The data are indexed by the frequencies at which the markers are drawn.
+  citation: {page: 8, printed_page: "2257", quote: "midpoint of the left renal artery (Fig. 1) of the experimental (crosses) and", where: Fig. 4}
+- id: q_fig4_spectrum
+  kind: unstated_model
+  about: [Qhat24_exp_fig4, Qhat24_elas_fig4, Qhat24_visc_fig4, network_1d]
+  text: >
+    Eq. 11 uses the amplitudes of the 'jth harmonic' of pressure and flow, but neither how they were computed
+    (length of the transform, padding, window) nor how an amplitude is normalised (one-sided or two-sided; the
+    markers at 0 Hz are the mean flow) is stated, and the marker spacing (q_fig4_frequencies) is not that
+    of the cycle's harmonics. No model in the record computes this spectrum: a model built on network_1d's
+    Q_mid_24 waveform would rest on added choices for each of these, so Fig. 4's three marker sets are recorded
+    as data only (the measured crosses for a later model to be validated against).
+  citation: {page: 5, printed_page: "2254", quote: "are the amplitudes of the", where: Eq. 11}
+- id: q_fig5_tube_law
+  kind: unexplained_difference
+  about: [cmp_fig5_tube_c0, cmp_fig5_tube_E, A15_elas_fig5]
+  text: >
+    The purely elastic A-P line of Fig. 5 must be Eq. 5 with Gamma = 0 at the thoracic aorta I midpoint (the area
+    is then a function of the pressure alone). With Table 2's r0 and c0 for Segment 15, interpolated linearly to
+    the midpoint as network_1d does, the tube law lies above the read line by about the same small amount at
+    every pressure, more than the reading's interval (cmp_fig5_tube_c0); beta from E = 1.2 MPa and h moves it
+    further up (cmp_fig5_tube_E). A constant offset in area is what a slightly smaller A0 would give: a reading
+    point a little downstream of the exact midpoint (r0 falls from 11.80 to 11.00 mm along the segment), a
+    different interpolation of r0 or A0 along the segment, or rounding of Table 2's radii. The paper does not say
+    where in its 2 cm elements the 'midpoint' values are taken.
+  citation: {page: 8, printed_page: "2257", quote: "simulated using the elastic (elas) and visco-elastic (visc) numerical models", where: Fig. 5 caption}
+- id: q_fig5_visc
+  kind: reading
+  about: [A15_elas_fig5]
+  text: >
+    The visco-elastic loop of Fig. 5 (dash-dot) runs within about one line width of the elastic line nearly
+    everywhere, so its two branches cannot be told from the elastic line; it is not read. The elastic reading's
+    interval spans the band the two make where they touch, so it holds the elastic line either way. The 8 phi
+    loop is read branch by branch; its upper branch makes a small loop near 13.5 kPa and is not read from 13.4 to
+    14.0 kPa, and the lower branch is not read at 13.0 kPa, where the arrow labelled 8 phi touches it.
+- id: q_fig2_loop
+  kind: reading
+  about: [loop_fig2b, phi_measured]
+  text: >
+    Fig. 2's loading and unloading curves (cubic splines through the measured points, caption) lie within about a
+    line width of each other, so they are read as one band (loop_fig2b) and the area between them, which Eq. 9
+    turns into phi, cannot be measured from the figure. Recomputing phi = 3.0 kPa s would also need Fmax, the
+    sample's cross-section and length and the extension rate, which are not printed.
+  citation: {page: 5, printed_page: "2254", quote: "whose direction is indicated by the arrows", where: Fig. 2 caption}
+# --- figure pass: fig3_questions
+- id: q_fig3_time_origin
+  kind: unstated_input
+  about: [run_fig3a_elas, run_fig3a_visc, cmp_fig3a_elas, cmp_fig3a_visc_vs_exp, P15_exp_fig3a]
+  text: >
+    Fig. 3's time axis starts at the onset of ejection: 'we matched the onset of the experimental and numerical
+    systolic ejections' (p. 5), but the shift applied to either waveform is not printed. The figure-pass runs
+    (run_fig3*_elas, run_fig3*_visc) take t_cycle as time from the start of the inflow period of the last cycle,
+    with the boileau_data inflow (q_inflow), whose t = 0 the reader takes to be the same instant. A shift between
+    the two time origins of even 0.01 s moves the steep parts of these curves by more than their read intervals,
+    so a not-reproduced verdict on cmp_fig3* may come from the time origin rather than the solver (q_scheme).
+  citation: {page: 5, printed_page: "2254", quote: "As in the purely elastic study, we matched the onset of the", where: text}
+- id: q_fig3_read
+  kind: reading
+  about: [P15_exp_fig3a, Q15_exp_fig3b, P24_exp_fig3c, Q24_exp_fig3d, P30_exp_fig3e, Q30_exp_fig3f, P3_exp_fig3g, Q3_exp_fig3h]
+  text: >
+    The three black lines of each Fig. 3 panel, feared inseparable (q_figures_unread), are told apart by stroke at
+    1200 dpi: exp is a 14 px solid line, visc a 14 px dashed line, elas a 5 px line (figures/_fig3.py). Where two
+    lines overlap, the reading's interval spans every line the hidden one may lie under; positions that cannot be
+    read in all three curves of a panel are left out of that panel. These readings give the in vitro waveforms at
+    the midpoints of Segments 15, 24, 30 and 3, of which boileau_data releases none (its eight sites are Segments
+    7, 10, 11, 14, 17, 20, 29, 34): with them, the E_P and E_Q of Table 3 at these four sites could be recomputed
+    from Eq. 10 at the figure's resolution (q_error_tables).
+- id: q_val_boileau_time_origin
+  kind: choice
+  about: [network_1d, t_report_added, T_added]
+  text: >
+    The validations of network_1d against boileau2015 Figs. 6-9 (validations.yaml, val_fig*) sweep t_cycle over
+    the times of those figures, taking their t = 0 as the start of the inflow period of the supporting inflow
+    file (the same inflow added here, q_inflow), which is how boileau2015's own solvers were driven. Neither paper
+    states that the plotted in vitro curves of [45] share that origin; if they were shifted (as this paper's Fig. 3
+    was, by matching the onsets of ejection, q_fig3_time_origin), a shift of even 0.01 s moves the steep parts of
+    the waveforms by more than the read intervals, so a not-reproduced verdict at a site may come from the time
+    origin rather than the model. The period 0.827 s of that inflow also sets where the curves end (alternative
+    0.857 s, T_added).
+  citation: {none: "this paper does not plot the eight sites of boileau2015 Figs. 6-9; the choice is the validation's"}
+- id: q_val_boileau_formulation
+  kind: choice
+  about: [network_1d]
+  text: >
+    boileau2015 Figs. 6-9 plot one in vitro waveform per panel, and both formulations of network_1d predict it, so
+    each of the 16 curves is validated twice: purely elastic (viscoelastic false; the formulation of boileau2015's
+    own solvers, Eq. 3) and visco-elastic with Table 2's Gamma (viscoelastic true; this paper's model). Neither is
+    preferred here; both use the reader's finite-volume scheme (q_scheme) and its junction and terminal conditions
+    (q_bc_junctions), so their verdicts judge that reading of the model as well as the model.
+  citation: {page: 4, printed_page: "2253", quote: "Table 2 shows the geometry, elasticity and boundary conditions", where: text}
+- id: q_val_boileau_data_none
+  kind: choice
+  about: [network_1d]
+  text: >
+    No validation of this record's models against boileau_data was added. The in vitro waveforms released in
+    boileau_data (Benchmark5_37ArteryNetwork/ExpData, the measurements of this paper at eight sites) are not
+    data of that record: it reads them only as inputs to its error runs (errors_*), whose outputs are error
+    norms of the 1D schemes, not measurements, and it has no datum of origin measured. So no measured datum of
+    boileau_data exists that network_1d could be judged against. The same in vitro waveforms are already used
+    here through boileau2015's figure readings of Figs. 6-9 (q_val_boileau_formulation). The other models
+    (Eq. 5's tube law, wave speed and Gamma, the viscosity multiple) predict nothing boileau_data measures.
+  citation: {none: "a finding of the cross-record job between alastruey2011 and boileau_data, not a printed statement"}
+- id: q_no_validation_vs_formaggia2003
+  kind: choice
+  about: [network_1d, tube_law_eq5_elastic, wave_speed_eq5, gamma_eq5]
+  text: >
+    No model of this record is validated against formaggia2003, and none of formaggia2003's against this
+    record's measurements (cross-validation job 2026-11-04). This paper cites formaggia2003 only for the
+    derivation of Eq. 5 from a generalised string model (p. 3). formaggia2003 holds no measured datum:
+    every plotted value there is the output of its own idealized simulations (bifurcation and endograft
+    channels, extended wall models), so no model here can be judged against it. In the other direction,
+    formaggia2003's models (an algebraic pressure-area law, two idealized channel solvers, a profile
+    coefficient) give none of the quantities measured here (wave speeds, load-extension, waveforms of the
+    37-segment network); see formaggia2003/q_no_validation_vs_alastruey2011.
+  citation: {page: 3, printed_page: "2252", quote: "derived from a generalised string model", where: text}
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [network_1d, tube_law_eq5_elastic, tube_law_mid, tube_law_mid_E, wave_speed_eq5, gamma_eq5]
+  text: >
+    No model of this record is validated against olufsen2000, and none of olufsen2000's against this
+    record's measurements (cross-validation job 2026-11-04). This paper cites olufsen2000 only for Laplace's
+    law in deriving Eq. 3 (p. 2) and in a list of works supporting 1-D modelling (p. 8); it does not say its
+    model predicts olufsen2000's data. olufsen2000's measurements are a subject's heart rate and period, the
+    ascending-aorta radius, the MRI inflow (Fig. 3), cuff pressures 120/80 mmHg and the MRI flows of Fig. 7
+    in nine human arteries. network_1d, though of the same shape, is the 37-segment silicone network: its
+    inputs are per-segment lengths, radii, wave speeds and terminal resistances of that network and its outputs
+    are midpoint waveforms of its segments 3-34, so it cannot be run on the conditions of a human tree whose
+    wave speeds and terminal resistances olufsen2000 does not give and whose branching differs; any such run
+    would rest almost wholly on added inputs. The algebraic models (tube laws, wave speed, Gamma) give area,
+    pressure from area, wave speed or wall viscosity, none of which olufsen2000 measures. In the other
+    direction olufsen2000/network_1d is not runnable (olufsen2000/q_network_not_runnable) and fixes the human
+    geometry; tube_law_eq14 needs an area, and this record measures no area or diameter (only the uniaxial
+    load-extension of Fig. 2 and the midpoint P, Q waveforms of Figs. 3-4). See
+    olufsen2000/q_no_validation_vs_alastruey2011.
+  citation: {page: 2, printed_page: "2251", quote: "using Laplace's law (Olufsen et al., 2000)", where: text}
+- id: q_no_validation_vs_reymond2009
+  kind: choice
+  about: [network_1d, tube_law_eq5_elastic, tube_law_mid, tube_law_mid_E, wave_speed_eq5, gamma_eq5]
+  text: >
+    No validation against reymond2009 is entered, in either direction (cross-validation job 2026-11-04).
+    This paper cites reymond2009 only qualitatively: as a visco-elastic 1-D model compared with in vivo
+    data (p. 2), as qualitative observations on visco-elasticity in the human (p. 8), in a list of works
+    supporting 1-D modelling (p. 8) and for nonlinear wall laws (p. 8). It does not say its model predicts
+    reymond2009's data. reymond2009's measurements are human in vivo values: the Table 4 systolic, mean and
+    diastolic flows and Table 5 pressures of volunteers, the averaged waveforms of Figs. 4-5, Senzaki et
+    al.'s normalized elastance (Fig. 1B) and literature PWV against diameter (Fig. 3). network_1d, though
+    of the same shape, is the 37-segment silicone network: its inputs are per-segment lengths, radii, wave
+    speeds and terminal resistances of that network and its outputs are midpoint waveforms of its segments,
+    so it cannot be run on the human tree of reymond2009 (a different branching, with a varying-elastance heart,
+    WK3 terminals and cerebral and coronary trees), whose per-segment wave speeds and terminal resistances
+    are not printed in a form these ports take; any such run would rest almost wholly on added inputs and
+    would not be a test. The algebraic models (tube laws, wave speed from E and h, Gamma) need a wall
+    Young's modulus and thickness that reymond2009 does not give for its arteries or for the Fig. 3
+    literature points. In the other direction, reymond2009/arterial_tree_1d is not runnable
+    (reymond2009/q_1d_not_runnable); its Eq. 22 PWV-diameter law is an empirical fit to human arteries, so
+    applying it to the silicone tubes' measured radii would not predict their measured wave speeds, which
+    are set by the silicone's E and h; its other algebraic models (distensibility, viscoelastic coefficient,
+    R1/RT, terminal compliance) give quantities not measured here. See
+    reymond2009/q_no_validation_vs_alastruey2011.
+  citation: {page: 2, printed_page: "2251", quote: "compared the predictions of a visco-elastic 1-D distributed model", where: text}
+- id: q_no_validation_vs_stergiopulos1992
+  kind: choice
+  about: [network_1d, tube_law_eq5_elastic, tube_law_mid, tube_law_mid_E, wave_speed_eq5, gamma_eq5]
+  text: >
+    (Cross-validation with stergiopulos1992, cited here as Stergiopulos et al., 1992; cross-validation job
+    2026-11-04.) No model of this record is validated against a measurement of stergiopulos1992. This paper
+    cites it only as background on modelling clinically relevant changes (p. 1), not as data its model is
+    compared with. The measurements there are in vivo human indices: Gosling et al.'s pulsatility indices
+    (Fig. 7) and Fronek et al.'s thigh, knee and ankle over brachial systolic pressure indices (p. 9).
+    network_1d has the same shape as stergiopulos1992/arterial_tree_1d, but it is the 37-segment silicone
+    network: its ports are that network's lengths, radii, wave speeds and terminal resistances. Its outputs
+    are midpoint waveforms of 12 segments, with no brachial site, no systolic ratio and no pulsatility index.
+    Running it on human subjects would need a whole human tree of added inputs and would not be a test. The
+    algebraic models (tube laws, wave speed, Gamma) give quantities that stergiopulos1992 does not measure.
+    In the other direction, see stergiopulos1992/q_no_validation_vs_alastruey2011.
+  citation: {page: 1, printed_page: "2250", quote: "underlying clinically relevant changes (Stergiopulos et al., 1992", where: text}

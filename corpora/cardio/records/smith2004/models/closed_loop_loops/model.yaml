@@ -1,0 +1,183 @@
+id: closed_loop_loops
+name: pressure-volume loop features of the closed-loop model with R_sys and E_es scaled (Figs. 8-11)
+role: model
+stated:
+  page: 8
+  printed_page: '137'
+  quote: shows results for a normal
+  where: Figs. 8-11
+equation: 'the equations of closed_loop as printed, with R_sys multiplied by rsys_factor (Figs. 9, 10) and the end-systolic
+  elastances E_es,lvf and E_es,rvf (and E_es,spt when ees_septum = 1) multiplied by ees_factor (Fig. 11, "changing
+  the end systolic elastance, E_es"); over the last beat: EDV = max V, ESV = min V, peak P of each ventricle, and
+  max / min P_ao'
+built_from:
+- closed_loop
+inputs:
+  E_lvf:
+    quantity: es_elastance
+    unit: mmHg/ml
+  Vd_lvf:
+    quantity: zero_pressure_volume
+    unit: ml
+  P0_lvf:
+    quantity: ed_pressure_scale
+    unit: mmHg
+  lam_lvf:
+    quantity: ed_stiffness
+    unit: 1/ml
+  V0_lvf:
+    quantity: ed_reference_volume
+    unit: ml
+  E_rvf:
+    quantity: es_elastance
+    unit: mmHg/ml
+  Vd_rvf:
+    quantity: zero_pressure_volume
+    unit: ml
+  P0_rvf:
+    quantity: ed_pressure_scale
+    unit: mmHg
+  lam_rvf:
+    quantity: ed_stiffness
+    unit: 1/ml
+  V0_rvf:
+    quantity: ed_reference_volume
+    unit: ml
+  E_spt:
+    quantity: es_elastance
+    unit: mmHg/ml
+  Vd_spt:
+    quantity: zero_pressure_volume
+    unit: ml
+  P0_spt:
+    quantity: ed_pressure_scale
+    unit: mmHg
+  lam_spt:
+    quantity: ed_stiffness
+    unit: 1/ml
+  V0_spt:
+    quantity: ed_reference_volume
+    unit: ml
+  P0_pcd:
+    quantity: ed_pressure_scale
+    unit: mmHg
+  lam_pcd:
+    quantity: ed_stiffness
+    unit: 1/ml
+  V0_pcd:
+    quantity: ed_reference_volume
+    unit: ml
+  P_th:
+    quantity: thoracic_pressure
+    unit: mmHg
+  E_ao:
+    quantity: vessel_elastance
+    unit: mmHg/ml
+  Vd_ao:
+    quantity: zero_pressure_volume
+    unit: ml
+  E_vc:
+    quantity: vessel_elastance
+    unit: mmHg/ml
+  Vd_vc:
+    quantity: zero_pressure_volume
+    unit: ml
+  E_pa:
+    quantity: vessel_elastance
+    unit: mmHg/ml
+  Vd_pa:
+    quantity: zero_pressure_volume
+    unit: ml
+  E_pu:
+    quantity: vessel_elastance
+    unit: mmHg/ml
+  Vd_pu:
+    quantity: zero_pressure_volume
+    unit: ml
+  R_mt:
+    quantity: flow_resistance
+    unit: mmHg*s/ml
+  R_av:
+    quantity: flow_resistance
+    unit: mmHg*s/ml
+  R_tc:
+    quantity: flow_resistance
+    unit: mmHg*s/ml
+  R_pv:
+    quantity: flow_resistance
+    unit: mmHg*s/ml
+  R_sys:
+    quantity: flow_resistance
+    unit: mmHg*s/ml
+  R_pul:
+    quantity: flow_resistance
+    unit: mmHg*s/ml
+  L_av:
+    quantity: inertance
+    unit: mmHg*s^2/ml
+  L_pv:
+    quantity: inertance
+    unit: mmHg*s^2/ml
+  HR:
+    quantity: heart_rate
+    unit: 1/min
+  V_tot:
+    quantity: stressed_blood_volume
+    unit: ml
+  A:
+    quantity: driver_amplitude
+    unit: dimensionless
+  B:
+    quantity: driver_width_coefficient
+    unit: 1/s^2
+  C:
+    quantity: driver_peak_time
+    unit: s
+  pth_pulm:
+    quantity: pulmonary_thoracic_coupling
+    unit: dimensionless
+  rsys_factor:
+    quantity: resistance_factor
+    unit: dimensionless
+  ees_factor:
+    quantity: contractility_factor
+    unit: dimensionless
+  ees_septum:
+    quantity: septum_contractility_switch
+    unit: dimensionless
+outputs:
+  EDV_lv:
+    quantity: lv_end_diastolic_volume
+    unit: ml
+  ESV_lv:
+    quantity: lv_end_systolic_volume
+    unit: ml
+  Plv_max:
+    quantity: lv_peak_pressure
+    unit: mmHg
+  EDV_rv:
+    quantity: rv_end_diastolic_volume
+    unit: ml
+  ESV_rv:
+    quantity: rv_end_systolic_volume
+    unit: ml
+  Prv_max:
+    quantity: rv_peak_pressure
+    unit: mmHg
+  Pao_sys:
+    quantity: aortic_systolic_pressure
+    unit: mmHg
+  Pao_dia:
+    quantity: aortic_diastolic_pressure
+    unit: mmHg
+settings:
+  dt: 0.0002
+  n_beats: 100
+  initial_fractions:
+    lv: 94.6812
+    ao: 133.3381
+    vc: 329.7803
+    rv: 90.7302
+    pa: 43.0123
+    pu: 808.4579
+stochastic: false

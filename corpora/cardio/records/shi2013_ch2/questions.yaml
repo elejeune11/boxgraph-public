@@ -1,0 +1,275 @@
+- id: q_eq2_13_sign
+  kind: possible_error
+  about: [circulation_ch2, circulation_ch2_signed, run_valves, run_all]
+  text: >
+    The second branch of Eq. 2-13 (P_lv < P_sas) is printed as +CQ_ao AR_ao sqrt(P_sas - P_lv), with no
+    minus sign, so a valve flow is never negative and the regurgitant flows the chapter reports (feature
+    FQ1) cannot arise; with leaflet dynamics an open leaflet then carries forward flow against an adverse
+    pressure difference. With on-off valves (Eq. 2-14) AR = 0 on that branch and the sign does not matter.
+    The record runs Eq. 2-13 as printed (run_valves, run_all) and with the sign corrected
+    (circulation_ch2_signed: run_valves_signed, run_all_signed).
+  citation: {page: 17, printed_page: "65", quote: "the basic pressure-flow relation in the aortic valve is described", where: "Eq. 2-13"}
+- id: q_kg_units
+  kind: possible_error
+  about: [circulation_ch2, Kst_la, Kst_lv, Kf_sav, Ke_sav, m_sav, run_kg]
+  text: >
+    Eq. 2-10 is a force balance, M_sav d2l/dt2 = K_e,la e_la - K_e,lv e_lv + (P_lv - P_la) A_sav - k_f,sav
+    dl/dt - k_e,sav l, but Table 2-3 gives coefficients named K_st,la, K_st,lv (not K_e,la, K_e,lv) with
+    the unit m/(s^2 mmHg), K_f,sav in 1/s and K_e,sav in 1/s^2, i.e. per unit mass, and the tissue-force
+    term K_st e (e in mmHg/ml) is m/(s^2 ml) in either reading, neither a force nor an acceleration. The
+    record takes K_st e numerically (dropping the per-ml factor) and runs two readings: Eq. 2-10 as
+    printed with M_sav multiplying the acceleration and the Table 2-3 numbers as the coefficients
+    (kg_form eq2_10, the record's choice), and every term divided by the mass, as the Table 2-3 units say
+    (model setting kg_form: per_mass). The pressure term is converted to SI (mmHg to Pa) in both. In the
+    per-mass reading the pressure term alone, (P_lv - P_la) A_sav/m_sav, is about 15000 m/s^2 in systole,
+    and with K_e,sav = 9000 1/s^2 a static displacement of order 1 m (A_sav l about 800 ml) results; run
+    by the reader with the KG-alone settings it diverges (non-finite state within the first beat), so it
+    gives no value to compare and is not recorded as a run. With K_f,sav = 0.0004 1/s the per-mass oscillator (natural frequency 15 Hz) is almost
+    undamped. Neither reading gives the smooth displacement of Fig. 2-12 reaching -0.0286 m.
+  citation: {page: 22, printed_page: "70", quote: "Table 2-3 Parameters for KG diaphragm motion modelling", where: "Eq. 2-10, Table 2-3"}
+- id: q_kg_volume
+  kind: reading
+  about: [circulation_ch2]
+  text: >
+    Eqs. 2-11 and 2-12 write V_lv = V_lv + A_sav l and V_la = V_la - A_sav l. The record reads them as
+    the chamber volume used in Eq. 2-4 being the volume integrated from the valve flows (Eq. 2-1) plus
+    (ventricle) or minus (atrium) the displaced volume A_sav l at that instant, with A_sav l converted
+    from m^3 to ml, and reports chamber volumes including that term. Applying the correction cumulatively
+    at every time step would be another reading.
+  citation: {page: 16, printed_page: "64", quote: "boundary at each time instant and introduces volume changes to the two chambers", where: "Eqs. 2-11, 2-12"}
+- id: q_table21_labels
+  kind: reading
+  about: [Prv0, Vrv0]
+  text: >
+    In Table 2-1 the right-heart rows for the reference pressure and volume are labelled P_lv,0 and V_lv,0
+    (as the left-heart rows), with values 1.0 mmHg and 10.0 ml. They are read as P_rv,0 and V_rv,0.
+  citation: {page: 20, printed_page: "68", quote: "Vlv ,0 10.0 ml", where: Table 2-1}
+- id: q_vlv0_initial
+  kind: reading
+  about: [Vlv_init, Vrv_init]
+  text: >
+    Table 2-2 lists "V_lv0 = 500 ml" and "V_rv0 = 400 ml" among the blood-vessel parameters, while Table
+    2-1 uses V_lv,0 = 5.0 ml as the reference volume of Eq. 2-4. The text (p. 22) says "the initial volumes
+    of the ventricles are set as listed in Table 2-2", so the Table 2-2 values are read as the initial
+    ventricular volumes. Because the loop is closed, they fix with the other initial values the
+    circulating volume.
+  citation: {page: 22, printed_page: "70", quote: "the initial volumes of the ventricles are set as listed in Table 2-2", where: text}
+- id: q_initial_values
+  kind: unstated_input
+  about: [Vla_init_added, Vra_init_added, Psas_init_added, Psat_init_added, Psvn_init_added, Ppas_init_added, Ppat_init_added, Ppvn_init_added]
+  text: >
+    Apart from the ventricular volumes, no initial value is stated: "Pressures for the vasculature can be
+    set at the normal physiological ranges observed clinically" (p. 22). In a closed loop these values fix
+    the circulating volume and with it every pressure and volume of the periodic solution. The record
+    takes the values of the authors' CellML code of the same circulation (atria 20 ml, systemic arteries
+    100 mmHg, pulmonary arteries 30 mmHg, veins 0 mmHg), with alternatives; initial flows, leaflet angles
+    (closed) and KG displacement and velocity are zero.
+  citation: {page: 22, printed_page: "70", quote: "Pressures for the vasculature can be set at the normal", where: text}
+- id: q_theta_max
+  kind: unstated_input
+  about: [theta_max_added]
+  text: >
+    Eq. 2-15 needs the fully open leaflet angle theta_max, which the chapter does not give (Table 2-4 has
+    only K_p and K_f). Figs. 2-15 and 2-16 show the leaflets opening to about 75 degrees; the record uses
+    75 degrees with alternatives. How the angle is held between closed (0 degrees) and fully open is not
+    stated: the record clamps it at both limits and stops the angular velocity there.
+  citation: {page: 17, printed_page: "65", quote: "the maximum opening angle corresponds to the", where: "Eq. 2-15"}
+- id: q_step_reading
+  kind: reading
+  about: [vlv_pwb_kg_atrial, vlv_max_kg_atrial, vrv_pwb_kg_atrial, vrv_max_kg_atrial, vla_pwb_kg_atrial, vla_trough_kg_atrial, vra_pwb_kg_atrial, vra_trough_kg_atrial]
+  text: >
+    "a step increase (from 120.9ml to 133.6ml in the left heart and from 100.2ml to 109.4ml in the right
+    heart) in ventricular volume, and a local decrease (from 57.9ml to 40.3ml ... from 45.2ml to 32.8ml)
+    in atrial volume in the late diastolic phase" is read as values within the combined run: the volume
+    at the onset of atrial contraction (t = T_pwb) and the end-diastolic maximum (ventricle) or the trough
+    during and just after atrial contraction (atrium). The pairs could instead compare the simplified
+    model with the combined model.
+  citation: {page: 36, printed_page: "84", quote: "with a step increase (from 120.9ml to", where: text}
+- id: q_tricuspid_systole
+  kind: reading
+  about: [qti_max_simplified_p41, qti_max_valves]
+  text: >
+    "in early systole the peak aortic flow increases from 879.4 to 1088.6 ml/s, and the peak tricuspid flow
+    also increases from 706.6 to 841.1 ml/s". In early systole the tricuspid valve is closed; the
+    pulmonary valve flow may be meant. The values are recorded as printed, as peak tricuspid flow, and
+    compared with the largest tricuspid flow of the cycle.
+  citation: {page: 41, printed_page: "89", quote: "flow also increases from 706.6 ml s to 841.1 ml s", where: text}
+- id: q_simplified_values_differ
+  kind: unexplained_difference
+  about: [plv_max_simplified_p34, plv_max_simplified_p41, plv_max_simplified_p47, ppas_max_simplified_p34, ppas_max_simplified_p41, qao_max_simplified_p41, qao_max_simplified_p47, qmi_E_simplified, qmi_max_simplified_p47, qti_E_simplified, qti_max_simplified_p47, qti_max_simplified_p41]
+  text: >
+    Results of the one simplified model are printed with different values in different sections: peak LV
+    and aortic pressure 117.2 mmHg (p. 34) and 117.4 mmHg (pp. 41, 47); peak pulmonary pressure 25.6
+    (p. 34) and 25.7 mmHg (p. 41); peak aortic flow 879.4 ml/s (p. 41) and 920.8 ml/s (p. 47); peak mitral
+    flow 746.2 ml/s (E peak, p. 41) and 744.6 ml/s (p. 47), which without atrial contraction should be the
+    same peak; tricuspid E peak 954.3 ml/s (p. 41) above the peak tricuspid flow 665.5 ml/s (p. 47) and
+    706.6 ml/s (p. 41). Consistency comparisons check the pairs of the same quantity.
+  citation: {page: 47, printed_page: "95", quote: "In aortic valve the value increases from 920.8 ml s to", where: text}
+- id: q_annulus_area
+  kind: possible_error
+  about: [A_annulus_text, m_annulus_text, annulus_geometry, annulus_mass]
+  text: >
+    A circle of 25 mm diameter has an area of pi (0.0125 m)^2 = 4.9 x 10^-4 m^2, not the printed
+    4.7 x 10^-4 m^2; the printed mass 4.0 x 10^-4 kg follows from 4.9 x 10^-4 m^2 x 1 mm x 800 kg/m^3
+    = 3.9 x 10^-4 kg rather than from the printed area (3.8 x 10^-4 kg). The text does not say how the
+    "sectional area" was obtained (an annulus ring, or an effective area, would be other readings).
+  citation: {page: 21, printed_page: "69", quote: "the annulus fibrosus has a sectional area of", where: text}
+- id: q_ea_flow
+  kind: reading
+  about: [ea_mi_atrial, ea_mi_kg_atrial, ea_ti_kg_atrial, ea_mi_all, ea_ti_all]
+  text: >
+    The E/A ratio is defined for transmitral flow velocities (p. 10); the model gives flows. The record
+    takes the ratio of the E and A peaks of valve flow, which equals the velocity ratio when the open
+    area is the same at both peaks (on-off valves, or fully open leaflets).
+  citation: {page: 10, printed_page: "58", quote: "flow velocity shows that there are two local peaks in mitral flow", where: text}
+- id: q_audit_kg_measurements
+  kind: reading
+  about: [l_min_kg_atrial, l_max_kg_atrial, circulation_ch2, A_sav]
+  text: >
+    Audit: the record leaves out the MRI measurements of KG diaphragm motion, but these are what the
+    KG model is meant to reproduce. They are: a displacement of "about 0.02 ~ 0.03m" along the long
+    axis in each heart cycle (pp. 8, 21), "about 0.003m" into the atrium in diastole (p. 22), and
+    "about 8 ~ 12ml" of chamber volume change (p. 8). They could be recorded as measured data and used
+    for validation of l_max (against 0.003 m) and of the peak-to-peak displacement l_max - l_min
+    (against 0.02-0.03 m), although being approximate they get no verdict. The record also leaves out the
+    model result on p. 43, where valve dynamics stretch the KG diaphragm "further into the ventricle for
+    about 0.002 ~ 0.004m during systole" (l_min of the all-features run against run_kg_atrial). That result
+    is approximate and is not in the notes' list of left-out values. A_sav times 0.02-0.03 m gives 9.4-14.1 ml,
+    not quite the printed 8-12 ml.
+  citation: {page: 8, printed_page: "56", quote: "KG diaphragm moves along the long axis of the adult heart for about", where: text}
+- id: q_window
+  kind: choice
+  about: [circulation_ch2, circulation_ch2_signed]
+  text: >
+    The chapter reports "the converged solution of the 11th period, from the 10th to the 11th second"
+    (p. 23) but its figures plot the response from 10 s to about 11.1 s. The record takes every statistic
+    over 10 s <= t < 11 s. The atrial contraction (T_pwb = 0.92 s, T_pww = 0.09 s) wraps across the end of
+    the period; its A peak is searched over t >= T_pwb and t < T_pwb + T_pww - T.
+  citation: {page: 23, printed_page: "71", quote: "the converged solution of the 11th period, from the 10th to the 11th second", where: text}
+- id: q_fig_regurgitant_flow
+  kind: possible_error
+  about: [circulation_ch2, circulation_ch2_signed, q_eq2_13_sign]
+  text: >
+    Figures: the flow panels with valve dynamics, Figs. 2-17(b), (e) (pp. 38-39) and 2-20(b), (e)
+    (pp. 44-45), plot negative valve flows (feature FQ1) reaching about -300 to -400 ml/s on their axes,
+    for the aortic, mitral, pulmonary and tricuspid valves. Eq. 2-13 as printed gives no negative flow,
+    so the curves the chapter plots were computed with the minus sign on the reverse branch: this bears
+    on q_eq2_13_sign in favour of the corrected variant circulation_ch2_signed. The spikes are
+    near-vertical and inside annotation ellipses and are not read (figures.md); the waveform readings
+    of Figs. 2-16, 2-17 and 2-20 are compared with both models.
+  citation: {page: 38, printed_page: "86", quote: "(b) Flow-rate, left heart", where: "Fig. 2-17(b)"}
+- id: q_fig_elvd
+  kind: unexplained_difference
+  about: [Elvd, fig2_6_elv_read, fig2_13_elv_read, elastance_ch2]
+  text: >
+    Figures: in diastole Figs. 2-6 and 2-13 plot E(lv) at about 0.068 mmHg/ml (read
+    fig2_6_elv, fig2_13_elv, interval about +-0.015), while Table 2-1 gives E_lv,d = 0.1 mmHg/ml; in the
+    same figures E(la) reads 0.148 mmHg/ml, consistent with E_la,min = 0.15, and the systolic peak of
+    E(lv) reads 2.50, consistent with E_lv,s = 2.5. Either the plotted elastance used another diastolic
+    value (0.07 or 0.06) or the table value is not the one simulated.
+  citation: {page: 12, printed_page: "60", quote: "Elastance change in the left ventricle and left atrium during a typical heart cycles", where: "Fig. 2-6"}
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [fig2_3_vlv_mri_read, circulation_ch2, circulation_ch2_signed, circulation_ch2_waveform]
+  text: >
+    Cross-validation against korakianitis2006 finds nothing to test, in either direction.
+    korakianitis2006 holds no measurement: its data are printed parameters and model results, and
+    all its figures are model output, so no model here has anything of it to be validated against.
+    This record's one measurement, fig2_3_vlv_mri_read (LV volume per MRI phase, Fig. 2-3), cannot
+    be predicted by korakianitis2006's circulation models: they give LV volume against time, the
+    curve is indexed by MRI phase number, and the mapping is not stated (the volunteer's heart
+    period, where phase 1 falls in the cycle, and the phase count: 30 per cycle in the text, 33
+    plotted). The chapter itself uses the MRI data only qualitatively. Adding a period and an offset
+    would make the verdict rest on added choices, and no model in either record maps phase to time.
+  citation: {page: 6, printed_page: "54", quote: "used for qualitative comparison with the simulation results", where: text}
+- id: q_no_cross_validation_korakianitis_cellml
+  kind: unstated_model
+  about: [fig2_3_vlv_mri_read, circulation_ch2, circulation_ch2_signed, circulation_ch2_waveform]
+  text: >
+    Cross-validation against korakianitis_cellml (the authors' CellML code of the korakianitis2006
+    circulation, the Shi 2006 model this chapter cites) finds nothing to test, in either direction.
+    That record is code and holds no measurement, so no model here has anything of it to be
+    validated against. This record's one measurement, fig2_3_vlv_mri_read, cannot be predicted by
+    its model closed_loop_onoff: the model gives scalar extremes and stroke volume over one cycle,
+    not LV volume against time, and the measured curve is indexed by MRI phase number with no
+    stated mapping to time (heart period, phase-1 position, 30 phases per cycle in the text against
+    33 plotted). No scalar end-diastolic or end-systolic volume of the volunteer is printed for
+    V_lv_max or V_lv_min to be compared with. No validation was added.
+  citation: {page: 6, printed_page: "54", quote: "used for qualitative comparison with the simulation results", where: text}
+- id: q_no_cross_validation_shi2013_ch5
+  kind: unstated_model
+  about: [circulation_ch2, circulation_ch2_waveform, fig2_3_vlv_mri_read]
+  text: >
+    Cross-validation against shi2013_ch5 (the pulsatile-bioreactor chapter) finds nothing to test, in
+    either direction. shi2013_ch5 holds no measurement. Every datum there is a Table 5-1 parameter,
+    a printed result of its own model or a figure of model output (its figures.md: "The chapter has
+    no measured data"). The experimental range it mentions (Sodian et al., -12 ~ 23 mmHg, 18 s
+    period) is of another bioreactor and is not recorded. So no model of this record has a
+    measurement there to predict. Neither chapter says one model explains the other's results.
+    circulation_ch2 and shi2013_ch5/air_pressure_eq5_12 share a shape (a pressure against time), but
+    that is not a prediction: air_pressure_eq5_12 is the bioreactor's prescribed air-chamber drive,
+    and circulation_ch2 models the human circulation, not the bioreactor. This record's one
+    measurement, fig2_3_vlv_mri_read (a volunteer's LV volume), is predicted by no model of
+    shi2013_ch5. No validation was added.
+  citation: {page: 7, printed_page: "55", quote: "Volume change of left ventricle measured from MRI data", where: "Fig. 2-3"}
+- id: q_no_cross_validation_shi2018
+  kind: unstated_model
+  about: [circulation_ch2, circulation_ch2_signed, circulation_ch2_waveform, fig2_3_vlv_mri_read]
+  text: >
+    Cross-validation against shi2018 (the CellML implementation paper of the same authors) finds
+    nothing to test, in either direction. shi2018 holds no measurement: its text values and all 20
+    Fig. 5 readings are output of its own Fig. 1(d) simulation (its figures.md: "The paper plots no
+    measured data"), so circulation_ch2 has nothing there to be validated against. Setting
+    circulation_ch2 against shi2018's simulated 55-130 mL or Fig. 5 curves would compare one model's
+    output with another's, a relation for a later job. The shape match between circulation_ch2 and
+    shi2018/text_max_lv_volume_over_pressure is not a prediction: that is a processing model holding
+    shi2018's printed 130 mL at the pressures where its Fig. 5(d) was read. This record's one
+    measurement, fig2_3_vlv_mri_read (a volunteer's LV volume per MRI phase), is predicted by no
+    runnable model of shi2018: circulation_fig1d is not runnable (no equations or parameters
+    printed), and the text_* models give shi2018's own extreme volumes and pressures, not the
+    volunteer's volume, against time or pressure rather than MRI phase (the phase-to-time mapping is
+    unstated). Neither paper cites the other or says one explains the other's results. No
+    validation was added.
+  citation: {page: 7, printed_page: "55", quote: "Volume change of left ventricle measured from MRI data", where: "Fig. 2-3"}
+- id: q_no_cross_validation_suga1973
+  kind: unstated_model
+  about: [elastance_ch2, elastance_eq2_4, circulation_ch2_waveform, fig2_3_vlv_mri_read]
+  text: >
+    Cross-validation against suga1973 (cited here as the source of the variable elastance model)
+    finds nothing to test, in either direction. suga1973's measurements are per-dog Vd, Emax, Tmax,
+    heart rate and [(dP/dt)/P]max (Tables 1, 2), their ratios and statistics, and the normalized curve
+    EN(tN) = E(t)/Emax against tN = t/Tmax (Fig. 5, four symbol series with SD bars). No model here
+    gives any of them. elastance_ch2 (and the elastances of circulation_ch2_waveform) gives
+    e_lv in mmHg/ml against time in s, not the dimensionless E/Emax against t/Tmax, so its output and
+    Fig. 5 measure different quantities. The chapter's Eq. 2-3 peaks at T_s1 with value E_lv,s, so
+    E_lv,s and T_s1 play the roles of Emax and Tmax: run on a dog's Emax and Tmax, the peak and its time
+    are inputs returned, not predictions. Comparing the shape of Eq. 2-3 with Fig. 5 would need a
+    normalized form of the chapter's elastance, and Eq. 2-2 has E_lv,d, T_s2 and T, which Suga does not
+    give for the dogs. That model is not stated in the chapter, and none is in either record.
+    The chapter adopts Suga's model by name. It does not say its activation function or parameters
+    were fitted to, or compared with, Suga's data. In the other direction, suga1973's runnable models
+    are E(t) = P/(V - Vd) and statistics of its own tables. None predicts this record's one
+    measurement, fig2_3_vlv_mri_read (a volunteer's LV volume per MRI phase), and
+    elastance_normalized is not runnable. No validation was added.
+  citation: {page: 12, printed_page: "60", quote: "the widely-used Suga et al.'s variable elastance model", where: text}
+- id: q_no_cross_validation_ursino1998
+  kind: unstated_model
+  about: [circulation_ch2, circulation_ch2_signed, circulation_ch2_waveform, fig2_3_vlv_mri_read]
+  text: >
+    Cross-validation against ursino1998 finds nothing to test, in either direction. The chapter
+    cites Ursino 1998 only as a source of loop parameters (Table 2-2, p. 20) and as background. It
+    does not say its model explains or was compared with that paper's data. Every measurement in
+    ursino1998 depends on the carotid baroreflex: afferent firing against carotid sinus pressure
+    (Fig. 3, Chapleau and Abboud), percent changes in cardiac output against carotid pressure
+    (Fig. 5, Kostiuk), open-loop venous volume shifts, heart period, resistance, pressure and
+    cardiac output (Fig. 7, Brunner, Eckberg, Cox, Shoukas, Schmidt), pulsatile open-loop pressure
+    (Fig. 8B, Schmidt) and hemorrhage responses (Fig. 9, Kumada). Most are from dogs. circulation_ch2
+    has no baroreflex, no carotid sinus input and no hemorrhage input, so it gives none of these
+    quantities. The one non-reflex measurement, Melbin's normalized dSV/dHR against heart rate
+    (fig6_dsv_exp_d, dog pacing), is a derivative that no model here outputs. Even with T as an input,
+    circulation_ch2 gives only SV at a fixed parameter set, and building a derivative of it would be a
+    new model. The shared shape of circulation_ch2 and ursino1998/circulation_baroreflex is a
+    relation between models, left for the later job. In the other direction, this record's one
+    measurement, fig2_3_vlv_mri_read, is predicted by no model of ursino1998 (see
+    ursino1998/q_no_cross_validation_shi2013_ch2). No validation was added.
+  citation: {page: 20, printed_page: "68", quote: "based on the data reported in (Lu et al. 2001, Thomas et al. 1997, Ursino", where: text}

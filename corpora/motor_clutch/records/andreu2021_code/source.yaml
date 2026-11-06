@@ -1,0 +1,42 @@
+id: andreu2021_code
+kind: software
+title: "Supplementary Software 1 of Andreu et al. 2021: molecular clutch model under cyclic stretch (MATLAB)"
+authors: [Ion Andreu, Bryan Falcones, Sebastian Hurst, Nimesh Chahare, Xarxa Quiroga, Anabel-Lise Le Roux,
+  Zanetta Kechagia, Amy E. M. Beedle, Alberto Elosegui-Artola, Xavier Trepat, Ramon Farré, Timo Betz,
+  Isaac Almendros, Pere Roca-Cusachs]
+year: 2021
+venue: Supplementary Software 1 of Nature Communications 12, 4229
+doi: 10.1038/s41467-021-24383-3
+file: corpus/motor_clutch/code/andreu2021_code
+url: https://doi.org/10.1038/s41467-021-24383-3
+version: "sha256:f7df6fa9a0c62b01e07e94d53984ce71ae536b964c6f117765aaddd8ede811a1"
+licence: none stated
+language: matlab
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "read_code-1", date: "2026-11-01"}
+notes: >
+  The code (no licence, no README) is four MATLAB files and two .mat files. Entry point stretchscriptg.m sets
+  the parameters, loads kofflr.mat (rate tables) and 'experimental data.mat' (YAP ratios yem +- yee, and
+  pem +- pee, which it does not use), and calls cmstretchg.m (a Gillespie clutch model under triangular
+  cyclic stretch, Chan and Odde based, three events plus talin refolding) for 2.5, 5, 10 and 20% stretch
+  (A = 1.5, 2, 2.5, 3 um) at 11 frequencies, plotting the scaled mean integrin density against the YAP data.
+  'loading rate script.m' with koffcb.m makes the loading-rate-corrected rate tables (Eqs. 5-6 of the
+  paper); as released it does not run (both rate lines commented out). MATLAB cannot run here, so the
+  record ports both to Python (lr_rate_port, cmstretchg_port; our code, outputs predicted).
+  Every parameter the paper prints agrees with the code (kc, FR, dmin, dmax, dadd, Fact, nf, kon, the four A)
+  except ksub: 1e-3 N/m in the code, 1 uN/nm in Supplementary Table 4 (q_ksub_unit). Hidden in the code and
+  not in the paper: the catch- and slip-bond coefficients, talin refolding (exp(13.07), -2.288e12; active
+  although a comment says it was not considered: q_refolding), the 'cm' off-rate variant above 150 pN, the
+  scaling bl = 1.2, sc = 1.4, the grids and cut-off of the rate tables, L = |v| ksub / n_bound.
+  Rate tables: the port reproduces the shipped kofflr.mat (both tables, every cell checked while reading;
+  rows and a column compared in the record) only with a cut-off of 1e-100; with the 1e-70 written on line 44
+  a few cells near the switch differ by up to 2.3% (q_table_cutoff). The force step leaves a 0.2% error at
+  the lowest loading rate (q_table_step).
+  Fig. 2e: the ported code, run at the paper's frequencies with 3 seeds of 1000 s, reproduces the paper's
+  model lines (read in the paper's record) at 2.5% and 5% stretch and is close at 10% (above at 1 and 2 Hz)
+  and 20% (above at 0.125 Hz); the 10% result settles as the simulated time is doubled and quadrupled.
+  To compare on the adhesion-length axis the record adds the twin-axis map of Fig. 2e (YAP 1.0-2.0 = 0-3 um),
+  which is not in the code. Against the measurements the code ships, the model is close to the YAP ratios at
+  10% and not reproduced elsewhere, and not reproduced against the adhesion lengths (q_validation).
+  Differences of the port from the code: Python's random numbers, 3 seeds per point (the code runs one),
+  the binding time of the unbound clutches drawn as one exponential (same distribution), tables rebuilt
+  rather than loaded.

@@ -1,0 +1,277 @@
+- id: q_rpvn
+  kind: possible_error
+  about: [Rpvn_code, Rpvn_paper, run_code_rpvn_paper]
+  text: >
+    The code's pulmonary venous resistance is Rpvn = 0.0006 mmHg s/mL (ParaPul.cellml line 28);
+    korakianitis2006 Table 2 prints R_pvn = 0.006 mmHg s/ml, ten times larger. Every other R, C and L
+    of both loops agrees with Table 2 as written. One of the two has a misplaced zero; neither
+    source says which. The value matters: it sets how fast the left atrium fills, and with the
+    code's 0.0006 the mitral E peak is far larger than with 0.006 (the build gives both runs,
+    run_code_values and run_code_rpvn_paper, against the paper's 702.9 ml/s).
+  citation: {file: ParaPul.cellml, lines: "28", quote: 'initial_value="0.0006" name="Rpvn"'}
+- id: q_initial_values
+  kind: unstated_input
+  about: [Vlv0_code, Vla0_code, Vra0_code, Vrv0_code, P0sas_code, P0sat_code, P0svn_code, P0pas_code, P0pat_code, P0pvn_code, Q0sas_code, Q0sat_code, Q0pas_code, Q0pat_code]
+  text: >
+    The code starts the ventricles at 500 mL each, the atria at 20 mL, the systemic sinus and artery
+    at 100 mmHg, the pulmonary sinus and artery at 30 mmHg, both veins at 0 mmHg, all inertance flows
+    at 0. With no unstressed vessel volume this fixes the circulating volume of the closed loop at
+    500 + 500 + 20 + 20 + 0.08 x 100 + 1.6 x 100 + 0.18 x 30 + 3.8 x 30 = 1327.4 mL, which sets
+    every pressure, flow and volume of the periodic solution. korakianitis2006 prints no initial
+    value except Table 2's V_lv0 = 800 ml and V_rv0 = 500 ml (read in that record as initial
+    ventricular volumes, its q_vlv0_table2): the code agrees on the right ventricle (500) but starts
+    the left at 500, not 800 (the build checks Vlv0_code against Vlv_init_table2). The paper's
+    record adds P_pas = P_pat = 20 mmHg at the start (Ppas_init_added, Ppat_init_added); the code
+    uses 30.
+  citation: {file: ParaHeart.cellml, lines: "46-49", quote: 'initial_value="500" name="Vlv0"'}
+- id: q_timing_fractions
+  kind: choice
+  about: [Tpwb_code, Tpww_code, Ts1_code, Ts2_code]
+  text: >
+    The code writes the activation times as dimensionless fractions of the period T (Tpwb = 0.92,
+    Tpww = 0.09, Ts1 = 0.3, Ts2 = 0.45, used as Tpwb*T etc.), while korakianitis2006 prints them in
+    seconds (T_pwb 0.92 s, T_pww 0.09 s, Ts 0.3 s) with T = 1 s. With T = 1 s they are the same
+    times, so they are not linked for a unit check here. The code settles what the paper leaves open
+    (its q_ts1_ts2): Ts1 = 0.3 T is the peak of ventricular activation and Ts2 = 0.45 T its end. Ts2
+    is printed nowhere in the paper. Both ventricles (and both atria) share these timings.
+  citation: {file: ParaHeart.cellml, lines: "38-41", quote: 'initial_value="0.45" name="Ts2"'}
+- id: q_elastance_form
+  kind: unexplained_difference
+  about: [closed_loop_onoff]
+  text: >
+    The code's ventricular activation is et = 1 - cos(pi t/(Ts1 T)) rising to 2 at Ts1 T, then
+    1 + cos(pi (t - Ts1 T)/((Ts2 - Ts1) T)) falling to 0 at Ts2 T, with E = Emin + et (Emax - Emin)/2,
+    so E runs from Emin to Emax. Eq. 3 of korakianitis2006 as recorded there is cos(t/T_s1 pi) and
+    cos((t + T_s2 - T_s1)/T_s1 pi), which gives a negative elastance (its q_eq3_activation,
+    q_fig2_eq3). The code's form is the one that record's corrected variants use and that its Fig. 2
+    shows: the released code supports reading Eq. 3 as a misprint.
+  citation: {file: EVentricle.cellml, lines: "20", quote: '<apply><eq/><ci>et</ci><piecewise>'}
+- id: q_eq18_code
+  kind: unexplained_difference
+  about: [closed_loop_onoff]
+  text: >
+    In the code the systemic artery flow is driven by the artery pressure: Sat is a TempRLC
+    (dQo/dt = (Pi - Po - R Qo)/L with Pi = P_sat) whose Po is Sar.Pi = P_svn + (R_sar + R_scp) Q_sat,
+    i.e. dQ_sat/dt = (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat, and the same holds for
+    the pulmonary artery (Pat, ModelPul.cellml lines 75-79). korakianitis2006 Eq. 18 as printed has
+    P_sas - P_svn (its q_eq18_psas). The code, by the paper's second author, follows the analogy
+    with Eq. 16, which supports reading Eq. 18 as a misprint.
+  citation: {file: ModelSys.cellml, lines: "76-80", quote: '<map_components component_1="Sat" component_2="Sar"/>'}
+- id: q_atrial_wrap
+  kind: choice
+  about: [closed_loop_onoff, Tpwb_code, Tpww_code]
+  text: >
+    Tpwb + Tpww = 1.01 exceeds 1, and the code wraps the last 0.01 T of atrial activation into the
+    start of the next cycle (the first branch of EAtrium, 0 <= mt <= (Tpwb + Tpww) T - T).
+    korakianitis2006 Eq. 5 as recorded there cuts it off instead (its q_e_wave_atrial_wrap).
+  citation: {file: EAtrium.cellml, lines: "22", quote: '<apply><eq/><ci>et</ci><piecewise>'}
+- id: q_valves_simplified
+  kind: choice
+  about: [closed_loop_onoff]
+  text: >
+    The four valves are on-off diodes (Tao = 1 when the upstream pressure is at least the
+    downstream, else 0) with an orifice law Q = CV |dP|^0.5, as in korakianitis2006 Eqs. 6-7 (its
+    Section 3.1 results), not the leaflet dynamics of its Eqs. 8-14. The code's documentation says
+    so. No backflow is possible (the backward branch is multiplied by Tao = 0), whatever the sign
+    printed in Eq. 6 (its q_eq6_sign). So the code can produce only the paper's Section 3.1 results;
+    the leaflet-dynamics, mitral stenosis and aortic regurgitation results of Sections 3.2-3.3, the
+    reverse flows and the leaflet angles (Figs. 4, 6-13) are out of its reach.
+  citation: {file: ModelMain.cellml, lines: "19", quote: "have been simplified in the current CellML implementation"}
+- id: q_vena_cava
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    The vena cava compliances C_svc and C_pvc (1.5 ml/mmHg) of korakianitis2006 Table 2 are not in
+    the code, which agrees with that record's reading that no equation of the paper uses them (its
+    q_vena_cava).
+- id: q_solver
+  kind: numerics
+  about: [run_code_values, run_code_rpvn_paper, closed_loop_onoff]
+  text: >
+    The CellML files hold no step size, end time or solver; ModelMain carries only an OpenCell
+    point density (nonstandard-pointDensity 10000). The port uses classical RK4 at dt = 0.1 ms
+    (korakianitis2006's DT) from the code's initial values and reports the 10th to 11th s, the cycle
+    the paper analyses. Halving and quartering dt changes the results by far less than their
+    printed precision; doubling the simulated time changes them by a few tenths of a percent (the
+    11th beat is close to but not exactly periodic; refinements.yaml).
+  citation: {file: ModelMain.cellml, lines: "134", quote: 'NS1:nonstandard-pointDensity="10000"'}
+- id: q_pi
+  kind: choice
+  about: [pi_code_atrium, pi_code_ventricle]
+  text: >
+    pi is written as 3.14159 in both activation functions (relative error 8e-7). The effect on the
+    results is far below printed precision; the port uses the code's number, one pi input for both
+    functions since both files write the same number.
+  citation: {file: EAtrium.cellml, lines: "22", quote: "3.14159"}
+- id: q_unit_pressure
+  kind: choice
+  about: [UnitP_code, closed_loop_onoff]
+  text: >
+    The code defines its pressure unit UnitP as 133 Pa, not 133.322 Pa (1 mmHg). Every value and
+    equation is in UnitP, so the results in UnitP are what the record calls mmHg; only a conversion
+    to SI would carry the 0.24% difference.
+  citation: {file: Units.cellml, lines: "5", quote: 'multiplier="133"'}
+- id: q_right_side
+  kind: unexplained_difference
+  about: [cmp_code_prv_peak, cmp_code_ppas_peak, cmp_rpvn_prv_peak, cmp_rpvn_ppas_peak, ErvMax_code]
+  text: >
+    Run as released, the code's right ventricular and pulmonary artery peaks are near 48 mmHg,
+    against the 26.8 mmHg korakianitis2006 prints for both (the build gives exact values). The
+    paper's own record finds about 45 mmHg with its corrected variants and suspected the unstated
+    right-side initial values (its q_audit_variant_residuals). The code states those initial values
+    (Vra0 20, Vrv0 500 mL, P0pas = P0pat = 30 mmHg) and the difference remains, so they do not
+    explain it. With E_rv,s = 1.15 mmHg/ml, a 26.8 mmHg peak would need an end-systolic RV volume
+    near 33 mL; no parameter written in the code or printed in the paper gives that.
+- id: q_differences_from_paper
+  kind: unexplained_difference
+  about: [cmp_code_plv_min, cmp_code_psas_min, cmp_code_sv, cmp_code_qao_peak, cmp_code_qmi_E]
+  text: >
+    The code is the paper's model with the paper's parameters and the paper's on-off valve law,
+    yet run as released it does not land on all of the paper's Section 3.1 numbers (the build gives
+    exact values and verdicts). Its LV diastolic pressure cannot fall to the printed 0 mmHg (it is
+    bounded below by about PlvIni + ElvMin (Vlv - VlvIni), some 6-8 mmHg); its stroke volume and
+    peak aortic and mitral flows are larger than printed. Possible sources, none printed: the
+    circulating volume set by the initial values (q_initial_values), R_pvn (q_rpvn), the activation
+    function (q_elastance_form), the artery flow law (q_eq18_code), and the C program the paper ran
+    possibly differing from this CellML in ways the documentation calls simplifications.
+- id: q_validation_claim_code
+  kind: overstated_claim
+  about: [closed_loop_onoff]
+  text: >
+    The code's documentation says "The results have been validated against the original C
+    implementation and against other published data." The C program is not published, and the
+    documentation names no validation case, tolerance or data set, so the claim cannot be checked as
+    stated. What can be checked is the code against the results the paper prints for its on-off
+    valve model (comparisons.yaml).
+  citation: {file: ModelMain.cellml, lines: "20", quote: "The results have been validated against the original C implementation"}
+- id: q_figures_not_compared
+  kind: choice
+  about: [closed_loop_onoff]
+  text: >
+    korakianitis2006 Fig. 5 plots the on-off valve model's pressures, flows and volumes over the
+    10th to 11th s, and that record reads them (fig5*_read). A figure reading belongs to the record
+    whose pages it reads, so the curves are not copied here; this record compares the code with the
+    scalar results the paper prints in the text. That record's q_fig5_values notes that Fig. 5 reads
+    a peak P(lv) of about 133 mmHg and an LV volume of about 55-131 ml, nearer the code's values than
+    the printed 126.4 mmHg and 50-120 ml.
+- id: q_tricuspid_systole
+  kind: reading
+  about: [closed_loop_onoff]
+  text: >
+    The paper's "peak tricuspid flow ... from 712.1 to 844.1 ml/s" in early systole is not compared,
+    as in the paper's record (its q_tricuspid_systole): the tricuspid valve is closed in early
+    systole, and the paper does not say which flow it means.
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    Cross-validation with korakianitis2006 (ref-korakianitis2006) finds nothing to test in either
+    direction. That record holds no measurement: its data are the paper's inputs and model results,
+    and its figure readings are all model output (its figures.md: "it shows no measurements, so every
+    figure datum has origin predicted"). This record holds none either: code parameters, initial
+    values and the paper's printed results. Running closed_loop_onoff against that record's values
+    or Fig. 5 curves would compare the code with the paper's own model output, which is the
+    reproduction this record already does (purpose reproduction, against the copied Section 3.1
+    results) or a relation between models for the later job, not a validation. No validation was
+    added.
+- id: q_no_cross_validation_shi2018
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    Cross-validation with shi2018 finds nothing to test in either direction. shi2018 holds no
+    measurement: its data are the Section 3 results of its own Fig. 1(d) simulation (predicted,
+    derived) and its 20 Fig. 5 readings are all model output (its figures.md: "The paper plots no
+    measured data"). Its comparison with a textbook ([18]) is in words and prints no measured
+    values; the "clinical data" it says ref [5] was validated against are in neither record. This
+    record holds no measurement either (code parameters, initial values, results copied from
+    korakianitis2006), so no shi2018 model can be validated against it. Running closed_loop_onoff
+    against shi2018's Fig. 5 curves or text values would compare this CellML code with output of
+    the same authors' CellML circulation model (shi2018 Fig. 1(d)): a relation between models for
+    a later job, not a validation. The shape match with shi2018/text_max_lv_volume_over_pressure
+    does not matter: that is a processing model holding shi2018's printed 130 mL. No validation
+    was added.
+- id: q_no_cross_validation_shi_cellml_systemic
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    Cross-validation with shi_cellml_systemic finds nothing to test in either direction. Both
+    records are CellML code from the same authors, and neither holds a measurement. Their data are
+    code parameters and initial values (origin reported) and results copied from korakianitis2006
+    and shi2018 (predicted, derived), and neither has figure readings. So closed_loop_onoff has
+    nothing of that record to be validated against, and this record holds nothing for
+    systemic_left_heart. ref-shi_cellml_systemic marks it as a sibling workspace sharing the
+    template, heart-parameter and systemic files, not as a source of data. The shared model shape
+    reflects that: systemic_left_heart is this circulation's left heart and systemic loop alone,
+    with venous return to the left atrium. Running one model against the other's run output would
+    compare model with model. That is a relation for a later job (shi_cellml_systemic relations.yaml
+    already has one), not a validation. No validation was added.
+- id: q_no_cross_validation_shi_cellml_westkessel
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    Cross-validation with shi_cellml_westkessel finds nothing to test in either direction. Both
+    records are CellML code by the same authors (Shi, Hose), and neither holds a measurement: no
+    datum of either has origin measured, and neither has figure readings or a figures.md. The
+    westkessel record's data are code parameters and initial values (origin reported, linked to
+    korakianitis2006 Tables 1, 2 and 5) and shi2018 Section 3 model results copied for an
+    approximation comparison (predicted, derived). Its ref-korakianitis2006 is the source of its
+    heart parameters, not of measurements. So closed_loop_onoff has nothing of that record to be
+    validated against, and this record holds nothing for westkessel_left_heart. The shared model
+    shape reflects shared code: westkessel_left_heart is this circulation's left heart (the same
+    TempCDa, TempCDv, EAtrium, EVentricle equations and parameters) with a three-element Westerhof
+    afterload in place of the systemic and pulmonary loops. Running one model against the other's
+    run output would compare model with model, a relation for a later job, not a validation. No
+    validation was added.
+- id: q_no_cross_validation_shi_cellml_windkessel
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    Checking against shi_cellml_windkessel found nothing to validate in either direction. Both
+    records are CellML code by the same authors (Shi, Hose), and neither contains a measurement: no
+    datum in either has origin measured, and neither has figure readings or a figures.md. The
+    windkessel record's data are code parameters and initial values (origin reported, linked to
+    korakianitis2006 Tables 1, 2 and 5), plus shi2018's Fig. 1(d) simulation results copied for an
+    approximation comparison (predicted, derived). Its ref-korakianitis2006 is the source of its
+    heart parameters, not of measurements. So closed_loop_onoff has nothing in that record to be
+    validated against, and this record holds nothing for windkessel_left_heart. The two models have
+    the same shape because they share code: windkessel_left_heart is this circulation's left heart
+    (the same TempCDa, TempCDv, EAtrium, EVentricle equations and heart parameters), with a
+    two-element Windkessel in place of the systemic and pulmonary loops. Running one model against
+    the other's run output would compare a model with a model. That is a relation for a later job,
+    not a validation. No validation was added.
+- id: q_no_cross_validation_shi2013_ch2
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    Checking against shi2013_ch2 found nothing to validate in either direction. This record is
+    code and holds no measurement (no datum has origin measured, no figure readings), so no model
+    of shi2013_ch2 has anything here to be validated against. shi2013_ch2 holds one measurement,
+    fig2_3_vlv_mri_read (Fig. 2-3, p. 7: LV volume of one volunteer per MRI phase, phases 1-32).
+    closed_loop_onoff cannot predict it as it stands: its outputs are scalars over the 10th-11th s
+    of a run (V_lv_max, V_lv_min, SV, pressures, flows), not a volume curve, and the measured curve
+    is indexed by MRI phase number, whose mapping to time is not stated (the volunteer's heart
+    period, where phase 1 falls in the cycle, and the phase count: 30 phases per cycle in the text,
+    p. 6, against 33 plotted). Neither record prints the volunteer's end-diastolic or end-systolic
+    volume as a value that V_lv_max or V_lv_min could be compared with; taking them from the
+    curve's extremes would be a new datum, and the model's parameters are generic adult values
+    (korakianitis2006), not that subject's. The thesis itself uses the MRI data only for
+    qualitative comparison and parameter setting (p. 6: "used for qualitative comparison with the
+    simulation results"). Validating would rest on an added period, phase offset and subject
+    parameters, so no validation was added. The shared model shape reflects that shi2013_ch2's
+    circulation_ch2 is a later version of this circulation by the same author; relating the two
+    models is a later job.
+- id: q_no_cross_validation_shi2013_ch5
+  kind: unstated_model
+  about: [closed_loop_onoff]
+  text: >
+    Cross-validation against shi2013_ch5 (the pulsatile bioreactor chapter) finds nothing to test.
+    shi2013_ch5 has no measured datum: every value is a Table 5-1 input or a simulation result, and
+    every figure reading is a simulated curve or the prescribed air pressure (its figures.md: "The
+    chapter has no measured data"). The only experimental values it mentions (Sodian et al.,
+    -12 ~ 23 mmHg at an 18 s period, p. 12) are of another bioreactor and are not recorded there.
+    closed_loop_onoff simulates the human circulation, not a bioreactor, so it would not predict
+    them anyway. This record is CellML code and holds no measurement for shi2013_ch5's bioreactor
+    models to predict. closed_loop_onoff has the same shape as shi2013_ch5/air_pressure_eq5_12 (a
+    pressure against time), but that one is a prescribed drive, not a prediction of anything
+    measured here. The thesis cites Shi and Korakianitis 2006 only as a source of the scaled chamber
+    resistances, capacitances and inductances (p. 9). No validation was added.

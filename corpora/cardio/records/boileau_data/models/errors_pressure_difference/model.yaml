@@ -1,0 +1,16 @@
+id: errors_pressure_difference
+name: relative pressure-difference errors of a released 1D waveform against the released 3D one (boileau2015 Eqs. 10-13, flow forms)
+role: processing
+software: true
+stated: {file: Benchmark2_CommonCarotidArtery/README.txt, lines: "16-24", quote: "col 5: pressure gradient between inlet and outlet [kPa]"}
+equation: "as for Q: every difference divided by max_j(Delta P_j) of the reference (p. 12: 'we use the same metrics as for the flow rate')"
+inputs:
+  t_ini: {quantity: time, unit: s, description: "start of the last 1D cardiac cycle, as the README gives it"}
+  t_lag: {quantity: time_lag, unit: s, description: "where t = 0 of the 3D record falls after t_ini (added)"}
+  period: {quantity: cardiac_period, unit: s, description: "period of the inflow; a time past t_ini + period is taken one period earlier"}
+outputs:
+  rms: {quantity: pressure_difference_rms_error, unit: percent}
+  max: {quantity: pressure_difference_max_error, unit: percent}
+  sys: {quantity: pressure_difference_systolic_error, unit: percent}
+  dias: {quantity: pressure_difference_diastolic_error, unit: percent}
+settings: {reference_file: "", reference_column: 5, solution_file: "", solution_column: 5}

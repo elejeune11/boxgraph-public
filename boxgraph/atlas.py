@@ -174,29 +174,62 @@ def _relerr(x, y) -> float:
     return abs(x - y) / max(abs(x), abs(y), 1e-300)
 
 
+def _gaps(rel, points, ya, yb) -> list[int]:
+    """The points where either model gives no value. None of them is evidence for or against the
+    relation: if every point is one, the relation cannot be tested."""
+    gaps = [i for i, (x, y) in enumerate(zip(ya, yb)) if x is None or y is None]
+    if points and len(gaps) == len(points):
+        who = [s for s, ys in ((rel.a, ya), (rel.b, yb)) if all(v is None for v in ys)]
+        raise _Unverifiable(f"{' and '.join(who) or 'one model or the other'} gives no value at any of the "
+                            f"{len(points)} points tested across the regime")
+    return gaps
+
+
+def _gap_note(rel, points, ya, yb, gaps) -> str:
+    if not gaps:
+        return ""
+    who = sorted({s for i in gaps for s, ys in ((rel.a, ya), (rel.b, yb)) if ys[i] is None})
+    at = ", ".join(f"{k} = {v:.3g}" for k, v in sorted(points[gaps[0]].items()))
+    return f"; no value from {' and '.join(who)} at {len(gaps)} of {len(points)} points (first at {at}), left out"
+
+
 def _numeric_same(rel, a, b, res: RelationResult):
     pts = _samples(rel, a)
-    ya, yb = _eval(rel, a, b, pts)
+    ya_all, yb_all = _eval(rel, a, b, pts)
+    gaps = _gaps(rel, pts, ya_all, yb_all)
+    note = _gap_note(rel, pts, ya_all, yb_all, gaps)
+    ya = [x for i, x in enumerate(ya_all) if i not in gaps]
+    yb = [y for i, y in enumerate(yb_all) if i not in gaps]
     errs = [_relerr(x, y) for x, y in zip(ya, yb)]
     res.samples = len(pts)
     res.method = "numeric"
     ok = [e <= rel.tolerance for e in errs]
+    _same_verdict(rel, res, ya, yb, errs, ok)
+    if gaps:  # agreement on part of the regime is not agreement across it
+        if res.status == "verified":
+            res.status = "ambiguous"
+            res.detail = f"agree at all {len(errs)} points where both give a value"
+        res.detail += note
+
+
+def _same_verdict(rel, res: RelationResult, ya, yb, errs, ok) -> None:
+    n = len(errs)
     if all(ok):
         res.status = "verified"
-        res.detail = f"agree at {len(pts)} points across the regime (max relative difference {max(errs):.2e})"
+        res.detail = f"agree at {n} points across the regime (max relative difference {max(errs):.2e})"
         return
     if any(ok):
         res.status = "ambiguous"
-        res.detail = f"agree at {sum(ok)} of {len(pts)} points"
+        res.detail = f"agree at {sum(ok)} of {n} points"
         return
-    ratios = [x / y for x, y in zip(ya, yb) if x is not None and y not in (None, 0)]
+    ratios = [x / y for x, y in zip(ya, yb) if y != 0]
     if ratios and max(ratios) - min(ratios) <= rel.tolerance * max(abs(r) for r in ratios) * 10:
         c = sum(ratios) / len(ratios)
         res.status = "not_verified"
         res.holds_instead = f"a = {c:.6g} × b: they agree up to a constant factor"
         res.detail = f"differ everywhere by a constant factor {c:.6g}"
         return
-    diffs = [x - y for x, y in zip(ya, yb) if x is not None and y is not None]
+    diffs = [x - y for x, y in zip(ya, yb)]
     if diffs and max(diffs) - min(diffs) <= rel.tolerance * max(max(abs(x) for x in ya), 1e-300) * 10:
         c = sum(diffs) / len(diffs)
         res.status = "not_verified"
@@ -204,7 +237,7 @@ def _numeric_same(rel, a, b, res: RelationResult):
         res.detail = "differ everywhere by a constant offset"
         return
     res.status = "refuted"
-    res.detail = f"disagree at all {len(pts)} points (median relative difference {sorted(errs)[len(errs)//2]:.2e})"
+    res.detail = f"disagree at all {n} points (median relative difference {sorted(errs)[n // 2]:.2e})"
 
 
 def _evaluate(expr: sp.Expr, values: dict) -> float:
@@ -298,6 +331,7 @@ def _reduces(rel, a, b, res):
         raise _Unverifiable("reduces_to needs a stated limit")
     pts = _samples(rel, a, n=20)
     errs_by_k = []
+    note = ""
     for k in (2, 4, 6, 8):
         moved = []
         for p in pts:
@@ -309,10 +343,15 @@ def _reduces(rel, a, b, res):
                 q[s] = _approach(val, lo, hi, k)
             moved.append(q)
         ya, yb = _eval(rel, a, b, moved)
-        errs_by_k.append(max(_relerr(x, y) for x, y in zip(ya, yb)))
+        gaps = _gaps(rel, moved, ya, yb)
+        note = note or _gap_note(rel, moved, ya, yb, gaps)
+        errs_by_k.append(max(_relerr(x, y) for i, (x, y) in enumerate(zip(ya, yb)) if i not in gaps))
     res.samples = len(pts)
     res.method = "numeric limit"
-    if errs_by_k[-1] <= max(rel.tolerance, 1e-6):
+    if errs_by_k[-1] <= max(rel.tolerance, 1e-6) and note:  # it holds only where both give a value
+        res.status = "ambiguous"
+        res.detail = f"difference falls to {errs_by_k[-1]:.1e} as {rel.limit} is approached, where both give a value"
+    elif errs_by_k[-1] <= max(rel.tolerance, 1e-6):
         res.status = "verified"
         res.detail = f"difference falls to {errs_by_k[-1]:.1e} as {rel.limit} is approached"
     elif errs_by_k[-1] < errs_by_k[0]:
@@ -321,6 +360,7 @@ def _reduces(rel, a, b, res):
     else:
         res.status = "not_verified"
         res.detail = f"difference does not fall as the limit is approached ({errs_by_k})"
+    res.detail += note
 
 
 def _apply_step(expr: sp.Expr, step: str, loc: dict) -> sp.Expr:
@@ -412,11 +452,17 @@ def _scales(rel, a, b, res):
 def _approx(rel, a, b, res):
     pts = _samples(rel, a)
     ya, yb = _eval(rel, a, b, pts)
-    err = max(_relerr(x, y) for x, y in zip(ya, yb))
+    gaps = _gaps(rel, pts, ya, yb)
+    err = max(_relerr(x, y) for i, (x, y) in enumerate(zip(ya, yb)) if i not in gaps)
     res.error = err
     res.method = "numeric error"
     res.samples = len(pts)
-    if err <= rel.tolerance:
+    if gaps:  # the error is measured only where both give a value
+        res.status = "ambiguous" if err <= rel.tolerance else "not_verified"
+        res.holds_instead = None if err <= rel.tolerance else f"max relative error is {err:.2e}"
+        res.detail = (f"max relative error {err:.2e} where both give a value"
+                      + _gap_note(rel, pts, ya, yb, gaps))
+    elif err <= rel.tolerance:
         res.status = "verified"
         res.detail = f"max relative error {err:.2e} across the regime, within the stated {rel.tolerance:g}"
     else:

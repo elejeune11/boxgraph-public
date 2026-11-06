@@ -1,0 +1,277 @@
+- id: q_parameters_unstated
+  kind: unstated_input
+  about: [closed_loop, two_chamber, E_lvf_added, E_rvf_added, E_spt_added, P0_pcd_added, R_sys_added, L_av_added, L_pv_added]
+  text: >-
+    The paper prints no value for any elastance, end-diastolic parameter, resistance or
+    inertance of the closed-loop or two-chamber models; it says only that they are
+    "extrapolated from those found over several references". Every such input in this
+    record is taken from the later CellML encoding of the model (record smith_cellml), so
+    every closed-loop and two-chamber verdict tests the paper's printed results against
+    that parameter set, not against values the paper states.
+  citation: {page: 7, printed_page: "136", quote: "ciﬁc parameters are extrapolated from those found", where: text}
+- id: q_driver_C_closed
+  kind: unstated_input
+  about: [C_closed_added, C_driver, closed_loop]
+  text: >-
+    Fig. 3's driver peaks at C = 0.27 s, but the paper does not say which A, B, C the
+    closed-loop runs use. The record takes the printed A = 1 and B = 80 and C = 0.375 s
+    from the CellML file, with 0.27 s as the alternative.
+- id: q_pth_pulmonary
+  kind: unstated_model
+  about: [pth_pulm_added, closed_loop, co_decrease_printed]
+  text: >-
+    Eq. 14 applies the thoracic pressure only to the pericardium. The pulmonary artery and
+    veins also lie in the thorax, and the CellML encoding adds P_th to their pressures. With
+    the CellML parameters, raising P_th from -4 to 0 mmHg reduces cardiac output by far more
+    than 9% when P_th acts on the ventricles alone (the model as stated); the alternative
+    pth_pulm = 1 shows how much of the difference this choice accounts for.
+- id: q_inlet_inertia
+  kind: unstated_model
+  about: [closed_loop]
+  text: >-
+    Fig. 1 draws inductors only at the aortic (L.av) and pulmonary (L.pv) valves, and the
+    text says inertia is included "around the ventricle exit valves", so the record's
+    model uses Eq. 6 at the mitral and tricuspid valves. The CellML encoding also gives the
+    mitral and tricuspid valves inertances (L_mt, L_tc). Which form produced Figs. 7-11 is
+    not stated.
+  citation: {page: 3, printed_page: "132", quote: "around the ventricle exit valves", where: text}
+- id: q_valve_sign
+  kind: reading
+  about: [closed_loop, two_chamber]
+  text: >-
+    Sec. 2.4.2 says a flow is re-included "when a pressure gradient becomes negative,
+    favouring forward flow". The record reads this as: the valve opens when the upstream
+    pressure exceeds the downstream one (the gradient along the flow direction is
+    negative), and closes when the flow through it becomes negative.
+  citation: {page: 6, printed_page: "135", quote: "When a pressure gradient becomes negative, favouring", where: text}
+- id: q_numerics
+  kind: choice
+  about: [closed_loop, two_chamber, run_closed_normal, run_two_chamber]
+  text: >-
+    The paper gives no solver, step size, number of beats simulated or initial volumes
+    ("approximated based on normal heart function"). The record integrates with fixed-step
+    RK4 at dt = 0.2 ms, clamps a closing valve's flow at zero, solves Eq. 20 by Newton's
+    method at each evaluation, starts from the CellML initial volumes scaled to the
+    printed 1500 ml, and reports the last of 100 beats (20 for the two-chamber model);
+    refinements in dt and beat count check these choices.
+- id: q_two_chamber_boundary
+  kind: unstated_input
+  about: [two_chamber, P_pu_tc_added, P_ao_tc_added, P_vc_tc_added, P_pa_tc_added, vspt_swing_printed]
+  text: >-
+    The two-chamber run of Fig. 6 holds "constant inlet and outlet pressures" whose values
+    are not printed. The record takes 10 and 100 mmHg for the left ventricle (Fig. 5's
+    single-chamber lines, by eye) and 0 and 15 mmHg for the right, with alternatives.
+- id: q_swing_fraction
+  kind: reading
+  about: [vspt_swing_pct_printed, two_chamber]
+  text: >-
+    "about 4% of the ventricle volume" does not say which ventricle volume (end-diastolic,
+    mean, left or right). The model divides the swing by the mean left ventricle volume
+    over the beat; the printed value is approximate and gets no verdict.
+- id: q_targets_vs_results
+  kind: reading
+  about: [pao_sys_base_printed, pao_dia_base_printed, pao_sys_typical, sv_typical, sv_fig7_label]
+  text: >-
+    On p. 7-8 the values 70 ml, 120/80 and 25/8 mmHg are given as "target performance
+    metrics" from [8], "as marked" in Fig. 7, so they are recorded as reported reference
+    values and compared as validation. The abstract states 120/80 mmHg as a model result
+    ("an increase in blood pressure from 120/80 to 165/130 mmHg"), and the Fig. 7 label
+    SV=70 marks the simulated stroke volume; those are recorded as predicted.
+- id: q_pth_sign
+  kind: reading
+  about: [Pth_normal]
+  text: >-
+    The OCR text of p. 8 reads "a normal (4 mmHg)"; the page image shows "(-4 mmHg)", as do
+    the abstract and the statement that the thoracic pressure is "generally about -4 mmHg".
+    The record uses -4.
+- id: q_single_chamber
+  kind: unstated_input
+  about: [closed_loop]
+  text: >-
+    The single-chamber results (Fig. 5: settling to one steady state within two beats from
+    V0 = 10 and 80 ml; identical results with L = 10^-6 mmHg s^2/ml) are not modelled: the
+    paper gives neither the chamber's parameters nor its constant inlet and outlet
+    pressures, and the claims are qualitative.
+  citation: {page: 7, printed_page: "136", quote: "Fig. 5 plots variations in chamber pressure and vol", where: text}
+- id: q_fig3_unchecked
+  kind: reading
+  about: [fig3_driver, e_fig3]
+  text: >-
+    The Fig. 3 reading was built without viewing the rendered crop or the check overlay,
+    which the reader's session did not permit. Its calibration comes from the frame and
+    gridlines found by the code; the overlay should be inspected
+    (boxgraph figure check) before its verdict is relied on.
+- id: q_contractility
+  kind: unstated_input
+  about: [closed_loop]
+  text: >-
+    Figs. 9 and 11 (stroke volume with 0.5 and 2 x R_sys; PV loops with 0.5, 1 and 2 x E_es)
+    support only qualitative trend statements in the text, and the paper does not say
+    which E_es (left, right, septal free walls) are scaled in Fig. 11. They are not
+    compared.
+- id: q_baseline_fig7_vs_fig8_9
+  kind: unexplained_difference
+  about: [run_closed_normal, sv_fig7_label, pao_sys_base_printed, pao_dia_base_printed, co_decrease_printed]
+  text: >-
+    (Audit, by eye on the page images.) The baseline closed-loop state does not look the same in
+    Fig. 7 as in Figs. 8 and 9. In Fig. 7 (p. 8) V_lv runs from about 45 to 117 ml and P_lv peaks
+    near 125 mmHg. The P_th = -4 mmHg loop of Fig. 8 and the R_sys loop of Fig. 9 (p. 8) reach about
+    130-140 ml and peak near 135 mmHg. The record uses one baseline run (run_closed_normal) for the
+    Fig. 7 label, for the 120/80 mmHg of the abstract and for the reference of the 9% decrease. If the
+    paper's tests started from a different parameter set than Fig. 7, those comparisons do not share
+    a baseline. The figure-reading job should confirm or rule this out.
+  citation: {page: 8, printed_page: "137", quote: "Change in stroke volume and PV diagram for a change in", where: "Figs. 7, 8, 9"}
+- id: q_vein_resistances
+  kind: unstated_model
+  about: [closed_loop]
+  text: >-
+    (Audit.) Sec. 2.3 names resistances of "the systemic and pulmonary veins (Rpu and Rvc)", but
+    neither Fig. 1 nor any equation contains them, and no value is given. The record's model follows
+    Fig. 1 (no R_pu or R_vc: the vein chambers connect straight to the mitral and tricuspid valves).
+    The paper does not say whether the simulations had these resistances.
+  citation: {page: 6, printed_page: "135", quote: "monary veins (Rpu and Rvc) because changes in blood", where: text}
+- id: q_eq19_inlet_inertia
+  kind: reading
+  about: [closed_loop, two_chamber, q_inlet_inertia]
+  text: >-
+    (Audit.) Eq. 19 (p. 6) gives the single chamber with inertia on both the inflow and the outflow
+    ("both inflow and outflow rates become state variables"). This is more evidence for the
+    question q_inlet_inertia: the inertial models in the paper may also have had inertia at the
+    inlet (mitral and tricuspid) valves, as the CellML encoding does, while Fig. 1 and the record's
+    models put it only at the outlet valves.
+  citation: {page: 6, printed_page: "135", quote: "and outﬂow rates become state variables", where: "Eq. 19"}
+
+# --- figure readings (figure job, 2026-11-03) ---
+- id: q_fig3_checked
+  kind: reading
+  about: [fig3_driver, e_fig3, q_fig3_unchecked]
+  text: >-
+    (Figure job.) The Fig. 3 reading was run with `boxgraph figure check` at its 1200 dpi crop and the
+    overlay inspected: every mark sits on the blue curve, and the calibration finds the frame and all
+    5 x and 9 y gridlines (misfit 0.0002 s, 0.0011). This settles q_fig3_unchecked: the reading stands.
+- id: q_fig3_driver_width
+  kind: possible_error
+  about: [B_driver, e_fig3, fig3_driver, driver_eq5]
+  text: >-
+    (Figure job.) The curve of Fig. 3 is narrower than Eq. 5 with the printed A = 1, B = 80, C = 0.27.
+    The calibrated reading gives e(0.2 s) = 0.618 [0.591, 0.645] and e(0.35 s) = 0.526 [0.499, 0.553],
+    where Eq. 5 with B = 80 gives about 0.68 and 0.60; solving e = exp(-B (t - 0.27)^2) for B at the read
+    points away from the peak gives about 100 s^-2 at each of them. Either the printed B = 80 is not the
+    value the figure was drawn with, or the figure is not Eq. 5 with these constants. The printed value
+    is kept; the comparison cmp_driver_fig3 tests it.
+  citation: {page: 4, printed_page: "133", quote: "A¼ 1, B¼ 80, C¼ 0:27 and N¼ 1", where: "Fig. 3, Eq. 5"}
+- id: q_fig_baselines
+  kind: unexplained_difference
+  about: [q_baseline_fig7_vs_fig8_9, fig7_vlv_data, fig7_plv_data, fig7_pao_data, fig8_lv_edv_data, fig8_lv_esv_data, fig8_lv_pmax_data, fig9_lv_edv_data, fig9_lv_esv_data, fig9_lv_pmax_data, fig11_lv_edv_data, fig11_lv_esv_data, fig11_lv_pmax_data, fig10_pao_max_data, fig10_pao_min_data, run_closed_normal]
+  text: >-
+    (Figure job, calibrated readings.) This confirms q_baseline_fig7_vs_fig8_9 and adds Fig. 11. The
+    baseline left ventricle of Fig. 7 runs from 45.1 to 115.8 ml with P_lv peaking at about 125 mmHg. The
+    baseline loops of the tests run from 69.9 to 131.2 ml, peak 134.7 mmHg (Fig. 8, P_th = -4 mmHg), from
+    70.0 to 131.2 ml, peak 134.8 mmHg (Fig. 9, R_sys), and from 76.4 to 136.7 ml, peak 135.2 mmHg (Fig. 11,
+    1 x E_es). So the stroke volume of the test baselines is about 61 ml, not the 70 ml labelled in Fig. 7,
+    and Fig. 11's baseline is not quite that of Figs. 8 and 9 either. The aortic pressure of Fig. 10's
+    R_sys curve (121.2 / 78.2 mmHg) does agree with Fig. 7 (about 121 / 79 mmHg). The record runs all
+    these tests from one baseline (run_closed_normal's inputs); the figures were evidently not all drawn
+    from one parameter set.
+  citation: {page: 8, printed_page: "137", quote: "Change in stroke volume and PV diagram for a change in", where: "Figs. 7, 8, 9, 11"}
+- id: q_fig8_stroke_volume_drop
+  kind: reading
+  about: [co_decrease_printed, fig8_lv_edv_data, fig8_lv_esv_data, fig8_rv_edv_data, fig8_rv_esv_data]
+  text: >-
+    (Figure job.) The 9% decrease in stroke volume and cardiac output printed for P_th from -4 to 0 mmHg
+    can be read off Fig. 8. Left ventricle: 131.2 - 69.9 = 61.3 ml at -4 mmHg and 118.0 - 62.4 = 55.6 ml at
+    0 mmHg, a 9.3% drop. Right ventricle: 121.6 - 60.5 = 61.2 ml and 95.5 - 40.1 = 55.4 ml, 9.4%. So the
+    printed 9% agrees with the paper's own figure; but the figure's baseline (61 ml) is not Fig. 7's
+    (q_fig_baselines). The left sides of the two left-ventricle loops are matched to P_th by following
+    the arcs on the image: the left side at 62 ml curves into the lower arc, which ends at the 118 ml
+    right side that the '0 mmHg' arrow marks.
+  citation: {page: 8, printed_page: "137", quote: "volume, and thus the cardiac output, is decreased by", where: "Fig. 8"}
+- id: q_fig5_boundary_pressures
+  kind: unstated_input
+  about: [q_two_chamber_boundary, P_pu_tc_added, P_ao_tc_added, fig5_p1_data, fig5_p3_data]
+  text: >-
+    (Figure job.) Calibrated, the constant pressures of Fig. 5 are P(1) = 7.9 [6.8, 9.1] mmHg and
+    P(3) = 95.0 [93.8, 96.1] mmHg, not the 10 and 100 mmHg read by eye that the record adds for the
+    left side of the two-chamber run of Fig. 6. Fig. 5 is the single-chamber run, so this does not say
+    what the two-chamber run used either; it narrows the plausible values the alternatives should span.
+  citation: {page: 7, printed_page: "136", quote: "Response of the single chamber system for", where: "Fig. 5"}
+- id: q_fig6_swing
+  kind: reading
+  about: [vspt_swing_printed, fig6_vspt_data]
+  text: >-
+    (Figure job.) Read from Fig. 6, V_spt ranges from 3.94 ml (at 0.7 s) to 6.61 ml (at 0.875 s): a swing of
+    about 2.7 ml, which the text prints as 'a magnitude of 3 ml'.
+  citation: {page: 7, printed_page: "136", quote: "The septum volume oscillates over a magnitude of 3", where: "Fig. 6"}
+- id: q_fig10_pressures
+  kind: reading
+  about: [pao_sys_base_printed, pao_dia_base_printed, pao_sys_double_printed, pao_dia_double_printed, fig10_pao_max_data, fig10_pao_min_data]
+  text: >-
+    (Figure job.) Fig. 10 has no time ticks, but its pressure axis is labelled. Calibrated, its curves
+    peak and fall to 164.2 / 130.5 mmHg (2 x R_sys), 121.2 / 78.2 mmHg (R_sys) and 85.4 / 38.0 mmHg
+    (0.5 x R_sys). The abstract's 120/80 -> 165/130 mmHg agrees with the figure to within the rounding
+    of the printed values.
+  citation: {page: 9, printed_page: "138", quote: "Response of aortic pressure to changes in systemic", where: "Fig. 10"}
+- id: q_fig7_time_origin
+  kind: choice
+  about: [closed_loop_trace, two_chamber_trace, run_fig7_trace, run_fig7_trace_b, run_fig6_trace]
+  text: >-
+    (Figure job.) Figs. 6 and 7 do not say where their time axes start. The trace models read the last
+    simulated beat at t modulo the period, with t = 0 at the start of a beat of the driver e(t) (peak at
+    C). Fig. 7 repeats with a period of 0.75 s (its curves at t and t + 0.75 s read the same), as the
+    printed 80 beats/min requires, and ejection starts near 0.25 s, about where the driver with
+    C = 0.375 s (C_closed_added) would start it; with C = 0.27 s the beat is shifted, and any other time
+    origin shifts the whole curve. A curve comparison that fails mainly by a shift says this, not that
+    the model is wrong.
+- id: q_fig11_septum
+  kind: choice
+  about: [ees_septum_added, closed_loop_loops, run_fig11_loops, q_contractility]
+  text: >-
+    (Figure job.) To run Fig. 11 the record scales E_es of both free walls by 0.5, 1 and 2, and not the
+    septum's (ees_septum_added = 0, alternative 1). Fig. 11 changes both ventricles' loops, so at least
+    both free walls are scaled; the paper does not say whether the septum is.
+- id: q_no_cross_validation_smith_cellml
+  kind: choice
+  about: [closed_loop, sv_typical, pao_sys_typical, ppu_typical]
+  text: >-
+    (Cross-validation job, smith2004 + smith_cellml.) No validation of this record's models against
+    smith_cellml, nor of smith_cellml's models against this record, is added. Neither record holds
+    a measurement: smith_cellml is the CellML code of this paper's model and prints only parameters
+    and initial values; this paper's figures (Figs. 3, 5-11) are all simulation output, and its
+    target values (sv_typical, pao_*_typical, ppa_*_typical, pvc_typical, ppu_typical) are reported
+    from ref. 8 and 'standard medical references', not measured here. Those targets are already
+    validation comparisons in both records (val_*_typical here; val_cyc_*_typical in smith_cellml,
+    through copies of these data). The 'clinical data' the paper cites for the 9% decrease and the
+    2 x R_sys pressures (p. 8) print no values. The code's agreement with this paper's predicted
+    results is reproduction, recorded in smith_cellml's comparisons, not validation.
+- id: q_no_validation_stergiopulos1999
+  kind: choice
+  about: [closed_loop, closed_loop_trace, closed_loop_loops, two_chamber, two_chamber_trace]
+  text: >-
+    (Cross-validation job, smith2004 + stergiopulos1999.) No validation is added in either direction.
+    The paper's ref. 27 is Stergiopulos, Segers & Westerhof 1999, 'Use of pulse pressure method for
+    estimating total arterial compliance in vivo' (Am J Physiol 276: H424-8), not the record
+    stergiopulos1999 ('Total arterial inertance as the fourth element of the windkessel model', H81-H88);
+    it is cited once, among works modelling 'only certain areas of CVS function', and nothing is compared
+    with it. This record holds no measurement (see q_no_cross_validation_smith_cellml), so stergiopulos1999's
+    windkessels have nothing here to predict. stergiopulos1999 measures, per dog and human beat, R_p, Z_c,
+    C (Tables 1-2), aortic flow and pressure waves (Figs. 1, 4) and the input impedance of dog 71 (Fig. 5).
+    This record's closed-loop models generate aortic pressure from a whole human heart-and-circulation
+    parameter set (taken from CellML) with no characteristic impedance or compliance port, and the paper
+    states no parameters for those dogs or beats (no ventricular elastances, volumes, or venous side), so
+    running them 'on the measurement's own conditions' would rest almost wholly on added inputs; and no
+    model here outputs Z_c, C, or an input impedance. Neither paper says one model explains the other's data.
+  citation: {page: 3, printed_page: "132", quote: "lating only certain areas of CVS function", where: text}
+- id: q_no_validation_pries2005
+  kind: choice
+  about: [closed_loop, closed_loop_trace, closed_loop_loops, two_chamber, two_chamber_trace, scale_resistance]
+  text: >-
+    (Cross-validation job, smith2004 + pries2005.) No validation is added in either direction. pries2005
+    cites 'Long, Smith, Pries, Ley & Damiano 2004' (its ref. 18, microviscometry), a different paper; it
+    does not cite this one, and neither paper says one model explains the other's data. pries2005's only
+    measurement is the distribution of microvessel diameters in rat mesenteric networks (Fig. 2); no model
+    here outputs a vessel diameter, a blood viscosity or an endothelial-layer thickness. The paper names
+    Poiseuille's law for resistance (Eq. 6), but its resistances are lumped values (from CellML), not
+    computed from a diameter and viscosity, so pries2005's viscosity law has no port here to feed. This
+    record holds no measurement (see q_no_cross_validation_smith_cellml), so pries2005's models have nothing
+    here to predict.
+  citation: {page: 7, quote: "using Poiseuille's equation as given in Eq. (6)", where: text}

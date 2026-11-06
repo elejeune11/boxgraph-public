@@ -1,0 +1,222 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_fig1d_is_korakianitis2006
+  kind: same_as
+  a: korakianitis2006/circulation_valves
+  b: shi2018/circulation_fig1d
+  mapping: {}   # circulation_fig1d has no inputs: the paper prints none and defers them all to [5]
+  output_map: {P_lv_max: Plv_max}
+  # The paper says its parameters are [5]'s, so the regime is the single point of korakianitis2006's
+  # base run (run_simplified inputs, in circulation_valves port units).
+  regime:
+    CQao: [350.0, 350.0]
+    CQmi: [400.0, 400.0]
+    CQpo: [350.0, 350.0]
+    CQti: [400.0, 400.0]
+    Elvs: [2.5, 2.5]
+    Elvd: [0.1, 0.1]
+    Plv0: [1.0, 1.0]
+    Vlv0: [5.0, 5.0]
+    Ela_max: [0.25, 0.25]
+    Ela_min: [0.15, 0.15]
+    Pla0: [1.0, 1.0]
+    Vla0: [4.0, 4.0]
+    Ervs: [1.15, 1.15]
+    Ervd: [0.1, 0.1]
+    Prv0: [1.0, 1.0]
+    Vrv0: [10.0, 10.0]
+    Era_max: [0.25, 0.25]
+    Era_min: [0.15, 0.15]
+    Pra0: [1.0, 1.0]
+    Vra0: [4.0, 4.0]
+    Csas: [0.08, 0.08]
+    Rsas: [0.003, 0.003]
+    Lsas: [6.2e-05, 6.2e-05]
+    Csat: [1.6, 1.6]
+    Rsat: [0.05, 0.05]
+    Lsat: [0.0017, 0.0017]
+    Rsar: [0.5, 0.5]
+    Rscp: [0.52, 0.52]
+    Rsvn: [0.075, 0.075]
+    Csvn: [20.5, 20.5]
+    Cpas: [0.18, 0.18]
+    Rpas: [0.002, 0.002]
+    Lpas: [5.2e-05, 5.2e-05]
+    Cpat: [3.8, 3.8]
+    Rpat: [0.01, 0.01]
+    Lpat: [0.0017, 0.0017]
+    Rpar: [0.05, 0.05]
+    Rpcp: [0.25, 0.25]
+    Rpvn: [0.006, 0.006]
+    Cpvn: [20.5, 20.5]
+    Kp_ao: [5500.0, 5500.0]
+    Kf_ao: [50.0, 50.0]
+    Kb_ao: [2.0, 2.0]
+    Kv_ao: [7.0, 7.0]
+    Kp_mi: [5500.0, 5500.0]
+    Kf_mi: [50.0, 50.0]
+    Kb_mi: [2.0, 2.0]
+    Kv_mi: [3.5, 3.5]
+    Kp_po: [5500.0, 5500.0]
+    Kf_po: [50.0, 50.0]
+    Kb_po: [2.0, 2.0]
+    Kv_po: [3.5, 3.5]
+    Kp_ti: [5500.0, 5500.0]
+    Kf_ti: [50.0, 50.0]
+    Kb_ti: [2.0, 2.0]
+    Kv_ti: [3.5, 3.5]
+    theta_max_ao: [75.0, 75.0]
+    theta_min_ao: [5.0, 5.0]
+    theta_max_mi: [75.0, 75.0]
+    theta_min_mi: [5.0, 5.0]
+    theta_ref_mi: [75.0, 75.0]
+    theta_max_po: [75.0, 75.0]
+    theta_min_po: [5.0, 5.0]
+    theta_max_ti: [75.0, 75.0]
+    theta_min_ti: [5.0, 5.0]
+    T: [1.0, 1.0]
+    Ts1: [0.3, 0.3]
+    Ts2: [0.45, 0.45]
+    Tpwb: [0.92, 0.92]
+    Tpww: [0.09, 0.09]
+    Vlv_init: [800.0, 800.0]
+    Vla_init: [20.0, 20.0]
+    Vrv_init: [500.0, 500.0]
+    Vra_init: [20.0, 20.0]
+    Psas_init: [100.0, 100.0]
+    Psat_init: [100.0, 100.0]
+    Psvn_init: [0.0, 0.0]
+    Ppas_init: [20.0, 20.0]
+    Ppat_init: [20.0, 20.0]
+    Ppvn_init: [0.0, 0.0]
+  assumptions:
+    - "the Fig. 1(d) CellML model implements Eqs. 1-20 of [5] with the parameters of [5] (Tables 1-5)"
+    - "Ts1, Ts2 and the initial conditions are korakianitis2006's added inputs; neither paper prints them all"
+  provenance: stated
+  citation: {page: 3, printed_page: "2", quote: "work of Korakianitis and Shi [5], as illustrated in", where: "Section 2.1"}
+- id: rel_stroke_volume_same
+  kind: same_as
+  a: korakianitis2006/stroke_volume
+  b: shi2018/stroke_volume_difference
+  mapping: {V_max: "Vmax", V_min: "Vmin"}
+  regime: {Vmax: [100, 200], Vmin: [20, 90]}
+  provenance: proposed
+  reason: >
+    Both papers get the stroke volume as the range of left ventricular volume (korakianitis2006 p. 9,
+    "between 50 and 120 ml, with a stroke volume of 70 ml"; shi2018 p. 7, "between 55 mL to 130 mL,
+    producing a stroke volume of 75 mL"), and shi2018's results are those of korakianitis2006's model.
+    The form is a plain difference.
+- id: rel_fig1c_code_from_fig1d
+  kind: derived_from
+  a: shi2018/circulation_fig1d
+  b: shi_cellml_systemic/systemic_left_heart
+  mapping: {}   # circulation_fig1d has no inputs (the paper prints none), so b's inputs cannot be written in a's symbols
+  steps:
+    - "remove the right atrium, right ventricle, pulmonary and tricuspid valves and the pulmonary loop (the paper: the Fig. 1(d) model 'has also been reduced into a series of simpler ones')"
+    - "keep the systemic loop as in Fig. 1(d) (the paper: 'exactly the systemic circulation part of the model in Figure 1(d)')"
+    - "return the systemic venous outflow directly to the left atrium (shown in the Fig. 1(c) schematic, not said in words)"
+  assumptions:
+    - "shi_cellml_systemic is the CellML model of Fig. 1(c) that the paper releases at ref [19]; the paper does not name the file"
+  provenance: stated
+  citation: {page: 4, printed_page: "3", quote: "which is exactly the systemic circulation part of", where: "Section 2.1"}
+- id: rel_fig1a_code_from_fig1d
+  kind: derived_from
+  a: shi2018/circulation_fig1d
+  b: shi_cellml_windkessel/windkessel_left_heart
+  mapping: {}   # circulation_fig1d has no inputs (the paper prints none), so b's inputs cannot be written in a's symbols
+  steps:
+    - "remove the right atrium, right ventricle, pulmonary and tricuspid valves and the pulmonary loop (the paper: 'the pulmonary circulation is neglected')"
+    - "replace the multi-compartment systemic loop with a two-element Windkessel compartment (the paper: 'the systemic loop is represented by a two-element Windkessel compartment representing the vessel elasticity and frictional loss in the arteries only')"
+    - "return the Windkessel outflow directly to the left atrium (shown in the Fig. 1(a) schematic, not said in words)"
+  assumptions:
+    - "shi_cellml_windkessel is the CellML model of Fig. 1(a) that the paper releases at ref [19] (the paper: the models in Figure 1(a,d) have been represented in CellML); the paper does not name the file"
+    - "the Windkessel R and C are printed in neither paper, so the reduction cannot be checked numerically"
+  provenance: stated
+  citation: {page: 3, printed_page: "2", quote: "simpler ones. In the simplest case, the pulmonary", where: "Section 2.1, Fig. 1(a)"}
+- id: rel_fig1b_code_from_fig1d
+  kind: derived_from
+  a: shi2018/circulation_fig1d
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: {}   # circulation_fig1d has no inputs (the paper prints none), so b's inputs cannot be written in a's symbols
+  steps:
+    - "remove the right atrium, right ventricle, pulmonary and tricuspid valves and the pulmonary loop (as for Fig. 1(a): 'the pulmonary circulation is neglected')"
+    - "replace the two-element Windkessel of Fig. 1(a) with a three-element Westerhof compartment, a characteristic resistance in series with a compliance and peripheral resistance (the paper: 'the two-element Windkessel compartment is replaced with a three-element Westerhof compartment, as illustrated in Figure 1(b)')"
+    - "return the afterload outflow directly to the left atrium (shown in the Fig. 1(b) schematic, not said in words)"
+  assumptions:
+    - "shi_cellml_westkessel is the CellML model of Fig. 1(b) in the repository of ref [19]; the paper says only the Fig. 1(a,d) models were put in CellML and does not name the file"
+    - "Rc, Rv and Cv are printed in neither paper, so the reduction cannot be checked numerically"
+  provenance: stated
+  citation: {page: 4, printed_page: "3", quote: "ment is replaced with a three-element Westerhof com", where: "Section 2.1, Fig. 1(b)"}
+- id: rel_fig1d_is_cellml_code
+  kind: same_as
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi2018/circulation_fig1d
+  mapping: {}   # circulation_fig1d has no inputs: the paper prints none; its model is the released CellML
+  output_map: {P_lv_max: P_lv_max}
+  # The paper prints no input value, so the regime is the single point of the code as released
+  # (korakianitis_cellml run_code_values inputs, in closed_loop_onoff port units).
+  regime:
+    ElaMax: [0.25, 0.25]
+    ElaMin: [0.15, 0.15]
+    PlaIni: [1.0, 1.0]
+    VlaIni: [4.0, 4.0]
+    ElvMax: [2.5, 2.5]
+    ElvMin: [0.1, 0.1]
+    PlvIni: [1.0, 1.0]
+    VlvIni: [5.0, 5.0]
+    EraMax: [0.25, 0.25]
+    EraMin: [0.15, 0.15]
+    PraIni: [1.0, 1.0]
+    VraIni: [4.0, 4.0]
+    ErvMax: [1.15, 1.15]
+    ErvMin: [0.1, 0.1]
+    PrvIni: [1.0, 1.0]
+    VrvIni: [10.0, 10.0]
+    T: [1.0, 1.0]
+    Tpwb: [0.92, 0.92]
+    Tpww: [0.09, 0.09]
+    Ts1: [0.3, 0.3]
+    Ts2: [0.45, 0.45]
+    CVao: [350.0, 350.0]
+    CVmi: [400.0, 400.0]
+    CVpa: [350.0, 350.0]
+    CVti: [400.0, 400.0]
+    Vlv0: [500.0, 500.0]
+    Vla0: [20.0, 20.0]
+    Vra0: [20.0, 20.0]
+    Vrv0: [500.0, 500.0]
+    Rsas: [0.003, 0.003]
+    Csas: [0.08, 0.08]
+    Lsas: [6.2e-05, 6.2e-05]
+    P0sas: [100.0, 100.0]
+    Q0sas: [0.0, 0.0]
+    Rsat: [0.05, 0.05]
+    Csat: [1.6, 1.6]
+    Lsat: [0.0017, 0.0017]
+    P0sat: [100.0, 100.0]
+    Q0sat: [0.0, 0.0]
+    Rsar: [0.5, 0.5]
+    Rscp: [0.52, 0.52]
+    Rsvn: [0.075, 0.075]
+    Csvn: [20.5, 20.5]
+    P0svn: [0.0, 0.0]
+    Rpas: [0.002, 0.002]
+    Cpas: [0.18, 0.18]
+    Lpas: [5.2e-05, 5.2e-05]
+    P0pas: [30.0, 30.0]
+    Q0pas: [0.0, 0.0]
+    Rpat: [0.01, 0.01]
+    Cpat: [3.8, 3.8]
+    Lpat: [0.0017, 0.0017]
+    P0pat: [30.0, 30.0]
+    Q0pat: [0.0, 0.0]
+    Rpar: [0.05, 0.05]
+    Rpcp: [0.25, 0.25]
+    Rpvn: [0.0006, 0.0006]
+    Cpvn: [20.5, 20.5]
+    P0pvn: [0.0, 0.0]
+    pi: [3.14159, 3.14159]
+  assumptions:
+    - "the CellML workspace shi_hose_2009 (korakianitis_cellml) is the Fig. 1(d) model the paper says it uploaded to the repository of ref [19] ('uploaded them to the CellML model repository for public access [19]'); the paper does not name the workspace, but its authors, its three-part structure and its template components (TempRLC, TempRC, TempR, TempCD as TempCDa/TempCDv, EAtrium, EVentricle; p. 3) match"
+    - "Fig. 5 and the Section 3 results were 'simulated with the CellML model presented in Figure 1(d)' (p. 7), taken as this code with the values it holds as released"
+  provenance: stated
+  citation: {page: 4, printed_page: "3", quote: "models in Figure 1(a,d) have been represented", where: "Section 2.2"}

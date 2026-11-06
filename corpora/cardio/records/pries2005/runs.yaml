@@ -1,0 +1,226 @@
+# in vitro law at the introduction's examples (HD 40%)
+- id: run_vitro_large_tube
+  model: vitro_viscosity
+  inputs: {D: D_large_tube, HD: HD_intro}
+  outputs: {eta_vitro: eta_large_tube_pred}
+- id: run_vitro_small_tube
+  model: vitro_viscosity
+  inputs: {D: D_small_tube, HD: HD_intro}
+  outputs: {eta_vitro: eta_small_tube_pred}
+# location of the in vitro viscosity minimum
+- id: run_vitro_minimum
+  model: vitro_minimum
+  inputs: {HD: HD_vitro_minimum}
+  settings: {D_lo: 3.3, D_hi: 1000.0, n: 200001}
+  outputs: {D_min: Dmin_vitro_pred}
+# ESL thickness: peak position, and Wph at 10 and 40 um
+- id: run_weff_peak
+  model: weff_peak
+  inputs: {HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  settings: {D_lo: 3.3, D_hi: 100.0, n: 200001}
+  outputs: {D_peak: Dpeak_pred}
+- id: run_wph_10
+  model: esl_thickness
+  inputs: {D: D_abstract_lo, HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  outputs: {Wph: Wph_10_pred, Weff: Weff_10_pred}
+- id: run_wph_40
+  model: esl_thickness
+  inputs: {D: D_abstract_hi, HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  outputs: {Wph: Wph_40_pred, Weff: Weff_40_pred}
+# minimum of the in vivo effective viscosity above the ESL peak
+- id: run_vivo_minimum
+  model: vivo_minimum
+  inputs: {HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  settings: {D_lo: 11.0, D_hi: 2000.0, n: 20001}
+  outputs: {D_min: Dmin_vivo_pred}
+  note: "D_lo = 11 um (just above Dcrit) is an added choice: it selects the minimum beyond the ESL peak that the text describes"
+# in vivo Fahraeus effect at 10 um, printed Eq. 13 and the variant (no printed value to compare: see questions)
+- id: run_fahraeus_vivo_10
+  model: fahraeus_vivo
+  inputs: {D: D_abstract_lo, HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  outputs: {ratio: HT_HD_vivo_10_pred}
+- id: run_fahraeus_vivo_core_10
+  model: fahraeus_vivo_core
+  inputs: {D: D_abstract_lo, HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  outputs: {ratio: HT_HD_vivo_core_10_pred}
+- id: run_fahraeus_vitro_10
+  model: fahraeus_vitro
+  inputs: {D: D_tube_10, HD: HD_figure}
+  outputs: {ratio: HT_HD_vitro_10_pred}
+- id: run_vivo_viscosity_10
+  model: vivo_viscosity
+  inputs: {D: D_abstract_lo, HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  outputs: {eta_vivo: eta_vivo_10_pred}
+# Discussion arithmetic
+- id: run_anat_lo
+  model: anatomic_diameter
+  inputs: {D_tube: D_tube_linear, W: W_transition_lo}
+  outputs: {D: D_anat_lo_pred}
+- id: run_anat_hi
+  model: anatomic_diameter
+  inputs: {D_tube: D_tube_convex, W: W_transition_hi}
+  outputs: {D: D_anat_hi_pred}
+- id: run_lipowsky
+  model: esl_from_viscosity
+  inputs: {D: D_lipowsky, eta_vivo: eta_lipowsky, eta_vitro: eta_vitro_lipowsky}
+  outputs: {W: W_lipowsky_pred}
+- id: run_rehm
+  model: esl_from_volume
+  inputs: {V: V_esl_rehm, S: S_endothelium}
+  outputs: {W: W_rehm_pred}
+# ---- figure pass: the models swept over the diameters read from Figs. 2 and 4
+- id: run_f4top_vivo_hd60
+  model: vivo_viscosity
+  inputs: {HD: hd_fig_60, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: eta_vivo_hd60_fig}
+  outputs: {eta_vivo: eta_vivo_hd60_curve}
+- id: run_f4top_vivo_hd45
+  model: vivo_viscosity
+  inputs: {HD: hd_fig_45, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: eta_vivo_hd45_fig}
+  outputs: {eta_vivo: eta_vivo_hd45_curve}
+- id: run_f4top_vivo_hd30
+  model: vivo_viscosity
+  inputs: {HD: hd_fig_30, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: eta_vivo_hd30_fig}
+  outputs: {eta_vivo: eta_vivo_hd30_curve}
+- id: run_f4top_vivo_hd20
+  model: vivo_viscosity
+  inputs: {HD: hd_fig_20, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: eta_vivo_hd20_fig}
+  outputs: {eta_vivo: eta_vivo_hd20_curve}
+- id: run_f4top_vivo_hd10
+  model: vivo_viscosity
+  inputs: {HD: hd_fig_10, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: eta_vivo_hd10_fig}
+  outputs: {eta_vivo: eta_vivo_hd10_curve}
+- id: run_f4top_vitro_hd60
+  model: vitro_viscosity
+  inputs: {HD: hd_fig_60}
+  sweep: {D: eta_vitro_hd60_fig}
+  outputs: {eta_vitro: eta_vitro_hd60_curve}
+- id: run_f4top_vitro_hd45
+  model: vitro_viscosity
+  inputs: {HD: hd_fig_45}
+  sweep: {D: eta_vitro_hd45_fig}
+  outputs: {eta_vitro: eta_vitro_hd45_curve}
+- id: run_f4top_vitro_hd30
+  model: vitro_viscosity
+  inputs: {HD: hd_fig_30}
+  sweep: {D: eta_vitro_hd30_fig}
+  outputs: {eta_vitro: eta_vitro_hd30_curve}
+- id: run_f4top_vitro_hd20
+  model: vitro_viscosity
+  inputs: {HD: hd_fig_20}
+  sweep: {D: eta_vitro_hd20_fig}
+  outputs: {eta_vitro: eta_vitro_hd20_curve}
+- id: run_f4top_vitro_hd10
+  model: vitro_viscosity
+  inputs: {HD: hd_fig_10}
+  sweep: {D: eta_vitro_hd10_fig}
+  outputs: {eta_vitro: eta_vitro_hd10_curve}
+- id: run_f4bot_vivo_hd60
+  model: fahraeus_vivo
+  inputs: {HD: hd_fig_60, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd60_fig}
+  outputs: {ratio: htd_vivo_hd60_curve}
+- id: run_f4bot_vivo_hd60_core
+  model: fahraeus_vivo_core
+  inputs: {HD: hd_fig_60, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd60_fig}
+  outputs: {ratio: htd_vivo_hd60_core_curve}
+- id: run_f4bot_vivo_hd45
+  model: fahraeus_vivo
+  inputs: {HD: hd_fig_45, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd45_fig}
+  outputs: {ratio: htd_vivo_hd45_curve}
+- id: run_f4bot_vivo_hd45_core
+  model: fahraeus_vivo_core
+  inputs: {HD: hd_fig_45, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd45_fig}
+  outputs: {ratio: htd_vivo_hd45_core_curve}
+- id: run_f4bot_vivo_hd30
+  model: fahraeus_vivo
+  inputs: {HD: hd_fig_30, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd30_fig}
+  outputs: {ratio: htd_vivo_hd30_curve}
+- id: run_f4bot_vivo_hd30_core
+  model: fahraeus_vivo_core
+  inputs: {HD: hd_fig_30, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd30_fig}
+  outputs: {ratio: htd_vivo_hd30_core_curve}
+- id: run_f4bot_vivo_hd20
+  model: fahraeus_vivo
+  inputs: {HD: hd_fig_20, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd20_fig}
+  outputs: {ratio: htd_vivo_hd20_curve}
+- id: run_f4bot_vivo_hd20_core
+  model: fahraeus_vivo_core
+  inputs: {HD: hd_fig_20, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd20_fig}
+  outputs: {ratio: htd_vivo_hd20_core_curve}
+- id: run_f4bot_vivo_hd10
+  model: fahraeus_vivo
+  inputs: {HD: hd_fig_10, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd10_fig}
+  outputs: {ratio: htd_vivo_hd10_curve}
+- id: run_f4bot_vivo_hd10_core
+  model: fahraeus_vivo_core
+  inputs: {HD: hd_fig_10, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: htd_vivo_hd10_fig}
+  outputs: {ratio: htd_vivo_hd10_core_curve}
+- id: run_f4bot_vitro_hd60
+  model: fahraeus_vitro
+  inputs: {HD: hd_fig_60}
+  sweep: {D: htd_vitro_hd60_fig}
+  outputs: {ratio: htd_vitro_hd60_curve}
+- id: run_f4bot_vitro_hd45
+  model: fahraeus_vitro
+  inputs: {HD: hd_fig_45}
+  sweep: {D: htd_vitro_hd45_fig}
+  outputs: {ratio: htd_vitro_hd45_curve}
+- id: run_f4bot_vitro_hd30
+  model: fahraeus_vitro
+  inputs: {HD: hd_fig_30}
+  sweep: {D: htd_vitro_hd30_fig}
+  outputs: {ratio: htd_vitro_hd30_curve}
+- id: run_f4bot_vitro_hd20
+  model: fahraeus_vitro
+  inputs: {HD: hd_fig_20}
+  sweep: {D: htd_vitro_hd20_fig}
+  outputs: {ratio: htd_vitro_hd20_curve}
+- id: run_f4bot_vitro_hd10
+  model: fahraeus_vitro
+  inputs: {HD: hd_fig_10}
+  sweep: {D: htd_vitro_hd10_fig}
+  outputs: {ratio: htd_vitro_hd10_curve}
+- id: run_f2_weff_hd60
+  model: esl_thickness
+  inputs: {HD: hd_fig_60, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: weff_hd60_fig}
+  outputs: {Weff: weff_hd60_curve}
+- id: run_f2_weff_hd45
+  model: esl_thickness
+  inputs: {HD: hd_fig_45, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: weff_hd45_fig}
+  outputs: {Weff: weff_hd45_curve}
+- id: run_f2_weff_hd30
+  model: esl_thickness
+  inputs: {HD: hd_fig_30, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: weff_hd30_fig}
+  outputs: {Weff: weff_hd30_curve}
+- id: run_f2_weff_hd20
+  model: esl_thickness
+  inputs: {HD: hd_fig_20, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: weff_hd20_fig}
+  outputs: {Weff: weff_hd20_curve}
+- id: run_f2_weff_hd10
+  model: esl_thickness
+  inputs: {HD: hd_fig_10, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: weff_hd10_fig}
+  outputs: {Weff: weff_hd10_curve}
+- id: run_f2_wph
+  model: esl_thickness
+  inputs: {HD: HD_figure, Doff: Doff_fit, Dcrit: Dcrit_fit, D50: D50_fit, Wmax: Wmax_vanHaaren, Eamp: Eamp_fit, Ewidth: Ewidth_fit, Epeak: Epeak_fit, EHD: EHD_fit}
+  sweep: {D: wph_fig}
+  outputs: {Wph: wph_curve, Weff: weff_hd45_added_curve}

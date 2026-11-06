@@ -1,0 +1,18 @@
+id: tube_law_eq5_elastic
+name: pressure from area by the elastic tube law (Eq. 5 with Gamma = 0)
+role: model
+stated: {page: 2, printed_page: "2251", quote: "Expressing Z as a function of A", where: Eq. 5}
+# A helper for the relation the paper states on p. 3: "Eq. (5) can also be derived from a generalised
+# string model (... Formaggia et al., 2003)". Eq. 5 as printed gives P from A; the record's other
+# tube-law models invert it at a segment midpoint. No printed result is computed from this helper.
+equation: "P = Pext + (beta/A0)(sqrt(A) - sqrt(A0)), beta = (4/3) sqrt(pi) E h, A0 = pi r0^2 (Eq. 5, Gamma = 0)"
+inputs:
+  A:    {quantity: local_lumen_area, unit: m^2}
+  r0:   {quantity: initial_lumen_radius, unit: m}
+  E:    {quantity: youngs_modulus, unit: Pa}
+  h:    {quantity: wall_thickness, unit: m}
+  Pext: {quantity: external_pressure, unit: Pa}
+outputs:
+  P: {quantity: local_pressure, unit: Pa}
+settings: {}
+stochastic: false

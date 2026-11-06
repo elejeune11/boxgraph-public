@@ -1,4 +1,4 @@
-# Status: version 0.8 (2026-11-02)
+# Status: version 0.9 (2026-11-02)
 
 ## What exists
 
@@ -9,13 +9,13 @@
 - **The Synthesis**: per-paper verdicts by purpose, cross-paper checks, cited-value
   checks, models judged against other papers' measurements (v0.8), six kinds of finding, implications, references, a traced written review,
   Markdown and HTML report.
-- **The reading pipeline** (`pipeline/`): ingest, reader guide, read / audit / relate
-  jobs run as parallel headless agent jobs, gated by the validator,
+- **The reading pipeline** (`pipeline/`): ingest, reader guide, read / audit /
+  digitize / relate / validate jobs run as parallel headless agent jobs, gated by the validator,
   resumable; a synthetic evaluation paper with ground truth.
 - **Figure readings**: each reading is code kept with the record
-  (`records/<id>/figures/*.py`), run by every build on the rendered page in an
+  (`corpora/<name>/records/<id>/figures/*.py`), run by every build on the rendered page in an
   isolated interpreter; every value says where it was read and is drawn on an
-  overlay (`build/figures.html`). The shared tested digitizer
+  overlay (`build/<name>/figures.html`). The shared tested digitizer
   (`boxgraph/digitize.py`) remains as a library and as declarative modes, and
   reads curves, markers, bars, histograms and error bars. Measured data with
   error bars (SEM, SD, 95% CI, range, unstated) carry the outer bar as their
@@ -28,11 +28,11 @@
   relating from the records (citations, models described from another, same
   shape), relates each pair with locks on both records, then runs a validate
   job for the pair (v0.8), and builds. A committed
-  ledger (`pipeline/completed.yaml`) keeps finished jobs from running again.
+  ledger (`corpora/<name>/completed.yaml`) keeps finished jobs from running again.
   Diagrams: `docs/pipeline.html`.
 - **Builds recompute, they do not re-run:** model runs, relation tests and
   figure readings are cached by the hash of their code and inputs; a warm
-  rebuild of four papers takes under two minutes.
+  rebuild of unchanged records starts no model, test or figure reading.
 - **Code and data as sources** (v0.6): a paper's released code and source data
   are attached with `python -m pipeline.attach` and read into records of their
   own. Values in code are cited by file and line and checked against the paper;
@@ -56,36 +56,55 @@
   The build runs the model on the other record's values (figure readings
   included) and judges it at the measurement's precision. A model fitted to that
   measurement is entered with `purpose: fit_quality` and reported as a fit.
-- **The overview** (v0.7): `build/overview/index.html`, served from `site/`: the
+- **The overview** (v0.7): `build/<name>/overview/index.html`, served from `site/<name>/`: the
   sources and models as a graph (in full, or the sources alone by year), three
   case studies and a view per source.
-- **353 tests** (catalogue in `docs/TESTS.md`), lint and CI (green).
+- **Several corpora** (v0.9): every corpus lives in `corpora/<name>/`, and
+  every pipeline command names it (`--corpus <name>`, and `CORPUS=<name>` for
+  make). Each has its own build, overview page (`site/<name>/`) and ledger;
+  the model cache is shared. `site/index.html` is a landing page linking the
+  reviews. The first corpus, `motor_clutch`, and the second, `cardio`, are below.
+- **Rounded inputs in verdicts** (v0.9): a result that misses its printed
+  value by no more than 10% is judged again with the range the printed
+  inputs' rounding allows (each input at either end of its printed range, at
+  most eight inputs). The comparison says which inputs were varied.
+- **Corrected variants of misprinted equations** (v0.9): the printed model
+  stays, with its verdicts as the paper's; a variant (`variant_of`,
+  `corrections` with their evidence) is run on the same results and tallied
+  apart as "reproduction, corrected". It makes no finding of its own.
+- **Time limits** (v0.9): a model run may take two hours, a gate six and an
+  agent job eight, so 1D network models and long simulations can be checked.
+- **The overview** (v0.9): one page per corpus, linked to each other; a
+  source with a corrected variant shows its corrections and their evidence;
+  sources sharing an author-year label are told apart (2013a, 2013b).
+- **About 400 tests** (catalogue in `docs/TESTS.md`), lint and CI.
 
-## The corpus
+## The motor-clutch corpus
 
-Fourteen papers, plus released code for two of them and source data for one:
+`corpora/motor_clutch/`. Thirteen papers, two releases of code (the Odde lab's, for Chan 2008 and
+Bangasser 2013, and Andreu 2021's) and one of source data (Andreu 2021):
 sixteen sources, read, audited and related by agents, every job validated.
 Everything after the first three papers was added through the pipeline end to
 end, and the last nine sources as one unattended batch in two waves:
 
 | Paper | Models | Data | Comparisons | Figure readings | Open questions |
 |---|---|---|---|---|---|
-| Bell 1978 | 37 | 116 | 68 | 8 (4 in use) | 21 |
-| Erdmann & Schwarz 2004 | 18 | 76 | 35 | 48 (24 in use) | 18 |
-| Chan & Odde 2008 | 5 | 141 | 42 | 109 | 24 |
-| Bangasser et al. 2013 | 17 | 514 | 249 | 98 | 28 |
-| Andreu et al. 2021 | 3 | 127 | 37 | 86 | 17 |
-| Andreu 2021, released code (MATLAB) | 2 | 50 | 17 | 0 | 16 |
+| Bell 1978 | 37 | 116 | 68 | 8 (4 in use) | 29 |
+| Erdmann & Schwarz 2004 | 18 | 76 | 35 | 48 (24 in use) | 20 |
+| Chan & Odde 2008 | 5 | 141 | 42 | 109 | 37 |
+| Bangasser et al. 2013 | 17 | 514 | 249 | 98 | 40 |
+| Andreu et al. 2021 | 3 | 127 | 37 | 86 | 24 |
+| Andreu 2021, released code (MATLAB) | 2 | 50 | 17 | 0 | 21 |
 | Andreu 2021, source data | 0 | 634 | 0 | 0 | 3 |
-| Bangasser & Odde 2013 | 13 | 105 | 68 | 50 | 23 |
-| Odde lab motor-clutch code (MATLAB) | 2 | 41 | 11 | 0 | 14 |
-| Craig et al. 2015 | 10 | 216 | 146 | 130 | 29 |
-| Elosegui-Artola et al. 2016 | 5 | 168 | 60 | 130 | 23 |
-| Gardel et al. 2008 | 2 | 55 | 4 | 39 | 15 |
-| Kong et al. 2009 | 2 | 80 | 14 | 74 | 19 |
-| Elosegui-Artola et al. 2014 | 5 | 54 | 21 | 42 | 15 |
-| Chaudhuri et al. 2015 | 5 | 85 | 13 | 53 | 22 |
-| Gong et al. 2018 | 11 | 96 | 27 | 48 | 24 |
+| Bangasser & Odde 2013 | 13 | 105 | 68 | 50 | 34 |
+| Odde lab motor-clutch code (MATLAB) | 2 | 41 | 11 | 0 | 19 |
+| Craig et al. 2015 | 10 | 216 | 146 | 130 | 31 |
+| Elosegui-Artola et al. 2016 | 5 | 168 | 60 | 130 | 30 |
+| Gardel et al. 2008 | 2 | 55 | 4 | 39 | 17 |
+| Kong et al. 2009 | 2 | 80 | 14 | 74 | 25 |
+| Elosegui-Artola et al. 2014 | 5 | 54 | 21 | 42 | 23 |
+| Chaudhuri et al. 2015 | 5 | 85 | 13 | 53 | 27 |
+| Gong et al. 2018 | 11 | 96 | 27 | 48 | 31 |
 
 Model counts include the helper models the relation job added. "Data" counts
 printed, measured and read values; earlier figure readings are kept but no
@@ -99,8 +118,9 @@ $2.36, data $3.32, ten relation jobs $6.00), plus a few dollars not recorded for
 attempts stopped before they reported their cost; read and data needed a second
 attempt, both because of false alarms of the new write check (since fixed).
 
-**The batch** (nine sources, two waves, run unattended with hourly check-ins and
-restarts at the environment's two-hour limit): all 62 jobs passed, 60 at the
+**The batch** (nine sources, two waves, run unattended with hourly check-ins, on
+a machine that stops commands after two hours, so the run was restarted when
+stopped): all 62 jobs passed, 60 at the
 first attempt (a figure job and a relation job needed a second), and nothing
 was parked. Wave 1 (Bangasser & Odde 2013 with the Odde lab code, Craig 2015,
 Elosegui-Artola 2016) took about five and a half hours; wave 2 (Gardel 2008, Kong 2009, Elosegui-Artola
@@ -111,17 +131,20 @@ agents' transcripts, priced at rates fitted to the 67 jobs that ran without
 interruption (median error 1.8%), the waves cost about $93 and $136. A paper
 cost $5-40 to read, audit and digitize, depending on how many figures plot
 data; a relation job $0.3-1.6. After the batch: 204 findings, 59 relations,
-two families, one cross-paper check. The batch papers' findings are in
-`build/report.html` and have not yet been reviewed by a person.
+two families, one cross-paper check (before rounded inputs, v0.9). The
+current build has 140 findings (112 not reproduced, 16 that depend on an added
+input, 11 that belong to the numerics, one cited value), 59 relations, two
+families and one cross-paper check. The batch papers' findings are in
+`build/motor_clutch/report.html` and have not yet been reviewed by a person.
 
 Validations (v0.8): a validate job ran for each of the 48 related pairs, all
 passed their gates ($39.42 in all, $0.3-1.6 a pair, plus one stopped call not
-priced). They entered 20 validations, every one checked by the build, and for the other
+priced). They entered 18 validations, every one checked by the build, and for the other
 pairs a question saying why none applies (most pairs are two theory papers, or
 a measurement no model there predicts). Only two are tests, and neither
 reproduces: Elosegui 2016's talin clutch model against Elosegui 2014's traction
 under myosin inhibition (Fig. 1b, which rises and then falls with stiffness;
-the model keeps rising) and its α5β1 retrograde flow (Fig. 4e). The other 18 are
+the model keeps rising) and its α5β1 retrograde flow (Fig. 4e). The other 16 are
 fits, the model tuned to that data:
 
 | Model | Against | Verdict |
@@ -175,8 +198,8 @@ Findings:
    off); Bell's curves moved at most 0.04 log units with intervals about a
    third narrower.
 
-8. **Bangasser et al. 2013:** 146 comparisons reproduce, 37 are close, 16 are
-   not reproduced. Eq. 10 with the base parameter set gives a binding time
+8. **Bangasser et al. 2013:** 175 comparisons reproduce, 11 are close, 13 are
+   not reproduced (before rounded inputs, v0.9: 146, 37 and 16). Eq. 10 with the base parameter set gives a binding time
    about twice the dashed line of Fig. 6D (q_tbinding), the line on which the
    paper's explanation of the optimal stiffness rests. Four sensitivity
    products of Fig. 5C differ in the last digit from S x R (-0.75 printed,
@@ -218,6 +241,55 @@ simulation is "qualitatively similar" to Chan's fixed-step one is tested as an
 approximation within a 10% tolerance the relator chose, and is not verified
 (the paper itself says the shapes differ).
 
+## The cardio corpus (v0.9)
+
+A second review, kept as a corpus of its own in `corpora/cardio/`: 0D
+(lumped-parameter) and 1D models of the cardiovascular system, from the heart
+and the large arteries to the viscosity of blood in microvessels. Its overview
+is published in `site/cardio/`.
+
+Twenty-nine sources: 21 articles, two thesis chapters (Shi 2013, chapters 2 and
+5), and six releases of code or data (four CellML models, the code of Smith
+2004 as CellML, and the Boileau 2015 benchmark waveforms). All were read,
+audited, figure-read, related and validated by agents in five batches. The
+ledger (`corpora/cardio/completed.yaml`) lists 231 passed jobs: 29 read,
+23 audit, 23 digitize, 78 relate and 78 validate. Recorded cost: $433.94
+(read $123.44, audit $32.94, digitize $163.25, relate $55.92, validate
+$58.39), about $14 a paper for reading, auditing and figures.
+
+The build (`build/cardio/synthesis.json`):
+
+- 92 relations (53 verified, 12 not verified, 3 refuted, 2 ambiguous,
+  22 unverifiable) and nine families;
+- 73 cross-paper runs checked, over 11 relations;
+- 1833 cited values checked;
+- 234 validations of one paper's models against another paper's
+  measurements: 215 tests (14 reproduced, 17 close, 183 not reproduced,
+  one without a verdict) and 19 fits (none reproduced);
+- 561 findings: 416 not reproduced, 74 that depend on an added input,
+  43 family conflicts, 23 cited values, three refuted relations, two that
+  belong to the numerics;
+- 11 corrected variants of misprinted models, in six records
+  (Korakianitis 2006, Olufsen 2004, Pries 1990, Pries 2005, Shi 2013
+  chapter 2, the Smith CellML code).
+
+Reproduction across the corpus: 1537 comparisons reproduced, 67 close,
+503 not reproduced, 58 without a verdict, with the rounding of printed inputs
+taken into account (DECISIONS, Rounded inputs in verdicts).
+
+Corrected variants: Korakianitis and Shi 2006 as printed reproduces 2 of 117
+results; its three evidently misprinted equations (an activation that gives
+negative elastance, a reverse flow without its sign, a flow driven by the
+wrong pressure) are corrected in a variant, which reproduces 21 and is close
+on 10 of 246 comparisons, reported apart as "reproduction, corrected". Pries
+1990's Eq. 7 has the wrong dimensions as printed; the variant with the factor
+(D/(D - W))^4 reproduces all five Fig. 3 curves read.
+
+The overview's three case studies are Pries 1990's Eq. 7, one entry of
+Boileau 2015's Table VI against the released waveforms (12.95% printed,
+2.95% computed), and Olufsen's asymmetry ratio across 1999, 2000 and 2012.
+These findings have not yet been reviewed by a person.
+
 ## Known limits
 
 - One reading per paper (plus an audit). Two independent readings compared
@@ -244,13 +316,14 @@ approximation within a 10% tolerance the relator chose, and is not verified
 - Chan Fig. S12E points against its fitted curve, and overflow bars ("More",
   "100+"), are read but not compared.
 - The finding for Chan 2008 depends on the reader's stepping rules; a person
-  should look at `records/chan2008/models/motor_clutch/model.py` and the SOM.
+  should look at `corpora/motor_clutch/records/chan2008/models/motor_clutch/model.py` and the SOM.
 
 ## Next
 
 1. A person reviews the findings and the validations against the papers, the
    batch's first.
-2. A second field: 0D and 1D models of the cardiovascular system.
+2. A person reviews the cardio corpus's corrected variants and findings
+   against the papers.
 3. A processing step for sample tables, so source data measures figure readings.
 4. More synthetic evaluation papers, one per finding kind.
 5. Second independent readings, and a comparison of the two.

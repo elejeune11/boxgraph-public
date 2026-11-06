@@ -1,0 +1,237 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_windkessel_approximates_korakianitis
+  kind: approximated_by
+  a: korakianitis2006/circulation_valves
+  b: shi_cellml_windkessel/windkessel_left_heart
+  mapping:
+    ElaMax: "Ela_max"
+    ElaMin: "Ela_min"
+    PlaIni: "Pla0"
+    VlaIni: "Vla0"
+    ElvMax: "Elvs"
+    ElvMin: "Elvd"
+    PlvIni: "Plv0"
+    VlvIni: "Vlv0"
+    T: "T"
+    Tpwb: "Tpwb/T"
+    Tpww: "Tpww/T"
+    Ts1: "Ts1/T"
+    Ts2: "Ts2/T"
+    CVao: "CQao"
+    CVmi: "CQmi"
+    Vlv0: "Vlv_init"
+    Vla0: "Vla_init"
+    Cwk: "Csas + Csat"
+    Rwk: "Rsas + Rsat + Rsar + Rscp + Rsvn"
+    P0: "Psas_init"
+    pi: "pi"
+  output_map: {P_lv_max: Plv_max}
+  regime:
+    CQao: [315, 385]
+    CQmi: [360, 440]
+    CQpo: [315, 385]
+    CQti: [360, 440]
+    Elvs: [2.25, 2.75]
+    Elvd: [0.09, 0.11]
+    Plv0: [0.9, 1.1]
+    Vlv0: [4.5, 5.5]
+    Ela_max: [0.225, 0.275]
+    Ela_min: [0.135, 0.165]
+    Pla0: [0.9, 1.1]
+    Vla0: [3.6, 4.4]
+    Ervs: [1.035, 1.265]
+    Ervd: [0.09, 0.11]
+    Prv0: [0.9, 1.1]
+    Vrv0: [9, 11]
+    Era_max: [0.225, 0.275]
+    Era_min: [0.135, 0.165]
+    Pra0: [0.9, 1.1]
+    Vra0: [3.6, 4.4]
+    Csas: [0.072, 0.088]
+    Rsas: [0.0027, 0.0033]
+    Lsas: [0.0000558, 0.0000682]
+    Csat: [1.44, 1.76]
+    Rsat: [0.045, 0.055]
+    Lsat: [0.00153, 0.00187]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    Cpas: [0.162, 0.198]
+    Rpas: [0.0018, 0.0022]
+    Lpas: [0.0000468, 0.0000572]
+    Cpat: [3.42, 4.18]
+    Rpat: [0.009, 0.011]
+    Lpat: [0.00153, 0.00187]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0054, 0.0066]
+    Cpvn: [18.45, 22.55]
+    Kp_ao: [4950, 6050]
+    Kf_ao: [45, 55]
+    Kb_ao: [1.8, 2.2]
+    Kv_ao: [6.3, 7.7]
+    Kp_mi: [4950, 6050]
+    Kf_mi: [45, 55]
+    Kb_mi: [1.8, 2.2]
+    Kv_mi: [3.15, 3.85]
+    Kp_po: [4950, 6050]
+    Kf_po: [45, 55]
+    Kb_po: [1.8, 2.2]
+    Kv_po: [3.15, 3.85]
+    Kp_ti: [4950, 6050]
+    Kf_ti: [45, 55]
+    Kb_ti: [1.8, 2.2]
+    Kv_ti: [3.15, 3.85]
+    theta_max_ao: [72, 78]
+    theta_min_ao: [4, 6]
+    theta_max_mi: [72, 78]
+    theta_min_mi: [4, 6]
+    theta_ref_mi: [72, 78]
+    theta_max_po: [72, 78]
+    theta_min_po: [4, 6]
+    theta_max_ti: [72, 78]
+    theta_min_ti: [4, 6]
+    T: [0.95, 1.05]
+    Ts1: [0.285, 0.315]
+    Ts2: [0.4275, 0.4725]
+    Tpwb: [0.9, 0.94]
+    Tpww: [0.0855, 0.0945]
+    Vlv_init: [720, 880]
+    Vla_init: [18, 22]
+    Vrv_init: [450, 550]
+    Vra_init: [18, 22]
+    Psas_init: [90, 110]
+    Psat_init: [90, 110]
+    Psvn_init: [0, 5]
+    Ppas_init: [18, 22]
+    Ppat_init: [18, 22]
+    Ppvn_init: [0, 5]
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    Neither source states a relation, but the CellML is the code of shi2018's Fig. 1(a) model,
+    whose parameters shi2018 says are those of korakianitis2006, and its left heart repeats
+    korakianitis2006's chamber equations (Eqs. 1, 4: dV/dt = Qin - Qout, P = P0 + e (V - V0)) and
+    orifice valves (Eqs. 6-7) with the same printed elastances, reference pressures and volumes and
+    CQao, CQmi. It truncates the rest: the right heart and pulmonary loop are removed, the systemic
+    loop is lumped into a two-element Windkessel that returns to the left atrium, and the valves are
+    on-off only (a is run at its own setting, the leaflet dynamics of Eqs. 8, 14). No limit makes this
+    exact, so it is an approximation, tested on peak LV pressure within 10% around korakianitis2006's
+    printed parameters (+-10%, timings +-5%; initial conditions as in its added.yaml). The lumping
+    Cwk = Csas + Csat (arterial compliance) and Rwk = Rsas + Rsat + Rsar + Rscp + Rsvn (total
+    systemic resistance, aorta to atrium) is ours; neither paper prints a Windkessel R or C (the code
+    has R = 0.55, C = 2.8). Timings map as fractions of T, as the code uses them. The two ventricular
+    activation functions also differ as recorded (q_elastance_form), so a large error is expected
+    and is the measured finding.
+# a is the closed-loop CellML (korakianitis_cellml, workspace shi_hose_2009), b this Windkessel CellML.
+# Both are ports in mL, mmHg, s with the same chamber, activation and on-off valve templates, so the
+# heart inputs map one to one; the Windkessel R, C and initial pressure are a lumping of a's systemic loop.
+- id: rel_windkessel_reduces_closed_loop_plv
+  kind: approximated_by
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi_cellml_windkessel/windkessel_left_heart
+  mapping: &cellmlmap
+    ElaMax: "ElaMax"
+    ElaMin: "ElaMin"
+    PlaIni: "PlaIni"
+    VlaIni: "VlaIni"
+    ElvMax: "ElvMax"
+    ElvMin: "ElvMin"
+    PlvIni: "PlvIni"
+    VlvIni: "VlvIni"
+    T: "T"
+    Tpwb: "Tpwb"
+    Tpww: "Tpww"
+    Ts1: "Ts1"
+    Ts2: "Ts2"
+    CVao: "CVao"
+    CVmi: "CVmi"
+    Vlv0: "Vlv0"
+    Vla0: "Vla0"
+    Cwk: "Csas + Csat"
+    Rwk: "Rsas + Rsat + Rsar + Rscp + Rsvn"
+    P0: "P0sas"
+    pi: "pi"
+  output_map: {P_lv_max: P_lv_max}
+  regime: &cellmlregime
+    ElaMax: [0.225, 0.275]
+    ElaMin: [0.135, 0.165]
+    PlaIni: [0.9, 1.1]
+    VlaIni: [3.6, 4.4]
+    ElvMax: [2.25, 2.75]
+    ElvMin: [0.09, 0.11]
+    PlvIni: [0.9, 1.1]
+    VlvIni: [4.5, 5.5]
+    EraMax: [0.225, 0.275]
+    EraMin: [0.135, 0.165]
+    PraIni: [0.9, 1.1]
+    VraIni: [3.6, 4.4]
+    ErvMax: [1.035, 1.265]
+    ErvMin: [0.09, 0.11]
+    PrvIni: [0.9, 1.1]
+    VrvIni: [9, 11]
+    T: [0.95, 1.05]
+    Tpwb: [0.92, 0.93]
+    Tpww: [0.085, 0.09]
+    Ts1: [0.285, 0.315]
+    Ts2: [0.4275, 0.4725]
+    CVao: [315, 385]
+    CVmi: [360, 440]
+    CVpa: [315, 385]
+    CVti: [360, 440]
+    Vlv0: [450, 550]
+    Vla0: [18, 22]
+    Vra0: [18, 22]
+    Vrv0: [450, 550]
+    Rsas: [0.0027, 0.0033]
+    Csas: [0.072, 0.088]
+    Lsas: [0.0000558, 0.0000682]
+    P0sas: [90, 110]
+    Q0sas: [0, 0]
+    Rsat: [0.045, 0.055]
+    Csat: [1.44, 1.76]
+    Lsat: [0.00153, 0.00187]
+    P0sat: [90, 110]
+    Q0sat: [0, 0]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    P0svn: [0, 5]
+    Rpas: [0.0018, 0.0022]
+    Cpas: [0.162, 0.198]
+    Lpas: [0.0000468, 0.0000572]
+    P0pas: [27, 33]
+    Q0pas: [0, 0]
+    Rpat: [0.009, 0.011]
+    Cpat: [3.42, 4.18]
+    Lpat: [0.00153, 0.00187]
+    P0pat: [27, 33]
+    Q0pat: [0, 0]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.00054, 0.00066]
+    Cpvn: [18.45, 22.55]
+    P0pvn: [0, 5]
+    pi: [3.14159, 3.14159]
+  tolerance: 0.1
+  provenance: stated
+  citation: &wkcite {file: MainWindKessel.cellml, lines: "41", quote: "it is one of a family that can be obtained by reduction of a more complex model that is published separately", where: "documentation, Model Structure"}
+  assumptions: &wkassume
+    - "The 'more complex model that is published separately' is taken to be the closed-loop CellML of korakianitis_cellml (workspace shi_hose_2009, by the same authors): the documentation names no model, and it is the most complex of the series and the only one published in its own workspace; its heart templates (TempCDa, TempCDv, EAtrium, EVentricle) are the ones this code uses."
+    - "'Reduction' is read as an approximation, not a limit: the right heart and pulmonary loop are removed and the systemic loop's two compliances, separated by resistance and inertance, are lumped into one Windkessel that returns to the left atrium; no parameter limit makes that exact."
+    - "The lumping is ours: Cwk = Csas + Csat (arterial compliance), Rwk = Rsas + Rsat + Rsar + Rscp + Rsvn (systemic resistance, sinus to atrium), P0 = P0sas (the Windkessel starts at the aortic pressure). The code itself writes Cwk = 2.8, Rwk = 0.55 and P0 = 0 (q_windkessel_values), which are not this lumping; the code does not say how they were reduced."
+    - "Heart inputs map one to one (same template, same names). The Windkessel loop then holds Vla0 + Vlv0 + Cwk P0 (about 690 mL at the code values) where the closed loop spreads 1327 mL over both circuits, so the reduced loop runs at a different filling: a large error is expected and is the measured finding."
+    - "The tolerance (10%) is ours."
+- id: rel_windkessel_reduces_closed_loop_co
+  kind: approximated_by
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi_cellml_windkessel/windkessel_left_heart
+  mapping: *cellmlmap
+  output_map: {Q_ao_mean: Q_ao_mean}
+  regime: *cellmlregime
+  tolerance: 0.1
+  provenance: stated
+  citation: *wkcite
+  assumptions: *wkassume

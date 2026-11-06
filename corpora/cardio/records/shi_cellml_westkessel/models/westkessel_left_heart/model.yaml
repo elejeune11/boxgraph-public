@@ -1,0 +1,61 @@
+id: westkessel_left_heart
+name: left atrium and ventricle (variable elastance, on-off valves) with a three-element Westerhof afterload, ported from the CellML
+role: model
+stated: {file: MainWestkessel.cellml, lines: "28", quote: "The systemic loop is described with a Westkessel model"}
+equation: >
+  LA, LV (TempCD): dV/dt = Qi - Qo; Pi = Pini + E (V - Vini); Tao = 1 if Pi >= Po else 0;
+  Qo = CV Tao |Pi - Po|^0.5 (Pi >= Po), -CV Tao |Po - Pi|^0.5 (Pi < Po).
+  Ventricle (EVentricle): mt = t - T floor(t/T); et = 1 - cos(3.14159 mt/(Ts1 T)) (0 <= mt <= Ts1 T),
+  1 + cos(3.14159 (mt - Ts1 T)/((Ts2 - Ts1) T)) (Ts1 T < mt <= Ts2 T), 0 (Ts2 T < mt < T); E = Emin + et (Emax - Emin)/2.
+  Atrium (EAtrium): et = 1 - cos(2 3.14159 (mt - (Tpwb - 1) T)/(Tpww T)) (0 <= mt <= (Tpwb + Tpww - 1) T),
+  0 ((Tpwb + Tpww - 1) T < mt <= Tpwb T), 1 - cos(2 3.14159 (mt - Tpwb T)/(Tpww T)) (Tpwb T < mt <= T); E = Emin + et (Emax - Emin)/2.
+  Characteristic resistance Zc (TempR): Pi = Po + R Qi; Qo = Qi.
+  Compliance and peripheral resistance Zv (TempRC): dPi/dt = (Qi - Qo)/C; Qo = (Pi - Po)/R.
+  Connections: LA.Po = LV.Pi, LA.Qo = LV.Qi; LV.Po = Vessel.Pi = Zc.Pi, LV.Qo = Vessel.Qi = Zc.Qi;
+  Zc.Po = Zv.Pi, Zc.Qo = Zv.Qi; Vessel.Po = Zv.Po = LA.Pi, Vessel.Qo = Zv.Qo = LA.Qi.
+inputs:
+  ElaMax: {quantity: chamber_elastance, unit: mmHg/mL}
+  ElaMin: {quantity: chamber_elastance, unit: mmHg/mL}
+  PlaIni: {quantity: chamber_reference_pressure, unit: mmHg}
+  VlaIni: {quantity: chamber_reference_volume, unit: mL}
+  ElvMax: {quantity: chamber_elastance, unit: mmHg/mL}
+  ElvMin: {quantity: chamber_elastance, unit: mmHg/mL}
+  PlvIni: {quantity: chamber_reference_pressure, unit: mmHg}
+  VlvIni: {quantity: chamber_reference_volume, unit: mL}
+  T: {quantity: heart_period, unit: s}
+  Tpwb: {quantity: p_wave_onset_fraction, unit: dimensionless}
+  Tpww: {quantity: p_wave_duration_fraction, unit: dimensionless}
+  Ts1: {quantity: peak_systole_fraction, unit: dimensionless}
+  Ts2: {quantity: end_systole_fraction, unit: dimensionless}
+  CVao: {quantity: valve_flow_coefficient, unit: mL/(s*mmHg^0.5)}
+  CVmi: {quantity: valve_flow_coefficient, unit: mL/(s*mmHg^0.5)}
+  Vlv0: {quantity: initial_chamber_volume, unit: mL}
+  Vla0: {quantity: initial_chamber_volume, unit: mL}
+  Rc: {quantity: characteristic_resistance, unit: mmHg*s/mL}
+  Rv: {quantity: vascular_resistance, unit: mmHg*s/mL}
+  Cv: {quantity: vascular_compliance, unit: mL/mmHg}
+  P0v: {quantity: initial_vessel_pressure, unit: mmHg}
+  pi: {quantity: pi_constant, unit: dimensionless}
+outputs:
+  P_lv_max: {quantity: peak_lv_pressure, unit: mmHg}
+  P_lv_min: {quantity: min_lv_pressure, unit: mmHg}
+  P_art_max: {quantity: peak_arterial_pressure, unit: mmHg, description: "maximum pressure at the inlet of the afterload (Vessel.Pi = Zc.Pi, just downstream of the aortic valve)"}
+  P_art_min: {quantity: min_arterial_pressure, unit: mmHg, description: "minimum pressure at the inlet of the afterload (Vessel.Pi = Zc.Pi)"}
+  V_lv_max: {quantity: max_lv_volume, unit: mL}
+  V_lv_min: {quantity: min_lv_volume, unit: mL}
+  SV: {quantity: stroke_volume, unit: mL}
+  Q_ao_mean: {quantity: mean_valve_flow, unit: L/min}
+  Q_mi_mean: {quantity: mean_valve_flow, unit: L/min}
+  Q_ao_peak: {quantity: peak_aortic_flow, unit: mL/s}
+  Q_mi_peak: {quantity: peak_mitral_flow, unit: mL/s}
+settings:
+  dt: 0.0001     # added: the CellML files hold no solver settings (q_solver)
+  t_end: 10.0    # added: simulated time; results over the last period [t_end - T, t_end]
+stochastic: false
+# Notes (the schema has no notes field): a port (our code), not the released code run. Ports
+# MainWestkessel.cellml (connections, lines 65-81), ModelWestkessel.cellml (Zc = TempR, Zv = TempRC,
+# lines 12-16, 39-67), ParaWestkessel.cellml (lines 11-14), TempR.cellml (line 19), TempRC.cellml
+# (lines 12, 21), and, through ModelLeftHeart.cellml (lines 51-123), ParaLeftHeart.cellml
+# (lines 12-28), TempCDa.cellml and TempCDv.cellml (lines 25, 40-54), EAtrium.cellml (lines 17-24)
+# and EVentricle.cellml (line 20). The algebraic loop between the aortic valve and Zc is solved in
+# closed form (q_algebraic_loop).

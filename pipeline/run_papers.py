@@ -1,16 +1,22 @@
 """Read the corpus into records with parallel headless agents.
 
-  python -m pipeline.run_papers --plan                 # what would run, with budget caps
-  python -m pipeline.run_papers [--papers a,b] [--stages ...] [--concurrency 3]
+  python -m pipeline.run_papers --corpus motor_clutch --plan     # what would run, with budget caps
+  python -m pipeline.run_papers --corpus motor_clutch [--papers a,b] [--stages ...] [--concurrency 3]
 
 Stages: ingest (code) -> read -> audit -> digitize (one agent per paper and
-stage, papers in parallel) -> relate (one agent per pair of papers that
-show a sign of a relation, see pipeline/pairs.py) -> build (code). Every
-agent job is gated by `boxgraph validate`.
+stage, papers in parallel; released code or data is only read) -> relate
+(one agent per pair of records that show a sign of a relation, see
+pipeline/pairs.py) -> validate (one agent per related pair: each one's models
+against the other's measurements) -> build (code). Every agent job is gated
+by `boxgraph validate`. Validate jobs share the --budget-relate cap.
 
-Jobs that passed are listed in pipeline/completed.yaml, committed with the
-records, and are not run again (unless --rerun). Progress within a run is
-kept in pipeline_state/, so an interrupted run resumes where it stopped.
+--corpus <name> names the corpus: its list, ledger, overview text and records
+are in corpora/<name>/, its sources in corpus/<name>/, its build in
+build/<name>/ and its state (and agent transcripts) in pipeline_state/<name>/;
+see pipeline.corpus.layout. Jobs that passed are listed in the corpus's
+completed.yaml, committed with the records, and are not run again (unless
+--rerun). Progress within a run is kept in its state folder, so an interrupted
+run resumes where it stopped.
 """
 
 from __future__ import annotations
@@ -25,7 +31,7 @@ import time
 from pathlib import Path
 
 from boxgraph.ingest import ingest
-from pipeline.corpus import check_papers, forget_completed, load_completed, load_papers, missing_sources, record_completed
+from pipeline.corpus import check_papers, forget_completed, layout, load_completed, load_papers, missing_sources, record_completed
 from pipeline.orchestrator import USAGE_KEYS, Job, Orchestrator, transcript_dir, unreported_usage
 from pipeline.pairs import candidate_pairs, split_pairs
 
@@ -34,12 +40,24 @@ PROMPTS = ROOT / "pipeline" / "prompts"
 VENV = ".venv/bin"
 PAPERS = ROOT / "pipeline" / "papers.yaml"
 LEDGER = ROOT / "pipeline" / "completed.yaml"
-CACHE = "build/cache"  # shared by every gate and the build, so a retry does not rerun every simulation
+CACHE = "build/cache"  # shared by every gate, build and corpus (keyed by code and inputs), so a retry does not rerun every simulation
+RECORDS = "records"  # where the corpus's records are, relative to ROOT; use_corpus points these at a named corpus
+BUILD = "build"
+STATE = "pipeline_state"
+OVERVIEW = "overview/content.yaml"  # the overview's words, relative to ROOT
 PER_PAPER = ("read", "audit", "digitize")
 
 
 def papers() -> list[dict]:
     return load_papers(PAPERS)
+
+
+def use_corpus(name: str | None) -> None:
+    """Point the pipeline at a corpus: the default one (None), or corpora/<name>/ (see pipeline.corpus.layout)."""
+    global PAPERS, LEDGER, OVERVIEW, RECORDS, BUILD, STATE
+    lay = layout(ROOT, name)
+    PAPERS, LEDGER, OVERVIEW = lay.papers, lay.ledger, lay.overview.relative_to(ROOT).as_posix()
+    RECORDS, BUILD, STATE = lay.records, lay.build, lay.state
 
 
 def stages_of(entry: dict) -> tuple[str, ...]:
@@ -59,17 +77,17 @@ def write_rules(rel: str) -> list[str]:
 
 
 def reader_tools(rid: str) -> list[str]:
-    return ["Read", "Glob", "Grep", *write_rules(f"records/{rid}/**"),
+    return ["Read", "Glob", "Grep", *write_rules(f"{RECORDS}/{rid}/**"),
             f"Bash({VENV}/boxgraph validate:*)", f"Bash({VENV}/python:*)", *READ_ONLY_SHELL]
 
 
 def _validate(rid: str) -> str:
-    return f"{VENV}/boxgraph validate records/{rid} --cache {CACHE}"
+    return f"{VENV}/boxgraph validate {RECORDS}/{rid} --cache {CACHE}"
 
 
 def _gate_with_log(rid: str, log: str, why: str) -> list[str]:
     return ["sh", "-c", f"{_validate(rid)} && "
-            f"{{ test -s records/{rid}/{log} || {{ echo 'ERROR: records/{rid}/{log} was not written; {why}'; exit 1; }}; }}"]
+            f"{{ test -s {RECORDS}/{rid}/{log} || {{ echo 'ERROR: {RECORDS}/{rid}/{log} was not written; {why}'; exit 1; }}; }}"]
 
 
 def _with_extra(js: list[Job], extra: str) -> list[Job]:
@@ -93,10 +111,10 @@ def jobs(model: str, budget_read: float, budget_audit: float, budget_relate: flo
     guide = str(PROMPTS / "record_guide.md")
     out: dict[str, list[Job]] = {"read": [], "audit": [], "digitize": []}
     for p in ps:
-        mine = [f"records/{p['id']}/**"]
+        mine = [f"{RECORDS}/{p['id']}/**"]
         if p.get("kind") in ("software", "dataset"):  # a paper's released code or data: one reading job
             prompt = "read_code.md" if p["kind"] == "software" else "read_data.md"
-            fmt = dict(id=p["id"], file=p["file"], papers=", ".join(p.get("papers") or []), page_note=p.get("note", ""))
+            fmt = dict(id=p["id"], records=RECORDS, file=p["file"], papers=", ".join(p.get("papers") or []), page_note=p.get("note", ""))
             out["read"].append(Job(
                 id=f"read:{p['id']}", kind="read", prompt=(PROMPTS / prompt).read_text().format(**fmt), cwd=str(ROOT),
                 validate=["sh", "-c", _validate(p["id"])],
@@ -104,7 +122,7 @@ def jobs(model: str, budget_read: float, budget_audit: float, budget_relate: flo
                 append_system_prompt_file=guide, model=model, max_turns=400, budget_usd=budget_read, max_attempts=3,
                 depends_on=[f"read:{x}" for x in p.get("papers") or []], writable=mine))
             continue
-        fmt = dict(id=p["id"], file=p["file"], first=p["pages"][0], last=p["pages"][1], page_note=p.get("note", ""),
+        fmt = dict(id=p["id"], records=RECORDS, file=p["file"], first=p["pages"][0], last=p["pages"][1], page_note=p.get("note", ""),
                    others=", ".join(i for i in ids if i != p["id"]) or "none", date=today, model=model)
         out["read"].append(Job(
             id=f"read:{p['id']}", kind="read", prompt=(PROMPTS / "read.md").read_text().format(**fmt), cwd=str(ROOT),
@@ -116,14 +134,14 @@ def jobs(model: str, budget_read: float, budget_audit: float, budget_relate: flo
             validate=_gate_with_log(p["id"], "audit.md", "the audit must log its changes and disagreements there"),
             allowed_tools=reader_tools(p["id"]), append_system_prompt_file=guide, model=model,
             max_turns=300, budget_usd=budget_audit, max_attempts=2, depends_on=[f"read:{p['id']}"],
-            writable=mine, fresh=[f"records/{p['id']}/audit.md"]))
+            writable=mine, fresh=[f"{RECORDS}/{p['id']}/audit.md"]))
         out["digitize"].append(Job(
             id=f"digitize:{p['id']}", kind="digitize", prompt=(PROMPTS / "digitize.md").read_text().format(**fmt),
             cwd=str(ROOT), validate=_gate_with_log(p["id"], "figures.md", "log every figure read, checked or left out there"),
             allowed_tools=[*reader_tools(p["id"]), f"Bash({VENV}/boxgraph figure:*)", "Bash(pdftoppm:*)", "Bash(mkdir:*)"],
             append_system_prompt_file=guide, model=model, max_turns=400,
             budget_usd=budget_audit if budget_digitize is None else budget_digitize, max_attempts=2,
-            depends_on=[f"audit:{p['id']}"], writable=mine, fresh=[f"records/{p['id']}/figures.md"]))
+            depends_on=[f"audit:{p['id']}"], writable=mine, fresh=[f"{RECORDS}/{p['id']}/figures.md"]))
     for js in out.values():
         _with_extra(js, extra)
     return out
@@ -135,19 +153,19 @@ def relate_jobs(pairs: dict[tuple[str, str], list[str]], model: str, budget: flo
     guide = str(PROMPTS / "record_guide.md")
     out = []
     for (a, b), reasons in sorted(pairs.items()):
-        check = f"build/relate-check/{a}+{b}"
+        check = f"{BUILD}/relate-check/{a}+{b}"
         tools = ["Read", "Glob", "Grep", f"Bash({VENV}/boxgraph validate:*)", f"Bash({VENV}/boxgraph relations:*)",
                  f"Bash({VENV}/python:*)", *READ_ONLY_SHELL, *write_rules(f"{check}/**")]
         writable = [f"{check}/**"]
         for rid in (a, b):
             for f in ("relations.yaml", "questions.yaml", "quantities.yaml", "cited.yaml", "models/**"):
-                tools += write_rules(f"records/{rid}/{f}")
-                writable.append(f"records/{rid}/{f}")
+                tools += write_rules(f"{RECORDS}/{rid}/{f}")
+                writable.append(f"{RECORDS}/{rid}/{f}")
         prompt = (PROMPTS / "relate.md").read_text().format(
-            a=a, b=b, reasons="\n".join(f"- {r}" for r in reasons), check=check)
+            a=a, b=b, records=RECORDS, reasons="\n".join(f"- {r}" for r in reasons), check=check)
         # the job may touch models, so both records are validated with their models run (from the shared cache)
-        gate = ["sh", "-c", f"{VENV}/boxgraph validate records/{a} records/{b} --cache {CACHE} && "
-                f"{VENV}/boxgraph relations records --only {a},{b}"]
+        gate = ["sh", "-c", f"{VENV}/boxgraph validate {RECORDS}/{a} {RECORDS}/{b} --cache {CACHE} && "
+                f"{VENV}/boxgraph relations {RECORDS} --only {a},{b}"]
         out.append(Job(id=f"relate:{a}+{b}", kind="relate", prompt=prompt, cwd=str(ROOT), validate=gate,
                        allowed_tools=tools, append_system_prompt_file=guide, model=model, max_turns=200,
                        budget_usd=budget, max_attempts=2, locks=[a, b], writable=writable))
@@ -160,18 +178,18 @@ def validate_jobs(pairs: dict[tuple[str, str], list[str]], model: str, budget: f
     guide = str(PROMPTS / "record_guide.md")
     out = []
     for (a, b), reasons in sorted(pairs.items()):
-        check = f"build/validate-check/{a}+{b}"
+        check = f"{BUILD}/validate-check/{a}+{b}"
         tools = ["Read", "Glob", "Grep", f"Bash({VENV}/boxgraph validate:*)", f"Bash({VENV}/boxgraph validations:*)",
                  f"Bash({VENV}/python:*)", *READ_ONLY_SHELL, *write_rules(f"{check}/**")]
         writable = [f"{check}/**"]
         for rid in (a, b):
             for f in ("validations.yaml", "added.yaml", "questions.yaml"):
-                tools += write_rules(f"records/{rid}/{f}")
-                writable.append(f"records/{rid}/{f}")
+                tools += write_rules(f"{RECORDS}/{rid}/{f}")
+                writable.append(f"{RECORDS}/{rid}/{f}")
         prompt = (PROMPTS / "validate.md").read_text().format(
-            a=a, b=b, reasons="\n".join(f"- {r}" for r in reasons), check=check, venv=VENV)
-        gate = ["sh", "-c", f"{VENV}/boxgraph validate records/{a} records/{b} --cache {CACHE} && "
-                f"{VENV}/boxgraph validations records --only {a},{b} --cache {CACHE}"]
+            a=a, b=b, records=RECORDS, reasons="\n".join(f"- {r}" for r in reasons), check=check, venv=VENV)
+        gate = ["sh", "-c", f"{VENV}/boxgraph validate {RECORDS}/{a} {RECORDS}/{b} --cache {CACHE} && "
+                f"{VENV}/boxgraph validations {RECORDS} --only {a},{b} --cache {CACHE}"]
         out.append(Job(id=f"validate:{a}+{b}", kind="validate", prompt=prompt, cwd=str(ROOT), validate=gate,
                        allowed_tools=tools, append_system_prompt_file=guide, model=model, max_turns=200,
                        budget_usd=budget, max_attempts=2, locks=[a, b], writable=writable))
@@ -219,7 +237,7 @@ def _ingest_needed(p: dict) -> bool:
     import hashlib
     import json
 
-    d = ROOT / "records" / p["id"]
+    d = ROOT / RECORDS / p["id"]
     meta = d / "ingest.json"
     if not meta.exists() or not (d / "text").is_dir() or not (d / "pages").is_dir():
         return True
@@ -250,8 +268,9 @@ def _run(o: Orchestrator, todo: list[Job], done: dict | None = None) -> dict[str
 
 
 def _stale_rows(done: dict, pid: str) -> list[str]:
-    """Ledger jobs that read a paper's old file: its own jobs and every relation job it is part of."""
-    return [j for j in done if j.split(":", 1)[1] == pid or (j.startswith("relate:") and pid in _paper_ids_of(j))]
+    """Ledger jobs that read a paper's old file: its own jobs and every relation or validation job it is part of."""
+    return [j for j in done
+            if j.split(":", 1)[1] == pid or (j.startswith(("relate:", "validate:")) and pid in _paper_ids_of(j))]
 
 
 def _paper_ids_of(job_id: str) -> list[str]:
@@ -264,8 +283,9 @@ def _tokens(u: dict) -> str:
 
 
 def _build(title: str) -> int:
-    content = ["--overview", "overview/content.yaml"] if (ROOT / "overview" / "content.yaml").exists() else []
-    return subprocess.run([str(ROOT / VENV / "boxgraph"), "build", "records", "--out", "build", "--title", title, *content],
+    content = ["--overview", OVERVIEW] if (ROOT / OVERVIEW).exists() else []
+    return subprocess.run([str(ROOT / VENV / "boxgraph"), "build", RECORDS, "--out", BUILD, "--cache", CACHE, "--title", title,
+                           *content],
                           cwd=ROOT, check=False).returncode
 
 
@@ -294,7 +314,8 @@ def main(argv=None) -> int:
     ap.add_argument("--budget-audit", type=float, default=20)
     ap.add_argument("--budget-digitize", type=float, default=30)
     ap.add_argument("--budget-relate", type=float, default=15)
-    ap.add_argument("--state", default="pipeline_state")
+    ap.add_argument("--corpus", required=True, help="the corpus, kept in corpora/<name>/")
+    ap.add_argument("--state", help="this machine's run state (default: pipeline_state/, or pipeline_state/<corpus>/)")
     ap.add_argument("--extra", help="text, or a file of text, appended to every job's prompt")
     ap.add_argument("--papers", help="comma-separated paper ids to run (default: all)")
     ap.add_argument("--jobs", help="comma-separated job ids to run, e.g. relate:a+b (default: all selected)")
@@ -307,8 +328,19 @@ def main(argv=None) -> int:
                     help="list the papers, code and data not under corpus/, with where to get them, and exit")
     ap.add_argument("--status", action="store_true", help="print the state of every job in this machine's run state and exit")
     a = ap.parse_args(argv)
+    if a.corpus:
+        try:
+            use_corpus(a.corpus)
+        except ValueError as e:
+            print(e)
+            return 2
+        if not PAPERS.exists():
+            print(f"{PAPERS.relative_to(ROOT)} does not exist: add a paper with python -m pipeline.add --corpus {a.corpus}")
+            return 2
+    a.state = a.state or STATE
+    listed = PAPERS.relative_to(ROOT).as_posix() if PAPERS.is_relative_to(ROOT) else str(PAPERS)
     if a.missing:
-        gone = missing_sources(load_papers(ROOT / "pipeline" / "papers.yaml"), ROOT, ROOT / "records")
+        gone = missing_sources(load_papers(PAPERS), ROOT, ROOT / RECORDS)
         for m in gone:
             print(f"{m['id']:20} {m['kind']:9} {m['file']}\n{'':31}{m['title'] or ''}\n{'':31}{m['where'] or 'no DOI or URL in its record'}")
         print(f"{len(gone)} source(s) missing" if gone else "every source in the corpus list is present")
@@ -341,14 +373,14 @@ def main(argv=None) -> int:
     ps = papers()
     errs = check_papers(ps, ROOT)
     if errs:
-        print("pipeline/papers.yaml has problems:", *errs, sep="\n  ")
+        print(f"{listed} has problems:", *errs, sep="\n  ")
         return 2
     ids = [p["id"] for p in ps]
     only = a.papers.split(",") if a.papers else None
     job_ids = a.jobs.split(",") if a.jobs else None
     unknown = sorted(set(only or []) - set(ids))
     if unknown:
-        print(f"not in pipeline/papers.yaml: {', '.join(unknown)} (add them with python -m pipeline.add)")
+        print(f"not in {listed}: {', '.join(unknown)} (add them with python -m pipeline.add)")
         return 2
     stages = a.stages.split(",")
     extra = Path(a.extra).read_text() if a.extra and Path(a.extra).is_file() else (a.extra or "")
@@ -365,7 +397,7 @@ def main(argv=None) -> int:
         print("Per-paper jobs:")
         print("\n".join(plan(per, done, a.rerun)))
         if "relate" in stages:
-            pairs, shape_only = split_pairs(candidate_pairs(ROOT / "records", ready(), manual))
+            pairs, shape_only = split_pairs(candidate_pairs(ROOT / RECORDS, ready(), manual))
             rel = select({"relate": relate_jobs(pairs, a.model, a.budget_relate)}, stages, only, job_ids)
             print("Relation jobs between papers already read:")
             print("\n".join(plan(rel, done, a.rerun)))
@@ -387,13 +419,13 @@ def main(argv=None) -> int:
     if lock is None:
         print(f"another run holds {state / 'run.lock'}; wait for it to finish (one run at a time)")
         return 3
-    failed_ingest = []
+    failed_ingest, reread = [], []
     if "ingest" in stages:
         for p in ps:
             if p.get("kind") in ("software", "dataset") or not _ingest_needed(p):
                 continue
             try:
-                d = ingest(ROOT / p["file"], p["id"], ROOT / "records", pages=tuple(p["pages"]))
+                d = ingest(ROOT / p["file"], p["id"], ROOT / RECORDS, pages=tuple(p["pages"]))
             except Exception as e:  # noqa: BLE001 - one bad PDF stops only its own paper
                 failed_ingest.append(p["id"])
                 print(f"could not ingest {p['id']}: {e}", flush=True)
@@ -401,12 +433,15 @@ def main(argv=None) -> int:
             stale = _stale_rows(done, p["id"])
             if stale:  # its jobs read the old file: they run again on the new one
                 forget_completed(LEDGER, stale)
+                reread += stale
                 done = load_completed(LEDGER)
                 print(f"{p['id']}: the PDF or page range changed; {len(stale)} finished job(s) will run again", flush=True)
             print(f"ingested {p['id']} -> {d}", flush=True)
     per = [j for j in per if _paper_ids_of(j.id)[0] not in failed_ingest]
-    o = Orchestrator(state / "state.db", claude_bin=a.agent, concurrency=a.concurrency, logs=state / "logs",
+    o = Orchestrator(state / "state.db", agent_bin=a.agent, concurrency=a.concurrency, logs=state / "logs",
                      watch=ROOT, on_passed=_record_passed)
+    if reread:  # and on this machine, or its state would still say they passed
+        o.reset(sorted(set(reread)))
     results: dict[str, dict] = {}
     todo = pending(per, done, a.rerun)
     if a.rerun:
@@ -426,7 +461,7 @@ def _runs(a, o, todo, done, stages, only, job_ids, manual, extra, ps, results, f
         results.update(_run(o, todo, done))
         done = load_completed(LEDGER)
     if "relate" in stages:
-        pairs, shape_only = split_pairs(candidate_pairs(ROOT / "records", ready(), manual))
+        pairs, shape_only = split_pairs(candidate_pairs(ROOT / RECORDS, ready(), manual))
         for (x, y), why in shape_only.items():
             print(f"listed, not related (a shared shape only): {x} + {y}: " + "; ".join(why), flush=True)
         rel = pending(select({"relate": relate_jobs(pairs, a.model, a.budget_relate, extra=extra)}, stages, only, job_ids),
@@ -437,7 +472,7 @@ def _runs(a, o, todo, done, stages, only, job_ids, manual, extra, ps, results, f
             results.update(_run(o, rel, done))
             done = load_completed(LEDGER)
     if "validate" in stages:  # after a pair's relations are in: its models against the other's measurements
-        pairs, _ = split_pairs(candidate_pairs(ROOT / "records", ready(), manual))
+        pairs, _ = split_pairs(candidate_pairs(ROOT / RECORDS, ready(), manual))
         related = {k: v for k, v in pairs.items() if f"relate:{k[0]}+{k[1]}" in done}
         val = pending(select({"validate": validate_jobs(related, a.model, a.budget_relate, extra=extra)}, stages, only, job_ids),
                       done, a.rerun)
@@ -464,7 +499,7 @@ def _runs(a, o, todo, done, stages, only, job_ids, manual, extra, ps, results, f
     if build_failed:
         print("  the build failed: see its output above")
     if needs_person or failed_ingest or build_failed:
-        print("  (pipeline_state/logs/ has every agent's transcript; `--reset JOB` lets a parked job run again)")
+        print(f"  ({a.state}/logs/ has every agent's transcript; `--reset JOB` lets a parked job run again)")
         return 1
     return 0
 

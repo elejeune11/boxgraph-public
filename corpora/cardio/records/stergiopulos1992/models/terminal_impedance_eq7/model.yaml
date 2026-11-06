@@ -1,0 +1,24 @@
+id: terminal_impedance_eq7
+name: impedance of one terminal modified windkessel (Eq. 7 for a sinusoidal p and Q)
+role: model
+stated:
+  page: 2
+  printed_page: '1478'
+  quote: The impedance model used is the modified windkessel model
+  where: Eq. 7
+equation: "dQ/dt = (1/R1) dp/dt + p/(R1 R2 CT) - (1 + R1/R2) Q/(R1 CT), R1 + R2 = RT; for p, Q ~ exp(j omega t):
+  Z = p/Q = R1 + R2/(1 + j omega R2 CT), R1 = (R1/RT) RT"
+from_words: true
+inputs:
+  RT: {quantity: terminal_resistance, unit: dyn*s/cm^5}
+  R1r: {quantity: terminal_resistance_ratio, unit: dimensionless}
+  CT: {quantity: terminal_compliance, unit: cm^5/dyn}
+  f: {quantity: frequency, unit: Hz}
+outputs:
+  mod: {quantity: terminal_impedance_modulus, unit: dyn*s/cm^5}
+  phase: {quantity: terminal_impedance_phase, unit: degree}
+settings: {}
+stochastic: false
+# Helper model added by the relation job (stergiopulos1992 + stergiopulos1999): stergiopulos1999 (p. 1) says
+# lumped windkessels serve as the peripheral load of this paper's model. Eq. 7 is the time-domain boundary
+# condition; this is the same equation for one harmonic, with the paper's own parameters RT, CT and R1/RT.

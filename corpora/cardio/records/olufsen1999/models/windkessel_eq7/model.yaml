@@ -1,0 +1,18 @@
+id: windkessel_eq7
+name: impedance of the three-element windkessel outflow condition (Eq. 7)
+role: model
+stated: {page: 4, printed_page: "H260", quote: "The most commonly used windkessel model is the three", where: Eq. 7}
+equation: "Z(0, omega) = (R1 + R2 + i omega CT R1 R2)/(1 + i omega CT R2), RT = R1 + R2"
+inputs:
+  R1: {quantity: windkessel_resistance, unit: g/s/cm^4, description: "series resistance R1"}
+  R2: {quantity: windkessel_resistance, unit: g/s/cm^4, description: "parallel resistance R2"}
+  CT: {quantity: windkessel_compliance, unit: cm^4*s^2/g}
+  omega: {quantity: angular_frequency, unit: 1/s}
+outputs:
+  Zmod: {quantity: input_impedance_modulus, unit: g/s/cm^4}
+  Zphase: {quantity: input_impedance_phase, unit: degree}
+settings: {}
+stochastic: false
+# Helper model added by the relation job (olufsen1999 + stergiopulos1992): the paper states Eq. 7 as the
+# windkessel outflow condition used in earlier work (Refs. 40, 46, 52, p. 4) but runs it only with fitted,
+# unprinted parameters, so no printed result is compared with it here.

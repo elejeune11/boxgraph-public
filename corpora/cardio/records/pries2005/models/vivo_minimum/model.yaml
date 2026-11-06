@@ -1,0 +1,21 @@
+id: vivo_minimum
+name: diameter of minimal effective viscosity in vivo above the ESL peak (ESL-based in vivo law)
+role: model
+stated: {page: 5, quote: "a shift of the minimal effective viscosity to", where: "text on Fig. 4"}
+equation: "D_min = argmin over D in (D_lo, D_hi) of eta_vivo(D, HD)"
+inputs:
+  HD: {quantity: discharge_hematocrit, unit: dimensionless}
+  Doff: {quantity: esl_offset_diameter, unit: um}
+  Dcrit: {quantity: esl_critical_diameter, unit: um}
+  D50: {quantity: esl_half_diameter, unit: um}
+  Wmax: {quantity: esl_max_thickness, unit: um}
+  Eamp: {quantity: esl_peak_amplitude, unit: um}
+  Ewidth: {quantity: esl_peak_decay, unit: 1/um}
+  Epeak: {quantity: esl_peak_weight, unit: dimensionless}
+  EHD: {quantity: esl_hematocrit_sensitivity, unit: dimensionless}
+outputs:
+  D_min: {quantity: vessel_diameter, unit: um}
+settings: {D_lo: 11.0, D_hi: 2000.0, n: 20001}
+stochastic: false
+from_words: true
+built_from: [vivo_viscosity, vitro_minimum]

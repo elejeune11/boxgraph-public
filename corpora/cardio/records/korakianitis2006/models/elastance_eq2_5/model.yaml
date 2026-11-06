@@ -1,0 +1,26 @@
+id: elastance_eq2_5
+name: left ventricular and left atrial elastance at an instant t (Eqs. 2, 3 and 5), as plotted in Fig. 2
+role: model
+stated: {page: 4, printed_page: "1967", quote: "The time-varying left ventricular elastance, illustrated in", where: "Eqs. 2-3, 5; Fig. 2"}
+equation: >
+  e_lv(t) = E_lv,d + (E_lv,s - E_lv,d)/2 e(t) (2); e(t) = cos(t/T_s1 pi), 0<=t<T_s1;
+  cos((t + T_s2 - T_s1)/T_s1 pi), T_s1<=t<T_s2; 0, T_s2<=t<T (3), t taken within the period;
+  atrium: e(t) = 1 - cos((t - T_pb)/T_pw 2pi), T_pb<=t<T_pb+T_pw, else 0 (5), with
+  e_la = E_la,min + (E_la,max - E_la,min)/2 e(t) ("similar to that for the ventricles")
+built_from: [circulation_valves]
+inputs:
+  Elvs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Elvd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ela_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ela_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  T: {quantity: heart_period, unit: s}
+  Ts1: {quantity: time_peak_systole, unit: s}
+  Ts2: {quantity: time_end_systole, unit: s}
+  Tpwb: {quantity: p_wave_onset, unit: s}
+  Tpww: {quantity: p_wave_duration, unit: s}
+  t: {quantity: time, unit: s, description: "time since the start of the simulation (Fig. 2's t axis)"}
+outputs:
+  Elv: {quantity: lv_elastance, unit: mmHg/ml}
+  Ela: {quantity: la_elastance, unit: mmHg/ml}
+settings: {}
+stochastic: false

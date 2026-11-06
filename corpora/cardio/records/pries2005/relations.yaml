@@ -1,0 +1,43 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_vitro_law_is_pries1992_eq7
+  kind: same_as
+  a: pries1992/eq7_eta_combined
+  b: pries2005/vitro_viscosity
+  mapping: {D: "D", HD: "HctD"}
+  output_map: {eta_vitro: eta}
+  regime: {D: [3.3, 1000], HctD: [0.05, 0.8]}
+  provenance: stated
+  citation: {page: 2, quote: "glass tubes (27). These data were used to derive a parametric", where: "Eqs. 5-7"}
+  assumptions:
+    - "the tube diameter (um) and discharge hematocrit (fraction) of the two papers are the same quantities"
+    - "the regime is the tube-diameter range of the meta-analysis pries2005 names (3.3 um to ~1 mm) and a hematocrit range of the pooled data"
+- id: rel_fahraeus_vitro_rat_scaling_of_pries1992_eq8
+  kind: approximated_by
+  a: pries1992/eq8_ratio
+  b: pries2005/fahraeus_vitro
+  mapping: {HD: "HctD", D: "D*(55/92)**(1/3)"}
+  output_map: {ratio: HctT_HctD}
+  regime: {HctD: [0.1, 0.8], D: [3, 100]}
+  tolerance: 0.03
+  provenance: proposed
+  reason: >
+    pries2005 Eq. 12 prints the Fahraeus relation with exponents 0.415 and 0.011 and takes it from ref 31
+    (pries1990), which adapts a human-blood description to rat blood by scaling diameters with the cube
+    root of mean red cell volume (human 92 fl, rat 55 fl); pries1992 Eq. 8 prints the human exponents
+    (0.35, 0.01). Evaluating the 2005 form at the diameter scaled by (55/92)^(1/3) should give the 1992
+    form up to the rounding of the printed exponents; 3% is the size that rounding 0.0119 to 0.011 can
+    produce over D up to 100 um.
+  assumptions:
+    - "pries2005 Eq. 12 is the rat-adapted form of the description pries1992 prints as Eq. 8"
+- id: rel_fahraeus_vitro_is_pries1990_eq1
+  kind: same_as
+  a: pries1990/fahraeus_eq1
+  b: pries2005/fahraeus_vitro
+  mapping: {D: "D", HD: "HD"}
+  output_map: {ratio: HT_HD}
+  regime: {D: [3, 300], HD: [0.05, 0.8]}
+  provenance: stated
+  citation: {page: 3, quote: "description of the Fåhraeus effect for blood flow in vitro (31) was used", where: "Eq. 12"}
+  assumptions:
+    - "pries2005 port D (tube_diameter) and pries1990 port D (vessel_diameter) are both the diameter in um the same formula takes; the two quantities are not merged"
+    - "the regime spans the microvessel diameters both papers apply the relation to and the usual range of discharge hematocrit"

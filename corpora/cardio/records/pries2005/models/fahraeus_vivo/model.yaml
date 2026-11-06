@@ -1,0 +1,21 @@
+id: fahraeus_vivo
+name: in vivo Fahraeus effect with the ESL (Eqs. 12-13, as printed)
+role: model
+stated: {page: 3, quote: "effect in the presence of the ESL was calculated by replacing D with", where: "Eq. 13"}
+equation: "(HT/HD)vivo = (HT/HD)vitro(Dph, HD) (D/Dph)^2; Dph = D - 2 Wph"
+inputs:
+  D: {quantity: vessel_diameter, unit: um}
+  HD: {quantity: discharge_hematocrit, unit: dimensionless}
+  Doff: {quantity: esl_offset_diameter, unit: um}
+  Dcrit: {quantity: esl_critical_diameter, unit: um}
+  D50: {quantity: esl_half_diameter, unit: um}
+  Wmax: {quantity: esl_max_thickness, unit: um}
+  Eamp: {quantity: esl_peak_amplitude, unit: um}
+  Ewidth: {quantity: esl_peak_decay, unit: 1/um}
+  Epeak: {quantity: esl_peak_weight, unit: dimensionless}
+  EHD: {quantity: esl_hematocrit_sensitivity, unit: dimensionless}
+outputs:
+  ratio: {quantity: hematocrit_ratio_vivo, unit: dimensionless}
+settings: {}
+stochastic: false
+built_from: [fahraeus_vitro, esl_thickness]

@@ -1,0 +1,16 @@
+- id: run_delay_8ms_10hz
+  model: delay_phase
+  inputs: {td: td_8ms, f: f_10hz}
+  outputs: {k: delay_coeff_pred, phase: delay_phase_10hz_pred}
+- id: run_factor_systolic
+  model: sensitivity_ratio
+  inputs: {S_R: sens_r_systolic, S_C: sens_c_systolic}
+  outputs: {factor: factor_systolic_pred}
+- id: run_factor_diastolic
+  model: sensitivity_ratio
+  inputs: {S_R: sens_r_diastolic, S_C: sens_c_diastolic}
+  outputs: {factor: factor_diastolic_pred}
+- id: run_wk2_high_f
+  model: wk2_impedance
+  inputs: {R: r_added, C: c_added, f: f_high_added}
+  outputs: {phase: wk2_phase_high_f_pred}

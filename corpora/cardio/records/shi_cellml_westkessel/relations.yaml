@@ -1,0 +1,425 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_systemic_approx_westkessel_part_max
+  kind: approximated_by
+  a: shi_cellml_systemic/systemic_left_heart
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: &heart_and_afterload
+    ElaMax: "ElaMax"
+    ElaMin: "ElaMin"
+    PlaIni: "PlaIni"
+    VlaIni: "VlaIni"
+    ElvMax: "ElvMax"
+    ElvMin: "ElvMin"
+    PlvIni: "PlvIni"
+    VlvIni: "VlvIni"
+    T: "T"
+    Tpwb: "Tpwb"
+    Tpww: "Tpww"
+    Ts1: "Ts1"
+    Ts2: "Ts2"
+    CVao: "CVao"
+    CVmi: "CVmi"
+    Vlv0: "Vlv0"
+    Vla0: "Vla0"
+    Rc: "Rsas + Rsat + Rsar + Rscp"
+    Rv: "Rsvn"
+    Cv: "Csvn"
+    P0v: "P0svn"
+    pi: "pi"
+  output_map: {P_art_max: P_sas_max}
+  regime: &regime
+    ElaMax: [0.2, 0.3]
+    ElaMin: [0.12, 0.18]
+    PlaIni: [0.8, 1.2]
+    VlaIni: [3.2, 4.8]
+    ElvMax: [2.0, 3.0]
+    ElvMin: [0.08, 0.12]
+    PlvIni: [0.8, 1.2]
+    VlvIni: [4, 6]
+    T: [0.9, 1.1]
+    Tpwb: [0.9, 0.94]
+    Tpww: [0.08, 0.1]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    CVao: [300, 400]
+    CVmi: [350, 450]
+    Vlv0: [400, 600]
+    Vla0: [15, 25]
+    Rsas: [0.0024, 0.0036]
+    Csas: [0.005, 0.01]
+    Lsas: [0.003, 0.01]
+    P0sas: [80, 120]
+    Q0sas: [0, 0]
+    Rsat: [0.04, 0.06]
+    Csat: [0.005, 0.01]
+    Lsat: [0.003, 0.01]
+    P0sat: [80, 120]
+    Q0sat: [0, 0]
+    Rsar: [0.4, 0.6]
+    Rscp: [0.42, 0.62]
+    Rsvn: [0.06, 0.09]
+    Csvn: [16, 25]
+    P0svn: [0, 5]
+    pi: [3.14159, 3.14159]
+  tolerance: 0.05
+  assumptions: &assumptions
+    - "the exact relation is a limit (Csas, Csat, Lsas, Lsat -> 0): the sinus and artery nodes then store no volume and carry no inertia, Qsas = Qsat = Qao, and Sas.Pi = Psvn + (Rsas + Rsat + Rsar + Rscp) Qao, which is the Westkessel valve-into-Zc loop with Zc.Pi = Sas.Pi"
+    - "the limit cannot be tested numerically with the ports as written: at their fixed RK4 step (dt = 0.1 ms) the systemic model goes unstable (NaN) once these compliances and inertances fall to about 1e-3 or below; the regime therefore samples small but stable values (C 0.005-0.01 mL/mmHg, L 0.003-0.01 mmHg s^2/mL), well below the code's Csat = 1.6 and so not the released parameter set, and the relation is an approximation within the tolerance"
+    - "in that regime the peak aortic valve flow does not settle (it chatters as the sinus compliance shrinks), so only pressure and stroke volume are related"
+    - "P0v = P0svn: the initial pressures of the vanishing compliances carry no volume in the limit; the initial inertance flows Q0sas, Q0sat have no counterpart"
+  provenance: proposed
+  reason: &reason >
+    Neither code states a relation to the other. The two CellML workspaces share the left-heart files
+    (ModelLeftHeart, TempCDa, TempCDv, EAtrium, EVentricle) line for line, and the Westkessel afterload
+    is built from the same TempR and TempRC components as the systemic arteriole, capillary and vein
+    segments. With the aortic sinus and artery compliances and inertances negligible, the five-segment
+    systemic loop is a characteristic resistance Rsas + Rsat + Rsar + Rscp in series with the vein's
+    parallel Csvn and Rsvn draining to the left atrium: the three-element Westerhof afterload of
+    MainWestkessel. shi2018 shows both as Fig. 1(b) and Fig. 1(c) but does not state this reduction.
+    The relation is between the models, not their parameter values (q_westkessel_values: Rc, Rv, Cv are
+    not lumped sums of the systemic segments).
+- id: rel_systemic_approx_westkessel_sv
+  kind: approximated_by
+  a: shi_cellml_systemic/systemic_left_heart
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: *heart_and_afterload
+  output_map: {SV: SV}
+  regime: *regime
+  tolerance: 0.03
+  assumptions: *assumptions
+  provenance: proposed
+  reason: *reason
+- id: rel_westkessel_reduces_to_windkessel_sv
+  kind: reduces_to
+  a: shi_cellml_westkessel/westkessel_left_heart
+  b: shi_cellml_windkessel/windkessel_left_heart
+  mapping: &wk_mapping
+    ElaMax: "ElaMax"
+    ElaMin: "ElaMin"
+    PlaIni: "PlaIni"
+    VlaIni: "VlaIni"
+    ElvMax: "ElvMax"
+    ElvMin: "ElvMin"
+    PlvIni: "PlvIni"
+    VlvIni: "VlvIni"
+    T: "T"
+    Tpwb: "Tpwb"
+    Tpww: "Tpww"
+    Ts1: "Ts1"
+    Ts2: "Ts2"
+    CVao: "CVao"
+    CVmi: "CVmi"
+    Vlv0: "Vlv0"
+    Vla0: "Vla0"
+    Cwk: "Cv"
+    Rwk: "Rv"
+    P0: "P0v"
+    pi: "pi"
+  limit: {Rc: "0"}
+  output_map: {SV: SV}
+  regime: &wk_regime
+    ElaMax: [0.2, 0.3]
+    ElaMin: [0.12, 0.18]
+    PlaIni: [0.8, 1.2]
+    VlaIni: [3.2, 4.8]
+    ElvMax: [2.0, 3.0]
+    ElvMin: [0.08, 0.12]
+    PlvIni: [0.8, 1.2]
+    VlvIni: [4, 6]
+    T: [0.9, 1.1]
+    Tpwb: [0.9, 0.94]
+    Tpww: [0.08, 0.1]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    CVao: [300, 400]
+    CVmi: [350, 450]
+    Vlv0: [400, 600]
+    Vla0: [15, 25]
+    Rc: [0.004, 0.006]
+    Rv: [0.5, 0.7]
+    Cv: [2.4, 3.0]
+    P0v: [0, 5]
+    pi: [3.14159, 3.14159]
+  tolerance: 0.001
+  assumptions: &wk_assumptions
+    - "as Rc -> 0 the characteristic resistance Zc (TempR: Pi = Po + R Qi) carries no pressure drop, Zc.Pi = Zv.Pi, and the aortic valve flow CV sqrt(Plv - Zc.Pi) becomes CV sqrt(Plv - Pv): the Westkessel afterload is then the two-element Windkessel TempRC with C = Cv, R = Rv, P0 = P0v"
+    - "both ports use the same RK4 scheme at the same dt and t_end, so the limit is exact up to round-off; the Westkessel port's closed-form valve-into-Zc solution is regular at Rc = 0"
+  provenance: proposed
+  reason: &wk_reason >
+    Neither code states a relation to the other, but the two CellML workspaces share the left-heart
+    files (ModelLeftHeart, TempCDa, TempCDv, EAtrium, EVentricle) line for line (shi_cellml_westkessel
+    notes), and the Westkessel afterload (ModelWestkessel: Zc = TempR in series with Zv = TempRC) is the
+    Windkessel afterload (ModelWindKessel: Zwk = TempRC) with the characteristic resistance Zc added
+    upstream. Removing Zc (Rc -> 0) gives the Windkessel model with Cwk = Cv, Rwk = Rv, P0 = P0v.
+    shi2018 shows the two as Fig. 1(a) and Fig. 1(b) but does not state the reduction. The relation is
+    between the models, not their parameter values (the codes' Rv = 0.65, Cv = 2.6 differ from
+    R = 0.55, C = 2.8; q_westkessel_values).
+- id: rel_westkessel_reduces_to_windkessel_part_max
+  kind: reduces_to
+  a: shi_cellml_westkessel/westkessel_left_heart
+  b: shi_cellml_windkessel/windkessel_left_heart
+  mapping: *wk_mapping
+  limit: {Rc: "0"}
+  output_map: {P_art_max: P_art_max}
+  regime: *wk_regime
+  tolerance: 0.001
+  assumptions: *wk_assumptions
+  provenance: proposed
+  reason: *wk_reason
+- id: rel_westkessel_approximates_korakianitis_onoff_plv
+  kind: approximated_by
+  a: korakianitis2006/circulation_onoff_corrected
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: &kor_map
+    ElaMax: "Ela_max"
+    ElaMin: "Ela_min"
+    PlaIni: "Pla0"
+    VlaIni: "Vla0"
+    ElvMax: "Elvs"
+    ElvMin: "Elvd"
+    PlvIni: "Plv0"
+    VlvIni: "Vlv0"
+    T: "T"
+    Tpwb: "Tpwb/T"
+    Tpww: "Tpww/T"
+    Ts1: "Ts1/T"
+    Ts2: "Ts2/T"
+    CVao: "CQao"
+    CVmi: "CQmi"
+    Vlv0: "Vlv_init"
+    Vla0: "Vla_init"
+    Rc: "Rsas"
+    Rv: "Rsat + Rsar + Rscp + Rsvn"
+    Cv: "Csas + Csat"
+    P0v: "Psas_init"
+    pi: "pi"
+  output_map: {P_lv_max: Plv_max}
+  regime: &kor_regime
+    CQao: [315, 385]
+    CQmi: [360, 440]
+    CQpo: [315, 385]
+    CQti: [360, 440]
+    Elvs: [2.25, 2.75]
+    Elvd: [0.09, 0.11]
+    Plv0: [0.9, 1.1]
+    Vlv0: [4.5, 5.5]
+    Ela_max: [0.225, 0.275]
+    Ela_min: [0.135, 0.165]
+    Pla0: [0.9, 1.1]
+    Vla0: [3.6, 4.4]
+    Ervs: [1.035, 1.265]
+    Ervd: [0.09, 0.11]
+    Prv0: [0.9, 1.1]
+    Vrv0: [9, 11]
+    Era_max: [0.225, 0.275]
+    Era_min: [0.135, 0.165]
+    Pra0: [0.9, 1.1]
+    Vra0: [3.6, 4.4]
+    Csas: [0.072, 0.088]
+    Rsas: [0.0027, 0.0033]
+    Lsas: [0.0000558, 0.0000682]
+    Csat: [1.44, 1.76]
+    Rsat: [0.045, 0.055]
+    Lsat: [0.00153, 0.00187]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    Cpas: [0.162, 0.198]
+    Rpas: [0.0018, 0.0022]
+    Lpas: [0.0000468, 0.0000572]
+    Cpat: [3.42, 4.18]
+    Rpat: [0.009, 0.011]
+    Lpat: [0.00153, 0.00187]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0054, 0.0066]
+    Cpvn: [18.45, 22.55]
+    T: [1, 1]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    Tpwb: [0.92, 0.93]
+    Tpww: [0.08, 0.09]
+    Vlv_init: [500, 800]
+    Vla_init: [15, 25]
+    Vrv_init: [450, 550]
+    Vra_init: [15, 25]
+    Psas_init: [90, 110]
+    Psat_init: [90, 110]
+    Psvn_init: [0, 5]
+    Ppas_init: [20, 30]
+    Ppat_init: [20, 30]
+    Ppvn_init: [0, 5]
+  tolerance: 0.1
+  assumptions: &kor_assumptions
+    - "the lumping is ours: Rc = Rsas (the aortic sinus segment as the characteristic resistance), Rv = Rsat + Rsar + Rscp + Rsvn (the rest of the systemic resistance, aorta to atrium), Cv = Csas + Csat (the arterial compliance, as in shi_cellml_windkessel's rel_windkessel_approximates_korakianitis); neither source prints Rc, Rv or Cv, and the code's Rc = 0.005, Rv = 0.65, Cv = 2.6 are not these sums (q_westkessel_values)"
+    - "a's inertances Lsas, Lsat, its venous compliance Csvn, and its whole right heart and pulmonary loop have no counterpart in b; P0v is mapped to a's initial sinus pressure Psas_init"
+    - "timings are mapped as fractions of T, as the code uses them; T is held at 1 s because a reports the cycle [10 s, 11 s) and b the cycle [t_end - T, t_end] = [9 s, 10 s], both in steady state at T = 1 s; the regime keeps Tpwb + Tpww >= T, which the code's atrial activation assumes"
+    - "pi is mapped to the constant pi; the code writes 3.14159 (q_pi)"
+    - "the tolerance (10%) is ours, as in the Windkessel relation"
+    - "initial volumes map one to one (Vlv0 = Vlv_init, Vla0 = Vla_init, P0v = Psas_init); b's closed loop holds only LA, LV and Cv, so the volume that a spreads over its venous (Csvn) and pulmonary compartments has no place in b and its circulating volume differs from a's: the large error found is expected from this truncation"
+  provenance: proposed
+  reason: &kor_reason >
+    No source states this relation; the code cites korakianitis2006 only for its parameter values
+    (data.yaml from_datum). The code's left heart repeats korakianitis2006's chamber law (Eqs. 1, 4),
+    its on-off valves (Eqs. 6-7, the Section 3.1 simplified model) and the ventricular activation that
+    korakianitis2006's record takes as the evident correction of Eq. 3, which is why a is the on-off,
+    corrected model. It truncates the rest: no right heart or pulmonary loop, and the systemic loop
+    (R-L-C sinus and artery, resistive arteriole and capillary, R-C vein; Eqs. 15-20) lumped into a
+    three-element Westerhof afterload (Rc, then Cv parallel to Rv) that returns to the left atrium.
+    No limit of a's parameters gives b (removing the pulmonary loop and venous compliance is a change
+    of circuit, not a limit), so the relation is an approximation, tested around korakianitis2006's
+    printed parameters (+-10%).
+- id: rel_westkessel_approximates_korakianitis_onoff_sv
+  kind: approximated_by
+  a: korakianitis2006/circulation_onoff_corrected
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: *kor_map
+  output_map: {SV: SV}
+  regime: *kor_regime
+  tolerance: 0.1
+  assumptions: *kor_assumptions
+  provenance: proposed
+  reason: *kor_reason
+- id: rel_westkessel_approximates_korakianitis_onoff_part
+  kind: approximated_by
+  a: korakianitis2006/circulation_onoff_corrected
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: *kor_map
+  output_map: {P_art_max: Psas_max}
+  regime: *kor_regime
+  tolerance: 0.1
+  assumptions: *kor_assumptions
+  provenance: proposed
+  reason: *kor_reason
+- id: rel_westkessel_approximates_closed_loop_code_plv
+  kind: approximated_by
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: &cl_map
+    ElaMax: "ElaMax"
+    ElaMin: "ElaMin"
+    PlaIni: "PlaIni"
+    VlaIni: "VlaIni"
+    ElvMax: "ElvMax"
+    ElvMin: "ElvMin"
+    PlvIni: "PlvIni"
+    VlvIni: "VlvIni"
+    T: "T"
+    Tpwb: "Tpwb"
+    Tpww: "Tpww"
+    Ts1: "Ts1"
+    Ts2: "Ts2"
+    CVao: "CVao"
+    CVmi: "CVmi"
+    Vlv0: "Vlv0"
+    Vla0: "Vla0"
+    Rc: "Rsas"
+    Rv: "Rsat + Rsar + Rscp + Rsvn"
+    Cv: "Csas + Csat"
+    P0v: "P0sas"
+    pi: "pi"
+  output_map: {P_lv_max: P_lv_max}
+  regime: &cl_regime
+    ElaMax: [0.225, 0.275]
+    ElaMin: [0.135, 0.165]
+    PlaIni: [0.9, 1.1]
+    VlaIni: [3.6, 4.4]
+    ElvMax: [2.25, 2.75]
+    ElvMin: [0.09, 0.11]
+    PlvIni: [0.9, 1.1]
+    VlvIni: [4.5, 5.5]
+    EraMax: [0.225, 0.275]
+    EraMin: [0.135, 0.165]
+    PraIni: [0.9, 1.1]
+    VraIni: [3.6, 4.4]
+    ErvMax: [1.035, 1.265]
+    ErvMin: [0.09, 0.11]
+    PrvIni: [0.9, 1.1]
+    VrvIni: [9, 11]
+    T: [1, 1]
+    Tpwb: [0.92, 0.93]
+    Tpww: [0.08, 0.09]
+    Ts1: [0.28, 0.32]
+    Ts2: [0.43, 0.47]
+    CVao: [315, 385]
+    CVmi: [360, 440]
+    CVpa: [315, 385]
+    CVti: [360, 440]
+    Vlv0: [450, 550]
+    Vla0: [18, 22]
+    Vra0: [18, 22]
+    Vrv0: [450, 550]
+    Rsas: [0.0027, 0.0033]
+    Csas: [0.072, 0.088]
+    Lsas: [0.0000558, 0.0000682]
+    P0sas: [90, 110]
+    Q0sas: [0, 0]
+    Rsat: [0.045, 0.055]
+    Csat: [1.44, 1.76]
+    Lsat: [0.00153, 0.00187]
+    P0sat: [90, 110]
+    Q0sat: [0, 0]
+    Rsar: [0.45, 0.55]
+    Rscp: [0.468, 0.572]
+    Rsvn: [0.0675, 0.0825]
+    Csvn: [18.45, 22.55]
+    P0svn: [0, 5]
+    Rpas: [0.0018, 0.0022]
+    Cpas: [0.162, 0.198]
+    Lpas: [0.0000468, 0.0000572]
+    P0pas: [27, 33]
+    Q0pas: [0, 0]
+    Rpat: [0.009, 0.011]
+    Cpat: [3.42, 4.18]
+    Lpat: [0.00153, 0.00187]
+    P0pat: [27, 33]
+    Q0pat: [0, 0]
+    Rpar: [0.045, 0.055]
+    Rpcp: [0.225, 0.275]
+    Rpvn: [0.0006, 0.006]
+    Cpvn: [18.45, 22.55]
+    P0pvn: [0, 5]
+    pi: [3.14159, 3.14159]
+  tolerance: 0.1
+  assumptions: &cl_assumptions
+    - "the lumping is ours, the same as in rel_westkessel_approximates_korakianitis_onoff_plv: Rc = Rsas, Rv = Rsat + Rsar + Rscp + Rsvn, Cv = Csas + Csat; neither code nor shi2018 prints such a lumping, and the Westkessel code's Rc = 0.005, Rv = 0.65, Cv = 2.6 are not these sums (q_westkessel_values)"
+    - "a's inertances Lsas, Lsat, its venous compliance Csvn, its right heart and its whole pulmonary loop have no counterpart in b; P0v is mapped to a's initial sinus pressure P0sas, and b's initial volumes Vlv0, Vla0 to a's"
+    - "T is held at 1 s: a reports the cycle [10 s, 11 s] and b [9 s, 10 s], the same steady cycle only at T = 1 s; the regime keeps Tpwb + Tpww >= 1, which both codes' atrial activation assumes"
+    - "the regime is +-10% around the closed-loop code's own values (korakianitis_cellml data.yaml), with Rpvn spanning the code's 0.0006 and korakianitis2006's 0.006; the tolerance (10%) is ours"
+    - "b's closed loop holds only LA, LV and Cv, so the circulating volume that a spreads over its venous and pulmonary compartments has no place in b: a large error is expected from this truncation"
+  provenance: proposed
+  reason: &cl_reason >
+    Neither code states a relation to the other; the Westkessel code cites korakianitis2006 only for its
+    parameter values. The two CellML workspaces are by the same authors and share their components:
+    the chamber templates TempCDa/TempCDv (variable elastance, on-off orifice valves), the ventricular
+    activation EVentricle written identically, the atrial activation EAtrium in an equivalent form
+    ((mt - Tpwb T) + T against mt - (Tpwb - 1) T), and the TempR and TempRC vessel segments. The
+    Westkessel code keeps the left heart and replaces the closed-loop code's systemic loop, right heart
+    and pulmonary loop by a three-element Westerhof afterload returning to the left atrium. No limit of
+    the closed-loop code's parameters removes the right heart and pulmonary loop, so this is an
+    approximation by truncation, tested around the closed-loop code's own parameters. It is the
+    code-to-code counterpart of rel_westkessel_approximates_korakianitis_onoff_*, entered directly
+    because approximations do not chain.
+- id: rel_westkessel_approximates_closed_loop_code_sv
+  kind: approximated_by
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: *cl_map
+  output_map: {SV: SV}
+  regime: *cl_regime
+  tolerance: 0.1
+  assumptions: *cl_assumptions
+  provenance: proposed
+  reason: *cl_reason
+- id: rel_westkessel_approximates_closed_loop_code_part
+  kind: approximated_by
+  a: korakianitis_cellml/closed_loop_onoff
+  b: shi_cellml_westkessel/westkessel_left_heart
+  mapping: *cl_map
+  output_map: {P_art_max: P_sas_max}
+  regime: *cl_regime
+  tolerance: 0.1
+  assumptions: *cl_assumptions
+  provenance: proposed
+  reason: *cl_reason

@@ -1,0 +1,26 @@
+id: fahraeus_vivo_core
+name: in vivo Fahraeus effect with the ESL (Eq. 13 with the area factor inverted)
+role: model
+stated: {page: 3, quote: "between the anatomic diameter and the diameter available for flow", where: "Eq. 13"}
+equation: "(HT/HD)vivo = (HT/HD)vitro(Dph, HD) (Dph/D)^2; Dph = D - 2 Wph"
+inputs:
+  D: {quantity: vessel_diameter, unit: um}
+  HD: {quantity: discharge_hematocrit, unit: dimensionless}
+  Doff: {quantity: esl_offset_diameter, unit: um}
+  Dcrit: {quantity: esl_critical_diameter, unit: um}
+  D50: {quantity: esl_half_diameter, unit: um}
+  Wmax: {quantity: esl_max_thickness, unit: um}
+  Eamp: {quantity: esl_peak_amplitude, unit: um}
+  Ewidth: {quantity: esl_peak_decay, unit: 1/um}
+  Epeak: {quantity: esl_peak_weight, unit: dimensionless}
+  EHD: {quantity: esl_hematocrit_sensitivity, unit: dimensionless}
+outputs:
+  ratio: {quantity: hematocrit_ratio_vivo, unit: dimensionless}
+settings: {}
+stochastic: false
+built_from: [fahraeus_vitro, esl_thickness]
+variant_of: fahraeus_vivo
+corrections:
+  - equation: Eq. 13
+    change: "factor (Dph/D)^2 instead of the printed (D/Dph)^2"
+    evidence: "The text (p. 5) says HT/HD in vivo exhibits a deeper minimum near 10 um than in vitro, as Fig. 4 bottom (p. 6) shows; the printed factor is >= 1 and raises HT/HD above the in vitro value at Dph, so it cannot give that. Red cells confined to the free-flow core of diameter Dph occupy a fraction (Dph/D)^2 of the anatomic cross section, which lowers HT referred to the anatomic volume."

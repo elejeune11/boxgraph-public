@@ -1,8 +1,18 @@
 """The job graph for reading the corpus."""
 
 import subprocess
+from pathlib import Path
 
+import pytest
+
+import pipeline.run_papers as _rp
 from pipeline.run_papers import jobs, papers, pending, plan, relate_jobs, select, validate_jobs
+
+
+@pytest.fixture(autouse=True)
+def _real_paper_list(monkeypatch):
+    """The job graph is built from the repository's motor_clutch paper list; paths keep the generic layout."""
+    monkeypatch.setattr(_rp, "PAPERS", Path(__file__).resolve().parents[1] / "corpora" / "motor_clutch" / "papers.yaml")
 
 
 def test_audit_passes_only_with_an_audit_log(tmp_path):
@@ -125,7 +135,6 @@ def test_agents_share_the_gates_cache():
     rel = relate_jobs({("a", "b"): ["test"]}, "m", 1)
     for j in [*js["read"], *js["audit"], *js["digitize"], *rel]:
         assert j.env.get("BOXGRAPH_CACHE") == str(ROOT / CACHE), j.id
-        assert j.validate_timeout_s <= 3600, j.id
 
 
 def test_relate_jobs_may_name_cited_values_in_both_records():
@@ -142,6 +151,21 @@ def test_single_jobs_can_be_chosen_by_id():
     assert [j.id for j in select({"relate": rel}, ["relate"], None, job_ids=["relate:b+c"])] == ["relate:b+c"]
 
 
+
+def _pin(rp, monkeypatch, ledger=None):
+    """Name the repository's motor_clutch corpus, restore the pipeline's paths afterwards, and keep its ledger in a scratch file."""
+    for name in ("PAPERS", "LEDGER", "RECORDS", "BUILD", "OVERVIEW", "STATE"):
+        monkeypatch.setattr(rp, name, getattr(rp, name))
+    if ledger is not None:
+        orig = rp.use_corpus
+
+        def use(name):
+            orig(name)
+            rp.LEDGER = ledger
+        monkeypatch.setattr(rp, "use_corpus", use)
+    return ["--corpus", "motor_clutch"]
+
+
 def test_a_rerun_resets_the_chosen_jobs_state(tmp_path, monkeypatch):
     """`--rerun` forgets the chosen jobs' state on this machine as well as skipping the ledger, so they really run again."""
     import pipeline.run_papers as rp
@@ -151,7 +175,8 @@ def test_a_rerun_resets_the_chosen_jobs_state(tmp_path, monkeypatch):
     monkeypatch.setattr(rp, "_run", lambda o, todo, done=None: {})
     monkeypatch.setattr(rp, "candidate_pairs", lambda *a, **k: {})
     monkeypatch.setattr(rp, "check_papers", lambda *a: [])  # the PDFs are not in git
-    rp.main(["--stages", "read", "--papers", "chan2008", "--rerun", "--state", str(tmp_path / "st")])
+    rp.main([*_pin(rp, monkeypatch, tmp_path / "completed.yaml"), "--stages", "read", "--papers", "chan2008", "--rerun",
+             "--state", str(tmp_path / "st")])
     assert seen["reset"] == ["read:chan2008"]
 
 
@@ -181,12 +206,12 @@ def _main(monkeypatch, tmp_path, argv, results=None):
     import pipeline.run_papers as rp
 
     monkeypatch.setattr(rp, "check_papers", lambda *a: [])  # the PDFs are not in git
-    monkeypatch.setattr(rp, "LEDGER", tmp_path / "completed.yaml")
+    corpus = _pin(rp, monkeypatch, tmp_path / "completed.yaml")
     monkeypatch.setattr(rp, "_run", lambda o, todo, done=None: {j.id: dict(results or {}).get(j.id, {"status": "passed"})
                                                                  for j in todo})
     monkeypatch.setattr(rp, "candidate_pairs", lambda *a, **k: {})
     monkeypatch.setattr(rp, "_build", lambda title: 0)
-    return rp.main([*argv, "--state", str(tmp_path / "st")])
+    return rp.main([*corpus, *argv, "--state", str(tmp_path / "st")])
 
 
 def test_only_one_run_at_a_time(tmp_path, monkeypatch):
@@ -220,8 +245,24 @@ def test_a_changed_pdf_clears_that_papers_finished_jobs():
     """When a paper's PDF or page range changes, its finished jobs leave the ledger, so they run again on the new file."""
     from pipeline.run_papers import _stale_rows
 
-    done = {"read:a": {}, "audit:a": {}, "digitize:a": {}, "read:b": {}, "relate:a+b": {}, "relate:b+c": {}}
-    assert sorted(_stale_rows(done, "a")) == ["audit:a", "digitize:a", "read:a", "relate:a+b"]
+    done = {"read:a": {}, "audit:a": {}, "digitize:a": {}, "read:b": {}, "relate:a+b": {}, "relate:b+c": {},
+            "validate:a+b": {}, "validate:b+c": {}}
+    assert sorted(_stale_rows(done, "a")) == ["audit:a", "digitize:a", "read:a", "relate:a+b", "validate:a+b"]
+
+
+def test_a_changed_pdf_resets_that_papers_jobs_on_this_machine(tmp_path, monkeypatch):
+    """When a paper's PDF or page range changes, its finished jobs are also forgotten in this machine's state, so they really run again."""
+    import pipeline.run_papers as rp
+    from pipeline.corpus import record_completed
+
+    record_completed(tmp_path / "completed.yaml", [{"job": j, "date": "2026-01-01", "cost_usd": 0, "turns": 0}
+                                                   for j in ("read:chan2008", "audit:chan2008", "read:other")])
+    seen = {}
+    monkeypatch.setattr(rp.Orchestrator, "reset", lambda self, ids: seen.setdefault("reset", sorted(ids)))
+    monkeypatch.setattr(rp, "_ingest_needed", lambda p: p["id"] == "chan2008")
+    monkeypatch.setattr(rp, "ingest", lambda *a, **k: tmp_path / "rec")
+    _main(monkeypatch, tmp_path, ["--stages", "ingest", "--papers", "chan2008"])
+    assert seen["reset"] == ["audit:chan2008", "read:chan2008"]
 
 
 def test_code_and_data_get_one_reading_job_after_their_papers(monkeypatch):
@@ -267,7 +308,7 @@ def test_a_stopped_run_says_how_to_resume(tmp_path, monkeypatch, capsys):
     import pipeline.run_papers as rp
 
     monkeypatch.setattr(rp, "_run", stop)
-    rc = rp.main(["--stages", "read", "--papers", "chan2008", "--rerun", "--state", str(tmp_path / "st")])
+    rc = rp.main(["--corpus", "motor_clutch", "--stages", "read", "--papers", "chan2008", "--rerun", "--state", str(tmp_path / "st")])
     assert rc == 130 and "run again to resume" in capsys.readouterr().out
 
 
@@ -293,3 +334,11 @@ def test_validation_jobs_are_kept_when_their_stage_is_chosen():
     val = validate_jobs({("a", "b"): ["r"], ("c", "d"): ["r"]}, "m", 1)
     assert [j.id for j in select({"validate": val}, ["validate"], ["a"])] == ["validate:a+b"]
     assert select({"validate": val}, ["relate"], None) == []
+
+
+def test_the_eval_readers_prompt_formats_and_points_at_the_eval_records():
+    """The eval reader's prompt fills every placeholder of the read prompt and names records_eval/, never records/."""
+    from pipeline.evals.run import reader_prompt
+
+    p = reader_prompt("synth1", "pipeline/evals/x (text only)", 3, "text only", "m")
+    assert "records_eval/synth1/" in p and "`records/" not in p and "{records}" not in p

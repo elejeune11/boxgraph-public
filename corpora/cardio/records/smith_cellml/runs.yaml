@@ -1,0 +1,156 @@
+# --- the model as written (pressures in the file's declared kPa, 13 beats)
+- id: run_code_normal
+  model: cellml_closed_loop
+  inputs: &code
+    R_mt: R_mt_code
+    R_av: R_av_code
+    R_tc: R_tc_code
+    R_pv: R_pv_code
+    R_pul: R_pul_code
+    R_sys: R_sys_code
+    L_tc: L_tc_code
+    L_pv: L_pv_code
+    L_mt: L_mt_code
+    L_av: L_av_code
+    P_th: P_th_code
+    A: A_code
+    B: B_code
+    C: C_code
+    period: period_code
+    P_0_pcd: P_0_pcd_code
+    V_0_pcd: V_0_pcd_code
+    lambda_pcd: lambda_pcd_code
+    E_es_lvf: E_es_lvf_code
+    V_d_lvf: V_d_lvf_code
+    P_0_lvf: P_0_lvf_code
+    lambda_lvf: lambda_lvf_code
+    V_0_lvf: V_0_lvf_code
+    E_es_rvf: E_es_rvf_code
+    V_d_rvf: V_d_rvf_code
+    P_0_rvf: P_0_rvf_code
+    lambda_rvf: lambda_rvf_code
+    V_0_rvf: V_0_rvf_code
+    E_es_spt: E_es_spt_code
+    V_d_spt: V_d_spt_code
+    P_0_spt: P_0_spt_code
+    lambda_spt: lambda_spt_code
+    V_0_spt: V_0_spt_code
+    one: one_code
+    E_es_pa: E_es_pa_code
+    V_d_pa: V_d_pa_code
+    E_es_pu: E_es_pu_code
+    V_d_pu: V_d_pu_code
+    E_es_ao: E_es_ao_code
+    V_d_ao: V_d_ao_code
+    E_es_vc: E_es_vc_code
+    V_d_vc: V_d_vc_code
+    V_lv_init: V_lv_init_code
+    V_rv_init: V_rv_init_code
+    V_pa_init: V_pa_init_code
+    V_pu_init: V_pu_init_code
+    V_ao_init: V_ao_init_code
+    V_vc_init: V_vc_init_code
+    Q_mt_init: Q_mt_init_code
+    Q_av_init: Q_av_init_code
+    Q_tc_init: Q_tc_init_code
+    Q_pv_init: Q_pv_init_code
+  settings: {dt: 0.0002, n_beats: 13, vspt_guess: 2.0}
+  outputs:
+    SV_lv: code_sv
+    CO: code_co
+    Pao_sys: code_pao_sys
+    Pao_dia: code_pao_dia
+    Vspt_swing: code_vspt_swing
+  note: "every input as written in the file; results over the 13th beat (time 9.0-9.75 s), the last the file's driver defines"
+
+- id: run_code_pth0
+  model: cellml_closed_loop
+  inputs:
+    <<: *code
+    P_th: Pth_raised_paper
+  settings: {dt: 0.0002, n_beats: 13, vspt_guess: 2.0}
+  outputs: {SV_lv: code_sv_pth0, CO: code_co_pth0}
+  note: "P_th = 0 as in smith2004 Fig. 8; the file has one P_th and no second case"
+
+- id: run_code_co_decrease
+  model: co_decrease
+  inputs: {CO_ref: code_co, CO_test: code_co_pth0}
+  outputs: {decrease: code_co_decrease}
+
+- id: run_rsys_double
+  model: scale_resistance
+  inputs: {R: R_sys_code, factor: rsys_factor_paper}
+  outputs: {R_scaled: R_sys_double_code}
+
+- id: run_code_rsys2
+  model: cellml_closed_loop
+  inputs:
+    <<: *code
+    R_sys: R_sys_double_code
+  settings: {dt: 0.0002, n_beats: 13, vspt_guess: 2.0}
+  outputs: {Pao_sys: code_pao_sys_rsys2, Pao_dia: code_pao_dia_rsys2}
+  note: "2 x R_sys as in smith2004 Figs. 9-10"
+
+# --- variant: pressure unit read as mmHg, 13 beats
+- id: run_mmhg_normal
+  model: cellml_closed_loop_mmhg
+  inputs: *code
+  settings: {dt: 0.0002, n_beats: 13, vspt_guess: 2.0}
+  outputs: {Pao_sys: mmhg_pao_sys, Pao_dia: mmhg_pao_dia}
+
+- id: run_mmhg_rsys2
+  model: cellml_closed_loop_mmhg
+  inputs:
+    <<: *code
+    R_sys: R_sys_double_code
+  settings: {dt: 0.0002, n_beats: 13, vspt_guess: 2.0}
+  outputs: {Pao_sys: mmhg_pao_sys_rsys2, Pao_dia: mmhg_pao_dia_rsys2}
+
+# --- variant: pressure unit read as mmHg and the driver cycled, 60 beats
+- id: run_cyc_normal
+  model: cellml_closed_loop_mmhg_cyclic
+  inputs: *code
+  settings: {dt: 0.0002, n_beats: 60, vspt_guess: 2.0}
+  outputs:
+    SV_lv: cyc_sv
+    CO: cyc_co
+    Pao_sys: cyc_pao_sys
+    Pao_dia: cyc_pao_dia
+    Ppa_sys: cyc_ppa_sys
+    Ppa_dia: cyc_ppa_dia
+    Pvc_mean: cyc_pvc
+    Ppu_mean: cyc_ppu
+    Vspt_swing: cyc_vspt_swing
+  note: "results over the 60th beat (q_beat_count)"
+
+- id: run_cyc_pth0
+  model: cellml_closed_loop_mmhg_cyclic
+  inputs:
+    <<: *code
+    P_th: Pth_raised_paper
+  settings: {dt: 0.0002, n_beats: 60, vspt_guess: 2.0}
+  outputs: {SV_lv: cyc_sv_pth0, CO: cyc_co_pth0}
+
+- id: run_cyc_co_decrease
+  model: co_decrease
+  inputs: {CO_ref: cyc_co, CO_test: cyc_co_pth0}
+  outputs: {decrease: cyc_co_decrease}
+
+- id: run_cyc_rsys2
+  model: cellml_closed_loop_mmhg_cyclic
+  inputs:
+    <<: *code
+    R_sys: R_sys_double_code
+  settings: {dt: 0.0002, n_beats: 60, vspt_guess: 2.0}
+  outputs: {Pao_sys: cyc_pao_sys_rsys2, Pao_dia: cyc_pao_dia_rsys2}
+
+# --- consistency of the code's inputs with the paper's
+- id: run_initial_volume_total
+  model: sum_volumes
+  inputs: {V_lv: V_lv_init_code, V_rv: V_rv_init_code, V_pa: V_pa_init_code, V_pu: V_pu_init_code, V_ao: V_ao_init_code, V_vc: V_vc_init_code}
+  outputs: {V_total: code_initial_volume_total}
+
+- id: run_period_rate
+  model: period_to_rate
+  inputs: {period: period_code}
+  outputs: {HR: code_heart_rate}

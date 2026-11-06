@@ -1,0 +1,595 @@
+# ---------------------------------------------------------------- 4.1 single pulse (Table II, p. 7; Eq. 14, p. 15)
+- {id: h_sp, quantity: wall_thickness, unit: mm, origin: reported, printed: "1.5", from_source: ref-42,
+   citation: {page: 7, where: Table II, quote: "Wall thickness, h 1.5 mm"}}
+- {id: rho_sp, quantity: blood_density, unit: kg/m^3, origin: reported, printed: "1050", from_source: ref-42,
+   citation: {page: 7, where: Table II, quote: "Blood mass density, 1050 kg m3"}}
+- {id: mu_sp, quantity: blood_viscosity, unit: mPa*s, origin: reported, printed: "4", from_source: ref-42,
+   citation: {page: 7, where: Table II, quote: "Blood viscosity, 4 mPa s or 0"},
+   note: "the viscous case; the inviscid case has mu = 0"}
+- {id: zeta_sp, quantity: velocity_profile_order, unit: dimensionless, origin: reported, printed: "9", from_source: ref-42,
+   citation: {page: 7, where: Table II, quote: "Velocity profile order, 9"}}
+- {id: E_sp, quantity: youngs_modulus, unit: kPa, origin: reported, printed: "400", from_source: ref-42,
+   citation: {page: 7, where: Table II, quote: "modulus, E 400 kPa"}}
+- {id: L_sp, quantity: distance_along_vessel, unit: m, origin: reported, printed: "10", from_source: ref-42,
+   citation: {page: 7, where: Table II, quote: "Length, L 10 m"}}
+- {id: c0_sp, quantity: pulse_wave_velocity, unit: m/s, origin: predicted,  printed: "6.17",
+   citation: {page: 7, where: Table II footnote, quote: "The calculated pulse wave velocity at the initial area"},
+   note: "printed as c0 = 6.17 m s^-1 at the initial area A0 (Eq. 5 with A = Ad = A0)"}
+- {id: c0_sp_text, quantity: pulse_wave_velocity, unit: m/s, origin: predicted, printed: "6.17",
+   citation: {page: 15, where: text, quote: "a wave speed of c0 D 6:17 m s1 at the initial area A0"},
+   note: "the same c0 repeated in the text, used there for the wavelength c0 T"}
+- {id: q_amp_eq14, quantity: inflow_rate, unit: m^3/s, origin: reported, printed: "10^-6",
+   citation: {page: 15, where: Eq. 14, quote: "is prescribed using the function"}}
+- {id: k_eq14, quantity: gaussian_rate_coefficient, unit: 1/s^2, origin: reported, printed: "10000",
+   citation: {page: 15, where: Eq. 14, quote: "with t given in seconds"}}
+- {id: t0_eq14, quantity: time, unit: s, origin: reported, printed: "0.05",
+   citation: {page: 15, where: Eq. 14, quote: "is prescribed using the function"},
+   note: "the centre of the Gaussian, (t - 0.05) in Eq. 14; also t0 = 0.05 s on p. 25"}
+- {id: q_peak_sp, quantity: inflow_rate, unit: ml/s, origin: reported, printed: "1",
+   citation: {page: 15, where: text, quote: "a volume inflow rate with a peak value of 1 ml s1"}}
+- {id: width_sp, quantity: pulse_duration, unit: s, origin: reported, printed: "~0.05",
+   citation: {page: 15, where: text, quote: "The inflow has a width of ~0.05 s"}}
+- {id: wavelength_sp, quantity: wavelength, unit: cm, origin: derived, printed: "≈ 31",
+   citation: {page: 15, where: text, quote: "giving a wavelength of about c0 T"}}
+- {id: wavelength_sp_p24, quantity: wavelength, unit: cm, origin: derived, printed: "≈ 31",
+   citation: {page: 24, where: "Section 5.1", quote: "small wavelength compared with the vessel length"},
+   note: "the single-pulse wavelength repeated in the discussion ('≈ 31 cm vs 10 m'); added by the audit"}
+
+# ---------------------------------------------------------------- Table I, single pulse (p. 6); added by the audit
+- {id: dt_sp_dcg, quantity: time_step, unit: ms, origin: reported, printed: "0.1",
+   citation: {page: 6, where: "Table I, single pulse, DCG", quote: "Single DCG 0.1 2.00 0.18 5th 2nd"}}
+- {id: dx_sp_dcg, quantity: element_size, unit: cm, origin: reported, printed: "2.00",
+   citation: {page: 6, where: "Table I, single pulse, DCG", quote: "Single DCG 0.1 2.00 0.18 5th 2nd"}}
+- {id: cfl_sp_dcg, quantity: cfl_number, unit: dimensionless, origin: derived, printed: "0.18",
+   citation: {page: 6, where: "Table I, single pulse, DCG", quote: "Single DCG 0.1 2.00 0.18 5th 2nd"}}
+- {id: dt_sp_lcg, quantity: time_step, unit: ms, origin: reported, printed: "0.01",
+   citation: {page: 6, where: "Table I, single pulse, LCG", quote: "pulse LCG 0.01 0.20 0.03"}}
+- {id: dx_sp_lcg, quantity: element_size, unit: cm, origin: reported, printed: "0.20",
+   citation: {page: 6, where: "Table I, single pulse, LCG", quote: "pulse LCG 0.01 0.20 0.03"}}
+- {id: cfl_sp_lcg, quantity: cfl_number, unit: dimensionless, origin: derived, printed: "0.03",
+   citation: {page: 6, where: "Table I, single pulse, LCG", quote: "pulse LCG 0.01 0.20 0.03"}}
+- {id: dt_sp_fvm, quantity: time_step, unit: ms, origin: reported, printed: "1.457",
+   citation: {page: 6, where: "Table I, single pulse, FVM", quote: "FVM 1.457 1.00 0.9 4th 4th"}}
+- {id: dx_sp_fvm, quantity: element_size, unit: cm, origin: reported, printed: "1.00",
+   citation: {page: 6, where: "Table I, single pulse, FVM", quote: "FVM 1.457 1.00 0.9 4th 4th"}}
+- {id: cfl_sp_fvm, quantity: cfl_number, unit: dimensionless, origin: derived, printed: "0.9",
+   citation: {page: 6, where: "Table I, single pulse, FVM", quote: "FVM 1.457 1.00 0.9 4th 4th"}}
+- {id: dt_sp_mcc, quantity: time_step, unit: ms, origin: reported, printed: "0.25",
+   citation: {page: 6, where: "Table I, single pulse, McC", quote: "McC 0.25 0.156 0.99"}}
+- {id: dx_sp_mcc, quantity: element_size, unit: cm, origin: reported, printed: "0.156",
+   citation: {page: 6, where: "Table I, single pulse, McC", quote: "McC 0.25 0.156 0.99"}}
+- {id: cfl_sp_mcc, quantity: cfl_number, unit: dimensionless, origin: derived, printed: "0.99",
+   citation: {page: 6, where: "Table I, single pulse, McC", quote: "McC 0.25 0.156 0.99"}}
+
+# ---------------------------------------------------------------- 4.2 common carotid artery (Table III, p. 9)
+- {id: rd_car, quantity: lumen_radius, unit: mm, origin: reported, printed: "3", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Radius at diastolic pressure, rd 3 mm"}}
+- {id: Ad_car, quantity: diastolic_area, unit: cm^2, origin: derived, printed: "0.28274", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Area at diastolic pressure, Ad 0.28274 cm2"}}
+- {id: A0_car, quantity: initial_area, unit: cm^2, origin: derived, printed: "0.22038",
+   citation: {page: 9, where: Table III, quote: "Initial cross-sectional area, A.x; 0/ 0.22038 cm2"}}
+- {id: h_car, quantity: wall_thickness, unit: mm, origin: reported, printed: "0.3", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Wall thickness, h 0.3 mm"}}
+- {id: rho_car, quantity: blood_density, unit: kg/m^3, origin: reported, printed: "1060", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Blood density, 1060 Kg m3"}}
+- {id: E_car, quantity: youngs_modulus, unit: kPa, origin: reported, printed: "700.0", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "modulus, E 700.0 kPa"}}
+- {id: Pd_car, quantity: diastolic_pressure, unit: kPa, origin: reported, printed: "10.933", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Diastolic pressure, Pd 10.933 kPa"}}
+- {id: Pout_car, quantity: outflow_pressure, unit: Pa, origin: reported, printed: "0",
+   citation: {page: 9, where: Table III, quote: "Outflow pressure, Pout 0"}}
+- {id: R1_car, quantity: proximal_resistance, unit: Pa*s/m^3, origin: derived, printed: "2.4875 x 10^8", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Windkessel resistance, R1"},
+   note: "set equal to the characteristic impedance of the end point (p. 5)"}
+- {id: C_car, quantity: windkessel_compliance, unit: m^3/Pa, origin: reported, printed: "1.7529 x 10^-10", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Windkessel compliance, C"}}
+- {id: R2_car, quantity: distal_resistance, unit: Pa*s/m^3, origin: reported, printed: "1.8697 x 10^9", from_source: ref-33,
+   citation: {page: 9, where: Table III, quote: "Windkessel resistance, R2"}}
+- {id: cm_car, quantity: pulse_wave_velocity, unit: m/s, origin: predicted, printed: "6.74",
+   citation: {page: 9, where: Table III footnote, quote: "The resulting wave speed at mean pressure is cm"}}
+
+# ---------------------------------------------------------------- 4.3 upper thoracic aorta (Table V, p. 11)
+- {id: rd_ao, quantity: lumen_radius, unit: cm, origin: reported, printed: "1.2", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Radius at diastolic pressure, rd 1.2 cm"}}
+- {id: Ad_ao, quantity: diastolic_area, unit: cm^2, origin: derived, printed: "4.5239", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Area at diastolic pressure, Ad 4.5239 cm2"}}
+- {id: A0_ao, quantity: initial_area, unit: cm^2, origin: derived, printed: "3.0605",
+   citation: {page: 11, where: Table V, quote: "Initial cross-sectional area, A.x; 0/ 3.0605 cm2"}}
+- {id: h_ao, quantity: wall_thickness, unit: mm, origin: reported, printed: "1.2", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Wall thickness, h 1.2 mm"}}
+- {id: rho_ao, quantity: blood_density, unit: kg/m^3, origin: reported, printed: "1060", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Blood density, 1060 Kg m3"}}
+- {id: E_ao, quantity: youngs_modulus, unit: kPa, origin: reported, printed: "400.0", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "modulus, E 400.0 kPa"}}
+- {id: Pd_ao, quantity: diastolic_pressure, unit: kPa, origin: reported, printed: "9.46", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Diastolic pressure, Pd 9:46O kPa"},
+   note: "the page prints a circumflex over the final 6 (9.46^ kPa), a repeating digit; see added Pd_946_repeating and question q_pd_circumflex"}
+- {id: Pout_ao, quantity: outflow_pressure, unit: Pa, origin: reported, printed: "0",
+   citation: {page: 11, where: Table V, quote: "Outflow pressure, Pout 0"}}
+- {id: R1_ao, quantity: proximal_resistance, unit: Pa*s/m^3, origin: derived, printed: "1.1752 x 10^7", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Windkessel resistance, R1"},
+   note: "set equal to the characteristic impedance of the end point (p. 5)"}
+- {id: C_ao, quantity: windkessel_compliance, unit: m^3/Pa, origin: reported, printed: "1.0163 x 10^-8", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Windkessel compliance, C"}}
+- {id: R2_ao, quantity: distal_resistance, unit: Pa*s/m^3, origin: reported, printed: "1.1167 x 10^8", from_source: ref-33,
+   citation: {page: 11, where: Table V, quote: "Windkessel resistance, R2"}}
+- {id: cm_ao, quantity: pulse_wave_velocity, unit: m/s, origin: predicted, printed: "5.17",
+   citation: {page: 11, where: Table V footnote, quote: "The resulting wave speed at mean pressure is cm"}}
+
+# ---------------------------------------------------------------- 4.4 aortic bifurcation (Table VII, p. 13)
+- {id: rd_bao, quantity: lumen_radius, unit: cm, origin: reported, printed: "0.86", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, aorta", quote: "Radius at diastolic pressure, rd 0.86 cm"}}
+- {id: rd_il, quantity: lumen_radius, unit: cm, origin: reported, printed: "0.60", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, iliac", quote: "Radius at diastolic pressure, rd 0.86 cm 0.60 cm"}}
+- {id: Ad_bao, quantity: diastolic_area, unit: cm^2, origin: derived, printed: "2.3235", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, aorta", quote: "Area at diastolic pressure, Ad 2.3235 cm2"}}
+- {id: Ad_il, quantity: diastolic_area, unit: cm^2, origin: derived, printed: "1.1310", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, iliac", quote: "Area at diastolic pressure, Ad 2.3235 cm2 1.1310 cm2"}}
+- {id: A0_bao, quantity: initial_area, unit: cm^2, origin: derived, printed: "1.8062",
+   citation: {page: 13, where: "Table VII, aorta", quote: "Initial cross-sectional area, A.x; 0/ 1.8062 cm2"}}
+- {id: A0_il, quantity: initial_area, unit: cm^2, origin: derived, printed: "0.94787",
+   citation: {page: 13, where: "Table VII, iliac", quote: "Initial cross-sectional area, A.x; 0/ 1.8062 cm2 0.94787 cm2"}}
+- {id: h_bao, quantity: wall_thickness, unit: mm, origin: reported, printed: "1.032", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, aorta", quote: "Wall thickness, h 1.032 mm"}}
+- {id: h_il, quantity: wall_thickness, unit: mm, origin: reported, printed: "0.72", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, iliac", quote: "Wall thickness, h 1.032 mm 0.72 mm"}}
+- {id: rho_bif, quantity: blood_density, unit: kg/m^3, origin: reported, printed: "1060", from_source: ref-33,
+   citation: {page: 13, where: Table VII, quote: "Blood density, 1060 Kg m3"}}
+- {id: E_bao, quantity: youngs_modulus, unit: kPa, origin: reported, printed: "500.0", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, aorta", quote: "modulus, E 500.0 kPa"}}
+- {id: E_il, quantity: youngs_modulus, unit: kPa, origin: reported, printed: "700.0", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, iliac", quote: "modulus, E 500.0 kPa 700.0 kPa"}}
+- {id: Pd_bif, quantity: diastolic_pressure, unit: kPa, origin: reported, printed: "9.46", from_source: ref-33,
+   citation: {page: 13, where: Table VII, quote: "Diastolic pressure, Pd 9:46O kPa"},
+   note: "printed with a circumflex over the final 6 in both columns; see added Pd_946_repeating"}
+- {id: Pout_il, quantity: outflow_pressure, unit: Pa, origin: reported, printed: "0",
+   citation: {page: 13, where: "Table VII, iliac", quote: "Outflow pressure, Pout"}}
+- {id: R1_il, quantity: proximal_resistance, unit: Pa*s/m^3, origin: derived, printed: "6.8123 x 10^7", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, iliac", quote: "Windkessel resistance, R1"},
+   note: "set equal to the characteristic impedance of the end point (p. 5)"}
+- {id: C_il, quantity: windkessel_compliance, unit: m^3/Pa, origin: reported, printed: "3.6664 x 10^-10", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, iliac", quote: "Windkessel compliance, C"}}
+- {id: R2_il, quantity: distal_resistance, unit: Pa*s/m^3, origin: reported, printed: "3.1013 x 10^9", from_source: ref-33,
+   citation: {page: 13, where: "Table VII, iliac", quote: "Windkessel resistance, R2"}}
+- {id: cm_bao, quantity: pulse_wave_velocity, unit: m/s, origin: predicted, printed: "6.26",
+   citation: {page: 13, where: Table VII footnote, quote: "wave speed at mean pressure is cm D 6:26 m s1 in the abdominal"}}
+- {id: cm_il, quantity: pulse_wave_velocity, unit: m/s, origin: predicted, printed: "7.35",
+   citation: {page: 13, where: Table VII footnote, quote: "aorta and cm D 7:35 m s1 in both iliac arteries"}}
+
+# ---------------------------------------------------------------- 5.2 pulse wavelengths (p. 27)
+- {id: wavelength_car, quantity: wavelength, unit: m, origin: derived, printed: "2.7",
+   citation: {page: 27, where: text, quote: "we obtain Ts cm D 2:7 m for"}}
+- {id: wavelength_ao, quantity: wavelength, unit: m, origin: derived, printed: "1.8",
+   citation: {page: 27, where: text, quote: "the carotid test and Ts cm D 1:8 m for the aorta test"}}
+
+# ---------------------------------------------------------------- 4.6 ADAN56 (Table XI p. 17, Eq. 17 p. 21, Tables XII-XIII pp. 23-24)
+- {id: rho_adan, quantity: blood_density, unit: kg/m^3, origin: reported, printed: "1040",
+   citation: {page: 17, where: Table XI, quote: "Blood density, 1040 Kg m3"}}
+- {id: E_adan, quantity: youngs_modulus, unit: kPa, origin: reported, printed: "225",
+   citation: {page: 17, where: Table XI, quote: "modulus, E 225 kPa"}}
+- {id: a_eq17, quantity: thickness_coef_a, unit: dimensionless, origin: reported, printed: "0.2802", from_source: ref-22,
+   citation: {page: 21, where: Eq. 17, quote: "where R0 is the reference radius"}}
+- {id: b_eq17, quantity: thickness_coef_b, unit: 1/cm, origin: reported, printed: "-5.053", from_source: ref-22,
+   citation: {page: 21, where: Eq. 17, quote: "where R0 is the reference radius"},
+   note: "the page image shows the minus sign, which the text layer drops"}
+- {id: c_eq17, quantity: thickness_coef_c, unit: dimensionless, origin: reported, printed: "0.1324", from_source: ref-22,
+   citation: {page: 21, where: Eq. 17, quote: "where R0 is the reference radius"}}
+- {id: d_eq17, quantity: thickness_coef_d, unit: 1/cm, origin: reported, printed: "-0.1114", from_source: ref-22,
+   citation: {page: 21, where: Eq. 17, quote: "where R0 is the reference radius"},
+   note: "the page image shows the minus sign, which the text layer drops"}
+- id: R1_adan_xii
+  quantity: proximal_resistance
+  unit: dyne*s/cm^5
+  origin: reported
+  citation: {page: 23, where: Table XII, quote: "Parameter data set for the ADAN56 model"}
+  note: "R1 of every terminal vessel of Table XII, indexed by its distal radius; in table order: 6 vertebral R, 8 radial R, 10b posterior interosseous R, 11 ulnar R II, 12 external carotid R, 13 internal carotid R, 16 external carotid L, 17 internal carotid L, 20 vertebral L, 22 radial L, 24b posterior interosseous L, 25 ulnar L II, 26 posterior intercostal R 1, 28 posterior intercostal L 1, 30 posterior intercostal R 2, 32 posterior intercostal L 2"
+  table:
+    index_quantity: lumen_radius
+    index_unit: cm
+    index: ["0.134", "0.138", "0.068", "0.141", "0.227", "0.277", "0.227", "0.277", "0.134", "0.138", "0.068", "0.141", "0.140", "0.140", "0.155", "0.155"]
+    values: ["18104", "11539", "47813", "11749", "9391", "5760", "9424", "5779", "19243", "11332", "47986", "11976", "249127", "255583", "232434", "234425"]
+- id: R1_adan_xiii
+  quantity: proximal_resistance
+  unit: dyne*s/cm^5
+  origin: reported
+  citation: {page: 24, where: Table XIII, quote: "Parameter data set for the ADAN56 model"}
+  note: "R1 of every terminal vessel of Table XIII, indexed by its distal radius; in table order: 36 common hepatic, 38 left gastric, 39 splenic II, 40 superior mesenteric, 42 renal L, 44 renal R, 46 inferior mesenteric, 51 internal iliac R, 52 profunda femoris R, 54 anterior tibial R, 55c posterior tibial R, 57 internal iliac L, 58 profunda femoris L, 60 anterior tibial L, 61c posterior tibial L"
+  table:
+    index_quantity: lumen_radius
+    index_unit: cm
+    index: ["0.269", "0.151", "0.217", "0.393", "0.271", "0.310", "0.208", "0.282", "0.214", "0.117", "0.123", "0.282", "0.214", "0.117", "0.123"]
+    values: ["3349", "343394", "4733", "2182", "2263", "2270", "23913", "4146", "3427", "24525", "21156", "4158", "3429", "24533", "21166"]
+# ---------------------------------------------------------------- figure readings (figures.yaml)
+
+- id: fig2a_eq15_curve
+  quantity: peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2a_eq15
+  citation: {page: 8, where: "Fig. 2(a)", quote: "the theoretical solution of the exponential peak magnitude decay"}
+  note: "Eq. 15 as drawn in panel (a), DCG; the same line in every panel"
+
+- id: fig2a_tips_points
+  quantity: inviscid_peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2a_tips
+  citation: {page: 8, where: "Fig. 2(a)", quote: "Two cases are shown: inviscid blood (thin solid lines)"}
+  note: "peak P/Ppeak of the inviscid pulse computed by DCG at the eight times 0.1-1.5 s, indexed by the pulse's position x; tips that reach the top frame are hidden by it"
+
+- id: fig2b_eq15_curve
+  quantity: peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2b_eq15
+  citation: {page: 8, where: "Fig. 2(b)", quote: "the theoretical solution of the exponential peak magnitude decay"}
+  note: "Eq. 15 as drawn in panel (b), LCG; the same line in every panel"
+
+- id: fig2b_tips_points
+  quantity: inviscid_peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2b_tips
+  citation: {page: 8, where: "Fig. 2(b)", quote: "Two cases are shown: inviscid blood (thin solid lines)"}
+  note: "peak P/Ppeak of the inviscid pulse computed by LCG at the eight times 0.1-1.5 s, indexed by the pulse's position x; tips that reach the top frame are hidden by it"
+
+- id: fig2c_eq15_curve
+  quantity: peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2c_eq15
+  citation: {page: 8, where: "Fig. 2(c)", quote: "the theoretical solution of the exponential peak magnitude decay"}
+  note: "Eq. 15 as drawn in panel (c), FEM; the same line in every panel"
+
+- id: fig2c_tips_points
+  quantity: inviscid_peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2c_tips
+  citation: {page: 8, where: "Fig. 2(c)", quote: "Two cases are shown: inviscid blood (thin solid lines)"}
+  note: "peak P/Ppeak of the inviscid pulse computed by FEM at the eight times 0.1-1.5 s, indexed by the pulse's position x; tips that reach the top frame are hidden by it"
+
+- id: fig2d_eq15_curve
+  quantity: peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2d_eq15
+  citation: {page: 8, where: "Fig. 2(d)", quote: "the theoretical solution of the exponential peak magnitude decay"}
+  note: "Eq. 15 as drawn in panel (d), FVM; the same line in every panel"
+
+- id: fig2d_tips_points
+  quantity: inviscid_peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2d_tips
+  citation: {page: 8, where: "Fig. 2(d)", quote: "Two cases are shown: inviscid blood (thin solid lines)"}
+  note: "peak P/Ppeak of the inviscid pulse computed by FVM at the eight times 0.1-1.5 s, indexed by the pulse's position x; tips that reach the top frame are hidden by it"
+
+- id: fig2e_eq15_curve
+  quantity: peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2e_eq15
+  citation: {page: 8, where: "Fig. 2(e)", quote: "the theoretical solution of the exponential peak magnitude decay"}
+  note: "Eq. 15 as drawn in panel (e), McC; the same line in every panel"
+
+- id: fig2e_tips_points
+  quantity: inviscid_peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2e_tips
+  citation: {page: 8, where: "Fig. 2(e)", quote: "Two cases are shown: inviscid blood (thin solid lines)"}
+  note: "peak P/Ppeak of the inviscid pulse computed by McC at the eight times 0.1-1.5 s, indexed by the pulse's position x; tips that reach the top frame are hidden by it"
+
+- id: fig2f_eq15_curve
+  quantity: peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2f_eq15
+  citation: {page: 8, where: "Fig. 2(f)", quote: "the theoretical solution of the exponential peak magnitude decay"}
+  note: "Eq. 15 as drawn in panel (f), STM; the same line in every panel"
+
+- id: fig2f_tips_points
+  quantity: inviscid_peak_pressure_ratio
+  unit: dimensionless
+  origin: predicted
+  figure: fig2f_tips
+  citation: {page: 8, where: "Fig. 2(f)", quote: "Two cases are shown: inviscid blood (thin solid lines)"}
+  note: "peak P/Ppeak of the inviscid pulse computed by STM at the eight times 0.1-1.5 s, indexed by the pulse's position x; tips that reach the top frame are hidden by it"
+
+- id: fig3a_P_3d_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: predicted
+  from_source: ref-33
+  figure: fig3a_P_3d
+  citation: {page: 10, where: "Fig. 3(a)", quote: "Common carotid artery. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig3b_dP_3d_curve
+  quantity: pressure_difference
+  unit: kPa
+  origin: predicted
+  from_source: ref-33
+  figure: fig3b_dP_3d
+  citation: {page: 10, where: "Fig. 3(b)", quote: "Common carotid artery. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig3c_Q_3d_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: predicted
+  from_source: ref-33
+  figure: fig3c_Q_3d
+  citation: {page: 10, where: "Fig. 3(c)", quote: "Common carotid artery. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig3d_dr_3d_curve
+  quantity: radius_change
+  unit: mm
+  origin: predicted
+  from_source: ref-33
+  figure: fig3d_dr_3d
+  citation: {page: 10, where: "Fig. 3(d)", quote: "Common carotid artery. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig4a_P_3d_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: predicted
+  from_source: ref-33
+  figure: fig4a_P_3d
+  citation: {page: 12, where: "Fig. 4(a)", quote: "Upper thoracic aorta. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig4b_dP_3d_curve
+  quantity: pressure_difference
+  unit: kPa
+  origin: predicted
+  from_source: ref-33
+  figure: fig4b_dP_3d
+  citation: {page: 12, where: "Fig. 4(b)", quote: "Upper thoracic aorta. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig4c_Q_3d_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: predicted
+  from_source: ref-33
+  figure: fig4c_Q_3d
+  citation: {page: 12, where: "Fig. 4(c)", quote: "Upper thoracic aorta. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig4d_dr_3d_curve
+  quantity: radius_change
+  unit: mm
+  origin: predicted
+  from_source: ref-33
+  figure: fig4d_dr_3d
+  citation: {page: 12, where: "Fig. 4(d)", quote: "Upper thoracic aorta. Pressure (a), pressure difference between inlet"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5a_mid_P_3d_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: predicted
+  from_source: ref-33
+  figure: fig5a_mid_P_3d
+  citation: {page: 17, where: "Fig. 5(a), midpoint of the aorta (top row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5b_mid_Q_3d_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: predicted
+  from_source: ref-33
+  figure: fig5b_mid_Q_3d
+  citation: {page: 17, where: "Fig. 5(b), midpoint of the aorta (top row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5c_mid_dr_3d_curve
+  quantity: radius_change
+  unit: mm
+  origin: predicted
+  from_source: ref-33
+  figure: fig5c_mid_dr_3d
+  citation: {page: 17, where: "Fig. 5(c), midpoint of the aorta (top row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5a_end_P_3d_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: predicted
+  from_source: ref-33
+  figure: fig5a_end_P_3d
+  citation: {page: 17, where: "Fig. 5(a), end point of the aorta (middle row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5b_end_Q_3d_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: predicted
+  from_source: ref-33
+  figure: fig5b_end_Q_3d
+  citation: {page: 17, where: "Fig. 5(b), end point of the aorta (middle row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5c_end_dr_3d_curve
+  quantity: radius_change
+  unit: mm
+  origin: predicted
+  from_source: ref-33
+  figure: fig5c_end_dr_3d
+  citation: {page: 17, where: "Fig. 5(c), end point of the aorta (middle row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5a_iliac_P_3d_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: predicted
+  from_source: ref-33
+  figure: fig5a_iliac_P_3d
+  citation: {page: 17, where: "Fig. 5(a), midpoint of either iliac artery (bottom row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5b_iliac_Q_3d_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: predicted
+  from_source: ref-33
+  figure: fig5b_iliac_Q_3d
+  citation: {page: 17, where: "Fig. 5(b), midpoint of either iliac artery (bottom row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig5c_iliac_dr_3d_curve
+  quantity: radius_change
+  unit: mm
+  origin: predicted
+  from_source: ref-33
+  figure: fig5c_iliac_dr_3d
+  citation: {page: 17, where: "Fig. 5(c), midpoint of either iliac artery (bottom row)", quote: "Aortic bifurcation. Pressure (a), flow rate (b)"}
+  note: "the 3D solution of [33] as plotted for comparison; values where the red line is hidden under the six 1D curves are not read"
+
+- id: fig6a_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig6a_P_exp
+  citation: {page: 18, where: "Fig. 6(a), left", quote: "Pressure (left) and flow (right) waveforms in the midpoint of"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig6a_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig6a_Q_exp
+  citation: {page: 18, where: "Fig. 6(a), right", quote: "Pressure (left) and flow (right) waveforms in the midpoint of"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig6b_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig6b_P_exp
+  citation: {page: 18, where: "Fig. 6(b), left", quote: "Pressure (left) and flow (right) waveforms in the midpoint of"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig6b_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig6b_Q_exp
+  citation: {page: 18, where: "Fig. 6(b), right", quote: "Pressure (left) and flow (right) waveforms in the midpoint of"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig7a_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig7a_P_exp
+  citation: {page: 19, where: "Fig. 7(a), left", quote: "vessels from the first generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig7a_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig7a_Q_exp
+  citation: {page: 19, where: "Fig. 7(a), right", quote: "vessels from the first generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig7b_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig7b_P_exp
+  citation: {page: 19, where: "Fig. 7(b), left", quote: "vessels from the first generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig7b_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig7b_Q_exp
+  citation: {page: 19, where: "Fig. 7(b), right", quote: "vessels from the first generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig8a_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig8a_P_exp
+  citation: {page: 20, where: "Fig. 8(a), left", quote: "vessels from the second generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig8a_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig8a_Q_exp
+  citation: {page: 20, where: "Fig. 8(a), right", quote: "vessels from the second generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig8b_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig8b_P_exp
+  citation: {page: 20, where: "Fig. 8(b), left", quote: "vessels from the second generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig8b_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig8b_Q_exp
+  citation: {page: 20, where: "Fig. 8(b), right", quote: "vessels from the second generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig9a_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig9a_P_exp
+  citation: {page: 21, where: "Fig. 9(a), left", quote: "vessels from the third generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig9a_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig9a_Q_exp
+  citation: {page: 21, where: "Fig. 9(a), right", quote: "vessels from the third generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig9b_P_exp_curve
+  quantity: blood_pressure
+  unit: kPa
+  origin: measured
+  from_source: ref-45
+  figure: fig9b_P_exp
+  citation: {page: 21, where: "Fig. 9(b), left", quote: "vessels from the third generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"
+
+- id: fig9b_Q_exp_curve
+  quantity: volume_flow_rate
+  unit: ml/s
+  origin: measured
+  from_source: ref-45
+  figure: fig9b_Q_exp
+  citation: {page: 21, where: "Fig. 9(b), right", quote: "vessels from the third generation of bifurcations"}
+  note: "in vitro measurement of [45] in the 37-artery silicone network; values where the red line is hidden under the 1D curves are not read"

@@ -1,0 +1,29 @@
+- id: run_boundary_layer
+  model: boundary_layer_lighthill
+  inputs: {nu: nu_printed, T: T_printed}
+  outputs: {delta: delta_pred}
+- id: run_nu
+  model: kinematic_viscosity
+  inputs: {mu: mu_printed, rho: rho_printed}
+  outputs: {nu: nu_from_mu_rho}
+- id: run_gamma_eq21
+  model: asymmetry_eq21
+  inputs: {xi: xi_printed, eta: eta_printed}
+  outputs: {gamma: gamma_pred}
+- id: run_eq22_printed_gamma
+  model: scaling_eq22
+  inputs: {xi: xi_printed, gamma: gamma_printed}
+  outputs: {alpha: alpha_pred, beta: beta_pred}
+- id: run_eq22_eq21_gamma
+  model: scaling_eq22
+  inputs: {xi: xi_printed, gamma: gamma_pred}
+  outputs: {alpha: alpha_from_eq21_gamma, beta: beta_from_eq21_gamma}
+  note: "Eq. 22 fed with the gamma that Eq. 21 gives from the printed eta and xi, not the printed gamma"
+- id: run_period_hr
+  model: period_from_heart_rate
+  inputs: {HR: heart_rate_results}
+  outputs: {T: T_from_heart_rate}
+- id: run_aortic_root_area
+  model: circle_area
+  inputs: {R: r_t_ascending_aorta}
+  outputs: {A: A_aortic_root_from_table1}

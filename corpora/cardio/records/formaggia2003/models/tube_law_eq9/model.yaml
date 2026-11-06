@@ -1,0 +1,18 @@
+id: tube_law_eq9
+name: pressure from area by the algebraic elastic law (Eqs. 9-10, with A0 of Eq. 6)
+role: model
+stated: {page: 5, printed_page: "255", quote: "Pressure and area will then be related by an algebraic law of the type", where: "Eqs. 6, 9, 10"}
+# A helper for the relation from Boileau et al. 2015, who state that their tube law is of this form.
+# The law is part of bifurcation_angles and endograft_bifurcation; no printed result is computed
+# from this helper on its own. kappa = 1 as the paper takes it (p. 5), so beta = E h0 sqrt(pi).
+equation: "P - Pext = beta (sqrt(A) - sqrt(A0))/A0,  beta = E h0 sqrt(pi),  A0 = pi R0^2"
+inputs:
+  A:    {quantity: cross_section_area, unit: cm^2}
+  R0:   {quantity: reference_radius, unit: cm}
+  E:    {quantity: young_modulus, unit: dyne/cm^2}
+  h0:   {quantity: wall_thickness, unit: cm}
+  Pext: {quantity: external_pressure, unit: dyne/cm^2}
+outputs:
+  P: {quantity: pressure, unit: dyne/cm^2}
+settings: {}
+stochastic: false

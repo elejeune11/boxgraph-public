@@ -1,0 +1,223 @@
+- id: q_model_unstated
+  kind: unstated_model
+  about: [circulation_fig1d, lv_pressure_min_text, lv_pressure_max_text, arterial_pressure_min_text, arterial_pressure_max_text, mean_flow_text, peak_aortic_flow_mls, peak_mitral_flow_mls, lv_volume_min_text, lv_volume_max_text]
+  text: >
+    The model that produces every result of the paper (Fig. 1(d)) is given only as schematics
+    (Table 1); its equations, parameter values, initial conditions, heart period and solver
+    settings are not printed and are referred to ref [5] and the CellML repository [19]. None of
+    the Section 3 results can be checked from this paper alone; they can be compared with the
+    korakianitis2006 and CellML records.
+  citation: {page: 3, printed_page: "2", quote: "values as in [5], which have been validated against the"}
+- id: q_solver_unstated
+  kind: unstated_input
+  about: [circulation_fig1d]
+  text: >
+    OpenCell offers backward Euler, Adams-Moulton and a two-stage implicit Runge-Kutta scheme;
+    the paper does not say which scheme, step size or tolerances produced Fig. 5, nor how many
+    cycles were run before the plotted beat (the plot starts near t = 6.9 s).
+  citation: {page: 3, printed_page: "2", quote: "including the Backwards Euler scheme"}
+- id: q_lv_pressure_min_fig
+  kind: reading
+  about: [lv_pressure_min_text]
+  text: >
+    Read by eye (no calibrated reading), the left ventricular pressure in Fig. 5(a) and the
+    pressure-volume loop in Fig. 5(d) do not seem to reach 0 mmHg; the lowest point of the loop
+    is several mmHg above 0. The text's "0 to 120 mmHg" may be a rounded description. A
+    calibrated reading of Fig. 5 would settle it.
+  citation: {page: 7, printed_page: "6", quote: "varies from 0 to 120 mmHg, and the arterial pressure"}
+- id: q_lv_volume_fig
+  kind: reading
+  about: [lv_volume_min_text, lv_volume_max_text]
+  text: >
+    Read by eye, the left ventricular volume in Fig. 5(c) and the left edge of the loop in
+    Fig. 5(d) are near 53 mL rather than 55 mL, and the right edge near 131-132 mL. If so, the
+    printed 55 and 130 mL, and the stroke volume of 75 mL that follows from them, are rounded
+    descriptions of the figure. A calibrated reading of Fig. 5 would settle it.
+  citation: {page: 7, printed_page: "6", quote: "between 55 mL to 130 mL, producing a stroke volume"}
+- id: q_validation_claim
+  kind: overstated_claim
+  about: [circulation_fig1d]
+  text: >
+    The abstract says the models are validated and that results agree well with published data,
+    and Section 3 says they agree with the original base model [5] in shape and range. The only
+    evidence shown is a comparison in words of a few ranges with a textbook [18]; no
+    quantitative comparison with [5] or with data is given, and the Fig. 1(a)-(c) models show no
+    results at all.
+  citation: {page: 7, printed_page: "6", quote: "The results also agree with that presented in"}
+- id: q_mean_flow_vs_stroke_volume
+  kind: unstated_input
+  about: [mean_flow_text, stroke_volume_text]
+  text: >
+    (Audit.) The mean flow of about 5 L/min and the stroke volume of 75 mL should be linked by
+    the heart rate (mean flow = SV x HR), but the paper prints no heart rate or heart period, so
+    the two printed results cannot be checked against each other here. A 75 mL stroke volume
+    gives 5 L/min at about 67 beats/min; the heart period in ref [5] or the CellML files would
+    allow a consistency comparison.
+  citation: {page: 7, printed_page: "6", quote: "flows show an average flow-rate of about 5 L/min", where: text}
+- id: q_fig5_lv_volume_read
+  kind: unexplained_difference
+  about: [lv_volume_min_text, lv_volume_max_text, stroke_volume_text, V_lv_min_fig5c, V_lv_max_fig5c, V_lv_min_fig5d, V_lv_max_fig5d, cmp_text_vmin_fig5d, cmp_text_vmax_fig5d, cmp_text_vmin_fig5c, cmp_text_vmax_fig5c, q_lv_volume_fig]
+  text: >
+    (Figure pass.) The calibrated readings settle q_lv_volume_fig: Fig. 5(c) and the edges of the
+    loop in Fig. 5(d) agree with each other and put the smallest left ventricular volume a few mL
+    below the printed 55 mL and the largest slightly above the printed 130 mL (comparisons
+    cmp_text_vmin_* and cmp_text_vmax_*). The text's values read as rounded descriptions of the
+    figure; the stroke volume implied by the figure is correspondingly a few mL larger than the
+    printed 75 mL. Both panels come from the same simulation, so this is a difference between the
+    paper's text and its own plotted result, not between models.
+  citation: {page: 7, printed_page: "6", quote: "between 55 mL to 130 mL, producing a stroke volume"}
+- id: q_fig5_lv_pressure_min_read
+  kind: unexplained_difference
+  about: [lv_pressure_min_text, P_lv_min_fig5d, P_lv_fig5a, cmp_text_pmin_fig5d, q_lv_pressure_min_fig]
+  text: >
+    (Figure pass.) The calibrated reading settles q_lv_pressure_min_fig: the lowest point of the
+    pressure-volume loop in Fig. 5(d) (and the lowest P(lv) read in Fig. 5(a), near t = 7.44 s) is
+    several mmHg above 0, so the text's "varies from 0 to 120 mmHg" does not hold at its lower end
+    for the plotted beat (cmp_text_pmin_fig5d, not reproduced). The upper end, 120 mmHg, agrees with
+    the loop's highest point (cmp_text_pmax_fig5d).
+  citation: {page: 7, printed_page: "6", quote: "varies from 0 to 120 mmHg, and the arterial pressure"}
+- id: q_fig5_heart_period
+  kind: reading
+  about: [q_mean_flow_vs_stroke_volume, mean_flow_text, stroke_volume_text, P_la_fig5a, Q_mi_fig5b]
+  text: >
+    (Figure pass.) Fig. 5 shows the heart period the text omits: the atrial-contraction bump of
+    P(la) (Fig. 5(a)) and the A wave of Q(mi) (Fig. 5(b)) recur about 1 s apart (near t = 6.95 s and
+    7.95 s). With that period, the stroke volume read from Fig. 5(c,d) gives a mean flow near the
+    printed "about 5 L/min". The period is read here by eye from the positions of the readings; a
+    later pass could read it by code (the times of the two P(la) peaks) and add a consistency
+    comparison of mean flow, stroke volume and heart rate.
+  citation: {page: 7, printed_page: "6", quote: "flows show an average flow-rate of about 5 L/min", where: text}
+- id: q_fig5_arterial_which
+  kind: reading
+  about: [arterial_pressure_min_text, arterial_pressure_max_text, P_sas_fig5a, P_sat_fig5a]
+  text: >
+    (Figure pass.) The text's "arterial pressure ... 80-120 mmHg" does not say which of the two
+    plotted arterial curves it means, P(sas) (aortic sinus) or P(sat) (systemic artery). In Fig. 5(a)
+    P(sas) runs a few mmHg above P(sat) throughout; the lowest values read are near 80 mmHg for
+    P(sat) and a few mmHg higher for P(sas). Their peaks (near t = 7.25-7.3 s) overlap P(lv) and each
+    other and were not read, so the 120 mmHg end is not compared.
+  citation: {page: 7, printed_page: "6", quote: "stays in the range of 80-120 mmHg", where: text}
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [circulation_fig1d, stroke_volume_difference]
+  text: >
+    Cross-validation against korakianitis2006 finds nothing to test. That record holds no
+    measurement: its data are model parameters (origin reported) and results of its own simulation
+    (predicted, derived), and its 78 figure readings are all of model output (its figures.md: the
+    plots "are all model output; it shows no measurements"). Besides, the model here that produces
+    results, circulation_fig1d, is not runnable, and the others are processing models of this
+    paper's own text values. This paper says ref [5] "has been validated against clinical data",
+    but those clinical data are in neither record.
+  citation: {page: 3, printed_page: "2", quote: "against clinical data under various physiological and"}
+- id: q_no_cross_validation_shi_cellml_systemic
+  kind: unstated_model
+  about: [circulation_fig1d, stroke_volume_difference, text_max_lv_volume_over_pressure]
+  text: >
+    Cross-validation against shi_cellml_systemic finds nothing to test, either way. That record is
+    CellML code: its data are code parameters (origin reported) and results copied from this paper
+    and korakianitis2006 (predicted, derived); it has no figure readings and no measurement, so no
+    model here can be validated against it. Nor can its model, systemic_left_heart, be validated
+    against this record: every value here, text and Fig. 5 readings alike, is output of this paper's
+    own simulation (figures.md: "The paper plots no measured data"), and Fig. 5 is "simulated with
+    the CellML model", not measured. The shape match with text_max_lv_volume_over_pressure is
+    a processing model that holds this paper's printed 130 mL, not a predictor of a measurement.
+    How the code's Fig. 1(c) model approximates this paper's Fig. 1(d) results is already compared
+    in that record (purpose approximation).
+  citation: {page: 7, printed_page: "6", quote: "simulated with the CellML model", where: "Fig. 5"}
+- id: q_no_cross_validation_shi_cellml_windkessel
+  kind: unstated_model
+  about: [circulation_fig1d, stroke_volume_difference, text_max_lv_volume_over_pressure]
+  text: >
+    Cross-validation against shi_cellml_windkessel finds nothing to test, in either direction. That
+    record is CellML code for this paper's Fig. 1(a) model. Its data are code parameters (origin
+    reported) and results copied from this paper and korakianitis2006 (predicted, derived). It has
+    no figure readings and no measurement, so no model here can be validated against it. Its model,
+    windkessel_left_heart, cannot be validated against this record either. Every value here is
+    output of this paper's own Fig. 1(d) simulation, and "The paper plots no measured data"
+    (figures.md). This paper also prints no result of Fig. 1(a). The shape match between
+    text_max_lv_volume_over_pressure and windkessel_left_heart does not matter: the former is a
+    processing model that holds the printed 130 mL. The code record already compares its
+    reduction with these results (purpose approximation).
+  citation: {page: 4, printed_page: "3", quote: "Systemic model with Windkessel afterload", where: "Fig. 1 caption"}
+- id: q_no_cross_validation_suga1973
+  kind: unstated_model
+  about: [circulation_fig1d, stroke_volume_difference]
+  text: >
+    Cross-validation against suga1973 finds nothing to test. This paper cites it (ref [10]) only
+    as an example of "a more sophisticated variable-elastance model"; it does not say its model
+    explains or is compared with Suga's canine measurements. The model here that could predict
+    them, circulation_fig1d, is not runnable, and the runnable ones are processing models of this
+    paper's own text values (stroke volume, held text values), which output nothing Suga measured
+    (Emax, Tmax, Vd, [(dP/dt)/P]max, their ratios, the normalized E(t) of Fig. 5). The other way,
+    suga1973's models (E = P/(V - Vd), E = Emax EN(t/Tmax), statistics) have no measurement here to
+    be validated against: every value in this record is model output.
+  citation: {page: 3, printed_page: "2", quote: "a more sophisticated variable-elastance", where: text}
+- id: q_no_cross_validation_westerhof1971
+  kind: unstated_model
+  about: [circulation_fig1d, stroke_volume_difference]
+  text: >
+    Cross-validation against westerhof1971 finds nothing to test. This paper cites it (ref [3])
+    only as the improvement of the Windkessel that accounts for inertia, and uses a three-element
+    Westerhof compartment as the afterload of Fig. 1(b); it does not say any of its models
+    explains or is compared with westerhof1971's measurements. Those measurements are the input
+    impedance (modulus and phase) and d-c resistance of hydraulic arterial models and the
+    literature impedance of dog trees, and the perfusate viscosity and density. No model here
+    outputs an impedance: the Fig. 1(b) model has no record model and no printed result,
+    circulation_fig1d is not runnable, and the runnable models are processing of this paper's own
+    text values (stroke volume, held text values). The other way, this record holds no
+    measurement at all (every value is the output of circulation_fig1d), so no westerhof1971
+    model (impedance_3el, tau_rpc, the design equations) can be validated against it; its
+    impedance_3el would also need parameter values and an aortic flow that this paper does not
+    print.
+  citation: {page: 3, printed_page: "2", quote: "improved by Westerhof et al. [3] by taking into", where: text}
+- id: q_no_cross_validation_shi_cellml_westkessel
+  kind: unstated_model
+  about: [circulation_fig1d, stroke_volume_difference, text_max_lv_volume_over_pressure]
+  text: >
+    Cross-validation against shi_cellml_westkessel finds nothing to test, in either direction.
+    That record is CellML code for this paper's Fig. 1(b) model (Westerhof afterload). Its data
+    are code parameters (origin reported) and Section 3 results copied from this paper (predicted,
+    derived). It has no figure readings and no measurement, so no model here can be validated
+    against it. Its model, westkessel_left_heart, cannot be validated against this record either:
+    every value here, text and Fig. 5 readings alike, is output of this paper's own Fig. 1(d)
+    simulation ("The paper plots no measured data", figures.md), and the paper prints no result of
+    Fig. 1(b). The shape match between text_max_lv_volume_over_pressure and westkessel_left_heart
+    does not matter: the former is a processing model that holds the printed 130 mL, not a
+    predictor of a measurement. The comparison in words with a textbook ([18], Guyton) gives no
+    measured values to record. The code record already judges its reduction against these
+    results (purpose approximation).
+  citation: {page: 7, printed_page: "6", quote: "simulated with the CellML model", where: "Fig. 5"}
+- id: q_no_cross_validation_korakianitis_cellml
+  kind: unstated_model
+  about: [circulation_fig1d, stroke_volume_difference, text_max_lv_volume_over_pressure]
+  text: >
+    Cross-validation against korakianitis_cellml finds nothing to test, in either direction. That
+    record is the CellML code of the korakianitis2006 closed loop (ref [5]): its data are code
+    parameters and initial values (origin reported) and results copied from korakianitis2006
+    (predicted); it has no figure readings and no measurement, so no model here can be validated
+    against it. Its model, closed_loop_onoff, cannot be validated against this record either: every
+    value here, text and Fig. 5 readings alike, is output of this paper's own Fig. 1(d) simulation
+    ("The paper plots no measured data", figures.md), and the comparison in words with a textbook
+    ([18]) prints no measured values. Setting closed_loop_onoff against Fig. 5 would compare one
+    model's output with another's, a relation for a later job. The shape match between
+    text_max_lv_volume_over_pressure and closed_loop_onoff does not matter: the former is a
+    processing model that holds the printed 130 mL, not a predictor of a measurement.
+  citation: {page: 7, printed_page: "6", quote: "simulated with the CellML model", where: "Fig. 5"}
+- id: q_no_cross_validation_shi2013_ch2
+  kind: unstated_model
+  about: [circulation_fig1d, text_max_lv_volume_over_pressure, text_max_lv_volume_over_time, text_min_lv_volume_over_time]
+  text: >
+    Cross-validation against shi2013_ch2 (Shi's thesis chapter on the lumped-parameter circulation
+    with KG diaphragm and valve dynamics) finds nothing to test, in either direction. Its one
+    measurement is fig2_3_vlv_mri_read, a healthy volunteer's LV volume per MRI phase (Fig. 2-3).
+    No model here predicts it: circulation_fig1d, the only model of a circulation, is not runnable
+    (q_model_unstated), and the text_* models are processing models that hold this paper's own
+    printed extremes (55, 130 mL; 0, 120 mmHg) at the positions where Fig. 5 was read. They are not
+    predictions of the volunteer's volume. Their outputs are maximum or minimum volume, not LV
+    volume, and they are indexed by time or pressure, not MRI phase (the phase-to-time mapping is
+    unstated). text_max_lv_volume_over_pressure shares a shape with shi2013_ch2/circulation_ch2,
+    but that does not make it a predictor. This record holds no measurement ("The paper plots no
+    measured data", figures.md), so circulation_ch2 has nothing here to be validated against.
+    Neither paper cites the other; this one compares its results only with ref [5] and a textbook.
+    No validation was added.
+  citation: {page: 7, printed_page: "6", quote: "simulated with the CellML model", where: "Fig. 5"}

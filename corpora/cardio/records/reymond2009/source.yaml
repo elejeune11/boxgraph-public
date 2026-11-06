@@ -1,0 +1,50 @@
+id: reymond2009
+kind: article
+title: Validation of a one-dimensional model of the systemic arterial tree
+authors: [Philippe Reymond, Fabrice Merenda, Fabienne Perren, Daniel Rüfenacht, Nikos Stergiopulos]
+year: 2009
+venue: "Am J Physiol Heart Circ Physiol 297: H208-H222"
+doi: 10.1152/ajpheart.00037.2009
+file: corpus/cardio/2009_Reymond.pdf
+page_range: [1, 15]
+pages: {1: "H208", 2: "H209", 3: "H210", 4: "H211", 5: "H212", 6: "H213", 7: "H214", 8: "H215", 9: "H216", 10: "H217", 11: "H218", 12: "H219", 13: "H220", 14: "H221", 15: "H222"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-04"}
+notes: >
+  The paper builds a 1-D model of the systemic arterial tree (103 segments, 47 WK3 terminals, varying-elastance LV,
+  coronaries, detailed circle of Willis) and compares its waves with volunteer measurements. The full 1-D model is recorded
+  as not runnable (q_1d_not_runnable): its connectivity, elastance curve, coronary constants and final compliance adjustments
+  are not printed. Its printed results (Tables 4-6) are recorded and checked only for internal consistency. What is checked
+  is the printed rules that build Table 2, segment by segment, each L/R value printed separately as its own entry (73 entries).
+  (1) Eqs. 22 + 6 (PWV = a2/d^b2, distensibility = 1/(rho PWV^2)) reproduce all 73 Table 2 distensibilities, 52 to the
+  printed digit and the rest within the rounding of the printed inputs (q_mean_diameter, q_D_pca2).
+  (2) Eq. 9 (ã = a3 d + b3) reproduces Table 2's viscoelastic coefficient everywhere except the aortic and
+  brachiocephalic segments, printed 0.05 where Eq. 9 gives -0.02 to 0.04 (q_visc_aorta_floor), and two intracranial
+  segments that follow b3 = 0.16 instead of the cerebral 0.34 (q_visc_cerebral_b3).
+  (3) The minimal-reflection rule R1 = ZC with Table 2's RT puts R1/RT within the printed 0.05-0.4 for most systemic beds.
+  It does not for the head and cerebral beds and the LAD; three exceed 1 (q_r1_range).
+  (4) Eq. 15 (CT proportional to terminal area compliance) reproduces none of Table 2's terminal compliances. The systemic
+  beds instead share RT x CT = 0.28 s (q_ct_eq15).
+  (5) Pulse pressure = systolic - diastolic holds for all six Table 5 rows.
+  (6) The p. 8 discrepancy statistics (22 ± 16%, 12 ± 11%, 9 ± 6%, 12 ± 5%) are all reproduced from Tables 4-5 when the
+  difference is taken relative to the mean of model and measurement (added w = 0.5, alternatives 0 and 1; q_discrepancy_norm).
+  The mean and the SD are recorded as separate printed values.
+  (7) The Table 6 percentages agree with one reference magnitude per column, except iliac flow rows 3-4 (4.6%, 5.1%, which
+  should be about 47%, 51%; q_table6_iliac_flow).
+  Units: Table 2 distensibility and CT carry header factors 10^-3 and 10^-5, recorded with the pint units 1/meter_Hg and
+  ml/hectometer_Hg so that the printed digits are kept (q_table2_units).
+  Left out: segment lengths; Table 1 (a literature survey); Table 3 (literature cerebral flows, used only to set
+  resistances); the Eq. 5 parameters (a1, b1, PmaxC, Pwidth),
+  mu, the tau1 and tau2 creep constants, and the heart parameter ranges. These feed only the non-runnable 1-D model. The
+  heart reference values, kappa and CSF pressure are recorded as its inputs. The first reading read no figure
+  (q_figures); a later figure pass did (below).
+  Audit (second reading, see audit.md): every printed value was checked against the page images and no transcription
+  error was found. The audit added the diastolic flow and mean pressure columns of Tables 4-5. It also added the p. 7
+  one-third rule Pmean = Pdiastole + PP/3 (model mean_pressure_dia_pp), compared with the in vivo mean pressures.
+  The rule matches the radial value but not the CCA or temporal values (q_pmean_one_third). Table 4's in vivo cerebral
+  means differ from Table 3's ultrasound row (q_table3_vs_table4_cerebral).
+  Figure pass (2026-11-04, see figures.md): calibrated readings by the record's own code of Figs. 1B, 3, 4, 5 and 6
+  (36 readings). A new model pwv_eq22 (Eq. 22 alone) reproduces the curve drawn in Fig. 3 within the rounding of a2 and
+  b2. Swept over Fig. 3's literature points, it gives a fit_quality comparison. The averaged in vivo and model waveforms of
+  Figs. 4-5 and the with/without-cerebral-tree waves of Fig. 6 are recorded as curves, against time from each panel's
+  scale bar (q_fig_time_origin). Their extremes agree with Table 4's flows. They disagree with Table 5 for the in vivo
+  CCA pressure (q_fig5f_vivo_vs_table5) and for some model pressures (q_fig_model_pressure_vs_table5).

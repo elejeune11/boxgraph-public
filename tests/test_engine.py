@@ -93,6 +93,12 @@ def test_conditions_rule():
     assert not conditions_agree({"T": "300 K"}, {"T": "310 K"})[0]
 
 
+def test_conditions_in_different_dimensions_never_agree():
+    """Two conditions with the same number in base units but different dimensions (1 m and 1 s) do not agree."""
+    assert not conditions_agree({"x": "1 m"}, {"x": "1 s"})[0]
+    assert conditions_agree({"x": "1 m"}, {"x": "100 cm"})[0]
+
+
 def test_alternatives_run_one_at_a_time_and_report_changed_verdicts(toy_build):
     """Each alternative of an added input is run one at a time, and verdicts it flips are reported."""
     alts = {a["alternative"]: a for a in toy_build.alternatives if a["added"] == "xb_added"}
@@ -262,3 +268,34 @@ def test_inputs_that_disagree_on_a_condition_give_a_mixed_condition_whatever_the
     assert a.values["t_pred"].conditions == b.values["t_pred"].conditions
     assert a.values["t_pred"].conditions["temperature"] == "300 K | 310 K"
     assert any("temperature" in w and "run_decay" in w for w in a.warnings)
+
+
+def test_a_model_may_run_for_two_hours_and_reading_a_figure_for_fifteen_minutes():
+    """A model run is stopped only after two hours (long simulations are normal); figure-reading code after fifteen minutes."""
+    from boxgraph import engine
+
+    assert engine.RUN_TIMEOUT == 2 * 3600 and engine.READ_TIMEOUT == 15 * 60
+    assert Builder.__init__.__defaults__[-1] == engine.RUN_TIMEOUT
+
+
+def test_a_cycle_in_built_from_ends(tmp_path):
+    """Models whose built_from names each other (or themselves) still get a cache key, with each model's code once."""
+    from boxgraph.engine import _code_bytes
+
+    for a, b in (("m1", "m2"), ("m2", "m1"), ("m3", "m3")):
+        (tmp_path / a).mkdir(exist_ok=True)
+        (tmp_path / a / "model.yaml").write_text(f"id: {a}\nbuilt_from: [{b}]\n")
+        (tmp_path / a / "model.py").write_text(f"# {a}\n")
+    assert _code_bytes(tmp_path / "m1" / "model.py").count(b"model.py\0") == 2
+    assert _code_bytes(tmp_path / "m3" / "model.py").count(b"model.py\0") == 1
+
+
+def test_figure_code_is_reread_when_a_module_beside_it_changes(tmp_path):
+    """A figure code's cache key covers every module in its folder (it may import one), not only '_' helpers."""
+    from boxgraph.engine import _code_bytes
+
+    (tmp_path / "fig2_alpha.py").write_text("A = 1\n")
+    (tmp_path / "fig2_beta.py").write_text("from fig2_alpha import A\n")
+    before = _code_bytes(tmp_path / "fig2_beta.py", figure=True)
+    (tmp_path / "fig2_alpha.py").write_text("A = 2\n")
+    assert _code_bytes(tmp_path / "fig2_beta.py", figure=True) != before

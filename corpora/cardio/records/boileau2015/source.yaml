@@ -1,0 +1,41 @@
+id: boileau2015
+kind: article
+title: A benchmark study of numerical schemes for one-dimensional arterial blood flow modelling
+authors: [Etienne Boileau, Perumal Nithiarasu, Pablo J. Blanco, Lucas O. Müller, Fredrik Eikeland Fossan, Leif Rune Hellevik, Wouter P. Donders, Wouter Huberts, Marie Willemet, Jordi Alastruey]
+year: 2015
+venue: Int. J. Numer. Meth. Biomed. Engng. 31, e02732
+doi: 10.1002/cnm.2732
+file: corpus/cardio/2015_Boileau.pdf
+page_range: [1, 33]
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-03"}
+notes: >
+  A benchmark of six 1D solvers on six test cases. The solvers themselves are described only in words
+  with references and their code is not released, so they are not models of this record; their outputs
+  and the relative-error tables built from them (Tables IV, VI, VIII, X, Eqs. 10-13) are left out here
+  because the waveforms they come from are released as the supporting datasets (record boileau_data),
+  where the errors can be recomputed from data (question q_error_tables). Table I (time steps, element
+  sizes, CFL numbers) feeds no model here and is not recorded. What is recorded is every printed number
+  the paper derives in closed form from its own equations and tables: the diastolic areas from the radii
+  (pi rd^2), the initial areas of Eq. 16, the pulse wave velocity c0 of Eq. 5, the wave speeds at mean
+  pressure of Tables III, V and VII (Eqs. 3 and 5 at the time-averaged Windkessel pressure of Eq. 9,
+  with mean inflows taken from the supporting inflow files, added), the Windkessel R1 as the end point's
+  characteristic impedance (p. 5), the peak of Eq. 14, and the wavelengths c0 T and Ts cm. All of these
+  reproduce except the aorta's Ts cm = 1.8 m (Ts is not printed; question q_ts_unstated) and the p. 5 rule
+  applied to the ADAN56 terminal R1 of Tables XII-XIII, which do not equal rho c / A (they are 0.2 of
+  R1+R2 throughout; question q_adan56_r1). The circumflex in 'Pd = 9.46^ kPa' is read as a repeating
+  digit, with the printed digits as alternative (q_pd_circumflex). Eq. 15 (viscous peak decay) is entered
+  and run at the outlet, but its only printed counterpart is the thick line of Fig. 2, which was not
+  digitised because the figure tools were refused in this session (figures.md, q_fig2_unread). Other
+  findings: 'mu = 4 mPa s^-1' (p. 15), RMS-error bounds in the text that Tables IV and VIII exceed or
+  equal, and swapped FEM/FVM descriptions in two captions. Numbers left out: Table I, the error tables,
+  the R2 and C values of ADAN56 (inputs to the solvers only), the network geometry of Tables XII-XIII
+  other than the terminal R1 and radii, the ~0.9% inviscid peak loss and the ~1%/3% STM differences
+  (bounds and approximations from solver runs).
+  Audit (audit.md): no transcription errors found; the single-pulse CFL rows of Table I were added and
+  checked against the footnote's formula (DCG does not reproduce: q_cfl_dcg_sp).
+  Figure pass (figures.yaml, figures.md): the figures were later read with calibrated code readings at
+  1200 dpi. Fig. 2's thick Eq. 15 line, read in all six panels, is compared with a sweep of
+  peak_decay_eq15 (cmp_eq15_fig2a-f; q_fig2_read). The inviscid pulse tips of Fig. 2 are recorded too.
+  The red 3D curves of [33] (Figs. 3-5, 17 panels) and the red in vitro measurements of [45] (Figs. 6-9,
+  16 panels, origin measured) are recorded as curves for validation elsewhere; no model here predicts
+  them. The overlapping 1D scheme curves and the ADAN56 figures (11-16) are left out (figures.md).

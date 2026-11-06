@@ -1,0 +1,13 @@
+id: windkessel_mean_pressure
+name: time-averaged pressure at the inlet of a three-element Windkessel (Eq. 9 averaged over a period)
+stated: {page: 5, where: Eq. 9, quote: "This model relates the pressure and the flow at the end point"}
+equation: "Q (1 + R1/R2) + C R1 dQ/dt = (P - Pout)/R2 + C dP/dt;  averaged over a periodic cycle: P = Pout + Q (R1 + R2)"
+inputs:
+  Q:    {quantity: mean_flow_rate, unit: m^3/s, description: "mean inflow of the model"}
+  n:    {quantity: outlet_count, unit: dimensionless, description: "identical terminals sharing it"}
+  R1:   {quantity: proximal_resistance, unit: Pa*s/m^3}
+  R2:   {quantity: distal_resistance, unit: Pa*s/m^3}
+  Pout: {quantity: outflow_pressure, unit: Pa}
+outputs:
+  P: {quantity: mean_pressure, unit: Pa}
+settings: {}

@@ -1,0 +1,94 @@
+id: cellml_closed_loop_mmhg_cyclic
+name: the CellML closed-loop model with its pressure unit read as mmHg and the driver cycled by remainder, run to a periodic state
+role: model
+stated: {file: smith_chase_nokes_shaw_wake_2004.cellml, lines: "27", quote: "if statements were used instead of a remainder operator to cycle the heart beat"}
+equation: >-
+  cellml_closed_loop (smith_chase_nokes_shaw_wake_2004.cellml lines 85-1624) with two changes:
+  pressures in mmHg where the file declares kPa (as cellml_closed_loop_mmhg), and
+  tau = time - k period with k = ceil(time/period) - 1 for every time, the remainder the 13
+  pieces of lines 114-359 spell out, so the model can run beyond 13 beats.
+variant_of: cellml_closed_loop
+built_from: [cellml_closed_loop]
+corrections:
+  - equation: "units kPa, kPa_per_mL, kPa_second_per_mL, kPa_second2_per_mL (lines 50-83)"
+    change: "the pressure unit of the file read as mmHg instead of the declared kilopascal; no number changed"
+    evidence: >-
+      The file's P_th is -4 (line 100), the paper's 'normal (-4 mmHg)' thoracic pressure; the
+      paper states all its pressures in mmHg (L = 10^-6 mmHg s^2/ml, p. 7). Read in kPa as
+      declared (1 kPa = 7.5 mmHg), every pressure is 7.5 times what the same numbers give in mmHg.
+  - equation: "driver_function tau, lines 111-360"
+    change: "tau by the remainder of time over the period for all time, in place of 13 explicit pieces that leave tau undefined after 13 periods"
+    evidence: >-
+      The file's own documentation (line 27) says the if statements were used 'instead of a
+      remainder operator to cycle the heart beat', that the model 'will only simulate 14 heart
+      beats' and that 'this can be increased if desired'; the paper's results are for a periodic
+      state (its long-term stability, p. 2), which 13 beats need not reach.
+inputs:
+  R_mt: {quantity: flow_resistance, unit: kPa*s/mL}
+  R_av: {quantity: flow_resistance, unit: kPa*s/mL}
+  R_tc: {quantity: flow_resistance, unit: kPa*s/mL}
+  R_pv: {quantity: flow_resistance, unit: kPa*s/mL}
+  R_pul: {quantity: flow_resistance, unit: kPa*s/mL}
+  R_sys: {quantity: flow_resistance, unit: kPa*s/mL}
+  L_tc: {quantity: inertance, unit: kPa*s^2/mL}
+  L_pv: {quantity: inertance, unit: kPa*s^2/mL}
+  L_mt: {quantity: inertance, unit: kPa*s^2/mL}
+  L_av: {quantity: inertance, unit: kPa*s^2/mL}
+  P_th: {quantity: thoracic_pressure, unit: kPa}
+  A: {quantity: driver_amplitude, unit: dimensionless}
+  B: {quantity: driver_width_coefficient, unit: 1/s^2}
+  C: {quantity: driver_peak_time, unit: s}
+  period: {quantity: heart_period, unit: s}
+  P_0_pcd: {quantity: ed_pressure_scale, unit: kPa}
+  V_0_pcd: {quantity: ed_reference_volume, unit: mL}
+  lambda_pcd: {quantity: ed_stiffness, unit: 1/mL}
+  E_es_lvf: {quantity: es_elastance, unit: kPa/mL}
+  V_d_lvf: {quantity: zero_pressure_volume, unit: mL}
+  P_0_lvf: {quantity: ed_pressure_scale, unit: kPa}
+  lambda_lvf: {quantity: ed_stiffness, unit: 1/mL}
+  V_0_lvf: {quantity: ed_reference_volume, unit: mL}
+  E_es_rvf: {quantity: es_elastance, unit: kPa/mL}
+  V_d_rvf: {quantity: zero_pressure_volume, unit: mL}
+  P_0_rvf: {quantity: ed_pressure_scale, unit: kPa}
+  lambda_rvf: {quantity: ed_stiffness, unit: 1/mL}
+  V_0_rvf: {quantity: ed_reference_volume, unit: mL}
+  E_es_spt: {quantity: es_elastance, unit: kPa/mL}
+  V_d_spt: {quantity: zero_pressure_volume, unit: mL}
+  P_0_spt: {quantity: ed_pressure_scale, unit: kPa}
+  lambda_spt: {quantity: ed_stiffness, unit: 1/mL}
+  V_0_spt: {quantity: ed_reference_volume, unit: mL}
+  one: {quantity: unit_constant, unit: dimensionless}
+  E_es_pa: {quantity: vessel_elastance, unit: kPa/mL}
+  V_d_pa: {quantity: zero_pressure_volume, unit: mL}
+  E_es_pu: {quantity: vessel_elastance, unit: kPa/mL}
+  V_d_pu: {quantity: zero_pressure_volume, unit: mL}
+  E_es_ao: {quantity: vessel_elastance, unit: kPa/mL}
+  V_d_ao: {quantity: zero_pressure_volume, unit: mL}
+  E_es_vc: {quantity: vessel_elastance, unit: kPa/mL}
+  V_d_vc: {quantity: zero_pressure_volume, unit: mL}
+  V_lv_init: {quantity: initial_chamber_volume, unit: mL}
+  V_rv_init: {quantity: initial_chamber_volume, unit: mL}
+  V_pa_init: {quantity: initial_chamber_volume, unit: mL}
+  V_pu_init: {quantity: initial_chamber_volume, unit: mL}
+  V_ao_init: {quantity: initial_chamber_volume, unit: mL}
+  V_vc_init: {quantity: initial_chamber_volume, unit: mL}
+  Q_mt_init: {quantity: initial_valve_flow, unit: mL/s}
+  Q_av_init: {quantity: initial_valve_flow, unit: mL/s}
+  Q_tc_init: {quantity: initial_valve_flow, unit: mL/s}
+  Q_pv_init: {quantity: initial_valve_flow, unit: mL/s}
+outputs:
+  SV_lv: {quantity: stroke_volume, unit: mL}
+  SV_rv: {quantity: stroke_volume, unit: mL}
+  CO: {quantity: cardiac_output, unit: L/min}
+  Pao_sys: {quantity: aortic_systolic_pressure, unit: mmHg}
+  Pao_dia: {quantity: aortic_diastolic_pressure, unit: mmHg}
+  Ppa_sys: {quantity: pa_systolic_pressure, unit: mmHg}
+  Ppa_dia: {quantity: pa_diastolic_pressure, unit: mmHg}
+  Pvc_mean: {quantity: vena_cava_pressure, unit: mmHg}
+  Ppu_mean: {quantity: pulmonary_vein_pressure, unit: mmHg}
+  Vspt_swing: {quantity: septal_volume_swing, unit: mL}
+settings:
+  dt: 0.0002        # added (q_solver)
+  n_beats: 60       # added: beats simulated before the last one is reported (q_beat_count)
+  vspt_guess: 2.0
+stochastic: false

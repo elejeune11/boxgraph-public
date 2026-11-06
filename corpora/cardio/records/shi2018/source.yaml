@@ -1,0 +1,48 @@
+id: shi2018
+kind: article
+title: Construction of lumped-parameter cardiovascular models using the CellML language
+authors: [Yubing Shi, Patricia Lawford, D. Rodney Hose]
+year: 2019
+venue: Journal of Medical Engineering & Technology (published online 19 February 2019)
+doi: 10.1080/03091902.2019.1576792
+file: corpus/cardio/2018_Shi.pdf
+page_range: [2, 8]
+pages: {3: "2", 4: "3", 5: "4", 6: "5", 7: "6", 8: "7"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-02"}
+notes: >
+  The paper describes four lumped-parameter cardiovascular models (Fig. 1(a)-(d)) built in CellML
+  and shows one set of results: Fig. 5 and the text of Section 3, for the full circulation model
+  of Fig. 1(d). It prints no governing equations and no parameter values. Table 1 shows the
+  template components only as circuit schematics (R, RC, RLC, a variable-elastance chamber with
+  a diode valve) and two normalised elastance curves without axes in time units. The model
+  equations and parameters are deferred to Korakianitis and Shi 2006 (ref [5], record
+  korakianitis2006: "Model parameters are assigned the same values as in [5]") and to the CellML
+  model repository (ref [19]; records shi_cellml_windkessel and shi_cellml_systemic). The year
+  is the publication year (2019); the corpus file is named 2018, the year the paper was received.
+
+  So the model that produces the paper's results, circulation_fig1d, is entered as stated but
+  not runnable from this paper alone (question q_model_unstated). Its scalar results from the
+  Section 3 text are recorded as predicted data: minimum and maximum left ventricular pressure
+  (0 and 120 mmHg), arterial pressure range (80-120 mmHg), mean aortic/mitral flow (about
+  5 L/min), peak aortic and mitral flows (about 1000 mL/s = 60 L/min, about 800 mL/s =
+  48 L/min), and left ventricular volume range (55-130 mL). These can be compared with the
+  CellML and korakianitis2006 records in a later cross-record pass. What this record can check
+  on its own is the arithmetic the paper did on its own results: stroke volume 75 mL = 130 - 55 mL
+  (model stroke_volume_difference, a reproduction), and the two printed unit conversions of the
+  peak flows (consistency comparisons; both sides are printed as "about", so they get no
+  verdict, correctly).
+
+  Left out: the Fig. 1(a)-(c) models (no result of theirs is printed or plotted); Fig. 5 as a
+  figure reading, and the elastance curves in Table 1. Commands to render page regions were not
+  permitted in this reading job, so no figure reading could be made by code. Read by eye
+  (no verdict), Fig. 5 looks slightly different from the text: the lowest left ventricular
+  pressure is a few mmHg above 0 and the smallest LV volume is about 53 mL (questions
+  q_lv_pressure_min_fig, q_lv_volume_fig). Fig. 5 should be read in a later pass. Also left out:
+  the quiz results of the e-learning study (33% and 22%, ref [20]), which no model produces.
+
+  Figure pass (2026-11-02): Fig. 5 is now read by code, all four panels (20 readings in
+  figures.yaml, code in figures/, log in figures.md): every curve that can be separated, the
+  peak flows, and the extremes of left ventricular pressure and volume. The eye-read questions
+  above are settled by q_fig5_lv_volume_read and q_fig5_lv_pressure_min_read; six consistency
+  comparisons set the text's 0, 120 mmHg and 55, 130 mL against the readings. Fig. 4 (a screen
+  capture) and the elastance thumbnails in Table 1 are left out, as figures.md explains.

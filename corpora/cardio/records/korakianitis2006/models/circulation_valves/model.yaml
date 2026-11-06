@@ -1,0 +1,125 @@
+id: circulation_valves
+name: closed-loop circulation with variable-elastance chambers and on-off or leaflet-dynamics valves (Eqs. 1-20)
+role: model
+stated: {page: 3, printed_page: "1966", quote: "provided in Fig. 1. The system is modelled in three", where: "Eqs. 1-20, Fig. 1"}
+equation: >
+  dV_lv/dt = Q_mi - Q_ao (1); e_lv(t) = E_lv,d + (E_lv,s - E_lv,d)/2 e(t) (2);
+  e(t) = cos(t/T_s1 pi), 0<=t<T_s1; cos((t + T_s2 - T_s1)/T_s1 pi), T_s1<=t<T_s2; 0, T_s2<=t<T (3);
+  P_lv = P_lv,0 + e_lv (V_lv - V_lv,0) (4); atria: e(t) = 1 - cos((t - T_pb)/T_pw 2pi) on T_pb<=t<T_pb+T_pw, else 0 (5);
+  Q_ao = CQ_ao AR_ao sqrt(P_lv - P_sas), P_lv>=P_sas; CQ_ao AR_ao sqrt(P_sas - P_lv), P_lv<P_sas (6);
+  AR_ao = 1 if P_lv>=P_sas else 0 (7) or AR_ao = (1 - cos theta)^2/(1 - cos theta_max)^2 (8);
+  d2theta/dt2 = (P_lv - P_sas) K_p cos theta - K_f dtheta/dt + K_b Q_ao cos theta - K_v Q_ao sin theta (Q_ao>=0; no K_v term for Q_ao<0) (14);
+  dP_sas/dt = (Q_ao - Q_sas)/C_sas (15); dQ_sas/dt = (P_sas - P_sat - R_sas Q_sas)/L_sas (16);
+  dP_sat/dt = (Q_sas - Q_sat)/C_sat (17); dQ_sat/dt = (P_sas - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat (18);
+  dP_svn/dt = (Q_sat - Q_svn)/C_svn (19); Q_svn = (P_svn - P_ra)/R_svn (20); right heart, atria, other valves and pulmonary loop "similar"
+inputs:
+  CQao: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQmi: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQpo: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQti: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  Elvs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Elvd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Plv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vlv0: {quantity: chamber_reference_volume, unit: ml}
+  Ela_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ela_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pla0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vla0: {quantity: chamber_reference_volume, unit: ml}
+  Ervs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ervd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Prv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vrv0: {quantity: chamber_reference_volume, unit: ml}
+  Era_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Era_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pra0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vra0: {quantity: chamber_reference_volume, unit: ml}
+  Csas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Csat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rsar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rscp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rsvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Csvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Cpas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Cpat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rpar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpcp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Cpvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Kp_ao: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ao: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_ao: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_ao: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_mi: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_mi: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_mi: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_mi: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_po: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_po: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_po: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_po: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  Kp_ti: {quantity: valve_pressure_coefficient, unit: rad/(s^2*mmHg)}
+  Kf_ti: {quantity: valve_friction_coefficient, unit: 1/s}
+  Kb_ti: {quantity: valve_flow_effect_coefficient, unit: rad/(s*ml)}
+  Kv_ti: {quantity: valve_vortex_coefficient, unit: rad/(s*ml)}
+  theta_max_ao: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ao: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_mi: {quantity: leaflet_max_angle, unit: deg, description: "upper limit of the mitral leaflet angle"}
+  theta_min_mi: {quantity: leaflet_min_angle, unit: deg}
+  theta_ref_mi: {quantity: leaflet_max_angle, unit: deg, description: "theta_max in the denominator of Eq. 8 for the mitral valve"}
+  theta_max_po: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_po: {quantity: leaflet_min_angle, unit: deg}
+  theta_max_ti: {quantity: leaflet_max_angle, unit: deg}
+  theta_min_ti: {quantity: leaflet_min_angle, unit: deg}
+  T: {quantity: heart_period, unit: s}
+  Ts1: {quantity: time_peak_systole, unit: s}
+  Ts2: {quantity: time_end_systole, unit: s}
+  Tpwb: {quantity: p_wave_onset, unit: s}
+  Tpww: {quantity: p_wave_duration, unit: s}
+  Vlv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vla_init: {quantity: initial_chamber_volume, unit: ml}
+  Vrv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vra_init: {quantity: initial_chamber_volume, unit: ml}
+  Psas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+outputs:
+  Plv_max: {quantity: peak_lv_pressure, unit: mmHg}
+  Plv_min: {quantity: min_lv_pressure, unit: mmHg}
+  Psas_max: {quantity: peak_aortic_pressure, unit: mmHg}
+  Psas_min: {quantity: min_aortic_pressure, unit: mmHg}
+  Psas_ed: {quantity: end_diastolic_aortic_pressure, unit: mmHg, description: "P_sas at the start of the analysed cycle (t = 10 s), where ventricular activation begins"}
+  Prv_max: {quantity: peak_rv_pressure, unit: mmHg}
+  Ppas_max: {quantity: peak_pulmonary_artery_pressure, unit: mmHg}
+  CO: {quantity: mean_aortic_flow, unit: l/min}
+  Vlv_max: {quantity: lv_volume_max, unit: ml}
+  Vlv_min: {quantity: lv_volume_min, unit: ml}
+  SV: {quantity: stroke_volume, unit: ml}
+  Qao_max: {quantity: peak_aortic_valve_flow, unit: ml/s}
+  Qpo_max: {quantity: peak_pulmonary_valve_flow, unit: ml/s}
+  Qmi_E: {quantity: mitral_E_peak_flow, unit: ml/s, description: "largest mitral flow between T_s2 and T_pb in the cycle"}
+  Qti_E: {quantity: tricuspid_E_peak_flow, unit: ml/s, description: "largest tricuspid flow between T_s2 and T_pb"}
+  Qmi_A: {quantity: mitral_A_peak_flow, unit: ml/s, description: "largest mitral flow after T_pb"}
+  Qmi_dmin: {quantity: mitral_diastolic_min_flow, unit: ml/s, description: "smallest mitral flow between the E peak and T_pb"}
+  Qao_rev: {quantity: aortic_reverse_flow_peak, unit: ml/s, description: "minus the smallest aortic valve flow in the cycle"}
+  Qpo_rev: {quantity: pulmonary_reverse_flow_peak, unit: ml/s}
+  Qmi_rev: {quantity: mitral_reverse_flow_peak, unit: ml/s}
+  Qti_rev: {quantity: tricuspid_reverse_flow_peak, unit: ml/s}
+settings:
+  dt: 0.0001            # Table 5, DT
+  t_end: 11.0           # "the period from the 10th to 11th s ... is selected"
+  t_window: 10.0
+  valve_model: dynamic  # dynamic: Eqs. 8 and 14; on_off: Eq. 7
+  vortex_angle_factor: 1  # 1: sin(theta) as in Eq. 14; 2: sin(2 theta) as in Eq. 13
+  scheme: rk4           # added: integration scheme not stated (q_scheme)
+stochastic: false

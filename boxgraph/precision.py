@@ -44,10 +44,6 @@ class Printed:
     def has_precision(self) -> bool:
         return self.lo is not None
 
-    @property
-    def half_width(self) -> float | None:
-        return None if self.lo is None else (self.hi - self.lo) / 2
-
 
 class PrintedError(ValueError):
     pass
@@ -151,14 +147,10 @@ def parse(text: str) -> Printed:
     return Printed(raw, value, value - h, value + h, "digits")
 
 
-def value_of(text: str) -> float:
-    return parse(text).value
-
-
 SE_MULTIPLE = 2.0  # a computed value with sampling error stands for mean ± 2 standard errors
 
 
-def verdict(computed: float, printed: Printed, se: float = 0.0) -> Verdict:
+def verdict(computed: float, printed: Printed, se: float = 0.0, band: tuple[float, float] | None = None) -> Verdict:
     """Verdict for a computed value against a printed one, in the same unit and scale.
 
     A computed value with sampling error `se` (a model with randomness, run
@@ -166,7 +158,8 @@ def verdict(computed: float, printed: Printed, se: float = 0.0) -> Verdict:
     printed interval. Close when the gap is at most the printed interval's width
     and, if the printed interval excludes zero, the value has its sign and is
     within a factor of ten of it. Otherwise not reproduced. With se = 0 this is
-    Figure 4's rule."""
+    Figure 4's rule. `band`, the range the rounding of the inputs allows, widens
+    the computed interval the same way."""
     if not printed.has_precision:
         return Verdict.no_verdict
     if computed is None or (isinstance(computed, float) and math.isnan(computed)):
@@ -174,6 +167,8 @@ def verdict(computed: float, printed: Printed, se: float = 0.0) -> Verdict:
     lo, hi = printed.lo, printed.hi
     half = SE_MULTIPLE * abs(se or 0.0)
     clo, chi = computed - half, computed + half
+    if band is not None:
+        clo, chi = min(clo, band[0]), max(chi, band[1])
     if chi >= lo and clo <= hi:
         return Verdict.reproduced
     if lo > 0 or hi < 0:

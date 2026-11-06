@@ -1,0 +1,19 @@
+id: impedance_3el
+name: input impedance of the three-element model (Fig. 1A), modulus and phase against frequency
+role: model
+stated: {page: 1, printed_page: "776", quote: "The electrical model, as shown in Fig. 1 A, was proposed earlier", where: "Fig. 1A and text, p. 1"}
+equation: "Z = R_c + R_p/(1 + j omega R_p C), omega = 2 pi f; |Z| -> R_c + R_p (Eq. 1a) at dc"
+from_words: true
+# The paper draws the network (Fig. 1A: R_c in series with R_p parallel to C), prints only its d-c
+# limit (Eq. 1a) and describes the rest in words; Figs. 4 and 5 draw its impedance as the
+# "theoretical impedance" with the Table 1 values.
+inputs:
+  Rc: {quantity: resistor_resistance, unit: g/cm^4/s}
+  Rp: {quantity: resistor_resistance, unit: g/cm^4/s}
+  C: {quantity: total_arterial_compliance, unit: cm^4*s^2/Mg, description: "Table 1 prints C x 10^6 in g^-1 cm^4 sec^2"}
+  f: {quantity: frequency, unit: Hz}
+outputs:
+  modulus: {quantity: input_impedance_modulus, unit: g/cm^4/s}
+  phase: {quantity: input_impedance_phase, unit: degree}
+settings: {}
+stochastic: false

@@ -1,0 +1,18 @@
+id: tube_law_eq14
+name: pressure from area by the state equation (Eq. 14)
+role: model
+stated: {page: 5, printed_page: "1285", quote: "from what is known as Laplace's law the circumferential", where: Eq. 14}
+# A helper for the relation alastruey2011 states on its p. 2: its Eq. 3 relates wall stress and strain to
+# pressure and radius "using Laplace's law (Olufsen et al., 2000)". Eq. 14 is this paper's state equation,
+# otherwise only inside network_1d (not runnable). No printed result of this record is computed from it.
+equation: "p(x,t) - p0 = (4/3)(E h/r0)(1 - sqrt(A0/A)), A0 = pi r0^2 (Eq. 14)"
+inputs:
+  A:  {quantity: cross_sectional_area, unit: cm^2}
+  r0: {quantity: vessel_radius, unit: cm}
+  E:  {quantity: youngs_modulus, unit: dyne/cm^2}
+  h:  {quantity: wall_thickness, unit: cm}
+  p0: {quantity: reference_pressure, unit: dyne/cm^2}
+outputs:
+  p: {quantity: arterial_pressure, unit: dyne/cm^2}
+settings: {}
+stochastic: false

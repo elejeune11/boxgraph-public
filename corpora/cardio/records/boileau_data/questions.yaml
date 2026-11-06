@@ -1,0 +1,181 @@
+- id: q_alignment
+  kind: unstated_input
+  about: [lag_b2, lag_b2_dcg, lag_b3, lag_b3_dcg, lag_b4, lag_b4_dcg, lag_b5, lag_b5_late, errors_pressure, errors_flow, errors_radius_change, errors_pressure_difference]
+  text: >
+    The errors of Tables IV, VI, VIII and X compare a 1D waveform with a reference sampled at its own
+    times (3D files and ExpData start at t = 0). The READMEs give only tini and tend of the last 1D
+    cycle; nothing says where the reference's t = 0 falls on the 1D clock. Read as stated (reference t = 0
+    at tini), the RMS and MAX errors of Benchmarks 2 and 3 come out tens of times the printed ones (e.g.
+    carotid DCG E_P^RMS 5.37% against 0.20%), while the SYS and DIAS errors, which do not depend on the
+    alignment, are reproduced. Scanning lags of 1 ms, every solver's printed RMS and MAX errors are
+    matched to the last digit by one lag per benchmark: 56 ms (B2), 57 ms (B3), 1 ms (B4), -1 ms (B5),
+    and 1 ms more for each file whose time column starts at 0.001 s instead of 0 (DCG in B2-B4; DCG and
+    LCG in B5), as if those files were stamped one step late. The 56-57 ms is close to the 0.055 s shift
+    the B2 and B3 inflow files mention ('add 0.055 to one period to have the minimum flow at t=0'). These
+    lags are added and fitted to the printed tables (added.yaml), so the RMS and MAX comparisons test that
+    one number per solver fits all its printed values, not the alignment itself; the alternatives (0, and
+    0.055 s) show the README reading.
+  citation: {file: Benchmark2_CommonCarotidArtery/inflow.txt, lines: "4", quote: "# add 0.055 to one period to have the minimum flow at t=0"}
+- id: q_wrap
+  kind: choice
+  about: [errors_pressure, errors_flow, errors_radius_change, errors_pressure_difference, lag_b3, lag_b3_dcg]
+  text: >
+    With the fitted lags, the last 3D samples of Benchmark 3 fall up to 58 ms past the end of the DCG,
+    LCG and McC files (20.0 s), and past tend = 20.0 s for all. The models take such a time one period
+    (0.955 s, inflow.txt) earlier, as for a periodic solution; without it the DCG E_P^MAX is 4.51% instead
+    of the printed 3.54%, and with it 3.54%. The paper says only that 'all error metrics are calculated over
+    a single cardiac cycle, once the numerical results are in the periodic regime' (p. 12).
+- id: q_table6_stm_qdias
+  kind: possible_error
+  about: [paper_b3_Q_dias_STM, cmp_b3_Q_dias_STM]
+  text: >
+    Table VI (p. 13) prints E_Q^DIAS = 12.95% for STM, against 2.67-3.48% for the other five schemes. The
+    released STM waveform gives 2.95% (with any lag from 0.055 to 0.058 s), so the printed '12.95' may carry
+    a stray leading 1. Recorded as printed.
+- id: q_b5_tibial
+  kind: unexplained_difference
+  about: [cmp_b5_RAnteriorTibial_P_rms_DCG, cmp_b5_RAnteriorTibial_P_max_DCG, paper_b5_RAnteriorTibial_P_rms_DCG, paper_b5_RAnteriorTibial_P_max_DCG]
+  text: >
+    For the right anterior tibial pressure, the recomputed E_P^RMS and E_P^MAX exceed the printed ones for
+    every scheme (DCG 3.79% and 13.8% against 3.25% and 9.87%), at every lag tried, while its SYS and DIAS
+    errors are reproduced; its E_Q^RMS comes out about 0.1 below the printed one for every scheme too. The largest relative errors lie in the last samples of
+    the released in vitro record (t = 0.82-0.83 s, about 13-14%); trimming the record to 0.826 s does not
+    change the RMS enough. The released ExpData/RAnteriorTibial_P.txt may differ from the record the
+    paper's Table X was computed from.
+- id: q_b3_fvm_dias
+  kind: unexplained_difference
+  about: [cmp_b3_Q_dias_FVM, cmp_b3_dP_dias_FVM, cmp_b3_r_dias_FVM, cmp_b3_P_dias_FVM]
+  text: >
+    For the upper thoracic aorta, every FVM error of Table VI is reproduced except the four diastolic ones:
+    E_Q^DIAS 3.54% against 3.48%, E_DeltaP^DIAS 6.62% against 6.37%, E_Deltar^DIAS 2.02% against 2.05%,
+    E_P^DIAS 0.97% against 0.99%. They do not depend on the lag (the same at 0 and 0.057 s), so the
+    released FVM file's minimum differs slightly from the one the table was computed from.
+- id: q_b5_pdias
+  kind: unexplained_difference
+  about: [cmp_b5_Splenic_P_dias_DCG, cmp_b5_Splenic_P_dias_FEM, cmp_b5_Splenic_P_dias_FVM, cmp_b5_Splenic_P_dias_McC, cmp_b5_Splenic_P_dias_STM, cmp_b5_AorticArchII_P_dias_DCG, cmp_b5_AorticArchII_P_dias_McC, cmp_b5_LSubclavianI_P_dias_LCG, cmp_b5_LSubclavianI_P_max_LCG]
+  text: >
+    A few Table X pressure errors are off by 0.05-0.15 percentage points while the other metrics of the same
+    site and scheme are reproduced: E_P^DIAS at the splenic site for five schemes (e.g. FEM -0.10% against
+    the printed +0.04%, DCG -0.27% against -0.14%), at the aortic arch II for DCG (-0.47 against -0.42) and
+    McC, and E_P^DIAS and E_P^MAX of LCG at the left subclavian I. These small diastolic errors hinge on the
+    minimum of a noisy in vitro record; the paper does not say whether its record was filtered.
+- id: q_b6_rounding
+  kind: reading
+  about: [cmp_b6_C_16, cmp_b6_C_38]
+  text: >
+    Two compliances of Tables XII-XIII do not round from the released mesh.txt values: segment 16
+    6.010467524E-006 printed as 6.011E-06, and segment 38 1.64947997E-007 printed as 1.650E-07 (both one in
+    the last digit). The other 383 ADAN56 numbers of the tables are the mesh values rounded.
+- id: q_b5_residual
+  kind: unexplained_difference
+  about: [lag_b5, cmp_b5_AorticArchII_Q_max_McC]
+  text: >
+    With the fitted -1 ms lag, FEM, FVM and STM reproduce Table X to about 0.01%, but McC keeps a misfit of
+    about 0.1% in some RMS and MAX errors. Its file is sampled at t = -0.00025 + k ms, a quarter step off the
+    others, which a whole-millisecond lag cannot follow; the paper does not say how it was matched to the
+    1 kHz in vitro samples.
+- id: q_b5_resistance_unit
+  kind: possible_error
+  about: [b5_R_3, b5_R_6, b5_R_37]
+  text: >
+    The Benchmark 5 README gives mesh.txt col 10 as 'outlet resistance R1 [Pa*s/m3]', but its values (2.67,
+    3.92, ... 5.65) are those of the terminal resistances Rp of alastruey2011 Table 2 in GPa s m^-3, 10^9
+    times larger; read in Pa s m^-3 as the README says, they would be no resistance at all. The data are
+    recorded with the README's unit, so each cited check against alastruey2011/Rp_n fails by 10^9. The
+    README also calls them R1 (the proximal element of a three-element Windkessel), whereas the in vitro
+    network ends in single resistances (Rp, alastruey2011 Table 2).
+  citation: {file: Benchmark5_37ArteryNetwork/README.txt, lines: "21", quote: "col 10: outlet resistance R1 [Pa*s/m3] (if applicable)"}
+- id: q_b6_readme_times
+  kind: possible_error
+  about: [b6_L_1]
+  text: >
+    The Benchmark 6 README gives the columns of NumData/X.txt as the pressure along the aorta 'for
+    t={9.1,9.2,9.3,9.5,9.7,1.0} [s]'; the last time, 1.0 s, is out of order and before the others, and
+    is probably 10.0 s. Not used here: no printed value of the paper rests on these files (Figs. 15-16 were
+    not read in the paper's record).
+  citation: {file: Benchmark6_ADAN56/README.txt, lines: "39", quote: "col 2 to 7: pressure [kPa] for t={9.1,9.2,9.3,9.5,9.7,1.0} [s]"}
+- id: q_b6_names
+  kind: reading
+  about: [b6_L_26, b6_L_28, b6_L_30, b6_L_32]
+  text: >
+    ADAN56 mesh.txt names segments 26, 28, 30 and 32 posterior_intercostal_T6_R, _T6_L, _T7_R and _T7_L,
+    where Tables XII-XIII print 'Posterior intercostal R 1', 'L 1', 'R 2' and 'L 2'. The rows are matched
+    here by segment number, which both use, and every number of those rows agrees.
+- id: q_b4_lcg_nan
+  kind: reading
+  about: [run_b4_mid_P_LCG, run_b4_end_P_LCG, run_b4_iliac_P_LCG]
+  text: >
+    The first row (t = 0) of the three Benchmark 4 LCG files holds NaN. The models leave a row with a NaN
+    out; it lies 28.6 s before the last cycle and changes no error.
+- id: q_b1_peak_reference
+  kind: choice
+  about: [peak_loss_single_pulse, peak_loss_paper]
+  text: >
+    The paper's inviscid peak loss 'less than 0.9%, relative to the peak magnitude at the inlet' (p. 15)
+    does not say how the inlet peak is taken. The released files hold the pressure along the vessel at
+    t = 0.1-1.5 s, not at the inlet; the model takes the peak at t = 0.1 s (the pulse about 0.3 m from the
+    inlet) as the reference and the peak at 1.5 s (about 9 m) as the end. The bound gets no verdict; the
+    build shows each scheme's value.
+- id: q_inflow_series
+  kind: choice
+  about: [period_b2, period_b3, period_b4, period_b5]
+  text: >
+    The inflow.txt files give each inflow as a Fourier series (22 to 40 coefficients) and ADAN56's as a
+    table of 22 points. Only their periods are recorded, because the error models need them; the
+    coefficients feed no model here. boileau2015's record takes its mean inflows (added Qm_car, Qm_ao,
+    Qm_bif) from the constant terms of the B2-B4 series.
+- id: q_figure_validations
+  kind: choice
+  about: [waveform, waveform_flow, waveform_radius_change, waveform_pressure_difference]
+  text: >
+    The red 3D and in vitro curves of Figs. 3-9, read in boileau2015's record, are compared with the
+    released 3D and ExpData columns at the reading's times. They are the same data plotted and released,
+    so this is a consistency check of figure against file; it is entered as a validation because a
+    comparison with another record's datum can only take that purpose. The 1D curves of those figures
+    and Figs. 11-16 were not read in the paper's record, so the released 1D waveforms are checked only
+    through the error tables.
+- id: q_b5_scheme_validations
+  kind: choice
+  about: [waveform, waveform_flow, tini_b5_AorticArchII, lag_b5, lag_b5_late]
+  text: >
+    The six schemes' Benchmark 5 waveforms (NumData/X_P.txt, X_Q.txt) are judged as predictions of the
+    in vitro pressure and flow of [45], read from boileau2015 Figs. 6-9 (validations val_fig6a_P_exp_DCG
+    ... val_fig9b_Q_exp_STM, 96 entries: 8 sites x P, Q x 6 schemes). This is a validation: the network
+    and its inflow are those measured on the rig, and nothing in the 1D models was fitted to these
+    waveforms. Two choices are open. (1) Alignment: the figure's t, the in vitro clock, is placed at the
+    stated tini of time_shifts.txt for every scheme (lag 0). The -1 ms lag (added lag_b5) that matches
+    Table X for FEM, FVM, McC and STM was fitted to the same in vitro record, so it is not used; a shift of
+    1 ms moves the 1D value by much less than its distance from the measurement on most of the steep
+    stretches. At the right anterior tibial site (Fig. 8(b)) the figure's times run to 0.81 s, past the
+    end of the DCG, FEM, FVM and McC files (15.0 s) from tini = 14.200 s; for all six schemes there the
+    cycle before the last is used (t_offset = 14.200 - 0.827 s, period_b5), taking the solution as
+    periodic as the error runs do (q_wrap). (2) Which scheme: the paper compares all six with the measurement and finds 'no
+    significant differences between the six schemes' (p. 20), so each is entered rather than one chosen.
+  citation: {file: Benchmark5_37ArteryNetwork/README.txt, lines: "25", quote: "Filename: time_shifts.txt (initial and end time of the last cardiac cycle)"}
+- id: q_b5_visible_only
+  kind: reading
+  about: [waveform, waveform_flow]
+  text: >
+    The in vitro curves of Figs. 6-9 were read only where the red line shows; where it lies within a
+    line width of the six 1D curves it is hidden and no value was recorded (boileau2015 figures.md). So
+    the points these validations test are, by construction, where the measurement and the 1D bundle are
+    visibly apart, and the reading interval is the reading precision of the line (a few hundredths of a
+    kPa, a few tenths of ml/s), not the measurement's uncertainty. Pointwise misses are therefore
+    expected and do not contradict the paper's summary errors (Table X, RMS under 4% for pressure and
+    26% for flow), which the error runs of this record reproduce from the full released records.
+- id: q_val_alastruey2011_none
+  kind: choice
+  about: [waveform, waveform_flow, errors_pressure, errors_flow]
+  text: >
+    No validation of this record's models against alastruey2011's measurements was added. The waveform
+    models read the released 1D and in vitro columns at the eight Benchmark 5 sites only (AorticArchII,
+    ThoracicAortaII, LSubclavianI, RIliacFemoralII, LUlnar, RAnteriorTibial, RUlnar, Splenic; README line
+    31). alastruey2011's measured waveforms (Fig. 3) are at the midpoints of thoracic aorta I, left renal,
+    right iliac-femoral III and right carotid, and its Fig. 4 harmonics at the left renal: none of these
+    sites is released here, and thoracic aorta II and right iliac-femoral II are different segments from
+    thoracic aorta I and right iliac-femoral III, so no column gives the measured quantity at the
+    measurement's own site. Its other measurements (Table 2's geometry and wave speeds, the fluid
+    properties, the tensile tests of Fig. 2) are predicted by no model of this record; mesh.txt's copy of
+    Table 2 is checked value by value through from_datum instead. The errors_* models give error norms,
+    which alastruey2011's record does not hold (its Tables 3-4 are left out).
+  citation: {file: Benchmark5_37ArteryNetwork/README.txt, lines: "31", quote: "col 2 to 9: pressure P [kPa] or flow rate Q [ml/s] for Z={AorticArchII,ThoracicAortaII,LSubclavianI,RIliacFemoralII,LUlnar,RAnteriorTibial,RUlnar,Splenic}"}

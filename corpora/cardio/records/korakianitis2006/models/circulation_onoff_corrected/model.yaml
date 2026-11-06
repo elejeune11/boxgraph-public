@@ -1,0 +1,101 @@
+id: circulation_onoff_corrected
+name: the simplified closed-loop circulation of Section 3.1 (on-off valves, Eq. 7) with Eqs. 3, 6 and 18 corrected
+role: model
+stated: {page: 8, printed_page: "1971", quote: "on–off heart valve model as described by Eq. (7)", where: "Sec. 3.1; Eqs. 1-7, 15-20"}
+equation: >
+  circulation_valves_corrected with AR = 1 if the upstream pressure is at least the downstream one, else 0
+  (Eq. 7) for all four valves: dV/dt = Q_in - Q_out (1); e_lv = E_lv,d + (E_lv,s - E_lv,d)/2 e(t) (2);
+  e(t) = 1 - cos(pi t/T_s1), 1 + cos(pi (t - T_s1)/(T_s2 - T_s1)), 0 (3, corrected); P = P_0 + e (V - V_0) (4);
+  atria 1 - cos((t - T_pb)/T_pw 2pi) on T_pb <= t < T_pb + T_pw (5); Q = CQ AR sqrt(dP), -CQ AR sqrt(-dP) (6, corrected);
+  Eqs. 15-17, 19-20; dQ_sat/dt = (P_sat - P_svn - (R_sat + R_sar + R_scp) Q_sat)/L_sat (18, corrected); pulmonary loop likewise
+built_from: [circulation_valves_corrected]
+# Notes (the schema has no notes field). A helper for ModelAtlas: the relation tester runs a model with
+# the settings in its model.yaml, and circulation_valves_corrected's are the dynamic valves of Sec. 3.2.
+# This model is that code with valve_model = on_off (Eq. 7), the configuration runs run_simplified_corr
+# and run_fig5*_corr already use. The leaflet coefficients and angles have no effect with on-off valves
+# and are not ports.
+inputs:
+  CQao: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQmi: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQpo: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  CQti: {quantity: valve_flow_coefficient, unit: ml/(s*mmHg^0.5)}
+  Elvs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Elvd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Plv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vlv0: {quantity: chamber_reference_volume, unit: ml}
+  Ela_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ela_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pla0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vla0: {quantity: chamber_reference_volume, unit: ml}
+  Ervs: {quantity: chamber_elastance, unit: mmHg/ml}
+  Ervd: {quantity: chamber_elastance, unit: mmHg/ml}
+  Prv0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vrv0: {quantity: chamber_reference_volume, unit: ml}
+  Era_max: {quantity: chamber_elastance, unit: mmHg/ml}
+  Era_min: {quantity: chamber_elastance, unit: mmHg/ml}
+  Pra0: {quantity: chamber_reference_pressure, unit: mmHg}
+  Vra0: {quantity: chamber_reference_volume, unit: ml}
+  Csas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Csat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rsat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lsat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rsar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rscp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rsvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Csvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  Cpas: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpas: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpas: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Cpat: {quantity: vascular_compliance, unit: ml/mmHg}
+  Rpat: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Lpat: {quantity: vascular_inertance, unit: mmHg*s^2/ml}
+  Rpar: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpcp: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Rpvn: {quantity: vascular_resistance, unit: mmHg*s/ml}
+  Cpvn: {quantity: vascular_compliance, unit: ml/mmHg}
+  T: {quantity: heart_period, unit: s}
+  Ts1: {quantity: time_peak_systole, unit: s}
+  Ts2: {quantity: time_end_systole, unit: s}
+  Tpwb: {quantity: p_wave_onset, unit: s}
+  Tpww: {quantity: p_wave_duration, unit: s}
+  Vlv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vla_init: {quantity: initial_chamber_volume, unit: ml}
+  Vrv_init: {quantity: initial_chamber_volume, unit: ml}
+  Vra_init: {quantity: initial_chamber_volume, unit: ml}
+  Psas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Psvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppas_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppat_init: {quantity: initial_vessel_pressure, unit: mmHg}
+  Ppvn_init: {quantity: initial_vessel_pressure, unit: mmHg}
+outputs:
+  Plv_max: {quantity: peak_lv_pressure, unit: mmHg}
+  Plv_min: {quantity: min_lv_pressure, unit: mmHg}
+  Psas_max: {quantity: peak_aortic_pressure, unit: mmHg}
+  Psas_min: {quantity: min_aortic_pressure, unit: mmHg}
+  Psas_ed: {quantity: end_diastolic_aortic_pressure, unit: mmHg, description: "P_sas at the start of the analysed cycle (t = 10 s), where ventricular activation begins"}
+  Prv_max: {quantity: peak_rv_pressure, unit: mmHg}
+  Ppas_max: {quantity: peak_pulmonary_artery_pressure, unit: mmHg}
+  CO: {quantity: mean_aortic_flow, unit: l/min}
+  Vlv_max: {quantity: lv_volume_max, unit: ml}
+  Vlv_min: {quantity: lv_volume_min, unit: ml}
+  SV: {quantity: stroke_volume, unit: ml}
+  Qao_max: {quantity: peak_aortic_valve_flow, unit: ml/s}
+  Qpo_max: {quantity: peak_pulmonary_valve_flow, unit: ml/s}
+  Qmi_E: {quantity: mitral_E_peak_flow, unit: ml/s, description: "largest mitral flow between T_s2 and T_pb in the cycle"}
+  Qti_E: {quantity: tricuspid_E_peak_flow, unit: ml/s, description: "largest tricuspid flow between T_s2 and T_pb"}
+  Qmi_A: {quantity: mitral_A_peak_flow, unit: ml/s, description: "largest mitral flow after T_pb"}
+  Qmi_dmin: {quantity: mitral_diastolic_min_flow, unit: ml/s, description: "smallest mitral flow between the E peak and T_pb"}
+  Qao_rev: {quantity: aortic_reverse_flow_peak, unit: ml/s, description: "minus the smallest aortic valve flow in the cycle"}
+  Qpo_rev: {quantity: pulmonary_reverse_flow_peak, unit: ml/s}
+  Qmi_rev: {quantity: mitral_reverse_flow_peak, unit: ml/s}
+  Qti_rev: {quantity: tricuspid_reverse_flow_peak, unit: ml/s}
+settings:
+  dt: 0.0001            # Table 5, DT
+  t_end: 11.0           # "the period from the 10th to 11th s ... is selected"
+  t_window: 10.0
+  valve_model: on_off   # Eq. 7 (the code sets it whatever is passed)
+  scheme: rk4           # added, as in circulation_valves (q_scheme)
+stochastic: false
