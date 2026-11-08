@@ -1,0 +1,20 @@
+id: pericardial_pressure_t5
+name: pericardial pressure from pericardial cavity volume (Eq. T5)
+role: model
+stated: {page: 2, printed_page: "1444", quote: "pericardial pressure/volume", where: "Eq. T5, Table 1; vpc defined on p. 8"}
+equation: "ppc = Kpc exp[(vpc - V0,pc)/Phi_pc]; vpc = sum of instantaneous chamber volumes + vpcf + myocardial volume (p. 8)"
+described_from: ref-118
+inputs:
+  Kpc: {quantity: pericardial_pressure_constant, unit: mmHg}
+  V0pc: {quantity: pericardial_reference_volume, unit: mL}
+  Phi: {quantity: pericardial_volume_constant, unit: mL}
+  v_lv: {quantity: chamber_volume, unit: mL}
+  v_rv: {quantity: chamber_volume, unit: mL}
+  v_la: {quantity: chamber_volume, unit: mL}
+  v_ra: {quantity: chamber_volume, unit: mL}
+  v_pcf: {quantity: pericardial_fluid_volume, unit: mL}
+  v_myo: {quantity: myocardial_volume, unit: mL}
+outputs:
+  ppc: {quantity: pericardial_pressure, unit: mmHg}
+settings: {}
+stochastic: false

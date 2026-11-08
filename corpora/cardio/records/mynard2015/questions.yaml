@@ -1,0 +1,355 @@
+- id: q_full_model_not_runnable
+  kind: unstated_input
+  about: [circulation_1d_0d]
+  text: >
+    The closed-loop model that produces Tables 6 and 8 and Figs. 4-7 cannot be run from this paper: the network
+    geometry and every vascular bed parameter are in Supplemental Files 1-2 (record mynard2015_data), and the grid,
+    time step and coronary layer parameters are not printed. Its printed results are recorded and checked only
+    against each other, against the paper's own reference data, and through the sub-models that can be run alone.
+- id: q_mu_av_ratio
+  kind: possible_error
+  about: [mu_av_la, mu_av_ra, cmp_mu_av_la]
+  text: >
+    The text says the left atrial mu_AV is 2/3 of the right atrial value, which gives 0.022 g/cm7/s from RA 0.033.
+    Table 4 prints LA 0.050 and RA 0.033, so LA is 3/2 of RA. Either the table's LA and RA entries are swapped, or the
+    text has the ratio inverted. Annulus displacement is larger at the tricuspid than at the mitral annulus, which fits
+    the text (left smaller than right). An erratum was published in 2016; it is not part of this record.
+  citation: {page: 7, quote: "mated as 2/3 of the right atrial value based on mitral"}
+- id: q_ppc_above_claim
+  kind: unexplained_difference
+  about: [ppc_normal_claim, cmp_ppc_end_diastole, cmp_ppc_initial]
+  text: >
+    With the printed Kpc = 0.5 mmHg, V0,pc = 641 mL and Phi_pc = 40 (mL), Eq. T5 gives 0.5 mmHg exactly when the
+    chambers hold 641 - 30 - 192 = 419 mL in total. At ventricular end-diastole, Table 6 gives at least 141 + 156 +
+    75 + 58 = 430 mL (ventricles at their maximum, atria at their minimum), so ppc is at least about 0.66 mmHg. With
+    the Table 4 initial volumes (446 mL) it is about 0.98 mmHg. The statement 'less than 0.5 mmHg under normal
+    conditions' then holds only for part of the beat or for a mean, which the paper does not say.
+  citation: {page: 8, quote: "a pericardial pressure of less than 0.5 mmHg under"}
+- id: q_phi_pc_unit
+  kind: reading
+  about: [phi_pc]
+  text: "Phi_pc = 40 is printed with no unit. The record reads it as mL, the unit the exponent of Eq. T5 requires."
+  citation: {page: 8, quote: "Fpc = 40, while pericardial cavity volume"}
+- id: q_sip_ratio_reading
+  kind: reading
+  about: [sip_ratio_max_claim, cmp_sip_ratio_max]
+  text: >
+    'Maximum pSIP was 20% of left ventricular cavity pressure' is read as the largest ratio pSIP/pV over the beat. By
+    Eq. 1 this ratio is alpha_SIP/(vV - Vp=0) = 8.2/(vV - 10), largest at the smallest LV volume. Table 6 gives
+    141 x (1 - 0.60) = 56.4 mL, so the ratio is about 17.7%, not 20%; 20% needs vV of about 51 mL. The sentence may
+    instead mean peak pSIP over peak LV pressure, which needs the waveforms and cannot be checked here.
+  citation: {page: 7, quote: "that maximum pSIP was 20% of left ventricular cavity"}
+- id: q_co_lv_rv
+  kind: unexplained_difference
+  about: [cmp_co_from_lv, cmp_co_from_rv, t6_co_model]
+  text: >
+    HR x EF x Vmax gives 6.35 L/min for the LV (75 x 0.60 x 141 mL) and 6.20 L/min for the RV (75 x 0.53 x 156 mL),
+    against the printed cardiac output of 6.2 L/min. The LV value agrees only at the edge of what the rounding of its
+    three inputs allows. The volumetric LV stroke volume may include valve regurgitation during closure (dynamic valves, Eqs. T14-T15) that
+    the net output excludes, or cardiac output may be measured elsewhere. The paper does not define it.
+- id: q_svr_definition
+  kind: unstated_model
+  about: [vascular_resistance, cmp_svr, cmp_svr_no_venous, cmp_pvr]
+  text: >
+    SVR and PVR are not defined. (mean AoRt - mean RA)/CO reproduces SVR 0.90; mean AoRt/CO gives 0.94. For PVR,
+    (mean PT - mean LA)/CO gives 0.068 from the rounded Table 6 values, against the printed 0.06.
+- id: q_c0_sys_art_min
+  kind: unexplained_difference
+  about: [cmp_c0_sys_art_min, c0_min_sys_art, d0_aortic_root_added]
+  text: >
+    Eq. 3 with the Table 2 systemic arterial coefficients and rho = 1.06 g/cm3 gives at most about 460.4 cm/s as
+    D0 grows (sqrt(2 k3/(3 rho))), so a minimum of 461 needs a largest systemic arterial D0 of about 1.8 cm, smaller
+    than a typical aortic root. The difference is within the rounding of the printed k3 (33.7) and rho (1.06). The
+    aortic root diameter of Supplemental File 1 would settle this.
+- id: q_mu0_arterial_5
+  kind: overstated_claim
+  about: [claim_mu0_arterial_max, cmp_t8_mu0_arterial_max, t8_mu0_mpa_fcw]
+  text: >
+    The text says removing AV plane motion (mu = 0) has a negligible effect (<5%) on arterial waves other than the
+    MPA FEWls, but Table 8 gives -5% for the MPA FCWee: equal to the bound, not below it, at the printed precision.
+  citation: {page: 11, quote: "fect (<5%) on arterial waves"}
+- id: q_lvemax_60
+  kind: reading
+  about: [t8_lvemax_aort_fcw, t8_lvemax_aort_few]
+  text: >
+    'Depressed LV contractility most significantly affects aortic root FCWee and FEWls (by ~60%)': Table 8 gives -60
+    and +56. The FEWls magnitude increases, which the wording does not say. Approximate claims are not compared.
+- id: q_audit_grid_nodes
+  kind: reading
+  about: [circulation_1d_0d]
+  text: >
+    Audit: the not_runnable_reason says the finite element grid is not stated, but p. 4 prints the size of the
+    1D networks (396 segments, 5359 nodes, 188 junctions) and the steady-state rule (9 cycles for the baseline).
+    The node spacing per segment and the time step are still not printed, so the model stays not runnable;
+    the printed node count could be entered as a setting of circulation_1d_0d.
+  citation: {page: 4, quote: "segments, 5359 nodes and 188 junctions in the 1D net-"}
+- id: q_table2_eq_label
+  kind: reading
+  about: [wave_speed_eq3]
+  text: "The Table 2 caption says its coefficients are used in Eq. (T3); they are the k1, k2, k3 of Eq. (3)."
+  citation: {page: 6, quote: "Coefficients used in Eq. (T3) for calculation of wave speed"}
+- id: q_fig4_scales
+  kind: reading
+  about: [fig4_aoroot_flow_mod, fig4_aoroot_flow_iv, aoroot_flow_fig4_model]
+  text: >
+    Figure readings: in Fig. 4 only the bottom row prints time labels and the model panels print no y labels.
+    Each panel is read on its own x ticks matched to the bottom row's 0.2, 0.4, 0.6, 0.8 s (the four ticks stand
+    at the same places in every panel), and each model panel on the y labels of the in vivo panel beside it. The
+    model axes' own tick marks sit on those label rows (the reading code checks this and says on how many), so a
+    shared y range is what the figure shows, but the paper does not state it. The time axes of the in vivo
+    curves are as replotted by the authors (one cycle from an origin they chose), so in vivo and model curves
+    are not aligned in time by anything the paper states.
+  citation: {page: 8, quote: "Comparison of published human flow and pressure waveforms"}
+- id: q_fig4_scaled_velocity
+  kind: reading
+  about: [aoroot_flow_fig4_invivo, mpa_flow_fig4_invivo, ivc_flow_fig4_invivo, svc_flow_fig4_invivo, lipv_flow_fig4_invivo, mhv_flow_fig4_invivo, hpv_flow_fig4_invivo, lts_flow_fig4_invivo, lad_flow_fig4_invivo]
+  text: >
+    The asterisked in vivo flow waveforms of Fig. 4 are measured velocities converted to flow 'by assuming the
+    same peak flow value as in the model'. Their shape is measured but their amplitude is the model's peak, so a
+    later validation against them can test timing and shape, not the size of the flow.
+  citation: {page: 8, quote: "velocity waveform has been has been converted to a flow waveform"}
+- id: q_fig5_fig7_peaks
+  kind: unexplained_difference
+  about: [aoroot_wif_fig5, wi_peak_fwd_path_a_fig7, rbrach_wif_fig5, wi_peak_fwd_path_b_fig7]
+  text: >
+    Fig. 7 plots the peak forward wave intensity along each path; its first circle (AoRt, about 0 cm) reads
+    about 10^6.5 W/m^2/s^2 in every panel, about 3.2 x 10^6. The aortic root FCWee of Fig. 5 peaks at about
+    2.65 x 10^6 on its linear axis (10^6.42). The right brachial artery shows the same gap (Fig. 5 peak about
+    1.6 x 10^6; Fig. 7(b) at the RBrach label about 10^6.29, 1.9 x 10^6). Both gaps (about 0.08 in log10, 20%)
+    are larger than either reading's interval. Fig. 7 may take the largest value along each 1D segment rather
+    than at the location of Fig. 5, or use another time step or sampling; the paper does not say. For the main
+    pulmonary artery the two figures agree within their readings (Fig. 6 peak about 2.0 x 10^5; Fig. 7(f)
+    MPA about 10^5.32).
+  citation: {page: 10, quote: "Peak forward (black solid) and backward (red dashed) wave intensity"}
+- id: q_fig7_orders
+  kind: reading
+  about: [wi_peak_fwd_path_a_fig7, wi_peak_bwd_path_a_fig7, wi_peak_fwd_path_f_fig7, wi_peak_bwd_path_f_fig7]
+  text: >
+    With Fig. 7 read, the text's 'proximal arterial backward waves are approximately 1-1.5 orders of magnitude
+    smaller than forward waves' can be looked at: at the aortic root (first circles of panels a-e) the circles
+    differ by about 1.55-1.6 in log10, at the edge of the stated range; in the main pulmonary artery (f) by about
+    1.4. The claims are approximate and are not compared (no verdict); the readings
+    wi_peak_*_fig7 hold the values.
+  citation: {page: 9, quote: "are approximately 1–1.5 orders of magnitude smaller"}
+
+# Added by the ModelAtlas job with olufsen1999.
+- id: q_eq3_factor_vs_olufsen1999
+  kind: unexplained_difference
+  about: [wave_speed_eq3]
+  text: >
+    Eq. 3 is said to be the empirical formula of Olufsen et al. (ref. 96 = olufsen1999), but olufsen1999
+    prints c0^2 = (4/3) Eh/(rho r0) at the reference area, while Eq. 3 is 2/(3 rho) [k1 exp(k2 D0/2) + k3],
+    i.e. (2/3) Eh/(rho r0) with Olufsen's Eh/r0 fit: c0 differs by a factor sqrt(2)
+    (relation rel_wave_speed_olufsen1999_printed, not verified). Eq. 3 agrees with the factor 2/3 that
+    olufsen1999's own Eq. 5 gives (rel_wave_speed_olufsen1999_eq5factor, verified; olufsen1999
+    q_wave_speed_factor). The middle expression of Eq. 3, 2Eh/(3 rho D0), equals (1/3) Eh/(rho r0) and agrees
+    with neither; the right-hand side, which is what is used, takes Eh/r0 (not Eh/D0) from Olufsen's fit.
+    Mynard's coronary-artery coefficients (20.00 x 10^6, -22.5, 86.5 x 10^4) equal Olufsen's printed
+    k1, k2, k3 (2.00 x 10^7, -22.53, 8.65 x 10^5) to rounding, but are not said to come from it.
+  citation: {page: 6, quote: "empirical formula suggested by Olufsen et al."}
+
+- id: q_no_validation_vs_boileau2015
+  kind: choice
+  about: [circulation_1d_0d, wave_speed_eq3, vascular_resistance, t6_svr_ref, t6_aort_mean_ref, d_cs_human]
+  text: >
+    No validation against boileau2015 is entered, in either direction (cross-validation job 2026-11-06).
+    Neither paper cites the other or uses the other's data. boileau2015's measurements are the in vitro pressure
+    and flow waveforms of its ref. 45 in a 37-vessel silicone network (its Figs. 6-9). circulation_1d_0d, which
+    would give pressures and flows in time, is not runnable (q_full_model_not_runnable) and is built for the
+    human circulation, not that network. Its runnable parts give a wave speed from a diameter with coefficients
+    fitted to human vessels (wave_speed_eq3), a pericardial pressure, a pSIP ratio, cardiac output from EF,
+    a vascular resistance from mean pressures and a compliance sum; none of these is a pressure or flow at a
+    time, which is all boileau2015 measures. The shared dimension of circulation_1d_0d's SVR and
+    boileau2015/adan56_terminal_impedance's R1 does not make them the same quantity: SVR is the whole systemic
+    resistance, R1 the characteristic impedance of one terminal vessel. In the other direction, boileau2015's
+    runnable models (areas, wave speeds from E, h and area, terminal impedance, Windkessel mean pressure,
+    Gaussian inflow, viscous peak decay) give no quantity that this record's measurements (Table 6 reference
+    ranges, coronary sinus diameter, Fig. 4 in vivo waveforms) quantify under conditions either paper states
+    (boileau2015 q_no_validation_vs_mynard2015).
+  citation: {page: 7, where: "Table 6", quote: "SVR mmHg s/mL 0.90 0.80"}
+
+- id: q_no_validation_vs_mynard2014_data
+  kind: choice
+  about: [wave_speed_eq3, circulation_1d_0d, d_cs_human]
+  text: >
+    No validation against mynard2014_data (the Supplemental Data File of ref. 91) is entered, in either
+    direction (cross-validation job 2026-11-06). mynard2014_data holds only parameters of the coronary 1D
+    network model (segment lengths, diameters and wave speeds c0, all origin reported), with no measurement,
+    so no model of this record can be validated against it. Running wave_speed_eq3 over its c0-vs-D0 tables
+    would compare two papers' parameter choices, not a model with a measurement. This paper cites ref. 91
+    for its coronary model and the distribution of coronary resistances (p. 3, p. 6), not for data. In the
+    other direction, mynard2014_data's only model (wave_speed_eq1) gives a wave speed, and none of this
+    record's measurements (Table 6 reference ranges, the coronary sinus diameter, the Fig. 4 in vivo
+    waveforms) is a wave speed (mynard2014_data q_no_validation_vs_mynard2015).
+  citation: {page: 6, quote: "reported by Fisher et al.32 As in Mynard et al.91"}
+
+- id: q_no_validation_vs_mynard2015_data
+  kind: choice
+  about: [wave_speed_eq3, compliance_sum, vascular_resistance, circulation_1d_0d]
+  text: >
+    No validation of this record's models against mynard2015_data is entered (cross-validation job 2026-11-06).
+    mynard2015_data is the paper's two supplemental parameter tables: it holds no measurement, only released
+    model inputs and the paper's printed values copied for its comparisons, so there is nothing of it for
+    wave_speed_eq3 or any other model here to be tested against (its own wave_speed_eq3 already reproduces
+    Table 2 from the released diameters). In the other direction, three of this record's measurements are
+    predicted by mynard2015_data's models and are entered there: the coronary sinus diameter (val_d_cs_human),
+    and the Table 6 SVR and PVR reference ranges (val_svr_ref as a fit, val_pvr_ref). The other measurements here
+    (the Fig. 4 in vivo waveforms, Table 6 heart rate, cardiac output, chamber volumes, ejection fractions,
+    pressures, E/A ratios and dp/dt) need the full closed-loop model, which neither record can run.
+  citation: {page: 6, quote: "with the value of 0.81 measured in humans"}
+
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [wave_speed_eq3, cardiac_output_from_ef, vascular_resistance, circulation_1d_0d]
+  text: >
+    No validation of this record's models against olufsen1999 (ref. 96) is entered (cross-validation job
+    2026-11-06). The paper cites ref. 96 only for the form of its wave-speed formula (Eq. 3, p. 6), not for
+    data. olufsen1999's measurements are the cardiac output 4.14 l/min and the inflow curve q(t) of its ref. 20
+    (Fig. 4), the input impedance modulus and phase md 0 / md 1 of Mills et al. (Fig. 9), and the aortic,
+    subclavian-brachial and radial pressures of Remington and Wood (Fig. 12); its Fig. 3 Eh/r0 points are
+    estimates, not measurements, and give a wall stiffness, not a wave speed. wave_speed_eq3 gives only c0,
+    which olufsen1999 does not measure. cardiac_output_from_ef would need the heart rate, ejection fraction
+    and ventricular volume of olufsen1999's subject, which neither paper states; vascular_resistance needs
+    mean pressures and a flow of one condition, which olufsen1999 does not measure together. Impedance spectra
+    and pressure waveforms would need circulation_1d_0d, which is not runnable. The model-to-model relation
+    between Eq. 3 and olufsen1999's Eq. 6 is in relations.yaml and q_eq3_factor_vs_olufsen1999. In the other
+    direction see olufsen1999 q_no_validation_vs_mynard2015.
+  citation: {page: 6, quote: "empirical formula suggested by Olufsen et al."}
+
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [wave_speed_eq3, cardiac_output_from_ef, vascular_resistance, min_volume_from_ef, circulation_1d_0d]
+  text: >
+    No validation of this record's models against olufsen2000 is entered (cross-validation job 2026-11-06).
+    This paper does not cite olufsen2000 (its Olufsen reference, ref. 96, is olufsen1999) and never sets its
+    results against olufsen2000's data. olufsen2000 measures, for one young male subject, the heart rate 51/min,
+    the cardiac period 1.1 s (Fig. 3 caption), the ascending-aorta inlet radius 1.25 cm (Table 1), the cuff
+    pressures 120/80 mmHg, and MR flow waveforms at the ascending aorta (Fig. 3) and nine further sites (Fig. 7).
+    None is the output of a runnable model here: wave_speed_eq3 gives a wave speed, which olufsen2000 does not
+    measure (it could be run at D0 = 2 x 1.25 cm, but there is nothing to set it against);
+    cardiac_output_from_ef and min_volume_from_ef need an ejection fraction and ventricular volume of that
+    subject, which neither paper states, and give a cardiac output or volume olufsen2000 does not measure
+    (the mean of the Fig. 3 inflow would be a computed number, not a printed measurement); vascular_resistance
+    needs a mean pressure drop and a cardiac output of one condition, which olufsen2000 does not give (the cuff
+    gives only systolic and diastolic values). The flow waveforms and cuff pressures would need
+    circulation_1d_0d, which is not runnable, and they belong to a different subject from the ones the model
+    is tuned to. The model-to-model relation between Eq. 3 and olufsen2000's Eqs. 14-15 is in relations.yaml
+    (rel_wave_speed_from_olufsen2000_tube_law). In the other direction see olufsen2000
+    q_no_validation_vs_mynard2015.
+  citation: {page: 6, quote: "empirical formula suggested by Olufsen et al."}
+
+- id: q_c0_vs_pwv_reymond2009
+  kind: choice
+  about: [wave_speed_eq3, circulation_1d_0d, cardiac_output_from_ef, vascular_resistance]
+  text: >
+    (Cross-validation with reymond2009, ref. 104, job 2026-11-06.) One validation is entered: Eq. 3 with the
+    systemic-artery coefficients of Table 2, run at each lumen diameter of reymond2009's Fig. 3, against the
+    literature PWV plotted there. Two choices are open. (1) c0 is taken as the same quantity as measured PWV:
+    c0 is the wave speed at the 80 mmHg reference pressure, while the Fig. 3 values are PWV measured at the
+    sources' own pressures in subjects of various ages. Both papers set c0 or PWV(Pref) beside such
+    measurements, but a PWV measured at a higher mean pressure would be higher than c0. (2) The systemic-artery
+    coefficients are used for every Fig. 3 point, including the small cerebral arteries of Giller and Aaslid,
+    since this paper applies one set of coefficients to all its systemic arteries, cerebral ones included.
+    The validation comes out not reproduced: Eq. 3 gives wave speeds below the measured PWV over the Fig. 3
+    diameter range, the more so for the small arteries, where reymond2009's own fit also lies below the points
+    (its p. 5, "it seems to underestimate the PWV"). Choice (1) leans the same way, since c0 is defined at a
+    pressure below mean arterial pressure.
+    Not used: the shared shape of cardiac_output_from_ef and reymond2009/arterial_tree_1d is no pair to test,
+    since reymond2009 measures no ejection fraction or ventricular volume and arterial_tree_1d is not runnable.
+    vascular_resistance would need a measured resistance in reymond2009, which it does not give. The Fig. 4 in
+    vivo waveforms taken from ref. 104 are reymond2009's measurements, but the model that would predict them,
+    circulation_1d_0d, is not runnable (q_full_model_not_runnable). No Table 6 quantity is measured in
+    reymond2009 (it gives no heart rate, cardiac output, chamber volume or ejection fraction of its volunteers).
+  citation: {page: 6, quote: "empirical formula suggested by Olufsen et al.", where: "Eq. 3"}
+- id: q_no_validation_vs_stergiopulos1992
+  kind: choice
+  about: [circulation_1d_0d, wave_speed_eq3, vascular_resistance, t6_aort_mean_ref, t6_aort_pulse_ref, aoroot_p_fig4_invivo]
+  text: >
+    (Cross-validation with stergiopulos1992, ref. 116, job 2026-11-06.) No model of this record is validated
+    against a measurement of stergiopulos1992. Its measurements are the Gosling et al. pulsatility indices
+    (aorta, groin, knee, ankle) and the Fronek et al. leg/brachial systolic indices for normal subjects and two
+    disease groups. Only the full closed-loop model circulation_1d_0d could give pulsatility indices or systolic
+    pressures at the thigh, knee and ankle, and it is not runnable (q_full_model_not_runnable). The runnable
+    parts (Eq. 3 wave speed, Eq. T5, Eq. 1, the CO, EF, resistance and compliance arithmetic) give none of these
+    quantities. The shared shape of circulation_1d_0d and stergiopulos1992/arterial_tree_1d (pressure from blood
+    density and pressure) is no pair to test for the same reason. In the other direction, one validation is
+    entered in stergiopulos1992 (val_p_asc_mean_vs_mynard2015_t6_aort_mean): its control tree's mean aortic
+    pressure against Table 6's reference range. This paper adapts that paper's bed resistances, but only as
+    inputs; it does not say either model explains the other's measurements.
+  citation: {page: 6, quote: "bed resistances were based on data in Stergiopulos"}
+- id: q_no_validation_vs_westerhof1969
+  kind: choice
+  about: [wave_speed_eq3, vascular_resistance, compliance_sum, cardiac_output_from_ef, circulation_1d_0d]
+  text: >
+    (Cross-validation with westerhof1969, ref. 130, job 2026-11-06.) No model of this record is validated against
+    a measurement of westerhof1969. This paper cites ref. 130 only as one source its systemic arterial network
+    "was adapted from" (p. 4), not as data any of its models explains. westerhof1969's measurements are the
+    pressure decay times 0.8, 0.4, 1.66 and about 0.5 s and the "about 50 per cent" rises in impedance level and
+    pulse wave velocity of a stiffened system, all measured on its own electrical analog (not in man, and
+    predicted there by its own models), and the apparent wave velocities in man of Luchsinger et al. and Gabe et
+    al. as functions of frequency (its Fig. 7). wave_speed_eq3 gives the reference wave speed c0 of a segment
+    from its diameter, with no frequency input; an apparent velocity from phase delays includes reflections and
+    varies with frequency, and westerhof1969's own reading declines to equate even its plateau with a local
+    phase velocity (its figures.md), so the two are not the same quantity; the measured curves also give no
+    diameter. The other runnable models (resistance, compliance sum, CO and EF arithmetic, Eq. T5, Eq. 1) give
+    no decay time, no relative change and no wave velocity. A decay time or a frequency-dependent apparent
+    velocity would need circulation_1d_0d, which is not runnable (q_full_model_not_runnable), and the analog's
+    decay times describe an electrical model, not a subject this model represents. For the other direction see
+    westerhof1969 q_no_validation_vs_mynard2015.
+  citation: {page: 4, quote: "was adapted from previous studies"}
+- id: q_no_validation_vs_alastruey2011
+  kind: choice
+  about: [circulation_1d_0d, wave_speed_eq3, vascular_resistance, compliance_sum, cardiac_output_from_ef]
+  text: >
+    (Cross-validation with alastruey2011, ref. 2, job 2026-11-06.) No model of this record is validated against a
+    measurement of alastruey2011. This paper cites ref. 2 only for the velocity profiles adopted in the convective
+    and friction terms of Eq. T2 (p. 3), not as data any of its models explains. alastruey2011's measurements are
+    in vitro: the fluid density and viscosity, the silicone's Young's modulus and wall viscosity, the per-segment
+    geometry and wave speeds c0 of its 37-tube phantom (Table 2), the load-extension holds and loop of Fig. 2 and
+    the midpoint pressure and flow waveforms and flow harmonics of Figs. 3-4. circulation_1d_0d, which shares
+    network_1d's shape (flow, pressure from a density), would be needed for the waveforms; it is not runnable
+    (q_full_model_not_runnable) and represents the human circulation with a beating heart, not a pump-driven
+    silicone network. wave_speed_eq3 could be run at the phantom's diameters, but its coefficients k1-k3 are an
+    empirical fit to human arteries (Table 2); the phantom's c0 are set by the silicone's E and wall thickness,
+    which Eq. 3 does not take, so its output would not be a prediction of those tubes' measured wave speeds.
+    vascular_resistance gives the whole systemic (or pulmonary) resistance from mean pressures and cardiac
+    output; the phantom's measured Rp (Table 2) are the resistances of single terminal tubes, a different
+    quantity despite the shared dimension. The compliance sum and the CO/EF arithmetic give quantities the
+    phantom does not measure (it has a pump, no ventricle, volume or ejection fraction). For the other
+    direction see alastruey2011 q_no_validation_vs_mynard2015.
+  citation: {page: 3, quote: "boundary layer for the viscous friction term, as adopted"}
+- id: q_no_validation_vs_formaggia2003
+  kind: choice
+  about: [wave_speed_eq3, circulation_1d_0d, vascular_resistance, compliance_sum, cardiac_output_from_ef]
+  text: >
+    (Cross-validation with formaggia2003, ref. 34, job 2026-11-06.) No model of this record is validated
+    against a measurement of formaggia2003, because that record holds none: formaggia2003 is a methods paper
+    whose data are the inputs of its numerical tests (density, viscosity, E, h0, radii, the half-sine inlet
+    pressure, loss coefficients and angles), the alpha = 1.1 it quotes from its ref. 19, and its own
+    simulated A, Q, W1 and W2 (Figs. 6-8, 11-18), all origin reported, predicted or derived. This paper cites
+    ref. 34 only for the operator splitting of the viscoelastic term on internal nodes (p. 3), not as data
+    any of its models explains. wave_speed_eq3 and formaggia2003/bifurcation_angles share a shape (a velocity
+    from a density and a length) only in dimension: formaggia2003 prints no wave speed of a vessel of given
+    diameter, measured or otherwise. For the other direction see formaggia2003 q_no_validation_vs_mynard2015.
+  citation: {page: 3, quote: "technique described by Formaggia et al.34 and Malossi"}
+- id: q_no_validation_vs_mynard2014
+  kind: choice
+  about: [circulation_1d_0d, wave_speed_eq3, vascular_resistance, cardiac_output_from_ef, sip_ratio_eq1]
+  text: >
+    (Cross-validation with mynard2014, ref. 91, job 2026-11-06.) No model of this record is validated against a
+    measurement of mynard2014. This paper cites ref. 91 only for the design of its coronary bed model ("identical
+    to that in Mynard et al.", p. 3), its resistance and intramyocardial pressure rules (pp. 6-7) and its
+    validation (p. 4). It never says that its own model reproduces ref. 91's data. mynard2014's measurements
+    are all from anaesthetised adult sheep and newborn lambs: Table 1 weights, heart rates, mean aortic
+    pressure and Cx flow per 100 g; the Experiment column of Table 2 (Cx flow features and phase durations);
+    the measured AoQ, AoP and LVP of Fig. 3; and the proximal Cx flow of each animal in Figs. 7-8. None of
+    these is produced by a runnable model here. The closed-loop model whose coronary bed could give a Cx flow
+    (circulation_1d_0d) is not runnable, and it is set up for an adult human, not a sheep. wave_speed_eq3 gives
+    a wave speed, but mynard2014 measures none: its 9.0 m/s proximal Cx wave speed is an assumption (origin
+    reported), and the proximal Cx diameter is not printed. Its Table 1 holds no ventricular volumes or EF,
+    so cardiac_output_from_ef cannot be checked against it. It holds no cardiac output or resistance either,
+    so vascular_resistance cannot be. Its SIP curve (Fig. 3) is derived, not measured, so sip_ratio_eq1 cannot
+    be. Both papers' wave-speed formulas (Eq. 3 here, Eq. 1 there, Olufsen's form) share a shape. That makes
+    them related models, not a model and a measurement. For the other direction see
+    mynard2014/q_no_validation_vs_mynard2015.
+  citation: {page: 3, quote: "is identical to that in Mynard et al.91 and"}

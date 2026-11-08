@@ -1,0 +1,20 @@
+# DemonstrationCode.m lines 9-39: element lengths, diameters, mid-element pressures and flows,
+# collected from TreeQ.IE and TreeQ.SE, and the diameter-length table written to Excel.
+id: demo_element_export
+name: per-element diameter, length, pressure and flow taken from the network graph (DemonstrationCode.m, sections 2-3)
+role: processing
+stated: {file: DemonstrationCode.m, lines: "13-16", quote: "Lengths=[TreeQ.IE.l, TreeQ.SE.l];"}
+equation: "l, d, P, |Q| of every element: internal elements then source elements, in S.I.; Q in mL/min = Q * 1e6 * 60; d in micron = d * 1e6; every 100th element plotted (log-log d vs Q); export rows [element number, d, l], source elements numbered 1000000 + k"
+inputs: {}
+outputs:
+  d: {quantity: vessel_diameter, unit: m}
+  l: {quantity: segment_length, unit: m}
+  P: {quantity: node_pressure, unit: Pa}
+  Q: {quantity: segment_flow, unit: m^3/s}
+settings: {plot_every: 100, source_element_offset: 1000000}
+runnable: false
+not_runnable_reason: >
+  It reads TreeQ from 'Human Left Coronary graph.mat' (the network itself, 121 MB), which is not in
+  this copy of the release, and its result is a list over all 202,184 elements, not a value. It
+  extracts data and computes nothing the paper prints beyond the counts recorded here.
+stochastic: false

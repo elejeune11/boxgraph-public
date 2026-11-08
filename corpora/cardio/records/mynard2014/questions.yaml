@@ -1,0 +1,335 @@
+- id: q_multiscale_not_runnable
+  kind: unstated_input
+  about: [multiscale_coronary]
+  text: >
+    The multi-scale model (Eqs. 1-8) produces Table 2's Model column, the RMS errors (16.7% and 14.5%), the
+    40% and 42% share of total effective resistance from systolic volume reduction, the transmural volume
+    swings (17%, 7%, 1.6%, 2.3%), the LAD/septal flow-integral percentages (3.2%, -1.4%, 4.3%, -0.7%, 7.9%,
+    4.9%) and Figs. 5-10, but its per-animal inputs (aortic flow, aortic and LV pressure waveforms) are not
+    published, the network geometry is in a separate supplement, and the numerical scheme's settings
+    (time step, mesh) are not given. None of these results can be recomputed from this paper.
+  citation: {page: 11, quote: "Only one free (i.e. fitting) parameter was considered in the validation procedure"}
+- id: q_d1_sd
+  kind: possible_error
+  about: [d1_dur_newborn_text, t2_D1_newborn_exp, t2_D1_newborn_model]
+  text: >
+    The Results give the newborn D1 duration as 13 ± 4% of heart period, but Table 2 gives 0.13±0.02
+    (Experiment) and 0.15±0.04 (Model). The mean matches the Experiment column and the SD matches the Model
+    column; one of the two is misprinted or mixed up.
+  citation: {page: 13, quote: "2% and 13 ± 4% vs 9 ± 2% respectively, both P < 0.05"}
+- id: q_reff
+  kind: unexplained_difference
+  about: [reff_adult_text, reff_newborn_text, cmp_reff_adult, cmp_reff_newborn, q_lm_adult_added, q_lm_newborn_added]
+  text: >
+    (pLM - pRA)/qLM from the Table 1 group means (mean aortic pressure 80 and 78 mmHg, pRA = 5 mmHg, qLM taken
+    as the Cx flow of 71 and 129 mL/min/100g) is about 1.06 (adults) and 0.57 (newborns)
+    mmHg·min·100g/mL, against the printed 0.72 ± 0.35 and 0.34 ± 0.09: the printed values are lower by a
+    factor of about 0.6-0.7 in both groups. A mean of individual ratios would be expected to be higher,
+    not lower, than the ratio of means. The paper normalizes qLM per 100 g LV, not per 100 g of the Cx
+    territory, and does not state how qLM was obtained (measured or simulated); the difference is not
+    explained by what is printed.
+  citation: {page: 12, quote: "and 0.34 ± 0.09 mmHg⋅min⋅(100g LV)/mL respectively"}
+- id: q_hw_ratio
+  kind: reading
+  about: [hw_ratio_text, cmp_hw_ratio]
+  text: >
+    "Heart weights differ by a factor of four" is read as total heart weight (HW/BW x BW: 175 g vs 43 g,
+    ratio 4.1). The LV free wall + septum weights of Table 1, which the paper uses for scaling, differ by a
+    factor of 4.6, which would round to 5.
+  citation: {page: 18, quote: "adult sheep and newborn lambs, whose heart weights differ by a factor of four"}
+- id: q_ventricular_ratio
+  kind: unstated_input
+  about: [hwbw_adult, hwbw_newborn]
+  text: >
+    The Discussion gives ventricular myocardium/body weight ratios of 5.3 g/kg (newborns) and 3.2 g/kg
+    (adults), but total ventricular weight (TVW, defined in the Table 1 footnote) is not in Table 1, so
+    these ratios cannot be checked; LVFWS/BW from Table 1 gives about 3.9 and 2.6 g/kg (without the RV free
+    wall).
+  citation: {page: 17, quote: "the ventricular myocardium/body weight ratio decreased from 5.3 g/kg in newborns to 3.2 g/kg"}
+- id: q_table2_sd_tolerance
+  kind: choice
+  about: [duration_difference, flow_difference, flow_difference_of_differences]
+  text: >
+    The Table 2 consistency checks (Difference = Model - Experiment; S1b - S1c and D1e - D1f rows from their
+    components) are judged against the printed ± SD, which is wide. Judged by the last printed digit
+    instead, every one of them also agrees within the rounding of the two-decimal means (largest
+    discrepancy 0.01), so the table is internally consistent at either standard.
+- id: q_duration_sum
+  kind: reading
+  about: [t2_S1_adult_exp, t2_S2_adult_exp, t2_D1_adult_exp, t2_D2_adult_exp]
+  text: >
+    The four phase durations of Table 2 sum to 0.99 (adult experiment), 1.01 (adult model), 0.99 (newborn
+    experiment) and 1.00 (newborn model), consistent with rounding of fractions that by definition sum to 1;
+    no comparison is recorded because the paper prints no total.
+- id: q_delay
+  kind: unstated_input
+  about: [multiscale_coronary]
+  text: >
+    The 15 ms (adult) and 8 ms (newborn) delays applied to aortic pressure are attributed to a ventricular
+    wave speed of about 4 m/s, but the transit distance is not given, so they cannot be checked. Scaling a
+    6 cm adult distance by the allometric length ratio 1/1.7 would give about 9 ms in newborns.
+  citation: {page: 10, quote: "having applied a delay of 15 ms (in adults) and 8 ms (in newborns)"}
+- id: q_figures_not_read
+  kind: choice
+  about: [multiscale_coronary]
+  text: >
+    Figs. 5-10 (simulated and measured Cx flow waveforms, sensitivity curves) were not digitized: they are
+    produced by the non-runnable multi-scale model, the measured waveforms of Figs. 7-8 are per-animal
+    traces that no runnable model in this record predicts, and their summary features are already printed
+    in Table 2. See figures.md.
+- id: q_feature_point_directions
+  kind: possible_error
+  about: [t2_S1a_adult_model, t2_S1a_newborn_model, t2_S1c_adult_model, t2_S1c_newborn_model, t2_D1f_adult_model,
+          t2_D1f_newborn_model, t2_D1e_adult_exp, t2_D1e_newborn_exp, t2_D1e_adult_model, t2_D1e_newborn_model,
+          t2_D1f_adult_exp, t2_D1f_newborn_exp]
+  text: >
+    (Audit.) The Results (p. 13) say the model "incorrectly predicted smaller S1a, S1c and D1f values in
+    newborns than adults", but Table 2's Model column gives larger newborn values for all three (S1a -0.53
+    vs -0.83, S1c 0.22 vs -0.10, D1f 1.98 vs 1.66); "smaller" holds only for S1a in magnitude. The same
+    paragraph says simulations and experiments "revealed higher D1e values in newborns", but Table 2 gives
+    lower newborn D1e in both columns (Experiment 3.06 vs 3.10, Model 2.35 vs 2.75). It also says there was
+    no adult-newborn difference in D1f (experiment), whereas Table 2 marks the newborn Experiment D1f
+    (2.40 vs 1.70) with the dagger for P < 0.05 and does not mark the Experiment D1e; the Discussion (p. 18)
+    lists the features without difference as S1a, S1b, S1c, D1d and D1e, i.e. without D1f. The text appears
+    to have the directions inverted and D1e and D1f interchanged; which of text or table is right cannot be
+    told from what is printed. These are qualitative claims, so no comparison is recorded.
+  citation: {page: 13, quote: "but the model incorrectly predicted smaller S1a, S1c and D1f values in newborns than adults"}
+- id: q_measured_waveforms_unread
+  kind: reading
+  about: [q_figures_not_read]
+  text: >
+    (Audit, disagreement with the first reading.) Figs. 7 and 8 plot measured Cx flow waveforms (solid
+    lines) for each of the 18 animals. The reading guide asks for every plot of measured data to be read,
+    whether or not a model in the record predicts it, since another paper's model may; these are averaged
+    beats of real measurements, not random single trajectories. The figure job should consider reading
+    them (and the simulated dashed lines, as the model's printed outputs).
+  citation: {page: 29, quote: "Comparison of measured (solid lines) and simulated (dashed lines) proximal circumflex"}
+- id: q_figures_read
+  kind: reading
+  about: [q_figures_not_read, q_measured_waveforms_unread]
+  text: >
+    (Figure job.) Figs. 3, 5, 6, 7, 8, 9 and 10 are now read as calibrated figure readings (figures.yaml,
+    figures.md), 91 curves. The measured and simulated Cx flow of every animal in Figs. 7-8 are recorded,
+    and each simulated curve is compared with its measured one (cmp_fig7a ... cmp_fig8i, validation). The
+    simulated curves still cannot be recomputed (q_multiscale_not_runnable). Figs. 1, 2 and 4 are left out
+    (drawings; an illustrative waveform of unstated origin).
+  citation: {page: 29, quote: "Comparison of measured (solid lines) and simulated (dashed lines) proximal circumflex"}
+- id: q_fig_time_axes
+  kind: choice
+  about: [multiscale_coronary]
+  text: >
+    (Figure job.) Figs. 6, 7, 8 and 9 have no ticks or labels on their time axes. Their curves are read
+    against the fraction of the plotted interval (0 at the y axis line, 1 at the end of the x axis line, or
+    between the box lines in Fig. 6); the paper does not say what interval is plotted (one heart period of
+    each animal is likely, as the curves end where they start). In Fig. 3 the ticks are unlabelled except
+    for "0.2 s" under the first interval of the LVE panel, read as a tick spacing of 0.2 s with 0 on the
+    axis line; the ticks fit that spacing to under 2 px.
+  citation: {page: 29, quote: "Comparison of measured (solid lines) and simulated (dashed lines) proximal circumflex"}
+- id: q_volvar_definition
+  kind: unstated_model
+  about: [volvar_endo_art_p12, volvar_epi_art_p12, fig5d_en_curve, fig5d_ep_curve]
+  text: >
+    (Figure job.) The arterial vascular volume "varied" by 17% (subendocardium) and 1.6% (subepicardium),
+    citing Fig. 5D, which is now read (fig5d_en, fig5d_ep). The paper does not say whether the variation is
+    (max - min) relative to the maximum, the minimum, the mean or the reference volume V0, so the printed
+    percentages are not compared with the readings; with a stated definition they could be.
+  citation: {page: 12, quote: "Vascular volume varied most in the subendocardium (arterial 17%; venous"}
+- id: q_fig78_pointwise
+  kind: reading
+  about: [cmp_fig7a, cmp_fig7b, cmp_fig7c, cmp_fig7d, cmp_fig7e, cmp_fig7f, cmp_fig7g, cmp_fig7h, cmp_fig7i,
+          cmp_fig8a, cmp_fig8b, cmp_fig8c, cmp_fig8d, cmp_fig8e, cmp_fig8f, cmp_fig8g, cmp_fig8h, cmp_fig8i, rms_err_adult,
+          rms_err_newborn]
+  text: >
+    (Figure job.) Compared point by point with their read intervals, the simulated Cx flow of every animal
+    differs from the measured one over parts of the beat (verdict not reproduced in all 18 panels), by up
+    to tens of mL/min at the flow transients and in late systole. This agrees with what the paper itself
+    reports: "visual agreement", an RMS error of 16.7 ± 4.9% (adults) and 14.5 ± 4.9% (newborns) of maximal
+    flow, and late systolic flow or early-systolic transients underestimated in named panels (Fig. 7E-G,
+    7D, 7F; Fig. 8C, 8E, 8H, 8F, 8I). The pointwise verdict is therefore not a contradiction of the paper's
+    claim, which is not a pointwise one. The per-animal RMS errors (printed only as group mean ± SD and
+    range) could be recomputed from these readings by a processing model over the paired curves; that is
+    not done here.
+  citation: {page: 13, quote: "The RMS error, normalised to maximal flow, was 16.7% ± 4.9%"}
+- id: q_fig9_baselines
+  kind: reading
+  about: [cmp_fig9b_base, cmp_fig9c_base, cmp_fig9d_base, cmp_fig9e_base, cmp_fig9f_base]
+  text: >
+    (Figure job.) The baseline (solid) curves of Figs. 9B-F agree with that of Fig. 9A to within about
+    1-2 mL/min at nearly all positions (verdicts close), as one unperturbed simulation should; one position
+    each in panels B (x = 0.35) and D (the early-systolic peak, x = 0.21, where the dashed line lies on the
+    solid one) is outside the read intervals. Panel-to-panel registration of the untick-marked time axes
+    and overlapping lines are the likely cause; the figure cannot tell this from a real difference.
+  citation: {page: 41, quote: "Sensitivity of simulated proximal circumflex coronary artery flow waveforms to changes"}
+- id: q_no_validation_vs_alastruey2011
+  kind: choice
+  about: [multiscale_coronary, wave_speed_eq1, wave_speed_perturbed]
+  text: >
+    (Cross-validation with alastruey2011; cross-validation job 2026-11-06.) No model of this record is
+    validated against a measurement of alastruey2011. Ref. 73 of this paper is Waters, Alastruey et al.
+    2011, a review of coronary models (Prog Biophys Mol Biol 104: 49-76), cited as a review (p. 3), not
+    Alastruey et al. 2011 (J Biomech); ref. 1 is Alastruey et al. 2012 (J Eng Math). Neither paper says one's
+    model explains the other's data. alastruey2011's measurements are of a silicone 37-segment phantom:
+    Table 2's radii, lengths, thicknesses, wave speeds and resistances, the fluid's density and viscosity,
+    the silicone's E, the uniaxial load-extension test and the midpoint pressure and flow waveforms.
+    wave_speed_eq1 is Olufsen's empirical stiffness fit of in vivo arteries, c0(r0) with k1, k2, k3; run on
+    the phantom's radii it would predict what an artery of that radius has, not what a silicone tube of
+    E = 1.2 MPa has, so it is no test of the phantom's measured c0 (and its coefficients are not in this
+    record). wave_speed_perturbed scales a given wave speed by a percentage, which the phantom does not
+    vary. multiscale_coronary is not runnable and models a coronary tree with myocardial loading, not the
+    phantom. The shared shape of wave_speed_eq1 and alastruey2011/wave_speed_eq5 is a coincidence of
+    dimensions. In the other direction, see alastruey2011/q_no_validation_vs_mynard2014.
+  citation: {page: 3, quote: "a void that has been recognized", where: text}
+- id: q_no_validation_vs_formaggia2003
+  kind: choice
+  about: [multiscale_coronary, wave_speed_eq1, wave_speed_perturbed]
+  text: >
+    (Cross-validation with formaggia2003; cross-validation job 2026-11-06.) No model of this record is
+    validated against a measurement of formaggia2003, and none can be: formaggia2003 is a methods paper
+    whose record holds no measured datum (its printed results are simulations of idealized test
+    channels, Figs. 6-8 and 11-18). This paper cites it (ref. 19) only for the numerical treatment of the
+    viscoelastic term, not for data or for a model that explains data. That wave_speed_eq1 and
+    formaggia2003/bifurcation_angles both give a velocity from a density and a length is a coincidence
+    of dimensions: bifurcation_angles gives the blood velocity in a simulated channel, wave_speed_eq1 the
+    reference wave speed of Olufsen's stiffness fit, and neither output is measured in the other paper.
+    In the other direction, see formaggia2003/q_no_validation_vs_mynard2014.
+  citation: {page: 6, quote: "operator splitting technique as described elsewhere", where: text}
+- id: q_no_validation_vs_kim2010
+  kind: choice
+  about: [multiscale_coronary, effective_resistance, segment_length_ratio, wave_speed_eq1, wave_speed_perturbed]
+  text: >
+    (Cross-validation with kim2010; cross-validation job 2026-11-06.) No model of this record is
+    validated against a measurement of kim2010. This paper does not cite Kim et al. 2010 and does not say
+    its model explains kim2010's data. kim2010's only measured data are the canine stenosis flows of
+    Gould et al. (ref. 7 there) as plotted in its Fig. 6 (gould_rest_fig6, gould_hyperemia_fig6), drawn on
+    a human cc/s axis by an unstated scaling (kim2010/q_fig6_gould_scaling). The one model here that could
+    give a coronary flow under a stenosis, multiscale_coronary, is not runnable and has no stenosis; the
+    other models are arithmetic on this paper's own numbers (effective_resistance, ratios, durations,
+    differences) or Olufsen's wave-speed fit, none of which outputs a mean flow against a diameter
+    reduction. In the other direction, see kim2010/q_no_validation_vs_mynard2014.
+  citation: {page: 4, quote: "subject-specific validation utilizing high fidelity in vivo measurements of proximal circumflex", where: text}
+- id: q_no_validation_vs_mynard2014_data
+  kind: choice
+  about: [multiscale_coronary, wave_speed_eq1, wave_speed_perturbed]
+  text: >
+    (Cross-validation with mynard2014_data; cross-validation job 2026-11-06.) No model of this record is
+    validated against mynard2014_data, and none can be: that record is this paper's Supplemental Table S1,
+    the unscaled lengths, diameters and reference wave speeds of the 1D network, all model parameters
+    (origin reported), with no measured datum. Running wave_speed_eq1 on its diameters to compare with its
+    c0 column would test the consistency of the paper's parameters with its Eq. 1, not a model against
+    data; that check is already made inside mynard2014_data (its runs run_eq1_*, question
+    q_eq1_constants), and Olufsen's coefficients k1, k2, k3 are not in this record. In the other
+    direction, see mynard2014_data/q_no_validation_vs_mynard2014.
+  citation: {page: 5, quote: "calculated as a function of reference radius", where: Eq. 1}
+- id: q_no_validation_vs_mynard2015
+  kind: choice
+  about: [multiscale_coronary, wave_speed_eq1, effective_resistance]
+  text: >
+    (Cross-validation with mynard2015, cross-validation job 2026-11-06.) No model of this record is validated
+    against a measurement of mynard2015. That paper is later than this one, which therefore says nothing of its
+    data. Its measured data are all adult human values: Table 6's reference ranges (heart rate, cardiac output,
+    SVR, PVR, chamber volumes, EF, mean and pulse pressures, E/A ratios, dP/dt), the 0.81 cm coronary sinus
+    diameter, and the 24 in vivo waveforms of Fig. 4. The one model here that could give coronary flow
+    waveforms (multiscale_coronary) is not runnable (q_multiscale_not_runnable), and it is built for sheep
+    and lambs with their own inputs. wave_speed_eq1 gives a wave speed from a radius, but mynard2015 records
+    no measured wave speed (the literature reference wave speeds of its Table 2 were left out of that
+    record). effective_resistance is (pLM - pRA)/qLM of the left main coronary per 100 g of myocardium. It
+    is not the systemic or pulmonary vascular resistance of mynard2015's Table 6: the two quantities share
+    a dimension, not a meaning. The other models are arithmetic on this paper's own numbers. In the other
+    direction, see mynard2015/q_no_validation_vs_mynard2014.
+  citation: {page: 4, quote: "subject-specific validation utilizing high fidelity in vivo measurements of proximal circumflex", where: text}
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [wave_speed_eq1, wave_speed_perturbed, effective_resistance, multiscale_coronary]
+  text: >
+    (Cross-validation with olufsen1999, cross-validation job 2026-11-06.) No model of this record is
+    validated against a measurement of olufsen1999. This paper cites it (ref. 46) only for the form of Eq. 1
+    and its coefficients k1, k2, k3 (p. 5); it does not say that any of its models explains or predicts
+    olufsen1999's data. olufsen1999's measured data are the human cardiac output (4.14 l/min) and the MR
+    inflow of its Fig. 4 (ref. 20), the input impedance modulus and phase md 0 and md 1 of its Fig. 9 (ref.
+    26/27), and the aortic, subclavian-brachial and radial pressures of its Fig. 12 (ref. 41). None is a
+    quantity a runnable model here gives: wave_speed_eq1 and wave_speed_perturbed give wave speeds, and
+    olufsen1999 measures none. Its Fig. 3 Eh/r0 points are estimates from literature compliances (origin
+    estimated, not measured) and a stiffness, not a wave speed; and because k1, k2, k3 were fitted to those
+    same points (Eq. 6), crossing them would test the fit, which olufsen1999 already does
+    (cmp_eq6_fig3_data, fit_quality). effective_resistance is the left main coronary resistance per 100 g of
+    myocardium, not the brachiocephalic DC impedance of Fig. 9: they share a dimension only in part and not
+    a meaning. multiscale_coronary, the only model of flow and pressure waveforms, is not runnable
+    (q_multiscale_not_runnable) and models the sheep coronary circulation, not human systemic arteries. In
+    the other direction see olufsen1999 q_no_validation_vs_mynard2014.
+  citation: {page: 5, quote: "Following Olufsen (46), stiffness of the 1D segments", where: text}
+- id: q_no_validation_vs_reymond2009
+  kind: choice
+  about: [ref-53, multiscale_coronary, wave_speed_eq1, wave_speed_perturbed, effective_resistance]
+  text: >
+    (Cross-validation with reymond2009, ref. 53, job 2026-11-06.) No model of this record is validated
+    against a measurement of reymond2009. This paper cites ref. 53 once (p. 3), as an example that 1D models
+    have been validated in vivo for systemic large arteries; it does not say that any of its models explains or
+    predicts reymond2009's data. reymond2009's measurements are the volunteers' flows and pressures (its
+    Tables 4-5 and the averaged waveforms of Figs. 4-5), Senzaki et al.'s normalized elastance (Fig. 1B) and
+    the literature PWV against lumen diameter (Fig. 3). multiscale_coronary, the only model here of flows and
+    pressures, is not runnable (q_multiscale_not_runnable) and models the left coronary tree of sheep and lambs,
+    not the human systemic sites of Tables 4-5. wave_speed_eq1 is the one candidate for Fig. 3, and it was
+    considered and not used: its output is the reference wave speed before "all wave speed values were
+    uniformly scaled to achieve a target wave speed in the proximal Cx" (p. 5), so its absolute level is not
+    a wave speed this paper's model gives any artery, only the relative stiffness along the tree (unlike
+    mynard2015/wave_speed_eq3, whose coefficients were chosen to give normal human wave speeds and which is
+    validated against Fig. 3, mynard2015/val_c0_eq3_vs_reymond2009_fig3_pwv). Its coefficients k1, k2, k3 and
+    rho are also not data of this record (only of mynard2014_data). wave_speed_perturbed scales a given wave
+    speed by a percentage, and effective_resistance is a coronary resistance per 100 g of myocardium; neither
+    is measured in reymond2009. In the other direction see reymond2009/q_no_validation_vs_mynard2014.
+  citation: {page: 3, quote: "although this has been performed for systemic large arteries", where: text}
+- id: q_no_validation_vs_smith2004
+  kind: choice
+  about: [ref-57, multiscale_coronary, effective_resistance, wave_speed_eq1, wave_speed_perturbed]
+  text: >
+    (Cross-validation with smith2004; cross-validation job 2026-11-06.) No model of this record is
+    validated against smith2004, and none in the other direction. This pair was proposed because this paper
+    cites "Smith, 2004" (ref. 57), but ref. 57 is Smith NP, "A computational study of the interaction
+    between coronary blood flow and myocardial mechanics", Physiol Meas 25: 863-877, 2004 (p. 26; Table 3,
+    p. 32), not Smith BW et al., "Minimal haemodynamic system model including ventricular interaction and
+    valve dynamics", Med Eng Phys 2004 (record smith2004): only the surname and year are shared. Neither
+    paper cites the other or says one's model explains the other's data. smith2004 holds no measurement
+    (its values are reported inputs and predicted results), so the models here have nothing of it to
+    predict; nor do they give any of its quantities (ventricular volumes, septal deflection, cardiac
+    output of a human closed loop). In the other direction, this record's measurements (Table 1 heart
+    rate, weights, mean aortic pressure, Cx flow per mass; Table 2 Cx flow features; the Fig. 3, 7, 8
+    waveforms) are of anaesthetized, open-chest sheep and lambs; smith2004's models have no coronary
+    branch, and their aortic and LV pressures are for a human parameter set no paper states for these
+    animals. See smith2004/q_no_validation_vs_mynard2014.
+  citation: {page: 26, quote: "Smith NP. A computational study of the interaction between coronary blood flow", where: "References, ref. 57"}
+- id: q_no_validation_vs_spaan1981
+  kind: choice
+  about: [ref-64, multiscale_coronary, effective_resistance]
+  text: >
+    (Cross-validation with spaan1981; cross-validation job 2026-11-06.) No model of this record is
+    validated against spaan1981's measurements. The paper cites ref. 64 (Spaan, Breuls & Laird 1981)
+    only for the idea of the intramyocardial pump (p. 12) and lists it in Table 3 as an earlier
+    single-compliance model (p. 32); it never compares its model with that paper's data. The only
+    model here that could predict them, multiscale_coronary, is not runnable (q_multiscale_not_runnable)
+    and was built for sheep and lambs, not the anaesthetized dogs at fixed mean left main pressure of
+    spaan1981. The runnable models are arithmetic on this record's own values; effective_resistance,
+    (pLM - pRA)/qLM per 100 g, is not spaan1981's R_c = (P_lc - P_w)/mean CBF (wedge pressure, not
+    right atrial pressure, and not weight-corrected), and spaan1981 prints no mean CBF to feed it.
+    spaan1981's measured p_lc against q_c (Fig. 5), R_a against R_c (Fig. 6), p_im, the Fig. 4A area and
+    the wedge and LV pressures are quantities no model here outputs. See spaan1981/q_no_validation_vs_mynard2014.
+  citation: {page: 12, quote: "demonstrating the intramyocardial pump effect (64) whereby cardiac contraction", where: text}
+- id: q_no_validation_chilian1986
+  kind: choice
+  about: [effective_resistance, multiscale_coronary]
+  text: >
+    (Cross-validation with chilian1986; cross-validation job 2026-11-06.) No model of this record is
+    validated against chilian1986's measurements. The paper does not cite chilian1986: its Chilian
+    references are other works (ref. 14, Chilian & Marcus 1982, on phasic velocity; Toyota et al.;
+    Wilson et al.). The one model that could predict chilian1986's measurements, multiscale_coronary
+    (it would give microvascular pressures along the tree, cf. chilian1986 Tables 4-6), cannot be run
+    (q_multiscale_not_runnable), and it was built for sheep and lambs, not cats. effective_resistance
+    has the same shape as chilian1986/coronary_resistance, but chilian1986 has no measured resistance
+    to test it against. Its Fig. 4 resistance bars are derived: they are its own quotient P/Q from the
+    same Table 3 pressure and perfusion that would be the inputs. So running (pLM - pRA)/qLM on them
+    would only measure the pRA term that chilian1986 leaves out, with an added cat pRA. That is a
+    difference of definition, already stated as rel_effective_resistance_chilian1986 (relations.yaml),
+    not a test against a measurement. The flows also differ: chilian1986 measures subepicardial
+    microsphere perfusion, where qLM is left main inflow per 100 g LV. The other runnable models
+    (ratios, differences, scaling and wave-speed helpers) output no quantity chilian1986 measures. See
+    chilian1986/q_no_validation_mynard2014.
+  citation: {page: 12, quote: "coronary artery (LM) of adults and newborns, calculated as", where: text}

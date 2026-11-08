@@ -1,0 +1,54 @@
+id: mynard2015_data
+kind: software
+title: "Supplemental Files 1 and 2 of 'One-Dimensional Haemodynamic Modeling and Wave Dynamics in the Entire Adult Circulation': parameters and connectivity of the 1D segments, and resistance and compliance of the vascular beds"
+authors: [Jonathan P. Mynard, Joseph J. Smolich]
+year: 2015
+url: https://doi.org/10.1007/s10439-015-1313-8
+file: corpus/cardio/code/mynard2015_data
+language: none (spreadsheets)
+licence: none stated
+version: "sha256:08ac64c3d92d510d1d24735fd710c892d0df0a621a8f86ef562b39ddc00ccfa1"
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-06"}
+notes: >
+  What the source is. The two supplemental files of mynard2015, renamed only (10439_2015_1313_MOESM1_ESM.xlsx
+  and MOESM2): data, not code, attached as a software source because the pipeline takes a folder only that way.
+  There is no code and no entry point; the paper's Matlab model is not released (q_no_code). year, url and
+  authors are the paper's; no licence is stated. MOESM1_1D_segments.xlsx, sheet '1D segments': two notes (VB
+  names are beds of File 2; '[xN]' means N identical vessels), then one row per 1D segment (1-396) with name,
+  abbreviation, length (cm), inlet and outlet A0 (cm2) and the inlet and outlet connectivity, in nine blocks
+  (systemic, coronary and head/neck arteries; systemic, portal, coronary and head/neck veins; pulmonary arteries
+  and veins). MOESM2_vascular_beds.xlsx, sheet 'Sheet1': reference resistance (mmHg s/mL) and arterial and
+  venous compliance (mL/mmHg) of 19 systemic rows (the liver in two), 9 coronary layers (totals over the
+  instances) and 29 pulmonary beds. No wave speeds, reference pressures, heart or valve parameters.
+
+  How it was read. A software source cannot cite sheets and cells, so no released value is typed into the
+  record: adapters (software: true) read the workbooks from $BOXGRAPH_SOURCE with our own reader
+  (models/network_counts/_sheets.py) and their outputs have origin run. The paper's printed values are copied
+  into data.yaml (citation none, naming the paper's page; from_datum where mynard2015 holds the datum). Our own
+  code: Eq. 3 (wave_speed_eq3), the pulmonary tree regrown by Eq. 2 and the 5 mm rule, the coronary venous
+  rule (1.4 x terminal artery, then Eq. 2a), the 1D compliance A0/(rho c0^2), and the bed resistances combined.
+
+  What reproduces. The release has the paper's 396 segments and 54 pulmonary arteries and 54 veins. Its
+  pulmonary trees follow the printed fractal exponent 2.76 and arterial length/radius ratio 2.55 at every
+  bifurcation and segment, with matching venous lengths, and the stated termination rule (read as: a segment
+  branches unless both its artery and its vein are below 5 mm radius; regrowing the tree this way from the
+  released lobar vessels gives 54). Its terminal coronary veins are 1.4 times their arteries' diameters, and
+  Eq. 2a from them gives the released coronary sinus diameter, which is the paper's 0.79 cm. Table 2's c0
+  ranges: five ends at the printed digits, the other seven only within the rounding of the printed
+  coefficients (q_c0_ranges). Table 3: systemic and pulmonary veins reproduced with our 1D compliance; systemic
+  arteries, liver and total close. The beds' combined resistances are close to Table 6's SVR and PVR (reference
+  values, rough by nature: q_reference_resistance).
+
+  What does not, and differences from the paper. (1) The asymmetry ratio of every released pulmonary
+  bifurcation is not the printed gamma = 0.43 but one other value near 0.46 (q_gamma, possible error). (2) The
+  pulmonary arterial upper c0 end, 526, is not what the released network gives; it equals the systemic venous
+  upper end printed above it (q_c0_ranges). (3) The pulmonary arterial compliance of Table 3 is not reproduced:
+  beds plus 1D exceed 6.7 mL/mmHg (q_compliance). (4) 188 junctions: our counts are one off either way
+  (q_junctions). (5) Hidden choices: the brain's compliance is not 'distributed according to the inverse of
+  resistance' like every other systemic bed, and the venous/arterial compliance ratio of the systemic beds is
+  fixed but unstated (q_bed_time_constant); Eq. 3 coefficients of the head/neck and portal networks are not
+  stated, and with the systemic ones the head/neck networks exceed the Table 2 ranges (q_head_neck_coefficients).
+  (6) Several connectivity names match no segment (q_connectivity_names). Not checked: the coronary resistances
+  (R1 = 1.2 Rm, R2 = 0.5 Rm, reference volumes, myocardial-weight distribution), the venous 1.25 diameter ratio
+  (only a starting value, then adjusted), the flow distribution the resistances were tuned to, the 5359 nodes,
+  and every simulated result, since the model's code is not released.

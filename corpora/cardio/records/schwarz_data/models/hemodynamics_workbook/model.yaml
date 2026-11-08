@@ -1,0 +1,27 @@
+id: hemodynamics_workbook
+name: power-law fits and diameter classes of a released hemodynamics workbook, as the authors' analysis wrote them
+role: processing
+software: true
+stated: {file: explanation_of_data.txt, lines: "265-266", quote: "Fits: The black fits in Fig. 5 and the power fits reported in the text."}
+equation: "y = factor * d^slope (d in m): 'all power' rows of sheet 'fits'; 'all, slope' the slope of the log-linear fit; conductance column H 'power fit' the fitted line per diameter class"
+inputs: {}
+outputs:
+  G_a: {quantity: conductance_fit_prefactor, unit: dimensionless, description: "fits!B 'all power, factor' (G in m^3/(Pa s), d in m)"}
+  G_b: {quantity: conductance_fit_exponent, unit: dimensionless, description: "fits!B 'all power, slope'"}
+  G_r2: {quantity: conductance_fit_r2, unit: dimensionless, description: "fits!B 'all power, R^2'"}
+  G_b_line: {quantity: conductance_fit_exponent, unit: dimensionless, description: "log-log slope of conductance!H 'power fit' against conductance!A (d in um, taken in m)"}
+  Q_a: {quantity: flow_fit_prefactor, unit: dimensionless, description: "fits!C 'all power, factor' (Q in ml/min, d in m)"}
+  Q_b: {quantity: flow_fit_exponent, unit: dimensionless, description: "fits!C 'all power, slope'"}
+  Q_r2: {quantity: flow_fit_r2, unit: dimensionless, description: "fits!C 'all power, R^2'"}
+  Q_b_loglin: {quantity: flow_fit_exponent, unit: dimensionless, description: "fits!C 'all, slope' (log-linear fit)"}
+  P_a: {quantity: pressure_fit_prefactor, unit: dimensionless, description: "fits!D 'all power, factor' (P in mmHg, d in m)"}
+  P_b: {quantity: pressure_fit_exponent, unit: dimensionless, description: "fits!D 'all power, slope'"}
+  P_r2: {quantity: pressure_fit_r2, unit: dimensionless, description: "fits!D 'all power, R^2'"}
+  v_a: {quantity: velocity_fit_prefactor, unit: dimensionless, description: "fits!F 'all power, factor' (v in cm/s, d in m)"}
+  v_b: {quantity: velocity_fit_exponent, unit: dimensionless, description: "fits!F 'all power, slope'"}
+  v_r2: {quantity: velocity_fit_r2, unit: dimensionless, description: "fits!F 'all power, R^2'"}
+  v_b_loglin: {quantity: velocity_fit_exponent, unit: dimensionless, description: "fits!F 'all, slope' (log-linear fit)"}
+  n_classes_G: {quantity: diameter_class_count, unit: dimensionless, description: "rows with a diameter in conductance!A"}
+  n_classes_Q: {quantity: diameter_class_count, unit: dimensionless, description: "rows with a diameter in flow!A"}
+settings: {file: hemodynamics_hum06.xlsx}
+stochastic: false

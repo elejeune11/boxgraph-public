@@ -1,0 +1,336 @@
+- id: q_G_exponent_sign
+  kind: possible_error
+  about: [Gheart_exponent, Gheart_exponent_discussion, conductance_power_law]
+  text: >
+    The heart conductance law is printed G = 1.58 10^-4 d^-2.22 (p. 7, minus sign checked on the page
+    image), yet the same exponent is given as 2.22 on p. 12 ('scaled with diameter to the power 2.22'),
+    the internal-segment exponent is 2.18, the in silico law has +2.49, and the text says the heart line
+    agrees with the in silico one. A negative exponent would make distal conductance fall with
+    diameter. The minus sign is likely a misprint; the value is kept as printed and both are run at
+    400 um (run_Gheart_400um, run_Gheart_400um_p12) beside the in silico law (run_Gis_400um): only the
+    p. 12 exponent puts the heart law near the in silico one.
+  citation: {page: 7, quote: "yet also agrees well for larger segments", where: text}
+- id: q_A_fit_unit
+  kind: possible_error
+  about: [area_growth_linear_fit, area_growth_linear_fit_mm, A_fit_coef_d]
+  text: >
+    The area-growth fit A = -0.66 dM + 0.34 S + 1.13 states its range as dM in [75, 600] 10^-6 m but
+    not the unit of dM in the formula. In m the diameter term is negligible (< 4 10^-4); in um A is
+    negative. Only a unit near mm gives sensible values; the variant reads dM in mm. Which unit was
+    used is not stated.
+  citation: {page: 5, quote: "Linear regression showed that area growth", where: text}
+- id: q_eq_reference
+  kind: reading
+  about: [area_growth_eq8]
+  text: >
+    The text introducing Eqs. 7-8 says 'adhere to a scaling law (Eq. 6)'; Eq. 6 is the wall shear stress.
+    The scaling law is Eq. 7. On p. 11 'fitting Equation 7 or alternatively by fitting any reformulation
+    of Equation 6' likewise seems to mean Eqs. 8 and 7.
+  citation: {page: 10, quote: "law (Eq. 6), area growth (A) at that node would be directly related", where: text}
+- id: q_plasma_viscosity
+  kind: unstated_input
+  about: [viscosity_eq3, segment_conductance_eq5, network_hemodynamics]
+  text: >
+    Eq. 3 gives the apparent viscosity relative to plasma, but Eq. 5 needs an absolute viscosity; the
+    plasma viscosity used is not stated. The absolute conductances, flows and shear stresses of the
+    network scale with it.
+  citation: {page: 4, quote: "an empirical diameter-dependent relationship derived by Pries et al.", where: Eq. 3}
+- id: q_eq3_units
+  kind: unstated_input
+  about: [viscosity_eq3]
+  text: >
+    The unit of d in Eq. 3 is not printed (the paper's other relations use d in m). The constants
+    (1.1, 0.085, 10^-11 d^12) are those of Pries et al. 1994 with d in um, which the model uses.
+  citation: {page: 4, quote: "an empirical diameter-dependent relationship derived by Pries et al.", where: Eq. 3}
+- id: q_velocity_flow_laws
+  kind: unexplained_difference
+  about: [cmp_velocity_exponent, cmp_velocity_prefactor, velocity_power_law, flow_power_law]
+  text: >
+    Under the paper's Poiseuille flow, centerline velocity is 8 Q/(pi d^2) segment by segment, so the
+    flow law Q = 5.07 10^8 d^2.53 implies a velocity law with exponent 2.53 - 2 and a prefactor fixed
+    by 5.07 10^8 (run_velocity_from_flow), whereas the printed velocity law is v = 3.00 10^4 d^0.89.
+    Neither the exponent nor the prefactor agrees. The paper states the fits were non-linear and gives
+    r2 = 0.21 for velocity, so some difference is expected, but its size is not explained.
+  citation: {page: 7, quote: "The diameter velocity relation was", where: text}
+- id: q_flow_ratio
+  kind: unexplained_difference
+  about: [cmp_flow_ratio, flow_ratio_large_100um]
+  text: >
+    'About 3,000-times as much blood per vessel' for arteries > 1 mm (median 36.6 ml/min) against
+    100 um segments, whereas the whole-range flow law gives the ratio (1 mm/100 um)^2.53
+    (run_flow_ratio), an order of magnitude smaller, and a 100 um flow (run_Q_100um) well above
+    36.6/3000 ml/min. The medians come from the network and 1 mm is only the lower bound of the larger
+    class, so the law need not match; the paper does not reconcile the two.
+  citation: {page: 7, quote: "as much blood per vessel as 100", where: text}
+- id: q_eq8_large_vessels
+  kind: overstated_claim
+  about: [cmp_eq8_gamma2_large, cmp_eq8_gamma3_large, A_median_large]
+  text: >
+    The paper reads the median area growth of 1.02 in the largest class as suggesting a scaling
+    exponent close to 2 rather than 3. Eq. 8 gives exactly 1 at gamma = 2 for any symmetry, and at
+    the median symmetry 0.59 gamma = 3 gives a value well above 1.02; 1.02 thus lies between, much
+    nearer 2. The claim holds as a direction, but a median of A does not fix gamma, which the paper
+    itself says is hard to quantitate from branching.
+  citation: {page: 11, quote: "an exponent close to 2 rather than 3", where: text}
+- id: q_systemic_pressure
+  kind: unstated_input
+  about: [systemic_pressure_added, P_fraction_100um]
+  text: >
+    'Around 32% of systemic pressure' (p. 11) does not say which pressure is meant; the record takes the
+    90 mmHg inlet pressure of the simulations. The pressure law is only stated for 250-800 um, so its
+    value at 100 um is an extrapolation.
+  citation: {page: 11, quote: "predicts a median pressure in 100 µm vessels around 32%", where: text}
+- id: q_network_data
+  kind: unstated_input
+  about: [network_hemodynamics, in_silico_extension]
+  text: >
+    The network geometry is not printed (it is released separately, record schwarz_data), and the
+    distributions that generated the in silico trees, the extrapolation below 30 um and the tissue
+    density used for perfusion are not stated. The network results (Table 2, Figs. 5-6, flow, pressure,
+    shear stress and perfusion values) cannot be recomputed from the paper.
+  citation: {page: 4, quote: "These in silico trees were", where: text}
+- id: q_pressure_fraction_reference
+  kind: reading
+  about: [systemic_pressure_added, cmp_pressure_fraction_100um]
+  text: >
+    Audit: 'around 32% of systemic pressure' could also be meant relative to the pressure range of the
+    model, (P - 20)/(90 - 20) with the 20 mmHg capillary back pressure, rather than P/90 or P/100. With
+    the pressure law at 100 um this lowers the share by several points. The first reader's choice
+    (P/90) is kept; this reading is not a value of the added input and is not run.
+  citation: {page: 11, quote: "predicts a median pressure in 100 µm vessels around 32%", where: text}
+- id: q_audit_derived_checks
+  kind: choice
+  about: [cmp_wss_100um, cmp_perfusion, cmp_Q_large, plasma_viscosity_added, d_perfusion_added, tissue_density_added]
+  text: >
+    Audit: the printed network outputs ~5 Pa, 5.6 ml/min/g and 36.6 ml/min are medians of the
+    unrunnable network. They are set against the paper's own whole-range flow law evaluated at one
+    diameter through Eqs. 3-6 and the perfusion definition, with an added plasma viscosity, tissue density
+    and representative diameter. These are approximations by construction: a law fitted to all
+    segments, evaluated at one diameter, against a class median.
+- id: q_fig5a_exponent_sign
+  kind: possible_error
+  about: [Gheart_exponent, Gheart_exponent_discussion, d_f5a_fit, cmp_f5a_fit_printed, cmp_f5a_fit_p12]
+  text: >
+    Figure reading: the black 'cast, fit' line of Fig. 5A rises with diameter over 50-4000 um. The heart
+    conductance law with the exponent printed on p. 12 (2.22) reproduces the line (cmp_f5a_fit_p12),
+    while the exponent printed on p. 7 (-2.22) does not (cmp_f5a_fit_printed). The paper's own figure
+    therefore supports reading the minus sign on p. 7 as a misprint (q_G_exponent_sign). The printed value
+    is kept as printed.
+  citation: {page: 9, where: "Fig. 5A", quote: "Dependency of hemodynamic parameters on segment diameter"}
+- id: q_fig5c_flow_ratio
+  kind: reading
+  about: [flow_ratio_large_100um, Q_large_median, d_f5c_cast, cmp_flow_ratio]
+  text: >
+    Figure reading: the heart median flow of Fig. 5C at 100 um reads about 0.011 ml/min, so the printed
+    median of 36.6 ml/min for arteries larger than 1 mm is about 3,000 times as much, as printed ('about
+    3,000-times'). The whole-range flow law gives a ratio near 340 between 1 mm and 100 um
+    (cmp_flow_ratio): the printed ratio comes from the medians, which at 100 um lie well below the law
+    (cmp_f5c_cast). This bears on q_flow_ratio.
+  citation: {page: 9, where: "Fig. 5C", quote: "Dependency of hemodynamic parameters on segment diameter"}
+- id: q_fig5b_pressure_100um
+  kind: reading
+  about: [P_fraction_100um, systemic_pressure_added, d_f5b_cast, cmp_pressure_fraction_100um, q_pressure_fraction_reference]
+  text: >
+    Figure reading: the heart median pressure of Fig. 5B at 100 um reads about 28.4 mmHg, which is about
+    32% of the 90 mmHg inlet pressure, as printed ('around 32%'), and far from (P - 20)/(90 - 20). This
+    supports the record's choice of P/90 (q_systemic_pressure, q_pressure_fraction_reference) and shows
+    the 32% comes from the plotted medians rather than from the pressure law extrapolated below its
+    250-800 um range.
+  citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"}
+- id: q_fig5e_wall_shear
+  kind: reading
+  about: [wss_small_median, d_f5e_cast]
+  text: >
+    Figure reading: the heart median wall shear stress of Fig. 5E reads 4.9-5.2 Pa between 60 and 250 um,
+    the plateau the text prints as 'leveled off around 5 Pa' for segments below 300 um. Its highest reading
+    is near 600-650 um, the peak near 630 um the first reader noted. The in silico median does not level off
+    (it rises from about 4 to about 10 Pa over 8-200 um).
+  citation: {page: 9, where: "Fig. 5E", quote: "Dependency of hemodynamic parameters on segment diameter"}
+- id: q_fig3a_fig4_large_class
+  kind: reading
+  about: [S_median_large, A_median_large, d_f3a_median, d_f4_symhi_median, d_f4_symlo_median]
+  text: >
+    Figure reading: the median daughter symmetry of the >= 400 um class in Fig. 3A reads about 0.59, the
+    value the text gives for mothers larger than 500 um (a different class bound). The median area growth
+    of the >= 400 um class in Fig. 4 reads about 1.08 for symmetry 0.5-1.0 and 0.95 for 0.0-0.5; the
+    printed median of 1.02 for segments larger than 400 um lies between them, as a pooled median should.
+  citation: {page: 7, where: "Fig. 3A", quote: "Daughter symmetry for (A) ten mother diameter classes"}
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [wall_shear_stress_eq6, flow_power_law, pressure_power_law, viscosity_eq3, segment_conductance_eq5, area_growth_eq8, network_hemodynamics, A_median_large, d_f4_symhi_median, d_f4_symlo_median, d_f2b_median, S_median_large, d_f3a_median]
+  text: >
+    (Cross-validation with olufsen2000, cross-validation job 2026-11-06; neither paper cites the other.) No model of
+    this record is validated against an olufsen2000 measurement. olufsen2000 measures one subject's MR flows in time
+    at the ascending aorta and eight other systemic sites (its Figs. 3, 7), cuff pressures 120/80 mmHg, the inlet
+    radius of the ascending aorta, the cycle length 1.1 s and the heart rate. This record's runnable models give a
+    segment's wall shear stress, conductance, pressure drop and viscosity from a diameter, a length and a pressure drop
+    or flow (none of which olufsen2000 measures at one site), coronary power laws of flow, pressure, velocity and
+    conductance against segment diameter (fitted to this coronary tree; run at the aorta's 2.5 cm they would be far
+    outside the 30 um-4 mm range they were fitted over and describe a different circulation), and the area growth of
+    Eq. 8, which olufsen2000 does not measure. The shape-suggested pair, wall_shear_stress_eq6 and
+    olufsen2000/tube_law_eq14, are an elastic wall law and a force balance: neither gives the other's measurement.
+    In the other direction, olufsen2000/area_ratio_eq21 (the same form as Eq. 8) predicts this record's median area
+    growth 1.02 of > 400 um bifurcations: see olufsen2000/validations.yaml. Not used: the Fig. 4 class medians of area
+    growth by symmetry group (each pools symmetries 0.0-0.5 or 0.5-1.0, and the median symmetry of each group is not
+    printed, so Eq. 21 has no single gamma to run at), the Fig. 3A symmetries (olufsen2000's runnable asymmetry_eq21
+    gives an area ratio of radii squared, gamma = S^2, a different quantity from S that cannot be mapped), and the
+    segment lengths of Fig. 2B (olufsen2000's length-to-radius ratio 50 lives only inside its non-runnable network_1d).
+  citation: {none: "a finding of the cross-record job between schwarz2020 and olufsen2000, not a printed statement"}
+- id: q_no_validation_vs_olufsen2012
+  kind: choice
+  about: [wall_shear_stress_eq6, flow_power_law, pressure_power_law, velocity_power_law, conductance_power_law, area_growth_eq8, network_hemodynamics, in_silico_extension, A_median_large, S_median_large]
+  text: >
+    (Cross-validation with olufsen2012, cross-validation job 2026-11-06; neither paper cites the other.) No model of
+    this record is validated against an olufsen2012 measurement. olufsen2012 measures only the MRI inflows to the
+    aorta and main pulmonary artery (Fig. 3, inputs of its network model) and plots Huang et al.'s averaged lengths
+    and radii of human pulmonary arteries by order (Fig. 5); its pressures (Table 2, Figs. 7-13) and tree counts are
+    simulated. This record's runnable models give a segment's wall shear stress, conductance, pressure drop and
+    viscosity, coronary power laws of flow, pressure, velocity and conductance against segment diameter, and area
+    growth (Eq. 8): none gives a vessel length or an inflow waveform, and the coronary flow law fitted over 30 um-4 mm
+    says nothing of an aortic or pulmonary inflow. The shape-suggested pair, wall_shear_stress_eq6 and
+    olufsen2012/network_1d_structured_tree, share no measurement: the network is not runnable and wall shear stress
+    is measured in neither paper. In the other direction, olufsen2012/area_ratio_eq216_217 (the same form as Eq. 8)
+    predicts this record's median area growth 1.02 of > 400 um bifurcations at the median symmetry 0.59: see
+    olufsen2012/validations.yaml and olufsen2012/q_schwarz_gamma_form for what was left out.
+  citation: {none: "a finding of the cross-record job between schwarz2020 and olufsen2012, not a printed statement"}
+- id: q_no_validation_vs_pries1990
+  kind: choice
+  about: [viscosity_eq3, velocity_power_law, pressure_power_law, pressure_fraction, flow_power_law, area_growth_eq8, network_hemodynamics, A_median_large, S_median_large]
+  text: >
+    (Cross-validation with pries1990, cross-validation job 2026-11-06.) No validation is added in either direction.
+    This paper cites Pries et al. 1994 and Secomb and Pries 2013 for Eq. 3 (p. 4), not pries1990, and neither paper
+    says one's model explains the other's data. pries1990 measures, in rat mesentery, inflow and segment hematocrits
+    (Table 3, Fig. 5), segment counts, phase separation at one bifurcation (Fig. 2), and, from its refs. 17, 25 and
+    26, AV velocity by generation (Fig. 6) and pressure in percent of the arteriovenous head against diameter
+    (Fig. 7). No model here outputs a hematocrit or a phase separation; Eq. 3 gives viscosity, which pries1990 does
+    not measure; velocity_power_law is a centerline velocity against diameter fitted to this coronary tree, while
+    Fig. 6 is indexed by generation; pressure_power_law and pressure_fraction give mmHg and percent of systemic
+    pressure for 250-800 um coronary segments, while Fig. 7 is percent of the arteriolar-to-venular head in
+    mesenteric vessels below 60 um, a different quantity far outside the fitted range. In the other direction,
+    pries1990's models (Eq. 1, Eqs. 2-3 and 7, phase separation, the mesenteric inflow velocity relation, the
+    unrunnable network simulation) output none of this record's measurements, which are all geometric (segment
+    lengths, symmetry, area growth, counts, terminal densities, perfused volumes).
+  citation: {none: "a finding of the cross-record job between schwarz2020 and pries1990, not a printed statement"}
+- id: q_no_validation_vs_pries1992
+  kind: choice
+  about: [viscosity_eq3, relative_viscosity, network_hemodynamics, A_median_large, S_median_large]
+  text: >
+    (Cross-validation with pries1992, cross-validation job 2026-11-06.) No validation is added in either direction.
+    Schwarz's Eq. 3 cites Pries et al. 1994 and Secomb and Pries 2013 (p. 4), not pries1992, and neither paper says
+    one's model explains the other's data. The only model here with an output pries1992 measures is viscosity_eq3,
+    and it was considered against every pries1992 viscosity measurement: the 163 compiled points at HD 0.45 (Fig. 5,
+    eta_fig5_points_HD045), the per-diameter data against hematocrit (Fig. 3, 3.3-40 um), the Fig. 2 inset residuals
+    and the approximate text values (~3.2 above 1,000 um, ~1.25 at ~7 um). All are in vitro: red cell suspensions
+    in glass tubes, relative to the suspending medium. Eq. 3 is the 1994 in vivo law, which departs on purpose from
+    the in vitro description: it adds an endothelial-layer factor (d/(d - 1.1))^2 inside and outside the hematocrit
+    term and replaces pries1992's small-tube term 220 e^(-1.3 D) by 6 e^(-0.085 d), terms fitted to in vivo network
+    data, not to these tubes. Its output is in vivo apparent viscosity, the quantity Schwarz needs for vessels; the
+    measurements are in vitro tube viscosity. This record's own relation rel_viscosity_eq3_reduces_to_pries1992_eq7_large_d
+    calls them different measured quantities, and pries2005 keeps them as two quantities and validates only its in
+    vitro law against these data. Mapping them would make the verdict test the in vivo correction against data it was
+    built to depart from (at HD 0.45, Eq. 3 over pries1992 Eq. 2 is about 1.2 at 40 um, 2 at 20 um and 7 at 4-7 um,
+    computed by hand; many of the 163 points lie below 30 um);
+    a sweep cannot be limited to the large tubes (>~100 um) where the two coincide. Where they coincide the shared
+    terms (3.2 - 2.44 e^(-0.06 D^0.645), and C = pries1992 Eq. 4) were fitted to these same data, so it would be a
+    fit, not a test; that agreement is already stated as a form relation (reduces_to at large d). In the other
+    direction, pries1992's models (Eqs. 2-10: in vitro viscosity, B, C, tube hematocrit) output none of this
+    record's measurements, which are all geometric (segment lengths, daughter symmetry, area growth, segment counts,
+    terminal densities, perfused volumes).
+  citation: {page: 4, quote: "diameter-dependent relationship derived by Pries et al. was used", where: Eq. 3}
+- id: q_no_validation_vs_pries2005
+  kind: choice
+  about: [viscosity_eq3, network_hemodynamics, area_growth_eq8, A_median_large, S_median_large, perfused_volume_median]
+  text: >
+    (Cross-validation with pries2005, cross-validation job 2026-11-06.) No validation is added in either
+    direction. Neither paper cites the other (Eq. 3 cites Pries et al. 1994 and Secomb and Pries 2013,
+    p. 4), and neither says its model explains the other's data. pries2005's only measurement is the
+    rat-mesentery vessel-diameter distribution of its Fig. 2 (diameter_percentiles_fig); no model here
+    outputs a diameter distribution. Its other plotted values are model outputs (Fig. 1 network errors,
+    Fig. 2 ESL thickness, Fig. 4 viscosity and HT/HD curves, origin predicted), and Lipowsky's 4.2 cP is
+    reported from its ref. 16, absolute rather than relative and with no stated hematocrit, so
+    viscosity_eq3 is not run against it. The relation of Eq. 3 to pries2005's in vivo law is already
+    recorded as form relations (rel_viscosity_eq3_*_pries2005_vivo*). In the other direction, pries2005's
+    models (viscosity, ESL thickness, Fahraeus, minima) output none of this record's measurements, which
+    are all geometric (segment counts and lengths, symmetry, area growth, terminal densities, perfused
+    volumes).
+  citation: {none: "a finding of the cross-record job between schwarz2020 and pries2005, not a printed statement"}
+- id: q_no_validation_vs_schwarz_data
+  kind: choice
+  about: [area_growth_eq8, area_growth_linear_fit, flow_power_law, pressure_power_law, velocity_power_law, conductance_power_law, perfusion_from_flow, network_hemodynamics, total_all, total_terminal, perfused_volume_total]
+  text: >
+    (Cross-validation with schwarz_data, cross-validation job 2026-11-06.) No validation is added in
+    either direction. schwarz_data is this paper's own released data, the same network and its solution
+    by the same authors, so it holds no independent measurement. Its only measured data are copies of
+    this paper's 4,954 territories and 358 cm3. No model here outputs a count or a perfused volume, and
+    perfusion_from_flow would need a tissue density that neither source states. The release's
+    branching tables, which the area-growth models (Eq. 8 and the linear fit) would predict, are not in
+    the copy that was read. The power laws are fitted to the workbook class medians, and those
+    medians are network outputs, not measurements. That agreement is already checked in schwarz_data
+    as reproductions of the printed fits. In the other direction, schwarz_data's element_total
+    (nIE + nSE) recounts the same graph that gives Table 1's 202,184 segments. That is bookkeeping, not
+    a prediction (schwarz_data cmp_element_total). See schwarz_data/q_no_validation_vs_schwarz2020.
+  citation: {page: 13, quote: "The datasets generated for this study are available on request", where: text}
+- id: q_no_validation_vs_kassab1993
+  kind: choice
+  about: [area_growth_eq8, area_growth_linear_fit, area_growth_linear_fit_mm, segment_conductance_eq5, conductance_power_law, flow_power_law, pressure_power_law, velocity_power_law, network_hemodynamics]
+  text: >
+    No validation is entered against kassab1993's measurements. This paper cites Kassab et al. (1993)
+    only as earlier porcine morphometry (pp. 2, 8) and, on p. 9, says its pig segment lengths "are closer to
+    our findings": a comparison of measured lengths with measured lengths, which no model here produces.
+    kassab1993 measures pig vessel diameters, lengths, segment-to-element ratios, element numbers and the
+    connectivity matrix by Strahler order (Tables 1-3, 5, 6, 9, 10; Figs. 6-9), and its areas and volumes per
+    order are computed from them. The models here give area growth at one node from its daughter symmetry
+    (Eq. 8, the linear fit), conductance, pressure, flow and velocity of a segment (Eqs. 3-6, the power
+    laws fitted to this paper's own network outputs) and the network hemodynamics (not runnable). kassab1993
+    measures none of these quantities: it prints no daughter symmetry or area ratio at a node, no flow,
+    pressure, velocity or conductance. The diameter power laws could be evaluated at Kassab's mean diameters,
+    but there is nothing measured in kassab1993 to set the result against.
+    For the other direction see kassab1993/q_no_validation_vs_schwarz2020.
+  citation: {page: 9, quote: "the same animal model Kassab et al. (1993) observed values that", where: text}
+- id: q_validation_vs_chilian1986
+  kind: choice
+  about: [pressure_power_law, pressure_fraction, perfusion_from_flow, P_100um_from_fit, systemic_pressure_added]
+  text: >
+    (Cross-validation with chilian1986, cross-validation job 2026-11-06.) This paper cites Chilian 1991, not
+    chilian1986, for measured pressure in 80-120 um vessels (p. 11). One validation is entered:
+    the pressure law at 100 um, as a share of the 90 mmHg inlet pressure, against chilian1986's measured
+    50-55% of aortic pressure in 70-130 um arterioles (val_pressure_fraction_100um_chilian1986). The choices
+    are open. (a) That measurement is the control with tone intact, while this network is vasodilated.
+    chilian1986 measured no small arterioles under papaverine. (b) The law is extrapolated below its 250-800 um
+    range; the plotted network median at 100 um (q_fig5b_pressure_100um) is a figure reading, not a model,
+    and cannot be run. (c) The share uses P/90, not (P - 20)/(90 - 20) (q_pressure_fraction_reference).
+    The model comes out well below the measured share. Not used: chilian1986's large (300-325 um) and medium
+    (187-192 um) arteriole shares (Table 6, Fig. 7, and the Table 4/5 pressures they come from). The large
+    arterioles lie inside the fitted range, but this record has no run of the pressure law at those diameters
+    to feed pressure_fraction, and a validation runs one model. The absolute pressures cannot be set against
+    the law's mmHg either: the law holds at a 90 mmHg inlet and chilian1986's aortic pressure is 66-78 mmHg.
+    Also not used: the venular pressures, because this is an arterial-only model. chilian1986's perfusion
+    (Table 3, Fig. 4) is not used either. perfusion_from_flow rests on the flow law at one added diameter,
+    with added tissue density, at a 90/20 mmHg driving pressure. Perfusion scales with that driving pressure
+    and the model has no pressure input to run at chilian1986's 72-76 mmHg, so it would not be run on the
+    measurement's conditions. Nothing measured here is predicted by a chilian1986 model:
+    see chilian1986/q_no_validation_schwarz2020.
+  citation: {page: 11, quote: "predicts a median pressure in 100 µm vessels around 32%", where: text}
+- id: q_no_validation_vs_schwarz_data_network
+  kind: choice
+  about: [segment_conductance_eq5, viscosity_eq3, network_hemodynamics, area_growth_eq8, area_growth_linear_fit, perfused_volume_total, perfused_volume_median, perfused_volume_abstract, total_all, d_f5c_cast, d_f6_median, schwarz_data/network_solution, schwarz_data/G_SE1_mat, schwarz_data/G_IE1_mat, schwarz_data/G_LCX_mat]
+  text: >
+    (Cross-validation with schwarz_data, second pass with the network, 2026-11-07.) Still no validation
+    is added in either direction; q_no_validation_vs_schwarz_data stands. schwarz_data now holds the
+    network and a runnable solver of it (schwarz_data/network_solution). (1) No model here predicts a
+    measurement of schwarz_data. Its only measured data are copies of this paper's 4,954 territories,
+    358 cm3 and 20.2 mm3. The network's segment conductances, flows and pressures that
+    segment_conductance_eq5 and viscosity_eq3 would predict are outputs of the authors' solver (origin
+    run), not measurements. schwarz_data already reproduces them from Eqs. 3 and 5 at Hd 0.45
+    (schwarz_data cmp_net_G_*, q_hematocrit). The area-growth models would predict branching
+    statistics, which schwarz_data does not tabulate from the network. (2) In the other direction,
+    network_solution outputs this paper's measured perfused volumes and territory count, but by summing
+    and counting the same reconstruction (TreeQ.SE.VVoronoi, PerfBranchID). That restates the
+    measurement and predicts nothing, and schwarz_data already checks it as a reproduction
+    (cmp_net_V_perfused, cmp_net_V_territory_median, cmp_net_n_perf). What network_solution does
+    predict (Fig. 5 'cast' curves, Fig. 6 perfusion, the power laws, 36.6 ml/min, 5.6 ml/min/g) are
+    this paper's predictions, not measurements. They are reproductions, and schwarz_data compares the
+    printed ones. The figure-read Fig. 5-6 curves here are still uncompared with that run (the
+    warnings of this record); a validation entry cannot carry that reproduction. See
+    schwarz_data/q_no_validation_vs_schwarz2020_network.
+  citation: {page: 13, quote: "The datasets generated for this study are available on request", where: text}

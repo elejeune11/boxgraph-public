@@ -1,0 +1,18 @@
+id: coronary_venous_tree
+name: coronary venous diameters from the terminal vein-to-artery ratio and repeated Eq. 2a, on the released network
+role: model
+software: true
+stated: {none: "printed in mynard2015 p. 6 (1448): 'a vein-to-artery diameter ratio of 1.4 was used for the terminal veins. Starting from the terminal veins, diameters of non-terminal coronary veins were found by repeated application of Eq. (2a)'; network from MOESM1_1D_segments.xlsx, sheet '1D segments', blocks 'Coronary Arteries' (rows 78-91) and 'Coronary Veins' (rows 224-237)"}
+equation: "D_v,terminal = ratio D_a; D_p^xi = sum D_d^xi toward the coronary sinus"
+from_words: true
+built_from: [network_counts]
+inputs:
+  ratio: {quantity: vein_artery_diameter_ratio, unit: dimensionless}
+  xi: {quantity: fractal_exponent, unit: dimensionless}
+outputs:
+  D_cs_rule: {quantity: vessel_diameter, unit: cm, description: "coronary sinus diameter by the paper's rule on the released arteries"}
+  D_cs_released: {quantity: vessel_diameter, unit: cm, description: "coronary sinus diameter as released (inlet A0)"}
+  ratio_min: {quantity: vein_artery_diameter_ratio, unit: dimensionless, description: "smallest released terminal vein/artery diameter ratio"}
+  ratio_max: {quantity: vein_artery_diameter_ratio, unit: dimensionless, description: "largest released terminal vein/artery diameter ratio"}
+settings: {sinus: CoroSin}
+stochastic: false

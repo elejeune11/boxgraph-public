@@ -1,0 +1,13 @@
+id: viscosity_eq3
+name: diameter-dependent apparent blood viscosity (Pries et al.), Eq. 3
+role: model
+stated: {page: 4, printed_page: "4", quote: "an empirical diameter-dependent relationship derived by Pries et al.", where: Eq. 3}
+equation: "mu = [1 + (mu*_0.45 - 1) ((1 - Hd)^C - 1)/((1 - 0.45)^C - 1) (d/(d - 1.1))^2] (d/(d - 1.1))^2; mu*_0.45 = 6 e^(-0.085 d) + 3.2 - 2.44 e^(-0.06 d^0.645); C = (0.8 + e^(-0.075 d)) (-1 + 1/(1 + 10^-11 d^12)) + 1/(1 + 10^-11 d^12)"
+described_from: pries1994
+inputs:
+  d: {quantity: vessel_diameter, unit: um, description: "the unit of d is not printed; um is the convention of the cited Pries et al. relation (q_eq3_units)"}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+outputs:
+  mu: {quantity: relative_viscosity, unit: dimensionless, description: "printed as the blood viscosity mu; the relation gives viscosity relative to plasma"}
+settings: {}
+stochastic: false

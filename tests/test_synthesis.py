@@ -325,3 +325,41 @@ def test_a_mapping_that_cannot_be_evaluated_is_not_checked(tmp_path, monkeypatch
     s = build_synthesis(root, cache_dir=tmp_path / "c")
     xs = [x for x in s["cross_checks"] if x["relation"] == "toy2/rel_pole" and x["model"] == "toy2/lifetime"]
     assert xs and all(x["status"].startswith("not checked") for x in xs), xs
+
+
+def test_finding_inputs_through_a_transcendental_mapping_is_quick():
+    """Inverting a mapping with an exponential for the other model's inputs ends within a time budget, never stalling the build."""
+    from types import SimpleNamespace as NS
+
+    from boxgraph.synthesis import _solve_inputs
+
+    ma = NS(inputs={n: None for n in ("rho", "k1", "k2", "k3", "D0")})
+    rel = NS(mapping={"Lp": "4*rho/(pi*D0**2)", "Cp": "3*pi*D0**2/(8*(k1*exp(k2*D0/2) + k3))"})
+    own = {"rho": 1.06, "k1": 2.0e6, "k2": -22.53, "k3": 8.65e4, "D0": 0.79}
+
+    import time
+
+    from boxgraph.synthesis import SOLVE_SECONDS, SolveTooSlow
+
+    t0 = time.monotonic()
+    try:
+        vals, free = _solve_inputs(rel, ma, None, {"Lp": 0.15, "Cp": 0.000027}, own)
+    except SolveTooSlow:
+        vals = None  # reported as not checked, with the reason
+    assert time.monotonic() - t0 < SOLVE_SECONDS + 5
+    if vals is not None:  # whatever is found must satisfy the mapping it came from
+        assert abs(4 * vals["rho"] / (3.141592653589793 * vals["D0"] ** 2) - 0.15) < 1e-6 * 0.15
+
+
+def test_complex_roots_of_a_mapping_are_skipped(monkeypatch):
+    """When the solver returns complex roots beside the real one, the real positive input is used and the complex ones are skipped."""
+    from types import SimpleNamespace as NS
+
+    import sympy as sp
+
+    import boxgraph.synthesis as syn
+
+    x = sp.Symbol("x", positive=True)
+    monkeypatch.setattr(syn.sp, "solve", lambda *a, **k: [{x: 1 + 2 * sp.I}, {x: sp.Integer(3)}])
+    vals, free = syn._solve_inputs(NS(mapping={"y": "x**3"}), NS(inputs={"x": None}), None, {"y": 27.0}, None)
+    assert vals == {"x": 3.0} and free == []

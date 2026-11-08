@@ -559,3 +559,23 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   on a corpus require `CORPUS=<name>`.
 - **A landing page.** Each review's overview is in `site/<name>/`;
   `site/index.html`, kept by hand, links the reviews.
+
+## A time budget for inverting a mapping (v0.9)
+
+A cross-paper check runs one model on another paper's inputs by solving the
+relation's mapping for the first model's inputs. With a transcendental mapping
+(an exponential in a wall-stiffness law, for one), the symbolic solver could
+run for hours and stall the whole build. Two rules now: the solver does not
+re-check its solutions symbolically (each one is checked as a positive number
+anyway), and the search for one relation gets 30 seconds. A relation that
+needs longer is reported as not checked, with that reason.
+
+## Images of our own in a case study (v0.9)
+
+A case-study step may show images we drew ourselves, `image: {caption, views: [{label, file}]}`, with
+the files next to the overview text; the page shows one view at a time with a switch, and a click opens
+the full-size image. They are for showing data no paper prints, such as a released network drawn segment
+by segment; they are never a copy of a paper's figure. The script that draws them is committed beside
+them (`corpora/cardio/overview_figures/draw_schwarz_tree.py`), and each image is named one by one in the
+test that keeps copies of papers out of git. Where the drawing needs released data that is not in git,
+the committed image is what readers see; the script redraws it for anyone who has the data.

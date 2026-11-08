@@ -1,0 +1,24 @@
+id: multiscale_coronary
+name: multi-scale left coronary model (1D conduit network, Eqs. 1-4, with 55 three-layer 0D microvascular beds, Eqs. 5-8)
+role: model
+stated: {page: 5, quote: "the non-linear 1D equations governing pressure (p), cross-sectional mean velocity (u)", where: "Eqs. 1-8"}
+equation: >
+  c0^2 = 2/(3 rho) [k1 exp(k2 r0) + k3] (1); dA/dt + d(Au)/dx = 0 (2);
+  du/dt + u du/dx + (1/rho) dp/dx = -xi pi mu u / (rho A) (3);
+  p - pext = (2 rho c0^2 / b) [(A/A0)^(b/2) - 1] + (Gamma/(A sqrt A)) dA/dt + p0 (4);
+  V_i(t) = V0,i + int_0^t C_i dptm,i/dt' dt' (5); R_i = R0,i V0,i^2 / V_i^2 (6);
+  Rm = R0,m [gamma V0,1^2/V1^2 + (1 - gamma) V0,2^2/V2^2] (7); pim = alpha CEP + SIP (8)
+inputs:
+  p_ao: {quantity: aortic_pressure, unit: mmHg, description: "measured aortic pressure waveform, delayed 15 ms (adults) or 8 ms (newborns), prescribed at the LM inlet"}
+  p_lv: {quantity: lv_cavity_pressure, unit: mmHg, description: "measured LV pressure waveform (CEP, and SIP via chamber elastance)"}
+  W: {quantity: myocardial_weight, unit: g, description: subject LV free wall + septum weight used to scale the 1D network}
+  c_cx: {quantity: wave_speed, unit: m/s, description: target proximal Cx wave speed}
+outputs:
+  q_cx: {quantity: normalized_cx_flow, unit: dimensionless, description: "proximal Cx flow waveform normalized to mean flow and heart period, and its Table 2 features"}
+runnable: false
+not_runnable_reason: >
+  The subject-specific inputs (measured aortic flow, aortic and LV pressure waveforms of each of the 18
+  animals) are not published; the 1D network geometry is in the Supplemental Data File (a separate
+  record, mynard2014_data), the finite element scheme, time step and mesh are not given here, and total
+  resistance is itself tuned per animal to the measured mean Cx flow. Table 2's Model column and Figs. 5-10
+  therefore cannot be recomputed from this paper.

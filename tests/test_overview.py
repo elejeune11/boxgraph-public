@@ -273,3 +273,40 @@ def test_the_overview_text_can_name_the_page(syn, tmp_path):
     """A title in the overview's text names the page in place of the build's title."""
     page = render_overview(syn, tmp_path, title="Build title", content={"title": "A review of toys"}).read_text()
     assert "<title>A review of toys</title>" in page and embedded(page)["title"] == "A review of toys"
+
+
+def _png(path):
+    """A tiny PNG made on the fly (images are not committed with the tests)."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure(figsize=(1, 1))
+    fig.savefig(path)
+    plt.close(fig)
+    return path
+
+
+def test_a_case_study_step_can_show_our_own_images_with_a_view_switch(syn, tmp_path):
+    """A step may show images of our own (e.g. drawn from released data), one per view; they are copied next to the page."""
+    src = tmp_path / "figs"
+    src.mkdir()
+    for n in ("a", "b"):
+        _png(src / f"tree_{n}.png")
+    content = {"case_studies": [{"id": "c", "title": "T", "steps": [{"text": "look", "image": {
+        "caption": "A tree", "views": [{"label": "Pressure", "file": "tree_a.png"}, {"label": "Shear", "file": "tree_b.png"}]}}]}]}
+    out = tmp_path / "out"
+    d = embedded(render_overview(syn, out, title="T", content=content, content_dir=src).read_text())
+    ev = d["case_studies"][0]["steps"][0]["evidence"]
+    assert ev["kind"] == "image" and ev["caption"] == "A tree"
+    assert [v["label"] for v in ev["views"]] == ["Pressure", "Shear"]
+    for v in ev["views"]:
+        assert (out / v["src"]).is_file() and v["src"].startswith("img/")
+
+
+def test_an_image_step_naming_a_missing_file_is_an_error(syn, tmp_path):
+    """An image step whose file is not next to the overview text stops the overview with a message naming it."""
+    content = {"case_studies": [{"id": "c", "steps": [{"text": "x", "image": {"views": [{"label": "P", "file": "nope.png"}]}}]}]}
+    with pytest.raises(CaseStudyError, match="nope.png"):
+        render_overview(syn, tmp_path / "out", title="T", content=content, content_dir=tmp_path)

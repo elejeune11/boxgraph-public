@@ -1,0 +1,156 @@
+- id: q_capillary_fraction_rounding
+  kind: unexplained_difference
+  about: [cmp_capillary_fraction, capillary_fraction_printed]
+  text: >-
+    3500/mm^2 x pi (5 um)^2 / 4 gives 0.0687, which rounds to 0.069; the paper prints 0.068
+    (truncated, or computed with slightly different inputs).
+  citation: {page: 8, quote: "calculates a capillary volume fraction of 0.068"}
+- id: q_sum_vs_total
+  kind: overstated_claim
+  about: [cmp_volume_sum_morgenstern, total_blood_volume_morgenstern]
+  text: >-
+    The sum of the capillary and intramural artery fractions (0.068 + 0.023 = 9.1%) is said to agree
+    with a total myocardial blood volume of 10-15%, but it lies below that range and leaves out the
+    veins, which the total includes.
+  citation: {page: 8, quote: "arterial volume agrees with the dye dilution, mean"}
+- id: q_lv_mass_fig7
+  kind: unstated_input
+  about: [lv_mass_fig7_added, Cim_per_mass_printed]
+  text: >-
+    The intramyocardial capacitance from Fig. 7 is given per 100 g LV, but the LV mass of that dog is
+    not stated. C_im = 3 s / 35 mm Hg s/ml = 0.086 ml/mm Hg, so "approximately 0.07 per 100 g" needs an
+    LV mass of about 122 g; with the 109 g of the Fig. 4 dog it would be 0.079 per 100 g.
+- id: q_fig7_resistances_source
+  kind: unstated_input
+  about: [Ra_fig7, Rv_fig7]
+  text: >-
+    R_a = 65 and R_v = 35 mm Hg s/ml for the Fig. 7 experiment are given without saying how they were
+    obtained (from a Fig. 5-type regression in that dog, or from the Fig. 6 regression).
+- id: q_ra_fig7_vs_regression
+  kind: unexplained_difference
+  about: [cmp_ra_fig7_vs_regression, Ra_fig7, ra_rc_slope, ra_rc_intercept]
+  text: >-
+    With R_c = R_a + R_v = 100 mm Hg s/ml, the Fig. 6 regression gives R_a = 0.63 x 100 - 12.9 = 50.1,
+    against the R_a = 65 used for Fig. 7. The Fig. 7 values are printed as approximate, so no verdict
+    is drawn; the scatter of Fig. 6 (r = 0.939) may account for part of it.
+- id: q_ra_63_percent
+  kind: overstated_claim
+  about: [ra_rc_slope, ra_rc_intercept]
+  text: >-
+    The Discussion says R_a is 63% of the total resistance, but the regression has an intercept of
+    -12.9 mm Hg s/ml, so R_a / R_c = 0.63 - 12.9 / R_c, which is 0.47-0.54 over R_c = 60-140 mm Hg s/ml
+    (the range of Fig. 6), not 0.63.
+  citation: {page: 9, quote: "component,\" is 63% of the total resistance, it is"}
+- id: q_ra_fraction_rc
+  kind: choice
+  about: [cmp_ra_fraction, rc_for_fraction_added, ra_fraction_printed]
+  text: >-
+    (Audit.) The 63% is checked as R_a / R_c from the paper's own regression at an added R_c = 100
+    mm Hg s/ml, which gives 0.50. No R_c in the Fig. 6 range gives 0.63; the fraction only tends to
+    0.63 as R_c grows without bound (alternative 1000 gives 0.62), so the paper appears to have quoted
+    the slope as the fraction (see q_ra_63_percent).
+  citation: {page: 9, quote: "component,\" is 63% of the total resistance, it is"}
+- id: q_regression_curves_fig4
+  kind: possible_error
+  about: [p_im_mean, potential_source_eq2]
+  text: >-
+    (Audit.) p. 5 says "Regression curves, as shown in Figure 4, resulted in standard deviations in
+    p_im in the order of 10%"; the regression curves of p_lc vs q_c are in Figure 5 (Fig. 4 shows
+    recordings), so "Figure 4" is probably meant as Figure 5.
+  citation: {page: 5, quote: "shown in Figure 4, resulted in standard deviations"}
+- id: q_plm_95_condition
+  kind: reading
+  about: [tau_initial_fig7, tau_slow_fig7, Ra_fig7, Rv_fig7, Cep_printed, Cim_per_mass_printed, tau_parallel_printed]
+  text: >-
+    (Audit.) The page image of p. 9 prints the condition of the Fig. 7 estimates as "(P̄_lm = 95 mm Hg)",
+    with subscript lm, not lc. The record reads it as the mean left main pressure P̄_lc (condition
+    mean_left_main_pressure: 95 mmHg), which fits Fig. 7 ("l. main art." pressure) but is a reading,
+    not what is printed.
+  citation: {page: 9, quote: "and RX™ - 3 s (P,m = 95 mm Hg)"}
+- id: q_wedge_14_vs_measured
+  kind: unexplained_difference
+  about: [wedge_pressure, resistance_split, ra_rc_regression]
+  text: >-
+    (Audit.) The Summary (p. 1) says R_c "was defined as (P̄_lc - 14 mm Hg)/mean coronary flow", a fixed
+    14 mm Hg, while the Methods (p. 4) define R_c with P_w, the left main pressure measured after a
+    15 s occlusion in each experiment, and p. 10 gives P_w as 14 mm Hg. Whether a single 14 mm Hg or
+    per-dog wedge pressures were used for the R_c of Fig. 6 is not clear.
+  citation: {page: 1, quote: "was defined as (Pic - 14 nun Hg)/mean coronary flow"}
+- id: q_figures_not_read
+  kind: reading
+  about: [ra_rc_regression, ra_rc_slope, ra_rc_intercept, ra_rc_r, p_im_mean, potential_source_eq2]
+  text: >-
+    The Fig. 5 (p_lc vs q_c, four P_lc in one dog) and Fig. 6 (R_a vs R_c, 25 points, six dogs) data
+    were not digitized in this job because the figure rendering and checking commands were not
+    available. A later reading should read both, so that Eq. 2 fits (slopes R_a, intercepts p_im) and
+    the regression R_a = 0.63 R_c - 12.9 (r = 0.939, n = 25) can be checked against the plotted points.
+- id: q_waterfall_not_runnable
+  kind: unstated_model
+  about: [waterfall_20_layer]
+  text: >-
+    The 20-layer waterfall simulation whose predictions are plotted in Fig. 6 is described only in
+    outline (layer resistances, LV pressure waveform and stenosis grades not given), so it cannot be
+    rerun.
+- id: q_fig6_points_read
+  kind: reading
+  about: [ra_rc_regression, ra_rc_r, ra_rc_slope, ra_rc_intercept]
+  text: >-
+    (Figure reading; bears on q_figures_not_read and q_ra_63_percent.) Fig. 6 is now read by code: 25
+    measured points in six symbol types (4 open triangles, 8 filled circles, 4 filled squares, 3 open
+    circles, 4 open squares, 2 filled triangles), as the printed n = 25 says, with the three encircled
+    symbols taken as the waterfall model's points. The regression is compared with the points of each
+    dog (fit_quality); its slope, intercept and r are not refitted, because a model takes scalar
+    inputs and not the plotted points as a whole. The plotted R_c run from about 30 to about 138
+    mm Hg s/ml, wider than the 60-140 used in q_ra_63_percent, so R_a / R_c from the regression falls
+    further below 0.63 at the low end.
+  citation: {page: 6, quote: "Each dog is represented by a different type of symbol"}
+- id: q_fig7_dog_not_in_fig6
+  kind: reading
+  about: [Ra_fig7, Rv_fig7, ra_vs_rc_filled_square_fig6]
+  text: >-
+    (Figure reading; bears on q_fig7_resistances_source.) No measured point in Fig. 6 lies near
+    R_c = 100, R_a = 65 mm Hg s/ml (the Fig. 7 values R_a = 65, R_v = 35): the points near R_c = 100
+    have R_a of about 37 to 60. So the Fig. 7 resistances are not one of the plotted Fig. 6 points,
+    and how they were obtained stays open (the Fig. 7 dog may not be one of the six).
+  citation: {page: 9, quote: "amounts to 0.003 ml/mm Hg (R« = 65 mm Hg • s/"}
+- id: q_fig5_fits_not_rerun
+  kind: choice
+  about: [potential_source_eq2, eq2_fit_r_min, plc_vs_qc_65_fig5, plc_vs_qc_90_fig5, plc_vs_qc_125_fig5, plc_vs_qc_155_fig5, ra_vs_rc_filled_square_fig6]
+  text: >-
+    (Figure reading.) The Fig. 5 points of the four P_lc are now read, but the Eq. 2 fits to them
+    (slope R_a, intercept p_im, r > 0.992 for p_lc > 5 mm Hg) are not recomputed: Eq. 2 needs each
+    curve's R_a and p_im, which are not printed, and a fit over the plotted points cannot be expressed
+    as a run over scalar inputs. The four fitted slopes should equal the four filled squares of Fig. 6
+    (the same dog), which a later check could make. The fitted lines themselves are not read.
+  citation: {page: 5, quote: "Relationship between phasic pressure components"}
+- id: q_no_validation_vs_kim2010
+  kind: choice
+  about: [potential_source_eq2, ra_rc_regression, ra_fraction_regression, resistance_split, epicardial_capacitance_rc, intramyocardial_capacitance_rc, parallel_discharge_time, waterfall_20_layer, plc_vs_qc_90_fig5, ra_vs_rc_filled_square_fig6, p_im_mean]
+  text: >
+    (Cross-validation with kim2010; cross-validation job 2026-11-06.) No validation is entered in either
+    direction. Spaan et al. (1981) precede Kim et al. (2010) and Kim et al. do not cite them; neither
+    paper says one's model explains the other's data. kim2010's only measurements are the canine LAD mean
+    flows of Gould et al. against percent diameter reduction, at rest and in hyperemia (kim2010 Fig. 6,
+    gould_rest_fig6, gould_hyperemia_fig6). This record's models give capillary and small-artery volume
+    fractions, capacitances and time constants from RC times, R_a from R_c by the printed regression,
+    p_lc from q_c (Eq. 2, inputs per curve not printed) and the 20-layer waterfall model (not runnable);
+    none has a stenosis grade as input or a mean coronary flow as output, so none gives Gould's measured
+    quantity. In the other direction, kim2010's runnable models are steady mean-flow relations for a human
+    patient and give none of this record's measured phasic quantities (p_lc against q_c, R_a against
+    R_c, p_im, the Fig. 4A area). See kim2010/q_no_validation_vs_spaan1981.
+  citation: {page: 1, printed_page: "584", quote: "nary blood flow are not due to varying resistances", where: text}
+- id: q_no_validation_vs_mynard2014
+  kind: choice
+  about: [resistance_split, potential_source_eq2, volume_variation_amplitude, epicardial_capacitance_rc, intramyocardial_capacitance_rc]
+  text: >
+    (Cross-validation with mynard2014; cross-validation job 2026-11-06.) No model of this record is
+    validated against mynard2014's measurements; mynard2014 (2014) cites this paper, not the other way.
+    mynard2014 measures, in sheep and lambs, heart rate, weights, mean aortic pressure, mean Cx flow per
+    100 g (Table 1), normalized Cx flow features and phase durations (Table 2) and Cx flow waveforms
+    (Figs. 7-8). The models here need inputs mynard2014 does not print for those animals: Eq. 2 and
+    resistance_split need R_a or p_im (no phasic pressure-flow split is measured); the capacitance models
+    need the RC times of a pressure decay after clamping; volume_variation_amplitude needs the area between
+    systolic and mean CBF, which mynard2014 does not print (reading it off one Fig. 7 panel would be a new
+    processing of their curve, and its output, an intramyocardial volume swing, is measured there by no
+    one). None outputs a quantity mynard2014 measures. See mynard2014/q_no_validation_vs_spaan1981.
+  citation: {page: 1, printed_page: "584", quote: "nary blood flow are not due to varying resistances", where: text}

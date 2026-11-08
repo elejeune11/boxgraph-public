@@ -1,0 +1,70 @@
+# Table 1: each class as a share of the printed column total
+- {id: run_share_all, model: segment_share, inputs: {total: total_all}, sweep: {n: share_all}, outputs: {share: share_all_pred}}
+- {id: run_share_terminal, model: segment_share, inputs: {total: total_terminal}, sweep: {n: share_terminal}, outputs: {share: share_terminal_pred}}
+- {id: run_share_subepi, model: density_share, inputs: {total: total_subepi}, sweep: {rho: share_subepi}, outputs: {share: share_subepi_pred}}
+- {id: run_share_midmyo, model: density_share, inputs: {total: total_midmyo}, sweep: {rho: share_midmyo}, outputs: {share: share_midmyo_pred}}
+- {id: run_share_subendo, model: density_share, inputs: {total: total_subendo}, sweep: {rho: share_subendo}, outputs: {share: share_subendo_pred}}
+
+# Eq. 8 for the large-vessel class: gamma close to 2 (the paper's reading) and 3 (Murray)
+- {id: run_eq8_gamma2, model: area_growth_eq8, inputs: {S: S_median_large, gamma: gamma_large_close}, outputs: {A: A_eq8_gamma2}}
+- {id: run_eq8_gamma3, model: area_growth_eq8, inputs: {S: S_median_large, gamma: gamma_murray}, outputs: {A: A_eq8_gamma3}}
+
+# the linear area-growth fit for the large-vessel class, as printed (dM in m) and read with dM in mm
+- id: run_Afit_large_m
+  model: area_growth_linear_fit
+  inputs: {c_d: A_fit_coef_d, c_S: A_fit_coef_S, c_0: A_fit_intercept, dM: dM_large_added, S: S_median_large}
+  outputs: {A: A_fit_large_m}
+- id: run_Afit_large_mm
+  model: area_growth_linear_fit_mm
+  inputs: {c_d: A_fit_coef_d, c_S: A_fit_coef_S, c_0: A_fit_intercept, dM: dM_large_added, S: S_median_large}
+  outputs: {A: A_fit_large_mm}
+
+# the centerline-velocity law the flow law implies under Poiseuille flow
+- {id: run_velocity_from_flow, model: velocity_fit_from_flow_fit, inputs: {a: Q_fit_prefactor, gamma: Q_fit_exponent}, outputs: {a_v: v_prefactor_from_flow, b_v: v_exponent_from_flow}}
+
+# the flow ratio of > 1 mm arteries to 100 um segments from the flow law
+- {id: run_flow_ratio, model: flow_ratio_power_law, inputs: {gamma: Q_fit_exponent, d1: d_large_artery, d2: d_100um}, outputs: {ratio: flow_ratio_from_fit}}
+
+# the flow and velocity laws at 100 um (for q_flow_ratio and q_velocity_flow_laws)
+- {id: run_Q_100um, model: flow_power_law, inputs: {a: Q_fit_prefactor, gamma: Q_fit_exponent, d: d_100um}, outputs: {Q: Q_100um_from_fit}}
+- {id: run_v_100um, model: velocity_power_law, inputs: {a: v_fit_prefactor, b: v_fit_exponent, d: d_100um}, outputs: {v: v_100um_from_fit}}
+
+# the pressure law at 100 um (outside its fitted range of 250-800 um), as a share of systemic pressure
+- {id: run_P_100um, model: pressure_power_law, inputs: {a: P_fit_prefactor, b: P_fit_exponent, d: d_100um_pressure}, outputs: {P: P_100um_from_fit}}
+- {id: run_P_fraction_100um, model: pressure_fraction, inputs: {P: P_100um_from_fit, P_sys: systemic_pressure_added}, outputs: {f: P_fraction_100um_from_fit}}
+
+# the two conductance laws at the top of the imputed range (400 um)
+- {id: run_Gis_400um, model: conductance_power_law, inputs: {a: Gis_prefactor, b: Gis_exponent, d: d_insilico_max}, outputs: {G: Gis_400um}}
+- {id: run_Gheart_400um, model: conductance_power_law, inputs: {a: Gheart_prefactor, b: Gheart_exponent, d: d_insilico_max}, outputs: {G: Gheart_400um}}
+- {id: run_Gheart_400um_p12, model: conductance_power_law, inputs: {a: Gheart_prefactor, b: Gheart_exponent_discussion, d: d_insilico_max}, outputs: {G: Gheart_400um_p12}, note: "the heart fit with the exponent as printed on p. 12 (2.22, no minus sign)"}
+
+# Eq. 3 at the paper's hematocrit, at 100 um
+- {id: run_eq3_100um, model: viscosity_eq3, inputs: {d: d_100um_pressure, Hd: Hd_constant}, outputs: {mu: mu_rel_100um}}
+
+# ---- added in the audit
+# wall shear stress at 100 um from the flow law through the paper's own Eqs. 3-6 (l cancels)
+- {id: run_mu_abs_100um, model: absolute_viscosity, inputs: {mu_rel: mu_rel_100um, mu_p: plasma_viscosity_added}, outputs: {mu: mu_abs_100um}}
+- {id: run_G_seg_100um, model: segment_conductance_eq5, inputs: {d: d_100um, mu: mu_abs_100um, l: L_median_all}, outputs: {G: G_seg_100um}}
+- {id: run_dP_100um, model: pressure_drop_eq4, inputs: {Q: Q_100um_from_fit, G: G_seg_100um}, outputs: {dP: dP_100um}}
+- {id: run_wss_100um, model: wall_shear_stress_eq6, inputs: {dP: dP_100um, d: d_100um, l: L_median_all}, outputs: {tau: wss_100um_from_fit}}
+# perfusion of a 150 um segment from the flow law over the median perfused volume
+- {id: run_Q_perfusion, model: flow_power_law, inputs: {a: Q_fit_prefactor, gamma: Q_fit_exponent, d: d_perfusion_added}, outputs: {Q: Q_perfusion_from_fit}}
+- {id: run_perfusion, model: perfusion_from_flow, inputs: {Q: Q_perfusion_from_fit, V: perfused_volume_median, rho: tissue_density_added}, outputs: {perfusion: perfusion_from_fit}}
+# the flow law at the lower bound (1 mm) of the class of arteries larger than 1 mm
+- {id: run_Q_1mm, model: flow_power_law, inputs: {a: Q_fit_prefactor, gamma: Q_fit_exponent, d: d_large_artery}, outputs: {Q: Q_1mm_from_fit}}
+
+# ---- figure readings (Fig. 5): the printed power laws swept over the diameters read off the plotted lines
+# the heart conductance law, with the exponent as printed on p. 7 (-2.22) and on p. 12 (2.22), against its own plotted fit line
+- {id: run_f5a_fit_printed, model: conductance_power_law, inputs: {a: Gheart_prefactor, b: Gheart_exponent}, sweep: {d: d_f5a_fit}, outputs: {G: G_f5a_fit_printed}}
+- {id: run_f5a_fit_p12, model: conductance_power_law, inputs: {a: Gheart_prefactor, b: Gheart_exponent_discussion}, sweep: {d: d_f5a_fit}, outputs: {G: G_f5a_fit_p12}}
+# the heart law (p. 12 exponent) against the plotted heart median, the in silico law against the in silico median
+- {id: run_f5a_cast_p12, model: conductance_power_law, inputs: {a: Gheart_prefactor, b: Gheart_exponent_discussion}, sweep: {d: d_f5a_cast}, outputs: {G: G_f5a_cast_p12}}
+- {id: run_f5a_insilico, model: conductance_power_law, inputs: {a: Gis_prefactor, b: Gis_exponent}, sweep: {d: d_f5a_insilico}, outputs: {G: G_f5a_insilico}}
+# pressure, flow and centerline velocity laws against their plotted fit lines and the plotted heart medians
+- {id: run_f5b_fit, model: pressure_power_law, inputs: {a: P_fit_prefactor, b: P_fit_exponent}, sweep: {d: d_f5b_fit}, outputs: {P: P_f5b_fit}}
+- {id: run_f5c_fit, model: flow_power_law, inputs: {a: Q_fit_prefactor, gamma: Q_fit_exponent}, sweep: {d: d_f5c_fit}, outputs: {Q: Q_f5c_fit}}
+- {id: run_f5c_cast, model: flow_power_law, inputs: {a: Q_fit_prefactor, gamma: Q_fit_exponent}, sweep: {d: d_f5c_cast}, outputs: {Q: Q_f5c_cast}}
+- {id: run_f5d_fit, model: velocity_power_law, inputs: {a: v_fit_prefactor, b: v_fit_exponent}, sweep: {d: d_f5d_fit}, outputs: {v: v_f5d_fit}}
+- {id: run_f5d_cast, model: velocity_power_law, inputs: {a: v_fit_prefactor, b: v_fit_exponent}, sweep: {d: d_f5d_cast}, outputs: {v: v_f5d_cast}}
+# the velocity law implied by the flow law under Poiseuille flow, against the plotted heart median velocity
+- {id: run_f5d_cast_from_flow, model: velocity_power_law, inputs: {a: v_prefactor_from_flow, b: v_exponent_from_flow}, sweep: {d: d_f5d_cast}, outputs: {v: v_f5d_cast_from_flow}}

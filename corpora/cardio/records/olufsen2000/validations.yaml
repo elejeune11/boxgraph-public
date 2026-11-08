@@ -1,0 +1,38 @@
+# Cross-validation against schwarz2020 (cross-validation job 2026-11-06). Neither paper cites the other.
+# Eq. 21 is the area ratio eta (summed daughter areas over parent area) of a bifurcation obeying the radius power law
+# (Eq. 19) with exponent xi; schwarz2020 measures the same ratio ("area growth") at coronary bifurcations.
+- id: val_eta_eq21_vs_schwarz_large
+  model: area_ratio_eq21
+  inputs: {xi: xi_printed, gamma: gamma_schwarz_large_added}
+  output: eta
+  against: schwarz2020/A_median_large
+  purpose: validation
+  quantities: {schwarz2020/area_growth: area_ratio}
+  conditions_ok: >
+    schwarz2020's median area growth 1.02 is for mothers larger than 400 um, its median symmetry 0.59 (taken here as
+    gamma = 0.59^2) for mothers larger than 500 um; Eq. 21 at the median symmetry is set against the median area
+    growth, as schwarz2020 itself does for its Eq. 8 (cmp_eq8_gamma2_large). Diameters above 400 um (radii above
+    0.02 cm) lie in the range of the structured tree, which branches from the large arteries down to r_min =
+    0.01-0.03 cm (p. 10).
+  basis: >
+    This paper builds its structured trees of small arteries on the power law (r0)_pa^xi = (r0)_d1^xi + (r0)_d2^xi
+    with 'In arterial blood flow a good choice26 for the exponent is xi = 2.76' (p. 7), and Eq. 21 gives the area
+    ratio such a bifurcation has at a given asymmetry. The exponent rests on ref. 26 and the area ratio on refs. 22 and 30
+    (Papageorgiou et al., Uylings), not fitted to schwarz2020's coronary nodes, so this is a test. schwarz2020's Eq. 8 is the same
+    form (schwarz2020/relations.yaml, rel_area_growth_eq8_same_as_olufsen_eq21).
+- id: val_eta_eq21_tree_vs_schwarz_large
+  model: area_ratio_eq21
+  inputs: {xi: xi_printed, gamma: gamma_printed}
+  output: eta
+  against: schwarz2020/A_median_large
+  purpose: validation
+  quantities: {schwarz2020/area_growth: area_ratio}
+  conditions_ok: >
+    The structured tree has one asymmetry at every bifurcation, gamma = 0.41 (diameter ratio about 0.64), close to but
+    not the median symmetry 0.59 (gamma 0.35) of schwarz2020's large coronary bifurcations; the comparison asks what
+    area ratio this paper's tree, with its own printed parameters, gives a bifurcation of that size class. Mothers above
+    400 um lie inside the tree's range of radii (down to r_min = 0.01-0.03 cm, p. 10).
+  basis: >
+    The structured tree as this paper specifies it: xi = 2.76 and gamma = 0.41 (p. 7, 'Using an area ratio of eta = 1.16
+    and the power xi = 2.76, the asymmetry-ratio gamma = 0.41'), estimated from refs. 22 and 30 and not from
+    schwarz2020's data. Eq. 21 run on them gives the area ratio of every bifurcation of the tree.

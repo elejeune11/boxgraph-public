@@ -1,0 +1,27 @@
+# Cross-record validations (job chilian1986+schwarz2020, 2026-11-06). Values are read at build time.
+- id: val_pressure_fraction_100um_chilian1986
+  model: pressure_fraction
+  inputs: {P: P_100um_from_fit, P_sys: systemic_pressure_added}
+  output: f
+  against: chilian1986/res_pct_70_130_ctl
+  purpose: validation
+  quantities: {chilian1986/mean_pressure_percent_of_aortic: pressure_fraction}
+  conditions_ok: >
+    The conditions differ in three ways. (1) Species and preparation: a human arterial tree perfused in
+    silico at a steady 90 mmHg inlet and 20 mmHg capillary pressure (p. 5), against cat subepicardial
+    arterioles in the beating heart (chilian1986). (2) Tone: this network is vasodilated (no tone,
+    p. 11), while the only measured pressure in ~100 um arterioles is chilian1986's control with tone
+    intact (it measured no small arterioles under papaverine, Table 5). (3) The pressure law is fitted
+    over 250-800 um (p. 7); its value at 100 um (run_P_100um) is an extrapolation, as in this record's own
+    comparison with "around 32%". The comparison is still sensible because both sides are the same quantity:
+    mean local pressure as a share of the pressure at the coronary inlet. A share does not depend on the
+    inlet pressure in a passive network, which is linear in pressure. Dilation raises this share at a given
+    diameter in chilian1986's own data (medium arterioles 77% control, 90% papaverine, Table 6), so a
+    vasodilated network should give a share at least as high as the control measurement.
+  basis: >
+    This paper sets its predicted pressure in 100 um vessels ("around 32% of systemic pressure", p. 11)
+    against direct measurements of microvascular pressure as a share of perfusion pressure ("Chilian et
+    al. demonstrated that pressure in 80-120 um vessels has dropped to 60% and 80%", p. 11). It cites
+    Chilian 1991, a later study by the same group, not chilian1986. chilian1986 measured the same quantity
+    in 70-130 um subepicardial arterioles ("50-55% of aortic pressure", p. 5). The paper's pressure law,
+    taken as a share of the 90 mmHg inlet pressure (pressure_fraction), predicts it at 100 um.

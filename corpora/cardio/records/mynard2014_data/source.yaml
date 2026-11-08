@@ -1,0 +1,38 @@
+id: mynard2014_data
+kind: dataset
+title: "Supplemental Data File of 'Scalability and in-vivo validation of a multi-scale numerical model of the left coronary circulation': parameter values for the one-dimensional network"
+authors: [Jonathan P. Mynard, Daniel J. Penny, Joseph J. Smolich]
+year: 2014
+url: https://doi.org/10.1152/ajpheart.00603.2013
+file: corpus/cardio/data/mynard2014_data.xlsx
+version: "sha256:8a669c93e5a8974ff7ae4f18a87400a6471e082092a05840a1eed97ee6cde653"
+licence: none stated
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-06"}
+notes: >
+  What the source is. The Supplemental Data File of mynard2014 (Table S1, "Unscaled parameter values for
+  the one-dimensional conduit arterial network model", legend on p. 29 of the manuscript), released as .xls
+  and converted to .xlsx (format only). The year and url are the paper's; neither the paper nor the file
+  states a licence. One sheet, "1D Network Parameters": title and citation (A1-A4); five notes (A7-A11:
+  values are for reference LV free wall and septal weights of 104 g and 54 g; allometric scaling power
+  0.35, values unscaled; wave speeds scale-invariant; (LVFW)/(Septum) name the region a penetrating artery
+  perfuses; segment numbers as in Fig. 1); then a table (header row 13) of Segment ID, Penetrating Artery
+  ID, Length L (cm), Diameter D0 (cm), Wave Speed c0 (cm/s) and distal connections (G-H), in seven blocks:
+  LM and LAD (rows 16-31), septal (34-40), diagonal (43-54), Cx (57-68), marginal (71-82), LI/LP/LPD
+  (85-92), and the other penetrating arteries P14-P55 (95-136). 67 segments and 55 penetrating arteries.
+
+  How it was read. It holds model parameters, not measurements, so every datum has origin reported. Each
+  block's L, D0 and c0 columns are one table datum each (L_*, D0_*, c0_*), indexed by segment number (or
+  penetrating artery number for the last block), values as the cells hold them; the IDs, the
+  terminal-segment penetrating arteries (column B) and the row order are in each note. The connectivity
+  (G-H, text) is not recorded as data. Each block's c0 is also recorded indexed by its own D0
+  (c0_vs_D0_*), so that the paper's Eq. 1 can be swept over it.
+
+  What is checked. The sheet's c0 of Cx-36 (the proximal Cx, the segment of Fig. 6) is 900 cm/s, the
+  paper's 9.0 m/s target (reproduced). The paper's Eq. 1 with its printed Olufsen constants (k1, k2, k3, rho
+  copied here from mynard2014 p. 5 and cited there), r0 = D0/2 and the uniform scaling to the Cx target
+  (model wave_speed_eq1) does not reproduce the released c0: all seven blocks are not reproduced, by up to
+  several m/s in the small vessels; only segments near the anchor diameter agree. The same equation with
+  k2 = -18 cm^-1 and k1 = 6.8×10^6 (k3 as printed) reproduces every one of the 121 values to the cells'
+  precision. These two constants are added and fitted by the reader (k1_fit, k2_fit; fit_quality
+  comparisons), so this shows the sheet follows Eq. 1 with one other set of constants, not which set the
+  simulations used (q_eq1_constants). The scaled per-animal geometry is not released (q_scaled_geometry).

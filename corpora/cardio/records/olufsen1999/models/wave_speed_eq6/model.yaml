@@ -1,0 +1,19 @@
+id: wave_speed_eq6
+name: reference wave speed from Eh/r0 of Eq. 6 (printed c0^2 at A = A0)
+role: model
+stated: {page: 3, printed_page: "H259", quote: "the square of the wave propagation velocity", where: "c0^2 before Eq. 6, with Eq. 6"}
+# A helper for the relation mynard2015 states on its p. 6: its Eq. 3 sets c0 "via the empirical formula
+# suggested by Olufsen et al." (ref. 96 = this paper). Here that formula is the printed
+# c0^2 = (A/rho) dp/dA = (4/3) Eh/(rho r0) sqrt(A0/A), taken at A = A0, with Eh/r0 from Eq. 6. No printed
+# result of this record is computed from it. The printed factor 4/3 is in doubt (q_wave_speed_factor).
+equation: "c0^2 = (4/3) Eh/(rho r0) sqrt(A0/A) at A = A0; Eh/r0 = k1 exp(k2 r0) + k3 (6)"
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  r0: {quantity: vessel_radius, unit: cm}
+outputs:
+  c0: {quantity: reference_wave_speed, unit: cm/s}
+settings: {}
+stochastic: false

@@ -1,0 +1,15 @@
+id: perfusion_sheet
+name: number, median and quartiles of the released per-territory perfusion values
+role: processing
+software: true
+stated: {file: explanation_of_data.txt, lines: "264", quote: "Perfusion: Individual data for all perfusion branch regions, used for Fig. 6."}
+equation: "all values of sheet 'perfusion' (every region column, rows 2 on), pooled: n, median, 25th and 75th percentiles"
+built_from: [hemodynamics_workbook]
+inputs: {}
+outputs:
+  n: {quantity: perfusion_territory_count, unit: dimensionless}
+  median: {quantity: perfusion, unit: ml/min/g}
+  p25: {quantity: perfusion_quartile_low, unit: ml/min/g}
+  p75: {quantity: perfusion_quartile_high, unit: ml/min/g}
+settings: {file: hemodynamics_hum06.xlsx, sheet: perfusion, percentile_method: linear}
+stochastic: false

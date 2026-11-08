@@ -1,0 +1,15 @@
+id: territory_density
+name: tissue density implied by the perfusion weights and the perfused volume of the left coronary tree
+role: processing
+from_words: true
+stated: {file: explanation_of_data.txt, lines: "163", quote: "Perfusion: Tissue perfusion, calculated as Q / (heart weight* VVoronoi / sum (all Voronoi volumes))"}
+equation: "weight of a territory = heart weight * VVoronoi / sum(all Voronoi volumes); summed over the left coronary tree: W_tree = weighttot * Vtree_of_Vtot; rho = W_tree / V_tree"
+inputs:
+  W: {quantity: heart_weight, unit: kg}
+  f: {quantity: tree_volume_fraction, unit: dimensionless}
+  V: {quantity: perfused_volume, unit: cm^3}
+outputs:
+  W_tree: {quantity: territory_weight, unit: g}
+  rho: {quantity: tissue_density, unit: g/cm^3}
+settings: {}
+stochastic: false

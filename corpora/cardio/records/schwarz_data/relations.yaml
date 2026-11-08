@@ -1,0 +1,83 @@
+# Relations to the models of schwarz2020 (ref-1), the paper this release belongs to. Neither source
+# states a relation between models; the release's own models are our arithmetic on the paper's
+# stated rules, so each is proposed here, beside the paper's model it restates. The workbook and
+# medians adapters (hemodynamics_workbook, perfusion_sheet, network_medians) have no inputs and the
+# paper's network model is not runnable, so no relation is entered for them.
+- id: rel_velocity_exponent_schwarz2020
+  kind: same_as
+  a: schwarz2020/velocity_fit_from_flow_fit
+  b: schwarz_data/velocity_exponent_from_flow
+  mapping: {gamma: "gamma"}
+  output_map: {b_v: b_v}
+  regime: {a: [1.0e+6, 1.0e+10], gamma: [1.5, 3.5]}
+  provenance: proposed
+  reason: >
+    Both take the velocity exponent a flow power law implies under the paper's Poiseuille flow
+    (v = 8 Q/(pi d^2), schwarz2020 p. 4): b_v = gamma - 2. The release's model keeps only the
+    exponent; the paper's also gives the prefactor, which has no counterpart here.
+- id: rel_pressure_fraction_schwarz2020
+  kind: same_as
+  a: schwarz2020/pressure_fraction
+  b: schwarz_data/pressure_fraction
+  mapping: {P: "P", P_in: "P_sys"}
+  regime: {P: [5, 90], P_sys: [80, 120]}
+  provenance: proposed
+  reason: >
+    Both express a pressure as a percentage of a reference pressure; the release's reference is the
+    inlet pressure of the network solution (90 mmHg), which the paper calls systemic pressure
+    (p. 11). The form is a plain ratio; the relation only records that the two records compute the
+    100 um fraction the same way.
+- id: rel_flow_ratio_schwarz2020
+  kind: same_as
+  a: schwarz2020/flow_ratio_power_law
+  b: schwarz_data/flow_ratio
+  mapping: {Q_1: "d1**gamma", Q_2: "d2**gamma"}
+  regime: {gamma: [2.0, 3.0], d1: [1.0e-3, 4.0e-3], d2: [5.0e-5, 2.0e-4]}
+  provenance: proposed
+  reason: >
+    The release's flow ratio Q_1/Q_2 is the paper's power-law ratio (d1/d2)^gamma when both flows
+    follow Q = a d^gamma (the prefactor a cancels, so it is set to 1 in the mapping). The release's
+    run feeds it network medians instead, which is why its ratio differs from the power law's.
+# Second pass (2026-11-07), the network file in the release. network_solution, our solver on the released network,
+# is the paper's network model applied to one network: one relation, proposed, since neither source states a relation
+# between models (the paper's data statement, p. 13, only says data are "available on request"). It cannot be tested:
+# the paper's model is not runnable (its network is not printed), and the steps are in words. The runs themselves, the
+# test this relation cannot give, are schwarz_data's comparisons cmp_net_* against the paper's printed values.
+# Not related, though shape suggested it: schwarz2020/segment_conductance_eq5 and network_solution. Eq. 5 is one
+# segment's conductance from its d, mu and l; network_solution takes only boundary pressures, Hd, a plasma viscosity
+# and statistics settings, and reads every d and l from the file. Its G_* outputs are Eq. 5 (with Eq. 3) at four
+# segments of the file, so a mapping would need the file's diameters and lengths typed in, which the release forbids
+# copying; the agreement is tested instead by cmp_net_G_* against the stored conductances. The same holds for Eq. 3,
+# Eq. 4 and Eq. 6, which the solver uses inside (its built_from in words). The paper's power-law fits are outputs of
+# the network run (fit prefactors and exponents), not forms of a model with matching inputs.
+- id: rel_network_solution_derived_from_schwarz2020_network
+  kind: derived_from
+  a: schwarz2020/network_hemodynamics
+  b: schwarz_data/network_solution
+  mapping: {P_in: "133.322*P_in", P_cap: "133.322*P_cap", Hd: "Hd", mu_p: "0.001",
+            d: "100", d_fit_lo: "250", d_fit_hi: "800", d_large: "1000", d_cut: "300", W: "0.330", f_tree: "0.8776"}
+  output_map: {P_class: P}
+  regime: {P_in: [60, 120], P_cap: [0, 40], Hd: [0.3, 0.5]}
+  steps:
+    - "take the network (segment diameters, lengths and connectivity) from TreeQ.SN, IN, SE and IE of the released .mat file"
+    - "take each end segment's distal conductance as the single deterministic value TreeQ.SE.Gdist, in series with the segment (1/G = 1/Gseg + 1/Gdist), instead of the paper's 1000 stochastic draws"
+    - "turn Eq. 3's relative viscosity into an absolute one with a plasma viscosity (the paper states none; 1.0 mPa s is what the stored conductances imply)"
+    - "solve the paper's Kirchhoff system once and take class medians, the paper's power-law fits, flows, shear stress and perfusion from the solution"
+  assumptions:
+    - "plasma viscosity 1.0 mPa s (schwarz_data mu_p_release_added); the paper does not state one"
+    - "W = 0.330 kg (the paper's 'Heart weight was 330 gram', p. 2) and f_tree = 0.8776 (the release's Vtree_of_Vtot, explanation_of_data.txt line 216; not in the paper)"
+    - "1 mmHg = 133.322 Pa; the network stores 11998.8 and 2666.4 Pa, i.e. 133.32 Pa/mmHg"
+  provenance: proposed
+  reason: >
+    The paper's model (Eqs. 3-6, pp. 4-5: Poiseuille conductance with the Pries viscosity at Hd 0.4, Kirchhoff at every
+    node, 90 mmHg in, end segments draining through imputed distal conductances to 20 mmHg) is the one the release says
+    its stored solution comes from ("The pressure in the node [N/m2], as calculated from solving the Kirchhoff and
+    Poiseuille laws. Assumptions here are input pressure 11970 N/m2 (90 mmHg)", explanation_of_data.txt line 120), on
+    the "coronary arterial network of a single human heart as described in the paper" (line 32). network_solution
+    restates that model on the released network, so it is derived from the paper's model by the steps above. Mapping:
+    the paper's pressures in mmHg go to Pa; its statistics (100 um vessels, the 250-800 um pressure-law range, arteries
+    larger than 1 mm, the under-300 um shear stress) are its printed constants, in um. The paper's model is stochastic
+    over 1000 draws of the distal conductances; this one uses one stored set, so it corresponds to the paper's
+    deterministic median case, not to its stochastic spread (Table 2). The release's own conductances use Hd 0.45, not
+    the paper's 0.4 (q_hematocrit): that is a difference between the release and the paper, not a step of this
+    derivation, and the mapping keeps the paper's Hd.

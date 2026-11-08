@@ -1,0 +1,21 @@
+# DemonstrationCode.m lines 41-106: at every internal node, the connected elements are sorted into
+# mother (upstream) and daughter (downstream) segments by the sign of their flow, and their
+# diameters written to Excel. This is how the paper's mother-daughter classification "based on flow
+# direction" (schwarz2020 p. 4) is implemented; symmetry (Eq. 1) and area growth (Eq. 2) are computed
+# from these diameters elsewhere (not released).
+id: demo_mother_daughter
+name: mother and daughter diameters at every internal node, classified by flow direction (DemonstrationCode.m, section 4)
+role: processing
+stated: {file: DemonstrationCode.m, lines: "62", quote: "Upstream=((ConnectedNode(2)==in)&&(Q>0))||((ConnectedNode(1)==in)&&(Q<0));"}
+equation: "an internal element is upstream of node in if it ends at in with Q > 0 or starts at in with Q < 0; a source element is upstream if its Q > 0; upstream diameters (mothers) in columns B-E (at most 4), downstream (daughters) in G-L (at most 6), in the order the elements are connected; a zero diameter ends a list"
+inputs: {}
+outputs:
+  d_mothers: {quantity: vessel_diameter, unit: m}
+  d_daughters: {quantity: vessel_diameter, unit: m}
+settings: {max_mothers: 4, max_daughters: 6}
+runnable: false
+not_runnable_reason: >
+  It loops over the 98,022 internal nodes of TreeQ ('Human Left Coronary graph.mat'), which is not in
+  this copy of the release; its result is a table over all nodes, not a value. The tables built from
+  it (final_tree_bifurcation_summary_all-ld.xlsx, Figs. 3-4) are not in this copy either.
+stochastic: false

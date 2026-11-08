@@ -1,0 +1,82 @@
+- id: run_capillary_fraction
+  model: capillary_volume_fraction
+  inputs: {d: capillary_diameter_used, n: capillary_density_used}
+  outputs: {phi_c: capillary_fraction_pred}
+- id: run_artery_fraction
+  model: small_artery_volume_fraction
+  inputs: {phi_c: capillary_fraction_printed}
+  outputs: {phi_a: artery_fraction_pred}
+- id: run_volume_sum
+  model: compartment_volume_sum
+  inputs: {phi_c: capillary_fraction_printed, phi_a: artery_fraction_printed}
+  outputs: {phi_sum: blood_volume_sum_pred}
+- id: run_volume_variation
+  model: volume_variation_amplitude
+  inputs: {A: area_fig4a}
+  outputs: {dV: volume_variation_pred}
+- id: run_cep
+  model: epicardial_capacitance_rc
+  inputs: {tau: tau_initial_fig7, Ra: Ra_fig7}
+  outputs: {Cep: Cep_pred}
+- id: run_cim
+  model: intramyocardial_capacitance_rc
+  inputs: {tau: tau_slow_fig7, Rv: Rv_fig7}
+  outputs: {Cim: Cim_pred}
+- id: run_cim_per_mass
+  model: capacitance_per_mass
+  inputs: {Cim: Cim_pred, M: lv_mass_fig7_added}
+  outputs: {c: Cim_per_mass_pred}
+- id: run_tau_parallel
+  model: parallel_discharge_time
+  inputs: {Cim: Cim_pred, Ra: Ra_fig7, Rv: Rv_fig7}
+  outputs: {tau: tau_parallel_pred}
+- id: run_rc_fig7
+  model: resistance_split
+  inputs: {Ra: Ra_fig7, Rv: Rv_fig7}
+  outputs: {Rc: Rc_fig7_pred}
+- id: run_ra_regression_fig7
+  model: ra_rc_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept, Rc: Rc_fig7_pred}
+  outputs: {Ra: Ra_regression_fig7_pred}
+  note: the Fig. 6 regression evaluated at the R_c implied by the Fig. 7 resistances
+- id: run_ra_fraction
+  model: ra_fraction_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept, Rc: rc_for_fraction_added}
+  outputs: {f: ra_fraction_pred}
+  note: added by the audit; the R_c is an added input (see rc_for_fraction_added)
+- id: run_ra_regression_open_triangle_fig6
+  model: ra_rc_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept}
+  sweep: {Rc: ra_vs_rc_open_triangle_fig6}
+  outputs: {Ra: ra_regression_open_triangle_pred}
+  note: the printed regression at the R_c of the plotted points of one dog (Fig. 6)
+- id: run_ra_regression_filled_circle_fig6
+  model: ra_rc_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept}
+  sweep: {Rc: ra_vs_rc_filled_circle_fig6}
+  outputs: {Ra: ra_regression_filled_circle_pred}
+  note: the printed regression at the R_c of the plotted points of one dog (Fig. 6)
+- id: run_ra_regression_filled_square_fig6
+  model: ra_rc_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept}
+  sweep: {Rc: ra_vs_rc_filled_square_fig6}
+  outputs: {Ra: ra_regression_filled_square_pred}
+  note: the printed regression at the R_c of the plotted points of one dog (Fig. 6)
+- id: run_ra_regression_open_circle_fig6
+  model: ra_rc_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept}
+  sweep: {Rc: ra_vs_rc_open_circle_fig6}
+  outputs: {Ra: ra_regression_open_circle_pred}
+  note: the printed regression at the R_c of the plotted points of one dog (Fig. 6)
+- id: run_ra_regression_open_square_fig6
+  model: ra_rc_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept}
+  sweep: {Rc: ra_vs_rc_open_square_fig6}
+  outputs: {Ra: ra_regression_open_square_pred}
+  note: the printed regression at the R_c of the plotted points of one dog (Fig. 6)
+- id: run_ra_regression_filled_triangle_fig6
+  model: ra_rc_regression
+  inputs: {b: ra_rc_slope, a: ra_rc_intercept}
+  sweep: {Rc: ra_vs_rc_filled_triangle_fig6}
+  outputs: {Ra: ra_regression_filled_triangle_pred}
+  note: the printed regression at the R_c of the plotted points of one dog (Fig. 6)

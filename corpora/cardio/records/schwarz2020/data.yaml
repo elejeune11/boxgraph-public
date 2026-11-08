@@ -1,0 +1,334 @@
+# ---- inputs of the network hemodynamics (Methods, pp. 4-5)
+- {id: Hd_constant, quantity: discharge_hematocrit, unit: dimensionless, origin: reported, printed: "0.4",
+   citation: {page: 4, printed_page: "4", quote: "assuming a constant hematocrit", where: text}}
+- {id: P_inlet, quantity: node_pressure, unit: mmHg, origin: reported, printed: "90",
+   citation: {page: 5, printed_page: "5", quote: "of 90 mmHg and capillary pressure of 20 mmHg", where: text}}
+- {id: P_capillary, quantity: node_pressure, unit: mmHg, origin: reported, printed: "20",
+   citation: {page: 5, printed_page: "5", quote: "of 90 mmHg and capillary pressure of 20 mmHg", where: text}}
+- {id: d_insilico_max, quantity: vessel_diameter, unit: um, origin: reported, printed: "400",
+   citation: {page: 4, printed_page: "4", quote: "and 400 µm. These predictions were then imputed to the", where: text},
+   note: upper end of the diameter range for which in silico distal conductances were imputed}
+
+# ---- power-law fits of the hemodynamic results (pp. 6-7, 12)
+- {id: Gis_prefactor, quantity: conductance_fit_prefactor, unit: dimensionless, origin: fitted, printed: "1.64 x 10^-3",
+   citation: {page: 6, printed_page: "6", quote: "by the allometric relation Gis", where: text},
+   note: "in silico trees, larger vessels; d in m, G in m^3/(Pa s); r2 = 0.98"}
+- {id: Gis_exponent, quantity: conductance_fit_exponent, unit: dimensionless, origin: fitted, printed: "2.49",
+   citation: {page: 6, printed_page: "6", quote: "by the allometric relation Gis", where: text}}
+- {id: Gheart_prefactor, quantity: conductance_fit_prefactor, unit: dimensionless, origin: fitted, printed: "1.58 x 10^-4",
+   citation: {page: 7, printed_page: "7", quote: "yet also agrees well for larger segments", where: text},
+   note: "reconstructed heart with extrapolated microcirculation (brown line, Fig. 5A); d in m, G in m^3/(Pa s); r2 = 0.81"}
+- {id: Gheart_exponent, quantity: conductance_fit_exponent, unit: dimensionless, origin: fitted, printed: "-2.22",
+   citation: {page: 7, printed_page: "7", quote: "yet also agrees well for larger segments", where: text},
+   note: printed with a minus sign (checked on the page image); see q_G_exponent_sign}
+- {id: Gheart_exponent_internal, quantity: conductance_fit_exponent, unit: dimensionless, origin: fitted, printed: "2.18",
+   citation: {page: 7, printed_page: "7", quote: "segments the exponent was: 2.18", where: text},
+   note: the same fit restricted to internal segments}
+- {id: Gheart_exponent_discussion, quantity: conductance_fit_exponent, unit: dimensionless, origin: fitted, printed: "2.22",
+   citation: {page: 12, printed_page: "12", quote: "scaled with diameter to the power 2.22", where: text}}
+- {id: P_fit_prefactor, quantity: pressure_fit_prefactor, unit: dimensionless, origin: fitted, printed: "5.40 x 10^3",
+   citation: {page: 7, printed_page: "7", quote: "The pressure-diameter relation was", where: text},
+   note: "d in [250, 800] 10^-6 m, P in mmHg, r2 = 0.14"}
+- {id: P_fit_exponent, quantity: pressure_fit_exponent, unit: dimensionless, origin: fitted, printed: "0.60",
+   citation: {page: 7, printed_page: "7", quote: "The pressure-diameter relation was", where: text}}
+- {id: Q_fit_prefactor, quantity: flow_fit_prefactor, unit: dimensionless, origin: fitted, printed: "5.07 x 10^8",
+   citation: {page: 7, printed_page: "7", quote: "allometric fit of flow", where: text},
+   note: "d in m, Q in ml/min, r2 = 0.83"}
+- {id: Q_fit_exponent, quantity: flow_fit_exponent, unit: dimensionless, origin: fitted, printed: "2.53",
+   citation: {page: 7, printed_page: "7", quote: "allometric fit of flow", where: text}}
+- {id: v_fit_prefactor, quantity: velocity_fit_prefactor, unit: dimensionless, origin: fitted, printed: "3.00 x 10^4",
+   citation: {page: 7, printed_page: "7", quote: "The diameter velocity relation was", where: text},
+   note: "centerline velocity; d in m, v in cm/s, r2 = 0.21"}
+- {id: v_fit_exponent, quantity: velocity_fit_exponent, unit: dimensionless, origin: fitted, printed: "0.89",
+   citation: {page: 7, printed_page: "7", quote: "The diameter velocity relation was", where: text}}
+
+# ---- flow and pressure statements checked against the fits
+- {id: d_large_artery, quantity: vessel_diameter, unit: mm, origin: reported, printed: "1",
+   citation: {page: 7, printed_page: "7", quote: "Arteries larger than 1 mm carried a median", where: text},
+   note: lower bound of the class 'arteries larger than 1 mm'}
+- {id: d_100um, quantity: vessel_diameter, unit: um, origin: reported, printed: "100",
+   citation: {page: 7, printed_page: "7", quote: "as much blood per vessel as 100", where: text}}
+- {id: Q_large_median, quantity: segment_flow, unit: ml/min, origin: predicted, printed: "36.6",
+   citation: {page: 7, printed_page: "7", quote: "Arteries larger than 1 mm carried a median", where: text},
+   note: median flow in arteries larger than 1 mm (network model)}
+- {id: flow_ratio_large_100um, quantity: flow_ratio, unit: dimensionless, origin: predicted, printed: "~3000",
+   citation: {page: 7, printed_page: "7", quote: "as much blood per vessel as 100", where: text},
+   note: "printed 'about 3,000-times': arteries larger than 1 mm against 100 um segments"}
+- {id: d_100um_pressure, quantity: vessel_diameter, unit: um, origin: reported, printed: "100",
+   citation: {page: 11, printed_page: "11", quote: "predicts a median pressure in 100 µm vessels around 32%", where: text}}
+- {id: P_fraction_100um, quantity: pressure_fraction, unit: percent, origin: predicted, printed: "~32",
+   citation: {page: 11, printed_page: "11", quote: "predicts a median pressure in 100 µm vessels around 32%", where: text},
+   note: "printed 'around 32% of systemic pressure'"}
+- {id: wss_small_median, quantity: wall_shear_stress, unit: Pa, origin: predicted, printed: "~5",
+   citation: {page: 7, printed_page: "7", quote: "median wall shear stress leveled", where: text},
+   note: "printed 'leveled off around 5 Pa' for segments smaller than 300 um"}
+- {id: perfused_volume_total, quantity: perfused_volume, unit: cm^3, origin: measured, printed: "358",
+   citation: {page: 7, printed_page: "7", quote: "The left coronary circulation perfused in total 358", where: text}}
+- {id: perfused_volume_median, quantity: perfused_volume, unit: mm^3, origin: measured, printed: "20.2",
+   citation: {page: 8, printed_page: "8", quote: "20.2 mm3 (interquartile range", where: text},
+   note: "median perfused volume of the 4954 segments of 100-200 um (the abstract prints 20)"}
+- {id: perfusion_median, quantity: perfusion, unit: ml/min/g, origin: predicted, printed: "5.6",
+   citation: {page: 8, printed_page: "8", quote: "perfusion of 5.6 ml/min/g (flow per weight", where: text},
+   note: "interquartile range 2.6-10.8 ml/min/g"}
+
+# ---- branching: area growth (pp. 5, 9, 11)
+- {id: A_fit_coef_d, quantity: area_growth_fit_coefficient_d, unit: dimensionless, origin: fitted, printed: "-0.66",
+   citation: {page: 5, printed_page: "5", quote: "Linear regression showed that area growth", where: text},
+   note: "A = -0.66 dM + 0.34 S + 1.13, dM in [75, 600] 10^-6 m; r2 = 0.047; the unit of dM in the formula is not stated (q_A_fit_unit)"}
+- {id: A_fit_coef_S, quantity: area_growth_fit_coefficient_S, unit: dimensionless, origin: fitted, printed: "0.34",
+   citation: {page: 5, printed_page: "5", quote: "Linear regression showed that area growth", where: text}}
+- {id: A_fit_intercept, quantity: area_growth_fit_intercept, unit: dimensionless, origin: fitted, printed: "1.13",
+   citation: {page: 5, printed_page: "5", quote: "Linear regression showed that area growth", where: text}}
+- {id: A_median_large, quantity: area_growth, unit: dimensionless, origin: measured, printed: "1.02",
+   citation: {page: 5, printed_page: "5", quote: "sectional area remained stable (median area growth", where: text},
+   note: median area growth at bifurcations of segments larger than 400 um}
+- {id: S_median_large, quantity: daughter_symmetry, unit: dimensionless, origin: measured, printed: "0.59",
+   citation: {page: 9, printed_page: "9", quote: "symmetry ratio was 0.59, in contrast to values", where: text},
+   note: median daughter symmetry for mother diameters larger than 500 um}
+- {id: gamma_large_close, quantity: branching_scaling_exponent, unit: dimensionless, origin: estimated, printed: "~2",
+   citation: {page: 11, printed_page: "11", quote: "an exponent close to 2 rather than 3", where: text},
+   note: the exponent the constant cross-sectional area of the large coronaries suggests}
+- {id: gamma_murray, quantity: branching_scaling_exponent, unit: dimensionless, origin: reported, printed: "3",
+   citation: {page: 11, printed_page: "11", quote: "an exponent close to 2 rather than 3", where: text},
+   note: the exponent the paper sets against it (Murray's law)}
+
+# ---- Table 1 (p. 6): shares of each diameter class, indexed by the printed count or density
+- id: share_all
+  quantity: segment_share
+  unit: percent
+  origin: measured
+  citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, column All"}
+  table:
+    index_quantity: segment_count
+    index_unit: dimensionless
+    index: ["8047", "22204", "32500", "33605", "27816", "19444", "24598", "19718", "12665", "1587"]
+    values: ["4.0", "11.0", "16.1", "16.6", "13.8", "9.6", "12.2", "9.8", "6.3", "0.8"]
+  note: "rows 30-45 um to >=400 um; counts printed with thousands separators (8,047)"
+- {id: total_all, quantity: segment_count, unit: dimensionless, origin: measured, printed: "202184",
+   citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, row Total, column All"},
+   note: "printed 202,184"}
+- id: share_terminal
+  quantity: segment_share
+  unit: percent
+  origin: measured
+  citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, column Terminal"}
+  table:
+    index_quantity: segment_count
+    index_unit: dimensionless
+    index: ["6695", "20760", "27545", "22872", "12860", "5428", "3274", "1204", "321", "2"]
+    values: ["6.6", "20.6", "27.3", "22.7", "12.7", "5.4", "3.2", "1.2", "0.3", "0.0"]
+- {id: total_terminal, quantity: segment_count, unit: dimensionless, origin: measured, printed: "100961",
+   citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, row Total, column Terminal"},
+   note: "printed 100,961"}
+- id: share_subepi
+  quantity: terminal_density_share
+  unit: percent
+  origin: measured
+  citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, column Subepicardium"}
+  table:
+    index_quantity: terminal_density
+    index_unit: 1/cm^3
+    index: ["12.2", "37.4", "46.2", "38.0", "21.9", "7.9", "3.4", "1.1", "0.3", "0.0"]
+    values: ["7.2", "22.2", "27.4", "22.6", "13.0", "4.7", "2.0", "0.7", "0.2", "0.0"]
+- {id: total_subepi, quantity: terminal_density, unit: 1/cm^3, origin: measured, printed: "168.4",
+   citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, row Total, column Subepicardium"}}
+- id: share_midmyo
+  quantity: terminal_density_share
+  unit: percent
+  origin: measured
+  citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, column Midmyocardium"}
+  table:
+    index_quantity: terminal_density
+    index_unit: 1/cm^3
+    index: ["20.9", "65.5", "90.3", "83.0", "52.0", "23.9", "15.3", "5.5", "1.5", "0.0"]
+    values: ["5.8", "18.3", "25.2", "23.2", "14.5", "6.7", "4.3", "1.5", "0.4", "0.0"]
+- {id: total_midmyo, quantity: terminal_density, unit: 1/cm^3, origin: measured, printed: "357.8",
+   citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, row Total, column Midmyocardium"}}
+- id: share_subendo
+  quantity: terminal_density_share
+  unit: percent
+  origin: measured
+  citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, column Subendocardium"}
+  table:
+    index_quantity: terminal_density
+    index_unit: 1/cm^3
+    index: ["34.9", "104.2", "136.3", "106.8", "50.2", "21.6", "14.8", "6.2", "1.6", "0.0"]
+    values: ["7.3", "21.9", "28.6", "22.4", "10.5", "4.5", "3.1", "1.3", "0.3", "0.0"]
+- {id: total_subendo, quantity: terminal_density, unit: 1/cm^3, origin: measured, printed: "476.6",
+   citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, row Total, column Subendocardium"}}
+
+# ---- added in the audit
+- {id: L_median_all, quantity: segment_length, unit: um, origin: measured, printed: "441",
+   citation: {page: 6, printed_page: "6", quote: "TABLE 1 | Segment distribution.", where: "Table 1, row Length median, column All"},
+   note: "median length of all segments; used only as l in Eqs. 5-6, where it cancels from the wall shear stress"}
+- {id: CV_flow_text, quantity: flow_cv, unit: percent, origin: predicted, printed: "7.4",
+   citation: {page: 6, printed_page: "6", quote: "variation for flow was 7.4%", where: text}}
+- {id: CV_flow_table2, quantity: flow_cv, unit: dimensionless, origin: predicted, printed: "0.074",
+   citation: {page: 10, printed_page: "10", quote: "TABLE 2 | Stochastic variation.", where: "Table 2, row Flow, column CV Median"}}
+- {id: perfused_volume_abstract, quantity: perfused_volume, unit: mm^3, origin: measured, printed: "20",
+   citation: {page: 1, printed_page: "1", quote: "perfused volume at a truncation level of 100 to 200", where: abstract},
+   note: "the abstract's value of the median perfused volume printed 20.2 mm3 on p. 8"}
+
+# ---- calibrated figure readings (see figures.yaml and figures.md)
+- {id: d_f5a_fit, quantity: distal_conductance, unit: ml/min/mmHg, origin: fitted, figure: f5a_fit,
+   citation: {page: 9, where: "Fig. 5A", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the black line 'cast, fit' (the allometric fit on the reconstructed heart)"}
+- {id: d_f5a_cast, quantity: distal_conductance, unit: ml/min/mmHg, origin: predicted, figure: f5a_cast,
+   citation: {page: 9, where: "Fig. 5A", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the brown line 'cast, median' (reconstructed heart with extrapolated microcirculation)"}
+- {id: d_f5a_insilico, quantity: distal_conductance, unit: ml/min/mmHg, origin: predicted, figure: f5a_insilico,
+   citation: {page: 9, where: "Fig. 5A", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the teal line 'in silico, median'"}
+- {id: d_f5b_fit, quantity: node_pressure, unit: mmHg, origin: fitted, figure: f5b_fit,
+   citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the black line 'cast, fit' (the allometric fit on the reconstructed heart)"}
+- {id: d_f5b_cast, quantity: node_pressure, unit: mmHg, origin: predicted, figure: f5b_cast,
+   citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the brown line 'cast, median' (reconstructed heart with extrapolated microcirculation)"}
+- {id: d_f5b_insilico, quantity: node_pressure, unit: mmHg, origin: predicted, figure: f5b_insilico,
+   citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the teal line 'in silico, median'"}
+- {id: d_f5b_cast_q1, quantity: node_pressure, unit: mmHg, origin: predicted, figure: f5b_cast_q1,
+   citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the lower edge of the brown area 'cast, IQR' (25th percentile)"}
+- {id: d_f5b_cast_q3, quantity: node_pressure, unit: mmHg, origin: predicted, figure: f5b_cast_q3,
+   citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the upper edge of the brown area 'cast, IQR' (75th percentile)"}
+- {id: d_f5b_insilico_q1, quantity: node_pressure, unit: mmHg, origin: predicted, figure: f5b_insilico_q1,
+   citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the lower edge of the light teal area 'in silico, IQR' (25th percentile)"}
+- {id: d_f5b_insilico_q3, quantity: node_pressure, unit: mmHg, origin: predicted, figure: f5b_insilico_q3,
+   citation: {page: 9, where: "Fig. 5B", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the upper edge of the light teal area 'in silico, IQR' (75th percentile)"}
+- {id: d_f5c_fit, quantity: segment_flow, unit: ml/min, origin: fitted, figure: f5c_fit,
+   citation: {page: 9, where: "Fig. 5C", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the black line 'cast, fit' (the allometric fit on the reconstructed heart)"}
+- {id: d_f5c_cast, quantity: segment_flow, unit: ml/min, origin: predicted, figure: f5c_cast,
+   citation: {page: 9, where: "Fig. 5C", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the brown line 'cast, median' (reconstructed heart with extrapolated microcirculation)"}
+- {id: d_f5c_insilico, quantity: segment_flow, unit: ml/min, origin: predicted, figure: f5c_insilico,
+   citation: {page: 9, where: "Fig. 5C", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the teal line 'in silico, median'"}
+- {id: d_f5c_cast_q1, quantity: segment_flow, unit: ml/min, origin: predicted, figure: f5c_cast_q1,
+   citation: {page: 9, where: "Fig. 5C", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the lower edge of the brown area 'cast, IQR' (25th percentile)"}
+- {id: d_f5c_cast_q3, quantity: segment_flow, unit: ml/min, origin: predicted, figure: f5c_cast_q3,
+   citation: {page: 9, where: "Fig. 5C", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the upper edge of the brown area 'cast, IQR' (75th percentile)"}
+- {id: d_f5d_fit, quantity: centerline_velocity, unit: cm/s, origin: fitted, figure: f5d_fit,
+   citation: {page: 9, where: "Fig. 5D", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the black line 'cast, fit' (the allometric fit on the reconstructed heart)"}
+- {id: d_f5d_cast, quantity: centerline_velocity, unit: cm/s, origin: predicted, figure: f5d_cast,
+   citation: {page: 9, where: "Fig. 5D", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the brown line 'cast, median' (reconstructed heart with extrapolated microcirculation)"}
+- {id: d_f5d_insilico, quantity: centerline_velocity, unit: cm/s, origin: predicted, figure: f5d_insilico,
+   citation: {page: 9, where: "Fig. 5D", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the teal line 'in silico, median'"}
+- {id: d_f5d_cast_q1, quantity: centerline_velocity, unit: cm/s, origin: predicted, figure: f5d_cast_q1,
+   citation: {page: 9, where: "Fig. 5D", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the lower edge of the brown area 'cast, IQR' (25th percentile)"}
+- {id: d_f5d_cast_q3, quantity: centerline_velocity, unit: cm/s, origin: predicted, figure: f5d_cast_q3,
+   citation: {page: 9, where: "Fig. 5D", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the upper edge of the brown area 'cast, IQR' (75th percentile)"}
+- {id: d_f5e_cast, quantity: wall_shear_stress, unit: Pa, origin: predicted, figure: f5e_cast,
+   citation: {page: 9, where: "Fig. 5E", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the brown line 'cast, median' (reconstructed heart with extrapolated microcirculation)"}
+- {id: d_f5e_insilico, quantity: wall_shear_stress, unit: Pa, origin: predicted, figure: f5e_insilico,
+   citation: {page: 9, where: "Fig. 5E", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the teal line 'in silico, median'"}
+- {id: d_f5e_cast_q1, quantity: wall_shear_stress, unit: Pa, origin: predicted, figure: f5e_cast_q1,
+   citation: {page: 9, where: "Fig. 5E", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the lower edge of the brown area 'cast, IQR' (25th percentile)"}
+- {id: d_f5e_cast_q3, quantity: wall_shear_stress, unit: Pa, origin: predicted, figure: f5e_cast_q3,
+   citation: {page: 9, where: "Fig. 5E", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the upper edge of the brown area 'cast, IQR' (75th percentile)"}
+- {id: d_f5e_insilico_q1, quantity: wall_shear_stress, unit: Pa, origin: predicted, figure: f5e_insilico_q1,
+   citation: {page: 9, where: "Fig. 5E", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the lower edge of the light teal area 'in silico, IQR' (25th percentile)"}
+- {id: d_f5e_insilico_q3, quantity: wall_shear_stress, unit: Pa, origin: predicted, figure: f5e_insilico_q3,
+   citation: {page: 9, where: "Fig. 5E", quote: "Dependency of hemodynamic parameters on segment diameter"},
+   note: "the upper edge of the light teal area 'in silico, IQR' (75th percentile)"}
+- {id: d_f2a_hist, quantity: segment_count, unit: dimensionless, origin: measured, figure: f2a_hist,
+   citation: {page: 6, where: "Fig. 2A", quote: "Segment length distribution"},
+   note: "the histogram bars (number of segments per 1 mm length bin), read at the bin centres"}
+- {id: d_f2b_whisker_lo, quantity: segment_length, unit: mm, origin: measured, figure: f2b_whisker_lo,
+   citation: {page: 6, where: "Fig. 2B", quote: "Segment length-diameter relation for ten diameter classes"},
+   note: "the left whisker end of the segment-length box plot of each diameter class (classes by their lower bound, 30-45 ... >=400 um)"}
+- {id: d_f2b_q1, quantity: segment_length, unit: mm, origin: measured, figure: f2b_q1,
+   citation: {page: 6, where: "Fig. 2B", quote: "Segment length-diameter relation for ten diameter classes"},
+   note: "the left box edge (25th percentile) of the segment-length box plot of each diameter class (classes by their lower bound, 30-45 ... >=400 um)"}
+- {id: d_f2b_median, quantity: segment_length, unit: mm, origin: measured, figure: f2b_median,
+   citation: {page: 6, where: "Fig. 2B", quote: "Segment length-diameter relation for ten diameter classes"},
+   note: "the median line of the segment-length box plot of each diameter class (classes by their lower bound, 30-45 ... >=400 um)"}
+- {id: d_f2b_q3, quantity: segment_length, unit: mm, origin: measured, figure: f2b_q3,
+   citation: {page: 6, where: "Fig. 2B", quote: "Segment length-diameter relation for ten diameter classes"},
+   note: "the right box edge (75th percentile) of the segment-length box plot of each diameter class (classes by their lower bound, 30-45 ... >=400 um)"}
+- {id: d_f2b_whisker_hi, quantity: segment_length, unit: mm, origin: measured, figure: f2b_whisker_hi,
+   citation: {page: 6, where: "Fig. 2B", quote: "Segment length-diameter relation for ten diameter classes"},
+   note: "the right whisker end of the segment-length box plot of each diameter class (classes by their lower bound, 30-45 ... >=400 um)"}
+- {id: d_f3a_whisker_lo, quantity: daughter_symmetry, unit: dimensionless, origin: measured, figure: f3a_whisker_lo,
+   citation: {page: 7, where: "Fig. 3A", quote: "Daughter symmetry for (A) ten mother diameter classes"},
+   note: "the left whisker end of the daughter-symmetry box plot of each mother diameter class (classes by their lower bound)"}
+- {id: d_f3a_q1, quantity: daughter_symmetry, unit: dimensionless, origin: measured, figure: f3a_q1,
+   citation: {page: 7, where: "Fig. 3A", quote: "Daughter symmetry for (A) ten mother diameter classes"},
+   note: "the left box edge (25th percentile) of the daughter-symmetry box plot of each mother diameter class (classes by their lower bound)"}
+- {id: d_f3a_median, quantity: daughter_symmetry, unit: dimensionless, origin: measured, figure: f3a_median,
+   citation: {page: 7, where: "Fig. 3A", quote: "Daughter symmetry for (A) ten mother diameter classes"},
+   note: "the median line of the daughter-symmetry box plot of each mother diameter class (classes by their lower bound)"}
+- {id: d_f3a_q3, quantity: daughter_symmetry, unit: dimensionless, origin: measured, figure: f3a_q3,
+   citation: {page: 7, where: "Fig. 3A", quote: "Daughter symmetry for (A) ten mother diameter classes"},
+   note: "the right box edge (75th percentile) of the daughter-symmetry box plot of each mother diameter class (classes by their lower bound)"}
+- {id: d_f3a_whisker_hi, quantity: daughter_symmetry, unit: dimensionless, origin: measured, figure: f3a_whisker_hi,
+   citation: {page: 7, where: "Fig. 3A", quote: "Daughter symmetry for (A) ten mother diameter classes"},
+   note: "the right whisker end of the daughter-symmetry box plot of each mother diameter class (classes by their lower bound)"}
+- {id: d_f3b_hist, quantity: symmetry_frequency, unit: dimensionless, origin: measured, figure: f3b_hist,
+   citation: {page: 7, where: "Fig. 3B", quote: "Distributions for mother diameter 75"},
+   note: "the histogram bars (frequency per symmetry bin of width 0.05) for mother diameter 75-90 um (blue), read at the bin centres"}
+- {id: d_f3c_hist, quantity: symmetry_frequency, unit: dimensionless, origin: measured, figure: f3c_hist,
+   citation: {page: 7, where: "Fig. 3C", quote: "Distributions for mother diameter 75"},
+   note: "the histogram bars (frequency per symmetry bin of width 0.05) for mother diameter >=400 um (yellow), read at the bin centres"}
+- {id: d_f4_symhi_whisker_lo, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symhi_whisker_lo,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the lower whisker end of the area-growth box plot, daughter symmetry 0.5-1.0 (light boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symhi_q1, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symhi_q1,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the lower box edge (25th percentile) of the area-growth box plot, daughter symmetry 0.5-1.0 (light boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symhi_median, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symhi_median,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the median line of the area-growth box plot, daughter symmetry 0.5-1.0 (light boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symhi_q3, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symhi_q3,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the upper box edge (75th percentile) of the area-growth box plot, daughter symmetry 0.5-1.0 (light boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symhi_whisker_hi, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symhi_whisker_hi,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the upper whisker end of the area-growth box plot, daughter symmetry 0.5-1.0 (light boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symlo_whisker_lo, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symlo_whisker_lo,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the lower whisker end of the area-growth box plot, daughter symmetry 0.0-0.5 (dark boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symlo_q1, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symlo_q1,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the lower box edge (25th percentile) of the area-growth box plot, daughter symmetry 0.0-0.5 (dark boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symlo_median, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symlo_median,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the median line of the area-growth box plot, daughter symmetry 0.0-0.5 (dark boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symlo_q3, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symlo_q3,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the upper box edge (75th percentile) of the area-growth box plot, daughter symmetry 0.0-0.5 (dark boxes), per mother diameter class (by lower bound)"}
+- {id: d_f4_symlo_whisker_hi, quantity: area_growth, unit: dimensionless, origin: measured, figure: f4_symlo_whisker_hi,
+   citation: {page: 8, where: "Fig. 4", quote: "Area growth and mother diameter relation"},
+   note: "the upper whisker end of the area-growth box plot, daughter symmetry 0.0-0.5 (dark boxes), per mother diameter class (by lower bound)"}
+- {id: d_f6_whisker_lo, quantity: perfusion, unit: ml/min/g, origin: predicted, figure: f6_whisker_lo,
+   citation: {page: 10, where: "Fig. 6", quote: "Perfusion distribution per myocardial region"},
+   note: "the lower whisker end of the perfusion box plot of each region (1 LV epi, 2 LV mid, 3 LV endo, 4 Sept LV, 5 Sept mid, 6 Sept RV)"}
+- {id: d_f6_q1, quantity: perfusion, unit: ml/min/g, origin: predicted, figure: f6_q1,
+   citation: {page: 10, where: "Fig. 6", quote: "Perfusion distribution per myocardial region"},
+   note: "the lower box edge (25th percentile) of the perfusion box plot of each region (1 LV epi, 2 LV mid, 3 LV endo, 4 Sept LV, 5 Sept mid, 6 Sept RV)"}
+- {id: d_f6_median, quantity: perfusion, unit: ml/min/g, origin: predicted, figure: f6_median,
+   citation: {page: 10, where: "Fig. 6", quote: "Perfusion distribution per myocardial region"},
+   note: "the median line of the perfusion box plot of each region (1 LV epi, 2 LV mid, 3 LV endo, 4 Sept LV, 5 Sept mid, 6 Sept RV)"}
+- {id: d_f6_q3, quantity: perfusion, unit: ml/min/g, origin: predicted, figure: f6_q3,
+   citation: {page: 10, where: "Fig. 6", quote: "Perfusion distribution per myocardial region"},
+   note: "the upper box edge (75th percentile) of the perfusion box plot of each region (1 LV epi, 2 LV mid, 3 LV endo, 4 Sept LV, 5 Sept mid, 6 Sept RV)"}
+- {id: d_f6_whisker_hi, quantity: perfusion, unit: ml/min/g, origin: predicted, figure: f6_whisker_hi,
+   citation: {page: 10, where: "Fig. 6", quote: "Perfusion distribution per myocardial region"},
+   note: "the upper whisker end of the perfusion box plot of each region (1 LV epi, 2 LV mid, 3 LV endo, 4 Sept LV, 5 Sept mid, 6 Sept RV)"}

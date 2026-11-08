@@ -1,0 +1,18 @@
+id: bed_resistance
+name: systemic and pulmonary resistance of the released vascular beds, and their arterial time constants
+role: processing
+software: true
+stated: {none: "MOESM2_vascular_beds.xlsx, sheet 'Sheet1', column D 'Resistance' (mmHg.s/mL) and E 'Arterial Compliance' (mL/mmHg), rows 11-71; Note 1 (A3): 'Values below refer to reference resistances'. A spreadsheet in a software source cannot be cited by sheet and cell."}
+equation: "1/R_sys = sum 1/R_i (liver lobules in series with the parallel splanchnic and hepatic arterial beds; coronary layers in parallel); 1/R_pulm = sum 1/R_i; tau_i = R_i Cart_i"
+built_from: [network_counts]
+inputs: {}
+outputs:
+  R_sys: {quantity: vascular_resistance, unit: mmHg*s/mL}
+  R_pulm: {quantity: vascular_resistance, unit: mmHg*s/mL}
+  tau_brain: {quantity: bed_time_constant, unit: s}
+  tau_min_other: {quantity: bed_time_constant, unit: s}
+  tau_max_other: {quantity: bed_time_constant, unit: s}
+settings:
+  splanchnic: ["Liver (arterial)", Spleen, Stomach, Intestines]
+  include_coronary: true
+stochastic: false

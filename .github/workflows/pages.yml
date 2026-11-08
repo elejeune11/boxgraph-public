@@ -1,10 +1,11 @@
 name: pages
-# Serves site/ (the built overview, copied there by `make site` and committed) with GitHub Pages.
-# Enable it once: Settings -> Pages -> Source: GitHub Actions.
+# Serves site/ (the landing page and each corpus's overview, copied there by `make site` and committed)
+# with GitHub Pages. Enable it once: Settings -> Pages -> Source: GitHub Actions.
+# Every push to the main branch deploys (about 20 s). No `paths: [site/**]` filter: GitHub checks a
+# path filter against the first 300 changed files only, so a large push that also changes site/ was skipped.
 on:
   push:
     branches: [master, main]
-    paths: [site/**]
   workflow_dispatch:
 permissions:
   contents: read

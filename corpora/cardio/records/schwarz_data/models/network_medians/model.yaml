@@ -1,0 +1,18 @@
+id: network_medians
+name: class medians of the released network pressure, flow and wall shear stress at given diameters
+role: processing
+software: true
+stated: {file: explanation_of_data.txt, lines: "265", quote: "the aggregate data used for making the plots in Fig. 5; in 64 diameter classes"}
+equation: "P, Q: medians of the diameter class nearest d (sheets 'pressure', 'flow'); wss_below: median of the class medians of 'wss' with d < d_cut; d_wss_peak: class of the largest 'wss' median"
+built_from: [hemodynamics_workbook]
+inputs:
+  d: {quantity: vessel_diameter, unit: um}
+  d_cut: {quantity: vessel_diameter, unit: um}
+outputs:
+  P: {quantity: node_pressure, unit: mmHg}
+  Q: {quantity: segment_flow, unit: ml/min}
+  d_class: {quantity: vessel_diameter, unit: um}
+  wss_below: {quantity: wall_shear_stress, unit: Pa}
+  d_wss_peak: {quantity: wss_peak_diameter, unit: um}
+settings: {file: hemodynamics_hum06.xlsx, column: E}
+stochastic: false

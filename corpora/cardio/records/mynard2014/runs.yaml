@@ -1,0 +1,351 @@
+- id: run_hr_ratio
+  model: heart_rate_ratio
+  inputs: {HR_n: hr_newborn, HR_a: hr_adult}
+  outputs: {ratio: hr_ratio_calc}
+  note: Ratio of the Table 1 group means.
+- id: run_hw_ratio
+  model: heart_weight_ratio
+  inputs: {r_a: hwbw_adult, BW_a: bw_adult, r_n: hwbw_newborn, BW_n: bw_newborn}
+  outputs: {ratio: hw_ratio_calc}
+  note: Group-mean heart weight taken as the product of the Table 1 group means of HW/BW and BW (not the mean of individual products).
+- id: run_seglen_ratio
+  model: segment_length_ratio
+  inputs: {W_a: lvfws_adult, W_n: lvfws_newborn, b: scaling_power}
+  outputs: {ratio: seglen_ratio_calc}
+  note: Every 1D segment is scaled by the same factor, so the mean segment length scales as (W/W_human)^0.35; group means of W are used.
+- id: run_ws_perturbed
+  model: wave_speed_perturbed
+  inputs: {c: c_cx, s: ws_change}
+  outputs: {c_up: c_up_calc, c_down: c_down_calc}
+- id: run_dflow_drop
+  model: relative_decrease
+  inputs: {a: t2_Dmean_adult_model, n: t2_Dmean_newborn_model}
+  outputs: {r: dflow_drop_calc}
+  note: From the Table 2 Model group means of (D1+D2) mean flow.
+- id: run_reff_adult
+  model: effective_resistance
+  inputs: {pLM: aobp_mean_adult, pRA: p_ra, qLM: q_lm_adult_added}
+  outputs: {R: reff_adult_calc}
+  note: Ratio of group means; qLM per 100 g LV is added (taken as the Table 1 Cx flow per 100 g).
+- id: run_reff_newborn
+  model: effective_resistance
+  inputs: {pLM: aobp_mean_newborn, pRA: p_ra, qLM: q_lm_newborn_added}
+  outputs: {R: reff_newborn_calc}
+  note: Ratio of group means; qLM per 100 g LV is added (taken as the Table 1 Cx flow per 100 g).
+# ---- Table 2 consistency runs (generated)
+- id: run_t2diff_S1_adult
+  model: duration_difference
+  inputs:
+    a: t2_S1_adult_model
+    b: t2_S1_adult_exp
+  outputs:
+    d: t2diff_S1_adult_calc
+  note: 'Table 2 ''S1'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_S1_newborn
+  model: duration_difference
+  inputs:
+    a: t2_S1_newborn_model
+    b: t2_S1_newborn_exp
+  outputs:
+    d: t2diff_S1_newborn_calc
+  note: 'Table 2 ''S1'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_S2_adult
+  model: duration_difference
+  inputs:
+    a: t2_S2_adult_model
+    b: t2_S2_adult_exp
+  outputs:
+    d: t2diff_S2_adult_calc
+  note: 'Table 2 ''S2'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_S2_newborn
+  model: duration_difference
+  inputs:
+    a: t2_S2_newborn_model
+    b: t2_S2_newborn_exp
+  outputs:
+    d: t2diff_S2_newborn_calc
+  note: 'Table 2 ''S2'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_D1_adult
+  model: duration_difference
+  inputs:
+    a: t2_D1_adult_model
+    b: t2_D1_adult_exp
+  outputs:
+    d: t2diff_D1_adult_calc
+  note: 'Table 2 ''D1'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_D1_newborn
+  model: duration_difference
+  inputs:
+    a: t2_D1_newborn_model
+    b: t2_D1_newborn_exp
+  outputs:
+    d: t2diff_D1_newborn_calc
+  note: 'Table 2 ''D1'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_D2_adult
+  model: duration_difference
+  inputs:
+    a: t2_D2_adult_model
+    b: t2_D2_adult_exp
+  outputs:
+    d: t2diff_D2_adult_calc
+  note: 'Table 2 ''D2'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_D2_newborn
+  model: duration_difference
+  inputs:
+    a: t2_D2_newborn_model
+    b: t2_D2_newborn_exp
+  outputs:
+    d: t2diff_D2_newborn_calc
+  note: 'Table 2 ''D2'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_S2mean_adult
+  model: flow_difference
+  inputs:
+    a: t2_S2mean_adult_model
+    b: t2_S2mean_adult_exp
+  outputs:
+    d: t2diff_S2mean_adult_calc
+  note: 'Table 2 ''S2 mean'', adult sheep: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_S2mean_newborn
+  model: flow_difference
+  inputs:
+    a: t2_S2mean_newborn_model
+    b: t2_S2mean_newborn_exp
+  outputs:
+    d: t2diff_S2mean_newborn_calc
+  note: 'Table 2 ''S2 mean'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_Dmean_adult
+  model: flow_difference
+  inputs:
+    a: t2_Dmean_adult_model
+    b: t2_Dmean_adult_exp
+  outputs:
+    d: t2diff_Dmean_adult_calc
+  note: 'Table 2 ''(D1+D2) mean'', adult sheep: model mean minus experiment mean (the mean of paired differences
+    equals the difference of the means).'
+- id: run_t2diff_Dmean_newborn
+  model: flow_difference
+  inputs:
+    a: t2_Dmean_newborn_model
+    b: t2_Dmean_newborn_exp
+  outputs:
+    d: t2diff_Dmean_newborn_calc
+  note: 'Table 2 ''(D1+D2) mean'', newborn lambs: model mean minus experiment mean (the mean of paired differences
+    equals the difference of the means).'
+- id: run_t2diff_S1a_adult
+  model: flow_difference
+  inputs:
+    a: t2_S1a_adult_model
+    b: t2_S1a_adult_exp
+  outputs:
+    d: t2diff_S1a_adult_calc
+  note: 'Table 2 ''S1a'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_S1a_newborn
+  model: flow_difference
+  inputs:
+    a: t2_S1a_newborn_model
+    b: t2_S1a_newborn_exp
+  outputs:
+    d: t2diff_S1a_newborn_calc
+  note: 'Table 2 ''S1a'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_S1b_adult
+  model: flow_difference
+  inputs:
+    a: t2_S1b_adult_model
+    b: t2_S1b_adult_exp
+  outputs:
+    d: t2diff_S1b_adult_calc
+  note: 'Table 2 ''S1b'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_S1b_newborn
+  model: flow_difference
+  inputs:
+    a: t2_S1b_newborn_model
+    b: t2_S1b_newborn_exp
+  outputs:
+    d: t2diff_S1b_newborn_calc
+  note: 'Table 2 ''S1b'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_S1c_adult
+  model: flow_difference
+  inputs:
+    a: t2_S1c_adult_model
+    b: t2_S1c_adult_exp
+  outputs:
+    d: t2diff_S1c_adult_calc
+  note: 'Table 2 ''S1c'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_S1c_newborn
+  model: flow_difference
+  inputs:
+    a: t2_S1c_newborn_model
+    b: t2_S1c_newborn_exp
+  outputs:
+    d: t2diff_S1c_newborn_calc
+  note: 'Table 2 ''S1c'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_S1bc_adult
+  model: flow_difference_of_differences
+  inputs:
+    a: t2_S1bc_adult_model
+    b: t2_S1bc_adult_exp
+  outputs:
+    d: t2diff_S1bc_adult_calc
+  note: 'Table 2 ''S1b – S1c'', adult sheep: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_S1bc_newborn
+  model: flow_difference_of_differences
+  inputs:
+    a: t2_S1bc_newborn_model
+    b: t2_S1bc_newborn_exp
+  outputs:
+    d: t2diff_S1bc_newborn_calc
+  note: 'Table 2 ''S1b – S1c'', newborn lambs: model mean minus experiment mean (the mean of paired differences
+    equals the difference of the means).'
+- id: run_t2diff_D1d_adult
+  model: flow_difference
+  inputs:
+    a: t2_D1d_adult_model
+    b: t2_D1d_adult_exp
+  outputs:
+    d: t2diff_D1d_adult_calc
+  note: 'Table 2 ''D1d'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_D1d_newborn
+  model: flow_difference
+  inputs:
+    a: t2_D1d_newborn_model
+    b: t2_D1d_newborn_exp
+  outputs:
+    d: t2diff_D1d_newborn_calc
+  note: 'Table 2 ''D1d'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_D1e_adult
+  model: flow_difference
+  inputs:
+    a: t2_D1e_adult_model
+    b: t2_D1e_adult_exp
+  outputs:
+    d: t2diff_D1e_adult_calc
+  note: 'Table 2 ''D1e'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_D1e_newborn
+  model: flow_difference
+  inputs:
+    a: t2_D1e_newborn_model
+    b: t2_D1e_newborn_exp
+  outputs:
+    d: t2diff_D1e_newborn_calc
+  note: 'Table 2 ''D1e'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_D1f_adult
+  model: flow_difference
+  inputs:
+    a: t2_D1f_adult_model
+    b: t2_D1f_adult_exp
+  outputs:
+    d: t2diff_D1f_adult_calc
+  note: 'Table 2 ''D1f'', adult sheep: model mean minus experiment mean (the mean of paired differences equals the
+    difference of the means).'
+- id: run_t2diff_D1f_newborn
+  model: flow_difference
+  inputs:
+    a: t2_D1f_newborn_model
+    b: t2_D1f_newborn_exp
+  outputs:
+    d: t2diff_D1f_newborn_calc
+  note: 'Table 2 ''D1f'', newborn lambs: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_D1ef_adult
+  model: flow_difference_of_differences
+  inputs:
+    a: t2_D1ef_adult_model
+    b: t2_D1ef_adult_exp
+  outputs:
+    d: t2diff_D1ef_adult_calc
+  note: 'Table 2 ''D1e – D1f'', adult sheep: model mean minus experiment mean (the mean of paired differences equals
+    the difference of the means).'
+- id: run_t2diff_D1ef_newborn
+  model: flow_difference_of_differences
+  inputs:
+    a: t2_D1ef_newborn_model
+    b: t2_D1ef_newborn_exp
+  outputs:
+    d: t2diff_D1ef_newborn_calc
+  note: 'Table 2 ''D1e – D1f'', newborn lambs: model mean minus experiment mean (the mean of paired differences
+    equals the difference of the means).'
+- id: run_exc_S1bc_adult_exp
+  model: flow_difference
+  inputs:
+    a: t2_S1b_adult_exp
+    b: t2_S1c_adult_exp
+  outputs:
+    d: exc_S1bc_adult_exp_calc
+  note: Table 2 row 'S1b – S1c' from rows S1b and S1c, adult sheep, Experiment.
+- id: run_exc_S1bc_adult_model
+  model: flow_difference
+  inputs:
+    a: t2_S1b_adult_model
+    b: t2_S1c_adult_model
+  outputs:
+    d: exc_S1bc_adult_model_calc
+  note: Table 2 row 'S1b – S1c' from rows S1b and S1c, adult sheep, Model.
+- id: run_exc_S1bc_newborn_exp
+  model: flow_difference
+  inputs:
+    a: t2_S1b_newborn_exp
+    b: t2_S1c_newborn_exp
+  outputs:
+    d: exc_S1bc_newborn_exp_calc
+  note: Table 2 row 'S1b – S1c' from rows S1b and S1c, newborn lambs, Experiment.
+- id: run_exc_S1bc_newborn_model
+  model: flow_difference
+  inputs:
+    a: t2_S1b_newborn_model
+    b: t2_S1c_newborn_model
+  outputs:
+    d: exc_S1bc_newborn_model_calc
+  note: Table 2 row 'S1b – S1c' from rows S1b and S1c, newborn lambs, Model.
+- id: run_exc_D1ef_adult_exp
+  model: flow_difference
+  inputs:
+    a: t2_D1e_adult_exp
+    b: t2_D1f_adult_exp
+  outputs:
+    d: exc_D1ef_adult_exp_calc
+  note: Table 2 row 'D1e – D1f' from rows D1e and D1f, adult sheep, Experiment.
+- id: run_exc_D1ef_adult_model
+  model: flow_difference
+  inputs:
+    a: t2_D1e_adult_model
+    b: t2_D1f_adult_model
+  outputs:
+    d: exc_D1ef_adult_model_calc
+  note: Table 2 row 'D1e – D1f' from rows D1e and D1f, adult sheep, Model.
+- id: run_exc_D1ef_newborn_exp
+  model: flow_difference
+  inputs:
+    a: t2_D1e_newborn_exp
+    b: t2_D1f_newborn_exp
+  outputs:
+    d: exc_D1ef_newborn_exp_calc
+  note: Table 2 row 'D1e – D1f' from rows D1e and D1f, newborn lambs, Experiment.
+- id: run_exc_D1ef_newborn_model
+  model: flow_difference
+  inputs:
+    a: t2_D1e_newborn_model
+    b: t2_D1f_newborn_model
+  outputs:
+    d: exc_D1ef_newborn_model_calc
+  note: Table 2 row 'D1e – D1f' from rows D1e and D1f, newborn lambs, Model.

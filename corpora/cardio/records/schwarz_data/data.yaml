@@ -1,0 +1,599 @@
+# ---- values stated in the release (explanation_of_data.txt, the plain-text copy of
+# 'Schwarz-2019 explanation of data.docx'), as the network data and its analysis use them
+
+# boundary conditions of the network solution (TreeQ.IN.P, TreeQ.SE.sourceP)
+- id: P_inlet_doc
+  quantity: node_pressure
+  unit: Pa
+  origin: reported
+  printed: "11970"
+  citation: {file: explanation_of_data.txt, lines: "120", quote: "Assumptions here are input pressure 11970 N/m2 (90 mmHg)"}
+  from_source: schwarz2020
+  from_datum: P_inlet
+  note: "printed as N/m2"
+- id: P_inlet_doc_mmHg
+  quantity: node_pressure
+  unit: mmHg
+  origin: reported
+  printed: "90"
+  citation: {file: explanation_of_data.txt, lines: "120", quote: "input pressure 11970 N/m2 (90 mmHg)"}
+  from_source: schwarz2020
+  from_datum: P_inlet
+  note: the same inlet pressure as the release labels it in mmHg
+- id: P_capillary_doc
+  quantity: node_pressure
+  unit: Pa
+  origin: reported
+  printed: "2660"
+  citation: {file: explanation_of_data.txt, lines: "120", quote: "Capillary pressure distal to the network 2660 N/m2 (20 mmHg)"}
+  from_source: schwarz2020
+  from_datum: P_capillary
+  note: "printed as N/m2"
+- id: P_capillary_doc_mmHg
+  quantity: node_pressure
+  unit: mmHg
+  origin: reported
+  printed: "20"
+  citation: {file: explanation_of_data.txt, lines: "120", quote: "Capillary pressure distal to the network 2660 N/m2 (20 mmHg)"}
+  from_source: schwarz2020
+  from_datum: P_capillary
+
+# the network graph TreeQ (TreeQ.info)
+- id: n_IN
+  quantity: node_count
+  unit: dimensionless
+  origin: reported
+  printed: "98022"
+  citation: {file: explanation_of_data.txt, lines: "212", quote: "nIN: 98022, total number of internal nodes"}
+- id: n_SN
+  quantity: node_count
+  unit: dimensionless
+  origin: reported
+  printed: "100961"
+  citation: {file: explanation_of_data.txt, lines: "213", quote: "nSN: 100961, total number of source and sink nodes"}
+- id: n_IE
+  quantity: segment_count
+  unit: dimensionless
+  origin: reported
+  printed: "101223"
+  citation: {file: explanation_of_data.txt, lines: "214", quote: "nIE: 101223, total number of internal elements"}
+- id: n_SE
+  quantity: segment_count
+  unit: dimensionless
+  origin: reported
+  printed: "100961"
+  citation: {file: explanation_of_data.txt, lines: "215", quote: "nSE: 100961, total number of source and sink elements"}
+  from_source: schwarz2020
+  from_datum: total_terminal
+  note: "the source elements: the terminal elements together with the two inlets (SE 100960 LCX, 100961 LAD, line 142)"
+- id: n_elements_doc
+  quantity: segment_count
+  unit: dimensionless
+  origin: reported
+  printed: "202184"
+  citation: {file: explanation_of_data.txt, lines: "231", quote: "These are all the elements in the data (n=202184 in total)"}
+  from_source: schwarz2020
+  from_datum: total_all
+- id: n_terminal_regions
+  quantity: segment_count
+  unit: dimensionless
+  origin: reported
+  printed: "94530"
+  citation: {file: explanation_of_data.txt, lines: "252", quote: "A total of 94530 elements was located in one of these regions."}
+  note: terminal elements in the subepicardium, midmyocardium or subendocardium (the right part of Table 1)
+- id: pixel_size_doc
+  quantity: pixel_size
+  unit: m
+  origin: reported
+  printed: "3.0000 x 10^-5"
+  citation: {file: explanation_of_data.txt, lines: "211", quote: "pixsize: 3.0000e-05 [m] pixel size calibration"}
+  from_source: schwarz2020
+  note: "schwarz2020 p. 2 prints a slice thickness of 30 um matching the in-plane resolution (not a datum of that record)"
+- id: heart_weight_doc
+  quantity: heart_weight
+  unit: kg
+  origin: reported
+  printed: "0.3300"
+  citation: {file: explanation_of_data.txt, lines: "217", quote: "weighttot: 0.3300 weight of whole heart [kg]"}
+  from_source: schwarz2020
+  note: "schwarz2020 p. 2 prints 'Heart weight was 330 gram' (not a datum of that record)"
+- id: Vtree_of_Vtot
+  quantity: tree_volume_fraction
+  unit: dimensionless
+  origin: reported
+  printed: "0.8776"
+  citation: {file: explanation_of_data.txt, lines: "216", quote: "Vtree_of_Vtot: 0.8776 voronoi combined volume of this tree"}
+  note: not in the paper
+
+# settings of the graph construction and of the analysis (TreeQ.settings, cleaning, selection)
+- id: CVlim
+  quantity: diameter_cv_limit
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: explanation_of_data.txt, lines: "224", quote: "CVlim: 1 indicated that in the estimation of element diameter"}
+  note: not in the paper
+- id: diam_if_all_0
+  quantity: vessel_diameter
+  unit: m
+  origin: reported
+  printed: "3.0000 x 10^-5"
+  citation: {file: explanation_of_data.txt, lines: "225", quote: "diam_if_all_0: 3.0000e-05 [m]"}
+  note: diameter assumed for an element whose centerline points all have zero diameter; not in the paper
+- id: fluid_viscosity_doc
+  quantity: fluid_viscosity
+  unit: Pa*s
+  origin: reported
+  printed: "0.0032"
+  citation: {file: explanation_of_data.txt, lines: "227", quote: "fluidviscosity: 0.0032: the fluid viscosity [Ns/m2] assumed"}
+  note: "used in the first submission only, the release says; not in the paper"
+- id: quality_cut_doc
+  quantity: excluded_quality_fraction
+  unit: percent
+  origin: reported
+  printed: "0.5"
+  citation: {file: explanation_of_data.txt, lines: "64", quote: "We removed terminal source elements with the poorest 0.5% quality"}
+  note: not in the paper, which says spurious terminal segments were 'eliminated based on quality measures' (p. 4)
+- id: daughter_ratio_limit_doc
+  quantity: daughter_mother_ratio_limit
+  unit: dimensionless
+  origin: reported
+  printed: "1.15"
+  citation: {file: explanation_of_data.txt, lines: "235", quote: "largest daughter diameter exceeded 1.15 times the mother diameter"}
+  note: outlier rule of the branching analysis (Figs. 2-4); not in the paper
+- id: perf_branch_diameter_doc
+  quantity: vessel_diameter
+  unit: um
+  origin: reported
+  printed: "100 to 200"
+  citation: {file: explanation_of_data.txt, lines: "98", quote: "selected on main diameter 100-200 micron"}
+  from_source: schwarz2020
+  note: "schwarz2020 p. 5 prints '100-200 um segments' (not a datum of that record)"
+- id: n_perf_branches_doc
+  quantity: perfusion_territory_count
+  unit: dimensionless
+  origin: reported
+  printed: "4954"
+  citation: {file: explanation_of_data.txt, lines: "99", quote: "PerfBranchID : unique number for this perfusion branch, 1 .. 4954"}
+  from_source: schwarz2020
+  note: "schwarz2020 p. 7 prints 4,954 (copied below as n_perf_paper)"
+- id: n_simulations_doc
+  quantity: simulation_count
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {file: explanation_of_data.txt, lines: "256", quote: "median and mean pressure over 1000 simulations with varying distal sink conductances"}
+  from_source: schwarz2020
+  note: "schwarz2020 pp. 4 and 6 print 1000 simulations (not a datum of that record)"
+- id: n_insilico_trees_doc
+  quantity: simulation_count
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: explanation_of_data.txt, lines: "270", quote: "Results of 50 simulations of in silico trees."}
+  from_source: schwarz2020
+  note: "schwarz2020 p. 4 prints 'Fifty trees' (not a datum of that record)"
+
+# the hemodynamics workbooks as the release describes them
+- id: n_classes_hum06_doc
+  quantity: diameter_class_count
+  unit: dimensionless
+  origin: reported
+  printed: "64"
+  citation: {file: explanation_of_data.txt, lines: "265", quote: "the aggregate data used for making the plots in Fig. 5; in 64 diameter classes"}
+- id: n_classes_highp_doc
+  quantity: diameter_class_count
+  unit: dimensionless
+  origin: reported
+  printed: "65"
+  citation: {file: explanation_of_data.txt, lines: "268", quote: "Data reflect median and quartile values of properties over 65 diameter classes"}
+- id: n_classes_hum6p_doc
+  quantity: diameter_class_count
+  unit: dimensionless
+  origin: reported
+  printed: "63"
+  citation: {file: explanation_of_data.txt, lines: "270", quote: "Data reflect median and quartile values of properties over 63 diameter classes"}
+
+# ---- printed in schwarz2020 and copied here to be compared with the released data
+# (each names the paper's datum where that record has it)
+- id: p_Gheart_prefactor
+  quantity: conductance_fit_prefactor
+  unit: dimensionless
+  origin: fitted
+  printed: "1.58 x 10^-4"
+  citation: {none: "printed in schwarz2020 p. 7: 'G = 1.58 · 10−4 d−2.22 , d in m, G in m3 /(Pa · s)'; not in the release text"}
+  from_source: schwarz2020
+  from_datum: Gheart_prefactor
+- id: p_Gheart_exponent
+  quantity: conductance_fit_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "-2.22"
+  citation: {none: "printed in schwarz2020 p. 7: 'G = 1.58 · 10−4 d−2.22' (minus sign checked on the page image in that record)"}
+  from_source: schwarz2020
+  from_datum: Gheart_exponent
+- id: p_Gheart_exponent_p12
+  quantity: conductance_fit_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "2.22"
+  citation: {none: "printed in schwarz2020 p. 12: 'scaled with diameter to the power 2.22'"}
+  from_source: schwarz2020
+  from_datum: Gheart_exponent_discussion
+- id: p_Gheart_r2
+  quantity: conductance_fit_r2
+  unit: dimensionless
+  origin: fitted
+  printed: "0.81"
+  citation: {none: "printed in schwarz2020 p. 7: '[G = 1.58 · 10−4 d−2.22 , d in m, G in m3 /(Pa · s)], r2 = 0.81'"}
+  from_source: schwarz2020
+- id: p_Gis_prefactor
+  quantity: conductance_fit_prefactor
+  unit: dimensionless
+  origin: fitted
+  printed: "1.64 x 10^-3"
+  citation: {none: "printed in schwarz2020 p. 6: 'Gis = 1.64 · 10−3 d2.49 (d in m; r2 = 0.98, p < 0.001)'"}
+  from_source: schwarz2020
+  from_datum: Gis_prefactor
+- id: p_Gis_exponent
+  quantity: conductance_fit_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "2.49"
+  citation: {none: "printed in schwarz2020 p. 6: 'Gis = 1.64 · 10−3 d2.49'"}
+  from_source: schwarz2020
+  from_datum: Gis_exponent
+- id: p_Gis_r2
+  quantity: conductance_fit_r2
+  unit: dimensionless
+  origin: fitted
+  printed: "0.98"
+  citation: {none: "printed in schwarz2020 p. 6: '(d in m; r2 = 0.98, p < 0.001)'"}
+  from_source: schwarz2020
+- id: p_P_prefactor
+  quantity: pressure_fit_prefactor
+  unit: dimensionless
+  origin: fitted
+  printed: "5.40 x 10^3"
+  citation: {none: "printed in schwarz2020 p. 7: 'P = 5.40 · 103 d0.60 (d ∈ [250, 800] 10−6 m, P in mmHg, r2 = 0.14)'"}
+  from_source: schwarz2020
+  from_datum: P_fit_prefactor
+- id: p_P_exponent
+  quantity: pressure_fit_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "0.60"
+  citation: {none: "printed in schwarz2020 p. 7: 'P = 5.40 · 103 d0.60'"}
+  from_source: schwarz2020
+  from_datum: P_fit_exponent
+- id: p_P_r2
+  quantity: pressure_fit_r2
+  unit: dimensionless
+  origin: fitted
+  printed: "0.14"
+  citation: {none: "printed in schwarz2020 p. 7: 'P in mmHg, r2 = 0.14'"}
+  from_source: schwarz2020
+- id: p_Q_prefactor
+  quantity: flow_fit_prefactor
+  unit: dimensionless
+  origin: fitted
+  printed: "5.07 x 10^8"
+  citation: {none: "printed in schwarz2020 p. 7: 'Q = 5.07 · 108 d2.53 , d in m, Q in ml/min, r2 = 0.83'"}
+  from_source: schwarz2020
+  from_datum: Q_fit_prefactor
+- id: p_Q_exponent
+  quantity: flow_fit_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "2.53"
+  citation: {none: "printed in schwarz2020 p. 7: 'predicts an exponent γ of 2.53'"}
+  from_source: schwarz2020
+  from_datum: Q_fit_exponent
+- id: p_Q_r2
+  quantity: flow_fit_r2
+  unit: dimensionless
+  origin: fitted
+  printed: "0.83"
+  citation: {none: "printed in schwarz2020 p. 7: 'Q in ml/min, r2 = 0.83'"}
+  from_source: schwarz2020
+- id: p_v_prefactor
+  quantity: velocity_fit_prefactor
+  unit: dimensionless
+  origin: fitted
+  printed: "3.00 x 10^4"
+  citation: {none: "printed in schwarz2020 p. 7: 'v = 3.00 · 104 d0.89 (d in m, v in cm/s, r2 = 0.21)'"}
+  from_source: schwarz2020
+  from_datum: v_fit_prefactor
+- id: p_v_exponent
+  quantity: velocity_fit_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "0.89"
+  citation: {none: "printed in schwarz2020 p. 7: 'v = 3.00 · 104 d0.89'"}
+  from_source: schwarz2020
+  from_datum: v_fit_exponent
+- id: p_v_r2
+  quantity: velocity_fit_r2
+  unit: dimensionless
+  origin: fitted
+  printed: "0.21"
+  citation: {none: "printed in schwarz2020 p. 7: 'v in cm/s, r2 = 0.21'"}
+  from_source: schwarz2020
+- id: p_perfusion_median
+  quantity: perfusion
+  unit: ml/min/g
+  origin: predicted
+  printed: "5.6"
+  citation: {none: "printed in schwarz2020 p. 8: 'with a median perfusion of 5.6 ml/min/g'"}
+  from_source: schwarz2020
+  from_datum: perfusion_median
+- id: p_perfusion_p25
+  quantity: perfusion_quartile_low
+  unit: ml/min/g
+  origin: predicted
+  printed: "2.6"
+  citation: {none: "printed in schwarz2020 p. 8: '(interquartile range: 2.6–10.8 ml/min/g, Figure 6)'"}
+  from_source: schwarz2020
+  note: lower end of the printed interquartile range
+- id: p_perfusion_p75
+  quantity: perfusion_quartile_high
+  unit: ml/min/g
+  origin: predicted
+  printed: "10.8"
+  citation: {none: "printed in schwarz2020 p. 8: '(interquartile range: 2.6–10.8 ml/min/g, Figure 6)'"}
+  from_source: schwarz2020
+  note: upper end of the printed interquartile range
+- id: n_perf_paper
+  quantity: perfusion_territory_count
+  unit: dimensionless
+  origin: measured
+  printed: "4954"
+  citation: {none: "printed in schwarz2020 p. 7: 'resulted in 4,954 segments perfusing as many territories'"}
+  from_source: schwarz2020
+- id: p_d_100um
+  quantity: vessel_diameter
+  unit: um
+  origin: reported
+  printed: "100"
+  citation: {none: "printed in schwarz2020 p. 11: 'predicts a median pressure in 100 µm vessels around 32%'"}
+  from_source: schwarz2020
+  from_datum: d_100um_pressure
+- id: p_d_wss_cut
+  quantity: vessel_diameter
+  unit: um
+  origin: reported
+  printed: "300"
+  citation: {none: "printed in schwarz2020 p. 7: 'For segments smaller than 300 µm, median wall shear stress leveled off around 5 Pa.'"}
+  from_source: schwarz2020
+- id: p_P_fraction_100um
+  quantity: pressure_fraction
+  unit: percent
+  origin: predicted
+  printed: "~32"
+  citation: {none: "printed in schwarz2020 p. 11: 'predicts a median pressure in 100 µm vessels around 32% of systemic pressure'"}
+  from_source: schwarz2020
+  from_datum: P_fraction_100um
+- id: p_Q_large_median
+  quantity: segment_flow
+  unit: ml/min
+  origin: predicted
+  printed: "36.6"
+  citation: {none: "printed in schwarz2020 p. 7: 'Arteries larger than 1 mm carried a median of 36.6 ml/min'"}
+  from_source: schwarz2020
+  from_datum: Q_large_median
+  note: a median over the individual segments larger than 1 mm, which the release does not tabulate (only class medians)
+- id: p_flow_ratio
+  quantity: flow_ratio
+  unit: dimensionless
+  origin: predicted
+  printed: "~3000"
+  citation: {none: "printed in schwarz2020 p. 7: 'about 3,000-times as much blood per vessel as 100 µm segments'"}
+  from_source: schwarz2020
+  from_datum: flow_ratio_large_100um
+- id: p_wss_small
+  quantity: wall_shear_stress
+  unit: Pa
+  origin: predicted
+  printed: "~5"
+  citation: {none: "printed in schwarz2020 p. 7: 'median wall shear stress leveled off around 5 Pa'"}
+  from_source: schwarz2020
+  from_datum: wss_small_median
+- id: p_wss_peak
+  quantity: wss_peak_diameter
+  unit: um
+  origin: predicted
+  printed: "630"
+  citation: {none: "printed in schwarz2020 p. 11: 'shear stress depended biphasically on diameter, having its peak at 630 µm'"}
+  from_source: schwarz2020
+- id: p_perfused_volume_total
+  quantity: perfused_volume
+  unit: cm^3
+  origin: measured
+  printed: "358"
+  citation: {none: "printed in schwarz2020 p. 7: 'The left coronary circulation perfused in total 358 cm3 of myocardium.'"}
+  from_source: schwarz2020
+  from_datum: perfused_volume_total
+
+# ---- second pass: values held in the network file 'Human Left Coronary graph.mat' (struct TreeQ).
+# A binary file has no lines to cite, so each is cited by its field path (citation none, where).
+# Stored as doubles; written here to 6 significant figures (q_typed_precision).
+
+# boundary conditions the stored solution used (TreeQ.SE.sourceP; guide line 146)
+- id: P_inlet_mat
+  quantity: node_pressure
+  unit: Pa
+  origin: reported
+  printed: "11998.8"
+  citation: {none: "binary MATLAB file: no lines; the value of TreeQ.SE(100960).sourceP and TreeQ.SE(100961).sourceP", where: "Human Left Coronary graph.mat: TreeQ.SE(100960:100961).sourceP"}
+  from_source: schwarz2020
+  from_datum: P_inlet
+  note: "the two inlets (LCX, LAD); the guide (line 120) prints 11970 N/m2 instead (q_pressure_conversion)"
+- id: P_sink_mat
+  quantity: node_pressure
+  unit: Pa
+  origin: reported
+  printed: "2666.4"
+  citation: {none: "binary MATLAB file: no lines; the value of TreeQ.SE(j).sourceP for every j up to 100959", where: "Human Left Coronary graph.mat: TreeQ.SE(1:100959).sourceP"}
+  from_source: schwarz2020
+  from_datum: P_capillary
+  note: "the same value at all 100959 sink elements; the guide prints 2660 N/m2"
+
+# the stored solution at a few places, to check the rerun against (origin run: output of the authors' software)
+- id: G_LCX_mat
+  quantity: segment_conductance
+  unit: m^3/(Pa*s)
+  origin: run
+  printed: "4.70431 x 10^-7"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.SE(100960).G"}
+  note: "the LCX inlet; its Gseg and Gdist are empty, so G is the segment's own conductance"
+- id: G_LAD_mat
+  quantity: segment_conductance
+  unit: m^3/(Pa*s)
+  origin: run
+  printed: "1.32002 x 10^-7"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.SE(100961).G"}
+  note: the LAD inlet
+- id: G_SE1_mat
+  quantity: segment_conductance
+  unit: m^3/(Pa*s)
+  origin: run
+  printed: "4.07090 x 10^-13"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.SE(1).Gseg"}
+  note: a sink element of 71 um diameter
+- id: G_IE1_mat
+  quantity: segment_conductance
+  unit: m^3/(Pa*s)
+  origin: run
+  printed: "6.99004 x 10^-13"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.IE(1).G"}
+  note: an internal element of 85 um diameter
+- id: Q_LCX_mat
+  quantity: segment_flow
+  unit: m^3/s
+  origin: run
+  printed: "7.81979 x 10^-6"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.SE(100960).Q"}
+- id: Q_LAD_mat
+  quantity: segment_flow
+  unit: m^3/s
+  origin: run
+  printed: "6.94499 x 10^-6"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.SE(100961).Q"}
+- id: P_IN1_mat
+  quantity: node_pressure
+  unit: Pa
+  origin: run
+  printed: "2986.34"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.IN(1).P"}
+- id: wss_IE1_mat
+  quantity: wall_shear_stress
+  unit: Pa
+  origin: run
+  printed: "-2.34852"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.IE(1).WSS"}
+  note: "signed: the flow in IE(1) runs from its second node to its first (TreeQ.IE(1).Q is negative)"
+
+# ---- second pass: the class medians of hemodynamics_hum06.xlsx ('median pooled', column B), classes
+# 2-12 (rows 2-12, 43.83-239.7 um), where the classes can be told (q_class_rule). A software record
+# cannot cite cells, so the cells are named in the citation; values written to 4 significant figures
+# (q_typed_precision). Each table is indexed by the class diameter of column A.
+- id: wb_d_classes
+  quantity: vessel_diameter
+  unit: um
+  origin: run
+  citation: {none: "hemodynamics_hum06.xlsx, sheet pressure, cells A2:A12 'diameter (µm)'"}
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["43.83", "61.3", "79.92", "98.87", "118.9", "139", "159.2", "178.8", "198.9", "219.1", "239.7"],
+          values: ["43.83", "61.3", "79.92", "98.87", "118.9", "139", "159.2", "178.8", "198.9", "219.1", "239.7"]}
+  note: the class diameters themselves, to compare with the median diameter of each class of the rerun
+- id: wb_P_classes
+  quantity: node_pressure
+  unit: mmHg
+  origin: run
+  citation: {none: "hemodynamics_hum06.xlsx, sheet pressure, cells B2:B12 'median pooled P (mmHg)'"}
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["43.83", "61.3", "79.92", "98.87", "118.9", "139", "159.2", "178.8", "198.9", "219.1", "239.7"],
+          values: ["26.67", "27.61", "27.72", "28.44", "28.77", "28.70", "28.87", "29.23", "30.10", "30.72", "31.71"]}
+- id: wb_Q_classes
+  quantity: segment_flow
+  unit: ml/min
+  origin: run
+  citation: {none: "hemodynamics_hum06.xlsx, sheet flow, cells B2:B12 'median pooled Flow (ml/min)'"}
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["43.83", "61.3", "79.92", "98.87", "118.9", "139", "159.2", "178.8", "198.9", "219.1", "239.7"],
+          values: ["0.0008999", "0.002798", "0.005909", "0.01116", "0.01866", "0.02847", "0.04233", "0.06241", "0.08197", "0.1095", "0.1385"]}
+- id: wb_G_classes
+  quantity: distal_conductance
+  unit: m^3/(Pa*s)
+  origin: run
+  citation: {none: "hemodynamics_hum06.xlsx, sheet conductance, cells B2:B12 'median pooled Distal conductance (m^3/(Pa*s))'"}
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["43.83", "61.3", "79.92", "98.87", "118.9", "139", "159.2", "178.8", "198.9", "219.1", "239.7"],
+          values: ["2.109 x 10^-14", "5.100 x 10^-14", "1.020 x 10^-13", "1.783 x 10^-13", "2.896 x 10^-13", "4.539 x 10^-13", "6.538 x 10^-13", "9.119 x 10^-13", "1.169 x 10^-12", "1.443 x 10^-12", "1.758 x 10^-12"]}
+- id: wb_wss_classes
+  quantity: wall_shear_stress
+  unit: Pa
+  origin: run
+  citation: {none: "hemodynamics_hum06.xlsx, sheet wss, cells B2:B12 'median pooled WSS (Pa)'"}
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["43.83", "61.3", "79.92", "98.87", "118.9", "139", "159.2", "178.8", "198.9", "219.1", "239.7"],
+          values: ["4.925", "5.017", "4.803", "4.966", "4.939", "4.912", "4.922", "5.170", "5.071", "5.078", "5.090"]}
+- id: wb_v_classes
+  quantity: centerline_velocity
+  unit: cm/s
+  origin: run
+  citation: {none: "hemodynamics_hum06.xlsx, sheet velocity, cells B2:B12 'median pooled Flow velocity (cm/s)'"}
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["43.83", "61.3", "79.92", "98.87", "118.9", "139", "159.2", "178.8", "198.9", "219.1", "239.7"],
+          values: ["2.216", "3.269", "3.949", "4.871", "5.613", "6.337", "7.101", "8.219", "8.816", "9.735", "10.33"]}
+  note: "labelled 'flow velocity'; it matches the centerline velocity 8 Q/(pi d^2) of the rerun, not the mean velocity"
+
+# ---- second pass: further values printed in schwarz2020, copied for the network run
+- id: p_Hd
+  quantity: discharge_hematocrit
+  unit: dimensionless
+  origin: reported
+  printed: "0.4"
+  citation: {none: "printed in schwarz2020 p. 4: 'assuming a constant hematocrit Hd = 0.4'"}
+  from_source: schwarz2020
+  from_datum: Hd_constant
+- id: p_d_large
+  quantity: vessel_diameter
+  unit: mm
+  origin: reported
+  printed: "1"
+  citation: {none: "printed in schwarz2020 p. 7: 'Arteries larger than 1 mm carried a median of 36.6 ml/min'"}
+  from_source: schwarz2020
+  from_datum: d_large_artery
+- id: p_P_fit_lo
+  quantity: vessel_diameter
+  unit: um
+  origin: reported
+  printed: "250"
+  citation: {none: "printed in schwarz2020 p. 7: '(d ∈ [250, 800] 10−6 m, P in mmHg, r2 = 0.14)'"}
+  from_source: schwarz2020
+  note: lower end of the diameter range of the pressure law (not a datum of that record)
+- id: p_P_fit_hi
+  quantity: vessel_diameter
+  unit: um
+  origin: reported
+  printed: "800"
+  citation: {none: "printed in schwarz2020 p. 7: '(d ∈ [250, 800] 10−6 m, P in mmHg, r2 = 0.14)'"}
+  from_source: schwarz2020
+  note: upper end of the diameter range of the pressure law (not a datum of that record)
+- id: p_Gheart_exponent_internal
+  quantity: conductance_fit_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "2.18"
+  citation: {none: "printed in schwarz2020 p. 7: 'for internal segments the exponent was: 2.18'"}
+  from_source: schwarz2020
+  from_datum: Gheart_exponent_internal
+- id: p_perfused_volume_median
+  quantity: perfused_volume
+  unit: mm^3
+  origin: measured
+  printed: "20.2"
+  citation: {none: "printed in schwarz2020 p. 8: 'The median perfused volume of these truncated segments was 20.2 mm3'"}
+  from_source: schwarz2020
+  from_datum: perfused_volume_median

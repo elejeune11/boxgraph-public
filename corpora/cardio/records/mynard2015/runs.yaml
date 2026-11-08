@@ -1,0 +1,33 @@
+# ---- Eq. 3: smallest c0 in a network = c0 of its largest segment (c0 falls with D0 since k2 < 0) ----
+- {id: run_c0_sys_art_min, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_art, k2: k2_sys_art, k3: k3_sys_art, D0: d0_aortic_root_added}, outputs: {c0: c0_sys_art_min_pred}, note: "D0 of the aortic root is added (Supplemental File 1)."}
+- {id: run_c0_pulm_art_min, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_pulm_art, k2: k2_pulm_art, k3: k3_pulm_art, D0: d0_mpa_added}, outputs: {c0: c0_pulm_art_min_pred}, note: "D0 of the main pulmonary artery is added (Supplemental File 1)."}
+- {id: run_c0_cor_vein_min, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_cor_vein, k2: k2_cor_vein, k3: k3_cor_vein, D0: d_cs_model}, outputs: {c0: c0_cor_vein_min_pred}, note: "The coronary sinus (0.79 cm, p. 6) is taken as the largest coronary vein."}
+
+# ---- Eq. T5: pericardial pressure ----
+- {id: run_ppc_initial, model: pericardial_pressure_t5, inputs: {Kpc: k_pc, V0pc: v0_pc, Phi: phi_pc, v_lv: vt0_lv, v_rv: vt0_rv, v_la: vt0_la, v_ra: vt0_ra, v_pcf: v_pcf, v_myo: v_myo}, outputs: {ppc: ppc_initial_pred}, note: "Initial chamber volumes of Table 4 (Vt=0)."}
+- {id: run_ppc_end_diastole, model: pericardial_pressure_t5, inputs: {Kpc: k_pc, V0pc: v0_pc, Phi: phi_pc, v_lv: t6_lv_max_model, v_rv: t6_rv_max_model, v_la: t6_la_min_model, v_ra: t6_ra_min_model, v_pcf: v_pcf, v_myo: v_myo}, outputs: {ppc: ppc_end_diastole_pred}, note: "Ventricles at their Table 6 maximum and atria at their Table 6 minimum: about ventricular end-diastole, just after atrial contraction. The atria are at least at their minimum at any instant, so this is a lower bound on the pericardial pressure at ventricular end-diastole."}
+
+# ---- Eq. 1: pSIP / pV at the smallest LV volume ----
+- {id: run_lv_min_volume, model: min_volume_from_ef, inputs: {Vmax: t6_lv_max_model, EF: t6_lv_ef_model}, outputs: {Vmin: lv_min_volume_pred}}
+- {id: run_sip_ratio_max, model: sip_ratio_eq1, inputs: {alpha: alpha_sip, vV: lv_min_volume_pred, Vp0: vp0_lv}, outputs: {ratio: sip_ratio_max_pred}, note: "pSIP/pV = alpha_SIP/(vV - Vp=0) is largest at the smallest LV volume (end-systole)."}
+
+# ---- Table 6 relations ----
+- {id: run_co_lv, model: cardiac_output_from_ef, inputs: {HR: t6_hr_model, EF: t6_lv_ef_model, Vmax: t6_lv_max_model}, outputs: {CO: co_from_lv_pred}}
+- {id: run_co_rv, model: cardiac_output_from_ef, inputs: {HR: t6_hr_model, EF: t6_rv_ef_model, Vmax: t6_rv_max_model}, outputs: {CO: co_from_rv_pred}}
+- {id: run_svr, model: vascular_resistance, inputs: {P_in: t6_aort_mean_model, P_out: t6_ra_mean_model, CO: t6_co_model}, outputs: {R: svr_pred}, note: "(mean aortic root - mean RA pressure)/CO."}
+- {id: run_svr_no_venous, model: vascular_resistance, inputs: {P_in: t6_aort_mean_model, P_out: p_out_zero_added, CO: t6_co_model}, outputs: {R: svr_no_venous_pred}, note: "Alternative definition: mean aortic root pressure/CO."}
+- {id: run_pvr, model: vascular_resistance, inputs: {P_in: t6_pt_mean_model, P_out: t6_la_mean_model, CO: t6_co_model}, outputs: {R: pvr_pred}, note: "(mean pulmonary trunk - mean LA pressure)/CO."}
+
+# ---- Table 3 ----
+- {id: run_compliance_total, model: compliance_sum, inputs: {C_sa: comp_sys_art, C_sv: comp_sys_vein, C_pa: comp_pulm_art, C_pv: comp_pulm_vein}, outputs: {C_total: comp_total_pred}}
+
+# ---- mu_AV, LA from RA (p. 7) ----
+- {id: run_mu_av_la, model: mu_av_left_from_right, inputs: {mu_ra: mu_av_ra}, outputs: {mu_la: mu_av_la_pred}}
+
+# ---- Text claims about Table 8 (p. 11) ----
+- {id: run_t8_lvemax_remote, model: abs_range_8, inputs: {w1: t8_lvemax_mpa_fcw, w2: t8_lvemax_mpa_few, w3: t8_lvemax_ivc_bcw, w4: t8_lvemax_ivc_bew, w5: t8_lvemax_lipv_bcw, w6: t8_lvemax_lipv_bew, w7: t8_lvemax_lipv_bcw, w8: t8_lvemax_lipv_bew}, outputs: {min_abs: lvemax_remote_min_pred, max_abs: lvemax_remote_max_pred}, note: "The six pulmonary arterial, vena caval and pulmonary venous waves; LIPV values repeated to fill eight ports."}
+- {id: run_t8_rvv0_all, model: abs_range_8, inputs: {w1: t8_rvv0_aort_fcw, w2: t8_rvv0_aort_few, w3: t8_rvv0_mpa_fcw, w4: t8_rvv0_mpa_few, w5: t8_rvv0_ivc_bcw, w6: t8_rvv0_ivc_bew, w7: t8_rvv0_lipv_bcw, w8: t8_rvv0_lipv_bew}, outputs: {min_abs: rvv0_min_pred, max_abs: rvv0_max_pred}, note: "All eight locations."}
+- {id: run_t8_kappa0_all, model: abs_range_8, inputs: {w1: t8_kappa0_aort_fcw, w2: t8_kappa0_aort_few, w3: t8_kappa0_mpa_fcw, w4: t8_kappa0_mpa_few, w5: t8_kappa0_ivc_bcw, w6: t8_kappa0_ivc_bew, w7: t8_kappa0_lipv_bcw, w8: t8_kappa0_lipv_bew}, outputs: {min_abs: kappa0_min_pred, max_abs: kappa0_max_pred}, note: "All eight locations."}
+- {id: run_t8_mu0_venous, model: abs_range_8, inputs: {w1: t8_mu0_ivc_bcw, w2: t8_mu0_ivc_bew, w3: t8_mu0_lipv_bcw, w4: t8_mu0_lipv_bew, w5: t8_mu0_ivc_bcw, w6: t8_mu0_ivc_bew, w7: t8_mu0_lipv_bcw, w8: t8_mu0_lipv_bew}, outputs: {min_abs: mu0_venous_min_pred, max_abs: mu0_venous_max_pred}, note: "The four venous BCWac and BEWar values, each given twice."}
+- {id: run_t8_mu0_mpa_few, model: abs_range_8, inputs: {w1: t8_mu0_mpa_few, w2: t8_mu0_mpa_few, w3: t8_mu0_mpa_few, w4: t8_mu0_mpa_few, w5: t8_mu0_mpa_few, w6: t8_mu0_mpa_few, w7: t8_mu0_mpa_few, w8: t8_mu0_mpa_few}, outputs: {min_abs: mu0_mpa_few_pred, max_abs: mu0_mpa_few_max_pred}, note: "One value: its magnitude."}
+- {id: run_t8_mu0_arterial, model: abs_range_8, inputs: {w1: t8_mu0_aort_fcw, w2: t8_mu0_aort_few, w3: t8_mu0_mpa_fcw, w4: t8_mu0_aort_fcw, w5: t8_mu0_aort_few, w6: t8_mu0_mpa_fcw, w7: t8_mu0_aort_fcw, w8: t8_mu0_aort_few}, outputs: {min_abs: mu0_arterial_min_pred, max_abs: mu0_arterial_max_pred}, note: "The arterial waves other than MPA FEWls: AoRt FCWee, AoRt FEWls, MPA FCWee (repeated)."}

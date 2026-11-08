@@ -1,0 +1,76 @@
+# ModelAtlas job with spaan1981 (ref. 64): no relation entered. mynard2014 cites ref. 64 on p. 3 (lumped
+# models whose conduit arteries are "represented by a single compliance (10, 12, 64)"), on p. 12 (the
+# simulated antiphase arterial/venous flow demonstrates "the intramyocardial pump effect (64)"), and in
+# Table 3 (p. 32: Spaan 1981 = single compliance, 1 layer, 1 compartment, CEP). These cite a phenomenon and
+# contrast model classes; none says a mynard2014 model is, reduces to or derives from a spaan1981 model.
+# The only candidate model, multiscale_coronary (3 layers, 2 compartments, 1D network), is not runnable, and
+# the runnable ones are processing formulas (ratios, differences, (pLM - pRA)/qLM) with no counterpart in
+# spaan1981 beyond trivially plain forms, so nothing is proposed. No mynard2014 datum is taken from ref. 64,
+# so cited.yaml gets no line.
+# Added by the ModelAtlas job with olufsen1999 (ref. 46). mynard2014 cites ref. 46 once (p. 5): Eq. 1, the
+# reference wave speed as a function of reference radius, "Following Olufsen (46)", with k1, k2, k3 "taken
+# from (46)". Eq. 1 is runnable here only as the helper wave_speed_eq1 (it is otherwise part of the
+# non-runnable multiscale_coronary). olufsen1999 gives the formula as its p. 3 c0^2 = (4/3) Eh/(rho r0)
+# sqrt(A0/A) at A = A0 with Eh/r0 from Eq. 6 (helper wave_speed_eq6), and the factor 2/3 that its Eq. 5
+# implies as the variant wave_speed_eq6_eq5factor. Both papers in cgs; r0 is the radius in both.
+# Values: mynard2014 prints k1 = 2x10^7, k2 = -22.53, k3 = 8.65x10^5, the same digits as olufsen1999's
+# k1_fit, k2_fit, k3_fit, but they are not data in this record (only in mynard2014_data), so nothing is
+# linked in cited.yaml. The rest of multiscale_coronary (1D equations with xi = 22 after ref. 58, power-law
+# tube law after ref. 44, 0D three-layer beds as outflow) is not said to follow Olufsen; olufsen1999's
+# structured-tree outflow condition is not used, so no other relation is entered.
+- id: rel_wave_speed_eq1_olufsen1999_printed
+  kind: same_as
+  a: olufsen1999/wave_speed_eq6
+  b: mynard2014/wave_speed_eq1
+  mapping: {rho: "rho", k1: "k1", k2: "k2", k3: "k3", r0: "r0"}
+  regime:
+    rho: [1.0, 1.1]
+    k1: [1.0e+5, 3.0e+7]
+    k2: [-25, -5]
+    k3: [1.0e+4, 1.0e+6]
+    r0: [0.01, 1.5]
+  provenance: stated
+  citation: {page: 5, quote: "Following Olufsen (46), stiffness of the 1D segments was determined by a prescribed reference wave speed", where: "text before Eq. 1"}
+- id: rel_wave_speed_eq1_olufsen1999_eq5factor
+  kind: same_as
+  a: olufsen1999/wave_speed_eq6_eq5factor
+  b: mynard2014/wave_speed_eq1
+  mapping: {rho: "rho", k1: "k1", k2: "k2", k3: "k3", r0: "r0"}
+  regime:
+    rho: [1.0, 1.1]
+    k1: [1.0e+5, 3.0e+7]
+    k2: [-25, -5]
+    k3: [1.0e+4, 1.0e+6]
+    r0: [0.01, 1.5]
+  provenance: proposed
+  reason: >
+    mynard2014 says Eq. 1 follows Olufsen (stated relation above), but its right-hand side
+    2/(3 rho) [k1 exp(k2 r0) + k3] carries the factor 2/3, while olufsen1999 prints c0^2 = (4/3) Eh/(rho r0)
+    at A = A0, so the two differ by a factor sqrt(2) in c0. The factor that (A/rho) dp/dA gives from
+    olufsen1999's own Eq. 5 is 2/3 (olufsen1999 q_wave_speed_factor), so Eq. 1 is Olufsen's formula with that
+    factor: the same model as olufsen1999's corrected variant wave_speed_eq6_eq5factor, term for term.
+# Added by the ModelAtlas job with chilian1986. mynard2014 does not cite chilian1986 (its Chilian references
+# are ref. 14, Chilian & Marcus 1982, and the Toyota et al. and Wilson et al. papers, other works), and
+# chilian1986 predates it, so no relation is stated and no value is taken from one by the other (cited.yaml
+# gets no line). One relation is proposed: both papers define a coronary resistance per 100 g of tissue as a
+# driving pressure over flow per 100 g, chilian1986 from aortic pressure alone, mynard2014 from the
+# aortic-to-right-atrial pressure difference.
+- id: rel_effective_resistance_chilian1986
+  kind: reduces_to
+  a: mynard2014/effective_resistance
+  b: chilian1986/coronary_resistance
+  mapping: {P: "pLM", Q: "qLM"}
+  limit: {pRA: "0"}
+  regime:
+    pLM: [40, 120]
+    pRA: [0, 10]
+    qLM: [50, 400]
+  provenance: proposed
+  reason: >
+    chilian1986 (p. 4, Methods) computes coronary resistance as the quotient of mean aortic pressure and
+    myocardial blood flow per 100 g; mynard2014 (p. 12) computes the total effective resistance of the LM bed
+    as (mean LM pressure - right atrial pressure) / mean LM flow per 100 g, with the measured aortic pressure
+    prescribed at the LM inlet. Both are mmHg·min·100g/mL. Taking the outflow (right atrial) pressure as
+    zero, mynard2014's definition is chilian1986's term for term. The flows differ in what is measured
+    (chilian1986: microsphere tissue perfusion; mynard2014: LM inflow per 100 g LV), which both papers
+    treat as the flow through the bed.

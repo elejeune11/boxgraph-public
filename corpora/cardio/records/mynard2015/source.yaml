@@ -1,0 +1,41 @@
+id: mynard2015
+kind: article
+title: One-Dimensional Haemodynamic Modeling and Wave Dynamics in the Entire Adult Circulation
+authors: [Jonathan P. Mynard, Joseph J. Smolich]
+year: 2015
+venue: "Ann. Biomed. Eng. 43(6), 1443-1460"
+doi: 10.1007/s10439-015-1313-8
+file: corpus/cardio/2015_Mynard.pdf
+page_range: [1, 18]
+pages: {1: "1443", 2: "1444", 3: "1445", 4: "1446", 5: "1447", 6: "1448", 7: "1449", 8: "1450", 9: "1451", 10: "1452", 11: "1453", 12: "1454", 13: "1455", 14: "1456", 15: "1457", 16: "1458", 17: "1459", 18: "1460"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-06"}
+notes: >
+  A modelling paper: a closed-loop 1D model of the whole adult circulation (396 segments) coupled to a 0D heart,
+  valves and vascular beds. The full model (circulation_1d_0d) cannot be run from the paper. Its geometry and bed
+  parameters are only in the supplemental files (record mynard2015_data), and the grid, time step and code are not
+  given. So its printed results (Table 6, Table 8) are recorded as predicted values and checked in three ways.
+  (1) Table 6 model values against the paper's own in vivo reference ranges (validation, recorded as range or
+  mean ± SD; the printed means are in notes). (2) Table 6 values against each other: CO = HR x EF x Vmax from the LV
+  and from the RV, and SVR and PVR from the mean pressures. SVR, PVR, EF and CO are not defined in the paper, so the
+  usual definitions are used and marked from_words. (3) The text's summary ranges against Table 8.
+  The parts that can be run alone are checked against printed numbers. Eq. 3 (wave speed) gives the lower ends of the
+  Table 2 c0 ranges for systemic arteries, pulmonary arteries and coronary veins. For the arteries the largest
+  diameter is added (Supplemental File 1); for the coronary veins it is the printed coronary sinus diameter 0.79 cm.
+  Eq. T5 gives the pericardial pressure for the printed constants and the Table 4 and Table 6 volumes. Eq. 1 gives
+  the claim that maximum pSIP is 20% of LV pressure. Table 3's total compliance is checked against the sum of its
+  parts, and the text's 'left mu_AV = 2/3 right' against Table 4.
+  Findings: Table 4's mu_AV (LA 0.050, RA 0.033) is the inverse of the text's 2/3 ratio (q_mu_av_ratio). Eq. T5
+  gives a pericardial pressure of at least about 0.66 mmHg at end-diastole, against the claimed '< 0.5 mmHg'
+  (q_ppc_above_claim). Eq. 1 gives a largest pSIP/pV of about 18%, not 20% (q_sip_ratio_reading). The LV and RV
+  stroke volumes differ slightly against the printed CO (q_co_lv_rv). '<5%' is stated where Table 8 has -5%
+  (q_mu0_arterial_5).
+  Left out: Eqs. T1-T4 and T6-T19, Eq. 2 (fractal pulmonary trees, n = 2.76, gamma = 0.43), Eq. 4 (wall viscosity,
+  b0, b1) and the Table 5 valve values. Each needs the full model or network data to give a printed number. Also
+  left out: the Table 2 coefficients and c0 ranges of the other networks (their largest and smallest diameters are
+  not printed), the literature reference wave speeds of Table 2, the remaining Table 4 heart parameters, and Table 8
+  rows the text does not summarise (kept: LV Emax, RV V0, kappa = 0, mu = 0).
+  Figures (a later pass, figures.md): every data panel of Figs. 4-7 is read with calibrated code (84 readings). These
+  are Fig. 4's 24 in vivo waveforms (measured, from the cited works) and the 24 model waveforms beside them; the model
+  P, U and forward and backward wave intensity of Figs. 5-6; and the peak wave intensities of Fig. 7. No model in
+  the record produces them, so they stand as data for later validation. Fig. 7 runs about 20% above the Fig. 5 peaks
+  at the aortic root and brachial artery (q_fig5_fig7_peaks). The 2016 erratum is not included.

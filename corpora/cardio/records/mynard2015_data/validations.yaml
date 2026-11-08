@@ -1,0 +1,40 @@
+# Cross-validation job with mynard2015 (2026-11-06): this record's models against the measurements printed in the paper.
+- id: val_d_cs_human
+  model: coronary_venous_tree
+  inputs: {ratio: cor_vein_ratio_paper, xi: xi_paper}
+  output: D_cs_rule
+  against: mynard2015/d_cs_human
+  purpose: validation
+  quantities: {mynard2015/vessel_diameter: vessel_diameter}
+  basis: >
+    The paper's coronary venous rule (terminal veins 1.4 x their arteries' diameters, refs. 58-59, then Eq. 2a toward
+    the sinus) run on the released coronary arteries gives a coronary sinus diameter, which mynard2015 compares with
+    the human measurement of its ref. 45: 'leading to a predicted coronary sinus diameter of 0.79 cm, which compares
+    well with the value of 0.81 measured in humans' (mynard2015 p. 6). The ratio comes from other references, not
+    from this measurement, so it is a test, not a fit.
+- id: val_svr_ref
+  model: bed_resistance
+  output: R_sys
+  against: mynard2015/t6_svr_ref
+  purpose: fit_quality
+  quantities: {mynard2015/vascular_resistance: vascular_resistance}
+  conditions_ok: >
+    the released bed resistances are reference values at reference transmural pressures (Note 1 of Supplemental
+    File 2) and leave out the 1D segments, while the reference range is in vivo SVR of normal adults (ref. 81); the
+    1D networks add little to the bed resistance, so the combined bed resistance is the model's SVR to first order
+  basis: >
+    The systemic bed resistances were fitted: 'Values were then adjusted to achieve a normal flow distribution as
+    reported for humans65 and to achieve normal mean pressure and cardiac output' (mynard2015 p. 6). Normal mean
+    pressure and cardiac output together fix SVR = (MAP - RAP)/CO, and Table 6's normal ranges for both come from the
+    same ref. 81 as the SVR range, so agreement with the SVR range measures the fit, not a prediction.
+- id: val_pvr_ref
+  model: bed_resistance
+  output: R_pulm
+  against: mynard2015/t6_pvr_ref
+  purpose: validation
+  quantities: {mynard2015/vascular_resistance: vascular_resistance}
+  conditions_ok: "as val_svr_ref: reference resistances of the 29 pulmonary beds in parallel, the pulmonary 1D networks left out, against the in vivo normal range of ref. 81"
+  basis: >
+    The combined pulmonary bed resistance is the model's pulmonary vascular resistance to first order, and Table 6 of
+    mynard2015 sets the model's PVR beside the in vivo reference range (ref. 81). The paper says how the systemic and
+    coronary resistances were set but not the pulmonary ones (q_pvr_tuned), so this is entered as a test.

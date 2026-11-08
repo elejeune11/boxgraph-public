@@ -1,0 +1,40 @@
+id: kim2010
+kind: article
+title: Patient-Specific Modeling of Blood Flow and Pressure in Human Coronary Arteries
+authors: [H. J. Kim, I. E. Vignon-Clementel, J. S. Coogan, C. A. Figueroa, K. E. Jansen, C. A. Taylor]
+year: 2010
+venue: Annals of Biomedical Engineering 38(10), 3195-3209
+doi: 10.1007/s10439-010-0083-6
+file: corpus/cardio/2010_Kim.pdf
+page_range: [1, 15]
+pages: {1: "3195", 2: "3196", 3: "3197", 4: "3198", 5: "3199", 6: "3200", 7: "3201", 8: "3202", 9: "3203", 10: "3204", 11: "3205", 12: "3206", 13: "3207", 14: "3208", 15: "3209"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-06"}
+notes: >
+  The paper's results come from 3D fluid-structure finite element simulations of a patient's aorta and
+  coronary arteries (geometry from unpublished CT data) coupled to lumped heart, Windkessel and coronary
+  bed models; that coupled model cannot be run from the paper, so waveforms, wall shear stress and
+  pressure-volume loops are not checked (question q_3d_not_runnable). What is checked: (1) the paper's
+  stated rules with its own printed inputs: coronary flow = 4.0% of cardiac output (rest and light
+  exercise), systolic pressure raised 20% in light exercise, and the 350% coronary flow increase at moderate
+  exercise, read both as "by" (factor 4.5, not reproduced) and as "to" (factor 3.5, reproduced; variant
+  model); (2) arithmetic consistency: CO = SV / cycle length and the sum of LAD, LCX and RCA flows;
+  (3) the steady (zero-frequency) limit of the printed coronary bed model, mean flow = mean pressure
+  difference / (Ra + Ra-micro + Rv + Rv-micro), applied with the Table 3 resistances (a) to split the printed
+  total flow among LAD, LCX and RCA (close at rest, LAD and LCX not reproduced in light exercise) and (b) to
+  predict the Table 4 LAD flows from the Table 4 pressures through outlets c and d with an added venous
+  pressure of 0 mmHg (most reproduced; rest 60% and 75% and exercise 75% not; verdicts change with the
+  venous-pressure alternatives). Table 3 is recorded for the rest and light-exercise columns of all outlets
+  and for the moderate-exercise column of outlets c and d and their stenosis rows; the capacitances Ca and
+  Cim, the moderate-exercise resistances of other outlets, Tables 1 and 2 (heart and Windkessel parameters),
+  the material and mesh settings, and the Young's modulus were left out because no runnable model in this
+  record uses them. Eq. 5 and its coefficient formulas (k1, k2, A, B, Z, Y) are used only through
+  q0 and p0; no printed number follows from the rest of them. Figures (second pass, 2026-11-06, see figures.md):
+  every data plot is read by calibrated code readings (figures.yaml, figures/*.py): Fig. 6 (simulated
+  rest and exercise LAD mean flows, compared with Table 4 as consistency checks; Gould et al. canine
+  measurements recorded as measured data), and the waveforms of Figs. 2, 3 and 5 and the left
+  ventricular pressure-volume loops of Fig. 2 (3D simulation results, recorded as data without runs).
+  Four questions were added from the figures (q_fig2_systolic_exercise, q_fig2_branch_labels,
+  q_fig6_rest_points, q_fig6_gould_scaling).
+  Audit (see audit.md): all data and models confirmed against the page images; the 10% contractility
+  increase in moderate exercise was added as a check on Table 1 E_LV,max (2.0 to 2.2 mmHg/cc), and three
+  questions on Table 2 and the exercise rules were added.

@@ -1,0 +1,19 @@
+id: stenosed_lad_flow
+name: mean flow through the stenosed LAD from the mean pressure downstream of it and the steady resistances of the two downstream coronary bed models (outlets c and d)
+role: model
+stated: {page: 9, printed_page: "3203", quote: "For resting conditions, we decreased the resistance", where: "text; Eq. 5 coefficients p0 = 1, q0 = Ra + Ra-micro + Rv + Rv-micro (p. 3198)"}
+equation: "Q = (P - P_v) (1/q0_c + 1/q0_d), q0 = Ra + Ra-micro + Rv + Rv-micro, p0 = 1"
+from_words: true
+inputs:
+  P: {quantity: stenosed_lad_mean_pressure, unit: mmHg}
+  Pv: {quantity: coronary_venous_pressure, unit: mmHg}
+  Ra_c: {quantity: coronary_arterial_resistance, unit: kdyn*s/cm^5}
+  Ram_c: {quantity: coronary_arterial_micro_resistance, unit: kdyn*s/cm^5}
+  Rv_c: {quantity: coronary_venous_resistance_sum, unit: kdyn*s/cm^5}
+  Ra_d: {quantity: coronary_arterial_resistance, unit: kdyn*s/cm^5}
+  Ram_d: {quantity: coronary_arterial_micro_resistance, unit: kdyn*s/cm^5}
+  Rv_d: {quantity: coronary_venous_resistance_sum, unit: kdyn*s/cm^5}
+outputs:
+  Q: {quantity: stenosed_lad_mean_flow, unit: cc/s}
+settings: {}
+stochastic: false

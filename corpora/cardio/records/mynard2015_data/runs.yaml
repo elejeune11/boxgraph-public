@@ -1,0 +1,53 @@
+# ---- network size ----
+- {id: run_counts, model: network_counts, inputs: {}, settings: {valves_as_junctions: false}, outputs: {n_segments: n_segments_released, n_pulm_art_tree: n_pulm_art_released, n_pulm_vein: n_pulm_vein_released, n_junctions: n_junctions_released}}
+- {id: run_counts_valves, model: network_counts, inputs: {}, settings: {valves_as_junctions: true}, outputs: {n_junctions: n_junctions_with_valves}, note: "The LVot-AoRt and RVot-MPA connections across the valves counted as junctions too."}
+
+# ---- Table 2: extreme diameters of each released network, then Eq. 3 (c0 falls with D0, as every k2 < 0) ----
+- {id: run_D_sys_art, model: network_diameter_range, inputs: {}, settings: {blocks: ["Systemic Arteries"]}, outputs: {D_min: D_min_sys_art, D_max: D_max_sys_art}}
+- {id: run_D_sys_vein, model: network_diameter_range, inputs: {}, settings: {blocks: ["Systemic Veins"]}, outputs: {D_min: D_min_sys_vein, D_max: D_max_sys_vein}}
+- {id: run_D_pulm_art, model: network_diameter_range, inputs: {}, settings: {blocks: ["Pulmonary Arteries"]}, outputs: {D_min: D_min_pulm_art, D_max: D_max_pulm_art}}
+- {id: run_D_pulm_vein, model: network_diameter_range, inputs: {}, settings: {blocks: ["Pulmonary Veins"]}, outputs: {D_min: D_min_pulm_vein, D_max: D_max_pulm_vein}}
+- {id: run_D_cor_art, model: network_diameter_range, inputs: {}, settings: {blocks: ["Coronary Arteries"]}, outputs: {D_min: D_min_cor_art, D_max: D_max_cor_art}}
+- {id: run_D_cor_vein, model: network_diameter_range, inputs: {}, settings: {blocks: ["Coronary Veins"]}, outputs: {D_min: D_min_cor_vein, D_max: D_max_cor_vein}}
+- {id: run_D_sys_art_hn, model: network_diameter_range, inputs: {}, settings: {blocks: ["Systemic Arteries", "Head/Neck Arteries"]}, outputs: {D_min: D_min_sys_art_hn, D_max: D_max_sys_art_hn}, note: "Alternative reading: head/neck arteries (Fig. 3i) counted with the systemic arteries."}
+- {id: run_D_sys_vein_hn, model: network_diameter_range, inputs: {}, settings: {blocks: ["Systemic Veins", "Head/Neck Veins", "Portal Veins"]}, outputs: {D_min: D_min_sys_vein_hn, D_max: D_max_sys_vein_hn}, note: "Alternative reading: head/neck veins (Fig. 3j) and portal veins (Fig. 3f) counted with the systemic veins."}
+
+- {id: run_c0min_sys_art, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_art, k2: k2_sys_art, k3: k3_sys_art, D0: D_max_sys_art}, outputs: {c0: c0_min_sys_art_released}}
+- {id: run_c0max_sys_art, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_art, k2: k2_sys_art, k3: k3_sys_art, D0: D_min_sys_art}, outputs: {c0: c0_max_sys_art_released}}
+- {id: run_c0min_sys_vein, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_vein, k2: k2_sys_vein, k3: k3_sys_vein, D0: D_max_sys_vein}, outputs: {c0: c0_min_sys_vein_released}}
+- {id: run_c0max_sys_vein, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_vein, k2: k2_sys_vein, k3: k3_sys_vein, D0: D_min_sys_vein}, outputs: {c0: c0_max_sys_vein_released}}
+- {id: run_c0min_pulm_art, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_pulm_art, k2: k2_pulm_art, k3: k3_pulm_art, D0: D_max_pulm_art}, outputs: {c0: c0_min_pulm_art_released}}
+- {id: run_c0max_pulm_art, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_pulm_art, k2: k2_pulm_art, k3: k3_pulm_art, D0: D_min_pulm_art}, outputs: {c0: c0_max_pulm_art_released}}
+- {id: run_c0min_pulm_vein, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_pulm_vein, k2: k2_pulm_vein, k3: k3_pulm_vein, D0: D_max_pulm_vein}, outputs: {c0: c0_min_pulm_vein_released}}
+- {id: run_c0max_pulm_vein, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_pulm_vein, k2: k2_pulm_vein, k3: k3_pulm_vein, D0: D_min_pulm_vein}, outputs: {c0: c0_max_pulm_vein_released}}
+- {id: run_c0min_cor_art, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_cor_art, k2: k2_cor_art, k3: k3_cor_art, D0: D_max_cor_art}, outputs: {c0: c0_min_cor_art_released}}
+- {id: run_c0max_cor_art, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_cor_art, k2: k2_cor_art, k3: k3_cor_art, D0: D_min_cor_art}, outputs: {c0: c0_max_cor_art_released}}
+- {id: run_c0min_cor_vein, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_cor_vein, k2: k2_cor_vein, k3: k3_cor_vein, D0: D_max_cor_vein}, outputs: {c0: c0_min_cor_vein_released}}
+- {id: run_c0max_cor_vein, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_cor_vein, k2: k2_cor_vein, k3: k3_cor_vein, D0: D_min_cor_vein}, outputs: {c0: c0_max_cor_vein_released}}
+- {id: run_c0max_sys_art_hn, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_art, k2: k2_sys_art, k3: k3_sys_art, D0: D_min_sys_art_hn}, outputs: {c0: c0_max_sys_art_hn}, note: "Head/neck arteries with the systemic arterial coefficients (the paper gives them no row of their own)."}
+- {id: run_c0min_sys_vein_hn, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_vein, k2: k2_sys_vein, k3: k3_sys_vein, D0: D_max_sys_vein_hn}, outputs: {c0: c0_min_sys_vein_hn}, note: "Head/neck and portal veins with the systemic venous coefficients."}
+- {id: run_c0max_sys_vein_hn, model: wave_speed_eq3, inputs: {rho: rho_blood, k1: k1_sys_vein, k2: k2_sys_vein, k3: k3_sys_vein, D0: D_min_sys_vein_hn}, outputs: {c0: c0_max_sys_vein_hn}, note: "Head/neck and portal veins with the systemic venous coefficients."}
+
+# ---- pulmonary networks: Eq. 2 and the length/radius ratio as released, and the tree regrown by the rules ----
+- {id: run_fractal_art, model: pulmonary_fractal_rules, inputs: {}, settings: {block: "Pulmonary Arteries", direction: outlet, roots: [LPA, RPA]}, outputs: {gamma_min: gamma_min_art, gamma_max: gamma_max_art, xi_min: xi_min_art, xi_max: xi_max_art, L_over_r_min: L_over_r_min_art, L_over_r_max: L_over_r_max_art, n_bifurcations: n_bif_art}}
+- {id: run_fractal_vein, model: pulmonary_fractal_rules, inputs: {}, settings: {block: "Pulmonary Veins", direction: inlet, roots: []}, outputs: {gamma_min: gamma_min_vein, gamma_max: gamma_max_vein, xi_min: xi_min_vein, xi_max: xi_max_vein, n_bifurcations: n_bif_vein}, note: "Veins: the paper states matching lengths rather than a length/radius ratio, so L/r is not compared."}
+- {id: run_tree_printed_gamma, model: pulmonary_tree_generation, inputs: {xi: xi_paper, gamma: gamma_paper, r_term: r_term_paper}, outputs: {n_segments: n_pulm_regrown_printed}}
+- {id: run_tree_released_gamma, model: pulmonary_tree_generation, inputs: {xi: xi_paper, gamma: gamma_max_art, r_term: r_term_paper}, outputs: {n_segments: n_pulm_regrown_released}, note: "With the asymmetry ratio the released arteries follow (gamma_max_art)."}
+
+# ---- coronary veins (p. 6) ----
+- {id: run_cor_veins, model: coronary_venous_tree, inputs: {ratio: cor_vein_ratio_paper, xi: xi_paper}, outputs: {D_cs_rule: D_cs_rule, D_cs_released: D_cs_released, ratio_min: cor_ratio_min_released, ratio_max: cor_ratio_max_released}, note: "xi = 2.76 is the exponent the paper prints with Eq. 2; Eq. 2a is the same relation."}
+
+# ---- Table 3 ----
+- id: run_compliance
+  model: compliance_distribution
+  inputs: {rho: rho_blood, k1_sa: k1_sys_art, k2_sa: k2_sys_art, k3_sa: k3_sys_art, k1_sv: k1_sys_vein, k2_sv: k2_sys_vein, k3_sv: k3_sys_vein, k1_pa: k1_pulm_art, k2_pa: k2_pulm_art, k3_pa: k3_pulm_art, k1_pv: k1_pulm_vein, k2_pv: k2_pulm_vein, k3_pv: k3_pulm_vein, k1_ca: k1_cor_art, k2_ca: k2_cor_art, k3_ca: k3_cor_art, k1_cv: k1_cor_vein, k2_cv: k2_cor_vein, k3_cv: k3_cor_vein}
+  outputs: {C_sys_art: C_sys_art_released, C_sys_vein: C_sys_vein_released, C_liver: C_liver_released, C_pulm_art: C_pulm_art_released, C_pulm_vein: C_pulm_vein_released, C_total: C_total_released, C1d_sys_art: C1d_sys_art, C1d_sys_vein: C1d_sys_vein, C1d_pulm_art: C1d_pulm_art, C1d_pulm_vein: C1d_pulm_vein, C0d_sys_art: C0d_sys_art, C0d_sys_vein: C0d_sys_vein, C0d_pulm_art: C0d_pulm_art, C0d_pulm_vein: C0d_pulm_vein}
+- id: run_compliance_coronary
+  model: compliance_distribution
+  inputs: {rho: rho_blood, k1_sa: k1_sys_art, k2_sa: k2_sys_art, k3_sa: k3_sys_art, k1_sv: k1_sys_vein, k2_sv: k2_sys_vein, k3_sv: k3_sys_vein, k1_pa: k1_pulm_art, k2_pa: k2_pulm_art, k3_pa: k3_pulm_art, k1_pv: k1_pulm_vein, k2_pv: k2_pulm_vein, k3_pv: k3_pulm_vein, k1_ca: k1_cor_art, k2_ca: k2_cor_art, k3_ca: k3_cor_art, k1_cv: k1_cor_vein, k2_cv: k2_cor_vein, k3_cv: k3_cor_vein}
+  settings: {include_coronary_beds: true}
+  outputs: {C_sys_art: C_sys_art_with_cor, C_sys_vein: C_sys_vein_with_cor, C_total: C_total_with_cor}
+  note: "Alternative reading: the coronary beds' compliances counted with the systemic arteries and veins."
+
+# ---- Table 6 SVR and PVR from the bed resistances ----
+- {id: run_resistance, model: bed_resistance, inputs: {}, outputs: {R_sys: R_sys_beds, R_pulm: R_pulm_beds, tau_brain: tau_brain, tau_min_other: tau_min_other, tau_max_other: tau_max_other}}

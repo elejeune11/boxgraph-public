@@ -1,0 +1,26 @@
+# Cross-validation with reymond2009 (ref. 104), job 2026-11-06.
+# Eq. 3 with the systemic-artery coefficients of Table 2 gives the wave speed of an artery from its diameter;
+# reymond2009's Fig. 3 plots measured PWV from six literature sources against lumen diameter.
+- id: val_c0_eq3_vs_reymond2009_fig3_pwv
+  model: wave_speed_eq3
+  inputs: {rho: rho_blood, k1: k1_sys_art, k2: k2_sys_art, k3: k3_sys_art}
+  sweep: {D0: 'reymond2009/pwv_lit_fig3'}
+  output: c0
+  against: 'reymond2009/pwv_lit_fig3'
+  purpose: validation
+  quantities: {'reymond2009/lumen_diameter': vessel_diameter, 'reymond2009/pulse_wave_velocity': reference_wave_speed}
+  conditions_ok: >
+    c0 is the model's wave speed at the systemic reference pressure of 80 mmHg (p. 6, "80/5 mmHg (systemic
+    arterial/venous)"), and D0 the diameter at that pressure; the Fig. 3 points are PWV measured in vivo by six
+    literature studies at their subjects' own pressures and ages. reymond2009 itself takes these literature PWV
+    values as the wave speed at the reference pressure (its p. 3, "derive the values of compliance at the
+    reference pressure from PWV", Eq. 6 with PWV(d, Pref)), and this paper sets its c0 ranges beside measured
+    wave speeds (Table 2, "Reference values"), so both papers treat the two as the same quantity. Pressure and
+    age differences between the sources are part of what the comparison tests (q_c0_vs_pwv_reymond2009).
+  basis: >
+    Eq. 3 (p. 6, "reference wave speed (c0) for each 1D segment was set via the empirical formula suggested by
+    Olufsen et al.") gives the wave speed of any systemic artery from its diameter, with k1, k2, k3 "chosen to
+    achieve normal wave speeds in the large vessels for a young adult human and a reasonable increase in smaller
+    vessels (Table 2)". The coefficients were chosen against the reference values of Table 2 (refs. 40, 132), not
+    the six sources of reymond2009's Fig. 3 (Baguet, Giller and Aaslid, Hayashi, Latham, Luchsinger, Murgo), so
+    this is a test, not a fit. Run at each measured lumen diameter, it predicts the PWV measured there.

@@ -1,0 +1,232 @@
+- id: q_number_slope_sign
+  kind: possible_error
+  about: [t4_N_b_e_rca, t4_N_b_e_lad, t4_N_b_e_lcx, t4_N_b_s_rca, t4_N_b_s_lad, t4_N_b_s_lcx, horton_number_fit_11, horton_number_fit_10]
+  text: >
+    Table 4 prints the slope b of Eq. 5 (log10 N_n = a + b n) for the total number of vessels as
+    positive (0.544, 0.545, 0.553, 0.450, 0.458, 0.474). The numbers of Table 9 fall with order, so a
+    least-squares fit gives the same magnitudes with a negative sign, and Eq. 5 with the printed
+    positive b and a = 6.35 would give numbers that grow with order. The intercepts, R2 and the ratios
+    (read as N_(n-1)/N_n) all reproduce, so the minus sign appears to have been dropped. The values are
+    kept as printed.
+  citation: {page: 10, quote: "data fit a straight line. Thus an equation similar to Eq. 2", where: "Eq. 5, Table 4"}
+- id: q_number_ratio_direction
+  kind: reading
+  about: [horton_number_fit_11, horton_number_fit_10, horton_segnumber_fit_11, horton_segnumber_fit_10, ratio_from_b_number]
+  text: >
+    Table 4 gives "Ratio is that between successive orders" without saying which way. For diameter and
+    length it is D_n/D_(n-1) = 10^b (Eq. 3). For the number of vessels the printed ratios (3.50 etc.)
+    are above one, so the fit models report N_(n-1)/N_n = 10^(-b); the Eq. 3 check (ratio_from_b_number)
+    applies 10^b to the printed, positive b.
+  citation: {page: 10, quote: "Empirical constants a and b of Eqs. 2, 4, and 5", where: Table 4}
+- id: q_segment_length_fits
+  kind: unexplained_difference
+  about: [t4_L411_a_s_rca, t4_L411_a_s_lad, t4_L411_a_s_lcx, t4_L411_b_s_rca, t4_L411_b_s_lad, t4_L411_b_s_lcx,
+          t4_L411_R2_s_rca, t4_L411_R2_s_lad, t4_L411_R2_s_lcx, t4_L13_R2_s_rca, t4_L13_R2_s_lad, t4_L13_R2_s_lcx]
+  text: >
+    The Table 4 constants "based on segments" for length do not follow from the segment lengths of
+    Tables 1-3 by the least-squares fit that reproduces every other column of Table 4. For orders 4-11
+    (4-10 for LCX) a, b, R2 and the ratio differ in all three trees; for orders 1-3 a, b and the ratio
+    reproduce but the printed R2 (0.971, 0.969, 0.969) is much higher than the fit's. No other range of
+    orders gives the printed a and b. The printed segment-length ratios do equal 10^b of the printed b
+    (Eq. 3 checks reproduce), so Table 4 is internally consistent but not with the Table 1-3 segment means.
+  citation: {page: 10, quote: "Empirical constants a and b of Eqs. 2, 4, and 5", where: "Table 4, Length rows, based on segments"}
+- id: q_volume_rca
+  kind: unexplained_difference
+  about: [vol_rca, tree_volume_11, cmp_volume_rca]
+  text: >
+    The cumulative volume of the RCA from Eqs. 6a and 7a, summed over orders 1-11 with the element
+    diameters and lengths of Table 1 and the element numbers of Table 9, falls just below the printed
+    1.4 +- 0.15 ml (verdict close); the LAD and LCX values reproduce within their printed SE. The paper
+    does not say whether element or segment means, or which numbers, enter the sum; with segment means
+    and segment numbers (N x S/E) the RCA value rises but is still below 1.4 ml.
+  citation: {page: 13, quote: "volume of blood in each arterial tree", where: Discussion}
+- id: q_volume_se
+  kind: unstated_input
+  about: [vol_rca, vol_lad, vol_lcx, tree_volume_11, tree_volume_10]
+  text: >
+    The SEs of the cumulative volumes (0.15, 0.21, 0.09 ml) come from Eqs. 6b and 7b, which need the SE
+    of each mean diameter and length (Tables 1-3 give SD and n only) and a rule for combining the
+    orders' errors in the sum, which the paper does not state. Only the means are compared.
+  citation: {page: 11, quote: "The SE of the total CSA is computed", where: "Eqs. 6b, 7b"}
+- id: q_horton_units
+  kind: reading
+  about: [horton_diameter_fit_11, horton_diameter_fit_10, horton_length_fit_1to3, horton_length_fit_4to11, horton_length_fit_4to10]
+  text: >
+    Eqs. 2 and 4 take log10 of D_n and L_n without stating their units. The fit models use um for both,
+    as on the axes of Figs. 6 and 7 (mean element diameter and length in um); with these units every
+    element-based intercept reproduces, whereas Tables 1-3 give lengths in mm.
+  citation: {page: 9, quote: "curves in Fig. 6 can be fitted by the equation", where: "Eqs. 2, 4"}
+- id: q_eq10_diagonal
+  kind: reading
+  about: [extrapolation_eq10]
+  text: >
+    Eq. 10 sums from m = n, so N'_n appears on both sides through the diagonal component C(n, n); the
+    text says that then additional order n vessels "must be computed according to Eq. 10 by including
+    the number of cut branches". The model solves the m = n term exactly, N'_n (1 - C(n,n)) = ...,
+    and likewise for Eq. 11; matrix components printed without an SE (zeros and the exact counts of
+    column 11) are given dC = 0. Read this way, Eqs. 10 and 11 reproduce every entry of Table 10.
+  citation: {page: 15, quote: "but if the diagonal components of", where: "Eqs. 10, 11"}
+- id: q_table6_orientation
+  kind: reading
+  about: [extrapolation_eq10, connected_elements]
+  text: >
+    The footnote of Tables 6-8 says the element (m,n) in the mth row and nth column is the ratio for
+    elements of order m springing from parents of order n, but the rows are headed "Order n" and the
+    columns "Order m". The record reads rows as the daughter order and columns as the parent order, as
+    the worked example on p. 13 does (column 11 lists 6 order 10, 5 order 9, 8 order 8, 11 order 7
+    vessels on the order 11 trunk) and as Eq. 10 needs (C(n, m), row n, column m >= n).
+  citation: {page: 11, quote: "An element (m,n) in mth row and nth column", where: "Table 6 footnote"}
+- id: q_table9_other_columns
+  kind: unstated_input
+  about: [N_lad_1, N_lcx_1, N_wh_1]
+  text: >
+    Table 9 gives the element numbers of the LAD, LCX and the whole heart (RCA and LCCA) computed the way
+    Table 10 does for the RCA, but the intact and cut counts of those casts (and the LCCA trunk) are not
+    printed, so only the RCA column can be recomputed (it equals Table 10, which reproduces). The
+    whole-heart column is not the sum of the RCA, LAD and LCX columns below order 10, presumably because
+    it includes the left common trunk. The Table 9 numbers enter the Eq. 5 fits and the volume sums as
+    printed.
+  citation: {page: 12, quote: "Total no. of vessel elements in each order of pig", where: Table 9}
+- id: q_lad_lcx_orders_1_3
+  kind: reading
+  about: [eD_lad_1, eD_lcx_1, sL_lad_1, sL_lcx_1]
+  text: >
+    Orders 1-3 of Tables 2 (LAD) and 3 (LCX) are identical in every column, and so are the first rows of
+    the connectivity matrices in Tables 7 and 8. The paper says the histological data of orders 1-4 were
+    lumped across hearts; it appears the left-ventricle histology was used for both left trees. Recorded
+    as printed.
+  citation: {page: 14, quote: "the data on orders l-4 were lumped together", where: "Scope of data"}
+- id: q_eq9_index
+  kind: possible_error
+  about: [connected_elements]
+  text: >
+    (Audit.) The text just before Eq. 9 gives the number of order m elements springing from order n
+    parents as C(m, n) . N_n, with N_n the number of elements of the parent order n. Eq. 9 as printed,
+    Q_m = sum_(n>m) q_mn C(m, n) N_m, multiplies by N_m instead. With the definition of C(m, n) given
+    on the same page, N_n appears to be meant. Eq. 9 produces no printed number, so no model is affected;
+    connected_elements uses the C(m, n) N_n of the text (which reproduces the 24 and 2 of p. 13).
+  citation: {page: 13, quote: "may be written as C(m, n) . N,, where C(m, n) is the", where: "text before Eq. 9, and Eq. 9"}
+- id: q_eq10_text_range
+  kind: possible_error
+  about: [extrapolation_eq10]
+  text: >
+    (Audit.) The text after Eq. 10 says "m is equal or smaller than n with an upper limit of 11 for RCA",
+    while Eq. 10 sums from m = n up to 11, so m >= n, and only m >= n gives parents larger than the
+    daughters. The model follows the printed summation limits (m = n..11) and reproduces Table 10.
+  citation: {page: 15, quote: "equal or smaller than n with an upper limit of 11 for RCA", where: "text after Eq. 10"}
+- id: q_eq11_table_numbers
+  kind: possible_error
+  about: [extrapolation_eq10, Cse_rca_1_1]
+  text: >
+    (Audit.) The text after Eq. 11 says "If the SEs listed in Tables 7-9 are used as dC(n, m)". The
+    connectivity matrices with their SEs are Tables 6-8 (Table 9 lists element numbers), and the worked
+    example is the RCA of Table 6. The model uses the SEs of Table 6, which reproduce the SEs of Table 10;
+    "Tables 7-9" appears to be meant as Tables 6-8.
+  citation: {page: 15, quote: "If the SEs listed in Tables 7-9 are usedasSC(n, m)", where: "text after Eq. 11"}
+- id: q_fig10_segment_diameters
+  kind: reading
+  about: [order_csa_11, order_csa_10, order_volume_11, order_volume_10, tree_volume_11, tree_volume_10, cmp_fig10_rca, cmp_fig10_lad,
+          cmp_fig10_lcx, cmp_fig11_rca, cmp_fig11_lad, cmp_fig11_lcx, cmp_volume_rca, cmp_volume_lad, cmp_volume_lcx]
+  text: >
+    (Figure reading.) The paper does not say which mean diameter enters Eq. 6a (see q_volume_rca). Figs. 10
+    and 11, read with calibrated code, settle it: the plotted total CSA of each order follows from the
+    segment mean diameters of Tables 1-3 with the element numbers of Table 9 (cmp_fig10_*_segD), and not
+    from the element mean diameters, which fall below several RCA and LAD points (cmp_fig10_rca,
+    cmp_fig10_lad). The plotted volumes of Fig. 11 likewise follow segment diameters with element lengths
+    and numbers (cmp_fig11_*_segD). Summing the same products over orders gives the cumulative volumes
+    compared in cmp_volume_*_segD, the reading that best matches the printed 1.4, 0.98 and 0.57 ml.
+    The element-diameter runs are kept as recorded.
+  citation: {page: 11, printed_page: H360, quote: "equal to the product of the area of each element and the", where: "Eq. 6a, Figs. 10-11"}
+- id: q_fig7_rca_order11
+  kind: unexplained_difference
+  about: [figL_rca, eL_rca_11, cmp_fig7_rca]
+  text: >
+    (Figure reading.) In Fig. 7 the RCA point of order 11 (an isolated, clearly drawn square) lies below
+    the 84.1 mm that Table 1 prints for the mean element length of order 11; the comparison of the figure
+    with the table is only close there, while the other RCA points read agree with Table 1. The paper does
+    not say which value was plotted.
+  citation: {page: 10, printed_page: H359, quote: "Relation between average lengths of vessel elements", where: "Fig. 7"}
+- id: q_fig9_rca_order3
+  kind: unexplained_difference
+  about: [figN_rca, N_rca_3, cmp_fig9_rca]
+  text: >
+    (Figure reading.) In Fig. 9 the RCA square of order 3 is drawn around the LAD triangle of order 3,
+    below the 51,915 elements Table 9 prints for the RCA (the comparison is only close); the other RCA,
+    LAD and LCX points read agree with Table 9.
+  citation: {page: 12, printed_page: H361, quote: "Relation between total corrected nos. of vessel elements in", where: "Fig. 9"}
+- id: q_fig9_line_slope
+  kind: reading
+  about: [q_number_slope_sign, t4_N_b_e_rca, t4_N_b_e_lad, t4_N_b_e_lcx]
+  text: >
+    (Figure reading.) The straight lines of Eq. 5 drawn in Fig. 9 fall with order for all three trees,
+    as the Table 9 numbers do, which supports q_number_slope_sign: the slope b of Eq. 5 is negative and
+    the positive b of Table 4 has lost its sign. The lines were not read (they overlap for the RCA and LAD).
+  citation: {page: 12, printed_page: H361, quote: "Relation between total corrected nos. of vessel elements in", where: "Fig. 9"}
+- id: q_no_validation_chilian1986
+  kind: choice
+  about: [order_diameter_11, horton_diameter_fit_11, order_volume_11, tree_volume_11, extrapolation_eq10]
+  text: >
+    (Cross-record validation with chilian1986.) No model of this record is validated against the
+    measurements of chilian1986, and none of chilian1986 against this record's. The models here give
+    morphometry of the pig coronary arterial tree by Strahler order (mean diameter, length, number,
+    cross-sectional area and volume of an order, Horton fits, the Eq. 10 extrapolation). chilian1986
+    measures cat epicardial microvascular and aortic pressures, microsphere perfusion and individual
+    arteriole and venule diameters (Fig. 3, the diameter ranges of Tables 4 and 5), none assigned a
+    Strahler order, so no model here can be run on those measurements' conditions: matching a cat
+    vessel class to a pig order by diameter would be an assumption, and would compare only species-
+    unrelated anatomy. The pressure-flow use of the data (Poiseuille, Eqs. 8-9) produces no number in
+    this record and is not a model here. Neither paper cites the other.
+- id: q_no_validation_chilian1986_reverse
+  kind: choice
+  about: [order_diameter_10, order_diameter_11]
+  text: >
+    (Cross-record validation with chilian1986.) chilian1986's models (pressure as a percentage of aortic
+    pressure, resistance partition, pressure drop, resistance = pressure / perfusion, relative diameter
+    change) take pressures, perfusion or diameter changes as inputs. This record measures none of these
+    (only the perfusion pressure of the casting, a preparation setting), so its measurements are not
+    predicted by any chilian1986 model.
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [horton_diameter_fit_11, horton_length_fit_4to11, horton_number_fit_11, tree_volume_11, extrapolation_eq10, eD_rca_1, eL_rca_1, SE_rca_1, N_rca_1, figD_rca, figN_rca]
+  text: >
+    No validation against olufsen1999 is entered, in either direction (cross-validation job 2026-11-06).
+    Neither paper cites the other, and neither says a model of one explains or predicts the other's data.
+    The models here are least-squares Horton fits of the pig coronary morphometry (Eqs. 2-5), the Eq. 10-11
+    extrapolation of element counts, and per-order area and volume sums (Eqs. 6a, 7a), each taking this
+    paper's own diameters, lengths and numbers as inputs. olufsen1999's measurements are a human cardiac
+    output (ref. 20), the human aortic inflow of its Fig. 4, the measured human input impedance modulus and
+    phase of its Fig. 9 (md 0, md 1) and the human aortic, subclavian-brachial and radial pressures of its
+    Fig. 12. None of these is a diameter, length, number, area or volume by Strahler order, so no model
+    here gives them. For the other direction see olufsen1999 q_no_validation_vs_kassab1993.
+  citation: {page: 4, quote: "of coronary blood vesselsare usually asymmetric"}
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [horton_diameter_fit_11, horton_length_fit_4to11, horton_number_fit_11, order_csa_11, order_volume_11, tree_volume_11, extrapolation_eq10]
+  text: >
+    (Cross-validation with olufsen2000, job 2026-11-06.) No model of this record is validated against
+    olufsen2000's measurements. olufsen2000 cites this paper (its ref. 14) only as literature behind its
+    structured trees; this paper, earlier, says nothing of it. The models here are the Horton fits (Eqs. 2-5),
+    the Eq. 10-11 extrapolation of element counts and the per-order area and volume sums (Eqs. 6a, 7a), each
+    run on this paper's own pig coronary diameters, lengths and numbers. olufsen2000's measurements are one
+    human subject's MR flows (Figs. 3, 7), cuff pressures (120/80 mmHg), ascending-aorta inlet radius, cycle
+    length and heart rate. None is a diameter, length, number, area or volume by Strahler order, so no model
+    here gives them. For the other direction see olufsen2000/q_no_validation_vs_kassab1993.
+  citation: {none: "a finding of the cross-record job between kassab1993 and olufsen2000, not a printed statement"}
+- id: q_no_validation_vs_schwarz2020
+  kind: choice
+  about: [horton_diameter_fit_11, horton_length_fit_4to11, horton_number_fit_11, extrapolation_eq10, order_csa_11, order_volume_11, tree_volume_11]
+  text: >
+    No validation is entered against schwarz2020's measurements. This paper, earlier, says nothing of
+    schwarz2020; schwarz2020 cites it (pp. 2, 8) as earlier porcine morphometry and says on p. 9 that its
+    pig segment lengths "are closer to our findings", a comparison of data with data, not a prediction by a
+    model. The models here are the Horton fits (Eqs. 2-5), the Eq. 10-11 extrapolation of element counts and
+    the per-order area and volume sums (Eqs. 6a, 7a), each a function of the Strahler order n run on this
+    paper's own pig diameters, lengths, numbers and connectivity matrix. schwarz2020's measurements are of one
+    human heart, binned by diameter class, not by order: segment shares and terminal densities (Table 1),
+    segment lengths per diameter class (Fig. 2), daughter symmetry per mother class (Fig. 3), area growth at
+    nodes (Fig. 4, the 1.02 median), the 441 um median length and perfused volumes. No Strahler order is
+    assigned to any of them, so no model here can be run on their conditions, and the order-level area A_n
+    is a sum over all elements of an order, not an area ratio at one node. Running a Horton law on a
+    diameter class would need an order-to-diameter map that neither paper gives for the human tree.
+    For the other direction see schwarz2020/q_no_validation_vs_kassab1993.
+  citation: {none: "a finding of the cross-record job between kassab1993 and schwarz2020, not a printed statement"}

@@ -403,19 +403,36 @@ def _evidence(syn: dict, ref: str, outdir: Path, case: str) -> dict:
             "page": f.get("page"), "image": name}
 
 
-def _case_studies(syn: dict, content: dict, outdir: Path) -> list[dict]:
+def _image(step_image: dict, outdir: Path, content_dir: Path | None, case: str) -> dict:
+    """An image step: images of our own (drawn from released data, say), one per view, copied next to the page."""
+    views = []
+    for v in step_image.get("views") or []:
+        f = (content_dir or Path.cwd()) / v["file"]
+        if not f.is_file():
+            raise CaseStudyError(f"case study {case}: image {v['file']} is not next to the overview text ({f.parent})")
+        (outdir / "img").mkdir(parents=True, exist_ok=True)
+        name = f"img/{f.name}"
+        shutil.copyfile(f, outdir / name)
+        views.append({"label": v.get("label", ""), "src": name, "alt": v.get("alt") or v.get("label", "")})
+    return {"kind": "image", "caption": step_image.get("caption", ""), "views": views}
+
+
+def _case_studies(syn: dict, content: dict, outdir: Path, content_dir: Path | None = None) -> list[dict]:
     out = []
     for cs in content.get("case_studies") or []:
         steps = [{"text": st.get("text", ""),
-                  "evidence": _evidence(syn, st["show"], outdir, cs["id"]) if st.get("show") else None}
+                  "evidence": _evidence(syn, st["show"], outdir, cs["id"]) if st.get("show")
+                  else _image(st["image"], outdir, content_dir, cs["id"]) if st.get("image") else None}
                  for st in cs.get("steps", [])]
         out.append({"id": cs["id"], "title": cs.get("title", ""), "summary": cs.get("summary", ""),
                     "teaches": cs.get("teaches", ""), "sources": cs.get("sources", []), "steps": steps})
     return out
 
 
-def render_overview(syn: dict, outdir: str | Path, title: str = "Synthesis overview", content: dict | None = None) -> Path:
-    """Write the overview page (index.html, and img/ for case-study figures) into outdir."""
+def render_overview(syn: dict, outdir: str | Path, title: str = "Synthesis overview", content: dict | None = None,
+                    content_dir: str | Path | None = None) -> Path:
+    """Write the overview page (index.html, and img/ for case-study figures) into outdir. Images a case study shows
+    of its own are found relative to content_dir (the folder of the overview text)."""
     outdir = Path(outdir)
     if (outdir / "img").exists():
         shutil.rmtree(outdir / "img")
@@ -426,7 +443,7 @@ def render_overview(syn: dict, outdir: str | Path, title: str = "Synthesis overv
     data["positions"] = layout(data)
     data["full"] = full_graph(data, syn)
     data["full"]["positions"] = full_layout(data["full"])
-    data["case_studies"] = _case_studies(syn, content, outdir)
+    data["case_studies"] = _case_studies(syn, content, outdir, Path(content_dir) if content_dir else None)
     data["intro"] = content.get("intro") or []
     data["links_out"] = content.get("links") or []
     data["purposes"] = PURPOSES
@@ -506,6 +523,10 @@ section { display: grid; gap: 16px; min-width: 0; }
 .legend span { display: inline-flex; gap: 7px; align-items: center; }
 .legend svg { overflow: visible; }
 .graphhead { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; }
+.imgev { display: grid; gap: 10px; }
+.imgev .seg { justify-self: start; }
+.imgev img { display: block; width: 100%; height: auto; border-radius: 6px; }
+.imgev .view[hidden] { display: none; }
 .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; overflow: hidden; background: var(--panel); }
 .seg button { font: inherit; font-size: 13px; border: 0; background: transparent; color: var(--ink); padding: 5px 14px; cursor: pointer; }
 .seg button + button { border-left: 1px solid var(--rule); }
@@ -914,6 +935,13 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
       e.models.map(function (m) { return "<tr><td>" + src(m.key) + '<div class="muted">' + esc(m.name) + '</div></td><td class="mono">' + esc(m.equation) + (m.page ? ' <span class="muted">p. ' + esc(m.page) + "</span>" : "") + "</td></tr>"; }).join("") + "</tbody></table></div></div>";
     if (e.kind === "question") return '<div class="ev"><div class="row"><span class="eyebrow">Open question · ' + esc((e.question_kind || "").replace(/_/g, " ")) + "</span>" + src(e.source) + "</div>" +
       "<div>" + esc(e.text) + "</div></div>";
+    if (e.kind === "image") {
+      var tabs = e.views.length > 1 ? '<div class="seg">' + e.views.map(function (v, i) {
+        return '<button type="button" aria-pressed="' + (i === 0) + '" data-i="' + i + '">' + esc(v.label) + "</button>"; }).join("") + "</div>" : "";
+      var imgs = e.views.map(function (v, i) {
+        return '<a class="view" data-i="' + i + '" href="' + esc(v.src) + '" target="_blank" rel="noopener"' + (i ? " hidden" : "") + '><img src="' + esc(v.src) + '" alt="' + esc(v.alt) + '" loading="lazy"></a>'; }).join("");
+      return '<div class="ev imgev">' + tabs + imgs + (e.caption ? '<div class="detail">' + esc(e.caption) + " Select an image to open it at full size.</div>" : "") + "</div>";
+    }
     if (e.kind === "figure") return '<div class="ev"><div class="row"><span class="eyebrow">' + esc(e.where) + "</span>" + src(e.source) + "</div>" +
       '<img src="' + esc(e.image) + '" alt="' + esc(e.what) + '" loading="lazy"><div class="detail">' + esc(e.what) + "</div></div>";
     return "";
@@ -924,6 +952,12 @@ footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-t
     app.innerHTML = '<a class="back" href="#overview">← Back to the overview</a>' +
       '<header class="head">' + (c.teaches ? '<div class="eyebrow">' + esc(c.teaches) + "</div>" : "") + "<h1>" + esc(c.title) + '</h1><div class="lede"><p>' + esc(c.summary) + "</p></div></header>" +
       '<section><div class="steps">' + c.steps.map(function (st) { return '<div class="step"><div><p>' + esc(st.text) + "</p>" + evidence(st.evidence) + "</div></div>"; }).join("") + "</div></section>";
+    app.querySelectorAll(".imgev").forEach(function (box) {  // one view at a time; the buttons switch between them
+      box.querySelectorAll(".seg button").forEach(function (b) { b.addEventListener("click", function () {
+        box.querySelectorAll(".seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+        box.querySelectorAll(".view").forEach(function (v) { v.hidden = v.dataset.i !== b.dataset.i; });
+      }); });
+    });
     window.scrollTo(0, 0);
   }
 

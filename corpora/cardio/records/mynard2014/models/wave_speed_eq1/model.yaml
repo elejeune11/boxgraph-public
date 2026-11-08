@@ -1,0 +1,20 @@
+id: wave_speed_eq1
+name: reference wave speed from reference radius (Eq. 1), before the uniform scaling
+role: model
+stated: {page: 5, quote: "calculated as a function of reference radius", where: Eq. 1}
+# A helper for the relation the paper states on p. 5 ("Following Olufsen (46), stiffness of the 1D segments
+# was determined by a prescribed reference wave speed (c0), calculated as a function of reference radius",
+# Eq. 1). Eq. 1 is otherwise only part of the non-runnable multiscale_coronary. The uniform scaling of all
+# c0 to the proximal Cx target that follows (lines 111-112) is not part of this helper; it is in
+# mynard2014_data/wave_speed_eq1. No printed result of this record is computed from it.
+equation: "c0^2 = 2/(3 rho) [k1 exp(k2 r0) + k3]"
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  r0: {quantity: vessel_radius, unit: cm}
+outputs:
+  c0: {quantity: reference_wave_speed, unit: cm/s}
+settings: {}
+stochastic: false

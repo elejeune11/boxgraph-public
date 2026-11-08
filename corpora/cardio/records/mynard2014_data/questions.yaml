@@ -1,0 +1,48 @@
+- id: q_eq1_constants
+  kind: unexplained_difference
+  about: [wave_speed_eq1, k1_paper, k2_paper, k1_fit, k2_fit, cmp_eq1_lm_lad, cmp_eq1_septal, cmp_eq1_diagonal, cmp_eq1_cx, cmp_eq1_marginal, cmp_eq1_li_lp_lpd, cmp_eq1_penetrating]
+  text: >
+    The paper says c0 of every 1D segment was computed from its reference radius by Eq. 1 with Olufsen's
+    k1 = 2×10^7 g s^-2 cm^-1, k2 = -22.53 cm^-1, k3 = 8.65×10^5 g s^-2 cm^-1, and then scaled uniformly to
+    the proximal Cx target (9.0 m/s). The released c0 column does not follow those constants (runs
+    run_eq1_*, with r0 = D0/2 and the scaling anchored at Cx-36). It does follow Eq. 1 exactly, for all 121
+    rows, with k2 = -18 cm^-1 and k1/k3 = 7.861 (k1 = 6.8×10^6 with the printed k3), runs run_eq1_fit_*.
+    Reading r0 as D0 instead of D0/2 does not help with the printed constants (it would need k2 = -9 cm^-1).
+    Either the simulations used other coefficients than printed (round values such as 6.8×10^6 and -18
+    suggest a deliberate set), or the sheet's wave speeds were computed differently from the simulations.
+    Which segment is "the proximal Cx" is our reading: Cx-36, whose c0 is exactly 900 cm/s.
+- id: q_scaled_geometry
+  kind: unstated_input
+  about: [L_lm_lad, D0_lm_lad]
+  text: >
+    The lengths and diameters are unscaled values for reference LV free wall and septal weights of 104 g
+    and 54 g (sheet Note1, cell A7); each animal's network is scaled with power 0.35 (Note2, A8). The
+    scaled per-animal geometries are not released, so the per-animal simulations still cannot be run from
+    this file alone (see mynard2014 q_multiscale_not_runnable).
+
+- id: q_no_validation_vs_mynard2015
+  kind: choice
+  about: [wave_speed_eq1]
+  text: >
+    No validation against mynard2015 is entered, in either direction (cross-validation job 2026-11-06).
+    This record's only model, wave_speed_eq1, gives the reference wave speed of a segment from its diameter;
+    mynard2015's measurements (Table 6 reference ranges of heart rate, cardiac output, resistances, chamber
+    volumes, pressures, E/A ratios and dP/dt; the coronary sinus diameter; the Fig. 4 in vivo flow and
+    pressure waveforms) include no wave speed. In the other direction this record holds no measurements: its
+    c0, L and D0 columns are model parameters (origin reported), so mynard2015's wave_speed_eq3 run on them
+    would compare parameter choices, not test a model (mynard2015 q_no_validation_vs_mynard2014_data).
+- id: q_no_validation_vs_mynard2014
+  kind: choice
+  about: [wave_speed_eq1]
+  text: >
+    (Cross-validation with mynard2014; cross-validation job 2026-11-06.) No validation is entered. This
+    record's only model, wave_speed_eq1 (mynard2014 Eq. 1 with the uniform scaling to the proximal Cx
+    target), outputs a reference wave speed, and mynard2014 measures no wave speed: its wave speeds are the
+    assumed 9.0 m/s proximal Cx target (c_cx, origin reported, "we assumed a proximal Cx wave speed of 9.0
+    m/s in all animals", p. 10) and the 7/9/11 m/s labels of Fig. 9A, which are the perturbed model inputs
+    (origin derived). Running wave_speed_eq1 against c_cx would only return the target it is scaled to.
+    mynard2014's measurements (body and myocardial weights, HW/BW, heart rate, mean aortic pressure, Cx flow
+    per mass, Table 2 phase durations and flow features, the Fig. 6-8 Cx flow waveforms, and the Fig. 3
+    aortic flow, aortic and LV pressure) are none of them a wave speed. The shared shape of the two
+    wave_speed_eq1 models reflects that this one is described from mynard2014's Eq. 1; how the two differ
+    is the subject of q_eq1_constants. In the other direction, see mynard2014/q_no_validation_vs_mynard2014_data.

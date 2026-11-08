@@ -1,0 +1,27 @@
+id: network_hemodynamics
+name: steady Poiseuille-Kirchhoff hemodynamics of the reconstructed left coronary tree with imputed distal conductances
+role: model
+stated: {page: 4, printed_page: "4", quote: "yields a system of linear equations that", where: "Eqs. 3-6, pp. 4-5"}
+equation: "Q_ij = G_ij (P_i - P_j) (Eq. 4), G_ij by Eq. 5 with mu by Eq. 3 (Hd = 0.4); sum over neighbours of Q = 0 at every node; inlet 90 mmHg; each end segment drains through its imputed distal conductance to 20 mmHg; tau by Eq. 6; perfusion = flow of 100-200 um segments over the weight of their Voronoi territory"
+inputs:
+  P_in: {quantity: node_pressure, unit: mmHg}
+  P_cap: {quantity: node_pressure, unit: mmHg}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+outputs:
+  P: {quantity: node_pressure, unit: mmHg}
+  Q: {quantity: segment_flow, unit: ml/min}
+  tau: {quantity: wall_shear_stress, unit: Pa}
+  G_distal: {quantity: distal_conductance, unit: m^3/(Pa*s)}
+  perfusion: {quantity: perfusion, unit: ml/min/g}
+settings: {n_simulations: 1000, seed: "not stated", distal_conductance: "median in 2.5% diameter intervals (deterministic) or drawn from the in silico distribution (stochastic)"}
+built_from: [viscosity_eq3, segment_conductance_eq5, wall_shear_stress_eq6, in_silico_extension]
+runnable: false
+not_runnable_reason: >
+  The network (202,184 segments with their diameters, lengths, connectivity and positions) is not
+  printed in the paper; it is released separately (record schwarz_data). The imputed distal
+  conductances come from the 50 in silico trees, whose generating distributions are not printed;
+  the plasma viscosity that turns Eq. 3 into an absolute viscosity is not stated; and the tissue
+  density used to turn Voronoi volumes into weights is not stated. None of the network results
+  (Table 2, Figs. 5-6, the flow, pressure, shear stress and perfusion values in the text) can be
+  recomputed from this paper alone.
+stochastic: true

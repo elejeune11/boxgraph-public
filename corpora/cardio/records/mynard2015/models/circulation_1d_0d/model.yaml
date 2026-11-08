@@ -1,0 +1,35 @@
+id: circulation_1d_0d
+name: closed-loop 1D model of the entire adult circulation with 0D heart, valves and vascular beds (Eqs. T1-T19, 1-4)
+role: model
+stated: {page: 2, printed_page: "1444", quote: "Model equations", where: "Table 1 (Eqs. T1-T19), Eqs. 1-4, Tables 2-5, Supplemental Files 1-2"}
+equation: >
+  1D mass and momentum (T1, T2) with a power-law viscoelastic tube law (T3, T4) in 396 segments; four time-varying
+  elastance chambers with source resistance, pericardium, septal and AV-plane interaction (T5-T11); Bernoulli valves
+  with dynamic opening (T12-T15); pressure-dependent windkessel-like, hepatic and layered coronary beds (T16-T19, Eq. 1);
+  finite elements with operator splitting, run until peak pressures change by less than 1% between cycles.
+inputs:
+  HR: {quantity: heart_rate, unit: 1/min}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  alpha_sip: {quantity: sip_constant, unit: mL}
+  Kpc: {quantity: pericardial_pressure_constant, unit: mmHg}
+  V0pc: {quantity: pericardial_reference_volume, unit: mL}
+  Phi: {quantity: pericardial_volume_constant, unit: mL}
+outputs:
+  CO: {quantity: cardiac_output, unit: L/min}
+  SVR: {quantity: vascular_resistance, unit: mmHg*s/mL}
+  P_aort_mean: {quantity: mean_pressure, unit: mmHg}
+  P_aort_pulse: {quantity: pulse_pressure, unit: mmHg}
+  V_lv_max: {quantity: chamber_volume, unit: mL}
+  EF_lv: {quantity: ejection_fraction, unit: dimensionless}
+  dpdt_lv_max: {quantity: pressure_rate, unit: mmHg/s}
+  WI_change: {quantity: wave_intensity_change, unit: percent}
+settings: {steady_state_criterion: "change in peak pressure < 1% between cycles in all 1D segments", cycles_baseline: 9}
+stochastic: false
+runnable: false
+not_runnable_reason: >
+  The 1D network geometry and connectivity (396 segments, 188 junctions) and every vascular bed resistance and
+  compliance are given only in Supplemental Files 1-2 (the record mynard2015_data), not in this paper; the elastance
+  activation of the heart, valve and coronary layers needs further unprinted values (pCEP distribution, coronary R0 per
+  region); the finite element grid and time step are not stated. The authors' Matlab code is not published with the
+  paper. Each printed ingredient that can be checked alone is recorded as its own model (Eqs. 1, 3, T5, Table 3, Table 6
+  relations).

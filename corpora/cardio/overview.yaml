@@ -3,8 +3,8 @@
 #   make build CORPUS=cardio
 title: "Cardiovascular models: a literature review"
 intro:
-  - All models are wrong, but some are useful (George E. P. Box). This page is a literature review of 0D (lumped-parameter) and 1D models of the cardiovascular system, from the heart and the large arteries to the viscosity of blood in microvessels, in which each paper's models are taken as stated and put to work, to see where each one holds.
-  - Every value is traced to the page it was printed on. Every model is rebuilt and run on the paper's own inputs and compared with what the paper reports, at the precision it was printed with. Relations between the models of different papers, such as a Windkessel and the arterial network it lumps, are tested rather than assumed. Released model code and released data are checked against the paper they belong to, and a model of one paper is judged against what another paper measured.
+  - All models are wrong, but some are useful (George E. P. Box). This page is a literature review of 0D (lumped-parameter) and 1D models of the cardiovascular system, from the heart and the large arteries to the coronary circulation and the viscosity of blood in microvessels, in which each paper's models are taken as stated and put to work, to see where each one holds.
+  - Every value is traced to the page it was printed on. Every model is rebuilt and run on the paper's own inputs and compared with what the paper reports, at the precision it was printed with. Relations between the models of different papers, such as a Windkessel and the arterial network it lumps, are tested rather than assumed. Released model code and released data, among them a whole human coronary arterial tree, are checked against the paper they belong to, and a model of one paper is judged against what another paper measured.
   - Nothing is corrected or overwritten. Where an equation is evidently misprinted, the model is kept as printed and a corrected variant is added beside it, with the evidence; the paper's tally counts only the model as printed. Every result is rebuilt each time a source is added, so the review changes as the literature does. A disagreement is recorded as a result, with the open question it raises.
 links:
   - {text: "All reviews", href: "../"}
@@ -34,27 +34,54 @@ case_studies:
           reported as a corrected reproduction, apart from the paper as printed.
         show: "comparison: pries1990/cmp_fig3c_HD045"
 
-  - id: data
+  - id: network
     teaches: Released data against the paper
-    title: One number in a table of hundreds
+    title: A coronary tree solved again
     summary: >-
-      Boileau et al. (2015) compare six numerical schemes for 1D blood flow and released every
-      scheme's waveforms. The record recomputes the paper's error tables from the released files,
-      so each printed percentage is checked against the data it summarizes.
+      Schwarz et al. (2020) reconstruct the left coronary arterial tree of one human heart,
+      about 200,000 segments, solve its pressures and flows, and summarise them in power laws.
+      They also released the tree. The record solves it again, so the paper's numbers can be
+      checked against the network they came from.
     steps:
       - text: >-
-          For the upper thoracic aorta, the STM scheme's errors in pressure, flow, radius and
-          pressure drop are recomputed from its released waveform and reproduce the printed values,
-          for example the root-mean-square flow error.
-        show: "comparison: boileau_data/cmp_b3_Q_rms_STM"
+          The released tree, drawn segment by segment from the network file (line width follows
+          diameter), with the released solution: pressure falls from the 90 mmHg imposed at the
+          inlet to the 20 mmHg imposed at the distal ends, most of it in vessels between 200 um and
+          1 mm across, as the paper reports.
+        image:
+          caption: >-
+            Human left coronary arterial tree of Schwarz et al. (2020), 202,184 segments from 30 um
+            to 4.1 mm, projected onto the plane of its two principal directions; our rendering of
+            the released data (doi 10.34894/XYF65X), drawn by overview_figures/draw_schwarz_tree.py.
+          views:
+            - {label: Pressure, file: overview_figures/schwarz_tree_pressure.png, alt: "The coronary tree coloured by pressure"}
+            - {label: Wall shear stress, file: overview_figures/schwarz_tree_wss.png, alt: "The coronary tree coloured by wall shear stress"}
+            - {label: Diameter, file: overview_figures/schwarz_tree_diameter.png, alt: "The coronary tree coloured by diameter"}
       - text: >-
-          One entry does not: Table VI prints a diastolic flow error of 12.95% for STM, against
-          2.67-3.48% for the other five schemes. The released waveform gives 2.95%.
-        show: "comparison: boileau_data/cmp_b3_Q_dias_STM"
+          From the paper alone, the flow into the left main coronary artery cannot be
+          recomputed: an estimate from its printed laws gives 13 ml/min against the printed 36.6.
+        show: "comparison: schwarz2020/cmp_Q_large"
       - text: >-
-          A stray leading 1 would explain it. The record keeps the printed value and the question,
-          because only the authors can say which number is right.
-        show: "question: boileau_data/q_table6_stm_qdias"
+          Solved on the released tree, with Poiseuille flow in every segment, the Pries viscosity
+          law, flow balance at each junction and the release's inlet and distal pressures, the
+          left main flow comes out at the printed value.
+        show: "comparison: schwarz_data/cmp_net_Q_large"
+      - text: So does the median perfusion of the myocardium the tree supplies.
+        show: "comparison: schwarz_data/cmp_net_perf_median"
+      - text: >-
+          The conductance law is printed with a negative exponent on p. 7 and a positive one on
+          p. 12. A negative exponent would make large vessels conduct less than small ones.
+        show: "question: schwarz2020/q_G_exponent_sign"
+      - text: The network's conductances do not follow the law as printed on p. 7 ...
+        show: "comparison: schwarz_data/cmp_net_G_b"
+      - text: ... and follow it with the exponent of p. 12. The minus sign is a misprint.
+        show: "comparison: schwarz_data/cmp_net_G_b_p12"
+      - text: >-
+          The printed velocity law is reproduced as a fit to the network, but it is a fit of its
+          own: with Poiseuille flow, the printed flow law implies a velocity exponent near 0.53,
+          not 0.89. For velocity or shear stress by vessel size, the network's values are the
+          ones to use, not the fitted laws.
+        show: "comparison: schwarz_data/cmp_net_v_from_Q"
 
   - id: parameter
     teaches: A parameter across three papers

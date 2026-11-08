@@ -1,0 +1,88 @@
+- id: run_co_rest
+  model: cardiac_output_sv
+  inputs: {SV: SV_rest, T: Tc_rest}
+  outputs: {CO: CO_rest_pred}
+- id: run_qcor_rest
+  model: coronary_fraction_flow
+  inputs: {f: coronary_fraction, CO: CO_rest}
+  outputs: {Q: Q_total_rest_from_co}
+- id: run_sum_rest
+  model: coronary_total_sum
+  inputs: {Q_LAD: Q_LAD_rest, Q_LCX: Q_LCX_rest, Q_RCA: Q_RCA_rest}
+  outputs: {Q_total: Q_total_rest_sum}
+- id: run_split_rest
+  model: coronary_flow_split
+  inputs: {Q_total: Q_total_rest, Ra_a: Ra_a_R, Ra_b: Ra_b_R, Ra_c: Ra_c_R, Ra_d: Ra_d_R, Ra_e: Ra_e_R, Ra_f: Ra_f_R, Ra_g: Ra_g_R, Ra_h: Ra_h_R, Ra_i: Ra_i_R, Ra_j: Ra_j_R, Ra_k: Ra_k_R, Ram_a: Ram_a_R, Ram_b: Ram_b_R, Ram_c: Ram_c_R, Ram_d: Ram_d_R, Ram_e: Ram_e_R, Ram_f: Ram_f_R, Ram_g: Ram_g_R, Ram_h: Ram_h_R, Ram_i: Ram_i_R, Ram_j: Ram_j_R, Ram_k: Ram_k_R, Rv_a: Rv_a_R, Rv_b: Rv_b_R, Rv_c: Rv_c_R, Rv_d: Rv_d_R, Rv_e: Rv_e_R, Rv_f: Rv_f_R, Rv_g: Rv_g_R, Rv_h: Rv_h_R, Rv_i: Rv_i_R, Rv_j: Rv_j_R, Rv_k: Rv_k_R}
+  outputs: {Q_LAD: Q_LAD_rest_split, Q_LCX: Q_LCX_rest_split, Q_RCA: Q_RCA_rest_split}
+- id: run_co_E1
+  model: cardiac_output_sv
+  inputs: {SV: SV_E1, T: Tc_E1}
+  outputs: {CO: CO_E1_pred}
+- id: run_qcor_E1
+  model: coronary_fraction_flow
+  inputs: {f: coronary_fraction, CO: CO_E1}
+  outputs: {Q: Q_total_E1_from_co}
+- id: run_sum_E1
+  model: coronary_total_sum
+  inputs: {Q_LAD: Q_LAD_E1, Q_LCX: Q_LCX_E1, Q_RCA: Q_RCA_E1}
+  outputs: {Q_total: Q_total_E1_sum}
+- id: run_split_E1
+  model: coronary_flow_split
+  inputs: {Q_total: Q_total_E1, Ra_a: Ra_a_E1, Ra_b: Ra_b_E1, Ra_c: Ra_c_E1, Ra_d: Ra_d_E1, Ra_e: Ra_e_E1, Ra_f: Ra_f_E1, Ra_g: Ra_g_E1, Ra_h: Ra_h_E1, Ra_i: Ra_i_E1, Ra_j: Ra_j_E1, Ra_k: Ra_k_E1, Ram_a: Ram_a_E1, Ram_b: Ram_b_E1, Ram_c: Ram_c_E1, Ram_d: Ram_d_E1, Ram_e: Ram_e_E1, Ram_f: Ram_f_E1, Ram_g: Ram_g_E1, Ram_h: Ram_h_E1, Ram_i: Ram_i_E1, Ram_j: Ram_j_E1, Ram_k: Ram_k_E1, Rv_a: Rv_a_E1, Rv_b: Rv_b_E1, Rv_c: Rv_c_E1, Rv_d: Rv_d_E1, Rv_e: Rv_e_E1, Rv_f: Rv_f_E1, Rv_g: Rv_g_E1, Rv_h: Rv_h_E1, Rv_i: Rv_i_E1, Rv_j: Rv_j_E1, Rv_k: Rv_k_E1}
+  outputs: {Q_LAD: Q_LAD_E1_split, Q_LCX: Q_LCX_E1_split, Q_RCA: Q_RCA_E1_split}
+- id: run_psys_E1
+  model: systolic_increase
+  inputs: {P_rest: Psys_rest, r: psys_increase_E1}
+  outputs: {P_ex: Psys_E1_pred}
+- id: run_sten_normal_R
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_normal_R, Pv: Pv_added, Ra_c: Ra_c_R, Ra_d: Ra_d_R, Ram_c: Ram_c_R, Ram_d: Ram_d_R, Rv_c: Rv_c_R, Rv_d: Rv_d_R}
+  outputs: {Q: Q_lad_normal_R_pred}
+- id: run_sten_40_R
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_40_R, Pv: Pv_added, Ra_c: Ra_c40_R, Ra_d: Ra_d40_R, Ram_c: Ram_c40_R, Ram_d: Ram_d40_R, Rv_c: Rv_c40_R, Rv_d: Rv_d40_R}
+  outputs: {Q: Q_lad_40_R_pred}
+- id: run_sten_50_R
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_50_R, Pv: Pv_added, Ra_c: Ra_c50_R, Ra_d: Ra_d50_R, Ram_c: Ram_c50_R, Ram_d: Ram_d50_R, Rv_c: Rv_c50_R, Rv_d: Rv_d50_R}
+  outputs: {Q: Q_lad_50_R_pred}
+- id: run_sten_60_R
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_60_R, Pv: Pv_added, Ra_c: Ra_c60_R, Ra_d: Ra_d60_R, Ram_c: Ram_c60_R, Ram_d: Ram_d60_R, Rv_c: Rv_c60_R, Rv_d: Rv_d60_R}
+  outputs: {Q: Q_lad_60_R_pred}
+- id: run_sten_75_R
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_75_R, Pv: Pv_added, Ra_c: Ra_c75_R, Ra_d: Ra_d75_R, Ram_c: Ram_c75_R, Ram_d: Ram_d75_R, Rv_c: Rv_c75_R, Rv_d: Rv_d75_R}
+  outputs: {Q: Q_lad_75_R_pred}
+- id: run_sten_normal_E2
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_normal_E2, Pv: Pv_added, Ra_c: Ra_c_E2, Ra_d: Ra_d_E2, Ram_c: Ram_c_E2, Ram_d: Ram_d_E2, Rv_c: Rv_c_E2, Rv_d: Rv_d_E2}
+  outputs: {Q: Q_lad_normal_E2_pred}
+- id: run_sten_40_E2
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_40_E2, Pv: Pv_added, Ra_c: Ra_c40_E2, Ra_d: Ra_d40_E2, Ram_c: Ram_c40_E2, Ram_d: Ram_d40_E2, Rv_c: Rv_c40_E2, Rv_d: Rv_d40_E2}
+  outputs: {Q: Q_lad_40_E2_pred}
+- id: run_sten_50_E2
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_50_E2, Pv: Pv_added, Ra_c: Ra_c50_E2, Ra_d: Ra_d50_E2, Ram_c: Ram_c50_E2, Ram_d: Ram_d50_E2, Rv_c: Rv_c50_E2, Rv_d: Rv_d50_E2}
+  outputs: {Q: Q_lad_50_E2_pred}
+- id: run_sten_60_E2
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_60_E2, Pv: Pv_added, Ra_c: Ra_c60_E2, Ra_d: Ra_d60_E2, Ram_c: Ram_c60_E2, Ram_d: Ram_d60_E2, Rv_c: Rv_c60_E2, Rv_d: Rv_d60_E2}
+  outputs: {Q: Q_lad_60_E2_pred}
+- id: run_sten_75_E2
+  model: stenosed_lad_flow
+  inputs: {P: P_lad_75_E2, Pv: Pv_added, Ra_c: Ra_c75_E2, Ra_d: Ra_d75_E2, Ram_c: Ram_c75_E2, Ram_d: Ram_d75_E2, Rv_c: Rv_c75_E2, Rv_d: Rv_d75_E2}
+  outputs: {Q: Q_lad_75_E2_pred}
+- id: run_contractility_E2
+  model: contractility_increase
+  inputs: {E_rest: ELV_max_R, r: contractility_increase_E2}
+  outputs: {E_ex: ELV_max_E2_pred}
+- id: run_increase_by
+  model: coronary_increase_by
+  inputs: {Q_rest: Q_lad_normal_R, r: coronary_increase_E2}
+  outputs: {Q_ex: Q_lad_normal_E2_by}
+- id: run_increase_to
+  model: coronary_increase_to
+  inputs: {Q_rest: Q_lad_normal_R, r: coronary_increase_E2}
+  outputs: {Q_ex: Q_lad_normal_E2_to}

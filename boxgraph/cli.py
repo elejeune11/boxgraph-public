@@ -64,7 +64,8 @@ def _build(args) -> int:
     (out / "explorer.html").write_text(render_explorer(to_json(syn), title=f"{args.title}: explorer", figdir=out / "figures",
                                                        image_dir=images, image_prefix="explorer_files/"))
     content = yaml.safe_load(Path(args.overview).read_text()) if args.overview else None
-    render_overview(to_json(syn), out / "overview", title=args.title, content=content)
+    render_overview(to_json(syn), out / "overview", title=args.title, content=content,
+                    content_dir=Path(args.overview).parent if args.overview else None)
     for sid, p in syn["papers"].items():
         state = "sound" if p.get("sound") else "NOT SOUND"
         t = p.get("tally", {})

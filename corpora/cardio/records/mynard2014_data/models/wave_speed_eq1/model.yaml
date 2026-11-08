@@ -1,0 +1,18 @@
+id: wave_speed_eq1
+name: reference wave speed from reference radius (mynard2014 Eq. 1), uniformly scaled to a target at the proximal Cx
+role: model
+stated: {none: "printed in mynard2014 p. 5, lines 107-112, Eq. 1: 'calculated as a function of reference radius (r0)' ... 'then all wave speed values were uniformly scaled to achieve a target wave speed in the proximal Cx'; not in the data"}
+described_from: mynard2014
+equation: "c0^2 = 2/(3 rho) [k1 exp(k2 r0) + k3], r0 = D0/2; then c0 -> c0 * c_ref / c0(D_ref)"
+inputs:
+  k1: {quantity: stiffness_coefficient_k1, unit: g*s^-2*cm^-1}
+  k2: {quantity: stiffness_coefficient_k2, unit: 1/cm}
+  k3: {quantity: stiffness_coefficient_k3, unit: g*s^-2*cm^-1}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  D0: {quantity: reference_diameter, unit: cm, description: "diameter of the segment; r0 = D0/2"}
+  D_ref: {quantity: reference_diameter, unit: cm, description: "diameter of the proximal Cx segment, where the target applies"}
+  c_ref: {quantity: reference_wave_speed, unit: cm/s, description: "target wave speed in the proximal Cx"}
+outputs:
+  c0: {quantity: reference_wave_speed, unit: cm/s}
+settings: {}
+stochastic: false

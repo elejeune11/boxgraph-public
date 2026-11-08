@@ -1,0 +1,67 @@
+id: network_solution
+name: steady Poiseuille-Kirchhoff pressure and flow on the released left coronary network, with the release's distal conductances
+role: model
+software: true
+stated: {file: explanation_of_data.txt, lines: "120", quote: "The pressure in the node [N/m2], as calculated from solving the Kirchhoff and Poiseuille laws."}
+equation: >
+  G = pi d^4 / (128 mu_p mu_rel(d, Hd) l) per segment (schwarz2020 Eqs. 3 and 5); a sink element in series
+  with its distal tree, 1/G = 1/Gseg + 1/Gdist (TreeQ.SE.G); sum of G (P_j - P_i) = 0 at every internal
+  node (Kirchhoff); inlets (TreeQ.SE.isinlet) at P_in, sinks at P_cap; per segment P = (P_up + P_down)/2,
+  Q = |G (P_up - P_down)|, v = 8 Q / (pi d^2), tau = |P_up - P_down| d / (4 l) (Eq. 6), distal
+  conductance Q / (P_down - P_cap); class medians in 20 um diameter classes; power laws y = a d^b by
+  non-linear least squares; perfusion = branch outflow / (W f_tree V_branch / sum V)
+inputs:
+  P_in: {quantity: node_pressure, unit: Pa, description: "pressure at the two inlets (TreeQ.SE 100960 LCX, 100961 LAD)"}
+  P_cap: {quantity: node_pressure, unit: Pa, description: "pressure distal to every sink element's distal tree"}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+  mu_p: {quantity: plasma_viscosity, unit: Pa*s, description: "plasma viscosity that scales the relative viscosity of Eq. 3"}
+  d: {quantity: vessel_diameter, unit: um, description: "the diameter whose class the class medians are taken over"}
+  d_fit_lo: {quantity: vessel_diameter, unit: um, description: "lower end of the diameter range of the pressure law"}
+  d_fit_hi: {quantity: vessel_diameter, unit: um, description: "upper end of the diameter range of the pressure law"}
+  d_large: {quantity: vessel_diameter, unit: um, description: "segments larger than this are 'arteries larger than 1 mm'"}
+  d_cut: {quantity: vessel_diameter, unit: um, description: "segments smaller than this enter the small-vessel shear stress median"}
+  W: {quantity: heart_weight, unit: kg}
+  f_tree: {quantity: tree_volume_fraction, unit: dimensionless}
+outputs:
+  d_class: {quantity: vessel_diameter, unit: um, description: median diameter of the class}
+  n_class: {quantity: segment_count, unit: dimensionless, description: number of segments in the class}
+  P_class: {quantity: node_pressure, unit: Pa, description: median mid-segment pressure of the class}
+  Q_class: {quantity: segment_flow, unit: m^3/s, description: median flow of the class}
+  G_class: {quantity: distal_conductance, unit: m^3/(Pa*s), description: median distal conductance of the class}
+  wss_class: {quantity: wall_shear_stress, unit: Pa, description: median wall shear stress of the class}
+  v_class: {quantity: centerline_velocity, unit: m/s, description: median centerline velocity of the class}
+  G_a: {quantity: conductance_fit_prefactor, unit: dimensionless, description: "distal conductance law over all segments, G in m^3/(Pa s), d in m"}
+  G_b: {quantity: conductance_fit_exponent, unit: dimensionless}
+  G_r2: {quantity: conductance_fit_r2, unit: dimensionless}
+  G_b_internal: {quantity: conductance_fit_exponent, unit: dimensionless, description: the same law over internal elements only}
+  Q_a: {quantity: flow_fit_prefactor, unit: dimensionless, description: "Q in ml/min, d in m, all segments"}
+  Q_b: {quantity: flow_fit_exponent, unit: dimensionless}
+  Q_r2: {quantity: flow_fit_r2, unit: dimensionless}
+  P_a: {quantity: pressure_fit_prefactor, unit: dimensionless, description: "P in mmHg, d in m, segments with d_fit_lo <= d <= d_fit_hi"}
+  P_b: {quantity: pressure_fit_exponent, unit: dimensionless}
+  P_r2: {quantity: pressure_fit_r2, unit: dimensionless}
+  v_a: {quantity: velocity_fit_prefactor, unit: dimensionless, description: "centerline v in cm/s, d in m, all segments"}
+  v_b: {quantity: velocity_fit_exponent, unit: dimensionless}
+  v_r2: {quantity: velocity_fit_r2, unit: dimensionless}
+  Gdist_a: {quantity: conductance_fit_prefactor, unit: dimensionless, description: "power law of the release's imputed distal conductances TreeQ.SE.Gdist against sink diameter (not solved; read)"}
+  Gdist_b: {quantity: conductance_fit_exponent, unit: dimensionless}
+  Q_total: {quantity: segment_flow, unit: m^3/s, description: inflow of the two inlets together}
+  Q_LCX: {quantity: segment_flow, unit: m^3/s, description: "inflow at TreeQ.SE(100960), the LCX"}
+  Q_LAD: {quantity: segment_flow, unit: m^3/s, description: "inflow at TreeQ.SE(100961), the LAD"}
+  G_LCX: {quantity: segment_conductance, unit: m^3/(Pa*s), description: "Eq. 5 conductance of the LCX inlet segment"}
+  G_LAD: {quantity: segment_conductance, unit: m^3/(Pa*s), description: "Eq. 5 conductance of the LAD inlet segment"}
+  G_SE1: {quantity: segment_conductance, unit: m^3/(Pa*s), description: "Eq. 5 conductance of the segment of TreeQ.SE(1), a 71 um sink"}
+  G_IE1: {quantity: segment_conductance, unit: m^3/(Pa*s), description: "Eq. 5 conductance of TreeQ.IE(1), an 85 um internal element"}
+  P_IN1: {quantity: node_pressure, unit: Pa, description: "pressure at internal node TreeQ.IN(1)"}
+  wss_IE1: {quantity: wall_shear_stress, unit: Pa, description: "wall shear stress in TreeQ.IE(1), signed from its first node to its second, as the release stores it"}
+  Q_large_median: {quantity: segment_flow, unit: m^3/s, description: median flow of the segments larger than d_large}
+  wss_small_median: {quantity: wall_shear_stress, unit: Pa, description: median wall shear stress of the segments smaller than d_cut}
+  d_wss_peak: {quantity: wss_peak_diameter, unit: um, description: "median diameter of the class with the largest median shear stress, among classes of at least min_class_n segments"}
+  perf_median: {quantity: perfusion, unit: ml/min/g, description: median perfusion over the perfusion branches}
+  perf_p25: {quantity: perfusion_quartile_low, unit: ml/min/g}
+  perf_p75: {quantity: perfusion_quartile_high, unit: ml/min/g}
+  n_perf: {quantity: perfusion_territory_count, unit: dimensionless, description: "number of perfusion branches (TreeQ.SE.PerfBranchID)"}
+  V_perfused: {quantity: perfused_volume, unit: m^3, description: "sum of TreeQ.SE.VVoronoi"}
+  V_territory_median: {quantity: perfused_volume, unit: m^3, description: median Voronoi volume of the perfusion branches}
+settings: {file: "Human Left Coronary graph.mat", class_width_um: 20, class_first_edge_um: 50, min_class_n: 20, percentile_method: linear}
+stochastic: false

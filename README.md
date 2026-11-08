@@ -51,10 +51,12 @@ The review is kept in [`corpora/motor_clutch/`](corpora/motor_clutch/).
 **[Open the cardiovascular overview →](https://elejeune11.github.io/boxgraph-public/cardio/)** The
 same method on a second field, kept as a corpus of its own in [`corpora/cardio/`](corpora/cardio/):
 0D (lumped-parameter) and 1D models of the circulation, from the heart and the large arteries
-to the viscosity of blood in microvessels. Twenty-nine sources: papers, two chapters of a thesis, released
-CellML models and a released benchmark data set. Its case studies show an equation that, as
-printed, has the wrong dimensions and the corrected form its figure follows; one number in a
-table of hundreds that the released data does not reproduce; and a parameter carried through
+to the viscosity of blood in microvessels and the coronary circulation. Thirty-nine sources: papers, two
+chapters of a thesis, released CellML models, a released benchmark data set and the released data of
+coronary models. Its case studies show an equation that, as
+printed, has the wrong dimensions and the corrected form its figure follows; a human coronary
+arterial tree of about 200,000 segments, released by its authors and solved again, which reproduces
+the paper's flows and settles a sign misprinted in its conductance law; and a parameter carried through
 three papers that is consistent with the equations printed beside it in none of them. Its
 sources are listed in [`corpora/cardio/papers.yaml`](corpora/cardio/papers.yaml).
 
@@ -244,12 +246,10 @@ the paper's figures with the data they plot.*
 
 ## Papers in the Synthesis
 
-Each source of the motor-clutch review has a record under
-`corpora/motor_clutch/records/<id>/`, and is listed in
-[`corpora/motor_clutch/papers.yaml`](corpora/motor_clutch/papers.yaml).
-Updated as papers are added. The cardiovascular review's sources are listed in
-[`corpora/cardio/papers.yaml`](corpora/cardio/papers.yaml), with records under
-`corpora/cardio/records/<id>/`.
+Each source has a record under `corpora/<name>/records/<id>/`, and each corpus lists its sources
+in `corpora/<name>/papers.yaml`. Updated as papers are added.
+
+### The motor-clutch review ([`corpora/motor_clutch/`](corpora/motor_clutch/papers.yaml))
 
 | Record | Source | Kind | In the Synthesis |
 |---|---|---|---|
@@ -269,6 +269,50 @@ Updated as papers are added. The cardiovascular review's sources are listed in
 | [`elosegui2014`](corpora/motor_clutch/records/elosegui2014) | Elosegui-Artola et al., *Rigidity sensing and adaptation through regulation of integrin types*. Nat. Mater. 13, 631-637 (2014) | article | yes |
 | [`chaudhuri2015`](corpora/motor_clutch/records/chaudhuri2015) | Chaudhuri et al., *Substrate stress relaxation regulates cell spreading*. Nat. Commun. 6, 6364 (2015) | article | yes |
 | [`gong2018`](corpora/motor_clutch/records/gong2018) | Gong et al., *Matching material and cellular timescales maximizes cell spreading on viscoelastic substrates*. PNAS 115, E2686-E2695 (2018) | article | yes |
+
+### The cardiovascular review ([`corpora/cardio/`](corpora/cardio/papers.yaml))
+
+| Record | Source | Kind | In the Synthesis |
+|---|---|---|---|
+| [`westerhof1969`](corpora/cardio/records/westerhof1969) | Westerhof et al., *Analog studies of the human systemic arterial tree*. J. Biomechanics 2, 121-143 (1969) | article | yes |
+| [`westerhof1971`](corpora/cardio/records/westerhof1971) | Westerhof et al., *An artificial arterial system for pumping hearts*. J. Appl. Physiol. 31(5), 776-781 (1971) | article | yes |
+| [`suga1973`](corpora/cardio/records/suga1973) | Suga et al., *Load Independence of the Instantaneous Pressure-Volume Ratio of the Canine Left Ventricle and Effects of Epinephrine and Heart Rate on the Ratio*. Circulation Research 32, 314-322 (1973) | article | yes |
+| [`spaan1981`](corpora/cardio/records/spaan1981) | Spaan et al., *Diastolic-systolic coronary flow differences are caused by intramyocardial pump action in the anesthetized dog*. Circ Res 49, 584-593 (1981) | article | yes |
+| [`chilian1986`](corpora/cardio/records/chilian1986) | Chilian et al., *Microvascular distribution of coronary vascular resistance in beating left ventricle*. Am. J. Physiol. 251 (Heart Circ. Physiol. 20): H779-H788 (1986) | article | yes |
+| [`pries1990`](corpora/cardio/records/pries1990) | Pries et al., *Blood Flow in Microvascular Networks: Experiments and Simulation*. Circulation Research 67, 826-834 (1990) | article | yes |
+| [`pries1992`](corpora/cardio/records/pries1992) | Pries et al., *Blood viscosity in tube flow: dependence on diameter and hematocrit*. Am. J. Physiol. 263 (Heart Circ. Physiol. 32), H1770-H1778 (1992) | article | yes |
+| [`stergiopulos1992`](corpora/cardio/records/stergiopulos1992) | Stergiopulos et al., *Computer simulation of arterial flow with applications to arterial and aortic stenoses*. J. Biomechanics 25(12), 1477-1488 (1992) | article | yes |
+| [`kassab1993`](corpora/cardio/records/kassab1993) | Kassab et al., *Morphometry of pig coronary arterial trees*. Am J Physiol 265 (Heart Circ Physiol 34), H350-H365 (1993) | article | yes |
+| [`ursino1998`](corpora/cardio/records/ursino1998) | Ursino, *Interaction between carotid baroregulation and the pulsating heart: a mathematical model*. Am. J. Physiol. 275 (Heart Circ. Physiol. 44), H1733-H1747 (1998) | article | yes |
+| [`olufsen1999`](corpora/cardio/records/olufsen1999) | Olufsen, *Structured tree outflow condition for blood flow in larger systemic arteries*. Am J Physiol Heart Circ Physiol 276 (Heart Circ Physiol 45), H257-H268 (1999) | article | yes |
+| [`stergiopulos1999`](corpora/cardio/records/stergiopulos1999) | Stergiopulos et al., *Total arterial inertance as the fourth element of the windkessel model*. Am. J. Physiol. 276 (Heart Circ. Physiol. 45): H81-H88 (1999) | article | yes |
+| [`olufsen2000`](corpora/cardio/records/olufsen2000) | Olufsen et al., *Numerical Simulation and Experimental Validation of Blood Flow in Arteries with Structured-Tree Outflow Conditions*. Annals of Biomedical Engineering 28, 1281-1299 (2000) | article | yes |
+| [`formaggia2003`](corpora/cardio/records/formaggia2003) | Formaggia et al., *One-dimensional models for blood flow in arteries*. Journal of Engineering Mathematics 47, 251-276 (2003) | article | yes |
+| [`olufsen2004`](corpora/cardio/records/olufsen2004) | Olufsen and Nadim, *On deriving lumped models for blood flow and pressure in the systemic arteries*. Mathematical Biosciences and Engineering 1(1), 61-80 (2004) | article | yes |
+| [`smith2004`](corpora/cardio/records/smith2004) | Smith et al., *Minimal haemodynamic system model including ventricular interaction and valve dynamics*. Medical Engineering & Physics 26, 131-139 (2004) | article | yes |
+| [`pries2005`](corpora/cardio/records/pries2005) | Pries and Secomb, *Microvascular blood viscosity in vivo and the endothelial surface layer*. Am J Physiol Heart Circ Physiol 289, H2657-H2664 (2005) | article | yes |
+| [`korakianitis2006`](corpora/cardio/records/korakianitis2006) | Korakianitis and Shi, *Numerical simulation of cardiovascular dynamics with healthy and diseased heart valves*. Journal of Biomechanics 39, 1964-1982 (2006) | article | yes |
+| [`korakianitis_cellml`](corpora/cardio/records/korakianitis_cellml) | Shi and Hose, Zero dimensional (lumped parameter) modelling of native human cardiovascular dynamics (CellML) (2006) | software | yes |
+| [`reymond2009`](corpora/cardio/records/reymond2009) | Reymond et al., *Validation of a one-dimensional model of the systemic arterial tree*. Am J Physiol Heart Circ Physiol 297: H208-H222 (2009) | article | yes |
+| [`smith_cellml`](corpora/cardio/records/smith_cellml) | Nunns, Minimal haemodynamic system model including ventricular interaction and valve dynamics (CellML) (2009) | software | yes |
+| [`westerhof2009`](corpora/cardio/records/westerhof2009) | Westerhof et al., *The arterial Windkessel*. Med Biol Eng Comput 47, 131-141 (2009) | article | yes |
+| [`kim2010`](corpora/cardio/records/kim2010) | Kim et al., *Patient-Specific Modeling of Blood Flow and Pressure in Human Coronary Arteries*. Annals of Biomedical Engineering 38(10), 3195-3209 (2010) | article | yes |
+| [`alastruey2011`](corpora/cardio/records/alastruey2011) | Alastruey et al., *Pulse wave propagation in a model human arterial network: Assessment of 1-D visco-elastic simulations against in vitro measurements*. J. Biomech. 44, 2250-2258 (2011) | article | yes |
+| [`olufsen2012`](corpora/cardio/records/olufsen2012) | Olufsen et al., *Rarefaction and blood pressure in systemic and pulmonary arteries*. J. Fluid Mech. 705, 280-305 (2012) | article | yes |
+| [`shi2013_ch2`](corpora/cardio/records/shi2013_ch2) | Shi, *Chapter 2: Development of a Lumped Parameter Model for the Human Cardiovascular System Including Heart Valve Dynamics and Atrio-ventricular Interaction*. PhD thesis, University of Sheffield, Chapter 2 (thesis pp. 49-101; PDF pages 65-118 of the thesis) (2013) | thesis | yes |
+| [`shi2013_ch5`](corpora/cardio/records/shi2013_ch5) | Shi, *Chapter 5: Numerical simulation of global hydro-dynamics in a pulsatile bioreactor for cardiovascular tissue engineering*. PhD thesis, University of Sheffield, 2013 (thesis PDF pages 177-190); adapted from J. Biomech. 41(3), 953-959, 2008 (2013) | thesis | yes |
+| [`mynard2014`](corpora/cardio/records/mynard2014) | Mynard et al., *Scalability and in-vivo validation of a multi-scale numerical model of the left coronary circulation*. Am J Physiol Heart Circ Physiol 306, H517-H528 (read from the accepted manuscript, Articles in PresS, 20 Dec 2013) (2014) | article | yes |
+| [`mynard2014_data`](corpora/cardio/records/mynard2014_data) | Mynard et al., Supplemental Data File of 'Scalability and in-vivo validation of a multi-scale numerical model of the left coronary circulation': parameter values for the one-dimensional network (2014) | dataset | yes |
+| [`boileau2015`](corpora/cardio/records/boileau2015) | Boileau et al., *A benchmark study of numerical schemes for one-dimensional arterial blood flow modelling*. Int. J. Numer. Meth. Biomed. Engng. 31, e02732 (2015) | article | yes |
+| [`boileau_data`](corpora/cardio/records/boileau_data) | Boileau et al., Supporting data of 'A benchmark study of numerical schemes for one-dimensional arterial blood flow modelling' (Benchmarks 1-6) (2015) | software | yes |
+| [`mynard2015`](corpora/cardio/records/mynard2015) | Mynard and Smolich, *One-Dimensional Haemodynamic Modeling and Wave Dynamics in the Entire Adult Circulation*. Ann. Biomed. Eng. 43(6), 1443-1460 (2015) | article | yes |
+| [`mynard2015_data`](corpora/cardio/records/mynard2015_data) | Mynard and Smolich, Supplemental Files 1 and 2 of 'One-Dimensional Haemodynamic Modeling and Wave Dynamics in the Entire Adult Circulation': parameters and connectivity of the 1D segments, and resistance and compliance of the vascular beds (2015) | software | yes |
+| [`shi2018`](corpora/cardio/records/shi2018) | Shi et al., *Construction of lumped-parameter cardiovascular models using the CellML language*. Journal of Medical Engineering & Technology (published online 19 February 2019) (2019) | article | yes |
+| [`shi_cellml_systemic`](corpora/cardio/records/shi_cellml_systemic) | Shi and Hose, Lumped-parameter model for the systemic circulation (CellML) (2019) | software | yes |
+| [`shi_cellml_westkessel`](corpora/cardio/records/shi_cellml_westkessel) | Shi and Hose, Lumped-parameter cardiovascular model with Westkessel after-load (CellML) (2019) | software | yes |
+| [`shi_cellml_windkessel`](corpora/cardio/records/shi_cellml_windkessel) | Shi and Hose, Lumped-parameter cardiovascular model with Windkessel after-load (CellML) (2019) | software | yes |
+| [`schwarz2020`](corpora/cardio/records/schwarz2020) | Schwarz et al., *Topologic and Hemodynamic Characteristics of the Human Coronary Arterial Circulation*. Frontiers in Physiology 10, 1611 (2020) | article | yes |
+| [`schwarz_data`](corpora/cardio/records/schwarz_data) | Schwarz et al., Data of 'Topologic and Hemodynamic Characteristics of the Human Coronary Arterial Circulation': network graph, hemodynamics tables and demonstration code (2020) | software | yes |
 
 Papers, code and data are never committed. Each record holds only short
 quotes that locate a value, and our own code and numbers.

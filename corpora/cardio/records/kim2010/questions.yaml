@@ -1,0 +1,204 @@
+- id: q_venous_pressure
+  kind: unstated_input
+  about: [Pv_added, stenosed_lad_flow]
+  text: "The venous pressure assigned at the end of each coronary bed model, used to set Rv, is not printed, so the mean flow that the Table 3 resistances give for a printed mean pressure cannot be computed without an added value."
+  citation: {page: 4, quote: "of the mean flow and assigned venous pressure", where: text}
+- id: q_table4_segment
+  kind: reading
+  about: [stenosed_lad_flow, Q_lad_normal_R]
+  text: "Table 4 gives a normal LAD mean flow of 1.1 cc/s at rest, while the text (p. 3201) gives 1.3 cc/s for the LAD at rest. The record reads the Table 4 flow as the flow through the stenosed segment, which feeds outlets c and d (the outlets whose resistances change with the stenosis in Table 3); the paper does not say which outlets it feeds."
+  citation: {page: 10, quote: "Mean left anterior descending coronary artery flow", where: "Table 4"}
+- id: q_table4_pressure_location
+  kind: unexplained_difference
+  about: [stenosed_lad_flow]
+  text: "At rest the downstream resistances were lowered with stenosis severity 'until the same mean flow was achieved', yet with the Table 4 pressures the Table 3 resistances of outlets c and d give flows rising from about 1.0 cc/s (normal) to about 1.3 cc/s (75%), and none is 1.1 cc/s. The Table 4 pressure is computed downstream of the stenosis, not at the outlets, and the outlet pressure is not printed, so the difference cannot be settled from the paper."
+  citation: {page: 11, quote: "The pressure was computed downstream of the stenosis", where: "Fig. 5 caption"}
+- id: q_increase_350
+  kind: reading
+  about: [coronary_increase_by, coronary_increase_to, coronary_increase_E2]
+  text: "'The mean coronary flow was increased by 350%' (p. 3199) can mean a factor 4.5 or a factor 3.5. Table 4 (1.1 to 3.7 cc/s in the LAD) and 'the coronary flow tripled' (p. 3205) point to a factor near 3.5; both readings are run."
+  citation: {page: 5, quote: "the mean coronary flow was increased by 350%", where: text}
+- id: q_split_equal_pressure
+  kind: choice
+  about: [coronary_flow_split]
+  text: "The split of the total coronary flow among LAD, LCX and RCA assumes the same mean pressure at every coronary outlet and the same venous pressure behind every bed. The 3D simulation's outlet pressures are not printed; pressure losses along the normal epicardial arteries would make the split differ from the conductance ratios."
+- id: q_flow_distribution_basis
+  kind: unstated_input
+  about: [coronary_flow_split]
+  text: "The flow fractions assigned to each coronary outlet (from morphology and Zhou et al., ref. 31) and the mean arterial pressure used to compute Ra and Ra-micro are not printed, so the Table 3 resistances cannot be rederived from the paper's stated procedure."
+  citation: {page: 4, quote: "The flow distribution to each primary branch of the", where: text}
+- id: q_split_difference
+  kind: unexplained_difference
+  about: [coronary_flow_split, Q_LAD_rest, Q_LCX_rest, Q_RCA_rest, Q_LAD_E1, Q_LCX_E1]
+  text: "Split by the Table 3 total resistances, the printed total coronary flow gives LAD/LCX/RCA = 1.45/1.42/0.53 cc/s at rest (printed 1.3/1.5/0.6) and 2.98/2.92/1.10 cc/s in light exercise (printed 2.8/3.1/1.1). The Table 3 values thus send relatively more flow to the LAD and less to the LCX than the printed mean flows; a difference in mean outlet pressures between branches in the 3D model would explain it, but those pressures are not printed."
+  citation: {page: 7, quote: "the left anterior descending coronary artery was 1.3 cc/s", where: text}
+- id: q_stenosis_75_exercise
+  kind: unexplained_difference
+  about: [stenosed_lad_flow, Q_lad_75_E2]
+  text: "At moderate exercise the Table 4 pressure and the Table 3 resistances of outlets c and d give the printed flows within rounding for the normal, 40%, 50% and 60% cases, but 1.6 cc/s against the printed 1.8 cc/s for 75% diameter reduction, where the pressure downstream of the stenosis (36 mmHg) is likely furthest from the outlet pressure."
+  citation: {page: 10, quote: "Mean left anterior descending coronary artery flow", where: "Table 4"}
+- id: q_table2_G_rest_exercise
+  kind: possible_error
+  about: []
+  text: "Table 2 (p. 3200) prints Rp = 1.80 x 10^3 dynes s/cm^5 for the left subclavian artery (G) at rest and 1.08 x 10^3 in light exercise, while the table's note and the text (p. 3200) say the upper branch vessel parameters are the same at rest and in light exercise; every other upper branch value is equal in the R and E1 columns. One of the two G values may be misprinted (1.80 and 1.08 differ by a digit swap). Table 2 is not recorded as data, so no value is affected."
+  citation: {page: 6, quote: "branch vessels are the same for the light exercise and resting conditions", where: "Table 2 note"}
+- id: q_heart_rate_tripled
+  kind: unexplained_difference
+  about: [Tc_rest]
+  text: "The text says moderate exercise 'tripled the cardiac output and heart rate' (p. 3199), but Table 1 (p. 3200) gives a moderate-exercise cardiac cycle of 0.3 s against 1.0 s at rest, a heart-rate factor of 1/0.3, not 3 (a cycle of 1/3 s). In light exercise the stated doubling matches the 0.5 s cycle exactly. The moderate-exercise cardiac output is not printed, so 'tripled' cannot be checked for it."
+  citation: {page: 5, quote: "we tripled the cardiac output and heart rate and the", where: text}
+- id: q_moderate_coronary_rule
+  kind: unexplained_difference
+  about: [coronary_fraction_flow, coronary_increase_by, coronary_increase_to, coronary_increase_E2]
+  text: "The methods say that during simulated exercise the coronary flow was increased to keep it at 4.0% of the cardiac output (p. 3198); with cardiac output tripled in moderate exercise (pp. 3199, 3203) that rule gives coronary flow x3, while the paper also says the mean coronary flow was increased by 350% (p. 3199, p. 3207) and Table 4 gives 1.1 to 3.7 cc/s in the LAD. The 4.0% rule is checked only at rest and light exercise; which rule set the moderate-exercise coronary boundary conditions is not said (the resistance threshold of p. 3198 may account for it)."
+  citation: {page: 4, quote: "coronary vascular bed was increased to maintain the", where: text}
+- id: q_3d_not_runnable
+  kind: unstated_model
+  about: []
+  text: "The paper's results (all waveforms, wall shear stress, Table 4 values, PV loops) come from 3D fluid-structure finite element simulations of a patient-specific geometry built from CT data that is not published. They are recorded only as printed results; only the mean-flow relations implied by the lumped coronary bed model and the text are checked."
+- id: q_fig2_systolic_exercise
+  kind: unexplained_difference
+  about: [Psys_E1, f2_H_p_ex_fig, f2_A_p_ex_fig, f2_H_p_rest_fig]
+  text: "The text gives a thoracic aortic systolic pressure of 149 mmHg in light exercise (p. 3200), but in Fig. 2 the exercise (dashed) pressure curves of the descending thoracic aorta (H) and of the aortic inlet (A) do not rise above the 138 mmHg top gridline of their panels (readings f2_H_p_ex and f2_A_p_ex). The rest curves peak near the printed 124 mmHg. Either the figure and the text come from different simulations, or one of them is in error; the paper does not say."
+  citation: {page: 6, quote: "pressure increased from 124 to 149 mmHg", where: text}
+- id: q_fig2_branch_labels
+  kind: reading
+  about: [quantity:pressure_outlet_B, quantity:pressure_outlet_C, quantity:pressure_outlet_D, quantity:pressure_outlet_E, quantity:pressure_outlet_G]
+  text: "Fig. 2 labels its panels B-Left subclavian, C-Left carotid, D-Left vertebral, E-Right carotid and G-Right subclavian, while the note to Table 2 (p. 3200) says B is the right subclavian, C the right carotid, D the right vertebral, E the left carotid and G the left subclavian artery. Left and right are swapped between the figure and the table, so it is not certain which Table 2 Windkessel parameters belong to which plotted waveform. The record names the waveforms by their outlet letters."
+  citation: {page: 6, quote: "B denotes right subclavian artery, C denotes right carotid artery", where: "Table 2 note"}
+- id: q_fig6_rest_points
+  kind: reading
+  about: [fig6_rest, Q_lad_R_fig6, Q_lad_40_R, Q_lad_60_R]
+  text: "Fig. 6 marks the simulated rest series only at 0, 50, 75 and 100% diameter reduction; the solid line passes 40% and 60% without a marker, although Table 4 gives rest flows for 40% and 60%. The rest values of Fig. 6 at 0, 50 and 75% are read and compared with Table 4; at 50% the figure shows about 1.0 cc/s against the printed 1.1 cc/s."
+  citation: {page: 11, quote: "Mean flow rate of the left anterior descending", where: "Fig. 6"}
+- id: q_fig6_gould_scaling
+  kind: unstated_input
+  about: [gould_rest_fig6, gould_hyperemia_fig6]
+  text: "Fig. 6 draws the experimental results of Gould et al. (ref. 7, canine coronary arteries) on the same cc/s axis as the simulated human LAD flows, with resting flow near the simulated resting flow. How the canine measurements were converted or scaled to this axis is not stated, so the plotted Gould values are recorded only as plotted (quantity gould_plotted_mean_flow) and not compared with the simulations."
+  citation: {page: 11, quote: "also plotted the experimental results of Gould et al. for", where: text}
+- id: q_no_validation_vs_mynard2014
+  kind: choice
+  about: [coronary_fraction_flow, coronary_flow_split, stenosed_lad_flow, coronary_total_sum, cardiac_output_sv]
+  text: >
+    (Cross-validation with mynard2014; cross-validation job 2026-11-06.) No model of this record is
+    validated against a measurement of mynard2014. Neither paper cites the other (Kim 2010 precedes it;
+    Mynard 2014's references do not include Kim et al.), and neither says one's model explains the other's
+    data. mynard2014's measurements are of adult sheep and newborn lambs: body, heart and myocardial
+    weights, heart rate, mean aortic pressure, proximal circumflex (Cx) flow per 100 g, the Table 2
+    phase durations and normalized Cx flow features, the measured Cx flow waveforms of Figs. 7-8 and one
+    animal's aortic flow, aortic and LV pressure (Fig. 3). The models here give a human patient's total,
+    LAD, LCX and RCA mean flows: coronary_fraction_flow gives total coronary flow as an assumed 4.0% of
+    cardiac output, which is not the Cx flow mynard2014 measures (one branch of the left coronary only)
+    and is an input rule of this paper, not a prediction; coronary_flow_split and stenosed_lad_flow need
+    this patient's Table 3 bed resistances, which mynard2014 does not give for its sheep (its total
+    resistance is tuned per animal to the measured Cx flow); cardiac_output_sv needs a stroke volume
+    mynard2014 does not print. None therefore gives a measured quantity of mynard2014 on its conditions.
+    In the other direction, see mynard2014/q_no_validation_vs_kim2010.
+  citation: {page: 4, printed_page: "3198", quote: "assumed that the mean coronary flow is 4.0% of the cardiac output", where: text}
+- id: q_no_validation_vs_smith2004
+  kind: choice
+  about: [cardiac_output_sv, coronary_fraction_flow, coronary_flow_split, stenosed_lad_flow, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with smith2004; cross-validation job 2026-11-06.) No validation is entered in either
+    direction, and neither paper cites the other or says one's model explains the other's data. smith2004
+    holds no measurement: every plot in it is simulation output (smith2004/figures.md) and its target values
+    (70 ml, 120/80 mmHg) are reported from the literature, so no model of this record has a smith2004
+    measurement to predict. The shape match of cardiac_output_sv with smith2004/closed_loop (a flow from a
+    volume and a time) is only dimensional. In the other direction, this record's only measurements are
+    the canine LAD mean flows of Gould et al. against diameter reduction plotted in Fig. 6
+    (gould_rest_fig6, gould_hyperemia_fig6); smith2004's models have no coronary branch, no stenosis and
+    no coronary flow output, so none gives that quantity. This record's cardiac outputs, stroke volumes
+    and systolic pressures (CO_rest, SV_rest, Psys_rest and their exercise values) are predictions of the
+    3D model, not measurements; the patient's measured cardiac output and brachial pulse pressure that the
+    boundary conditions were tuned to (p. 3199) are not printed. See smith2004/q_no_validation_vs_kim2010.
+  citation: {page: 11, printed_page: "3205", quote: "also plotted the experimental results of Gould et al. for", where: text}
+- id: q_no_validation_vs_spaan1981
+  kind: choice
+  about: [stenosed_lad_flow, coronary_flow_split, coronary_fraction_flow, coronary_total_sum, cardiac_output_sv, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with spaan1981; cross-validation job 2026-11-06.) No validation is entered in either
+    direction. Kim et al. do not cite Spaan et al. (references.yaml) and neither paper says one's model
+    explains the other's data; Kim's coronary bed with an intramyocardial pressure is related in concept
+    to Spaan's intramyocardial pump, but that likeness is not a quantitative prediction. spaan1981's
+    measurements are phasic quantities in anesthetized dogs: p_lc against q_c (Fig. 5), the fitted
+    phasic arterial resistance R_a against the mean-flow resistance R_c (Fig. 6), p_im = 53.1 mm Hg, LV
+    systolic pressure, the 14 mm Hg wedge pressure, the Fig. 4A area and the LV mass. This record's
+    runnable models are steady (zero-frequency) relations: stenosed_lad_flow and coronary_flow_split give
+    a human patient's mean LAD, LCX and RCA flows from mean pressure and the Table 3 resistances, and the
+    others are percentage rules and CO = SV/T. None gives a phasic pressure or flow component, a
+    phasic arterial resistance, an intramyocardial pressure or a volume; and spaan1981 prints no mean
+    coronary flow at a stated perfusion pressure that stenosed_lad_flow could be run on (its R_c values
+    are per-point fit inputs on Fig. 6's axis, and running Kim's human Table 3 resistances against a
+    dog's flow would test nothing about either paper). The Ca and Cim capacitances that could be set
+    against Spaan's C_ep and C_im are not recorded here and are model parameters, not predictions.
+    In the other direction, this record's only measurements are Gould et al.'s canine LAD mean flows
+    against diameter reduction (Fig. 6); spaan1981's models (volume fractions, RC-time capacitances,
+    the R_a-R_c regression, Eq. 2, the not-runnable waterfall model) have no stenosis input and no mean
+    flow output, so none gives that quantity. See spaan1981/q_no_validation_vs_kim2010.
+  citation: {page: 1, printed_page: "3195", quote: "The intramyocardial pressure was represented with", where: text}
+- id: q_no_validation_vs_stergiopulos1999
+  kind: choice
+  about: [ref-22, cardiac_output_sv, coronary_fraction_flow, coronary_flow_split, stenosed_lad_flow, systolic_increase, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with stergiopulos1999; cross-validation job 2026-11-06.) No validation is entered in
+    either direction. This paper's ref. 22 is a different Stergiopulos 1999 paper: Stergiopulos, Segers and
+    Westerhof, the pulse pressure method for total arterial compliance (AJP 276: H424-H428), cited on p. 3199
+    only for matching the measured brachial pulse pressure; stergiopulos1999 is Stergiopulos, Westerhof and
+    Westerhof, total arterial inertance (AJP 276: H81-H88), which this paper does not cite, and neither paper
+    says one's model explains the other's data. stergiopulos1999's measurements are canine and human
+    ascending aortic pressure and flow waves, the standard-technique R_p, Z_c and compliance of seven dogs
+    and two human beats, and the measured aortic input impedance of dog 71 (Fig. 5). This record's runnable
+    models give a human patient's total, LAD, LCX and RCA mean coronary flows (from this patient's Table 3
+    bed resistances or an assumed 4.0% of cardiac output), CO = SV/T, and percentage rules; none gives an
+    aortic input impedance, a characteristic impedance, a compliance or an aortic pressure wave, and
+    stergiopulos1999 prints no stroke volume, cardiac output or coronary quantity to run them on. In the
+    other direction, this record's only measurements are Gould et al.'s canine LAD mean flows against
+    diameter reduction (Fig. 6); stergiopulos1999's models (zin_3wk, zin_4wk, Eq. 1 inertance, AIC/SC,
+    t-tests and relative deviations) have no stenosis input and no coronary flow output, so none gives that
+    quantity. See stergiopulos1999/q_no_validation_vs_kim2010.
+  citation: {page: 5, printed_page: "3199", quote: "measured brachial artery pulse pressure", where: text}
+- id: q_no_validation_vs_suga1973
+  kind: choice
+  about: [contractility_increase, cardiac_output_sv, coronary_fraction_flow, coronary_flow_split, stenosed_lad_flow, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with suga1973; cross-validation job 2026-11-06.) No validation is entered in either
+    direction. Kim et al. do not cite Suga et al. (references.yaml; their lumped heart model is taken from
+    their own ref. 11), and neither paper says one's model explains the other's data; the two share only
+    the idea of a time-varying ventricular elastance. suga1973's measurements are per-dog canine values:
+    Vd, heart rate, Emax, Tmax and [(dP/dt)/P]max in control and under epinephrine (Tables 1, 2) and the
+    normalized E(t/Tmax) curve of Fig. 5. The only model here with an elastance is contractility_increase,
+    E_max,exercise = E_max,rest (1 + 10%), whose 10% is an input the authors chose for a human patient's
+    moderate exercise (p. 3204), not a predicted response; run on Suga's control Emax it would give Suga's
+    epinephrine Emax only if the 10% were replaced by Suga's own measured change, which tests nothing.
+    The other models give a human patient's coronary mean flows and cardiac output, which suga1973 does
+    not measure as results, and the heart model whose E(t) could be set against Fig. 5 is not runnable
+    in this record (q_3d_not_runnable). In the other direction, this record's only measurements are
+    Gould et al.'s canine LAD mean flows against diameter reduction (Fig. 6); suga1973's models
+    (E = P/(V - Vd), the not-runnable Emax EN(t/Tmax), and ratios and statistics of its own tables) have
+    no stenosis input and no flow output, and the left ventricular pressure-volume loops of Fig. 2 here
+    are 3D simulation output, not measurements. See suga1973/q_no_validation_vs_kim2010.
+  citation: {page: 10, printed_page: "3204", quote: "The contractility of this subject was increased 10% for", where: text}
+- id: q_no_validation_vs_westerhof1971
+  kind: choice
+  about: [stenosed_lad_flow, coronary_flow_split, coronary_fraction_flow, coronary_total_sum, cardiac_output_sv, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with westerhof1971; cross-validation job 2026-11-06.) No validation is entered in
+    either direction. Kim et al. use three-element Windkessel outlet models but cite them to their ref. 28
+    (Vignon-Clementel et al.), not to Westerhof et al. 1971, which is not in their references; neither paper
+    says one's model explains the other's data. westerhof1971's measurements are of its hydraulic
+    artificial arterial systems and from the literature: the liquid viscosity and density, the d-c
+    resistances of the four constructed models (Figs. 2-5 captions), and input impedance modulus and phase
+    against frequency (the literature dog data of Figs. 2-3 and the hydraulic models of Figs. 4-5). This
+    record's runnable models are steady relations for a human patient's coronary circulation:
+    stenosed_lad_flow and coronary_flow_split give mean LAD, LCX and RCA flows from mean pressures and this
+    patient's Table 3 bed resistances, and the others are CO = SV/T, a sum of branch flows and percentage
+    rules. None outputs an impedance, a d-c resistance, a viscosity or a density; the series-resistance sum
+    inside stenosed_lad_flow could be fed westerhof1971's R_c and R_p, but that would only rerun Eq. 1a of
+    that paper (westerhof1971/rdc_eq1a) and test nothing of Kim's coronary bed. The Windkessel parameters of
+    Table 2 that could be set against an impedance are not recorded here and no impedance model is runnable
+    (q_3d_not_runnable). In the other direction, this record's only measurements are Gould et al.'s canine
+    LAD mean flows against diameter reduction (Fig. 6); westerhof1971's models (tube quality factor and
+    impedance, minimum lengths, numbers of tubes, tau = RpC, air volumes, d-c resistance and the
+    three-element impedance) have no stenosis input and no coronary flow output, so none gives that
+    quantity. See westerhof1971/q_no_validation_vs_kim2010.
+  citation: {page: 3, quote: "impedance using a three-element Windkessel model", where: text}

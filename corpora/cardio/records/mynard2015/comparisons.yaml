@@ -1,0 +1,64 @@
+# ---- Table 2 lower ends of the c0 ranges against Eq. 3 ----
+- {id: cmp_c0_sys_art_min, purpose: reproduction, computed: c0_sys_art_min_pred, printed: c0_min_sys_art, conditions_ok: "the smallest c0 in the network is that of its largest segment, the aortic root (D0 added)"}
+- {id: cmp_c0_pulm_art_min, purpose: reproduction, computed: c0_pulm_art_min_pred, printed: c0_min_pulm_art, conditions_ok: "the smallest c0 in the network is that of its largest segment, the main pulmonary artery (D0 added)"}
+- {id: cmp_c0_cor_vein_min, purpose: reproduction, computed: c0_cor_vein_min_pred, printed: c0_min_cor_vein, conditions_ok: "the smallest coronary venous c0 is that of the largest coronary vein, taken as the coronary sinus (0.79 cm)"}
+
+# ---- Coronary sinus diameter (p. 6) ----
+- {id: cmp_d_cs_human, purpose: validation, computed: d_cs_model, printed: d_cs_human, note: "The paper's own comparison ('compares well'); the model value comes from Eq. 2a on the network of Supplemental File 1."}
+
+# ---- Pericardial pressure under normal conditions (p. 8) ----
+- {id: cmp_ppc_end_diastole, purpose: consistency, computed: ppc_end_diastole_pred, printed: ppc_normal_claim, conditions_ok: "the claim is for normal (steady-state) conditions; the run uses the steady-state Table 6 volumes at about ventricular end-diastole", note: "The printed value is an upper bound ('less than 0.5 mmHg') and gets no verdict; the computed value is above it (q_ppc_above_claim)."}
+- {id: cmp_ppc_initial, purpose: consistency, computed: ppc_initial_pred, printed: ppc_normal_claim, conditions_ok: "initial (t = 0) volumes rather than the steady state; shown for the volumes the paper prints in Table 4", note: "No verdict for an upper bound."}
+
+# ---- Eq. 1: maximum pSIP is 20% of LV cavity pressure (p. 7) ----
+- {id: cmp_sip_ratio_max, purpose: reproduction, computed: sip_ratio_max_pred, printed: sip_ratio_max_claim, conditions_ok: "the largest ratio pSIP/pV over the beat, at the smallest LV volume of Table 6 (q_sip_ratio_reading)"}
+
+# ---- Table 6 internal relations ----
+- {id: cmp_co_from_lv, purpose: consistency, computed: co_from_lv_pred, printed: t6_co_model}
+- {id: cmp_co_from_rv, purpose: consistency, computed: co_from_rv_pred, printed: t6_co_model}
+- {id: cmp_svr, purpose: consistency, computed: svr_pred, printed: t6_svr_model}
+- {id: cmp_svr_no_venous, purpose: consistency, computed: svr_no_venous_pred, printed: t6_svr_model, note: "Alternative SVR definition (no venous pressure subtracted)."}
+- {id: cmp_pvr, purpose: consistency, computed: pvr_pred, printed: t6_pvr_model}
+
+# ---- Table 3 ----
+- {id: cmp_compliance_total, purpose: consistency, computed: comp_total_pred, printed: comp_total}
+
+# ---- mu_AV (Table 4 against text p. 7) ----
+- {id: cmp_mu_av_la, purpose: consistency, computed: mu_av_la_pred, printed: mu_av_la}
+
+# ---- Table 6: model against in vivo reference data (the paper's own validation) ----
+- {id: val_t6_hr, purpose: validation, computed: t6_hr_model, printed: t6_hr_ref, note: "Heart rate is a model input."}
+- {id: val_t6_co, purpose: validation, computed: t6_co_model, printed: t6_co_ref}
+- {id: val_t6_svr, purpose: validation, computed: t6_svr_model, printed: t6_svr_ref}
+- {id: val_t6_pvr, purpose: validation, computed: t6_pvr_model, printed: t6_pvr_ref}
+- {id: val_t6_lv_max, purpose: validation, computed: t6_lv_max_model, printed: t6_lv_max_ref}
+- {id: val_t6_rv_max, purpose: validation, computed: t6_rv_max_model, printed: t6_rv_max_ref}
+- {id: val_t6_la_max, purpose: validation, computed: t6_la_max_model, printed: t6_la_max_ref, note: "Reference is mean ± SD."}
+- {id: val_t6_ra_max, purpose: validation, computed: t6_ra_max_model, printed: t6_ra_max_ref}
+- {id: val_t6_lv_ef, purpose: validation, computed: t6_lv_ef_model, printed: t6_lv_ef_ref}
+- {id: val_t6_rv_ef, purpose: validation, computed: t6_rv_ef_model, printed: t6_rv_ef_ref}
+- {id: val_t6_la_min, purpose: validation, computed: t6_la_min_model, printed: t6_la_min_ref, note: "Reference is mean ± SD."}
+- {id: val_t6_ra_min, purpose: validation, computed: t6_ra_min_model, printed: t6_ra_min_ref}
+- {id: val_t6_la_mean, purpose: validation, computed: t6_la_mean_model, printed: t6_la_mean_ref}
+- {id: val_t6_ra_mean, purpose: validation, computed: t6_ra_mean_model, printed: t6_ra_mean_ref}
+- {id: val_t6_aort_mean, purpose: validation, computed: t6_aort_mean_model, printed: t6_aort_mean_ref}
+- {id: val_t6_aort_pulse, purpose: validation, computed: t6_aort_pulse_model, printed: t6_aort_pulse_ref}
+- {id: val_t6_pt_mean, purpose: validation, computed: t6_pt_mean_model, printed: t6_pt_mean_ref}
+- {id: val_t6_pt_pulse, purpose: validation, computed: t6_pt_pulse_model, printed: t6_pt_pulse_ref}
+- {id: val_t6_portal_mean, purpose: validation, computed: t6_portal_mean_model, printed: t6_portal_mean_ref}
+- {id: val_t6_ea_mitral, purpose: validation, computed: t6_ea_mitral_model, printed: t6_ea_mitral_ref}
+- {id: val_t6_ea_tricuspid, purpose: validation, computed: t6_ea_tricuspid_model, printed: t6_ea_tricuspid_ref}
+- {id: val_t6_dpdt_lv_max, purpose: validation, computed: t6_dpdt_lv_max_model, printed: t6_dpdt_lv_max_ref, note: "Reference is mean ± SD."}
+- {id: val_t6_dpdt_lv_min, purpose: validation, computed: t6_dpdt_lv_min_model, printed: t6_dpdt_lv_min_ref, note: "Reference is mean ± SD."}
+- {id: val_t6_dpdt_rv_max, purpose: validation, computed: t6_dpdt_rv_max_model, printed: t6_dpdt_rv_max_ref}
+
+# ---- Text claims (p. 11) against Table 8 ----
+- {id: cmp_t8_lvemax_remote_min, purpose: consistency, computed: lvemax_remote_min_pred, printed: claim_lvemax_remote_min}
+- {id: cmp_t8_lvemax_remote_max, purpose: consistency, computed: lvemax_remote_max_pred, printed: claim_lvemax_remote_max}
+- {id: cmp_t8_rvv0_min, purpose: consistency, computed: rvv0_min_pred, printed: claim_rvv0_min}
+- {id: cmp_t8_rvv0_max, purpose: consistency, computed: rvv0_max_pred, printed: claim_rvv0_max}
+- {id: cmp_t8_kappa0_max, purpose: consistency, computed: kappa0_max_pred, printed: claim_kappa0_max}
+- {id: cmp_t8_mu0_venous_min, purpose: consistency, computed: mu0_venous_min_pred, printed: claim_mu0_venous_min}
+- {id: cmp_t8_mu0_venous_max, purpose: consistency, computed: mu0_venous_max_pred, printed: claim_mu0_venous_max}
+- {id: cmp_t8_mu0_mpa_few, purpose: consistency, computed: mu0_mpa_few_pred, printed: claim_mu0_mpa_few}
+- {id: cmp_t8_mu0_arterial_max, purpose: consistency, computed: mu0_arterial_max_pred, printed: claim_mu0_arterial_max, note: "Upper bound '<5%': no verdict. Table 8 gives -5 for the MPA FCWee (q_mu0_arterial_5)."}

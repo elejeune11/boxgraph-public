@@ -1,0 +1,62 @@
+id: compliance_distribution
+name: distribution of vascular compliance from the released beds and 1D networks (cf. Table 3)
+role: model
+software: true
+stated: {none: "printed in mynard2015 p. 7 (1449): 'These values were distributed amongst the respective 0D vascular bed compartments according to the inverse of resistance, having first subtracted out the 1D network compliances.' Beds from MOESM2_vascular_beds.xlsx, sheet 'Sheet1', columns E-F (rows 11-71); networks from MOESM1_1D_segments.xlsx, sheet '1D segments', columns D-F"}
+equation: "C_region = sum of bed compliances + sum over 1D segments of integral A0/(rho c0^2) dx, c0 from Eq. 3"
+from_words: true
+built_from: [network_counts, wave_speed_eq3]
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  k1_sa: {quantity: wave_speed_coef_k1, unit: g/s^2/cm}
+  k2_sa: {quantity: wave_speed_coef_k2, unit: 1/cm}
+  k3_sa: {quantity: wave_speed_coef_k3, unit: g/s^2/cm}
+  k1_sv: {quantity: wave_speed_coef_k1, unit: g/s^2/cm}
+  k2_sv: {quantity: wave_speed_coef_k2, unit: 1/cm}
+  k3_sv: {quantity: wave_speed_coef_k3, unit: g/s^2/cm}
+  k1_pa: {quantity: wave_speed_coef_k1, unit: g/s^2/cm}
+  k2_pa: {quantity: wave_speed_coef_k2, unit: 1/cm}
+  k3_pa: {quantity: wave_speed_coef_k3, unit: g/s^2/cm}
+  k1_pv: {quantity: wave_speed_coef_k1, unit: g/s^2/cm}
+  k2_pv: {quantity: wave_speed_coef_k2, unit: 1/cm}
+  k3_pv: {quantity: wave_speed_coef_k3, unit: g/s^2/cm}
+  k1_ca: {quantity: wave_speed_coef_k1, unit: g/s^2/cm}
+  k2_ca: {quantity: wave_speed_coef_k2, unit: 1/cm}
+  k3_ca: {quantity: wave_speed_coef_k3, unit: g/s^2/cm}
+  k1_cv: {quantity: wave_speed_coef_k1, unit: g/s^2/cm}
+  k2_cv: {quantity: wave_speed_coef_k2, unit: 1/cm}
+  k3_cv: {quantity: wave_speed_coef_k3, unit: g/s^2/cm}
+outputs:
+  C_sys_art: {quantity: vascular_compliance, unit: mL/mmHg}
+  C_sys_vein: {quantity: vascular_compliance, unit: mL/mmHg, description: "including the liver"}
+  C_liver: {quantity: vascular_compliance, unit: mL/mmHg, description: "liver lobules, Cp/a plus venous"}
+  C_pulm_art: {quantity: vascular_compliance, unit: mL/mmHg}
+  C_pulm_vein: {quantity: vascular_compliance, unit: mL/mmHg}
+  C_total: {quantity: vascular_compliance, unit: mL/mmHg}
+  C1d_sys_art: {quantity: vascular_compliance, unit: mL/mmHg, description: "1D part"}
+  C1d_sys_vein: {quantity: vascular_compliance, unit: mL/mmHg, description: "1D part"}
+  C1d_pulm_art: {quantity: vascular_compliance, unit: mL/mmHg, description: "1D part"}
+  C1d_pulm_vein: {quantity: vascular_compliance, unit: mL/mmHg, description: "1D part"}
+  C0d_sys_art: {quantity: vascular_compliance, unit: mL/mmHg, description: "bed part"}
+  C0d_sys_vein: {quantity: vascular_compliance, unit: mL/mmHg, description: "bed part"}
+  C0d_pulm_art: {quantity: vascular_compliance, unit: mL/mmHg, description: "bed part"}
+  C0d_pulm_vein: {quantity: vascular_compliance, unit: mL/mmHg, description: "bed part"}
+settings:
+  coefficients:
+    "Systemic Arteries": sa
+    "Head/Neck Arteries": sa
+    "Coronary Arteries": ca
+    "Systemic Veins": sv
+    "Head/Neck Veins": sv
+    "Portal Veins": sv
+    "Coronary Veins": cv
+    "Pulmonary Arteries": pa
+    "Pulmonary Veins": pv
+  regions:
+    sys_art: ["Systemic Arteries", "Head/Neck Arteries", "Coronary Arteries"]
+    sys_vein: ["Systemic Veins", "Head/Neck Veins", "Portal Veins", "Coronary Veins"]
+    pulm_art: ["Pulmonary Arteries"]
+    pulm_vein: ["Pulmonary Veins"]
+  include_coronary_beds: false
+  n_taper: 200
+stochastic: false

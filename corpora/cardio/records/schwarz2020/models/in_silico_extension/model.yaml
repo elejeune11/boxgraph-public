@@ -1,0 +1,18 @@
+id: in_silico_extension
+name: stochastic in silico arterial trees below 30 um, giving the distal conductance of each end segment
+role: model
+stated: {page: 4, printed_page: "4", quote: "These in silico trees were", where: "text, p. 4"}
+equation: "from a 300-400 um segment, daughters drawn from the observed symmetry distribution of the mother's diameter class, diameters set by the class's area growth, lengths drawn from the class's length-to-diameter distribution (extrapolated below 30 um), until 5.0-7.5 um; distal conductance of every segment computed; 50 trees"
+inputs:
+  d: {quantity: vessel_diameter, unit: m}
+outputs:
+  G_distal: {quantity: distal_conductance, unit: m^3/(Pa*s)}
+settings: {n_trees: 50, seed: "not stated", start_diameter: "300-400 um", stop_diameter: "5.0-7.5 um"}
+runnable: false
+not_runnable_reason: >
+  The per-class distributions of symmetry, area growth and length-to-diameter ratio that drive the
+  tree generation are shown only as box plots and two histograms (Figs. 2-4), the extrapolation
+  below 30 um is not specified, and the viscosity scale (plasma viscosity) is not stated. The tree
+  cannot be regenerated, so its results (1.22 +/- 0.05 million segments, the Gis fit) are recorded
+  as fits only.
+stochastic: true

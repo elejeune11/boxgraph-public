@@ -1,0 +1,12 @@
+id: segment_length_ratio
+name: allometric scaling of 1D segment lengths with myocardial weight (adult/newborn ratio)
+role: model
+from_words: true
+stated: {page: 10, quote: "measured individual myocardial weight, using a scaling power of 0.35 (56)", where: text}
+equation: "L = L_human (W / W_human)^0.35, so L_adult / L_newborn = (W_adult / W_newborn)^0.35"
+inputs:
+  W_a: {quantity: myocardial_weight, unit: g, description: adult LV free wall + septum weight}
+  W_n: {quantity: myocardial_weight, unit: g, description: newborn LV free wall + septum weight}
+  b: {quantity: allometric_scaling_exponent, unit: dimensionless}
+outputs:
+  ratio: {quantity: segment_length_ratio, unit: dimensionless}

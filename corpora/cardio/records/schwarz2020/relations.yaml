@@ -1,0 +1,162 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_area_growth_eq8_same_as_olufsen_eq21
+  kind: same_as
+  a: olufsen2000/area_ratio_eq21
+  b: schwarz2020/area_growth_eq8
+  mapping: {S: "sqrt(gamma)", gamma: "xi"}
+  regime: {xi: [2.0, 3.0], gamma: [0.05, 1.0]}
+  provenance: proposed
+  reason: >
+    Both give the area ratio at a bifurcation whose diameters obey a power (scaling) law with exponent
+    xi (Olufsen, r_p^xi = r_d1^xi + r_d2^xi) or gamma (Schwarz Eq. 7, dM^g = dL^g + dS^g). Olufsen's
+    Eq. 21 (p. 7) is written in the area asymmetry ratio gamma = (r_d2/r_d1)^2, Schwarz's Eq. 8 (p. 10)
+    in the diameter symmetry S = dS/dL (Eq. 1, p. 4); with S = sqrt(gamma) and the exponents identified,
+    (1 + S^2)/(1 + S^g)^(2/g) is (1 + gamma)/(1 + gamma^(xi/2))^(2/xi). Neither paper cites the other.
+    The relation joins the forms only: Olufsen's xi is a structured-tree design parameter (2.76 for large
+    arteries) and Schwarz's gamma an exponent tested against measured coronary nodes; no quantity is
+    identified. The pair suggested by shape (olufsen2000/tube_law_eq14 and schwarz2020/wall_shear_stress_eq6)
+    is not related: one is an elastic wall law, the other a force balance for wall shear stress.
+# Relations to Olufsen et al. (2012), olufsen2012. Neither paper cites the other; both relations are proposed.
+# The pair suggested by shape (olufsen2012/network_1d_structured_tree and schwarz2020/wall_shear_stress_eq6) is
+# not related: the first is a non-runnable 1D pulsatile network simulation with structured-tree outflow, the
+# second a local force balance tau = dP d/(4 l) for one segment; they share no form, only the word "pressure".
+- id: rel_area_growth_eq8_same_as_olufsen2012_eq218
+  kind: same_as
+  a: olufsen2012/area_ratio_eq218
+  b: schwarz2020/area_growth_eq8
+  mapping: {S: "sqrt(gamma)", gamma: "xi"}
+  regime: {xi: [2.0, 3.0], gamma: [0.05, 1.0]}
+  provenance: proposed
+  reason: >
+    Both give the area ratio at a bifurcation whose radii (diameters) obey a power law: Olufsen 2012 Eq. 2.16,
+    r_p^xi = r_d1^xi + r_d2^xi, and Schwarz Eq. 7, dM^g = dL^g + dS^g. The right-hand form of Olufsen's Eq. 2.18
+    (p. 9), eta = (1 + gamma)/(1 + gamma^(xi/2))^(2/xi), is written in an area asymmetry ratio; Schwarz's Eq. 8
+    (p. 10), A = (1 + S^2)/(1 + S^g)^(2/g), in the diameter symmetry S = dS/dL (Eq. 1, p. 4). With S = sqrt(gamma)
+    and the exponents identified the two forms are one. Neither paper cites the other. The relation joins forms
+    only: Olufsen's xi (2.76) and gamma (0.41) are structured-tree design parameters, Schwarz's g an exponent tested
+    against measured coronary nodes; no quantity is identified. Regime: xi spans Schwarz's tested exponents 2 to 3
+    (Olufsen's Eq. 2.16 range 2.33-3 lies inside); gamma in (0, 1], the smaller over the larger daughter.
+- id: rel_area_growth_eq8_same_as_olufsen2012_eq216_217
+  kind: same_as
+  a: olufsen2012/area_ratio_eq216_217
+  b: schwarz2020/area_growth_eq8
+  mapping: {S: "gamma", gamma: "xi"}
+  regime: {xi: [2.0, 3.0], gamma: [0.05, 1.0]}
+  provenance: proposed
+  reason: >
+    Olufsen 2012's definitions as printed (Eqs. 2.16-2.17 with the left-hand form of Eq. 2.18) take gamma = r_d1/r_d2,
+    a ratio of daughter radii, and give eta = (1 + gamma^2)/(1 + gamma^xi)^(2/xi). Schwarz's Eq. 8 with S = dS/dL, a
+    ratio of daughter diameters (Eq. 1, p. 4), is the same expression with S = gamma and g = xi: both are the parent-to-
+    daughters area ratio of a power-law bifurcation written in the daughters' linear-size ratio. The form is symmetric
+    under gamma -> 1/gamma, so the relation holds whichever daughter Olufsen's d1 denotes. Neither paper cites the other;
+    forms only, no quantity identified.
+# Relations to Pries et al. (1990), pries1990: none. Schwarz's Eq. 3 cites Pries et al. 1994 and Secomb and Pries 2013,
+# not pries1990. The pair viscosity_eq3 / pries1990 viscosity_modified_eq7(_corrected) is not the same law: the in vitro
+# parts differ (1990: 110 e^(-1.424 D) + 3 - 3.45 e^(-0.035 D) with an exponential hematocrit term; Eq. 3: 6 e^(-0.085 d)
+# + 3.2 - 2.44 e^(-0.06 d^0.645) with a (1 - Hd)^C term), the wall correction enters differently ((D/(D - W))^4 on the
+# whole viscosity vs (d/(d - 1.1))^2 inside and outside the hematocrit term), and no limit joins them: at large D they
+# tend to different in vitro curves (about 4.0 vs 3.1 at D = 500 um, Hd = 0.45). They differ by -75% to +95% over
+# D = 5-500 um, Hd = 0.2-0.6, so neither approximates the other. The two network models are both non-runnable and share
+# only Poiseuille-Kirchhoff conservation. No value in either data.yaml comes from the other paper.
+# Relations to Pries et al. (1992), pries1992. Schwarz's Eq. 3 cites Pries et al. 1994 (the in vivo law) and Secomb and
+# Pries 2013, not pries1992, so both relations are proposed. The 1994 law is built on the 1992 in vitro description:
+# its C is pries1992 Eq. 4 term for term, and its relative viscosity at 0.45 keeps the large-tube part of pries1992
+# Eq. 2 (3.2 - 2.44 e^(-0.06 D^0.645)), with the small-tube term 220 e^(-1.3 D) replaced by 6 e^(-0.085 d) and a wall
+# layer factor (d/(d - 1.1))^2 added. Eq. 3 has no separate C model, so the identity of the C forms is noted here only.
+# No value in either data.yaml comes from the other paper.
+- id: rel_viscosity_eq3_reduces_to_pries1992_eq7_large_d
+  kind: reduces_to
+  a: pries1992/eq7_eta_combined
+  b: schwarz2020/viscosity_eq3
+  mapping: {d: "D", Hd: "HctD"}
+  limit: {D: "oo"}
+  regime: {D: [10, 500], HctD: [0.1, 0.8]}
+  provenance: proposed
+  reason: >
+    Schwarz's Eq. 3 (p. 4), the Pries et al. 1994 in vivo viscosity law, and pries1992 Eq. 7 (with Eqs. 2 and 4) give
+    the relative apparent viscosity in the same form, 1 + (eta_0.45 - 1) ((1 - Hd)^C - 1)/((1 - 0.45)^C - 1), with the
+    same C (pries1992 Eq. 4). They differ only in terms that vanish for wide vessels: the wall-layer factor
+    (d/(d - 1.1))^2 tends to 1 and both small-diameter exponentials (6 e^(-0.085 d), 220 e^(-1.3 D)) tend to 0, leaving
+    the common 3.2 - 2.44 e^(-0.06 D^0.645). So as the diameter grows, the in vivo law used by Schwarz tends to the in
+    vitro law of pries1992. Both take d in um (q_eq3_units) and discharge hematocrit as a fraction. The relation joins
+    forms only: in vivo apparent viscosity and in vitro tube viscosity are different measured quantities.
+- id: rel_viscosity_eq3_approximated_by_pries1992_eq7
+  kind: approximated_by
+  a: schwarz2020/viscosity_eq3
+  b: pries1992/eq7_eta_combined
+  mapping: {D: "d", HctD: "Hd"}
+  regime: {d: [30, 4000], Hd: [0.3, 0.5]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    Asks whether the in vitro law of pries1992 Eq. 7 could stand in for Schwarz's Eq. 3 over the vessels Schwarz
+    reconstructs (30 um to 4 mm, pp. 3 and 5) at hematocrits around the Hd = 0.4 it uses (p. 4). The tolerance of 5%
+    is an added choice. The measured error is the result: the two forms join at large diameters (see the reduces_to
+    relation), but the wall-layer factor and the in vivo small-vessel term make Eq. 3 markedly higher in the smallest
+    vessels of the tree.
+# Relations to Pries and Secomb (2005), pries2005. Neither paper cites the other: Schwarz's Eq. 3 is the Pries et al.
+# 1994 in vivo law (ref 32 of pries2005, its "in vivo 94" relation of Fig. 1), and pries2005 proposes the ESL-based in
+# vivo law as an alternative to it. Both relations are proposed. Only the in vivo viscosity laws are related; Schwarz's
+# other models (Poiseuille conductance, power-law fits, branching laws) have no counterpart in pries2005, and pries2005's
+# Fahraeus, ESL-thickness and minimum models have none in Schwarz. No value in either data.yaml comes from the other paper.
+- id: rel_viscosity_eq3_reduces_to_pries2005_vivo_large_d
+  kind: reduces_to
+  a: schwarz2020/viscosity_eq3
+  b: pries2005/vivo_viscosity
+  mapping: {D: "d", HD: "Hd", Doff: "2.4", Dcrit: "10.5", D50: "100", Wmax: "2.6", Eamp: "1.1", Ewidth: "0.03", Epeak: "0.6", EHD: "1.18"}
+  limit: {d: "oo"}
+  regime: {d: [30, 4000], Hd: [0.3, 0.5]}
+  provenance: proposed
+  reason: >
+    Two in vivo relative-viscosity laws of the same group: Schwarz's Eq. 3 (p. 4), the Pries et al. 1994 law with a
+    constant 1.1 um wall term (d/(d - 1.1))^2, and pries2005's ESL-based law eta_vitro(Dph, HD) (D/Deff)^4 (p. 3) with
+    the fitted ESL parameters pries2005 prints (Doff 2.4, Dcrit 10.5, D50 100, Eamp 1.1, Ewidth 0.03, Epeak 0.6, EHD 1.18
+    on p. 3; Wmax 2.6 um from van Haaren et al.). For wide vessels both wall factors tend to 1, the ESL peak and both
+    small-diameter exponentials vanish, and both laws share the C of pries1992 Eq. 4 and the term 3.2 - 2.44
+    e^(-0.06 D^0.645), so they tend to the same large-tube in vitro viscosity. Diameters in um and discharge hematocrit
+    as a fraction on both sides (q_eq3_units). Forms only: the ESL parameters are pries2005's rat-mesentery fit, not
+    values Schwarz uses.
+- id: rel_viscosity_eq3_approximated_by_pries2005_vivo
+  kind: approximated_by
+  a: schwarz2020/viscosity_eq3
+  b: pries2005/vivo_viscosity
+  mapping: {D: "d", HD: "Hd", Doff: "2.4", Dcrit: "10.5", D50: "100", Wmax: "2.6", Eamp: "1.1", Ewidth: "0.03", Epeak: "0.6", EHD: "1.18"}
+  regime: {d: [30, 4000], Hd: [0.3, 0.5]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    Asks whether pries2005's ESL-based in vivo law, which pries2005 offers in place of the 1994 law (its Fig. 1 compares
+    network simulations with the "in vivo 94" and "in vivo ESL" relations, p. 4), could stand in for Schwarz's Eq. 3
+    over the vessels Schwarz reconstructs (30 um to 4 mm) at hematocrits around the Hd = 0.4 it uses (p. 4). The
+    tolerance of 5% is an added choice, the same as for the pries1992 comparison above. The measured error is the
+    result: the laws join at large diameters (see the reduces_to relation) and differ most near 30-100 um, at the upper
+    end of the range pries2005 fitted (3.3-83 um).
+# Relations to Kassab et al. (1993), kassab1993: none. Schwarz cites it only as earlier porcine morphometry (pp. 2, 8)
+# and says its segment lengths are "closer to our findings" (p. 9), a comparison of data, not of models. Kassab's models
+# are per-order Strahler bookkeeping (Horton fits log10 X_n = a + b n, A_n = (pi/4) D_n^2 N_n, V_n = L_n A_n, the
+# connectivity extrapolation); Schwarz's are per-segment hemodynamics (Poiseuille-Kirchhoff, Eq. 3 viscosity),
+# diameter power-law fits and node area growth (Eq. 8). No pair shares a form or an independent variable: Horton laws
+# are in order n, Schwarz's fits in diameter d, and Kassab's order-level area A_n is a sum over all elements of an order,
+# not the area ratio at one node. No value in either data.yaml comes from the other paper.
+# Relations to Chilian et al. (1986), chilian1986. Schwarz does not cite this paper: its Discussion (p. 11) compares its
+# "around 32%" with Chilian, 1991 (a later study of subepicardial and subendocardial pressures), not with chilian1986. So
+# the one relation is proposed. Chilian's other models are bookkeeping on its own measurements (R = P/Q per weight of
+# tissue, diameter change, Fig. 4/7 selectors) or its resistance-partition rule, which assumes zero venous pressure and
+# has no runnable counterpart here (Schwarz's network, which drains to 20 mmHg, is not runnable). Schwarz's R-like Eq. 4
+# (dP = Q/G for one segment) relates a segment's own drop to its own conductance, not aortic pressure to organ
+# perfusion. No value in either data.yaml comes from the other paper.
+- id: rel_pressure_fraction_same_as_chilian1986_percent_of_aortic
+  kind: same_as
+  a: chilian1986/pressure_percent_of_aortic
+  b: schwarz2020/pressure_fraction
+  mapping: {P: "Pm_m", P_sys: "Pa_m"}
+  output_map: {f: pct_m}
+  regime: {Pa_s: [80, 160], Pa_d: [50, 110], Pa_m: [60, 130], Pm_s: [10, 150], Pm_d: [5, 110], Pm_m: [5, 120]}
+  provenance: proposed
+  reason: >
+    Both express a microvascular pressure as a percentage of the upstream driving pressure: Chilian's mean microvascular
+    pressure over the simultaneous mean aortic pressure (Methods p. 5, Table 6, "Mean%"), Schwarz's predicted local pressure
+    over systemic pressure (p. 11, "around 32%"), which Schwarz sets beside Chilian's direct measurements of the same
+    percentage (citing Chilian, 1991). With P = Pm_m and P_sys = Pa_m the forms are one (100 P/P_sys). The form is a plain
+    ratio and joins forms only: Chilian's is a measured beating-heart cat pressure over a measured aortic pressure, Schwarz's
+    a steady network prediction over a prescribed 90 mmHg inlet; no quantity is identified.

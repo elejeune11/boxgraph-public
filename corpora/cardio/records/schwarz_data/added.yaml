@@ -1,0 +1,36 @@
+# Second pass (the network file). Neither the guide nor the network states the hematocrit or the plasma
+# viscosity behind the stored conductances (TreeQ.settings names only 'pries1996'; its fluidviscosity
+# 0.0032 belongs to the first submission, guide line 227).
+- id: Hd_release_added
+  quantity: discharge_hematocrit
+  unit: dimensionless
+  printed: "0.45"
+  basis: >
+    The hematocrit at which Eq. 3 (Pries et al. 1994) and Eq. 5 give the stored conductances
+    TreeQ.SE.Gseg, SE.G (inlets) and IE.G of every segment, together with a plasma viscosity of
+    1.0 mPa s: run_net_release reproduces them to the 6 figures recorded (cmp_net_G_*), and the
+    paper's Hd = 0.4 (run_net_paper) does not. At Hd 0.45 Eq. 3's hematocrit factor is 1, so the
+    relation reduces to its 0.45 form. Inferred by us; stated nowhere.
+  alternatives: ["0.4"]
+  stands_for: Hd in Eq. 3 as the release's solution used it
+- id: mu_p_release_added
+  quantity: plasma_viscosity
+  unit: mPa*s
+  printed: "1.0"
+  basis: >
+    The plasma viscosity that, with Hd 0.45, makes Eq. 3-5 give the stored conductances (see
+    Hd_release_added). Whether some other plasma viscosity does so at Hd 0.4 is what the
+    alternatives of mu_p_paper_added in run_net_paper try. Inferred by us; stated nowhere.
+  alternatives: ["1.2", "1.12"]
+  stands_for: the plasma viscosity that scales mu in Eq. 5
+- id: mu_p_paper_added
+  quantity: plasma_viscosity
+  unit: mPa*s
+  printed: "1.0"
+  basis: >
+    For the run on the paper's stated inputs (Hd 0.4, 90 and 20 mmHg), which leaves the plasma
+    viscosity unstated (schwarz2020 q_plasma_viscosity): the value the release's conductances imply
+    (mu_p_release_added). schwarz2020's own added value is 1.2 mPa s; 1.12 mPa s is a value
+    within the range the single stored conductances would need at Hd 0.4 (reader's exploration).
+  alternatives: ["1.2", "1.12"]
+  stands_for: the plasma viscosity that scales mu in Eq. 5

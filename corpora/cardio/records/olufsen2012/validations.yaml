@@ -1,0 +1,25 @@
+# Cross-validation against schwarz2020 (cross-validation job 2026-11-06). Neither paper cites the other.
+# Eqs. 2.16-2.18 give the area ratio eta (summed daughter areas over parent area) of a bifurcation obeying the radius
+# power law with exponent xi; schwarz2020 measures the same ratio ("area growth") at coronary bifurcations, with the
+# daughter symmetry S = dS/dL, the ratio of the smaller to the larger daughter diameter.
+- id: val_eta_eq216_217_vs_schwarz_large
+  model: area_ratio_eq216_217
+  inputs: {xi: xi_base, gamma: schwarz2020/S_median_large}
+  output: eta
+  against: schwarz2020/A_median_large
+  purpose: validation
+  quantities: {schwarz2020/daughter_symmetry: asymmetry_ratio, schwarz2020/area_growth: area_ratio}
+  conditions_ok: >
+    schwarz2020's median area growth 1.02 is for mothers larger than 400 um, its median symmetry 0.59 for mothers
+    larger than 500 um; the model at the median symmetry is set against the median area growth, as schwarz2020
+    itself does with its Eq. 8 (cmp_eq8_gamma3_large). Mothers above 400 um in diameter (radii above 200 um) lie in
+    the range of this paper's systemic structured trees, which branch from the terminal large arteries down to
+    r_min = 100 um (p. 9). The coronary bed is a systemic bed.
+  basis: >
+    This paper builds its small-artery trees on r_p^xi = r_d1^xi + r_d2^xi with 'for both the systemic and the
+    pulmonary trees, we let xi = 2.76' (p. 9), and Eqs. 2.16-2.18 give the area ratio such a bifurcation has at a
+    given asymmetry. The model takes gamma = r_d1/r_d2, the ratio of daughter radii as Eq. 2.17 prints it (the
+    smaller over the larger, since gamma = 0.41 < 1), which is schwarz2020's S (a ratio of diameters is the same
+    ratio of radii); with it the model is the same form as schwarz2020's Eq. 8, and the same number as the
+    right-hand form of Eq. 2.18 with gamma = S^2 (q_schwarz_gamma_form). xi rests on Olufsen (1999), not on
+    schwarz2020's coronary nodes, so this is a test.

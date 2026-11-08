@@ -11,6 +11,9 @@ result never depends on the order papers were added (principle 11).
 
 from __future__ import annotations
 
+import signal
+import threading
+from contextlib import contextmanager
 from dataclasses import replace
 from itertools import combinations
 from pathlib import Path
@@ -250,9 +253,41 @@ def _cited_table(lr, d, mine_b, theirs_b, from_datum: str, src: str, sid: str) -
 # --------------------------------------------------------------------------
 
 
+SOLVE_SECONDS = 30  # time allowed to invert one relation's mapping for a cross-paper check
+
+
+class SolveTooSlow(Exception):
+    """Inverting a mapping took longer than SOLVE_SECONDS: the check is reported as not checked."""
+
+
+@contextmanager
+def _deadline(seconds: float):
+    """Raise SolveTooSlow after `seconds` of wall time. Only in the main thread (signals); elsewhere no limit."""
+    if threading.current_thread() is not threading.main_thread():
+        yield
+        return
+
+    def stop(*_):
+        raise SolveTooSlow(f"inverting the mapping took longer than {seconds:g} s")
+
+    old = signal.signal(signal.SIGALRM, stop)
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old)
+
+
 def _solve_inputs(rel, ma, mb, b_vals: dict[str, float], a_own: dict[str, float] | None):
     """Find a's inputs from b's values through the mapping. Inputs the
-    mapping leaves free are taken from a's own run, labelled as added."""
+    mapping leaves free are taken from a's own run, labelled as added.
+    Raises SolveTooSlow when the search takes longer than SOLVE_SECONDS."""
+    with _deadline(SOLVE_SECONDS):
+        return _search_inputs(rel, ma, b_vals, a_own)
+
+
+def _search_inputs(rel, ma, b_vals: dict[str, float], a_own: dict[str, float] | None):
     syms = {n: sp.Symbol(n, positive=True) for n in ma.inputs}
     eqs = []
     for bs, expr in rel.mapping.items():
@@ -266,7 +301,12 @@ def _solve_inputs(rel, ma, mb, b_vals: dict[str, float], a_own: dict[str, float]
                 continue
             sub = {syms[n]: a_own[n] for n in free} if free else {}
             try:
-                sol = sp.solve([e.subs(sub) for e in eqs], [syms[n] for n in subset], dict=True)
+                # no symbolic re-check of each solution (check, simplify): it can take hours on a
+                # transcendental mapping; every solution is checked below as a positive number instead
+                sol = sp.solve([e.subs(sub) for e in eqs], [syms[n] for n in subset], dict=True,
+                               check=False, simplify=False)
+            except SolveTooSlow:
+                raise
             except Exception:  # noqa: BLE001
                 continue
             for s in sol:
@@ -280,7 +320,11 @@ def _solve_inputs(rel, ma, mb, b_vals: dict[str, float], a_own: dict[str, float]
                     if not v.is_number:
                         ok = False
                         break
-                    vals[n] = float(v)
+                    c = complex(v.evalf())
+                    if abs(c.imag) > 1e-12 * max(1.0, abs(c.real)):  # a complex root: not an input
+                        ok = False
+                        break
+                    vals[n] = c.real
                 if ok and all(v > 0 for v in vals.values()):
                     for n in free:
                         vals[n] = a_own[n]
@@ -349,7 +393,11 @@ def _cross_checks(records, sound, rel_results, rels, evaluated, cache_dir=None) 
                 continue
             if not rr or not rr.ok:
                 continue
-            vals, free = _solve_inputs(rel, ma, mb, rr.inputs, a_own)
+            try:
+                vals, free = _solve_inputs(rel, ma, mb, rr.inputs, a_own)
+            except SolveTooSlow as e:
+                out.append({**base, "status": f"not checked: {e}"})
+                continue
             if vals is None:
                 out.append({**base, "status": "not checked: the mapping cannot be inverted for these inputs"})
                 continue

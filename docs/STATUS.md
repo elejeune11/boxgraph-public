@@ -257,6 +257,17 @@ ledger (`corpora/cardio/completed.yaml`) lists 231 passed jobs: 29 read,
 (read $123.44, audit $32.94, digitize $163.25, relate $55.92, validate
 $58.39), about $14 a paper for reading, auditing and figures.
 
+A sixth batch (coronary) added ten sources: Spaan 1981 (the intramyocardial
+pump), Chilian 1986 (microvascular pressures in the beating heart), Kassab 1993
+(pig coronary morphometry), Kim 2010 (coronary outflow boundary conditions),
+Mynard 2014 and 2015 (a validated left coronary model; the whole adult
+circulation in 1D), Schwarz 2020 (a human left coronary tree), and the released
+data of Mynard 2014, Mynard 2015 and Schwarz 2020 (without the network file of
+Schwarz 2020, which was too large to upload). Its 96 jobs cost $146.52 (read
+$37.78, audit $10.81, digitize $43.49, relate $22.59, validate $31.85). With
+it, the corpus has 39 sources and its ledger 327 passed jobs ($580.46). The
+counts below are those of the first five batches.
+
 The build (`build/cardio/synthesis.json`):
 
 - 92 relations (53 verified, 12 not verified, 3 refuted, 2 ambiguous,

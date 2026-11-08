@@ -1,0 +1,225 @@
+# mapping: b's input symbol -> expression in a's input symbols, in each model's port units (both cgs)
+- id: rel_wave_speed_scaled_eq1_eq3
+  kind: same_as
+  a: mynard2014_data/wave_speed_eq1
+  b: mynard2015/wave_speed_eq3
+  mapping:
+    rho: "rho"
+    k1: "k1*c_ref**2/(2/(3*rho)*(k1*exp(k2*D_ref/2) + k3))"
+    k2: "k2"
+    k3: "k3*c_ref**2/(2/(3*rho)*(k1*exp(k2*D_ref/2) + k3))"
+    D0: "D0"
+  regime:
+    k1: [1.0e+6, 3.0e+7]
+    k2: [-25, -5]
+    k3: [1.0e+4, 1.0e+6]
+    rho: [1.0, 1.1]
+    D0: [0.05, 0.5]
+    D_ref: [0.2, 0.45]
+    c_ref: [500, 1200]
+  provenance: proposed
+  reason: >
+    Both are Olufsen's empirical wave-speed formula c0^2 = 2/(3 rho) [k1 exp(k2 D0/2) + k3]. mynard2014
+    (Eq. 1) then scales every c0 uniformly by s = c_ref / c0(D_ref) to hit a target at the proximal Cx;
+    mynard2015 (Eq. 3) uses the formula unscaled with its own constants (Table 2). Since s multiplies the
+    square root, the scaled formula is the unscaled one with k1 and k3 both multiplied by s^2 (k2 and rho
+    unchanged), so the two are the same model under that reparametrisation. mynard2015 cites Olufsen for
+    Eq. 3, not Mynard 2014, so this relation is proposed, not stated.
+# Eq. 3 is "the empirical formula suggested by Olufsen et al." (ref. 96 = olufsen1999). In olufsen1999 that
+# formula is its p. 3 wave speed c0^2 = (4/3) Eh/(rho r0) sqrt(A0/A) at A = A0 with Eh/r0 from its Eq. 6
+# (helper model wave_speed_eq6). Mynard's D0 is the diameter, so D0 = 2 r0; k1, k2, k3, rho carry over
+# (both papers in cgs). Units: g/s^2/cm, 1/cm, g/cm^3, cm on both sides.
+- id: rel_wave_speed_olufsen1999_printed
+  kind: same_as
+  a: olufsen1999/wave_speed_eq6
+  b: mynard2015/wave_speed_eq3
+  mapping: {rho: "rho", k1: "k1", k2: "k2", k3: "k3", D0: "2*r0"}
+  regime:
+    rho: [1.0, 1.1]
+    k1: [1.0e+5, 3.0e+7]
+    k2: [-25, -5]
+    k3: [1.0e+4, 1.0e+6]
+    r0: [0.025, 1.5]
+  provenance: stated
+  citation: {page: 6, printed_page: "1448", quote: "empirical formula suggested by Olufsen et al.", where: "text before Eq. 3"}
+- id: rel_wave_speed_olufsen1999_eq5factor
+  kind: same_as
+  a: olufsen1999/wave_speed_eq6_eq5factor
+  b: mynard2015/wave_speed_eq3
+  mapping: {rho: "rho", k1: "k1", k2: "k2", k3: "k3", D0: "2*r0"}
+  regime:
+    rho: [1.0, 1.1]
+    k1: [1.0e+5, 3.0e+7]
+    k2: [-25, -5]
+    k3: [1.0e+4, 1.0e+6]
+    r0: [0.025, 1.5]
+  provenance: proposed
+  reason: >
+    mynard2015 says Eq. 3 is Olufsen's formula (stated relation above), but its right-hand side
+    2/(3 rho) [k1 exp(k2 D0/2) + k3] carries the factor 2/3, while olufsen1999 prints c0^2 = (4/3) Eh/(rho r0)
+    at A = A0. The factor (A/rho) dp/dA actually gives from olufsen1999's Eq. 5 is 2/3 (olufsen1999
+    q_wave_speed_factor), so Mynard's Eq. 3 is Olufsen's formula with that factor in place of the printed one:
+    the same model as olufsen1999's corrected variant wave_speed_eq6_eq5factor under D0 = 2 r0.
+# Added by the ModelAtlas job with olufsen2000. mynard2015 does not cite olufsen2000 (its ref. 96 is
+# olufsen1999), so nothing here is stated.
+- id: rel_wave_speed_from_olufsen2000_tube_law
+  kind: derived_from
+  a: olufsen2000/tube_law_eq14
+  b: mynard2015/wave_speed_eq3
+  mapping: {}
+  steps:
+    - "the wave speed is c = sqrt((A/rho) dp/dA) (olufsen2000 p. 15, Appendix B)"
+    - "with Eq. 14, p - p0 = (4/3)(Eh/r0)(1 - sqrt(A0/A)), this gives c^2 = (2/3)(Eh/(rho r0)) sqrt(A0/A)"
+    - "at the reference state A = A0: c0^2 = (2/(3 rho)) Eh/r0"
+    - "Eh/r0 = k1 exp(k2 r0) + k3 (olufsen2000 Eq. 15), and r0 = D0/2 (Mynard's D0 is the diameter)"
+  provenance: proposed
+  reason: >
+    olufsen2000 defines the wave speed as c = sqrt((A/rho) dp/dA) (p. 15) and uses the state equation Eq. 14 with the
+    stiffness fit Eq. 15, Eh/r0 = k1 exp(k2 r0) + k3, whose k1, k2, k3 it takes from olufsen1999. These steps give
+    c0^2 = (2/(3 rho)) [k1 exp(k2 D0/2) + k3] with D0 = 2 r0, which is mynard2015's Eq. 3 term for term, factor 2/3
+    included. That supports the reading in rel_wave_speed_olufsen1999_eq5factor and q_eq3_factor_vs_olufsen1999:
+    Olufsen's own later definitions give the factor Mynard uses, not the (4/3) that olufsen1999 prints.
+  assumptions:
+    - >
+      The steps take a derivative and change the output from pressure to wave speed, which the symbolic test cannot
+      apply. a (tube_law_eq14) has ports A, r0, E, h, p0 and no rho, k1, k2 or k3, so b's inputs cannot be written in
+      a's symbols, and no mapping or regime is given. The relation is recorded as unverifiable. No helper model is
+      added because no paper states this relation.
+# Checked with reymond2009 (ref. 104): no relation entered. mynard2015 cites ref. 104 as an open-loop 1D arterial
+# model with a simple cardiac model (p. 1) and as a systemic arterial 1D model (p. 12): descriptions, not a
+# derivation; its circulation_1d_0d is a different, closed-loop network whose resistances come from Stergiopulos
+# et al. (ref. 116). Its wall viscosity C = b1/D + b0 (Eq. 4, p. 6) is estimated "Similar to Reymond et al.": a
+# similar procedure, but an inverse-linear law for a viscosity in g/s, where reymond2009 Eq. 9 is linear in diameter
+# for a dimensionless coefficient of a different (Holenstein) wall model; "similar" names no relation kind, and Eq. 4
+# is not a model in this record. cardiac_output_from_ef and reymond2009/arterial_tree_1d share only a port shape.
+# The Fig. 4 in vivo waveforms taken from ref. 104 are linked in cited.yaml.
+# Checked with stergiopulos1992 (ref. 116): no relation entered and no value linked. mynard2015 cites ref. 116 as
+# an open-loop 1D arterial model with prescribed aortic inflow (p. 1, p. 12), says its systemic arterial network
+# "was adapted from previous studies" including 116 (p. 4), and that its systemic bed resistances "were based on
+# data in Stergiopulos et al." then combined, divided and adjusted to a normal flow distribution (p. 6). These are
+# sources of network data, not statements about models; the resistances themselves are only in Supplemental File 2
+# (record mynard2015_data), and after adjustment are not the values stergiopulos1992 prints. circulation_1d_0d
+# (closed loop, power-law viscoelastic tube law, not runnable) and stergiopulos1992/arterial_tree_1d (open loop,
+# logarithmic wall law Eq. 9) share only a port shape; no proposed relation would be testable or meaningful.
+# The two compliance_sum models are plain sums (flagged as too plain to relate).
+# Checked with westerhof1969 (ref. 130): mynard2015 cites it only in a list of 1D/arterial-tree models (p. 1) and
+# as one of the "previous studies" its systemic arterial network was adapted from (p. 4). Neither is a statement
+# about a model, and no value in data.yaml is taken from it (the network dimensions are in Supplemental File 1,
+# record mynard2015_data), so nothing is stated and nothing is linked in cited.yaml. One relation is proposed:
+- id: rel_wave_speed_eq3_westerhof_phase_velocity
+  kind: same_as
+  a: mynard2015/wave_speed_eq3
+  b: westerhof1969/phase_velocity
+  # Lp = rho/(pi r^2) with r = D0/2 (westerhof1969 L'_1, exact); Cp = 3 pi r^2 / (2 Eh/r) with Eh/r = k1 exp(k2 D0/2) + k3
+  # (thin-wall leading term of westerhof1969 C'). Units: g/cm^5 and cm^3*s^2/g from cgs inputs, no conversion factors.
+  mapping:
+    Lp: "4*rho/(pi*D0**2)"
+    Cp: "3*pi*D0**2/(8*(k1*exp(k2*D0/2) + k3))"
+  output_map: {c: c0}
+  regime:
+    rho: [1.0, 1.1]
+    k1: [1.0e+5, 3.0e+7]
+    k2: [-25, -5]
+    k3: [1.0e+4, 1.0e+6]
+    D0: [0.05, 3.0]
+  provenance: proposed
+  reason: >
+    Westerhof et al. give the lossless phase velocity c = 1/sqrt(L'_1 C') (Eq. 3, p. 140) with the segment inertance
+    per length L'_1 = rho/(pi r^2) and transverse capacitance per length C' = 3 pi r^2 (a + 1)^2/(E (2a + 1)), a = r/h
+    (Fig. 1). For a thin wall (h/r -> 0) C' -> 3 pi r^3/(2 E h) = 3 pi r^2/(2 Eh/r). Writing Eh/r with Olufsen's fit
+    k1 exp(k2 r) + k3 and r = D0/2 gives c^2 = (2/(3 rho)) [k1 exp(k2 D0/2) + k3], which is mynard2015's Eq. 3, factor
+    2/3 included. So Eq. 3 is Westerhof's analog phase velocity for a thin-walled segment, the factor 2/3 being the
+    one Westerhof's capacitance (the incompressible wall factor 3/2) carries. This supports the reading in
+    rel_wave_speed_olufsen1999_eq5factor. Neither paper states it; mynard2015 cites westerhof1969 only for network data.
+  assumptions:
+    - >
+      The mapping builds in the thin-wall limit of Westerhof's C' and Olufsen's Eh/r fit; westerhof1969 uses the full
+      thick-wall C' with E and h separately, which mynard2015's inputs (Eh/r only) cannot supply. For the h/r of
+      large arteries (about 0.1, a = 10) the thick-wall C' is larger by the factor 2 (a + 1)^2/(a (2a + 1)) = 1.15, so
+      the full Westerhof phase velocity is about 7% below Eq. 3; the relation is exact only in the thin-wall limit.
+# Added by the ModelAtlas job with alastruey2011 (ref. 2). mynard2015 cites ref. 2 once (p. 3), for the velocity
+# profile assumptions of its 1D equations; no value in data.yaml is taken from it, so nothing is linked in cited.yaml.
+- id: rel_1d_velocity_profile_alastruey2011
+  kind: derived_from
+  a: alastruey2011/network_1d
+  b: mynard2015/circulation_1d_0d
+  mapping: {}
+  steps:
+    - "a flat velocity profile for the convective acceleration term (u du/dx in Eq. T2; U dU/dx in alastruey2011 Eq. 1)"
+    - "a profile with a boundary layer for the viscous friction term, as adopted by Alastruey et al. (T2: -xi pi mu u/(rho A), xi = 22; alastruey2011 Eq. 1: f/(rho A), f = -22 mu pi U)"
+  provenance: stated
+  citation: {page: 3, printed_page: "1445", quote: "assumed a ﬂat velocity proﬁle for the convective acceleration term and a proﬁle with a", where: "text on Eqs. T1-T2"}
+  assumptions:
+    - >
+      The statement covers only the velocity-profile assumptions of the 1D momentum equation (T2), the part of
+      circulation_1d_0d that the paper says follows Alastruey et al.; the rest of the two models differs (closed loop
+      with 0D heart and beds against an open 37-artery network; power-law tube law T3-T4 against the square-root law
+      of alastruey2011 Eq. 5). The relation is recorded as stated and is unverifiable: circulation_1d_0d does not run,
+      and the steps are modelling choices in words, not operations the symbolic test can apply. No helper model is
+      added for the friction term alone, since two copies of -22 pi mu U/(rho A) would be a form too plain to relate.
+# Not entered, for want of a runnable model: Mynard's tube law T3 with b = 1, Gamma = 0 and P0 = 0 is
+# p - pext = 2 rho c0^2 (sqrt(A/A0) - 1), which is alastruey2011's elastic Eq. 5 (tube_law_eq5_elastic) under
+# beta/sqrt(A0) = 2 rho c0^2. But b is fixed by T4 (b = 2 rho c0^2/(P0 - Pcollapse)), not a free input, and T3 is
+# only part of the non-runnable circulation_1d_0d; the viscous terms also differ (Gamma/(A sqrt(A)) dA/dt in T3,
+# Gamma/(A0 sqrt(A)) dA/dt in alastruey2011 Eq. 5). No paper states this correspondence, so no helper model is written.
+# Checked with formaggia2003 (ref. 34): no relation entered and no value linked. mynard2015 cites ref. 34 once (p. 3):
+# "The viscoelastic term was neglected at junctions and on internal nodes was treated with the operator splitting
+# technique described by Formaggia et al.34 and Malossi et al.77". That is a numerical scheme borrowed for the
+# viscoelastic wall term, which formaggia2003 presents in Section 4 (pp. 18-22); those wall-model tests are not modelled
+# in formaggia2003 (q_wall_models_not_run), and its models bifurcation_angles and endograft_bifurcation are purely
+# elastic (Taylor-Galerkin, no splitting), so the statement names no model in either record; circulation_1d_0d is not
+# runnable in any case. Mynard's junction conditions (mass and total-pressure continuity, no losses) are formaggia2003
+# Eqs. 35 and 38, but mynard2015 cites refs. 89 and 108 for them, not Formaggia, and they are only part of the
+# non-runnable network, so no relation is proposed. The port-shape match between formaggia2003/bifurcation_angles (a
+# network simulation returning A, W1, W2) and wave_speed_eq3 is coincidental. Formaggia's square-root law does imply a
+# reference wave speed c0^2 = E h0/(2 rho R0), against (2/3) Eh/(rho r0) behind Eq. 3; the factors differ (different
+# tube laws), formaggia2003 has no wave-speed model, and a constant-factor scaling would be too plain to mean anything.
+# No value in mynard2015's data.yaml is taken from formaggia2003, so nothing is linked in cited.yaml.
+# Added by the ModelAtlas job with mynard2014 (ref. 91). mynard2015 says its coronary vascular bed and the way its
+# intramyocardial pressure is formed come from mynard2014. Both full models (mynard2014/multiscale_coronary and
+# mynard2015/circulation_1d_0d) are not runnable, so both stated relations are unverifiable. No value in
+# mynard2015's data.yaml has from_source ref-91 (aSIP = 8.2 mL is from ref. 103; the reference volumes 2.5 and
+# 8.0 mL/100 g and R1 = 1.2 Rm, R2 = 0.5 Rm are not data in either record), so nothing is linked in cited.yaml.
+# Not proposed: mynard2014's wave-speed formula (its Eq. 1) is part of multiscale_coronary only here; its runnable
+# form is mynard2014_data/wave_speed_eq1, already related above (rel_wave_speed_scaled_eq1_eq3). The remaining
+# runnable models of both records are arithmetic (differences, ratios, sums) and share no form worth relating.
+- id: rel_coronary_bed_mynard2014
+  kind: derived_from
+  a: mynard2014/multiscale_coronary
+  b: mynard2015/circulation_1d_0d
+  mapping: {}
+  steps:
+    - "the coronary vascular bed (Fig. 2c) is the three-layer 0D bed of mynard2014 (subendocardium, midwall, subepicardium; compliances C1, C2; resistances R1, Rm, R2)"
+    - "volume-dependent resistances: mynard2015 Eqs. T17-T19 are mynard2014 Eqs. 5-7 (R = R0 V0^2/V^2; Rm split by gamma between the two compartments)"
+    - "the bed is coupled to a terminal 1D artery and vein via penetrating artery/vein characteristic impedances and compliances (Zpa, Zpv, Cpa, Cpv)"
+    - "parameterisation as in mynard2014: R1 = 1.2 Rm, R2 = 0.5 Rm; myocardial weights and conductances distributed by the inverse cube of 1D penetrating artery radii"
+  provenance: stated
+  citation: {page: 3, printed_page: "1445", quote: "is identical to that in Mynard et al", where: "Heart and Valves, on the coronary vascular bed model"}
+  assumptions:
+    - >
+      The statement covers only the coronary bed, one component of mynard2015's closed-loop circulation; in
+      mynard2014 the same bed terminates a 1D left coronary network driven by measured aortic and LV pressures,
+      in mynard2015 it is driven by the simulated heart. Neither model runs (subject data, network geometry and
+      numerics unpublished), and the steps are statements in words, so the relation is unverifiable. The third
+      and fourth steps are from mynard2015 p. 4 ("For further details about the design, implementation and
+      validation of the coronary model, see Mynard et al.91") and p. 6-7 ("As in Mynard et al.91 myocardial
+      weights ... were distributed"; "R1 = 1.2Rm and R2 = 0.5Rm.91").
+- id: rel_intramyocardial_pressure_mynard2014
+  kind: derived_from
+  a: mynard2014/multiscale_coronary
+  b: mynard2015/circulation_1d_0d
+  mapping: {}
+  steps:
+    - "pim = pCEP + pSIP applied to the bed compliances (mynard2014 Eq. 8, pim = alpha CEP + SIP)"
+    - "pCEP varies linearly across the wall from ventricular cavity pressure at the endocardium to pericardial pressure at the epicardium (from LV to RV pressure in the septum), as in mynard2014 p. 8"
+    - "pSIP proportional to ventricular chamber elastance: mynard2014 SIP = phi E_LV; mynard2015 Eq. 1 pSIP = aSIP pV/(vV - Vp=0,V)"
+    - "the constant chosen so that peak SIP is 20% of peak LV pressure in both papers"
+  provenance: stated
+  citation: {page: 7, printed_page: "1449", quote: "intramyocardial pressure (pCEP and pSIP) were deter", where: "text before Table 3, continued 'mined as in Mynard et al.91'"}
+  assumptions:
+    - >
+      mynard2015 writes the elastance explicitly as pV/(vV - Vp=0,V) and applies it to each ventricle (and to the
+      septum), where mynard2014 writes SIP = phi E_LV for the left ventricle only and the measured, not simulated,
+      LV pressure enters it. mynard2015's runnable sip_ratio_eq1 (pSIP/pV = aSIP/(vV - Vp=0)) has no counterpart
+      model in mynard2014, which gives SIP only inside the non-runnable multiscale_coronary, so no helper model is
+      written and the relation is unverifiable.

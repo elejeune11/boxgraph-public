@@ -1,0 +1,18 @@
+id: pulmonary_fractal_rules
+name: asymmetry ratio, fractal exponent and length/radius ratio of the released pulmonary networks (Eq. 2)
+role: processing
+software: true
+stated: {none: "MOESM1_1D_segments.xlsx, sheet '1D segments', blocks 'Pulmonary Arteries' (rows 304-361) and 'Pulmonary Veins' (rows 364-417): columns D 'Length', E 'Inlet A0', G-H connectivity. A spreadsheet in a software source cannot be cited by sheet and cell."}
+equation: "Dp^xi = Dd1^xi + Dd2^xi and gamma = r_d2^2 / r_d1^2 (Eq. 2), L/r per segment"
+built_from: [network_counts]
+inputs: {}
+outputs:
+  gamma_min: {quantity: asymmetry_ratio, unit: dimensionless}
+  gamma_max: {quantity: asymmetry_ratio, unit: dimensionless}
+  xi_min: {quantity: fractal_exponent, unit: dimensionless}
+  xi_max: {quantity: fractal_exponent, unit: dimensionless}
+  L_over_r_min: {quantity: length_radius_ratio, unit: dimensionless}
+  L_over_r_max: {quantity: length_radius_ratio, unit: dimensionless}
+  n_bifurcations: {quantity: bifurcation_count, unit: dimensionless}
+settings: {block: "Pulmonary Arteries", direction: outlet, roots: [LPA, RPA]}
+stochastic: false

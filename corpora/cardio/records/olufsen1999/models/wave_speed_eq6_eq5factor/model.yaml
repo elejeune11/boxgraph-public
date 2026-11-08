@@ -1,0 +1,25 @@
+id: wave_speed_eq6_eq5factor
+name: reference wave speed from Eh/r0 of Eq. 6, with the factor that follows from Eq. 5
+role: model
+stated: {page: 3, printed_page: "H259", quote: "the square of the wave propagation velocity", where: "c0^2 before Eq. 6, with Eqs. 5 and 6"}
+# A helper for the relation mynard2015 states on its p. 6 (see wave_speed_eq6): the same formula with the
+# factor 2/3 that (A/rho) dp/dA gives from Eq. 5, in place of the printed 4/3 (q_wave_speed_factor).
+equation: "c0^2 = (2/3) Eh/(rho r0) at A = A0; Eh/r0 = k1 exp(k2 r0) + k3 (6)"
+variant_of: wave_speed_eq6
+corrections:
+  - equation: "c0^2 (p. 3)"
+    change: "(2/3) Eh/(rho r0) sqrt(A0/A) instead of the printed (4/3) Eh/(rho r0) sqrt(A0/A)"
+    evidence: >
+      The printed c0^2 is defined as (A/rho) dp/dA; differentiating Eq. 5,
+      p - p0 = (4/3)(Eh/r0)(1 - sqrt(A0/A)), gives (2/3) Eh/(rho r0) sqrt(A0/A). The compliance printed on
+      p. 5, C = 3 A0 r0/(2 Eh), also agrees with Eq. 5 and the factor 2/3.
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  r0: {quantity: vessel_radius, unit: cm}
+outputs:
+  c0: {quantity: reference_wave_speed, unit: cm/s}
+settings: {}
+stochastic: false

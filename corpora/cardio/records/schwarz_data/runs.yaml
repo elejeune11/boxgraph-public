@@ -1,0 +1,102 @@
+# the authors' fits as the three released workbooks hold them
+- {id: run_wb_hum06, model: hemodynamics_workbook, inputs: {}, settings: {file: hemodynamics_hum06.xlsx},
+   outputs: {G_a: G_a_hum06, G_b: G_b_hum06, G_r2: G_r2_hum06, G_b_line: G_b_line_hum06,
+             Q_a: Q_a_hum06, Q_b: Q_b_hum06, Q_r2: Q_r2_hum06, Q_b_loglin: Q_b_loglin_hum06,
+             P_a: P_a_hum06, P_b: P_b_hum06, P_r2: P_r2_hum06,
+             v_a: v_a_hum06, v_b: v_b_hum06, v_r2: v_r2_hum06, v_b_loglin: v_b_loglin_hum06,
+             n_classes_G: n_classes_G_hum06, n_classes_Q: n_classes_Q_hum06},
+   note: "the reconstructed heart with extrapolated microcirculation (Fig. 5, brown)"}
+- {id: run_wb_hum6p, model: hemodynamics_workbook, inputs: {}, settings: {file: hemodynamics_in-silicoHum6P.xlsx},
+   outputs: {G_a: G_a_hum6p, G_b: G_b_hum6p, G_r2: G_r2_hum6p, G_b_line: G_b_line_hum6p,
+             Q_a: Q_a_hum6p, Q_b: Q_b_hum6p, Q_r2: Q_r2_hum6p, Q_b_loglin: Q_b_loglin_hum6p,
+             P_a: P_a_hum6p, P_b: P_b_hum6p, P_r2: P_r2_hum6p,
+             v_a: v_a_hum6p, v_b: v_b_hum6p, v_r2: v_r2_hum6p, v_b_loglin: v_b_loglin_hum6p,
+             n_classes_G: n_classes_G_hum6p, n_classes_Q: n_classes_Q_hum6p},
+   note: "the in silico trees of the second (final) iteration (Fig. 5, blue)"}
+- {id: run_wb_highp, model: hemodynamics_workbook, inputs: {}, settings: {file: hemodynamics_in-silicoHighP.xlsx},
+   outputs: {G_a: G_a_highp, G_b: G_b_highp, G_r2: G_r2_highp, G_b_line: G_b_line_highp,
+             Q_a: Q_a_highp, Q_b: Q_b_highp, Q_r2: Q_r2_highp, Q_b_loglin: Q_b_loglin_highp,
+             P_a: P_a_highp, P_b: P_b_highp, P_r2: P_r2_highp,
+             v_a: v_a_highp, v_b: v_b_highp, v_r2: v_r2_highp, v_b_loglin: v_b_loglin_highp,
+             n_classes_G: n_classes_G_highp, n_classes_Q: n_classes_Q_highp},
+   note: "the in silico trees of the first iteration (topological branching), not used for the paper's results"}
+
+# the velocity exponent the flow fits imply under Poiseuille flow
+- {id: run_v_from_Q_power, model: velocity_exponent_from_flow, inputs: {gamma: Q_b_hum06}, outputs: {b_v: v_b_from_Q_power}}
+- {id: run_v_from_Q_loglin, model: velocity_exponent_from_flow, inputs: {gamma: Q_b_loglin_hum06}, outputs: {b_v: v_b_from_Q_loglin}}
+
+# the released per-territory perfusion
+- {id: run_perfusion, model: perfusion_sheet, inputs: {},
+   outputs: {n: n_perf_released, median: perfusion_median_released, p25: perfusion_p25_released, p75: perfusion_p75_released}}
+- {id: run_perfusion_matlab, model: perfusion_sheet, inputs: {}, settings: {percentile_method: matlab},
+   outputs: {n: n_perf_released_m, median: perfusion_median_released_m, p25: perfusion_p25_released_m, p75: perfusion_p75_released_m},
+   note: "quartiles as Matlab's prctile takes them"}
+
+# class medians of the network solution at the paper's diameters (smoothed and pooled medians)
+- {id: run_medians_smoothed, model: network_medians, inputs: {d: p_d_100um, d_cut: p_d_wss_cut}, settings: {column: E},
+   outputs: {P: P_100um_smoothed, Q: Q_100um_smoothed, d_class: d_class_smoothed, wss_below: wss_below300_smoothed, d_wss_peak: d_wss_peak_smoothed}}
+- {id: run_medians_pooled, model: network_medians, inputs: {d: p_d_100um, d_cut: p_d_wss_cut}, settings: {column: B},
+   outputs: {P: P_100um_pooled, Q: Q_100um_pooled, d_class: d_class_pooled, wss_below: wss_below300_pooled, d_wss_peak: d_wss_peak_pooled}}
+- {id: run_P_fraction_100um, model: pressure_fraction, inputs: {P: P_100um_smoothed, P_in: P_inlet_doc}, outputs: {f: P_fraction_100um_released},
+   note: "relative to the inlet pressure the network solution used (11970 Pa)"}
+- {id: run_flow_ratio, model: flow_ratio, inputs: {Q_1: p_Q_large_median, Q_2: Q_100um_smoothed}, outputs: {ratio: flow_ratio_released},
+   note: "the paper's median of > 1 mm arteries over the released median of the class nearest 100 um"}
+
+# counts and weights stated in the release
+- {id: run_element_total, model: element_total, inputs: {n_IE: n_IE, n_SE: n_SE}, outputs: {n: n_elements_sum}}
+- {id: run_territory_density, model: territory_density, inputs: {W: heart_weight_doc, f: Vtree_of_Vtot, V: p_perfused_volume_total},
+   outputs: {W_tree: W_tree_left, rho: rho_implied}}
+
+# ---- second pass: the pressure and flow solution rerun on the released network
+# (a) with the boundary pressures stored in the network and the hematocrit and plasma viscosity its
+#     conductances imply: does the rerun give the stored solution, the workbooks and the paper's numbers?
+- id: run_net_release
+  model: network_solution
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d: p_d_100um, d_fit_lo: p_P_fit_lo, d_fit_hi: p_P_fit_hi, d_large: p_d_large, d_cut: p_d_wss_cut,
+           W: heart_weight_doc, f_tree: Vtree_of_Vtot}
+  outputs: {d_class: net_d_100um, n_class: net_n_100um, P_class: net_P_100um, Q_class: net_Q_100um,
+            G_class: net_G_100um, wss_class: net_wss_100um, v_class: net_v_100um,
+            G_a: net_G_a, G_b: net_G_b, G_r2: net_G_r2, G_b_internal: net_G_b_internal,
+            Q_a: net_Q_a, Q_b: net_Q_b, Q_r2: net_Q_r2, P_a: net_P_a, P_b: net_P_b, P_r2: net_P_r2,
+            v_a: net_v_a, v_b: net_v_b, v_r2: net_v_r2, Gdist_a: net_Gdist_a, Gdist_b: net_Gdist_b,
+            Q_total: net_Q_total, Q_LCX: net_Q_LCX, Q_LAD: net_Q_LAD, G_LCX: net_G_LCX, G_LAD: net_G_LAD,
+            G_SE1: net_G_SE1, G_IE1: net_G_IE1, P_IN1: net_P_IN1, wss_IE1: net_wss_IE1,
+            Q_large_median: net_Q_large, wss_small_median: net_wss_small, d_wss_peak: net_d_wss_peak,
+            perf_median: net_perf_median, perf_p25: net_perf_p25, perf_p75: net_perf_p75, n_perf: net_n_perf,
+            V_perfused: net_V_perfused, V_territory_median: net_V_territory_median}
+  note: "boundary pressures as TreeQ.SE.sourceP holds them; Hd 0.45 and plasma viscosity 1.0 mPa s as the stored conductances imply; class statistics for the class containing 100 um (90-110 um)"
+# (b) on the paper's stated inputs: 90 and 20 mmHg, Hd 0.4 (p. 4); the plasma viscosity is unstated
+- id: run_net_paper
+  model: network_solution
+  inputs: {P_in: P_inlet_doc_mmHg, P_cap: P_capillary_doc_mmHg, Hd: p_Hd, mu_p: mu_p_paper_added,
+           d: p_d_100um, d_fit_lo: p_P_fit_lo, d_fit_hi: p_P_fit_hi, d_large: p_d_large, d_cut: p_d_wss_cut,
+           W: heart_weight_doc, f_tree: Vtree_of_Vtot}
+  outputs: {d_class: netp_d_100um, n_class: netp_n_100um, P_class: netp_P_100um, Q_class: netp_Q_100um,
+            G_class: netp_G_100um, wss_class: netp_wss_100um, v_class: netp_v_100um,
+            G_a: netp_G_a, G_b: netp_G_b, G_r2: netp_G_r2, G_b_internal: netp_G_b_internal,
+            Q_a: netp_Q_a, Q_b: netp_Q_b, Q_r2: netp_Q_r2, P_a: netp_P_a, P_b: netp_P_b, P_r2: netp_P_r2,
+            v_a: netp_v_a, v_b: netp_v_b, v_r2: netp_v_r2, Gdist_a: netp_Gdist_a, Gdist_b: netp_Gdist_b,
+            Q_total: netp_Q_total, Q_LCX: netp_Q_LCX, Q_LAD: netp_Q_LAD, G_LCX: netp_G_LCX, G_LAD: netp_G_LAD,
+            G_SE1: netp_G_SE1, G_IE1: netp_G_IE1, P_IN1: netp_P_IN1, wss_IE1: netp_wss_IE1,
+            Q_large_median: netp_Q_large, wss_small_median: netp_wss_small, d_wss_peak: netp_d_wss_peak,
+            perf_median: netp_perf_median, perf_p25: netp_perf_p25, perf_p75: netp_perf_p75, n_perf: netp_n_perf,
+            V_perfused: netp_V_perfused, V_territory_median: netp_V_territory_median}
+  note: "the paper's Hd 0.4 and 90/20 mmHg (taken at 133.322 Pa/mmHg); the release's distal conductances TreeQ.SE.Gdist kept as they are"
+# (c) the class medians of the release run at the workbook's classes
+- id: run_net_release_classes
+  model: network_solution
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_fit_lo: p_P_fit_lo, d_fit_hi: p_P_fit_hi, d_large: p_d_large, d_cut: p_d_wss_cut,
+           W: heart_weight_doc, f_tree: Vtree_of_Vtot}
+  sweep: {d: wb_P_classes}
+  outputs: {d_class: net_d_classes, P_class: net_P_classes, Q_class: net_Q_classes, G_class: net_G_classes,
+            wss_class: net_wss_classes, v_class: net_v_classes}
+  note: "d takes each class diameter of hemodynamics_hum06.xlsx column A (classes 1-11)"
+# derived from the release run
+- {id: run_net_P_fraction_100um, model: pressure_fraction, inputs: {P: net_P_100um, P_in: P_inlet_mat}, outputs: {f: net_P_fraction_100um},
+   note: "median mid-segment pressure of the 90-110 um class over the stored inlet pressure"}
+- {id: run_net_flow_ratio, model: flow_ratio, inputs: {Q_1: net_Q_large, Q_2: net_Q_100um}, outputs: {ratio: net_flow_ratio},
+   note: "median flow of segments > 1 mm over that of the 90-110 um class, both from the rerun"}
+- {id: run_net_v_from_Q, model: velocity_exponent_from_flow, inputs: {gamma: net_Q_b}, outputs: {b_v: net_v_b_from_Q},
+   note: "the velocity exponent the rerun's own non-linear flow exponent implies under Poiseuille flow"}
