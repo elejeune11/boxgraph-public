@@ -1,0 +1,199 @@
+# ---- constants of vascular generation (Table S1, p. 67) and of the CFD (Table S3, p. 69; text pp. 5, 21)
+- {id: gamma_t1, quantity: murray_exponent, unit: dimensionless, origin: reported, printed: "3",
+   citation: {page: 67, printed_page: "S59", quote: "scaling exponent 3", where: "Table S1"}}
+- {id: alpha_r_t1, quantity: cost_radius_exponent, unit: dimensionless, origin: reported, printed: "2",
+   citation: {page: 67, printed_page: "S59", quote: "radius exponent 2", where: "Table S1"}}
+- {id: alpha_l_t1, quantity: cost_length_exponent, unit: dimensionless, origin: reported, printed: "1",
+   citation: {page: 67, printed_page: "S59", quote: "length exponent 1", where: "Table S1"}}
+- {id: mu_t1, quantity: dynamic_viscosity, unit: cP, origin: reported, printed: "4",
+   citation: {page: 67, printed_page: "S59", quote: "dynamic viscosity cP 4", where: "Table S1"}}
+- {id: mu_t3, quantity: dynamic_viscosity, unit: cP, origin: reported, printed: "4",
+   citation: {page: 69, printed_page: "S61", quote: "dynamic viscosity cP 4", where: "Table S3"}}
+- {id: rho_t3, quantity: fluid_density, unit: g/cm^3, origin: reported, printed: "1.06",
+   citation: {page: 69, printed_page: "S61", quote: "fluid density g/cm3 1.06", where: "Table S3"}}
+- {id: nu_t3, quantity: kinematic_viscosity, unit: cm^2/s, origin: derived, printed: "0.037",
+   citation: {page: 69, printed_page: "S61", quote: "kinematic viscosity cm · s 0.037", where: "Table S3"},
+   note: "the unit is printed 'cm · s', which is not a kinematic viscosity; entered in cm^2/s (q_table_units)"}
+- {id: rho_p5, quantity: fluid_density, unit: g/cm^3, origin: reported, printed: "1.06",
+   citation: {page: 5, printed_page: "1202", quote: "blood (ρ = 1.06 g/cm3 and ν = 0.04 cP", where: text},
+   note: the fluid of the pulsatile simulation of the printed single-inlet single-outlet network (Fig. 5H)}
+- {id: mu_p5, quantity: dynamic_viscosity, unit: cP, origin: reported, printed: "0.04",
+   citation: {page: 5, printed_page: "1202", quote: "blood (ρ = 1.06 g/cm3 and ν = 0.04 cP", where: text},
+   note: "printed with the symbol of kinematic viscosity (nu) and the unit of dynamic viscosity (cP); entered as printed, in cP (q_viscosity_main_text)"}
+- {id: gamma_range_lo, quantity: murray_exponent, unit: dimensionless, origin: reported, printed: "2",
+   citation: {page: 11, printed_page: "S3", quote: "law exponents exist in a range", where: text},
+   note: "lower end of the stated physiological range '2 <= gamma <= 3'"}
+
+# ---- the identity stated for Eq. S6 (p. 12)
+- {id: murray_identity, quantity: murray_sum, unit: dimensionless, origin: derived, printed: "1",
+   citation: {page: 12, printed_page: "S4", quote: "is derived from (Eq. S5), we note that", where: "text after Eq. S7"},
+   note: "printed 'sum_{i in C} beta_i^gamma ≡ 1', with beta_i = r_i / r_p (Eq. S6)"}
+
+# ---- tree sizes the paper grows in a cube
+- {id: n_term_1000, quantity: terminal_count, unit: dimensionless, origin: reported, printed: "1000",
+   citation: {page: 3, printed_page: "1200", quote: "We also successfully created 1000-outlet vascular", where: text},
+   note: "1000-outlet trees in a cube, annulus, heart and brain gyrus (Fig. 2E)"}
+- {id: n_term_4000, quantity: terminal_count, unit: dimensionless, origin: reported, printed: "4000",
+   citation: {page: 51, printed_page: "S43", quote: "trees with 100, 1000, 4000, and 8000 terminal segments", where: "Fig. S8 caption"}}
+
+# ---- generation time and the acceleration claim (pp. 1, 3)
+- {id: speedup_abstract, quantity: speedup_factor, unit: dimensionless, origin: derived, printed: "230",
+   citation: {page: 1, printed_page: "1198", quote: "advances accelerate vascular generation 230-fold", where: abstract}}
+- {id: t_gyrus_8000_new, quantity: build_time, unit: min, origin: measured, printed: "15",
+   citation: {page: 3, printed_page: "1200", quote: "takes a median of 15 min, compared with 59.96 hours", where: text},
+   conditions: {terminal_count: "8000"},
+   note: median time of the presented code for 8000-terminal trees in a brain gyrus geometry}
+- {id: t_gyrus_8000_ref, quantity: build_time, unit: h, origin: reported, printed: "59.96",
+   citation: {page: 3, printed_page: "1200", quote: "takes a median of 15 min, compared with 59.96 hours", where: text},
+   conditions: {terminal_count: "8000"}, from_source: ref-34,
+   note: "'reported elsewhere (34)', Talou et al. 2021"}
+
+# ---- build times of Tables S5 and S6 (pp. 71-72) and the main text's million-vessel time (p. 4) [audit]
+- {id: t_globus_pallidus_build, quantity: build_time, unit: s, origin: measured, printed: "56.52",
+   citation: {page: 71, printed_page: "S63", quote: "Left Globus Pallidus 56.52 4260.97", where: "Table S5"},
+   conditions: {terminal_count: "1000"},
+   note: "the presented code's build time for the Table S5 domain with the largest benchmark-to-build ratio"}
+- {id: t_globus_pallidus_bench, quantity: build_time, unit: s, origin: measured, printed: "4260.97",
+   citation: {page: 71, printed_page: "S63", quote: "Left Globus Pallidus 56.52 4260.97", where: "Table S5"},
+   conditions: {terminal_count: "1000"},
+   note: "the open-source serial CCO benchmark run 'under the same build parameters' (Fig. S9 caption, p. 57)"}
+- {id: t_biventricle_1e6, quantity: build_time, unit: s, origin: measured, printed: "17483.8",
+   citation: {page: 72, printed_page: "S64", quote: "106 17483.8 17651.0", where: "Table S6"},
+   conditions: {terminal_count: "10^6"}}
+- {id: t_annulus_1e6, quantity: build_time, unit: s, origin: measured, printed: "17651.0",
+   citation: {page: 72, printed_page: "S64", quote: "106 17483.8 17651.0", where: "Table S6"},
+   conditions: {terminal_count: "10^6"}}
+- {id: t_1e6_text, quantity: build_time, unit: h, origin: measured, printed: "~5",
+   citation: {page: 4, printed_page: "1201", quote: "Each million-vessel tree took about 5 hours to generate", where: text},
+   conditions: {terminal_count: "10^6"},
+   note: "printed 'about 5 hours'"}
+
+# ---- cell counting in the viability assay (pp. 34-35)
+- {id: area_live, quantity: cell_area, unit: um^2, origin: measured, printed: "207.9",
+   citation: {page: 34, printed_page: "S26", quote: "The Live stained cells had an area of 207.9", where: text}}
+- {id: area_dead, quantity: cell_area, unit: um^2, origin: measured, printed: "220.4",
+   citation: {page: 35, printed_page: "S27", quote: "of 220.4 µm2 . To convert that into pixel values", where: text}}
+- {id: pixel_res, quantity: pixel_size, unit: um, origin: reported, printed: "5.524",
+   citation: {page: 35, printed_page: "S27", quote: "the resolution was 5.524 µm/pixel", where: text}}
+- {id: px_live, quantity: pixels_per_cell, unit: dimensionless, origin: derived, printed: "6.813",
+   citation: {page: 35, printed_page: "S27", quote: "an average of 6.813 pixels corresponded to a", where: text}}
+- {id: px_dead, quantity: pixels_per_cell, unit: dimensionless, origin: derived, printed: "7.223",
+   citation: {page: 35, printed_page: "S27", quote: "and 7.223 pixels corresponded to a dead cell", where: text}}
+
+# ---- figure readings (figure pass, 2026-11-09; figures.yaml, figures.md) ----
+# Fig. 5F (p. 6): PIV flow ratios in the printed network, and the CFD values of the same branches
+- {id: q_ratio_piv_fig5f, quantity: branch_flow_fraction, unit: dimensionless, origin: measured, figure: fig5f_piv,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5F", quote: "Normalized flow rates (q/qin) from PIV"},
+   note: "mean of N = 3 constructs per branch (1 Bottom, 2 Middle, 3 Top) with +-1 SD bars"}
+- {id: q_ratio_cfd_fig5f, quantity: branch_flow_fraction, unit: dimensionless, origin: predicted, figure: fig5f_cfd,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5F", quote: "Welch’s correction (N = 3). Averaged (dashed) and individual"},
+   note: "the CFD of the printed network; not runnable here (no mesh or model released)"}
+- {id: q_ratio_cfd_mean_fig5f, quantity: branch_flow_fraction, unit: dimensionless, origin: predicted, figure: fig5f_cfd_mean,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5F", quote: "Welch’s correction (N = 3). Averaged (dashed) and individual"},
+   note: "the dashed line, read at each branch's column"}
+# Fig. 5P(iii) (p. 6): live cell count and viability, perfused (1) and media control (2)
+- {id: live_count_fig5p, quantity: normalized_live_cell_count, unit: dimensionless, origin: measured, figure: fig5p_count,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5P(iii)", quote: "comparison of integrated viable cell"}}
+- {id: viability_fig5p, quantity: cell_viability, unit: percent, origin: measured, figure: fig5p_viability,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5P(iii)", quote: "comparison of integrated viable cell"}}
+- {id: live_count_printed_fig5p, quantity: normalized_live_cell_count, unit: dimensionless, origin: measured,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5P(iii) caption and bar labels", quote: "count [perfused: (417 ± 37)-fold higher]"},
+   table: {index_quantity: construct_condition_index, index_unit: dimensionless, index: ["1", "2"], values: ["417 ± 37", "1.0 ± 0.4"]},
+   note: "417 ± 37 is in the caption and above the perfused bar; 1.0±0.4 is printed above the media-control bar (inside the figure, not in the page text)"}
+- {id: viability_printed_fig5p, quantity: cell_viability, unit: percent, origin: measured,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5P(iii) caption", quote: "viability (perfused: 37.8 ± 33.6%; media control: 0.4 ± 0.4%)"},
+   table: {index_quantity: construct_condition_index, index_unit: dimensionless, index: ["1", "2"], values: ["37.8 ± 33.6", "0.4 ± 0.4"]}}
+# Fig. 5P(ii) (p. 6): radial profiles of viable cells (N = 3 per condition)
+- {id: radial_viable_perfused_fig5p, quantity: viable_cell_count_radial, unit: dimensionless, origin: measured, figure: fig5p2_perfused,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5P(ii)", quote: "with normalized radius (R) and core region"}}
+- {id: radial_viable_media_fig5p, quantity: viable_cell_count_radial, unit: dimensionless, origin: measured, figure: fig5p2_media,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5P(ii)", quote: "with normalized radius (R) and core region"},
+   note: "read with panel 1's y scale (this panel has no y axis)"}
+- {id: radial_viable_pbs_fig5p, quantity: viable_cell_count_radial, unit: dimensionless, origin: measured, figure: fig5p2_pbs,
+   citation: {page: 6, printed_page: "1203", where: "Fig. 5P(ii)", quote: "with normalized radius (R) and core region"},
+   note: "read with panel 1's y scale (this panel has no y axis)"}
+# Fig. 1G (p. 2): bulk tissue concentration, moving averages over network size
+- {id: c_tissue_lat_cube_fig1g, quantity: tissue_concentration_ratio, unit: dimensionless, origin: predicted, figure: fig1g_lat_i,
+   citation: {page: 2, printed_page: "1199", where: "Fig. 1G(i)", quote: "solid lines indicate moving averages"}, note: "lattice networks, convex cube"}
+- {id: c_tissue_vas_cube_fig1g, quantity: tissue_concentration_ratio, unit: dimensionless, origin: predicted, figure: fig1g_vas_i,
+   citation: {page: 2, printed_page: "1199", where: "Fig. 1G(i)", quote: "solid lines indicate moving averages"}, note: "synthetic vasculature, convex cube"}
+- {id: c_tissue_lat_biv_fig1g, quantity: tissue_concentration_ratio, unit: dimensionless, origin: predicted, figure: fig1g_lat_ii,
+   citation: {page: 2, printed_page: "1199", where: "Fig. 1G(ii)", quote: "solid lines indicate moving averages"}, note: "lattice networks, biventricle"}
+- {id: c_tissue_vas_biv_fig1g, quantity: tissue_concentration_ratio, unit: dimensionless, origin: predicted, figure: fig1g_vas_ii,
+   citation: {page: 2, printed_page: "1199", where: "Fig. 1G(ii)", quote: "solid lines indicate moving averages"}, note: "synthetic vasculature, biventricle"}
+# Fig. 2B (p. 3): theoretical clock-cycle scalings (red lines)
+- {id: clock_recompute_fig2b, quantity: clock_cycles, unit: dimensionless, origin: predicted, figure: fig2b_recompute,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2B", quote: "Theoretical scaling complexities (red) for previously reported bifurcation"},
+   note: "labelled 'Recompute Entire Tree, C α N^2'; the caption: 'Plots reference bifurcation depth in full, balanced trees'"}
+- {id: clock_naive_fig2b, quantity: clock_cycles, unit: dimensionless, origin: predicted, figure: fig2b_naive,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2B", quote: "Theoretical scaling complexities (red) for previously reported bifurcation"},
+   note: "labelled 'Naive Implementation, C α (N*E)^2'"}
+# Fig. 2 (p. 3): alignment and software timings
+- {id: alignment_approx_fig2c, quantity: bifurcation_alignment, unit: dimensionless, origin: run, figure: fig2c_approx,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2C", quote: "Alignment accuracy versus a high-resolution finite-difference solution"}, note: "median, N = 100; 8000-outlet trees in a cube"}
+- {id: alignment_pb_fig2c, quantity: bifurcation_alignment, unit: dimensionless, origin: run, figure: fig2c_pb,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2C", quote: "Alignment accuracy versus a high-resolution finite-difference solution"}, note: "median, N = 100; 8000-outlet trees in a cube"}
+- {id: t_mesh_eval_fig2f, quantity: operation_time, unit: s, origin: measured, figure: fig2f_mesh,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2F", quote: "Scaling complexity for mesh-based versus implicit evaluations"}}
+- {id: t_implicit_eval_fig2f, quantity: operation_time, unit: s, origin: measured, figure: fig2f_implicit,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2F", quote: "Scaling complexity for mesh-based versus implicit evaluations"}}
+- {id: t_obb_fit_fig2h, quantity: operation_time, unit: s, origin: fitted, figure: fig2h_fit,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2H", quote: "Sphere proximity alone is cheap but less accurate"}, note: "the red line through the OBB times; the paper does not say what was fitted"}
+- {id: t_sphere_fig2h, quantity: operation_time, unit: s, origin: measured, figure: fig2h_sphere,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2H", quote: "Sphere proximity alone is cheap but less accurate"}}
+- {id: n_obb_fit_fig2i, quantity: obb_evaluation_count, unit: dimensionless, origin: fitted, figure: fig2i_fit,
+   citation: {page: 3, printed_page: "1200", where: "Fig. 2I", quote: "Used as a filter, heuristic sphere proximity eliminates"}, note: "the red line through the average OBB evaluation counts"}
+# Fig. S2D-F (p. 39): data-structure operation times (means of 100 reruns)
+- {id: t_append_array_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2d_array,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2D", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_append_linked_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2d_linked,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2D", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_append_vectorized_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2d_vectorized,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2D", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_rescale_array_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2e_array,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2E", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_rescale_linked_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2e_linked,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2E", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_collide_array_any_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2f_array_any,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2F", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_collide_array_all_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2f_array_all,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2F", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_collide_linked_any_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2f_linked_any,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2F", quote: "Fundamental data structures and performance acceleration"}}
+- {id: t_collide_linked_all_figs2, quantity: operation_time, unit: s, origin: measured, figure: figs2f_linked_all,
+   citation: {page: 39, printed_page: "S31", where: "Fig. S2F", quote: "Fundamental data structures and performance acceleration"}}
+# Fig. S4B (p. 42): implicit reconstruction time
+- {id: t_recon_pu_figs4b, quantity: operation_time, unit: s, origin: measured, figure: figs4b_pu,
+   citation: {page: 42, printed_page: "S34", where: "Fig. S4B", quote: "because interpolation involves"}}
+- {id: t_recon_global_figs4b, quantity: operation_time, unit: s, origin: measured, figure: figs4b_global,
+   citation: {page: 42, printed_page: "S34", where: "Fig. S4B", quote: "because interpolation involves"}}
+# Fig. S8 (p. 51): build times of the two convex domains
+- {id: t_build_convex_upper_figs8, quantity: build_time, unit: s, origin: measured, figure: figs8_upper,
+   citation: {page: 51, printed_page: "S43", where: "Fig. S8", quote: "Estimated build times for synthetic vasculature across a large set"}, note: "mean of 100 trees, +-1 SD"}
+- {id: t_build_convex_lower_figs8, quantity: build_time, unit: s, origin: measured, figure: figs8_lower,
+   citation: {page: 51, printed_page: "S43", where: "Fig. S8", quote: "Estimated build times for synthetic vasculature across a large set"}, note: "mean of 100 trees, +-1 SD"}
+# Fig. S10 (p. 58): histograms of tissue distance to the nearest vessel (synthetic trees of 1E4-1E6 terminals)
+- {id: dist_hist_biv_1e4_figs10, quantity: subregion_count, unit: dimensionless, origin: predicted, figure: figs10a_1e4,
+   citation: {page: 58, printed_page: "S50", where: "Fig. S10A", quote: "Average tissue distance distributions to nearest vessel"}, conditions: {terminal_count: "10^4"}}
+- {id: dist_hist_biv_1e5_figs10, quantity: subregion_count, unit: dimensionless, origin: predicted, figure: figs10a_1e5,
+   citation: {page: 58, printed_page: "S50", where: "Fig. S10A", quote: "Average tissue distance distributions to nearest vessel"}, conditions: {terminal_count: "10^5"}}
+- {id: dist_hist_biv_1e6_figs10, quantity: subregion_count, unit: dimensionless, origin: predicted, figure: figs10a_1e6,
+   citation: {page: 58, printed_page: "S50", where: "Fig. S10A", quote: "Average tissue distance distributions to nearest vessel"}, conditions: {terminal_count: "10^6"}}
+- {id: dist_hist_ann_1e4_figs10, quantity: subregion_count, unit: dimensionless, origin: predicted, figure: figs10b_1e4,
+   citation: {page: 58, printed_page: "S50", where: "Fig. S10B", quote: "Average tissue distance distributions to nearest vessel"}, conditions: {terminal_count: "10^4"}}
+- {id: dist_hist_ann_1e5_figs10, quantity: subregion_count, unit: dimensionless, origin: predicted, figure: figs10b_1e5,
+   citation: {page: 58, printed_page: "S50", where: "Fig. S10B", quote: "Average tissue distance distributions to nearest vessel"}, conditions: {terminal_count: "10^5"}}
+- {id: dist_hist_ann_1e6_figs10, quantity: subregion_count, unit: dimensionless, origin: predicted, figure: figs10b_1e6,
+   citation: {page: 58, printed_page: "S50", where: "Fig. S10B", quote: "Average tissue distance distributions to nearest vessel"}, conditions: {terminal_count: "10^6"}}
+# Fig. S11C (p. 60): parabolic fits of example PIV velocity profiles
+- {id: v_profile_bottom_figs11, quantity: axial_velocity, unit: um/s, origin: fitted, figure: figs11c_bottom,
+   citation: {page: 60, printed_page: "S52", where: "Fig. S11C", quote: "Example velocity profile"}}
+- {id: v_profile_middle_figs11, quantity: axial_velocity, unit: um/s, origin: fitted, figure: figs11c_middle,
+   citation: {page: 60, printed_page: "S52", where: "Fig. S11C", quote: "Example velocity profile"}}
+- {id: v_profile_top_figs11, quantity: axial_velocity, unit: um/s, origin: fitted, figure: figs11c_top,
+   citation: {page: 60, printed_page: "S52", where: "Fig. S11C", quote: "Example velocity profile"}}
+# Fig. S15A(i) (p. 65): cell area histograms
+- {id: area_hist_live_figs15, quantity: cell_count, unit: dimensionless, origin: measured, figure: figs15a_live,
+   citation: {page: 65, printed_page: "S57", where: "Fig. S15A(i)", quote: "Processing of live/dead imaging data to assess cell viability"}}
+- {id: area_hist_dead_figs15, quantity: cell_count, unit: dimensionless, origin: measured, figure: figs15a_dead,
+   citation: {page: 65, printed_page: "S57", where: "Fig. S15A(i)", quote: "Processing of live/dead imaging data to assess cell viability"}}

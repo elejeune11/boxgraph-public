@@ -1,0 +1,22 @@
+id: tree_parameters
+name: the constants svVascularize grows a tree with by default (TreeParameters), run as released
+role: model
+software: true
+stated: {file: svv/tree/data/data.py, lines: "259-284", quote: "def __init__(self, *, unit_system: Optional[UnitSystem] = None):"}
+equation: >
+  a default TreeParameters(): murray_exponent, radius_exponent, length_exponent, kinematic_viscosity,
+  fluid_density, terminal_flow, terminal_pressure, root_pressure (data.py lines 263-283); the growth puts
+  mu = kinematic_viscosity * fluid_density in Eq. S1 (root.py line 266)
+inputs: {}
+outputs:
+  gamma: {quantity: murray_exponent, unit: dimensionless}
+  alpha_r: {quantity: cost_radius_exponent, unit: dimensionless}
+  alpha_l: {quantity: cost_length_exponent, unit: dimensionless}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  rho: {quantity: fluid_density, unit: g/cm^3}
+  mu: {quantity: dynamic_viscosity, unit: cP, description: "the viscosity of the growth's Eq. S1, nu * rho"}
+  Q_term: {quantity: terminal_flow, unit: ml/s}
+  P_root: {quantity: tree_pressure, unit: mmHg}
+  P_term: {quantity: tree_pressure, unit: mmHg}
+settings: {}
+stochastic: false

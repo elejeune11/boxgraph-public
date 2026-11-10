@@ -1,0 +1,20 @@
+id: ram_code_port
+name: the code's time-varying microvascular resistance Ram(t) (get_Ram), ported to Python; its time average and peak over a cycle
+role: model
+stated: {file: src/model/OpenLoopCoronaryVarResBC.cpp, lines: "18-37", quote: "double t_cycle = fmod(time, model->cardiac_cycle_period);"}
+equation: "Ram(t) = [sqrt(Ram_min) + (sqrt(Ram_max) - sqrt(Ram_min)) e(t)]^2, e(t) = (1 - cos(pi t/T_vc))/2 on [0, T_vc], (1 + cos(pi (t - T_vc)/T_vr))/2 on (T_vc, T_vc + T_vr], 0 after; t = time mod period"
+described_from: yong2025
+inputs:
+  Ram_min: {quantity: microvascular_resistance_min, unit: mmHg*s/mL}
+  Ram_max: {quantity: microvascular_resistance_max, unit: mmHg*s/mL}
+  T_vc: {quantity: ventricular_contraction_duration, unit: s}
+  T_vr: {quantity: ventricular_relaxation_duration, unit: s}
+  T: {quantity: cardiac_cycle_length, unit: s}
+outputs:
+  Ram_mean: {quantity: microvascular_resistance_mean, unit: mmHg*s/mL}
+  Ram_peak: {quantity: microvascular_resistance_max, unit: mmHg*s/mL}
+settings: {n_samples: 100000}
+stochastic: false
+# Port of OpenLoopCoronaryVarResBC.cpp lines 9-38 (get_Ram), line by line, in our own code. The code
+# has no unit of its own: the port's units are those of whatever it is given. n_samples is ours: the
+# midpoint rule over one cycle for the time average.

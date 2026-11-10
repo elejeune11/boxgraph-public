@@ -1,0 +1,271 @@
+id: coronary_block_svzerod
+name: the paper's coronary territories run in the released svZeroDSolver (CORONARY_VAR_RES and CORONARY blocks), driven by the closed-loop rebuild
+role: model
+stated:
+  page: 3
+  printed_page: '3'
+  quote: Our model is based on Mantero et al. (1992) and Kim et al. (2010)
+  where: Sec. 2.3, Eqs. 2, 10-12
+equation: 'svZeroDSolver OpenLoopCoronaryVarResBC (src/model/OpenLoopCoronaryVarResBC.cpp lines 9-38): R_am(t) = [(sqrt(R_am,max) - sqrt(R_am,min)) e(t) + sqrt(R_am,min)]^2 with e(t) of Eq. 4; Ra1 - Ca
+  - R_am(t) - Cim(P_im) - Rv1 - P_v (OpenLoopCoronaryBC.cpp). Inlet pressure, P_im and P_v from coronary_closed_loop.'
+inputs:
+  Emax_ra:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_ra:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_rv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_rv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_la:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_la:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_lv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_lv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Tvc_rv:
+    quantity: contraction_duration
+    unit: s
+  Tvr_rv:
+    quantity: relaxation_duration
+    unit: s
+  Tvc_lv:
+    quantity: contraction_duration
+    unit: s
+  Tvr_lv:
+    quantity: relaxation_duration
+    unit: s
+  Tac_ra:
+    quantity: contraction_duration
+    unit: s
+  Tar_ra:
+    quantity: relaxation_duration
+    unit: s
+  tac_ra:
+    quantity: atrial_contraction_onset
+    unit: s
+  tar_ra:
+    quantity: atrial_relaxation_onset
+    unit: s
+  Tac_la:
+    quantity: contraction_duration
+    unit: s
+  Tar_la:
+    quantity: relaxation_duration
+    unit: s
+  tac_la:
+    quantity: atrial_contraction_onset
+    unit: s
+  tar_la:
+    quantity: atrial_relaxation_onset
+    unit: s
+  T:
+    quantity: heart_period
+    unit: s
+  R_open:
+    quantity: valve_resistance
+    unit: mmHg*s/ml
+  R_closed:
+    quantity: valve_resistance
+    unit: mmHg*s/ml
+  R_ao:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_sa:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_sv:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pa:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pc:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pvn:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  C_sa:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_sv:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_pa:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_pvn:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Ra_lad:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_lad:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_lad:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_lad:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_lad:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ra_lcx:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_lcx:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_lcx:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_lcx:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_lcx:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ra_rca:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_rca:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_rca:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_rca:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_rca:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  k_lca:
+    quantity: resistance_scale_factor
+    unit: dimensionless
+  k_rca:
+    quantity: resistance_scale_factor
+    unit: dimensionless
+  k_ph:
+    quantity: ph_resistance_factor
+    unit: dimensionless
+  frac_lca:
+    quantity: basal_resistance_fraction
+    unit: percent
+  frac_rca:
+    quantity: basal_resistance_fraction
+    unit: percent
+  imp_ratio:
+    quantity: imp_ratio
+    unit: dimensionless
+  P_init:
+    quantity: initial_pressure
+    unit: mmHg
+outputs:
+  Qs_mean_lad:
+    quantity: coronary_flow_systolic_mean
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qd_mean_lad:
+    quantity: coronary_flow_diastolic_mean
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qs_peak_lad:
+    quantity: coronary_flow_systolic_peak
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qd_peak_lad:
+    quantity: coronary_flow_diastolic_peak
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Q_mean_lad:
+    quantity: coronary_flow_cycle_mean
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  pDSFR_lad:
+    quantity: peak_dsfr
+    unit: dimensionless
+    description: LAD distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  mDSFR_lad:
+    quantity: mean_dsfr
+    unit: dimensionless
+    description: LAD distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qs_mean_lcx:
+    quantity: coronary_flow_systolic_mean
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qd_mean_lcx:
+    quantity: coronary_flow_diastolic_mean
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qs_peak_lcx:
+    quantity: coronary_flow_systolic_peak
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qd_peak_lcx:
+    quantity: coronary_flow_diastolic_peak
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Q_mean_lcx:
+    quantity: coronary_flow_cycle_mean
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  pDSFR_lcx:
+    quantity: peak_dsfr
+    unit: dimensionless
+    description: LCx distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  mDSFR_lcx:
+    quantity: mean_dsfr
+    unit: dimensionless
+    description: LCx distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qs_mean_rca:
+    quantity: coronary_flow_systolic_mean
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qd_mean_rca:
+    quantity: coronary_flow_diastolic_mean
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qs_peak_rca:
+    quantity: coronary_flow_systolic_peak
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Qd_peak_rca:
+    quantity: coronary_flow_diastolic_peak
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  Q_mean_rca:
+    quantity: coronary_flow_cycle_mean
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  pDSFR_rca:
+    quantity: peak_dsfr
+    unit: dimensionless
+    description: RCA distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+  mDSFR_rca:
+    quantity: mean_dsfr
+    unit: dimensionless
+    description: RCA distal (intramural) arterial flow, through Rmicro, computed by svZeroDSolver
+settings:
+  dt: 0.01
+  t_end: 60.0
+  variable_resistance: true
+  imp: true
+  dsfr: integral
+  n_cycles: 60
+built_from:
+- coronary_closed_loop
+stochastic: false

@@ -1,0 +1,48 @@
+id: stochastic_table2
+name: Table 2 of schwarz2020 (stochastic variation and agreement with the deterministic models), recomputed from the per-element sheets of 'Gdistal variations.xlsx'
+role: processing
+software: true
+stated: {file: explanation_of_data.txt, lines: "255-256", quote: "Column A and B show for each individual element the median and mean pressure over 1000 simulations"}
+equation: >
+  per variable X (P, Q, WSS): CV median and 95th percentile over all elements of sheet X_CoV; MAD the
+  same of X_mad; PCC = Pearson r of Xmedian!A with Xmedian!E (power fit) or Xmedian!C (median G); beta =
+  slope of the least-squares line A = beta X + c
+inputs: {}
+outputs:
+  P_cv_median: {quantity: pressure_cv, unit: dimensionless}
+  P_cv_p95: {quantity: pressure_cv, unit: dimensionless}
+  P_mad_median: {quantity: pressure_mad, unit: mmHg}
+  P_mad_p95: {quantity: pressure_mad, unit: mmHg}
+  P_pcc_fit: {quantity: agreement_pcc, unit: dimensionless}
+  P_beta_fit: {quantity: agreement_beta, unit: dimensionless}
+  P_pcc_medG: {quantity: agreement_pcc, unit: dimensionless}
+  P_beta_medG: {quantity: agreement_beta, unit: dimensionless}
+  Q_cv_median: {quantity: flow_cv, unit: dimensionless}
+  Q_cv_p95: {quantity: flow_cv, unit: dimensionless}
+  Q_mad_median: {quantity: flow_mad, unit: ml/min}
+  Q_mad_p95: {quantity: flow_mad, unit: ml/min}
+  Q_pcc_fit: {quantity: agreement_pcc, unit: dimensionless}
+  Q_beta_fit: {quantity: agreement_beta, unit: dimensionless}
+  Q_pcc_medG: {quantity: agreement_pcc, unit: dimensionless}
+  Q_beta_medG: {quantity: agreement_beta, unit: dimensionless}
+  WSS_cv_median: {quantity: wss_cv, unit: dimensionless}
+  WSS_cv_p95: {quantity: wss_cv, unit: dimensionless}
+  WSS_mad_median: {quantity: wss_mad, unit: Pa}
+  WSS_mad_p95: {quantity: wss_mad, unit: Pa}
+  WSS_pcc_fit: {quantity: agreement_pcc, unit: dimensionless}
+  WSS_beta_fit: {quantity: agreement_beta, unit: dimensionless}
+  WSS_pcc_medG: {quantity: agreement_pcc, unit: dimensionless}
+  WSS_beta_medG: {quantity: agreement_beta, unit: dimensionless}
+  n_elements_P: {quantity: segment_count, unit: dimensionless, description: rows of Pmedian}
+  n_elements_Q: {quantity: segment_count, unit: dimensionless}
+  n_elements_WSS: {quantity: segment_count, unit: dimensionless}
+  P_IE1_medG: {quantity: node_pressure, unit: Pa, description: "Pmedian!C2, the 'median G' run's mid-element pressure of TreeQ.IE(1)"}
+  P_IE1_fit: {quantity: node_pressure, unit: Pa, description: "Pmedian!E2, the 'power fit' run's"}
+  P_SE1_medG: {quantity: node_pressure, unit: Pa, description: "Pmedian!C101225, TreeQ.SE(1)"}
+  P_SE1_fit: {quantity: node_pressure, unit: Pa, description: "Pmedian!E101225"}
+  Q_LCX_medG: {quantity: segment_flow, unit: ml/min, description: "Qmedian!C202184, inlet SE(100960)"}
+  Q_LCX_fit: {quantity: segment_flow, unit: ml/min, description: "Qmedian!E202184"}
+  Q_LAD_medG: {quantity: segment_flow, unit: ml/min, description: "Qmedian!C202185, inlet SE(100961)"}
+  Q_LAD_fit: {quantity: segment_flow, unit: ml/min, description: "Qmedian!E202185"}
+settings: {file: "Gdistal variations.xlsx", percentile_method: matlab}
+stochastic: false

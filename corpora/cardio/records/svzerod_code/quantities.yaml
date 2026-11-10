@@ -1,0 +1,53 @@
+# --- the release's own test cases (tests/cases/*.json): pressures and flows of their networks
+- {id: case_pressure, name: pressure at a node of a release test-case network, dimension: "[mass]/[length]/[time]**2", description: "a pressure the solver outputs for one of the release's test cases (inlet or outlet of a vessel, or a block's pressure variable); the cases state no units"}
+- {id: case_flow, name: flow rate at a node of a release test-case network, dimension: "[length]**3/[time]", description: "a flow the solver outputs for one of the release's test cases"}
+# --- the solver's own numerical defaults and the release's test tolerances
+- {id: solver_absolute_tolerance, name: absolute tolerance of the Newton iterations, dimension: dimensionless, description: "absolute_tolerance: the residual norm below which a time step's nonlinear iterations stop (the residual mixes pressures, flows and volumes, so it has no single unit)"}
+- {id: solver_max_iterations, name: maximum number of nonlinear iterations per time step, dimension: dimensionless}
+- {id: spectral_radius_infinity, name: spectral radius at infinite frequency of the generalized-alpha scheme, dimension: dimensionless, description: "rho_infty, which sets the scheme's alpha_m, alpha_f and gamma"}
+- {id: cycle_to_cycle_error, name: allowed cycle-to-cycle change of mean pressures and flows, dimension: dimensionless, description: "sim_cycle_to_cycle_percent_error, used when use_cycle_to_cycle_error is on"}
+- {id: cardiac_cycle_length, name: cardiac cycle length, dimension: "[time]", description: "the period of the simulated heart beat"}
+- {id: test_relative_tolerance, name: relative tolerance of the release's comparison with stored results, dimension: dimensionless, description: "rtol in tests/utils.py: a value passes when |y - y_ref| <= rtol + rtol |y_ref|"}
+# --- coronary beds (kim2010's Table 3 and 4 quantities; the same ids as in kim2010's record)
+- {id: coronary_arterial_resistance, name: coronary arterial resistance Ra, dimension: "[mass]/[length]**4/[time]", description: "Ra of the lumped coronary bed (the code's Ra1)"}
+- {id: coronary_arterial_micro_resistance, name: coronary arterial microcirculation resistance Ra-micro, dimension: "[mass]/[length]**4/[time]", description: "Ra-micro of the lumped coronary bed (the code's Ra2)"}
+- {id: coronary_venous_resistance_sum, name: coronary venous plus venous microcirculation resistance Rv + Rv-micro, dimension: "[mass]/[length]**4/[time]", description: "kim2010 prints the sum; the code has one venous resistance, Rv1"}
+- {id: coronary_arterial_capacitance, name: coronary arterial capacitance Ca, dimension: "[length]**4*[time]**2/[mass]", description: "Ca of the lumped coronary bed (the code's Ca)"}
+- {id: intramyocardial_capacitance, name: intramyocardial capacitance Cim, dimension: "[length]**4*[time]**2/[mass]", description: "Cim of the lumped coronary bed (the code's Cc)"}
+- {id: intramyocardial_pressure, name: intramyocardial pressure, dimension: "[mass]/[length]/[time]**2", description: "pressure on the far side of Cim (the code's Pim), held constant here"}
+- {id: intramyocardial_pressure_mean, name: mean of a sinusoidal intramyocardial pressure, dimension: "[mass]/[length]/[time]**2"}
+- {id: intramyocardial_pressure_amplitude, name: amplitude of a sinusoidal intramyocardial pressure, dimension: "[mass]/[length]/[time]**2"}
+- {id: coronary_venous_pressure, name: pressure at the venous end of the coronary bed, dimension: "[mass]/[length]/[time]**2", description: "the code's P_v; kim2010's equation has no such term"}
+- {id: coronary_inlet_pressure_mean, name: mean of a sinusoidal pressure at a coronary outlet, dimension: "[mass]/[length]/[time]**2"}
+- {id: coronary_inlet_pressure_amplitude, name: amplitude of a sinusoidal pressure at a coronary outlet, dimension: "[mass]/[length]/[time]**2"}
+- {id: coronary_bed_flow_mean, name: mean flow into one coronary bed over a cycle, dimension: "[length]**3/[time]"}
+- {id: coronary_bed_flow_max, name: largest flow into one coronary bed over a cycle, dimension: "[length]**3/[time]"}
+- {id: coronary_bed_flow_min, name: smallest flow into one coronary bed over a cycle, dimension: "[length]**3/[time]"}
+- {id: stenosed_lad_mean_pressure, name: mean pressure downstream of the LAD stenosis, dimension: "[mass]/[length]/[time]**2", description: "kim2010 Table 4"}
+- {id: stenosed_lad_mean_flow, name: mean flow in the stenosed LAD segment, dimension: "[length]**3/[time]", description: "kim2010 Table 4: the flow feeding outlets c and d"}
+- {id: lad_mean_flow, name: mean flow to the left anterior descending coronary artery, dimension: "[length]**3/[time]", description: "flow to outlets a-d"}
+- {id: lcx_mean_flow, name: mean flow to the left circumflex coronary artery, dimension: "[length]**3/[time]", description: "flow to outlets e-h"}
+- {id: rca_mean_flow, name: mean flow to the right coronary artery, dimension: "[length]**3/[time]", description: "flow to outlets i-k"}
+- {id: total_coronary_mean_flow, name: total mean coronary flow, dimension: "[length]**3/[time]"}
+# --- time-varying microvascular resistance (yong2025; the code's CORONARY_VAR_RES)
+- {id: microvascular_resistance_min, name: smallest microvascular resistance over the cycle, dimension: "[mass]/[length]**4/[time]", description: "yong2025's Rmicro,min, the code's Ra2_min"}
+- {id: microvascular_resistance_max, name: largest microvascular resistance over the cycle, dimension: "[mass]/[length]**4/[time]", description: "yong2025's Rmicro,max, the code's Ra2_max: the value at peak activation"}
+- {id: microvascular_resistance_mean, name: time average of the microvascular resistance over one cycle, dimension: "[mass]/[length]**4/[time]", description: "yong2025's mean Rmicro, which its k is chosen to match"}
+- {id: ventricular_contraction_duration, name: duration of ventricular contraction Tvc, dimension: "[time]"}
+- {id: ventricular_relaxation_duration, name: duration of ventricular relaxation Tvr, dimension: "[time]"}
+- {id: coronary_venous_resistance, name: coronary venous resistance Rv, dimension: "[mass]/[length]**4/[time]", description: "yong2025's Rv (the venous microvascular part is in Rmicro); the code's Rv1"}
+# --- Windkessel (RCR) block and westerhof1971's three-element model
+- {id: windkessel_proximal_resistance, name: proximal (characteristic) resistance of the three-element Windkessel, dimension: "[mass]/[length]**4/[time]", description: "the code's Rp; westerhof1971's Rc"}
+- {id: windkessel_distal_resistance, name: distal (peripheral) resistance of the three-element Windkessel, dimension: "[mass]/[length]**4/[time]", description: "the code's Rd; westerhof1971's Rp"}
+- {id: windkessel_capacitance, name: capacitance of the three-element Windkessel, dimension: "[length]**4*[time]**2/[mass]", description: "the code's C; westerhof1971's C"}
+- {id: frequency, name: frequency of the sinusoidal inflow, dimension: "1/[time]"}
+- {id: input_impedance_modulus, name: modulus of the input impedance, dimension: "[mass]/[length]**4/[time]"}
+- {id: input_impedance_phase, name: phase of the input impedance, dimension: dimensionless}
+# --- impedance (structured-tree) block and olufsen2000's Eq. 38
+- {id: outlet_flow_mean, name: mean of a sinusoidal flow into an outflow boundary, dimension: "[length]**3/[time]"}
+- {id: outlet_flow_amplitude, name: amplitude of a sinusoidal flow into an outflow boundary, dimension: "[length]**3/[time]"}
+- {id: kernel_resistance, name: integral scale of an exponential impulse response z(t) = (Z/tau) exp(-t/tau), dimension: "[mass]/[length]**4/[time]", description: "Z: the zero-frequency impedance of the kernel when tau is much shorter than the period"}
+- {id: kernel_time_constant, name: decay time of an exponential impulse response, dimension: "[time]"}
+- {id: outlet_pressure_mean, name: mean pressure at an outflow boundary over one cycle, dimension: "[mass]/[length]/[time]**2"}
+- {id: outlet_pressure_max, name: largest pressure at an outflow boundary over one cycle, dimension: "[mass]/[length]/[time]**2"}
+- {id: outlet_pressure_min, name: smallest pressure at an outflow boundary over one cycle, dimension: "[mass]/[length]/[time]**2"}

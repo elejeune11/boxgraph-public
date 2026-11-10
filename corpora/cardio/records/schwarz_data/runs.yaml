@@ -100,3 +100,122 @@
    note: "median flow of segments > 1 mm over that of the 90-110 um class, both from the rerun"}
 - {id: run_net_v_from_Q, model: velocity_exponent_from_flow, inputs: {gamma: net_Q_b}, outputs: {b_v: net_v_b_from_Q},
    note: "the velocity exponent the rerun's own non-linear flow exponent implies under Poiseuille flow"}
+
+# ==== third pass: the rest of the release
+# ---- Table 1 from the network (per class: sweep over the classes of the printed table)
+- id: run_t1_classes
+  model: tree_table1
+  inputs: {}
+  sweep: {d: p_T1_all}
+  outputs: {n_all: net_T1_all, n_internal: net_T1_internal, n_terminal: net_T1_terminal,
+            share_all: net_T1_share_all, share_terminal: net_T1_share_terminal,
+            dens_epi: net_T1_dens_epi, dens_mid: net_T1_dens_mid, dens_endo: net_T1_dens_endo,
+            dshare_epi: net_T1_dshare_epi, dshare_mid: net_T1_dshare_mid, dshare_endo: net_T1_dshare_endo,
+            L_median: net_L_classes, L_q1: net_L_q1_classes, L_q3: net_L_q3_classes}
+  note: "d takes each class lower bound of Table 1 (30 ... 400 um)"
+- id: run_t1_summary
+  model: tree_summary
+  inputs: {}
+  outputs: {n_all: net_T1_total_all, n_term: net_T1_total_terminal, n_regions: net_n_regions,
+            n_in: net_n_in, n_sn: net_n_sn,
+            dens_epi: net_T1_dens_total_epi, dens_mid: net_T1_dens_total_mid, dens_endo: net_T1_dens_total_endo,
+            d_med_all: net_T1_dmed_all, d_p10_all: net_T1_dp10_all, d_p90_all: net_T1_dp90_all, l_med_all: net_T1_lmed_all,
+            d_med_term: net_T1_dmed_term, d_p10_term: net_T1_dp10_term, d_p90_term: net_T1_dp90_term, l_med_term: net_T1_lmed_term,
+            d_med_epi: net_T1_dmed_epi, d_p10_epi: net_T1_dp10_epi, d_p90_epi: net_T1_dp90_epi, l_med_epi: net_T1_lmed_epi,
+            d_med_mid: net_T1_dmed_mid, d_p10_mid: net_T1_dp10_mid, d_p90_mid: net_T1_dp90_mid, l_med_mid: net_T1_lmed_mid,
+            d_med_endo: net_T1_dmed_endo, d_p10_endo: net_T1_dp10_endo, d_p90_endo: net_T1_dp90_endo, l_med_endo: net_T1_lmed_endo,
+            pct_3: net_pct_3, pct_4: net_pct_4, pct_more: net_pct_more, n_loops: net_n_loops, n_components: net_n_components,
+            V_territory_q1: net_V_territory_q1, V_territory_median: net_V_territory_median_mm3, V_territory_q3: net_V_territory_q3}
+
+# ---- branching from the network, mothers by the flow of our own solution (as run_net_release)
+- id: run_branch_classes
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  sweep: {d: p_f4_n_symhi}
+  outputs: {n_nodes_class: net_n_mothers_classes, S_median: net_S_classes, S_q1: net_S_q1_classes, S_q3: net_S_q3_classes,
+            n_symhi: net_n_symhi, n_symlo: net_n_symlo, A_median_symhi: net_A_symhi_classes, A_median_symlo: net_A_symlo_classes}
+  note: "every one-mother two-daughter node kept (no outlier rule)"
+- id: run_branch
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added, d: p_A_fit_lo,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  outputs: {n_nodes: net_n_nodes_1m2d, n_multi_mother: net_n_multi_mother, S_median_large: net_S_large, A_median_large: net_A_large,
+            c_d: net_A_fit_c_d, c_d_mm: net_A_fit_c_d_mm, c_S: net_A_fit_c_S, c_0: net_A_fit_c_0, fit_r2: net_A_fit_r2, n_fit: net_A_fit_n}
+  note: "every one-mother two-daughter node kept; the class outputs (d = 75 um) are not used"
+- id: run_branch_rules
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added, d: p_A_fit_lo,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  settings: {ratio_limit: 1.15, require_l_gt_d: true}
+  outputs: {n_nodes: netr_n_nodes_1m2d, S_median_large: netr_S_large, A_median_large: netr_A_large,
+            c_d: netr_A_fit_c_d, c_d_mm: netr_A_fit_c_d_mm, c_S: netr_A_fit_c_S, c_0: netr_A_fit_c_0, fit_r2: netr_A_fit_r2, n_fit: netr_A_fit_n}
+  note: "the guide's outlier rules (line 235): larger daughter at most 1.15 times the mother, every element longer than its diameter"
+
+# ---- the workbooks, recomputed
+- id: run_bifwb_classes
+  model: bifurcation_workbook
+  inputs: {d_S_large: p_d_S_large}
+  sweep: {d: p_T1_all}
+  outputs: {n_segments: wbb_n_segments, n_mothers: wbb_n_mothers, n_length: wbb_n_length, L_median: wbb_L_classes,
+            n_sym: wbb_n_sym, S_median: wbb_S_classes, n_area_hi: wbb_n_area_hi, n_area_lo: wbb_n_area_lo,
+            A_median_hi: wbb_A_hi_classes, A_median_lo: wbb_A_lo_classes}
+- id: run_bifwb
+  model: bifurcation_workbook
+  inputs: {d_S_large: p_d_S_large, d: p_A_fit_lo}
+  outputs: {pct_3: wbb_pct_3, pct_4: wbb_pct_4, pct_more: wbb_pct_more, n_internal_nodes: wbb_n_internal_nodes,
+            n_length_all: wbb_n_length_all, L_median_all: wbb_L_median_all, n_pairs: wbb_n_pairs,
+            S_median_large: wbb_S_large, A_median_top_class: wbb_A_top_class}
+- id: run_termwb_classes
+  model: termseg_workbook
+  inputs: {}
+  sweep: {d: p_T1_all}
+  outputs: {n_all: wbt_T1_all, n_terminal: wbt_T1_terminal, share_all: wbt_T1_share_all, share_terminal: wbt_T1_share_terminal,
+            dens_epi: wbt_T1_dens_epi, dens_mid: wbt_T1_dens_mid, dens_endo: wbt_T1_dens_endo,
+            dshare_epi: wbt_T1_dshare_epi, dshare_mid: wbt_T1_dshare_mid, dshare_endo: wbt_T1_dshare_endo}
+- id: run_termwb
+  model: termseg_workbook
+  inputs: {d: p_A_fit_lo}
+  outputs: {n_all_total: wbt_total_all, n_internal_total: wbt_total_internal, n_terminal_total: wbt_total_terminal,
+            dens_total_epi: wbt_dens_total_epi, dens_total_mid: wbt_dens_total_mid, dens_total_endo: wbt_dens_total_endo,
+            n_regions: wbt_n_regions, n_regions_stated: wbt_n_regions_stated,
+            d_med_epi: wbt_dmed_epi, d_p10_epi: wbt_dp10_epi, d_p90_epi: wbt_dp90_epi, l_med_epi: wbt_lmed_epi,
+            d_med_mid: wbt_dmed_mid, d_p10_mid: wbt_dp10_mid, d_p90_mid: wbt_dp90_mid, l_med_mid: wbt_lmed_mid,
+            d_med_endo: wbt_dmed_endo, d_p10_endo: wbt_dp10_endo, d_p90_endo: wbt_dp90_endo, l_med_endo: wbt_lmed_endo}
+  note: "the class outputs (d = 75 um) are not used"
+- id: run_topowb_classes
+  model: topology_workbook
+  inputs: {d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  sweep: {d: p_T1_all}
+  outputs: {n_class: wbo_T1_all}
+- id: run_topowb
+  model: topology_workbook
+  inputs: {d: p_A_fit_lo, d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  outputs: {n_rows: wbo_n_rows, n_internal: wbo_n_internal, n_source: wbo_n_source,
+            d_med: wbo_dmed_all, d_p10: wbo_dp10_all, d_p90: wbo_dp90_all, l_med: wbo_lmed_all,
+            n_node_rows: wbo_n_node_rows, n_nodes: wbo_n_nodes_1m2d, S_median_large: wbo_S_large, A_median_large: wbo_A_large,
+            c_d: wbo_A_fit_c_d, c_S: wbo_A_fit_c_S, c_0: wbo_A_fit_c_0, fit_r2: wbo_A_fit_r2}
+- id: run_table2
+  model: stochastic_table2
+  inputs: {}
+  outputs: {P_cv_median: wbg_P_cv_med, P_cv_p95: wbg_P_cv_p95, P_mad_median: wbg_P_mad_med, P_mad_p95: wbg_P_mad_p95,
+            P_pcc_fit: wbg_P_pcc_fit, P_beta_fit: wbg_P_beta_fit, P_pcc_medG: wbg_P_pcc_medG, P_beta_medG: wbg_P_beta_medG,
+            Q_cv_median: wbg_Q_cv_med, Q_cv_p95: wbg_Q_cv_p95, Q_mad_median: wbg_Q_mad_med, Q_mad_p95: wbg_Q_mad_p95,
+            Q_pcc_fit: wbg_Q_pcc_fit, Q_beta_fit: wbg_Q_beta_fit, Q_pcc_medG: wbg_Q_pcc_medG, Q_beta_medG: wbg_Q_beta_medG,
+            WSS_cv_median: wbg_WSS_cv_med, WSS_cv_p95: wbg_WSS_cv_p95, WSS_mad_median: wbg_WSS_mad_med, WSS_mad_p95: wbg_WSS_mad_p95,
+            WSS_pcc_fit: wbg_WSS_pcc_fit, WSS_beta_fit: wbg_WSS_beta_fit, WSS_pcc_medG: wbg_WSS_pcc_medG, WSS_beta_medG: wbg_WSS_beta_medG,
+            n_elements_P: wbg_n_elements,
+            P_IE1_medG: wbg_P_IE1_medG, P_IE1_fit: wbg_P_IE1_fit, P_SE1_medG: wbg_P_SE1_medG, P_SE1_fit: wbg_P_SE1_fit,
+            Q_LCX_medG: wbg_Q_LCX_medG, Q_LCX_fit: wbg_Q_LCX_fit, Q_LAD_medG: wbg_Q_LAD_medG, Q_LAD_fit: wbg_Q_LAD_fit}
+  note: "percentiles as Matlab's prctile (the sheet's own P95 values follow it)"
+
+# ---- the skeleton against the network
+- id: run_skeleton
+  model: skeleton_network
+  inputs: {pixel: pixel_size_doc, d0: diam_if_all_0}
+  note: "CVlim = 1 (datum CVlim) is the model's setting"
+  outputs: {n_points_header: skel_n_points_header, n_segments_header: skel_n_segments_header, n_points: skel_n_points,
+            n_segments: skel_n_segments, n_neighbour_slots: skel_n_slots, n_node_points: skel_n_node_points,
+            n_elements_in_skeleton: skel_n_elements_found, n_skeleton_segments_in_network: skel_n_segments_in_network,
+            n_skeleton_segments_not_in_network: skel_n_segments_not_in_network, n_elements_same_ends: skel_n_same_ends,
+            n_d_match_internal: skel_n_d_match_internal, n_d_match_terminal: skel_n_d_match_terminal, d_med_skeleton: skel_dmed}

@@ -1,0 +1,79 @@
+id: yong2025
+kind: article
+title: A lumped parameter model of the coronary circulation incorporating time-varying resistance, intramyocardial pressure and vascular compliance
+authors: [Enhui Yong, Javeria Latief, Yufei Wang, David Erlinge, Axel Dahlgren, Tushar Kotecha, Vivek Muthurangu, Ryo Torii]
+year: 2025
+venue: Journal of Biomechanics 189, 112679
+doi: 10.1016/j.jbiomech.2025.112679
+file: corpus/cardio/2025_Yong.pdf
+page_range: [1, 17]
+pages: {1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "10", 11: "11"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-09"}
+notes: >
+  Scope: the paper's quantitative core. The closed-loop circulation (four variable-elastance chambers,
+  diode-resistor valves, systemic and pulmonary RC networks, and LAD, LCx and RCA territories Ra-Ca-Rmicro(t)-Cm-Rv
+  with intramyocardial pressure 0.6 P_V) is rebuilt as one model, coronary_closed_loop, from Eqs. 1-14, the circuit
+  of Fig. 1 and Supp. Tables S1-S2, and integrated with backward Euler at the paper's 0.01 s for its 60 s. It is
+  run in the paper's five configurations: normal VR + IMP ('new'), Rbar + IMP ('conventional') and VR, and PH
+  (RV Emax 1.00, pulmonary artery compliance 0.70, pulmonary resistance 0.41, k_PH = 2.5 for the new model) for the
+  new and conventional models. Every number of Table 1 for the LAD, RCA and great cardiac vein is compared, as are
+  the cardiac output, Supp. Table S3, the PH mDSFR of Fig. 8, the text on Fig. 7 and the abstract.
+  Eq. 14 is printed as a ratio of integrals, but Table 1's mDSFR equals the ratio of its own mean flows
+  (consistency comparisons cmp_ratio_*, all reproduced). A variant, coronary_closed_loop_mean_dsfr, reads Eq. 14
+  that way; the printed model is kept. Closed-form models check the resistance function (Eqs. 10-11:
+  Rmin, Rmax, cycle mean, k, PH mean), the flow splits implied by Table S2, the area-to-diameter conversion and
+  the RV elastance fold change.
+
+  The released svZeroDSolver (svzerod_code) has a block that cites this paper, CORONARY_VAR_RES
+  (src/model/OpenLoopCoronaryVarResBC.cpp lines 9-38). Its e(t) is Eq. 4 and its R_am(t) is Eq. 9, with
+  R_am,min and R_am,max in place of fraction x Rbar and k_PH^2 k Rbar (Eq. 11 squares k_PH), on the circuit of Kim et al. 2010's open-loop
+  coronary block, which is the paper's circuit. coronary_block_svzerod runs that block, and CORONARY for the
+  conventional model, on the paper's parameters. Because the block is open loop, it is driven by the rebuild's
+  aortic-root and ventricular pressures and its cycle-mean right atrial pressure. The solver agrees with the
+  rebuild to about 1 % (LAD VR + IMP: mean flow 0.8158 vs 0.8159 ml/s, Eq. 14 mDSFR 5.20 vs 5.24; conventional
+  3.27 vs 3.30; RCA 2.97 vs 3.00). So the code's block and this record's reading of Eqs. 2, 10-12 agree, and the
+  paper's printed coronary results are no closer with the released code.
+
+  Findings: the rebuild reproduces the paper's qualitative ordering, and with the ratio-of-means mDSFR, the
+  new and conventional values come within the rounding of the inputs (LAD 2.82 vs 2.65, 1.78 vs 1.70; RCA 1.61 vs
+  1.50, 1.04 vs 1.00). It does not reproduce the peak ratios, the great-cardiac-vein backflow, the
+  systolic duration or the aortic pulse pressure. In PH its RCA mDSFR rises less than printed (3.80 vs 5.35;
+  q_ph_rca), though the relative fall of RCA mean flow matches. The printed k (2.04, 1.85) do not make the cycle
+  mean of Rmicro(t) equal Rbar (q_k_mean); the PH mean RCA resistance 231.29 follows from Eq. 11 to the same 1.4 %
+  (q_rca_ph_mean).
+
+  Audit (second reading, 2026-11-09): Eq. 11 had been entered with k_PH inside the square root; the page prints
+  k_PH sqrt(k_RCA Rbar). The three models that use it were corrected to the printed form, and the normal-physiology
+  MAE values of the text and the Fig. 6 caption were added and compared. See audit.md. The paper contradicts itself on the PH
+  RCA conventional mDSFR (abstract 2.17 vs Fig. 8 1.60), on the Fig. 7 mDSFR values (vs Table 1 and Fig. 8) and on
+  the PH MAE (text vs Fig. 8 caption). Halving the time step changes the Eq. 14 mDSFR by more than the paper's
+  stated 1.5 % (q_dt_numerics).
+
+  Unstated, and added: the circulating volume (all compartments start at 7 mmHg, the textbook mean systemic filling
+  pressure; the model is linear, so this scales absolute flows and pressures and leaves every ratio unchanged; at
+  10 mmHg the cardiac output is 4.0 l/min), and which pulmonary resistance takes the PH value 0.41 (the capillary
+  one). Supp. Table S1's column headers and the supplement's Eqs. (1)-(4) are blank in the supplement (questions).
+
+  Left out: the MAE values themselves (they need the in vivo waveforms of Figs. 6 and 8; only their internal
+  consistency is checked), the other models' values in Table 1 (Mynard and Smolich 2016, Munneke et al. 2022; not
+  in this corpus), the literature ranges of Supp. Table S3 (textbook reference ranges that feed no model), the
+  statements of Fig. 3 that repeat Supp. Table S3, and (in the first reading) all figures (figure tools were
+  refused in that session; q_figures). The figures are now read; see the figure pass below. The paper states no relation to a model that is in another record (it is 'based on
+  Mantero et al. (1992) and Kim et al. (2010)', but kim2010's record holds no model of its coronary block), so
+  relations.yaml is empty. The cross-record relations to kim2010, spaan1981 and mynard2014, and to svzerod_code's
+  block, are left to the cross-record job.
+
+  Figure pass (2026-11-09): 55 calibrated figure readings (figures.yaml, figures/*.py, figures.md) of Figs. 2B-C,
+  3A-B, 4D-F, 5A-C, 6A-C, 7A-D, 8A-B and Supp. Figs. S1-S2, including the in vivo waveforms of Figs. 6 and 8 on
+  both axes (as measured, and as the paper rescaled them). Three waveform models sample the rebuild at the
+  figures' x positions: coronary_waveform (built on coronary_closed_loop, unchanged), rmicro_waveform and
+  elastance_waveform. The bars_* models arrange the five configurations by bar position. Results: the closed-form
+  curves are reproduced point by point (Rmicro(t) of Figs. 2B-C and the PH RCA curve of Fig. 3B, which settles
+  q_kph_form, see q_fig3b_kph; all four elastance curves of Fig. 3B). The closed-loop waveforms are not
+  reproduced in level. The rebuild's aortic pressure runs 41-70 mmHg against the plotted 56-131, and the coronary
+  flows are about 0.7 times the plotted ones, as the record's scalar comparisons already showed (the added
+  circulating volume scales absolute values). The shapes follow the paper's ordering, but the rebuild's systole is
+  shorter. The rescaled in vivo curves agree with the rebuild in places (Fig. 6B, RCA; Fig. 6C, GCV, IMP models),
+  but the paper aligned model and measurement in time in an unstated way (q_fig_time_alignment), so the MAE values
+  are still not recomputed. New findings: Fig. 5A-B's GCV peak (about 6.0) against Table 1's 5.39 (q_fig5_peak),
+  and Fig. 7C's bars standing above their own labels (q_fig7c_bars).

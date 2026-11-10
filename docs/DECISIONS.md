@@ -579,3 +579,25 @@ by segment; they are never a copy of a paper's figure. The script that draws the
 them (`corpora/cardio/overview_figures/draw_schwarz_tree.py`), and each image is named one by one in the
 test that keeps copies of papers out of git. Where the drawing needs released data that is not in git,
 the committed image is what readers see; the script redraws it for anyone who has the data.
+
+## Released code that needs its own environment
+
+Some released code cannot run in the project's environment: svZeroDSolver is C++ with a Python
+interface built from source, and svVascularize brings VTK, Qt and mesh tools. Each corpus may keep such
+tools in `corpus/<name>/envs/` (never committed, like the rest of `corpus/`), installed at the pinned
+version of the release it belongs to. A model that needs one runs that interpreter in a subprocess on a
+script in its own folder and reads back plain numbers; nothing is installed into the project's
+environment. The cardio corpus's `corpus/cardio/envs/sim` holds svv 0.0.57 (from PyPI) and svZeroDSolver
+built from the attached source at commit 87bbadc. Its build fetches pybind11 v3.1.0, nlohmann/json
+v3.11.2 and pybind11_json d0bf434 at the versions its CMakeLists pins; where the network allows only git,
+they are cloned at those versions and passed with `-DFETCHCONTENT_SOURCE_DIR_<NAME>` in
+`CMAKE_COMMON_VARIABLES`:
+
+```bash
+python3 -m venv corpus/cardio/envs/sim
+corpus/cardio/envs/sim/bin/pip install svv==0.0.57
+corpus/cardio/envs/sim/bin/pip install corpus/cardio/code/svzerod_code
+```
+
+svv's telemetry is turned off for every run (`SVV_TELEMETRY_DISABLED=1`). Without the environment,
+these models report that they cannot run, like any model whose released files are missing.

@@ -1,0 +1,111 @@
+- id: Pv_zero
+  quantity: coronary_venous_pressure
+  unit: mmHg
+  printed: "0"
+  basis: >
+    kim2010 does not print the venous pressure it assigned behind each coronary bed (p. 4), and its
+    printed equation (p. 4) has no venous pressure term, which is the code's P_v = 0. The same added
+    value as kim2010's record (Pv_added).
+  alternatives: ["5", "10"]
+  stands_for: P_v of the code's CORONARY block
+- id: Pim_const
+  quantity: intramyocardial_pressure
+  unit: mmHg
+  printed: "0"
+  basis: >
+    The steady (mean) flow runs hold the intramyocardial pressure constant; a constant Pim enters the
+    code only through the difference Pim - Pim(0) (OpenLoopCoronaryBC.cpp lines 57-61), so it cannot
+    change a mean flow. kim2010 drives Pim with the ventricular pressure of its closed loop, which is
+    not printed.
+  alternatives: ["100"]
+  stands_for: Pim of the code's CORONARY block
+- id: P_mean_probe
+  quantity: coronary_inlet_pressure_mean
+  unit: mmHg
+  printed: "94"
+  basis: kim2010's Table 4 mean LAD pressure at rest without stenosis (94 mmHg), taken as the mean of an added pulsatile pressure at outlet c, only to set the coronary block and kim2010's equation side by side.
+  alternatives: ["80"]
+- id: P_amp_probe
+  quantity: coronary_inlet_pressure_amplitude
+  unit: mmHg
+  printed: "20"
+  basis: An added sinusoidal pulse on kim2010's Table 4 mean pressure, only to set the coronary block and kim2010's equation side by side under the same pulsatile inputs (nothing printed is compared with it).
+  alternatives: ["40"]
+- id: Pim_mean_probe
+  quantity: intramyocardial_pressure_mean
+  unit: mmHg
+  printed: "60"
+  basis: Added, as P_amp_probe; it does not enter the mean flow.
+  alternatives: ["0"]
+- id: Pim_amp_probe
+  quantity: intramyocardial_pressure_amplitude
+  unit: mmHg
+  printed: "50"
+  basis: Added, as P_amp_probe.
+  alternatives: ["0", "100"]
+- id: Q0_probe
+  quantity: outlet_flow_mean
+  unit: mL/s
+  printed: "2.2"
+  basis: The mean of the inflow of the release's own impedance test case (pulsatileFlow_R_impedance.json); olufsen2000 prints no outflow condition run in isolation.
+  alternatives: ["5"]
+- id: Q1_probe
+  quantity: outlet_flow_amplitude
+  unit: mL/s
+  printed: "1.5"
+  basis: The amplitude of the inflow of the release's impedance test case (it runs from 0.7 to 3.7).
+  alternatives: ["0.5"]
+- id: Z_probe
+  quantity: kernel_resistance
+  unit: dyn*s/cm^5
+  printed: "1000"
+  basis: An added exponential impulse response; olufsen2000 prints no impulse response z(t) in numbers, and the code takes the kernel as input.
+  alternatives: ["10000"]
+- id: tau_probe
+  quantity: kernel_time_constant
+  unit: s
+  printed: "0.2"
+  basis: Added with Z_probe.
+  alternatives: ["0.05"]
+- id: f_probe
+  quantity: frequency
+  unit: Hz
+  printed: "1"
+  basis: A heart rate of 60 per minute, the first harmonic at which westerhof1971's three-element model is drawn against measured impedance.
+  alternatives: ["2", "5"]
+
+# ---- cross-validation with westerhof1971, 2026-11-09: the distal resistance of each built hydraulic model ----
+# westerhof1971 records both resistors of its three-element model as one quantity (resistor_resistance),
+# and a validation can map that quantity to only one quantity here; it is mapped to
+# windkessel_proximal_resistance (R_c is read from westerhof1971 at build time). The distal resistance R_p
+# of each bed is therefore entered here, as the value westerhof1971 Table 1 prints for it
+# (q_val_westerhof1971_rp_added). Alternative: the measured d-c resistance of the built model (Fig. 2-5
+# captions) less R_c, the as-built R_p if R_c was built exactly.
+- id: wk_rd_w71_dog_syst
+  quantity: windkessel_distal_resistance
+  unit: g/cm^4/s
+  printed: "4500"
+  basis: "westerhof1971 Table 1 (p. 3), R_p for the dog systemic tree (its datum rp_dog_syst), the design value of the hydraulic model of Fig. 2; entered here only because that record's one resistance quantity is mapped to the proximal resistance (q_val_westerhof1971_rp_added)."
+  alternatives: ["4480"]
+  stands_for: Rd of the code's RCR block (westerhof1971's R_p), dog systemic model
+- id: wk_rd_w71_dog_pulm
+  quantity: windkessel_distal_resistance
+  unit: g/cm^4/s
+  printed: "600"
+  basis: "westerhof1971 Table 1 (p. 3), R_p for the dog pulmonary tree (rp_dog_pulm), the design value of the hydraulic model of Fig. 3 (q_val_westerhof1971_rp_added)."
+  alternatives: ["620"]
+  stands_for: Rd of the code's RCR block (westerhof1971's R_p), dog pulmonary model
+- id: wk_rd_w71_cat_syst
+  quantity: windkessel_distal_resistance
+  unit: g/cm^4/s
+  printed: "21000"
+  basis: "westerhof1971 Table 1 (p. 3), R_p for the cat systemic tree (rp_cat_syst), the design value of the hydraulic model of Fig. 4 (q_val_westerhof1971_rp_added)."
+  alternatives: ["20100"]
+  stands_for: Rd of the code's RCR block (westerhof1971's R_p), cat systemic model
+- id: wk_rd_w71_cat_pulm
+  quantity: windkessel_distal_resistance
+  unit: g/cm^4/s
+  printed: "3000"
+  basis: "westerhof1971 Table 1 (p. 3), R_p for the cat pulmonary tree (rp_cat_pulm), the design value of the hydraulic model of Fig. 5 (q_val_westerhof1971_rp_added). The measured d-c resistance less R_c (3750 - 750) is the same 3000; the alternative is the Rp the measured d-c resistance would give if R_c were 10% off."
+  alternatives: ["2925", "3075"]
+  stands_for: Rd of the code's RCR block (westerhof1971's R_p), cat pulmonary model

@@ -333,3 +333,34 @@
     (ratios, differences, scaling and wave-speed helpers) output no quantity chilian1986 measures. See
     chilian1986/q_no_validation_mynard2014.
   citation: {page: 12, quote: "coronary artery (LM) of adults and newborns, calculated as", where: text}
+- id: q_no_validation_vs_schwarz_data
+  kind: choice
+  about: [multiscale_coronary, effective_resistance, segment_length_ratio, wave_speed_eq1, cxq_adult, cxq_newborn]
+  text: >
+    (Validation job mynard2014+schwarz_data, 2026-11-09.) No model of this record is validated against a
+    measurement of schwarz_data, the released human left coronary tree of Schwarz et al. (2020), which this paper
+    predates and does not cite. The tree's measurements are anatomy (diameters, lengths, counts, branching,
+    perfused volumes); its flows and pressures are outputs of its own network model, not measurements.
+    multiscale_coronary, the one model here that would give flows on a coronary network, is not runnable
+    (q_multiscale_not_runnable), and its 1D network is Dodge's human anatomy scaled to sheep, not the released tree.
+    effective_resistance takes a measured flow, which the tree does not have. segment_length_ratio is the
+    allometric ratio between two animals' segment lengths, and the tree is one heart; wave_speed_eq1 needs a wall
+    stiffness, which the tree has no measurement of. The other way round, schwarz_data's tree is validated against
+    this record's measured adult Cx flow per 100 g (cxq_adult): schwarz_data/val_mynard_cxq_adult and
+    schwarz_data/q_validation_vs_mynard2014.
+  citation: {page: 30, quote: "CxQ mean (mL/min/100g) 71 ± 35 129 ± 38", where: Table 1}
+- id: q_no_validation_vs_yong2025
+  kind: unstated_model
+  about: [multiscale_coronary, effective_resistance, wave_speed_eq1, segment_length_ratio, cxq_adult, t2_Dmean_adult_exp, fig7a_meas_curve]
+  text: >
+    (Validation job mynard2014+yong2025, 2026-11-09.) No validation is entered, in either direction.
+    yong2025 (a human coronary lumped-parameter model) postdates this paper and cites only Mynard and Smolich
+    2016. Its measurements are human in vivo LAD and RCA velocities and diastolic-to-systolic flow ratios and
+    great-cardiac-vein flow (literature data: Seligman 2022, Bedaux 2001, van Wolferen 2008). The one model here
+    that gives coronary flow, multiscale_coronary, is not runnable (q_multiscale_not_runnable), and it is a
+    sheep model. The runnable models are processing formulas, Eq. 1's wave speed and the allometric length ratio,
+    and none of them gives those quantities. The other way round, yong2025's closed-loop models have human
+    parameters only. Neither paper gives them for sheep or lambs, and no input takes a measured aortic pressure,
+    so a run on these animals' conditions would test added inputs, not the model. See
+    yong2025/q_no_validation_vs_mynard2014.
+  citation: {page: 32, quote: "Flow waveforms in nine adult sheep and nine newborn lambs", where: Table 3}

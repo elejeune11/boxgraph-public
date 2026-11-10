@@ -1,0 +1,40 @@
+id: tree_structured_params
+name: the structured-tree parameters of olufsen1999 (xi, gamma, eta, l/r, DC root-resistance radius power) measured on the released network
+role: processing
+software: true
+built_from: [tree_branching, network_solution]
+stated: {file: explanation_of_data.txt, lines: "243", quote: "daughter symmetry versus mother diameter in 3-nodes with one mother (inflow) segment"}
+# Added by the ModelAtlas job olufsen1999+schwarz_data (2026-11-09). olufsen1999 builds its structured tree
+# from four geometric parameters (pp. 6-7): the radius exponent xi of r_pa^xi = r_d1^xi + r_d2^xi (Eq. 19),
+# the asymmetry ratio gamma = (r_d2/r_d1)^2 and area ratio eta = (r_d1^2 + r_d2^2)/r_pa^2 (Eq. 20), and the
+# length-to-radius ratio lrr = l/r; and it says the tree's DC root impedance scales about as r_root^-3 (p. 9).
+# This model takes the same statistics of the released network. The release states none of them; this is our
+# arithmetic on the network and on our own flow solution.
+equation: >
+  bifurcations: the nodes of tree_branching (one inflowing mother, two outflowing daughters, flow of
+  network_solution) with dM >= d_lo; dL >= dS the daughters; gamma = (dS/dL)^2 (Eq. 20's gamma, the
+  square of schwarz2020's S); eta = (dL^2 + dS^2)/dM^2 (Eq. 20's eta, schwarz2020's A); xi solves
+  dM^xi = dL^xi + dS^xi (Eq. 19), taken as +inf where dL >= dM (no finite exponent); medians over the
+  nodes. Elements with d >= d_lo: lrr = l/(d/2), median; R_root = (P_up - P_cap)/Q, the steady resistance
+  from the element's upstream end to the distal pressure (Eq. 18's Z(0,0) of a tree rooted there);
+  p = -slope of the least-squares line of ln R_root on ln(d/2) over the elements with Q > 0
+inputs:
+  P_in: {quantity: node_pressure, unit: Pa, description: inlet pressure of the flow solution}
+  P_cap: {quantity: node_pressure, unit: Pa, description: pressure distal to every sink element's distal tree}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+  mu_p: {quantity: plasma_viscosity, unit: Pa*s}
+  d_lo: {quantity: vessel_diameter, unit: um, description: "lower bound of the mother (nodes) or element (lrr, p) diameter"}
+outputs:
+  n_nodes: {quantity: node_count, unit: dimensionless, description: one-mother two-daughter nodes with dM >= d_lo}
+  gamma_median: {quantity: asymmetry_ratio, unit: dimensionless, description: "median (dS/dL)^2"}
+  eta_median: {quantity: area_growth, unit: dimensionless, description: "median (dL^2 + dS^2)/dM^2"}
+  xi_median: {quantity: radius_exponent, unit: dimensionless, description: "median per-node exponent of Eq. 19 (nodes with dL >= dM count as +inf)"}
+  share_no_xi: {quantity: bifurcation_share, unit: percent, description: "nodes with dL >= dM, which no finite exponent fits"}
+  n_elements: {quantity: segment_count, unit: dimensionless, description: elements with d >= d_lo}
+  lrr_median: {quantity: length_to_radius_ratio, unit: dimensionless, description: "median l/(d/2) of the elements"}
+  lrr_q1: {quantity: length_to_radius_ratio, unit: dimensionless, description: "first quartile of l/(d/2)"}
+  lrr_q3: {quantity: length_to_radius_ratio, unit: dimensionless, description: "third quartile of l/(d/2)"}
+  p_dc: {quantity: dc_impedance_radius_power, unit: dimensionless, description: "-d ln R_root / d ln r, least squares over the elements"}
+settings:
+  file: "Human Left Coronary graph.mat"
+stochastic: false

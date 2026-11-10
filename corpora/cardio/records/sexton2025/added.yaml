@@ -1,0 +1,90 @@
+# ---- settings of tree growth the paper does not state (svv_tree runs)
+- id: cube_edge_added
+  quantity: domain_edge_length
+  unit: cm
+  printed: "1"
+  basis: >
+    The paper does not give the size of the cube its synthetic trees are grown in (Fig. 2E, Fig. 2C "a cube
+    perfusion volume"). Its lattice comparisons use "a 1cm cube tissue volume" (Fig. S1 caption, p. 37), and
+    svv's quickstart grows trees in pyvista's default unit cube. 1 cm is taken.
+  alternatives: ["2"]
+  stands_for: the cube tissue domain of Figs. 2C and 2E
+- id: Q_term_added
+  quantity: terminal_flow
+  unit: ml/s
+  printed: "6.25 x 10^-5"
+  basis: >
+    Table S1 lists the flow rate Q without a value, and the paper gives none for tree generation. This is svv's
+    own default terminal flow, 0.125/2000 mL/s (svv/tree/data/data.py lines 269-271), read back by svv_defaults.
+    It sets the absolute size of the tree only (radii scale with the fourth root of flow), so it matters for
+    the statistics restricted to mothers above a diameter.
+  alternatives: ["1.25 x 10^-4"]
+  stands_for: "Q of each terminal vessel (Table S1)"
+- id: P_root_added
+  quantity: tree_pressure
+  unit: mmHg
+  printed: "100"
+  basis: >
+    Table S1 lists the pressure difference without a value. svv's default root pressure (svv/tree/data/data.py
+    lines 276-278). Like the flow it scales the tree's radii.
+  alternatives: ["120"]
+  stands_for: pressure at the root, Delta P_tree of Eq. S8 with the terminal pressure
+- id: P_term_added
+  quantity: tree_pressure
+  unit: mmHg
+  printed: "60"
+  basis: >
+    svv's default terminal pressure (svv/tree/data/data.py lines 273-275); the paper states none.
+  alternatives: ["20"]
+  stands_for: pressure at every terminal, Delta P_tree of Eq. S8 with the root pressure
+
+# ---- one bifurcation for the Eq. S10 models (reduced_resistance_s10, its variant, bifurcation_network)
+- id: l_parent_added
+  quantity: vessel_length
+  unit: cm
+  printed: "0.1"
+  basis: an illustrative parent length of the size of the vessels of a 1-cm, 1000-terminal tree; Eq. S10 holds for any tree, so any lengths test it
+  alternatives: ["0.3"]
+  stands_for: L_i of the parent in Eq. S10
+- id: l_a_added
+  quantity: vessel_length
+  unit: cm
+  printed: "0.05"
+  basis: an illustrative terminal daughter length, unequal to the other daughter's so the daughters differ
+  alternatives: ["0.02"]
+  stands_for: L of daughter a
+- id: l_b_added
+  quantity: vessel_length
+  unit: cm
+  printed: "0.08"
+  basis: an illustrative terminal daughter length
+  alternatives: ["0.2"]
+  stands_for: L of daughter b
+- id: Q_a_added
+  quantity: vessel_flow
+  unit: ml/s
+  printed: "6.25 x 10^-5"
+  basis: one terminal's flow, as Q_term_added
+  alternatives: ["1.25 x 10^-4"]
+  stands_for: Q of daughter a (Eq. S9)
+- id: Q_b_added
+  quantity: vessel_flow
+  unit: ml/s
+  printed: "1.25 x 10^-4"
+  basis: twice daughter a's flow, so the daughters' radii differ
+  alternatives: ["6.25 x 10^-5"]
+  stands_for: Q of daughter b (Eq. S9)
+- id: ratio_added
+  quantity: daughter_radius_ratio
+  unit: dimensionless
+  printed: "0.5"
+  basis: an illustrative ratio of the two daughter radii; the identity the paper states holds for any ratio
+  alternatives: ["0.9"]
+  stands_for: r_j / r_i in Eq. S6
+- id: c0_fig2b_added
+  quantity: clock_cycles
+  unit: dimensionless
+  printed: "5 x 10^5"
+  basis: "figure pass: the proportionality constant of 'C α N^2' is not stated; the red dashed line of Fig. 2B starts near 5 x 10^5 at B = 0 (by eye). It only shifts the curve: the comparison turns on the slope, which no choice of C0 changes"
+  alternatives: ["3 x 10^5", "1 x 10^6"]
+  stands_for: C0, the cost of the one-vessel tree in C α N^2 (Fig. 2B)

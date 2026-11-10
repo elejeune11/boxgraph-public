@@ -1,0 +1,240 @@
+id: coronary_waveform
+name: waveforms of the closed-loop coronary circulation (Eqs. 1-12) at a phase of the cycle
+role: model
+stated:
+  page: 2
+  printed_page: '2'
+  quote: The coronary circulation is modelled using a closed-loop LPM as
+  where: Sec. 2, Eqs. 1-14, Fig. 1, Supp. Tables S1-S2
+equation: Q_k = (P_k,1 - P_k,2)/R_k (1); Q_k = dC_k(P_k,lumen - P_k,ext)/dt (2); E_k(t) = (E_k,max - E_k,min) e_n(t) + E_k,min (3); e_v(t) = 1/2[1 - cos(pi t/T_vc)], 0<=t<=T_vc; 1/2[1 + cos(pi (t - T_vc)/T_vr)],
+  T_vc<t<=T_vc+T_vr; 0 after (4); e_a(t) as Eq. 5; Q_valve = (P_n,1 - P_n,2)/R_valve, R_valve = R_open or R_closed (6); Rmicro-LCA(t) = [(sqrt(k_LCA Rbar) - sqrt(0.7 Rbar)) e_n(t) + sqrt(0.7 Rbar)]^2 (10);
+  Rmicro-RCA(t) = [(k_PH sqrt(k_RCA Rbar) - sqrt(0.75 Rbar)) e_n(t) + sqrt(0.75 Rbar)]^2 (11); P_k,ext = P_im = 0.6 P_V (12); pDSFR = max_{Tes<=t<=Ted} Q / max_{0<=t<=Tes} Q (13); mDSFR = int_{Tes}^{Ted}
+  Q dt / int_0^{Tes} Q dt (14); circuit of Fig. 1
+inputs:
+  Emax_ra:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_ra:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_rv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_rv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_la:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_la:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_lv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_lv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Tvc_rv:
+    quantity: contraction_duration
+    unit: s
+  Tvr_rv:
+    quantity: relaxation_duration
+    unit: s
+  Tvc_lv:
+    quantity: contraction_duration
+    unit: s
+  Tvr_lv:
+    quantity: relaxation_duration
+    unit: s
+  Tac_ra:
+    quantity: contraction_duration
+    unit: s
+  Tar_ra:
+    quantity: relaxation_duration
+    unit: s
+  tac_ra:
+    quantity: atrial_contraction_onset
+    unit: s
+  tar_ra:
+    quantity: atrial_relaxation_onset
+    unit: s
+  Tac_la:
+    quantity: contraction_duration
+    unit: s
+  Tar_la:
+    quantity: relaxation_duration
+    unit: s
+  tac_la:
+    quantity: atrial_contraction_onset
+    unit: s
+  tar_la:
+    quantity: atrial_relaxation_onset
+    unit: s
+  T:
+    quantity: heart_period
+    unit: s
+  R_open:
+    quantity: valve_resistance
+    unit: mmHg*s/ml
+  R_closed:
+    quantity: valve_resistance
+    unit: mmHg*s/ml
+  R_ao:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_sa:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_sv:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pa:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pc:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pvn:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  C_sa:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_sv:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_pa:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_pvn:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Ra_lad:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_lad:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_lad:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_lad:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_lad:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ra_lcx:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_lcx:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_lcx:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_lcx:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_lcx:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ra_rca:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_rca:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_rca:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_rca:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_rca:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  k_lca:
+    quantity: resistance_scale_factor
+    unit: dimensionless
+  k_rca:
+    quantity: resistance_scale_factor
+    unit: dimensionless
+  k_ph:
+    quantity: ph_resistance_factor
+    unit: dimensionless
+  frac_lca:
+    quantity: basal_resistance_fraction
+    unit: percent
+  frac_rca:
+    quantity: basal_resistance_fraction
+    unit: percent
+  imp_ratio:
+    quantity: imp_ratio
+    unit: dimensionless
+  P_init:
+    quantity: initial_pressure
+    unit: mmHg
+  phase:
+    quantity: cardiac_cycle_fraction
+    unit: dimensionless
+    description: time in the cycle over the period T, 0 at the start of ventricular contraction
+outputs:
+  q_lad:
+    quantity: coronary_flow
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  q_lcx:
+    quantity: coronary_flow
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  q_rca:
+    quantity: coronary_flow
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  q_gcv:
+    quantity: coronary_venous_flow
+    unit: ml/s
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  q_lcx_vein:
+    quantity: coronary_venous_flow
+    unit: ml/s
+    description: 'LCx venous component: flow through the LCx venous resistance'
+  p_ao:
+    quantity: aortic_pressure
+    unit: mmHg
+    description: aortic root pressure (proximal coronary pressure Pa)
+  p_d_lad:
+    quantity: distal_coronary_pressure
+    unit: mmHg
+    description: LAD pressure after the epicardial resistance Ra
+  p_d_lcx:
+    quantity: distal_coronary_pressure
+    unit: mmHg
+    description: LCx pressure after Ra
+  p_d_rca:
+    quantity: distal_coronary_pressure
+    unit: mmHg
+    description: RCA pressure after Ra
+  p_pa:
+    quantity: pa_pressure
+    unit: mmHg
+    description: pressure at the pulmonary valve outlet, before the pulmonary artery resistance
+  q_ao:
+    quantity: aortic_flow
+    unit: ml/s
+    description: flow through the aortic valve
+  q_pa:
+    quantity: pa_flow
+    unit: ml/s
+    description: flow through the pulmonary valve
+settings:
+  dt: 0.01
+  t_end: 60.0
+  variable_resistance: true
+  imp: true
+  dsfr: integral
+built_from:
+- coronary_closed_loop
+stochastic: false

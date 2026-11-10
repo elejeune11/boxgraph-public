@@ -1,0 +1,34 @@
+id: skeleton_network
+name: the raw skeleton checked against the network graph (counts, element identities, end nodes, element diameters)
+role: processing
+software: true
+built_from: [tree_table1]
+stated: {file: explanation_of_data.txt, lines: "39", quote: "The file contains 3,913,549 center points of vessels"}
+equation: >
+  counts of the skeleton; network elements found by IDsegfile; end nodes compared; skeleton diameter of
+  an element = mean of 2 r pixel over its centre points with r > 0 and Stddev/r <= CVlim, else d0
+inputs:
+  pixel: {quantity: pixel_size, unit: m}
+  d0: {quantity: vessel_diameter, unit: um, description: diameter given to an element without a usable centre point}
+outputs:
+  n_points_header: {quantity: point_count, unit: dimensionless, description: line 2 of the skeleton}
+  n_segments_header: {quantity: segment_count, unit: dimensionless, description: line 4}
+  n_points: {quantity: point_count, unit: dimensionless, description: centre-point lines read}
+  n_segments: {quantity: segment_count, unit: dimensionless, description: lines after SEGMENT-INFO}
+  n_neighbour_slots: {quantity: neighbour_slot_count, unit: dimensionless}
+  n_node_points: {quantity: point_count, unit: dimensionless, description: centre points with radius -1}
+  n_points_unassigned: {quantity: point_count, unit: dimensionless, description: centre points with BelongstoLineSegment -1}
+  n_elements_in_skeleton: {quantity: segment_count, unit: dimensionless, description: network elements whose IDsegfile is a skeleton segment}
+  n_skeleton_segments_in_network: {quantity: segment_count, unit: dimensionless, description: distinct skeleton segments named by the network}
+  n_skeleton_segments_not_in_network: {quantity: segment_count, unit: dimensionless}
+  n_elements_same_ends: {quantity: segment_count, unit: dimensionless, description: network elements whose two nodes are their skeleton segment's two end points}
+  n_d_match_internal: {quantity: segment_count, unit: dimensionless, description: "internal elements whose stored d equals the skeleton diameter within match_rel"}
+  n_d_match_terminal: {quantity: segment_count, unit: dimensionless, description: "the same for the source/sink elements"}
+  d_med_skeleton: {quantity: median_segment_diameter, unit: um, description: "median skeleton diameter of the network's 202184 elements"}
+settings:
+  skeleton: "Human Left Coronary skeleton.txt"
+  network: "Human Left Coronary graph.mat"
+  block_lines: 250000
+  match_rel: 0.001
+  CVlim: 1          # TreeQ.settings.CVlim (datum CVlim, guide line 224)
+stochastic: false

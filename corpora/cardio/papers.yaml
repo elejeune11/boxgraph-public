@@ -178,6 +178,7 @@
   file: corpus/cardio/code/schwarz_data
   papers: [schwarz2020]
   url: https://doi.org/10.34894/XYF65X
+  relate_with: [kassab1993, chilian1986, spaan1981, kim2010, mynard2014, mynard2015, olufsen1999, olufsen2012]
   note: >-
     The released data of schwarz2020 (DataverseNL, doi 10.34894/XYF65X; CC0 on the repository, CC BY 4.0 in
     the data guide): the network itself, 'Human Left Coronary graph.mat' (MATLAB 5 file holding the struct
@@ -186,10 +187,14 @@
     hemodynamics_in-silicoHighP.xlsx, hemodynamics_in-silicoHum6P.xlsx), the authors' DemonstrationCode.m,
     MANIFEST.TXT and 'Schwarz-2019 explanation of data.docx' (explanation_of_data.txt is our plain-text copy of
     it, for reading). Data plus a short MATLAB demonstration, attached as software because the pipeline takes a
-    folder only that way; cite values by file and sheet/cell, file and lines, or the .mat field path. Not
-    included: the skeleton, Gdistal variations.xlsx, final_tree_bifurcation_summary_all-ld.xlsx, Topology
-    data.xlsx and termseg_density.xlsx. With the network, the pressure and flow solution (Poiseuille and
-    Kirchhoff, Pries viscosity, 90 and 20 mmHg) can be rerun on the released tree with scipy.io.loadmat.
+    folder only that way; cite values by file and sheet/cell, file and lines, or the .mat field path. The rest
+    of the release was added later, each file downloaded from the repository and checked against its SHA-1:
+    'Human Left Coronary skeleton.txt' (the raw skeleton, 3,913,549 centre points in 288,198 segments, with the
+    LAD, LCX and RCA; the paper analyses LAD and LCX), 'Topology data.xlsx', 'final_tree_bifurcation_summary_
+    all-ld.xlsx' (branching statistics, Figs. 2-4), 'Gdistal variations.xlsx' (the stochastic downstream
+    conductances, Table 2) and termseg_density.xlsx. Only the release's copy of the paper PDF is left out.
+    The network solution (Poiseuille and Kirchhoff, Pries viscosity, 90 and 20 mmHg) can be rerun on the
+    released tree with scipy.io.loadmat.
 
 - id: spaan1981
   file: corpus/cardio/1981_Spaan.pdf
@@ -250,3 +255,57 @@
     parameters and connectivity of the 1D segments) and MOESM2_vascular_beds.xlsx (MOESM2: resistance
     and compliance of the vascular beds). Data, not code: attached as software because the pipeline takes
     a folder only that way; cite values by file, sheet and cell.'
+- id: menon2025
+  file: corpus/cardio/2025_Menon.pdf
+  pages: [1, 8]
+  note: 'Menon, Richter, Pfaller, Pham, Mathew, Harold, Dorn, Verma & Marsden 2025, J Open Source Softw
+    10:7595 (published 23 May 2025), doi 10.21105/joss.07595. The paper of svZeroDSolver, SimVascular''s
+    lumped-parameter (0D) solver: blocks for vessels, junctions, Windkessel, coronary and impedance outflow
+    conditions, heart chambers and valves, assembled from a .json file. Its code is the record svzerod_code.'
+  relate_with: [kim2010, olufsen2000, stergiopulos1999, westerhof1971]
+- id: yong2025
+  file: corpus/cardio/2025_Yong.pdf
+  pages: [1, 17]
+  note: Yong, Latief, Wang, Erlinge, Dahlgren, Kotecha, Muthurangu & Torii 2025, J Biomech 189:112679,
+    doi 10.1016/j.jbiomech.2025.112679. PDF pp. 1-11 are the article; pp. 12-17 are its supplementary
+    materials (parameter tables), converted here from the journal's .docx to PDF with LibreOffice and
+    appended (format only). A closed-loop lumped-parameter model with LAD, LCX and RCA coronary territories,
+    time-varying microvascular resistance and intramyocardial pressure; normal and pulmonary hypertension.
+  relate_with: [kim2010, spaan1981, mynard2014, korakianitis2006]
+- id: sexton2025
+  file: corpus/cardio/2025_Sexton.pdf
+  pages: [1, 81]
+  note: Sexton, Rutsche, Herrmann, Hudson, Sinha, Du, Shiwarski, Masaltseva, Solberg, Pham, Szafron, Wu,
+    Feinberg, Skylar-Scott & Marsden 2025, Science 388:1198-1204, doi 10.1126/science.adj6152. PDF pp.
+    1-8 are the article; pp. 9-81 are its Supplementary Materials (Materials and Methods, Supplementary
+    Text, Figs. S1-S15, Tables S1-S6, references), appended. Synthetic organ-scale vascular trees grown
+    by constrained constructive optimization (Hagen-Poiseuille vessels, a power-law diameter rule at bifurcations),
+    for biomanufacturing. Its code is the record svv_code.
+  relate_with: [schwarz_data, kassab1993, olufsen1999]
+- id: svzerod_code
+  kind: software
+  file: corpus/cardio/code/svzerod_code
+  papers: [menon2025]
+  relate_with: [kim2010, yong2025, olufsen2000, stergiopulos1999, westerhof1971, suga1973, korakianitis2006]
+  url: https://github.com/SimVascular/svZeroDSolver (commit 87bbadc109d467182995f91b49ca11d53d006d79,
+    7 Nov 2026)
+  note: 'svZeroDSolver, the lumped-parameter (0D) solver of SimVascular, exported from the repository
+    at commit 87bbadc109d467182995f91b49ca11d53d006d79 (git archive, no history). C++ source in src/ (the
+    blocks in src/model/, each citing its source paper in its header: OpenLoopCoronaryBC kim2010, OpenLoopCoronaryVarResBC
+    yong2025, ImpedanceBC olufsen2000, WindkesselBC Vignon & Taylor 2004), docs/references.bib, and about
+    40 test cases in tests/cases/*.json with stored results in tests/cases/results/. A Python interface
+    (pysvzerod) builds from the source with pip; where it does not build, the blocks are restated in our
+    models and checked against the stored results.'
+- id: svv_code
+  kind: software
+  file: corpus/cardio/code/svv_code
+  papers: [sexton2025]
+  relate_with: [schwarz_data, kassab1993, olufsen1999]
+  url: https://github.com/SimVascular/svVascularize (commit 5ca73e4c734cfd3704c85a06417cc105828e5195,
+    23 Sep 2026; the same as svv 0.0.57 on PyPI; release archive doi 10.5281/zenodo.15151168)
+  note: svVascularize (Python package svv), the synthetic vascular tree generator of sexton2025, exported
+    from the repository at commit 5ca73e4c734cfd3704c85a06417cc105828e5195 (git archive, no history),
+    the code of svv 0.0.57 on PyPI. Tree growth in svv/tree/ and svv/forest/, tissue domains in svv/domain/,
+    reduced-order simulation export in svv/simulation/; biventricle_tissue.stl is a heart-ventricle domain
+    shipped with it. svv 0.0.57 is installed in a separate environment for runs (see the run's notes);
+    its telemetry is disabled with SVV_TELEMETRY_DISABLED=1.

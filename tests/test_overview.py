@@ -310,3 +310,15 @@ def test_an_image_step_naming_a_missing_file_is_an_error(syn, tmp_path):
     content = {"case_studies": [{"id": "c", "steps": [{"text": "x", "image": {"views": [{"label": "P", "file": "nope.png"}]}}]}]}
     with pytest.raises(CaseStudyError, match="nope.png"):
         render_overview(syn, tmp_path / "out", title="T", content=content, content_dir=tmp_path)
+
+
+def test_the_overview_text_can_put_a_notice_above_every_view(syn, tmp_path):
+    """A notice in the overview's text is shown as a strip above every view, escaped, with its link."""
+    notice = {"title": "Work in progress:", "text": "results are <unreviewed>;",
+              "link": "check a record", "href": "https://example.org/repo"}
+    page = render_overview(syn, tmp_path, content={"notice": notice}).read_text()
+    strip = page.split('<div class="notice" role="note">', 1)[1].split("</div>", 1)[0]
+    assert "<b>Work in progress:</b>" in strip and "results are &lt;unreviewed&gt;;" in strip
+    assert '<a href="https://example.org/repo">check a record</a>' in strip
+    assert page.index('class="notice"') < page.index('id="app"')
+    assert '<div class="notice"' not in render_overview(syn, tmp_path / "b").read_text()

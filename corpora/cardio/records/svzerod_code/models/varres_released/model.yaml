@@ -1,0 +1,25 @@
+id: varres_released
+name: the released time-varying coronary block (CORONARY_VAR_RES) under a constant flow, its microvascular resistance read back from the inlet pressure
+role: model
+stated: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "14-16", quote: "Open loop coronary boundary condition with time-varying microvascular"}
+equation: "with Ca, Cim negligible: P_in(t) = Q (Ra + Ram(t) + Rv), so mean Ram = mean P_in / Q - Ra - Rv and peak Ram = max P_in / Q - Ra - Rv"
+described_from: yong2025
+software: true
+inputs:
+  Ram_min: {quantity: microvascular_resistance_min, unit: mmHg*s/mL}
+  Ram_max: {quantity: microvascular_resistance_max, unit: mmHg*s/mL}
+  T_vc: {quantity: ventricular_contraction_duration, unit: s}
+  T_vr: {quantity: ventricular_relaxation_duration, unit: s}
+  T: {quantity: cardiac_cycle_length, unit: s}
+  Ra: {quantity: coronary_arterial_resistance, unit: mmHg*s/mL}
+  Rv: {quantity: coronary_venous_resistance, unit: mmHg*s/mL}
+outputs:
+  Ram_mean: {quantity: microvascular_resistance_mean, unit: mmHg*s/mL}
+  Ram_peak: {quantity: microvascular_resistance_max, unit: mmHg*s/mL}
+settings: {n_pts: 1001, n_cycles: 3, Q: 1.0, tau_probe: 1.0e-4}
+stochastic: false
+# Settings are ours: n_pts time points per cycle, n_cycles cycles, the probe flow Q and the time
+# constant tau_probe (s) that sets the probe capacitances Ca = Cim = tau_probe / (Ram_max + Rv). They
+# must be small against the time scale of Ram(t) but not so small that the block's residual (scaled by
+# Cim Rv) falls under the solver's absolute tolerance: a fixed Cim of 1e-12 mL/mmHg returned Ram_min
+# throughout and 1e-9 was erratic (q_varres_small_capacitance); refinements.yaml varies tau_probe.

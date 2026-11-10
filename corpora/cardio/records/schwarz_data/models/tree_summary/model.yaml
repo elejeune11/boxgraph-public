@@ -1,0 +1,55 @@
+id: tree_summary
+name: whole-network statistics of the released graph (Table 1 bottom rows, node types, loops, territory volumes)
+role: processing
+software: true
+built_from: [tree_table1]
+stated: {file: explanation_of_data.txt, lines: "61", quote: "The file Human Left Coronary graph.mat contains all the data that was used for this study."}
+equation: >
+  n, median and 10th/90th percentiles of d, median of l over all elements, the terminal elements and the
+  terminal elements of each LV region; region density = n / sum VVoronoi; node shares = share of internal
+  nodes of degree 3, 4, > 4; loops = E - V + C; quartiles of sum VVoronoi per perfusion branch
+inputs: {}
+outputs:
+  n_all: {quantity: segment_count, unit: dimensionless}
+  n_term: {quantity: segment_count, unit: dimensionless}
+  n_epi: {quantity: segment_count, unit: dimensionless, description: terminal elements in LV subepicardium}
+  n_mid: {quantity: segment_count, unit: dimensionless}
+  n_endo: {quantity: segment_count, unit: dimensionless}
+  n_regions: {quantity: segment_count, unit: dimensionless, description: terminal elements in the three LV regions together}
+  n_in: {quantity: node_count, unit: dimensionless}
+  n_sn: {quantity: node_count, unit: dimensionless}
+  dens_epi: {quantity: terminal_density, unit: 1/cm^3, description: all terminal elements of the region per cm^3}
+  dens_mid: {quantity: terminal_density, unit: 1/cm^3}
+  dens_endo: {quantity: terminal_density, unit: 1/cm^3}
+  d_med_all: {quantity: median_segment_diameter, unit: um}
+  d_p10_all: {quantity: diameter_decile_low, unit: um}
+  d_p90_all: {quantity: diameter_decile_high, unit: um}
+  l_med_all: {quantity: median_segment_length, unit: um}
+  d_med_term: {quantity: median_segment_diameter, unit: um}
+  d_p10_term: {quantity: diameter_decile_low, unit: um}
+  d_p90_term: {quantity: diameter_decile_high, unit: um}
+  l_med_term: {quantity: median_segment_length, unit: um}
+  d_med_epi: {quantity: median_segment_diameter, unit: um}
+  d_p10_epi: {quantity: diameter_decile_low, unit: um}
+  d_p90_epi: {quantity: diameter_decile_high, unit: um}
+  l_med_epi: {quantity: median_segment_length, unit: um}
+  d_med_mid: {quantity: median_segment_diameter, unit: um}
+  d_p10_mid: {quantity: diameter_decile_low, unit: um}
+  d_p90_mid: {quantity: diameter_decile_high, unit: um}
+  l_med_mid: {quantity: median_segment_length, unit: um}
+  d_med_endo: {quantity: median_segment_diameter, unit: um}
+  d_p10_endo: {quantity: diameter_decile_low, unit: um}
+  d_p90_endo: {quantity: diameter_decile_high, unit: um}
+  l_med_endo: {quantity: median_segment_length, unit: um}
+  pct_3: {quantity: node_type_share, unit: percent, description: internal nodes connecting 3 elements (bifurcations)}
+  pct_4: {quantity: node_type_share, unit: percent, description: internal nodes connecting 4 elements (trifurcations)}
+  pct_more: {quantity: node_type_share, unit: percent, description: internal nodes connecting more than 4 elements}
+  n_loops: {quantity: loop_count, unit: dimensionless}
+  n_components: {quantity: component_count, unit: dimensionless}
+  V_territory_q1: {quantity: perfused_volume_quartile_low, unit: mm^3}
+  V_territory_median: {quantity: perfused_volume, unit: mm^3}
+  V_territory_q3: {quantity: perfused_volume_quartile_high, unit: mm^3}
+settings:
+  file: "Human Left Coronary graph.mat"
+  regions: {epi: 1, mid: 2, endo: 3}
+stochastic: false

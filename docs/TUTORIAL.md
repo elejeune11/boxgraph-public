@@ -128,7 +128,8 @@ its view in the overview. Commit the new records and `corpora/<name>/completed.y
 (the ledger of finished jobs) together; never the papers.
 
 To change what the overview says, edit `corpora/<name>/overview.yaml`: its
-title, introduction, links and case
+title, introduction, links, an optional `notice` (a strip shown above every
+view: `title`, `text`, `link`, `href`) and case
 studies. A case study names what each step shows (`comparison: src/id`,
 `relation: src/id`, `cited: src/datum`, `validation: src/id`,
 `refinement: src/id`, `family: src/model`, `question: src/id`, ...), and the

@@ -1,0 +1,64 @@
+# ---- the code's default parameters, read at run time
+- id: run_params
+  model: tree_parameters
+  inputs: {}
+  outputs: {gamma: param_gamma, alpha_r: param_alpha_r, alpha_l: param_alpha_l, nu: param_nu, rho: param_rho,
+            mu: param_mu, Q_term: param_Q_term, P_root: param_P_root, P_term: param_P_term}
+
+# ---- svv's own resistance and radius update on one bifurcation, with the paper's viscosity and exponent
+- id: run_bifurcation
+  model: resistance_update
+  inputs: {mu: mu_s1_paper, gamma: gamma_paper, l_p: l_parent_added, l_a: l_a_added, l_b: l_b_added,
+           Q_a: Q_a_added, Q_b: Q_b_added, P_root: P_root_code, P_term: P_term_code}
+  outputs: {Rstar_p: bif_rstar, beta_a: bif_beta_a, beta_b: bif_beta_b, beta_sum: bif_beta_sum, d_p: bif_d_p,
+            P_end_a: bif_P_end_a, P_end_b: bif_P_end_b}
+  note: the same bifurcation as sexton2025's run_s10 and run_s10_beta4, with svv's default pressures
+
+# ---- trees grown by svv at its own defaults, 1000 terminals as the trees of the paper's Fig. 2E
+- id: run_cube_1000
+  model: tree_growth
+  inputs: {n_terminals: n_term_1000_paper, cube_edge: cube_edge_added}
+  settings: {seed: 1}
+  replicates: 3
+  outputs: {n_terminals_grown: cube_n_term, root_diameter: cube_root_d, beta_sum_max: cube_beta_sum_max,
+            beta_sum_min: cube_beta_sum_min, radius_sum_max: cube_radius_sum_max, radius_sum_min: cube_radius_sum_min,
+            radius_sum_median: cube_radius_sum_median, check_radius_sum_max: cube_check_sum_max,
+            check_radius_sum_min: cube_check_sum_min, radius_dev_max: cube_radius_dev_max,
+            frac_radius_dev_1pct: cube_frac_dev, rstar_root_dev: cube_rstar_dev, root_radius_dev: cube_root_dev,
+            flow_sum_dev_max: cube_flow_dev, terminal_flow_dev_max: cube_term_flow_dev,
+            P_root_0d: cube_P_root_0d, P_root_0d_mu: cube_P_root_0d_mu, mu_export: cube_mu_export,
+            outlet_R_max: cube_outlet_R, outlet_flow_dev_max: cube_outlet_flow_dev, n_outlets: cube_n_outlets,
+            t_grow: cube_t_grow}
+  note: >
+    A 1-cm cube (cube_edge_added) and 1000 terminals, the size of the cube tree of Fig. 2E; every growth
+    setting at svv's defaults (data.yaml), which the paper does not state for these trees. Three seeds (1-3),
+    each of which repeats exactly (run_seed_before); the value is their mean, with its spread.
+- id: run_biventricle_1000
+  model: tree_biventricle
+  inputs: {n_terminals: n_term_1000_paper}
+  settings: {seed: 11}
+  replicates: 3
+  outputs: {n_terminals_grown: biv_n_term, root_diameter: biv_root_d, beta_sum_max: biv_beta_sum_max,
+            beta_sum_min: biv_beta_sum_min, radius_sum_max: biv_radius_sum_max, radius_sum_min: biv_radius_sum_min,
+            check_radius_sum_max: biv_check_sum_max, radius_dev_max: biv_radius_dev_max,
+            frac_radius_dev_1pct: biv_frac_dev, rstar_root_dev: biv_rstar_dev,
+            P_root_0d: biv_P_root_0d, P_root_0d_mu: biv_P_root_0d_mu, mu_export: biv_mu_export,
+            outlet_R_max: biv_outlet_R, outlet_flow_dev_max: biv_outlet_flow_dev,
+            A_median_large: biv_A_large, S_median_large: biv_S_large, n_bif_A_large: biv_n_bif_A,
+            n_bif_S_large: biv_n_bif_S, A_median_large_check: biv_A_large_check,
+            S_median_large_check: biv_S_large_check, domain_volume: biv_volume, t_grow: biv_t_grow}
+  note: >
+    The biventricle surface shipped with the code, 1000 terminals as the heart tree of Fig. 2E (whether it is
+    the paper's biventricle is not stated: q_biventricle_units); svv's defaults; seeds 11-13.
+
+# ---- does a fixed seed repeat a tree? (two growths per run, in separate processes)
+- id: run_seed_before
+  model: seed_repeat
+  inputs: {n_terminals: n_term_1000_paper, cube_edge: cube_edge_added}
+  settings: {seed: 7, seed_order: before}
+  outputs: {root_end_distance: rep_before_root, radius_diff_max: rep_before_radius, root_diameter_diff: rep_before_root_d}
+- id: run_seed_after
+  model: seed_repeat
+  inputs: {n_terminals: n_term_1000_paper, cube_edge: cube_edge_added}
+  settings: {seed: 7, seed_order: after_build}
+  outputs: {root_end_distance: rep_after_root, radius_diff_max: rep_after_radius, root_diameter_diff: rep_after_root_d}

@@ -1,0 +1,58 @@
+id: tree_growth
+name: open-loop tree grown in a cube by the released svVascularize at its default parameters, checked against the tree equations, svv's own check functions and svv's own 0D export
+role: model
+software: true
+stochastic: true
+stated: {file: svv/tree/tree.py, lines: "567-569", quote: "def n_add(self, n, **kwargs):"}
+equation: >
+  svv grows the tree (Domain(surface).create/solve/build; Tree().set_domain, set_root, n_add; one terminal
+  per step, each bifurcation placed by L-BFGS-B on the cost sum l^alpha_l r^alpha_r, bifurcation.py line 230;
+  flows summed, Eq. S3; equal terminal pressures, Eq. S9; ratios, Eq. S6; R*, Eq. S10 with beta^4; root
+  radius, Eq. S8). The adapter then runs svv's check functions naive and naive_radius (bifurcation.py lines
+  2158-2205) on a copy, and svv's export_0d_simulation (zerod_tree.py, its defaults: steady inflow equal to the
+  root flow, Poiseuille resistances with tree.parameters.kinematic_viscosity, Olufsen rigid-wall capacitances,
+  inductances, a RESISTANCE outlet at every vessel without children), run with svZeroDSolver. Our arithmetic
+  on the returned numbers is described in model.py.
+inputs:
+  n_terminals: {quantity: terminal_count, unit: dimensionless}
+  cube_edge: {quantity: domain_edge_length, unit: cm}
+outputs:
+  n_terminals_grown: {quantity: terminal_count, unit: dimensionless}
+  n_segments: {quantity: segment_count, unit: dimensionless}
+  root_diameter: {quantity: vessel_diameter, unit: um}
+  min_diameter: {quantity: vessel_diameter, unit: um}
+  domain_volume: {quantity: domain_volume, unit: cm^3}
+  t_grow: {quantity: build_time, unit: s, description: wall-clock time of n_add on the machine that ran it}
+  beta_sum_max: {quantity: murray_sum, unit: dimensionless, description: "largest beta_L^gamma + beta_R^gamma, svv's stored ratios"}
+  beta_sum_min: {quantity: murray_sum, unit: dimensionless}
+  radius_sum_max: {quantity: murray_sum, unit: dimensionless, description: "largest (r_L^gamma + r_R^gamma)/r_p^gamma, svv's stored radii"}
+  radius_sum_min: {quantity: murray_sum, unit: dimensionless}
+  radius_sum_median: {quantity: murray_sum, unit: dimensionless}
+  check_radius_sum_max: {quantity: murray_sum, unit: dimensionless, description: "the same with the radii of svv's own check functions"}
+  check_radius_sum_min: {quantity: murray_sum, unit: dimensionless}
+  radius_dev_max: {quantity: radius_deviation, unit: dimensionless, description: "largest |r_stored / r_check - 1|"}
+  frac_radius_dev_1pct: {quantity: vessel_fraction, unit: dimensionless, description: share of vessels whose stored radius differs from the check's by more than 1%}
+  root_radius_dev: {quantity: radius_deviation, unit: dimensionless, description: "|r_root stored / r_root from Eq. S8 with the check's R* - 1|"}
+  rstar_root_dev: {quantity: resistance_deviation, unit: dimensionless, description: "|R*_root stored / R*_root recomputed by svv's naive() - 1|"}
+  flow_sum_dev_max: {quantity: flow_deviation, unit: dimensionless, description: "largest |Q_p - Q_L - Q_R| / Q_p (Eq. S3)"}
+  terminal_flow_dev_max: {quantity: flow_deviation, unit: dimensionless, description: largest relative difference of a terminal's stored flow from svv's terminal flow}
+  A_median_all: {quantity: area_growth, unit: dimensionless}
+  S_median_all: {quantity: daughter_symmetry, unit: dimensionless}
+  A_median_large: {quantity: area_growth, unit: dimensionless, description: "median over mothers wider than d_A_large_um, svv's stored radii"}
+  S_median_large: {quantity: daughter_symmetry, unit: dimensionless, description: "median over mothers wider than d_S_large_um, svv's stored radii"}
+  n_bif_A_large: {quantity: bifurcation_count, unit: dimensionless}
+  n_bif_S_large: {quantity: bifurcation_count, unit: dimensionless}
+  A_median_large_check: {quantity: area_growth, unit: dimensionless, description: "as A_median_large with the check's radii"}
+  S_median_large_check: {quantity: daughter_symmetry, unit: dimensionless}
+  P_root_0d: {quantity: tree_pressure, unit: mmHg, description: "root pressure of svv's exported 0D model with every outlet at svv's terminal pressure"}
+  P_root_0d_mu: {quantity: tree_pressure, unit: mmHg, description: "the same with the exported resistances multiplied by svv's density (the growth's viscosity)"}
+  mu_export: {quantity: dynamic_viscosity, unit: cP, description: "viscosity implied by the exported Poiseuille resistances, R pi r^4 / (8 l), median"}
+  outlet_R_max: {quantity: outlet_resistance, unit: dyn*s/cm^5, description: largest outlet resistance svv exports}
+  n_outlets: {quantity: terminal_count, unit: dimensionless, description: outlets of the exported 0D model}
+  outlet_flow_dev_max: {quantity: flow_deviation, unit: dimensionless, description: "largest |Q_outlet / Q_term - 1| in the 0D solution"}
+  P_out_max: {quantity: outlet_pressure_0d, unit: mmHg, description: largest outlet pressure of the 0D solution as exported}
+settings:
+  seed: 1
+  seed_order: before
+  d_A_large_um: 400
+  d_S_large_um: 500

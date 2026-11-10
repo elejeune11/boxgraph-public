@@ -1,0 +1,17 @@
+id: elastance_waveform
+name: ventricular elastance E(t) at a time in the cycle (Eqs. 3-4)
+role: model
+stated: {page: 3, printed_page: "3", quote: "The time-varying elastance Ek (t) for each chamber", where: "Eqs. 3-4"}
+equation: "E_k(t) = (E_k,max - E_k,min) e_n(t) + E_k,min (3); e_v(t) = 1/2[1 - cos(pi t/T_vc)], 0<=t<=T_vc; 1/2[1 + cos(pi (t - T_vc)/T_vr)], T_vc<t<=T_vc+T_vr; 0 after (4)"
+inputs:
+  Emax: {quantity: chamber_elastance, unit: mmHg/ml}
+  Emin: {quantity: chamber_elastance, unit: mmHg/ml}
+  Tvc: {quantity: contraction_duration, unit: s}
+  Tvr: {quantity: relaxation_duration, unit: s}
+  T: {quantity: heart_period, unit: s}
+  t: {quantity: time_in_cycle, unit: s, description: "time from the start of ventricular contraction"}
+outputs:
+  E: {quantity: chamber_elastance, unit: mmHg/ml}
+settings: {}
+stochastic: false
+

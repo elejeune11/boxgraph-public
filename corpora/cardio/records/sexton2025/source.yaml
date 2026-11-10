@@ -1,0 +1,56 @@
+id: sexton2025
+kind: article
+title: Rapid model-guided design of organ-scale synthetic vasculature for biomanufacturing
+authors: [Zachary A. Sexton, Dominic Rütsche, Jessica E. Herrmann, Andrew R. Hudson, Soham Sinha, Jianyi Du, Daniel J. Shiwarski, Anastasiia Masaltseva, Fredrik Samdal Solberg, Jonathan Pham, Jason M. Szafron, Sean M. Wu, Adam W. Feinberg, Mark A. Skylar-Scott, Alison L. Marsden]
+year: 2025
+venue: Science 388, 1198-1204
+doi: 10.1126/science.adj6152
+file: corpus/cardio/2025_Sexton.pdf
+page_range: [1, 81]
+pages: {1: "1198", 2: "1199", 3: "1200", 4: "1201", 5: "1202", 6: "1203", 7: "1204", 10: "S2", 11: "S3", 12: "S4", 13: "S5", 14: "S6", 15: "S7", 16: "S8", 17: "S9", 18: "S10", 19: "S11", 20: "S12", 21: "S13", 22: "S14", 23: "S15", 24: "S16", 25: "S17", 26: "S18", 27: "S19", 28: "S20", 29: "S21", 30: "S22", 31: "S23", 32: "S24", 33: "S25", 34: "S26", 35: "S27", 36: "S28", 37: "S29", 38: "S30", 39: "S31", 40: "S32", 41: "S33", 42: "S34", 43: "S35", 44: "S36", 45: "S37", 46: "S38", 47: "S39", 48: "S40", 49: "S41", 50: "S42", 51: "S43", 52: "S44", 53: "S45", 54: "S46", 55: "S47", 56: "S48", 57: "S49", 58: "S50", 59: "S51", 60: "S52", 61: "S53", 62: "S54", 63: "S55", 64: "S56", 65: "S57", 66: "S58", 67: "S59", 68: "S60", 69: "S61", 70: "S62", 71: "S63", 72: "S64", 73: "S65", 74: "S66", 75: "S67", 76: "S68", 77: "S69", 78: "S70", 79: "S71", 80: "S72", 81: "S73"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-09"}
+notes: >
+  Scope. The quantitative core of an article about software: the constrained constructive optimization (CCO)
+  tree equations (Eqs. S1-S10, Table S1), the constants of Tables S1 and S3, the arithmetic the paper prints
+  (kinematic viscosity, pixels per cell, the 230-fold acceleration), and the paper's released code,
+  svVascularize (svv 0.0.57, record svv_code), run in the separate environment corpus/cardio/envs/sim on the
+  paper's own constants. Trees are grown in a 1-cm cube with 1000 terminals (Fig. 2E's size) and 4000
+  terminals (a size of Fig. S8), each with five seeds, since svv's growth does not repeat for a fixed seed
+  (q_svv_nonrepeatable). Flow, pressures and cube size are unstated and taken from svv's defaults and
+  Fig. S1, as added inputs with alternatives (q_tree_settings).
+
+  Left out. The partial implicit volumes (Eqs. S11-S20), closed-loop connection (S21), the 3D/1D/0D/FSI
+  and advection-diffusion formulations (S22-S48; no printed result follows from them without the authors'
+  meshes and trees), the organ-scale trees of 10^4-10^6 terminals and their diameters, distances and build
+  times (q_organ_scale, q_fig_s10_units), the timing tables S4-S6 (hardware-specific), the printing and
+  viability measurements, and every figure (figures.md says why each one).
+
+  What reproduces. Eq. S6 gives its stated identity; Table S3's nu from its mu and rho; both
+  pixels-per-cell values; svv's default exponents and density match Table S1/S3, and svv's stored ratios
+  satisfy the identity at every bifurcation.
+
+  What does not. (1) Eq. S10 is printed with beta_k where Eqs. S1-S7 and the released code give beta_k^4;
+  the printed form does not equal the Poiseuille network and does not give svv's root R* or root radius,
+  the beta^4 variant does (q_s10_beta). (2) svv's stored radii, which it exports, are not the root radius
+  times its own stored ratios for most vessels, so Eq. S5 fails at some bifurcations in both directions
+  (cmp_tree*_radius_sum_*; q_svv_radii). (3) svv's default viscosity is below Table S1's and its nu rounds
+  to 0.036, not 0.037 (q_svv_viscosity). (4) The main text's "nu = 0.04 cP" is a hundredth of the tables'
+  viscosity (q_viscosity_main_text). (5) The 230-fold acceleration does not follow from the build times the
+  paper sets side by side (q_speedup). Unit and cross-reference slips are in q_table_units.
+
+  Against measured trees (validations.yaml; judged by the validation job). Synthetic trees grown with the
+  paper's gamma = 3 are compared with schwarz2020's human large-vessel area growth (1.02) and symmetry
+  (0.59), and with kassab1993's pig Horton ratios; a gamma = 2 tree (the paper's own lower bound) is kept
+  beside them. With gamma = 3 the large-vessel area growth stays well above the human value, as Murray's
+  cube law implies; with gamma = 2 it is near one. What each comparison can and cannot mean, and what was not
+  entered (segment counts and lengths by diameter, pressure share), is in q_validation_schwarz and
+  q_validation_kassab.
+
+  Figure pass (2026-11-09). The figures left out above are now read where their values can be separated:
+  45 calibrated readings (figures.yaml, code in figures/, one datum each) of Figs. 1G, 2B, 2C, 2F, 2H-I
+  (lines), 5F, 5P(ii-iii), S2D-F, S4B, S8 (convex lines), S10, S11C (fits) and S15A(i); figures.md says
+  what each panel is and why the rest are left out. Checks: Fig. 5P's bars against the printed values,
+  Fig. 5F's CFD against its PIV, and Fig. 2B's dashed line against the caption's C α N^2 for full balanced
+  trees, which rises some 13 times faster per depth than the line drawn (q_fig2b_scaling). Findings:
+  Fig. 2F's top axis label (q_fig2f_axis_label), Fig. 5F's PIV fractions adding to 0.7 (q_fig5f_piv_sum),
+  and Fig. S10's axes in cm (q_fig_s10_units_axis).

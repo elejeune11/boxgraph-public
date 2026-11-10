@@ -1,0 +1,25 @@
+id: tree_lumen_volume_fraction
+name: lumen volume of the released left coronary tree's segments in a diameter window, as a fraction of the tissue volume the tree perfuses
+role: processing
+software: true
+built_from: [network_solution]
+stated: {file: explanation_of_data.txt, lines: "163", quote: "Perfusion: Tissue perfusion, calculated as Q / (heart weight* VVoronoi / sum (all Voronoi volumes))"}
+# Added by the ModelAtlas job schwarz_data+spaan1981 (2026-11-09), for comparing the tree with intramyocardial
+# arterial blood-volume fractions, such as spaan1981's small-artery volume fraction (0.023 of myocardial volume,
+# p. 8) and the 5% of wall volume for intramural arteries plus veins it quotes from Morgenstern et al. The release
+# states no lumen volume; this is our arithmetic on the stored segment diameters and lengths.
+equation: >
+  each segment (TreeQ.IE and TreeQ.SE, inlets included) a cylinder of volume pi d^2 l / 4 with its stored d and l;
+  V_lumen = sum over segments with d_lo <= d <= d_hi; V_tissue = sum of TreeQ.SE.VVoronoi (the perfused volume
+  of network_solution); phi = V_lumen / V_tissue; share_of_tree = V_lumen / (sum over all segments)
+inputs:
+  d_lo: {quantity: vessel_diameter, unit: um, description: smallest segment diameter taken}
+  d_hi: {quantity: vessel_diameter, unit: um, description: largest segment diameter taken}
+outputs:
+  n_seg: {quantity: segment_count, unit: dimensionless, description: segments with d_lo <= d <= d_hi}
+  V_lumen: {quantity: arterial_lumen_volume, unit: mm^3, description: summed lumen volume of those segments}
+  V_tissue: {quantity: perfused_volume, unit: cm^3, description: sum of TreeQ.SE.VVoronoi}
+  phi: {quantity: small_artery_volume_fraction, unit: dimensionless, description: "V_lumen / V_tissue (spaan1981's id): the arterial lumen volume of the window per volume of perfused tissue"}
+  share_of_tree: {quantity: lumen_volume_share, unit: dimensionless, description: "V_lumen over the lumen volume of all segments"}
+settings: {file: "Human Left Coronary graph.mat"}
+stochastic: false

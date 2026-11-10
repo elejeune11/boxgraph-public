@@ -334,3 +334,36 @@
     warnings of this record); a validation entry cannot carry that reproduction. See
     schwarz_data/q_no_validation_vs_schwarz2020_network.
   citation: {page: 13, quote: "The datasets generated for this study are available on request", where: text}
+- id: q_no_validation_vs_schwarz_data_release
+  kind: choice
+  about: [area_growth_eq8, area_growth_linear_fit, area_growth_linear_fit_mm, segment_share, density_share, segment_conductance_eq5, viscosity_eq3, d_f2b_median, d_f3a_median, d_f4_symhi_median, d_f4_symlo_median, schwarz_data/p_A_median_large, schwarz_data/p_S_median_large, schwarz_data/p_T1_all, schwarz_data/tree_branching]
+  text: >
+    (Cross-validation with schwarz_data, third pass with the whole release, 2026-11-08.) No model of this
+    record is entered against schwarz_data. Every measured datum of schwarz_data is a copy of a value
+    printed here (from_source schwarz2020: Table 1, the p. 5 topology, the p. 5 and p. 9 medians, Fig. 4's
+    group sizes, the perfused volumes). Judging a model here against them would judge this paper against
+    itself. The values schwarz_data recomputes from the released files are run outputs, not data. Considered
+    and not used: (1) area_growth_eq8. Its gamma is not stated, and the paper uses Eq. 8 only for a trend
+    ("growth in cross-sectional area increases with increasing daughter symmetry for gamma > 2", p. 10).
+    Fig. 4 groups the nodes by symmetry ranges (0-0.5, 0.5-1), not by a symmetry value at which Eq. 8 could
+    be run. (2) area_growth_linear_fit and _mm. They are fitted to these nodes, so they could at most be a
+    fit_quality, and a fitted A at one (dM, S) has no measured counterpart: the medians are per class and
+    symmetry range. schwarz_data already sets the fit's coefficients against the recomputed regression
+    (cmp_A_fit_*, q_area_growth_fit). (3) segment_share and density_share are arithmetic on the counts
+    printed here. (4) segment_conductance_eq5 and viscosity_eq3 would predict the stored conductances,
+    which are outputs of the authors' solver (origin run), as before. The other direction is entered: the
+    measured box plots of Figs. 2B, 3A and 4 read here are judged against schwarz_data's statistics of
+    the released network and workbook (schwarz_data validations.yaml, q_validation_figs_2_4).
+  citation: {page: 10, quote: "area growth (A) at that node would be directly related", where: "Eqs. 7-8"}
+- id: q_no_validation_vs_svv_code
+  kind: choice
+  about: [wall_shear_stress_eq6, pressure_drop_eq4, segment_conductance_eq5, network_hemodynamics, svv_code/resistance_update]
+  text: >
+    (Cross-validation with svv_code, 2026-11-09.) No model of this record is entered against svv_code. svv_code
+    is software and holds no measurement: its data are the code's constants and the outputs of its runs. That
+    wall_shear_stress_eq6 and svv_code/resistance_update take the same kinds of input (lengths, pressures) is a
+    likeness of form; the Poiseuille relations they share are compared as relations, not as a model against
+    data. In the other direction, svv_code sets its grown biventricle trees against this paper's measured
+    large-vessel area growth (1.02) and daughter symmetry (0.59). See svv_code validations.yaml and
+    svv_code/q_schwarz2020_unused.
+  citation: {page: 5, quote: "sectional area remained stable (median area growth", where: text}

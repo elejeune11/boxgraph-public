@@ -1,0 +1,21 @@
+# Helper added for ModelAtlas: the constitutive relation of the 1D formulation, Eq. S26 as printed,
+# which the paper calls "an Olufsen material model" (ref. 75 = olufsen1999). The paper gives no
+# units and no values of k1, k2, k3 here; the ports are in CGS, as in svOneDSolver and in ref. 75.
+# No printed result of this record is computed from it.
+id: olufsen_material_s26
+name: pressure from cross-sectional area, Olufsen material model (Eq. S26)
+role: model
+stated: {page: 22, printed_page: "S14", quote: "we default synthetic vascular networks to an Olufsen material model shown here", where: "Eq. S26"}
+equation: "P(z, t) = P0(z) + (4/3) Yh/r0(z) (1 - sqrt(S0(z)/S(z, t))); Yh/r0(z) = k1 e^(k2 r0(z)) + k3"
+inputs:
+  k1: {quantity: stiffness_fit_amplitude, unit: dyn/cm^2}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: dyn/cm^2}
+  r0: {quantity: reference_radius, unit: cm}
+  P0: {quantity: reference_pressure, unit: dyn/cm^2}
+  S0: {quantity: reference_area, unit: cm^2}
+  S: {quantity: lumen_area, unit: cm^2}
+outputs:
+  P: {quantity: lumen_pressure, unit: dyn/cm^2}
+settings: {}
+stochastic: false

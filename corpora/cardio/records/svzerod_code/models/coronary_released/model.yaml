@@ -1,0 +1,32 @@
+id: coronary_released
+name: the released open-loop coronary block (CORONARY) driven by sinusoidal inlet and intramyocardial pressures
+role: model
+stated: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+equation: >
+  OpenLoopCoronaryBC.h lines 35-47: C_im R_v Q_in - V_im + C_im (-P_cim(0) + P_im(0) - P_im + P_v)
+  - C_im R_v dV_im/dt - C_a C_im R_v dP_in/dt + R_a C_a C_im R_v dQ_in/dt = 0 and
+  C_im R_v P_in - C_im R_v R_a Q_in - R_v V_im - C_im (R_v + R_am)(P_cim(0) - P_im(0) + P_im)
+  - C_im R_v R_am dV_im/dt - R_am V_im + R_am C_im P_v = 0 (circuit R_a, C_a to ground, R_am, C_im to P_im, R_v to P_v)
+described_from: kim2010
+software: true
+inputs:
+  P_mean: {quantity: coronary_inlet_pressure_mean, unit: mmHg}
+  P_amp: {quantity: coronary_inlet_pressure_amplitude, unit: mmHg}
+  Pim_mean: {quantity: intramyocardial_pressure_mean, unit: mmHg}
+  Pim_amp: {quantity: intramyocardial_pressure_amplitude, unit: mmHg}
+  Ra: {quantity: coronary_arterial_resistance, unit: kdyn*s/cm^5}
+  Ram: {quantity: coronary_arterial_micro_resistance, unit: kdyn*s/cm^5}
+  Rv: {quantity: coronary_venous_resistance_sum, unit: kdyn*s/cm^5}
+  Ca: {quantity: coronary_arterial_capacitance, unit: cm^5/Mdyn}
+  Cim: {quantity: intramyocardial_capacitance, unit: cm^5/Mdyn}
+  Pv: {quantity: coronary_venous_pressure, unit: mmHg}
+  T: {quantity: cardiac_cycle_length, unit: s}
+outputs:
+  Q_mean: {quantity: coronary_bed_flow_mean, unit: cm^3/s}
+  Q_max: {quantity: coronary_bed_flow_max, unit: cm^3/s}
+  Q_min: {quantity: coronary_bed_flow_min, unit: cm^3/s}
+settings: {n_pts: 501, n_cycles: 10, n_tau: 12}
+stochastic: false
+# Settings are ours (no paper gives them): n_pts output/time points per cycle, at least n_cycles
+# cycles and n_tau times the bed's slowest time constant bound (Ca + Cim)(Ram + Rv), so the start-up
+# has died out; the solver's own defaults (rho_infty 0.5, absolute tolerance 1e-8) are kept.

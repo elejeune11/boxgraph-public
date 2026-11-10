@@ -1,0 +1,101 @@
+# ---- the code's default tree parameters (svv/tree/data/data.py, TreeParameters.__init__), cgs units as the
+#      class docstring says ("By default the centimetre-gram-second convention is used"); pressures in mmHg
+- {id: gamma_code, quantity: murray_exponent, unit: dimensionless, origin: reported, printed: "3.0",
+   from_source: sexton2025, from_datum: gamma_t1,
+   citation: {file: svv/tree/data/data.py, lines: "281", quote: "self.murray_exponent = 3.0"}}
+- {id: alpha_r_code, quantity: cost_radius_exponent, unit: dimensionless, origin: reported, printed: "2.0",
+   from_source: sexton2025, from_datum: alpha_r_t1,
+   citation: {file: svv/tree/data/data.py, lines: "282", quote: "self.radius_exponent = 2.0"}}
+- {id: alpha_l_code, quantity: cost_length_exponent, unit: dimensionless, origin: reported, printed: "1.0",
+   from_source: sexton2025, from_datum: alpha_l_t1,
+   citation: {file: svv/tree/data/data.py, lines: "283", quote: "self.length_exponent = 1.0"}}
+- {id: nu_code, quantity: kinematic_viscosity, unit: cm^2/s, origin: reported, printed: "3.6 x 10^-2",
+   from_source: sexton2025, from_datum: nu_t3,
+   citation: {file: svv/tree/data/data.py, lines: "263-264", quote: "3.6e-2, 'kinematic_viscosity', from_system=self._CGS_SYSTEM"},
+   note: "written 3.6e-2; the growth multiplies it by the density to get the viscosity of Eq. S1 (root.py line 266), the 0D export and the 3D set-up use it alone (q_viscosity_code)"}
+- {id: rho_code, quantity: fluid_density, unit: g/cm^3, origin: reported, printed: "1.06",
+   from_source: sexton2025, from_datum: rho_t3,
+   citation: {file: svv/tree/data/data.py, lines: "266-267", quote: "1.06, 'density', from_system=self._CGS_SYSTEM"}}
+- {id: q_numerator_code, quantity: default_flow_numerator, unit: ml/s, origin: reported, printed: "0.125",
+   citation: {file: svv/tree/data/data.py, lines: "269-270", quote: "0.125 / 2000.0, 'volumetric_flow'"},
+   note: "the default terminal flow is written 0.125 / 2000.0 (q_hidden_defaults)"}
+- {id: q_divisor_code, quantity: default_flow_divisor, unit: dimensionless, origin: reported, printed: "2000.0",
+   citation: {file: svv/tree/data/data.py, lines: "269-270", quote: "0.125 / 2000.0, 'volumetric_flow'"}}
+- {id: P_term_code, quantity: tree_pressure, unit: mmHg, origin: reported, printed: "60.0",
+   citation: {file: svv/tree/data/data.py, lines: "273-274", quote: "60.0, 'pressure', from_system=self._MMHG_SYSTEM"}}
+- {id: P_root_code, quantity: tree_pressure, unit: mmHg, origin: reported, printed: "100.0",
+   citation: {file: svv/tree/data/data.py, lines: "276-277", quote: "100.0, 'pressure', from_system=self._MMHG_SYSTEM"}}
+- {id: nonconvex_limit_code, quantity: nonconvex_attempt_limit, unit: dimensionless, origin: reported, printed: "100",
+   citation: {file: svv/tree/data/data.py, lines: "284", quote: "self.max_nonconvex_count = 100"}}
+
+# ---- settings of the growth step written only in the code (svv/tree/branch/bifurcation.py add_vessel,
+#      svv/tree/tree.py); the paper states none of them (q_hidden_growth_settings)
+- {id: flow_ratio_code, quantity: flow_ratio_cutoff, unit: dimensionless, origin: reported, printed: "20",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "92", quote: "flow_ratio = kwargs.get('flow_ratio', 20)"},
+   note: "the docstring (lines 65-68) says the default is 10"}
+- {id: threshold_exponent_code, quantity: threshold_exponent, unit: dimensionless, origin: reported, printed: "1.5",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "96", quote: "threshold_exponent = kwargs.pop('threshold_exponent', 1.5)"},
+   note: "the docstring (lines 73-74) says 1.0"}
+- {id: threshold_adjuster_code, quantity: threshold_adjuster, unit: dimensionless, origin: reported, printed: "0.9",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "97", quote: "threshold_adjuster = kwargs.pop('threshold_adjuster', 0.9)"}}
+- {id: n_points_code, quantity: candidate_point_count, unit: dimensionless, origin: reported, printed: "50",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "98", quote: "n_points = kwargs.pop('n_points', 50)"},
+   note: "the docstring (lines 77-78) says 100"}
+- {id: n_closest_code, quantity: candidate_vessel_count, unit: dimensionless, origin: reported, printed: "2",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "99", quote: "n_closest_vessels = kwargs.pop('n_closest_vessels', 2)"},
+   note: "the docstring (lines 79-81) says 10"}
+- {id: max_iter_code, quantity: optimizer_iteration_limit, unit: dimensionless, origin: reported, printed: "20",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "103", quote: "max_iter = kwargs.pop('max_iter', 20)"}}
+- {id: proximity_code, quantity: proximity_factor, unit: dimensionless, origin: reported, printed: "4",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "178", quote: "if dist < data[bifurcation_vessel, 21]*4:"}}
+- {id: bound_lo_code, quantity: optimizer_bound, unit: dimensionless, origin: reported, printed: "0.05",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "230", quote: "bounds=[(0.05, 0.95), (0.05, 0.95)]"}}
+- {id: bound_hi_code, quantity: optimizer_bound, unit: dimensionless, origin: reported, printed: "0.95",
+   citation: {file: svv/tree/branch/bifurcation.py, lines: "230", quote: "bounds=[(0.05, 0.95), (0.05, 0.95)]"}}
+- {id: decay_code, quantity: sampling_decay, unit: dimensionless, origin: reported, printed: "0.9",
+   citation: {file: svv/tree/tree.py, lines: "447", quote: "decay_probability = kwargs.pop('decay_probability', 0.9)"}}
+- {id: convexity_tol_code, quantity: convexity_tolerance, unit: dimensionless, origin: reported, printed: "1e-2",
+   citation: {file: svv/tree/tree.py, lines: "337", quote: "def set_domain(self, domain, convexity_tolerance=1e-2):"}}
+
+# ---- the 0D export (svv/simulation/fluid/rom/zero_d/zerod_tree.py, export_0d_simulation defaults)
+- {id: rho_export_code, quantity: fluid_density, unit: g/cm^3, origin: reported, printed: "1.06",
+   from_source: sexton2025, from_datum: rho_t3,
+   citation: {file: svv/simulation/fluid/rom/zero_d/zerod_tree.py, lines: "16", quote: "density=1.06 ,viscosity=0.04"},
+   note: the density of the exported vessels' inductances (line 172)}
+- {id: mu_export_arg_code, quantity: dynamic_viscosity, unit: poise, origin: reported, printed: "0.04",
+   from_source: sexton2025, from_datum: mu_t3,
+   citation: {file: svv/simulation/fluid/rom/zero_d/zerod_tree.py, lines: "16", quote: "density=1.06 ,viscosity=0.04"},
+   note: "the docstring (lines 50-52) calls it the viscosity of blood and gives no unit; entered in poise (cgs, the code's units), which is Table S3's 4 cP. The function never uses it: the exported resistances take tree.parameters.kinematic_viscosity (line 146) (q_viscosity_code)"}
+- {id: k2_export_code, quantity: wall_stiffness_exponent, unit: 1/cm, origin: reported, printed: "-22.5267",
+   citation: {file: svv/simulation/fluid/rom/zero_d/zerod_tree.py, lines: "17", quote: "olufsen={'k1' :0.0 ,'k2' :-22.5267 ,'k3' :1.0e7"}}
+- {id: k3_export_code, quantity: wall_stiffness_constant, unit: dyn/cm^2, origin: reported, printed: "1.0 x 10^7",
+   citation: {file: svv/simulation/fluid/rom/zero_d/zerod_tree.py, lines: "17", quote: "olufsen={'k1' :0.0 ,'k2' :-22.5267 ,'k3' :1.0e7"},
+   note: "written 1.0e7; with k1 = 0, the rigid-wall setting the paper describes for Eq. S26 (p. 22)"}
+- {id: Pd_export_code, quantity: outlet_pressure_0d, unit: dyn/cm^2, origin: reported, printed: "0",
+   citation: {file: svv/simulation/fluid/rom/zero_d/zerod_tree.py, lines: "213", quote: "bc_values[\"Pd\"] = 0  # tree.parameters[\"Pterm\"]"},
+   note: "every outlet's distal pressure; the comment beside it names svv's terminal pressure"}
+
+# ---- what sexton2025 prints for these models (copied; the build checks each copy against the paper's record)
+- {id: gamma_paper, quantity: murray_exponent, unit: dimensionless, origin: reported, printed: "3",
+   from_source: sexton2025, from_datum: gamma_t1, citation: {none: "printed in sexton2025 p. 67, Table S1; not in the code"}}
+- {id: alpha_r_paper, quantity: cost_radius_exponent, unit: dimensionless, origin: reported, printed: "2",
+   from_source: sexton2025, from_datum: alpha_r_t1, citation: {none: "printed in sexton2025 p. 67, Table S1"}}
+- {id: alpha_l_paper, quantity: cost_length_exponent, unit: dimensionless, origin: reported, printed: "1",
+   from_source: sexton2025, from_datum: alpha_l_t1, citation: {none: "printed in sexton2025 p. 67, Table S1"}}
+- {id: mu_s1_paper, quantity: dynamic_viscosity, unit: cP, origin: reported, printed: "4",
+   from_source: sexton2025, from_datum: mu_t1, citation: {none: "printed in sexton2025 p. 67, Table S1 (vascular generation)"}}
+- {id: mu_s3_paper, quantity: dynamic_viscosity, unit: cP, origin: reported, printed: "4",
+   from_source: sexton2025, from_datum: mu_t3, citation: {none: "printed in sexton2025 p. 69, Table S3 (CFD)"}}
+- {id: rho_paper, quantity: fluid_density, unit: g/cm^3, origin: reported, printed: "1.06",
+   from_source: sexton2025, from_datum: rho_t3, citation: {none: "printed in sexton2025 p. 69, Table S3"}}
+- {id: nu_paper, quantity: kinematic_viscosity, unit: cm^2/s, origin: derived, printed: "0.037",
+   from_source: sexton2025, from_datum: nu_t3, citation: {none: "printed in sexton2025 p. 69, Table S3 (unit printed 'cm · s')"}}
+- {id: murray_identity_paper, quantity: murray_sum, unit: dimensionless, origin: derived, printed: "1",
+   from_source: sexton2025, from_datum: murray_identity,
+   citation: {none: "printed in sexton2025 p. 12 after Eq. S7: sum_i beta_i^gamma ≡ 1, Eq. S6 being derived from Eq. S5"}}
+- {id: n_term_1000_paper, quantity: terminal_count, unit: dimensionless, origin: reported, printed: "1000",
+   from_source: sexton2025, from_datum: n_term_1000,
+   citation: {none: "printed in sexton2025 p. 3: 1000-outlet trees in a cube, annulus, heart and brain gyrus (Fig. 2E)"}}
+- {id: outlet_R_zero_paper, quantity: outlet_resistance, unit: dyn*s/cm^5, origin: reported, printed: "0",
+   from_source: sexton2025,
+   citation: {none: "printed in words in sexton2025 p. 73, Movie S2 caption: 'Zero resistance boundary conditions are applied uniformly across all outlets' of the 0D models of 1000-terminal trees; not a datum of sexton2025's record"}}

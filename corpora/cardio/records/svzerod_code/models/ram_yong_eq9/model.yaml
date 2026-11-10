@@ -1,0 +1,19 @@
+id: ram_yong_eq9
+name: yong2025's time-varying microvascular resistance (Eq. 9 with Eq. 4) restated; its time average and peak in closed form
+role: model
+stated: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "14-16", quote: "Open loop coronary boundary condition with time-varying microvascular"}
+equation: "Rmicro(t) = [(sqrt(Rmicro,max) - sqrt(Rmicro,min)) e_v(t) + sqrt(Rmicro,min)]^2 (yong2025 Eq. 9), e_v(t) of Eq. 4"
+described_from: yong2025
+inputs:
+  Ram_min: {quantity: microvascular_resistance_min, unit: mmHg*s/mL}
+  Ram_max: {quantity: microvascular_resistance_max, unit: mmHg*s/mL}
+  T_vc: {quantity: ventricular_contraction_duration, unit: s}
+  T_vr: {quantity: ventricular_relaxation_duration, unit: s}
+  T: {quantity: cardiac_cycle_length, unit: s}
+outputs:
+  Ram_mean: {quantity: microvascular_resistance_mean, unit: mmHg*s/mL}
+  Ram_peak: {quantity: microvascular_resistance_max, unit: mmHg*s/mL}
+settings: {}
+stochastic: false
+# Restated from yong2025 (pp. 3, Eqs. 4 and 9) in our own code, independently of the port: the time
+# average is integrated in closed form. Valid for T_vc + T_vr <= T.

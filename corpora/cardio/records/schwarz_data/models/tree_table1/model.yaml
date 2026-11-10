@@ -1,0 +1,32 @@
+id: tree_table1
+name: Table 1 of schwarz2020 per diameter class, recounted from the released network (and the segment length of each class, Fig. 2B)
+role: processing
+software: true
+stated: {file: explanation_of_data.txt, lines: "250", quote: "SegType: Distribution of the diameters of non-terminal and terminal segments in the data."}
+equation: >
+  per class [lo, hi) of element diameter (edges in m): n_all = #(IE and SE), n_internal = #IE,
+  n_terminal = #SE; share = 100 n / column total; LV density of a region r = #SE of r in the class /
+  sum of VVoronoi of the SE of r (cm^3), density share = 100 density / region total; L median and
+  quartiles of the lengths of all elements of the class
+inputs:
+  d: {quantity: vessel_diameter, unit: um, description: "lower bound of the diameter class (30, 45, ..., 400)"}
+outputs:
+  n_all: {quantity: segment_count, unit: dimensionless, description: "elements of the class (TreeQ.IE and TreeQ.SE)"}
+  n_internal: {quantity: segment_count, unit: dimensionless, description: "internal elements (TreeQ.IE) of the class"}
+  n_terminal: {quantity: segment_count, unit: dimensionless, description: "source/sink elements (TreeQ.SE) of the class"}
+  share_all: {quantity: segment_share, unit: percent}
+  share_terminal: {quantity: segment_share, unit: percent}
+  dens_epi: {quantity: terminal_density, unit: 1/cm^3, description: "terminal elements per cm^3 of LV subepicardium (regionID 1)"}
+  dens_mid: {quantity: terminal_density, unit: 1/cm^3, description: "LV midmyocardium (regionID 2)"}
+  dens_endo: {quantity: terminal_density, unit: 1/cm^3, description: "LV subendocardium (regionID 3)"}
+  dshare_epi: {quantity: terminal_density_share, unit: percent}
+  dshare_mid: {quantity: terminal_density_share, unit: percent}
+  dshare_endo: {quantity: terminal_density_share, unit: percent}
+  L_median: {quantity: median_segment_length, unit: um, description: "median length of the elements of the class (Fig. 2B)"}
+  L_q1: {quantity: length_quartile_low, unit: um}
+  L_q3: {quantity: length_quartile_high, unit: um}
+settings:
+  file: "Human Left Coronary graph.mat"
+  class_edges_um: [30, 45, 60, 75, 90, 105, 120, 150, 200, 400]
+  regions: {epi: 1, mid: 2, endo: 3}
+stochastic: false

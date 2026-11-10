@@ -264,3 +264,27 @@
     values are model inputs, not measurements, and are not recorded). In the other direction, kim2010's
     models give a human patient's mean coronary flows, cardiac output and percentage rules, none of which
     is an impedance, d-c resistance, viscosity or density measured here. See kim2010/q_no_validation_vs_westerhof1971.
+- id: q_no_validation_vs_svzerod_code
+  kind: choice
+  about: [impedance_3el, rdc_eq1a, tau_rpc]
+  text: >
+    (Cross-validation with svzerod_code, 2026-11-09.) No model of this record is judged against svzerod_code:
+    that record is a released solver and measures nothing (no datum of origin measured), so there is no
+    measurement for impedance_3el or any other model here to predict. In the other direction, the released
+    RCR block (svzerod_code/windkessel_released_impedance), which is this paper's Fig. 1A circuit, is run with
+    the Table 1 values of each bed against the impedances measured here (Figs. 2-3 lines and dots, Figs. 4-5
+    crosses): svzerod_code/validations.yaml, val_rcr_w71_*, and svzerod_code/q_val_westerhof1971_choices for
+    the measurements not used.
+- id: q_no_validation_vs_menon2025
+  kind: choice
+  about: [impedance_3el, rdc_eq1a, tau_rpc]
+  text: >
+    (Cross-validation with menon2025, 2026-11-09.) No validation is entered in either direction. This
+    record's models cannot be judged against menon2025: that paper (the svZeroDSolver software paper) prints
+    no data at all (no datum; its only figure is a class diagram of block types), so there is no measurement
+    for impedance_3el or any other model here to predict. In the other direction, menon2025's Windkessel
+    block (menon2025/windkessel_bc) is a word model that is not runnable: the paper gives no circuit, element
+    count or parameter, so it cannot be run on the conditions of the d-c resistances (rdc_*_meas) or the
+    impedances read from Figs. 2-5 measured here. The released RCR block is tested against those
+    measurements in svzerod_code (val_rcr_w71_*). See menon2025/q_no_validation_vs_westerhof1971.
+  citation: {none: "concerns another record; this 1971 paper cannot cite menon2025"}

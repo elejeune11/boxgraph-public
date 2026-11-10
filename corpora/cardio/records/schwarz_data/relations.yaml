@@ -81,3 +81,191 @@
     deterministic median case, not to its stochastic spread (Table 2). The release's own conductances use Hd 0.45, not
     the paper's 0.4 (q_hematocrit): that is a difference between the release and the paper, not a step of this
     derivation, and the mapping keeps the paper's Hd.
+# Relations to Kassab et al. (1993), kassab1993 (relation job kassab1993+schwarz_data, 2026-11-09): none, stated or
+# proposed. Neither the release nor its guide names Kassab, Strahler orders or Horton's law; schwarz2020 cites
+# kassab1993 only for porcine data (see schwarz2020/relations.yaml). kassab1993's models are per-order bookkeeping
+# whose inputs are per-order means and counts (Horton fits on D1..D11, L_n, N_n; ratio 10^b; A_n = (pi/4) D_n^2 N_n;
+# V_n = L_n A_n; the connectivity extrapolation of Eqs. 10-11). This record's models read every diameter, length and
+# connection from the released file and take only boundary pressures, hematocrit, viscosity and class edges or
+# thresholds as inputs, so no mapping of one model's inputs onto the other's exists. Where the two meet is the
+# statistic, not the form: this job adds tree_strahler and tree_strahler_order, which apply kassab1993's Eq. 1
+# ordering and its Eqs. 2-5 fits to the released network (q_strahler_choices). With the literal 'pair' rule the
+# human left coronary tree has 8 orders from about 77 um, with Horton ratios of about 1.69 (diameter), 1.87 (length)
+# and 4.55 (number), beside kassab1993's pig Table 4 (diameter 1.81-1.89; length 2.02-2.20 for orders 4-11). Setting
+# those against each other is a cross-species comparison of measurements, the validation job's work, not a relation.
+# No value of either data.yaml is taken from the other paper, so cited.yaml gets no line.
+# Third pass (2026-11-08), the rest of the release. No relation is added. The new models (tree_table1, tree_summary,
+# tree_branching, termseg_workbook, topology_workbook, bifurcation_workbook, stochastic_table2, skeleton_network) are
+# statistics over the released files: their only inputs are class edges and thresholds, and every value comes from the
+# files. None has the form of a schwarz2020 model with inputs a mapping could join: segment_share and density_share take
+# a count and a total, area_growth_eq8 a symmetry and an exponent, area_growth_linear_fit the fit's coefficients (which
+# topology_workbook and tree_branching output, not take), and the stochastic network (network_hemodynamics,
+# in_silico_extension) is not runnable. Their agreement with the paper is tested as values instead: schwarz_data's
+# comparisons (cmp_t1_*, cmp_t2*, cmp_S_*, cmp_A_*, cmp_f4_*, ...) against the paper's printed Table 1, Table 2 and text,
+# and the cited.yaml links of both records (the Fig. 5 'cast, median' curves to the workbook's class medians, the copied
+# Table 1 columns to schwarz2020's).
+# Relations to Kim et al. (2010), kim2010 (relation job kim2010+schwarz_data, 2026-11-09): none, stated or proposed.
+# Neither source names the other (kim2010 is the earlier paper; schwarz2020's references and the release's guide do not
+# cite it), so nothing is stated, and no value of either data.yaml comes from the other, so cited.yaml gets no line.
+# Where the two meet is the steady coronary bed. kim2010's coronary_flow_split and stenosed_lad_flow are the zero-frequency
+# limit of its lumped bed model (Eq. 5 coefficients, p. 3198): mean flow = (P - Pv) / q0, q0 = Ra + Ra-micro + Rv +
+# Rv-micro per outlet, with Table 3's resistances as inputs. network_solution is a steady resistive network too
+# (Poiseuille segments, Pries viscosity, the release's distal conductances), but its resistances are not inputs: it reads
+# every diameter, length and distal conductance from the released file and takes only boundary pressures, hematocrit,
+# plasma viscosity and statistics thresholds. The lumped resistance of the LAD or LCX tree is therefore an output of the
+# network ((P_in - P_cap) / Q_LAD, from its Q_LAD, Q_LCX and Q_total), not an expression in its input symbols, and a
+# mapping of kim2010's Ra, Ra-micro and Rv onto network_solution's inputs would need the file's numbers typed in, which
+# the release forbids copying and the record never asserts. kim2010's other models (cardiac output from stroke volume,
+# coronary flow as 4.0% of cardiac output, the exercise increases, the sum of LAD, LCX and RCA flows) have no
+# counterpart among this record's models; network_solution has no RCA and no cardiac output. No helper model is added:
+# the statistics a comparison would use (the LAD and LCX inflows and their split at given inlet and distal pressures)
+# are already outputs of network_solution. Setting kim2010's lumped values (Table 3's resistances; the rest LAD and LCX
+# mean flows of 1.3 and 1.5 cc/s, p. 3201; Table 4's LAD flows at 94 mmHg) against them is the validation job's work,
+# and differs in kind: one patient in vivo, pulsatile, Newtonian blood at 0.04 dyn s/cm2, resistances tuned to flows
+# set by literature ratios and 4.0% of cardiac output, with venous and intramyocardial compartments; against one
+# arrested, cast human left coronary tree, steady, at 90 mmHg in and 20 mmHg distal, with no venous side.
+# Relations to Mynard et al. (2014), mynard2014 (relation job mynard2014+schwarz_data, 2026-11-09): none, stated or
+# proposed. mynard2014 predates the release and does not cite it; schwarz2020's references and the release's guide do
+# not cite mynard2014. So nothing is stated, and no value of either data.yaml comes from the other (cited.yaml gets no
+# line). mynard2014's models: multiscale_coronary (1D conduit network after Dodge's human anatomy, scaled to sheep by
+# myocardial weight, with 55 three-layer 0D beds; not runnable), wave_speed_eq1 (Olufsen's c0(r0)), segment_length_ratio
+# ((W_a/W_n)^0.35), effective_resistance ((pLM - pRA)/qLM per 100 g LV), and plain ratios and differences of Table 1-2
+# values. None has a counterpart here whose inputs a mapping could join: this record's models read every diameter,
+# length and distal conductance from the released file. The two meet only at the bed's weight-corrected resistance.
+# mynard2014's (pLM - pRA)/qLM takes the flow as an input, while for the tree the flow is the network's output at given
+# pressures (the network is linear, so its resistance is a constant of the file), so no mapping of the tree's inputs
+# from pLM, pRA, qLM exists; it is a value comparison, the validation job's work. For it this job adds the helper
+# tree_effective_resistance: (P_in - P_cap) over the LAD + LCX inflow per 100 g of perfused tissue (W f_tree, as
+# network_solution's perfusion), in mmHg·min·(100g)/mL, the unit of mynard2014's reff_adult_text (0.72 ± 0.35) and
+# reff_newborn_text (0.34 ± 0.09). It differs in kind from those: anaesthetised sheep and lambs in vivo, pulsatile, the
+# resistance tuned per animal to the measured Cx flow and including the venous side and intramyocardial compression
+# (40-42% of it, p. 12), per 100 g LV free wall + septum; against one arrested, cast human left tree, steady, arterial
+# side only, its distal conductances imputed in silico, per 100 g of the LAD + LCX Voronoi territory. Its run is left to
+# that job. mynard2014's other quantities (Cx flow waveform features, wave speed, segment-length scaling of the 1D
+# network) are not statistics this tree gives: the tree has no wall stiffness and no waveform, and Dodge's network,
+# which mynard2014 scales, is not in its record (it is in mynard2014_data, another job's pair).
+# Relations to Mynard and Smolich (2015), mynard2015 (relation job mynard2015+schwarz_data, 2026-11-09): none, stated or
+# proposed. mynard2015 predates the release and does not cite it; schwarz2020's references and the release's guide do
+# not cite mynard2015. So nothing is stated, and no value of either data.yaml comes from the other (cited.yaml gets no
+# line; mynard2015's in vivo LAD waveform of Fig. 4 is from its ref. 35, not from this tree). The coronary parts of
+# mynard2015 are: the three-layer 0D coronary bed of mynard2014 inside the non-runnable circulation_1d_0d (already
+# related to mynard2014, rel_coronary_bed_mynard2014), with resistances tuned to Fisher et al.'s flow distribution and
+# given only in its Supplemental File 2; the epicardial 1D coronary network "based on published human data" (p. 5),
+# not printed; the Table 2 wave-speed coefficients for coronary arteries and veins (Eq. 3, wave_speed_eq3); and Fig. 4
+# and Fig. 7e waveforms and wave intensities. None has a counterpart here whose inputs a mapping could join, for the
+# same reason as with mynard2014: this record's models read every diameter, length and distal conductance from the
+# released file and take only boundary pressures, hematocrit, viscosity and thresholds. Checked and not entered:
+# - wave_speed_eq3 run on the tree's diameters. The tree has no wall stiffness or wave speed to compare with. Table 2's
+#   coronary-artery c0 range 789-1308 cm/s implies, by Eq. 3, a 1D coronary network from about 0.45 cm down to about
+#   0.21 cm; its upper end is a left main or RCA size, and the released tree has neither (its inlets are the LAD and
+#   LCX), and its lower end is where Mynard's 1D network stops, a modelling choice, not a statistic of anatomy.
+# - The coronary resistance rule (conductance and myocardial weight distributed by the cube of penetrating artery
+#   radii, p. 6, "As in Mynard et al.91") against the tree's flow-diameter exponent (network_solution Q_b). The rule is
+#   mynard2014's, is not a model in mynard2015's record, and mynard2015 prints no value it gives; the comparison with
+#   mynard2014's per-100 g resistance is that pair's (tree_effective_resistance).
+# - Eq. 2 (fractal exponent 2.76, asymmetry 0.43) is used for the pulmonary networks and, as Eq. 2a, for the coronary
+#   veins (p. 5-6), not for coronary arteries; it is not a model in mynard2015's record, and this tree has no veins.
+# - The Fig. 4 LAD flow (in vivo and model) is a waveform whose in vivo scale is set to the model's peak
+#   (q_fig4_scaled_velocity in mynard2015); the tree's steady LAD inflow at 90/20 mmHg (network_solution Q_LAD) is a mean of
+#   an arrested, cast tree, and no time-mean of either waveform is a datum, so no validation is entered.
+# Relations to Olufsen (1999), olufsen1999 (relation job olufsen1999+schwarz_data, 2026-11-09): none, stated or proposed.
+# olufsen1999 predates the release; schwarz2020's references and the release's guide do not cite it. So nothing is
+# stated, and no value of either data.yaml comes from the other (cited.yaml gets no line). olufsen1999's models take
+# geometric parameters as inputs (structured_tree_impedance and dc_root_radius_power: root and minimum radius, xi,
+# gamma, lrr, the Eq. 6 stiffness fit, nu, rho; area_ratio_eq21 and asymmetry_eq21: two of xi, gamma, eta; the 1D
+# large-artery network, windkessel, wave speed and the count arithmetic of p. 6). This record's models read every
+# diameter, length and distal conductance from the released file and take only boundary pressures, hematocrit, plasma
+# viscosity and thresholds, so no mapping of one model's inputs onto the other's exists. The forms that do coincide
+# (olufsen1999 Eq. 21 and schwarz2020 Eq. 8) are schwarz2020's models, related in schwarz2020/relations.yaml through
+# olufsen2000 and olufsen2012. Where the two records meet is the statistic, not the form: olufsen1999 builds its
+# structured tree from xi = 2.76 (Eq. 19), eta = 1.16 and gamma = 0.41 (Eqs. 20-21), lrr = l/r = 50 +- 10, and says
+# its DC root impedance scales about as r_root^-3 (p. 9). This job adds tree_structured_params, which measures each of
+# these on the released network (q_olufsen_params). With mothers or elements of at least 200 um (twice olufsen1999's
+# smallest minimum radius, 0.01 cm) and the release's solution inputs, the human left coronary tree gives median gamma
+# 0.416, eta 1.149 and xi 2.80 (28% of its bifurcations have a daughter as wide as the mother, and no finite xi);
+# median l/r 4.6 (quartiles 2.2-9.3); and a DC-resistance power p = 2.0. Over the whole tree (all elements, about
+# 30 um up): gamma 0.55, eta 1.29, xi 3.7, l/r 9.6, p 2.5. Setting those against olufsen1999's values is the
+# validation job's work and is of a different kind on each side: olufsen1999's values are design choices for the
+# small systemic arteries taken from the literature (Uylings, Zamir, Iberall), not measurements, and its p is a
+# property of its own model; the tree's are measurements of one arrested, cast human left coronary tree, with flow
+# directions and downstream resistances from a steady solution that uses the release's imputed distal conductances.
+# The other way to meet, olufsen1999's structured_tree_impedance run at omega = 0 on the tree's xi, gamma, lrr and an
+# inlet radius against the tree's own inlet resistance, needs inputs the tree does not give (the Eq. 6 wall-stiffness
+# fit, which only matters at omega > 0, and a minimum radius, which the 30 um truncation of the cast sets, not
+# anatomy); it is left to that job too.
+# Relations to Olufsen et al. (2012), olufsen2012 (relation job olufsen2012+schwarz_data, 2026-11-09). olufsen2012
+# predates the release and does not cite it; schwarz2020's references and the release's guide do not cite olufsen2012.
+# So nothing is stated, and no value of either data.yaml comes from the other (cited.yaml gets no line). One relation is
+# proposed, where the two records' models meet in form: the mean pressure of a systemic arterial tree as a function of
+# vessel radius.
+# Considered and not entered:
+# - olufsen2012/network_1d_structured_tree and network_solution, the pair suggested by shape. Both give pressure in an
+#   arterial tree, but Olufsen's model is not runnable and its inputs (wall-stiffness fit k1-k3, Eh/r0, xi, gamma, rmin,
+#   lrr, nu, rho) set an idealised geometry, while network_solution reads its geometry from the file and takes only
+#   boundary pressures, hematocrit, plasma viscosity and thresholds. No mapping of one's inputs onto the other's exists,
+#   and neither is derived from the other; the relation would be unverifiable and say nothing. Where they meet is
+#   Olufsen's own steady summary of its tree's pressures, Eq. 3.1, entered below.
+# - olufsen2012/area_ratio_eq218 and area_ratio_eq216_217 (eta from xi and gamma). Their forms are related to
+#   schwarz2020's Eq. 8 in schwarz2020/relations.yaml. Here the tree gives the three statistics as outputs
+#   (tree_structured_params: median gamma = (dS/dL)^2, eta, xi, and lrr = l/r), not as inputs, so no mapping exists.
+#   olufsen2012 takes xi = 2.76, gamma = 0.41, eta = 1.16 from Olufsen 1999 (p. 9) and prints Eq. 2.17's gamma as
+#   r_d1/r_d2 (the tree's sqrt(gamma_median), schwarz2020's S); setting them against the tree's medians is the
+#   validation job's work, as for olufsen1999. No new model is needed for it.
+# - olufsen2012's statement under Eq. 2.31 (p. 12) that a tree's root impedance is about proportional to r0^-3: it is a
+#   remark, not a model of olufsen2012's record; the tree's exponent is tree_structured_params' p_dc (about 2.0 for
+#   elements of at least 200 um), the validation job's value to compare.
+# - length_radius_loglinear_fig5 and prefactor_eq219: a pulmonary length-radius law fitted to Huang et al.'s human
+#   pulmonary casts. The coronary tree is not a pulmonary bed, and olufsen2012 uses lrr, not Eq. 2.19, for its systemic
+#   trees.
+- id: rel_network_solution_approx_olufsen2012_eq31
+  kind: approximated_by
+  a: schwarz_data/network_solution
+  b: olufsen2012/pressure_log_radius_eq31
+  mapping: {a: "60", b: "-110", log10r: "log(d/2)/log(10)"}
+  output_map: {p: P_class}
+  regime: {P_in: [11998.8, 11998.8], P_cap: [0, 2666.4], Hd: [0.45, 0.45], mu_p: [0.001, 0.001],
+           d: [200, 1000], d_fit_lo: [250, 250], d_fit_hi: [800, 800], d_large: [1000, 1000], d_cut: [300, 300],
+           W: [0.330, 0.330], f_tree: [0.8776, 0.8776]}
+  tolerance: 0.2
+  provenance: proposed
+  reason: >
+    olufsen2012 summarises the mean pressures of its systemic structured tree (the femoral bed, Fig. 7(d) left) by
+    Eq. 3.1, p_sys = 60 log10 r_sys - 110 (p in mmHg, r in um; "approximately linear", p. 15), and says its agreement
+    with a log-linear law it reads from Levy et al. (2001) "gives some confidence that the structured tree gives a good
+    representation of a vascular bed" (p. 15). network_solution gives the mean pressure of each 20 um diameter class
+    of the one released systemic arterial tree, the human left coronary tree, by the same physics at zero frequency
+    (Poiseuille segments, Kirchhoff at nodes; Olufsen's Eq. 2.31 is the steady limit of its tree). If the structured
+    tree's law represents a vascular bed, it should approximate this tree's class medians. Mapping: b's slope and
+    intercept are the printed systemic values; r = d/2 (both in um); P_class in Pa is compared with p in mmHg by unit
+    conversion. Regime: d from 200 to 1000 um, i.e. r from 100 um (olufsen2012's systemic r_min, p. 9) to 500 um, where
+    every 20 um class of the tree holds segments (above about 1.6 mm classes are empty); the inlet at the release's
+    90 mmHg (olufsen2012's femoral mean pressure, Table 2, is 77-120 mmHg over its xi range); the distal pressure from
+    0 (a structured tree, as in Olufsen 1999 and 2000 to which olufsen2012 refers, ends in a zero terminal impedance)
+    to the release's 20 mmHg; the release's hematocrit and plasma viscosity; the statistics thresholds and heart weight
+    do not enter P_class. Tolerance 0.2 (added): olufsen2012 calls the log-linear law approximate and takes agreement
+    within its reading of Levy et al.'s figure as support, which no tighter tolerance would grant.
+  assumptions:
+    - "the tree's class-median mid-segment pressure is taken as the 'mean pressure averaged over all vessels of a given radius' of olufsen2012 (p. 15); both are time-mean (the tree's is steady) pressures per radius"
+    - "the release's tree is an arrested, cast human left coronary tree with imputed distal conductances below its ~30 um ends; olufsen2012's bed is a model femoral bed truncated at r = 100 um. Different organ and boundary, both systemic arterial trees"
+    - "P_in, Hd, mu_p are fixed at the release's solution (P_inlet_mat, Hd_release_added, mu_p_release_added); the network is linear in pressure, so P_in and P_cap only rescale P_class"
+# Relations to Spaan, Breuls and Laird (1981), spaan1981 (relation job schwarz_data+spaan1981, 2026-11-09): none, stated
+# or proposed. spaan1981 predates the release; schwarz2020's references and the release's guide do not cite it. So
+# nothing is stated, and no value of either data.yaml comes from the other (cited.yaml gets no line). spaan1981's
+# models are lumped arithmetic on its own values: R_c = R_a + R_v, the Fig. 6 regression R_a = 0.63 R_c - 12.9 and the
+# 63% fraction, the potential-source Eq. 2, the RC-time capacitances C_ep and C_im (and C_im per 100 g LV), the parallel
+# discharge time, the capillary volume fraction n pi d^2/4, the small-artery fraction as one third of it, their sum,
+# and the volume swing from the Fig. 4A area; the 20-layer waterfall model is not runnable. This record's models read
+# every diameter, length and distal conductance from the released file, so no mapping of one model's inputs onto the
+# other's exists. Checked and not entered:
+# - spaan1981's R_c and R_a (mmHg s/ml, one dog's circumflex bed in vivo, beating, with its venous side and an
+#   intramyocardial pump) against the tree's inlet-to-distal resistance (tree_effective_resistance, per 100 g):
+#   spaan1981 states no perfused mass for its beds (the 109 g of Fig. 4 is the whole LV), and R_c includes the
+#   venous resistance R_v, which the tree, an arterial cast with imputed distal conductances, does not have.
+# - The 63% arterial share R_a/R_c against the share of the tree's pressure drop spent upstream of a vessel size
+#   (network_pressure_share proximal_median). R_a is defined as the resistance upstream of the intramyocardial
+#   compliance, not of a vessel size, and the tree's share is fixed by the imputed distal conductances below its
+#   ~30 um ends (q_gdist_law), so the two are not the same quantity.
+# - C_ep and C_im: the tree has no wall compliance.
+# Where the records meet is a statistic: spaan1981's intramural arterial volume fraction (0.023, p. 8). This job adds
+# tree_lumen_volume_fraction, the lumen volume of the tree's segments in a diameter window over its perfused (Voronoi)
+# volume (q_lumen_volume_vs_spaan1981). Setting the two against each other is the validation job's work.

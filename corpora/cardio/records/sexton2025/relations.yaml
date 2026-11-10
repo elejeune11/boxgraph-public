@@ -1,0 +1,42 @@
+# The paper closes its 1D formulation (Eqs. S24-S25) with "an Olufsen material model" (ref. 75 =
+# olufsen1999), printed as Eq. S26: olufsen1999's Eq. 5 with Eh/r0 from its Eq. 6 (Y for E, S for A,
+# P0 for p0). olufsen1999 defines A0 = pi r0^2 after Eq. 5; Eq. S26 keeps S0 and r0 as separate
+# symbols, so the mapping sets S0 = pi*r0**2. olufsen1999's p0 is the pressure of the surroundings
+# (zero transmural pressure); Eq. S26's P0 is called a reference pressure: the relation joins the
+# models, not these quantities. Both ports are CGS (g/s^2/cm = dyn/cm^2).
+- id: rel_olufsen_material_olufsen1999
+  kind: same_as
+  a: olufsen1999/pressure_area_eq5
+  b: sexton2025/olufsen_material_s26
+  mapping: {k1: "k1", k2: "k2", k3: "k3", r0: "r0", P0: "p0", S0: "pi*r0**2", S: "A"}
+  regime: {k1: [1.0e+6, 5.0e+7], k2: [-30, -5], k3: [1.0e+5, 2.0e+6], r0: [0.02, 1.5], p0: [0, 1.5e+5], A: [0.001, 10]}
+  provenance: stated
+  citation: {page: 22, printed_page: "S14", quote: "we default synthetic vascular networks to an Olufsen material model shown here", where: "Eq. S26"}
+# olufsen2000 (ref. 19) is cited only on p. 1, among works on structured and morphometric trees ("(19, 20)");
+# the paper states no relation between its models and olufsen2000's. The two below are proposed.
+- id: rel_kinematic_viscosity_olufsen2000
+  kind: same_as
+  a: olufsen2000/kinematic_viscosity
+  b: sexton2025/kinematic_viscosity
+  mapping: {mu: "100*mu", rho: "rho"}
+  regime: {mu: [0.01, 0.1], rho: [0.9, 1.2]}
+  provenance: proposed
+  reason: >
+    Both records compute the kinematic viscosity as nu = mu/rho (olufsen2000 p. 3, below Eq. 7; sexton2025
+    Table S3, whose rows mu, rho^f and nu are related this way). olufsen2000's port takes mu in g/(cm s),
+    sexton2025's in cP, so b's mu is 100 times a's (1 g/(cm s) = 100 cP).
+- id: rel_material_s26_olufsen2000_eq14
+  kind: same_as
+  a: olufsen2000/tube_law_eq14
+  b: sexton2025/olufsen_material_s26
+  mapping: {k1: "0", k2: "0", k3: "E*h/r0", r0: "r0", P0: "p0", S0: "pi*r0**2", S: "A"}
+  regime: {A: [0.001, 10], r0: [0.02, 1.5], E: [1.0e+6, 1.0e+8], h: [0.002, 0.2], p0: [0, 1.5e+5]}
+  provenance: proposed
+  reason: >
+    Eq. S26 is the state equation of olufsen2000 (Eq. 14, p - p0 = (4/3)(E h/r0)(1 - sqrt(A0/A)), A0 = pi r0^2)
+    with the stiffness written as the fit Yh/r0 = k1 exp(k2 r0) + k3, which olufsen2000 also uses (Eq. 15,
+    k1, k2, k3 from ref. 21). The olufsen2000 helper model takes E and h as ports, so the mapping gives b's
+    whole stiffness through the constant term (k3 = E h/r0, k1 = k2 = 0): the relation checks that the two
+    tube laws agree for any value of the stiffness, Eq. 15's form included. Eq. S26 keeps S0 and r0 as
+    separate symbols; S0 = pi r0^2 as in Eq. 14. sexton2025 cites ref. 75 (olufsen1999) for Eq. S26, not
+    olufsen2000. Both ports are CGS (dyne/cm^2 = g/(s^2 cm)).

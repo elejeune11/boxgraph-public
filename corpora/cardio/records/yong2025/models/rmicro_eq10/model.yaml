@@ -1,0 +1,19 @@
+id: rmicro_eq10
+name: time-varying microvascular resistance (Eqs. 10-11) - minimum, maximum and cycle mean
+role: model
+stated: {page: 3, printed_page: "3", quote: "with k determined such that mean Rmicro (t) match the desired constant", where: "Eqs. 9-11"}
+equation: "Rmicro-LCA(t) = [(sqrt(k_LCA Rmicro_bar) - sqrt(0.7 Rmicro_bar)) en(t) + sqrt(0.7 Rmicro_bar)]^2 (Eq. 10); Rmicro-RCA(t) = [(k_PH sqrt(k_RCA Rmicro_bar) - sqrt(0.75 Rmicro_bar)) en(t) + sqrt(0.75 Rmicro_bar)]^2 (Eq. 11); en(t) = ev(t) of Eq. 4"
+inputs:
+  Rbar: {quantity: microvascular_resistance_mean, unit: mmHg*s/ml}
+  frac: {quantity: basal_resistance_fraction, unit: percent}
+  k: {quantity: resistance_scale_factor, unit: dimensionless}
+  k_ph: {quantity: ph_resistance_factor, unit: dimensionless}
+  Tvc: {quantity: contraction_duration, unit: s}
+  Tvr: {quantity: relaxation_duration, unit: s}
+  T: {quantity: heart_period, unit: s}
+outputs:
+  R_min: {quantity: microvascular_resistance_min, unit: mmHg*s/ml}
+  R_max: {quantity: microvascular_resistance_max, unit: mmHg*s/ml}
+  R_mean: {quantity: microvascular_resistance_mean, unit: mmHg*s/ml, description: "average of Rmicro(t) over one cardiac cycle"}
+settings: {}
+stochastic: false

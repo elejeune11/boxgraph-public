@@ -597,3 +597,335 @@
   citation: {none: "printed in schwarz2020 p. 8: 'The median perfused volume of these truncated segments was 20.2 mm3'"}
   from_source: schwarz2020
   from_datum: perfused_volume_median
+
+# ==== third pass: the rest of the release (skeleton, Topology data, bifurcation summary,
+# termseg_density, Gdistal variations)
+
+# ---- values the guide states about the new files
+- id: skel_points_doc
+  quantity: point_count
+  unit: dimensionless
+  origin: reported
+  printed: "3913549"
+  citation: {file: explanation_of_data.txt, lines: "39", quote: "The file contains 3,913,549 center points of vessels"}
+  note: "printed 3,913,549"
+- id: skel_segments_doc
+  quantity: segment_count
+  unit: dimensionless
+  origin: reported
+  printed: "288198"
+  citation: {file: explanation_of_data.txt, lines: "39", quote: "which are combined into 288198 segments"}
+- id: skel_neighbour_slots_doc
+  quantity: neighbour_slot_count
+  unit: dimensionless
+  origin: reported
+  printed: "18"
+  citation: {file: explanation_of_data.txt, lines: "43", quote: "There are 18 positions available here, for up to 18 neighbours."}
+
+# ---- Table 1 of schwarz2020 (p. 6), copied to be recomputed from the released files. schwarz2020's
+# record holds the class columns as shares indexed by the printed counts (share_all, ...); here each
+# column is a table indexed by the class's lower bound (30-45 um ... >= 400 um), so a run can sweep it.
+- id: p_T1_all
+  quantity: segment_count
+  unit: dimensionless
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'All', the counts (schwarz2020/share_all holds them as its index)"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["8047", "22204", "32500", "33605", "27816", "19444", "24598", "19718", "12665", "1587"]}
+- id: p_T1_terminal
+  quantity: segment_count
+  unit: dimensionless
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Terminal', the counts"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["6695", "20760", "27545", "22872", "12860", "5428", "3274", "1204", "321", "2"]}
+- id: p_T1_share_all
+  quantity: segment_share
+  unit: percent
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'All', the percentages"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["4.0", "11.0", "16.1", "16.6", "13.8", "9.6", "12.2", "9.8", "6.3", "0.8"]}
+- id: p_T1_share_terminal
+  quantity: segment_share
+  unit: percent
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Terminal', the percentages"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["6.6", "20.6", "27.3", "22.7", "12.7", "5.4", "3.2", "1.2", "0.3", "0.0"]}
+- id: p_T1_dens_epi
+  quantity: terminal_density
+  unit: 1/cm^3
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Subepicardium', the densities"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["12.2", "37.4", "46.2", "38.0", "21.9", "7.9", "3.4", "1.1", "0.3", "0.0"]}
+- id: p_T1_dens_mid
+  quantity: terminal_density
+  unit: 1/cm^3
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Midmyocardium', the densities"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["20.9", "65.5", "90.3", "83.0", "52.0", "23.9", "15.3", "5.5", "1.5", "0.0"]}
+- id: p_T1_dens_endo
+  quantity: terminal_density
+  unit: 1/cm^3
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Subendocardium', the densities"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["34.9", "104.2", "136.3", "106.8", "50.2", "21.6", "14.8", "6.2", "1.6", "0.0"]}
+- id: p_T1_dshare_epi
+  quantity: terminal_density_share
+  unit: percent
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Subepicardium', the percentages"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["7.2", "22.2", "27.4", "22.6", "13.0", "4.7", "2.0", "0.7", "0.2", "0.0"]}
+- id: p_T1_dshare_mid
+  quantity: terminal_density_share
+  unit: percent
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Midmyocardium', the percentages"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["5.8", "18.3", "25.2", "23.2", "14.5", "6.7", "4.3", "1.5", "0.4", "0.0"]}
+- id: p_T1_dshare_endo
+  quantity: terminal_density_share
+  unit: percent
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 6, Table 1, column 'Subendocardium', the percentages"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["7.3", "21.9", "28.6", "22.4", "10.5", "4.5", "3.1", "1.3", "0.3", "0.0"]}
+# Table 1, row Total
+- {id: p_T1_total_all, quantity: segment_count, unit: dimensionless, origin: measured, printed: "202184",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row Total, column All: '202,184 (100.0)'"},
+   from_source: schwarz2020, from_datum: total_all}
+- {id: p_T1_total_terminal, quantity: segment_count, unit: dimensionless, origin: measured, printed: "100961",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row Total, column Terminal: '100,961 (100.0)'"},
+   from_source: schwarz2020, from_datum: total_terminal}
+- {id: p_T1_dens_total_epi, quantity: terminal_density, unit: 1/cm^3, origin: measured, printed: "168.4",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row Total, column Subepicardium"},
+   from_source: schwarz2020, from_datum: total_subepi}
+- {id: p_T1_dens_total_mid, quantity: terminal_density, unit: 1/cm^3, origin: measured, printed: "357.8",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row Total, column Midmyocardium"},
+   from_source: schwarz2020, from_datum: total_midmyo}
+- {id: p_T1_dens_total_endo, quantity: terminal_density, unit: 1/cm^3, origin: measured, printed: "476.6",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row Total, column Subendocardium"},
+   from_source: schwarz2020, from_datum: total_subendo}
+# Table 1, rows 'Diameter. median', 'Diameter. interdecile range' (low, high), 'Length. median'
+# (columns All, Terminal, Subepicardium, Midmyocardium, Subendocardium); not data of schwarz2020's record
+# except the length median of All
+- {id: p_T1_dmed_all, quantity: median_segment_diameter, unit: um, origin: measured, printed: "92.3",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Diameter. median (um)', column All"}, from_source: schwarz2020}
+- {id: p_T1_dp10_all, quantity: diameter_decile_low, unit: um, origin: measured, printed: "54.3",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Diameter. interdecile range (um)', column All: '54.3-179'"}, from_source: schwarz2020}
+- {id: p_T1_dp90_all, quantity: diameter_decile_high, unit: um, origin: measured, printed: "179",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Diameter. interdecile range (um)', column All: '54.3-179'"}, from_source: schwarz2020}
+- {id: p_T1_lmed_all, quantity: median_segment_length, unit: um, origin: measured, printed: "441",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Length. median (um)', column All"}, from_source: schwarz2020, from_datum: L_median_all}
+- {id: p_T1_dmed_term, quantity: median_segment_diameter, unit: um, origin: measured, printed: "72.4",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Diameter. median (um)', column Terminal"}, from_source: schwarz2020}
+- {id: p_T1_dp10_term, quantity: diameter_decile_low, unit: um, origin: measured, printed: "47.8",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Terminal: '47.8-105'"}, from_source: schwarz2020}
+- {id: p_T1_dp90_term, quantity: diameter_decile_high, unit: um, origin: measured, printed: "105",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Terminal: '47.8-105'"}, from_source: schwarz2020}
+- {id: p_T1_lmed_term, quantity: median_segment_length, unit: um, origin: measured, printed: "443",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Length. median (um)', column Terminal"}, from_source: schwarz2020}
+- {id: p_T1_dmed_epi, quantity: median_segment_diameter, unit: um, origin: measured, printed: "71.2",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Diameter. median (um)', column Subepicardium"}, from_source: schwarz2020}
+- {id: p_T1_dp10_epi, quantity: diameter_decile_low, unit: um, origin: measured, printed: "47.4",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Subepicardium: '47.4-101'"}, from_source: schwarz2020}
+- {id: p_T1_dp90_epi, quantity: diameter_decile_high, unit: um, origin: measured, printed: "101",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Subepicardium: '47.4-101'"}, from_source: schwarz2020}
+- {id: p_T1_lmed_epi, quantity: median_segment_length, unit: um, origin: measured, printed: "473",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Length. median (um)', column Subepicardium"}, from_source: schwarz2020}
+- {id: p_T1_dmed_mid, quantity: median_segment_diameter, unit: um, origin: measured, printed: "75.4",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Diameter. median (um)', column Midmyocardium"}, from_source: schwarz2020}
+- {id: p_T1_dp10_mid, quantity: diameter_decile_low, unit: um, origin: measured, printed: "48.9",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Midmyocardium: '48.9-110'"}, from_source: schwarz2020}
+- {id: p_T1_dp90_mid, quantity: diameter_decile_high, unit: um, origin: measured, printed: "110",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Midmyocardium: '48.9-110'"}, from_source: schwarz2020}
+- {id: p_T1_lmed_mid, quantity: median_segment_length, unit: um, origin: measured, printed: "453",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Length. median (um)', column Midmyocardium"}, from_source: schwarz2020}
+- {id: p_T1_dmed_endo, quantity: median_segment_diameter, unit: um, origin: measured, printed: "70.6",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Diameter. median (um)', column Subendocardium"}, from_source: schwarz2020}
+- {id: p_T1_dp10_endo, quantity: diameter_decile_low, unit: um, origin: measured, printed: "46.7",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Subendocardium: '46.7-103'"}, from_source: schwarz2020}
+- {id: p_T1_dp90_endo, quantity: diameter_decile_high, unit: um, origin: measured, printed: "103",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, interdecile range, column Subendocardium: '46.7-103'"}, from_source: schwarz2020}
+- {id: p_T1_lmed_endo, quantity: median_segment_length, unit: um, origin: measured, printed: "391",
+   citation: {none: "printed in schwarz2020 p. 6, Table 1, row 'Length. median (um)', column Subendocardium"}, from_source: schwarz2020}
+
+# ---- topology and branching printed in schwarz2020 (pp. 5, 8, 9)
+- {id: p_pct_bifurcations, quantity: node_type_share, unit: percent, origin: measured, printed: "91",
+   citation: {none: "printed in schwarz2020 p. 5: 'Rather, 91% of the nodes were bifurcations'"}, from_source: schwarz2020}
+- {id: p_pct_trifurcations, quantity: node_type_share, unit: percent, origin: measured, printed: "8",
+   citation: {none: "printed in schwarz2020 p. 5: '8% were trifurcations (connecting four segments)'"}, from_source: schwarz2020}
+- {id: p_pct_more, quantity: node_type_share, unit: percent, origin: measured, printed: "<1",
+   citation: {none: "printed in schwarz2020 p. 5: 'less than 1% connected more than four segments'"}, from_source: schwarz2020,
+   note: "a bound: no verdict"}
+- {id: p_loops, quantity: loop_count, unit: dimensionless, origin: measured, printed: "3202",
+   citation: {none: "printed in schwarz2020 p. 5: 'an analysis based on graph theory revealed 3,202 such loops'"}, from_source: schwarz2020}
+- {id: p_d_S_large, quantity: vessel_diameter, unit: um, origin: reported, printed: "500",
+   citation: {none: "printed in schwarz2020 p. 9: 'for large mother diameters (>500 um) the median observed symmetry ratio was 0.59'"}, from_source: schwarz2020}
+- {id: p_S_median_large, quantity: daughter_symmetry, unit: dimensionless, origin: measured, printed: "0.59",
+   citation: {none: "printed in schwarz2020 p. 9: 'the median observed symmetry ratio was 0.59'"}, from_source: schwarz2020, from_datum: S_median_large}
+- {id: p_d_A_large, quantity: vessel_diameter, unit: um, origin: reported, printed: "400",
+   citation: {none: "printed in schwarz2020 p. 5: 'For segments larger than 400 um, on average the cross-sectional area remained stable'"}, from_source: schwarz2020}
+- {id: p_A_median_large, quantity: area_growth, unit: dimensionless, origin: measured, printed: "1.02",
+   citation: {none: "printed in schwarz2020 p. 5: '(median area growth: 1.02)'"}, from_source: schwarz2020, from_datum: A_median_large}
+- {id: p_A_fit_c_d, quantity: area_growth_fit_coefficient_d, unit: dimensionless, origin: fitted, printed: "-0.66",
+   citation: {none: "printed in schwarz2020 p. 5: '(A = -0.66 dM + 0.34 S + 1.13, dM in [75, 600] 10-6 m)'"}, from_source: schwarz2020, from_datum: A_fit_coef_d,
+   note: "the unit of dM in the formula is not printed (schwarz2020 q_A_fit_unit)"}
+- {id: p_A_fit_c_S, quantity: area_growth_fit_coefficient_S, unit: dimensionless, origin: fitted, printed: "0.34",
+   citation: {none: "printed in schwarz2020 p. 5: 'A = -0.66 dM + 0.34 S + 1.13'"}, from_source: schwarz2020, from_datum: A_fit_coef_S}
+- {id: p_A_fit_c_0, quantity: area_growth_fit_intercept, unit: dimensionless, origin: fitted, printed: "1.13",
+   citation: {none: "printed in schwarz2020 p. 5: 'A = -0.66 dM + 0.34 S + 1.13'"}, from_source: schwarz2020, from_datum: A_fit_intercept}
+- {id: p_A_fit_r2, quantity: area_growth_fit_r2, unit: dimensionless, origin: fitted, printed: "0.047",
+   citation: {none: "printed in schwarz2020 p. 5: 'the low r2 = 0.047 indicates'"}, from_source: schwarz2020}
+- {id: p_A_fit_lo, quantity: vessel_diameter, unit: um, origin: reported, printed: "75",
+   citation: {none: "printed in schwarz2020 p. 5: 'dM in [75, 600] 10-6 m'"}, from_source: schwarz2020}
+- {id: p_A_fit_hi, quantity: vessel_diameter, unit: um, origin: reported, printed: "600",
+   citation: {none: "printed in schwarz2020 p. 5: 'dM in [75, 600] 10-6 m'"}, from_source: schwarz2020}
+# Fig. 4 (p. 8): the group sizes printed above the bars ('Numbers above the bars indicate group size'),
+# per mother diameter class; light boxes symmetry 0.5-1.0, dark boxes 0.0-0.5 (read from the page image)
+- id: p_f4_n_symhi
+  quantity: node_count
+  unit: dimensionless
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 8, Fig. 4, the numbers above the light boxes (daughter symmetry 0.5-1.0)"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["816", "1196", "4199", "9031", "12373", "11109", "15892", "12437", "7230", "884"]}
+- id: p_f4_n_symlo
+  quantity: node_count
+  unit: dimensionless
+  origin: measured
+  citation: {none: "printed in schwarz2020 p. 8, Fig. 4, the numbers above the dark boxes (daughter symmetry 0.0-0.5)"}
+  from_source: schwarz2020
+  table: {index_quantity: vessel_diameter, index_unit: um,
+          index: ["30", "45", "60", "75", "90", "105", "120", "150", "200", "400"],
+          values: ["51", "37", "202", "572", "971", "1188", "2389", "3080", "2795", "512"]}
+- {id: p_V_territory_q1, quantity: perfused_volume_quartile_low, unit: mm^3, origin: measured, printed: "7.2",
+   citation: {none: "printed in schwarz2020 p. 8: '20.2 mm3 (interquartile range: 7.2-56.5 mm3)'"}, from_source: schwarz2020}
+- {id: p_V_territory_q3, quantity: perfused_volume_quartile_high, unit: mm^3, origin: measured, printed: "56.5",
+   citation: {none: "printed in schwarz2020 p. 8: '20.2 mm3 (interquartile range: 7.2-56.5 mm3)'"}, from_source: schwarz2020}
+
+# ---- Table 2 of schwarz2020 (p. 10): stochastic variation (1000 simulations) and agreement with the
+# deterministic models ('Power fit', 'Median G'); pressure, flow, wall shear stress
+- {id: p_T2_P_cv_med, quantity: pressure_cv, unit: dimensionless, origin: predicted, printed: "0.004",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, CV Median"}, from_source: schwarz2020}
+- {id: p_T2_P_cv_p95, quantity: pressure_cv, unit: dimensionless, origin: predicted, printed: "0.011",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, CV P95"}, from_source: schwarz2020}
+- {id: p_T2_P_mad_med, quantity: pressure_mad, unit: mmHg, origin: predicted, printed: "0.10",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, MAD Median: '0.10 mmHg'"}, from_source: schwarz2020}
+- {id: p_T2_P_mad_p95, quantity: pressure_mad, unit: mmHg, origin: predicted, printed: "0.36",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, MAD P95: '0.36 mmHg'"}, from_source: schwarz2020}
+- {id: p_T2_P_pcc_fit, quantity: agreement_pcc, unit: dimensionless, origin: predicted, printed: "1.000",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, Power fit PCC"}, from_source: schwarz2020}
+- {id: p_T2_P_beta_fit, quantity: agreement_beta, unit: dimensionless, origin: predicted, printed: "0.997",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, Power fit beta"}, from_source: schwarz2020}
+- {id: p_T2_P_pcc_medG, quantity: agreement_pcc, unit: dimensionless, origin: predicted, printed: "1.000",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, Median G PCC"}, from_source: schwarz2020}
+- {id: p_T2_P_beta_medG, quantity: agreement_beta, unit: dimensionless, origin: predicted, printed: "1.000",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Pressure, Median G beta"}, from_source: schwarz2020}
+- {id: p_T2_Q_cv_med, quantity: flow_cv, unit: dimensionless, origin: predicted, printed: "0.074",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, CV Median"}, from_source: schwarz2020, from_datum: CV_flow_table2}
+- {id: p_T2_Q_cv_p95, quantity: flow_cv, unit: dimensionless, origin: predicted, printed: "0.104",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, CV P95"}, from_source: schwarz2020}
+- {id: p_T2_Q_mad_med, quantity: flow_mad, unit: ml/min, origin: predicted, printed: "<0.001",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, MAD Median: '<0.001 ml/min'"}, from_source: schwarz2020,
+   note: "a bound: no verdict"}
+- {id: p_T2_Q_mad_p95, quantity: flow_mad, unit: ml/min, origin: predicted, printed: "<0.01",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, MAD P95: '<0.01 ml/min'"}, from_source: schwarz2020,
+   note: "a bound: no verdict"}
+- {id: p_T2_Q_pcc_fit, quantity: agreement_pcc, unit: dimensionless, origin: predicted, printed: "1.000",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, Power fit PCC"}, from_source: schwarz2020}
+- {id: p_T2_Q_beta_fit, quantity: agreement_beta, unit: dimensionless, origin: predicted, printed: "1.008",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, Power fit beta"}, from_source: schwarz2020}
+- {id: p_T2_Q_pcc_medG, quantity: agreement_pcc, unit: dimensionless, origin: predicted, printed: "1.000",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, Median G PCC"}, from_source: schwarz2020}
+- {id: p_T2_Q_beta_medG, quantity: agreement_beta, unit: dimensionless, origin: predicted, printed: "0.999",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Flow, Median G beta"}, from_source: schwarz2020}
+- {id: p_T2_WSS_cv_med, quantity: wss_cv, unit: dimensionless, origin: predicted, printed: "0.074",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, CV Median"}, from_source: schwarz2020}
+- {id: p_T2_WSS_cv_p95, quantity: wss_cv, unit: dimensionless, origin: predicted, printed: "0.104",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, CV P95"}, from_source: schwarz2020}
+- {id: p_T2_WSS_mad_med, quantity: wss_mad, unit: Pa, origin: predicted, printed: "0.21",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, MAD Median: '0.21 Pa'"}, from_source: schwarz2020}
+- {id: p_T2_WSS_mad_p95, quantity: wss_mad, unit: Pa, origin: predicted, printed: "1.13",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, MAD P95: '1.13 Pa'"}, from_source: schwarz2020}
+- {id: p_T2_WSS_pcc_fit, quantity: agreement_pcc, unit: dimensionless, origin: predicted, printed: "0.999",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, Power fit PCC"}, from_source: schwarz2020}
+- {id: p_T2_WSS_beta_fit, quantity: agreement_beta, unit: dimensionless, origin: predicted, printed: "0.994",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, Power fit beta"}, from_source: schwarz2020}
+- {id: p_T2_WSS_pcc_medG, quantity: agreement_pcc, unit: dimensionless, origin: predicted, printed: "1.000",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, Median G PCC"}, from_source: schwarz2020}
+- {id: p_T2_WSS_beta_medG, quantity: agreement_beta, unit: dimensionless, origin: predicted, printed: "1.000",
+   citation: {none: "printed in schwarz2020 p. 10, Table 2, row Wall shear stress, Median G beta"}, from_source: schwarz2020}
+- {id: p_cv_flow_text, quantity: flow_cv, unit: percent, origin: predicted, printed: "7.4",
+   citation: {none: "printed in schwarz2020 p. 6: 'the median coefficient of variation for flow was 7.4%'"}, from_source: schwarz2020, from_datum: CV_flow_text}
+
+# ---- the workbook's own Table 2 ('Gdistal variations.xlsx', sheet 'Table 2', rows 2-4 Pressure, Flow,
+# WSS; columns A CV_med, B CV_P95, C MAD_med, D MAD_P95, E Agree_fit_PCC, F Agree_fit_beta,
+# H Agree_med_PCC, I Agree_med_beta). Written to 4 significant figures, cells named (q_typed_precision).
+- {id: wb_T2_P_cv_med, quantity: pressure_cv, unit: dimensionless, origin: run, printed: "0.004034", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell A2"}}
+- {id: wb_T2_P_cv_p95, quantity: pressure_cv, unit: dimensionless, origin: run, printed: "0.01127", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell B2"}}
+- {id: wb_T2_P_mad_med, quantity: pressure_mad, unit: mmHg, origin: run, printed: "0.09696", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell C2"}}
+- {id: wb_T2_P_mad_p95, quantity: pressure_mad, unit: mmHg, origin: run, printed: "0.3635", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell D2"}}
+- {id: wb_T2_P_pcc_fit, quantity: agreement_pcc, unit: dimensionless, origin: run, printed: "0.9999", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell E2"}}
+- {id: wb_T2_P_beta_fit, quantity: agreement_beta, unit: dimensionless, origin: run, printed: "0.9966", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell F2"}}
+- {id: wb_T2_P_pcc_medG, quantity: agreement_pcc, unit: dimensionless, origin: run, printed: "1.000", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell H2"}}
+- {id: wb_T2_P_beta_medG, quantity: agreement_beta, unit: dimensionless, origin: run, printed: "1.000", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell I2"}}
+- {id: wb_T2_Q_cv_med, quantity: flow_cv, unit: dimensionless, origin: run, printed: "0.07436", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell A3"}}
+- {id: wb_T2_Q_cv_p95, quantity: flow_cv, unit: dimensionless, origin: run, printed: "0.1044", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell B3"}}
+- {id: wb_T2_Q_mad_med, quantity: flow_mad, unit: ml/min, origin: run, printed: "0.0004186", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell C3"}}
+- {id: wb_T2_Q_mad_p95, quantity: flow_mad, unit: ml/min, origin: run, printed: "0.003629", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell D3"}}
+- {id: wb_T2_Q_pcc_fit, quantity: agreement_pcc, unit: dimensionless, origin: run, printed: "1.000", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell E3"}}
+- {id: wb_T2_Q_beta_fit, quantity: agreement_beta, unit: dimensionless, origin: run, printed: "1.008", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell F3"}}
+- {id: wb_T2_Q_pcc_medG, quantity: agreement_pcc, unit: dimensionless, origin: run, printed: "1.000", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell H3"}}
+- {id: wb_T2_Q_beta_medG, quantity: agreement_beta, unit: dimensionless, origin: run, printed: "0.9993", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell I3"}}
+- {id: wb_T2_WSS_cv_med, quantity: wss_cv, unit: dimensionless, origin: run, printed: "0.07436", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell A4"}}
+- {id: wb_T2_WSS_cv_p95, quantity: wss_cv, unit: dimensionless, origin: run, printed: "0.1044", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell B4"}}
+- {id: wb_T2_WSS_mad_med, quantity: wss_mad, unit: Pa, origin: run, printed: "0.2100", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell C4"}}
+- {id: wb_T2_WSS_mad_p95, quantity: wss_mad, unit: Pa, origin: run, printed: "1.127", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell D4"}}
+- {id: wb_T2_WSS_pcc_fit, quantity: agreement_pcc, unit: dimensionless, origin: run, printed: "0.9994", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell E4"}}
+- {id: wb_T2_WSS_beta_fit, quantity: agreement_beta, unit: dimensionless, origin: run, printed: "0.9936", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell F4"}}
+- {id: wb_T2_WSS_pcc_medG, quantity: agreement_pcc, unit: dimensionless, origin: run, printed: "1.000", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell H4"}}
+- {id: wb_T2_WSS_beta_medG, quantity: agreement_beta, unit: dimensionless, origin: run, printed: "1.000", citation: {none: "Gdistal variations.xlsx, sheet 'Table 2', cell I4"}}
+
+# ---- the stored network solution at two more places (field paths; 6 significant figures), to set the
+# deterministic runs of 'Gdistal variations.xlsx' against
+- id: P_IE1_mid_mat
+  quantity: node_pressure
+  unit: Pa
+  origin: run
+  printed: "3027.11"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.IE(1).P"}
+  note: pressure halfway the element (guide line 195)
+- id: P_SE1_mid_mat
+  quantity: node_pressure
+  unit: Pa
+  origin: run
+  printed: "2961.49"
+  citation: {none: "binary MATLAB file: no lines", where: "Human Left Coronary graph.mat: TreeQ.SE(1).P"}

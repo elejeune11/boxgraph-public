@@ -1,0 +1,20 @@
+id: impedance_olufsen_eq38
+name: olufsen2000's outflow convolution (Eq. 38) discretized as its Appendix B says, periodic state under a sinusoidal inflow
+role: model
+stated: {file: src/model/ImpedanceBC.h, lines: "18-21", quote: "following the structured-tree outflow condition of \\cite olufsen2000."}
+equation: "p(x_L, t) = integral over one period of q(x_L, t - tau) z(x_L, tau) d tau (olufsen2000 Eq. 38); p_n = sum_{k=0}^{N-1} q_{n-k} z(t_k) dt (Fig. B3)"
+described_from: olufsen2000
+inputs:
+  Q0: {quantity: outlet_flow_mean, unit: cm^3/s}
+  Q1: {quantity: outlet_flow_amplitude, unit: cm^3/s}
+  Z: {quantity: kernel_resistance, unit: dyn*s/cm^5}
+  tau: {quantity: kernel_time_constant, unit: s}
+  T: {quantity: cardiac_cycle_length, unit: s}
+outputs:
+  P_mean: {quantity: outlet_pressure_mean, unit: dyn/cm^2}
+  P_max: {quantity: outlet_pressure_max, unit: dyn/cm^2}
+  P_min: {quantity: outlet_pressure_min, unit: dyn/cm^2}
+settings: {N: 128}
+stochastic: false
+# Restated in our own code from olufsen2000 (Eq. 38, p. 16; Fig. B3), which prints no number for the
+# outflow condition alone; N is the number of time steps per period (the paper's N, not printed).

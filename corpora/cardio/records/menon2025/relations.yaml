@@ -1,0 +1,52 @@
+# ModelAtlas job menon2025 + svzerod_code (2026-11-09).
+# menon2025 describes svZeroDSolver's blocks in words only and sends the reader to the documentation, built
+# from the code, for each block's governing equations and circuit (p. 4; p. 5: "automatically built on GitHub
+# using Doxygen"), and to tests/cases for configurations (p. 5). That is the paper stating that the blocks it
+# describes are the released code's blocks. Each such relation joins one of the paper's word models to the
+# code record's model of the same released block. The paper's models are not runnable (no equation, circuit or
+# parameter is printed), and their ports (a flow in, a pressure out) cannot give the code block's parameters,
+# so no mapping or regime can be written and each relation is unverifiable as recorded; the paper's words stand
+# as the evidence. The code's blocks themselves are checked against the papers they cite in svzerod_code.
+# Not related: chamber_elastance_inductor and valve_tanh have no counterpart model in svzerod_code (those blocks
+# are checked there only through test cases); chamber_elastance_inductor and svzerod_code/impedance_olufsen_eq38
+# share only port dimensions (a time-varying elastance chamber against an outlet convolution of flow with an
+# impulse response), so no relation is proposed. The impedance and variable-resistance coronary blocks are not
+# in the paper's Fig. 1 ("at the time of writing"; q_blocks_after_paper), so no paper model relates to them.
+#
+# ModelAtlas job menon2025 + westerhof1971 (2026-11-09): no relation entered. menon2025 does not cite
+# Westerhof et al. 1971 and does not say how many elements its Windkessel block has (q_equations_in_docs);
+# windkessel_bc is a word model that does not run, and its ports (Q_in -> P_in) cannot give
+# westerhof1971/impedance_3el's Rc, Rp, C and f, so a relation could hold no mapping and say nothing the
+# paper supports. The three-element circuit is the released code's, and the code block is already related
+# to westerhof1971/impedance_3el in svzerod_code/relations.yaml; menon2025/windkessel_bc reaches it through
+# rel_menon_windkessel_block_code. menon2025 has no data.yaml, so no value is cited from westerhof1971.
+- id: rel_menon_coronary_block_code
+  kind: same_as
+  a: menon2025/coronary_bc
+  b: svzerod_code/coronary_released
+  mapping: {}
+  provenance: stated
+  citation: {page: 5, quote: "coronary boundary conditions that include the intramyocardial pressure experienced by coronary arteries", where: "Software details"}
+  assumptions:
+    - "The paper's coronary block is described in words, with Fig. 1 naming OpenLoopCoronaryBC among four coronary classes; svzerod_code/coronary_released runs the released OpenLoopCoronaryBC (CORONARY). The paper gives the block's equations only by reference to the documentation (p. 4: 'The governing equations and circuit representation for each block are available in the documentation')."
+    - "No mapping: a's ports (Q_in, P_im) cannot give b's resistances, capacitances and pressure waveform parameters. Unverifiable because a is not runnable."
+- id: rel_menon_windkessel_block_code
+  kind: same_as
+  a: menon2025/windkessel_bc
+  b: svzerod_code/windkessel_released_impedance
+  mapping: {}
+  provenance: stated
+  citation: {page: 5, quote: "several boundary condition blocks including simple flow, pressure and resistors blocks, windkessel boundary conditions", where: "Software details"}
+  assumptions:
+    - "The paper's Windkessel block is described in words, with Fig. 1 naming WindkesselBC and ClosedLoopRCRBC; svzerod_code/windkessel_released_impedance runs the released WindkesselBC (RCR), the open-loop version. The paper does not say how many elements the block has; the code's is three (proximal R, C, distal R)."
+    - "No mapping: a's port (Q_in) cannot give b's Rc, Rp, C and frequency. Unverifiable because a is not runnable."
+- id: rel_menon_solver_release_cases
+  kind: same_as
+  a: menon2025/svzerodsolver_assembly
+  b: svzerod_code/release_case
+  mapping: {}
+  provenance: stated
+  citation: {page: 5, quote: "Examples of configuration files to run svZeroDSolver simulations using the various available blocks are in svZeroDSolver/tests/cases"}
+  assumptions:
+    - "The paper's solver (blocks assembled from a .json configuration into a global system, integrated by generalized-alpha with Newton-Raphson iterations, p. 4) is the released solver that svzerod_code/release_case runs on the release's test cases, the examples the paper points to (p. 5)."
+    - "No mapping: b's network and settings are the case file, not ports; a is not runnable (the paper prints no block equation, scheme setting or tolerance; svzerod_code q_hidden_solver_settings). Unverifiable as recorded."

@@ -1,0 +1,290 @@
+- id: q_viscosity_code
+  kind: unexplained_difference
+  about: [nu_code, mu_export_arg_code, cmp_nu, cmp_mu_growth, cmp_cube_mu_export, cmp_biv_mu_export, tree_parameters]
+  citation: {file: svv/tree/data/data.py, lines: "263-264", quote: "3.6e-2, 'kinematic_viscosity', from_system=self._CGS_SYSTEM"}
+  text: >
+    The paper gives mu = 4 cP for tree generation (Table S1) and for CFD (Table S3), with rho = 1.06 and
+    nu = 0.037. The code stores a kinematic viscosity of 3.6e-2 cm^2/s (not 0.037) and a density of 1.06. Tree
+    growth puts their product, 3.816 cP, in Eq. S1 (root.py line 266; bifurcation.py lines 628, 705), below
+    Table S1's 4 cP (cmp_mu_growth). The 0D export puts the kinematic viscosity alone where a dynamic
+    viscosity belongs (zerod_tree.py lines 146, 165: R = 8 nu l / (pi r^4)), so the exported resistances use
+    3.6 cP (cmp_*_mu_export), and so does the 3D set-up (simulation.py lines 805, 834). export_0d_simulation
+    has a viscosity argument of 0.04 (Table S3's 4 cP in poise) that it never uses. The main text's "nu =
+    0.04 cP" (sexton2025 p. 5, q_viscosity_main_text there) may be this unused 0.04 in poise. Both 3.816 and
+    3.6 cP count as reproducing the printed "4" only because a one-digit "4" allows 3.5 to 4.5; the kinematic
+    viscosity, printed to two digits, is only close (cmp_nu).
+- id: q_svv_radii
+  kind: unexplained_difference
+  about: [tree_growth, tree_biventricle, cmp_cube_radius_max, cmp_cube_radius_min, cmp_biv_radius_max,
+          cmp_biv_radius_min, cmp_cube_check_max, cmp_cube_check_min, cmp_biv_check_max, cmp_cube_P_root_0d_mu,
+          cmp_biv_P_root_0d_mu]
+  citation: {file: svv/tree/branch/bifurcation.py, lines: "2190-2193", quote: "This function is used to check the values assigned in the current tree."}
+  text: >
+    In trees svv grows, its stored reduced resistances, flows and ratios are exactly what its own check
+    function naive() recomputes from the tree (rstar_root_dev and root_radius_dev are zero), and the ratios
+    satisfy the paper's identity (cmp_*_beta_*). The radius of every other vessel, which svv stores in column
+    21 and exports to its solids, centerlines and 0D models, is not the radius its own naive_radius() gives
+    from the root radius and the ratios: for about two thirds of vessels they differ by more than 1%, some by
+    as much as the radius itself (radius_dev_max, frac_radius_dev_1pct). The exported radii therefore break
+    Eq. S5 at many bifurcations, in both directions (cmp_*_radius_*; the median is one), while the check's
+    radii keep it (cmp_*_check_*). The largest sums are not reproduced; the smallest pass only because the
+    identity is printed as a bare "1", whose one digit allows 0.5 to 1.5. Near the root the stored and check
+    radii agree, so the large-vessel statistics of the validations are the same with either.
+    The stored column appears to be updated incrementally during growth (bifurcation.py, the tmp_28 scaling
+    column, around lines 686-1070) and not refreshed downstream. The same was found in sexton2025's record
+    (q_svv_radii there). Whether the paper's printed trees carry the same deviation is not known.
+- id: q_export_outlets
+  kind: possible_error
+  about: [cmp_cube_outlet_R, cmp_biv_outlet_R, Pd_export_code, outlet_R_zero_paper]
+  citation: {file: svv/simulation/fluid/rom/zero_d/zerod_tree.py, lines: "131-133", quote: "terminal_vessels = np.argwhere(tree.data[: ,16 ]==-1).flatten()"}
+  text: >
+    export_0d_simulation means to give each outlet a resistance R_total A_total / A_i, so that the outlets in
+    parallel have R_total = (P_term - P_distal) / Q_root (lines 131-133, 214), with distal pressure 0 (line
+    213, whose comment names svv's terminal pressure). It finds the terminals as the rows whose column 16 is
+    -1, but svv marks a missing child with NaN (c_update.py line 14, the export's own line 208), so it finds
+    none: the total outlet area is 0 and every outlet resistance is 0 (outlet_R_max). The exported model thus
+    has zero-resistance outlets at zero pressure, which is what sexton2025's Movie S2 caption says its 0D
+    models had ("Zero resistance boundary conditions are applied uniformly across all outlets", p. 73): the
+    code reproduces the paper's statement (cmp_*_outlet_R), but by a terminal test that cannot succeed rather
+    than by the resistance the code computes for them. Steady pressures in the export are then the pressure
+    drop across the tree only.
+- id: q_export_pressure
+  kind: unexplained_difference
+  about: [cmp_cube_P_root_0d, cmp_cube_P_root_0d_mu, cmp_biv_P_root_0d, cmp_biv_P_root_0d_mu, tree_growth]
+  text: >
+    svv grows each tree so that the root flow passes from root pressure (100 mmHg) to terminal pressure (60 mmHg)
+    with every terminal carrying the terminal flow (Eqs. S3, S8, S9). Its own 0D export of the same tree, run
+    with svZeroDSolver at that root flow and outlets held at the terminal pressure, needs a different root
+    pressure, about 5 mmHg lower (cmp_*_P_root_0d), and delivers outlet flows that differ from the terminal
+    flow by more than the terminal flow itself at some outlets (outlet_flow_dev_max). Part is the export's viscosity (3.6 cP against the growth's 3.816 cP,
+    q_viscosity_code); the rest remains when that is removed (cmp_*_P_root_0d_mu) and is the stored radii
+    (q_svv_radii). The 0D results of the paper (Fig. 3D-E, Movie S2) were computed from exported trees; how
+    much they carry these differences is not known.
+- id: q_s10_code
+  kind: possible_error
+  about: [resistance_update, rel_update_s10_beta4, rel_update_s10_printed]
+  citation: {file: svv/tree/utils/c_update.py, lines: "35-37", quote: "(lbif ** 4.0) / data[left, 25] + (rbif ** 4.0) / data[right, 25]"}
+  text: >
+    The code's reduced-resistance update uses beta^4 / R* in the sum over daughters (c_update.py lines 35-37;
+    the growth's own update and svv's check function naive(), bifurcation.py line 2183, likewise), as Eqs.
+    S1-S7 imply; the paper prints Eq. S10 with beta / R* (sexton2025 q_s10_beta). rel_update_s10_beta4 and
+    rel_update_s10_printed test the code against both forms.
+- id: q_update_resistance_loop
+  kind: possible_error
+  about: [resistance_update]
+  citation: {file: svv/tree/utils/c_update.py, lines: "6-12", quote: "max_depth = int(np.max(data[:, 26])) if size else 0"}
+  text: >
+    update_resistance in c_update.py (and its Cython twin c_update.pyx, lines 21-26) computes the largest
+    depth once and keeps only the vessels at that depth in each pass; it never lowers max_depth, so on any
+    table with vessels at more than one depth the loop never ends. svv calls it only on the single root vessel
+    (root.py line 266), where it is harmless; the growth updates resistances elsewhere (c_local_optimize).
+    resistance_update calls it on a bifurcation laid out daughters first at one depth, which its single pass
+    then handles in the intended order; this layout is ours. update_radii also reads the parent from a fourth
+    connectivity column (line 56) that svv's three-column connectivity (root.py line 265) does not have; the
+    adapter appends it.
+- id: q_seed
+  kind: numerics
+  about: [seed_repeat, run_seed_before, run_seed_after, tree_growth, tree_biventricle]
+  citation: {file: svv/domain/domain.py, lines: "179-190", quote: "self.random_generator = np.random.Generator(np.random.PCG64(seed=self.random_seed))"}
+  text: >
+    Domain.set_random_seed only stores the seed; svv makes the random generator it draws terminal points and
+    the root from when the domain is created or built (domain.py lines 186-190, 374, 404, 460-461). Set before
+    Domain.create, a seed (with Python's random and numpy's global generator also seeded) repeats a tree
+    exactly (run_seed_before: zero differences). Set after Domain.build, it has no effect and two growths
+    differ from the root on (run_seed_after). sexton2025's record set the seed after build and concluded that
+    "a fixed seed does not repeat an svv tree" (its q_svv_nonrepeatable); its growth script, not svv, is the
+    cause. Its five-seed means remain valid statistics, but its trees could have been repeated exactly. The
+    paper states no seeds. This record's tree runs set the seed first; each repeats, and their spread over
+    three seeds is a spread over trees, not over reruns. The growth has no step size or mesh to refine (the
+    number of terminals is an input), so no refinement series is recorded.
+- id: q_hidden_growth_settings
+  kind: unstated_input
+  about: [flow_ratio_code, threshold_exponent_code, threshold_adjuster_code, n_points_code, n_closest_code,
+          max_iter_code, proximity_code, bound_lo_code, bound_hi_code, decay_code, convexity_tol_code,
+          nonconvex_limit_code]
+  citation: {file: svv/tree/branch/bifurcation.py, lines: "92-103", quote: "flow_ratio = kwargs.get('flow_ratio', 20)"}
+  text: >
+    The growth step depends on settings the paper never states: a terminal is attached only to vessels whose
+    flow is at most 20 terminal flows (flow_ratio), 50 candidate points per attempt each tried against its 2
+    nearest vessels, a minimum distance V^(1/3) / n^1.5 shrunk by 0.9 when no point is found, points within 4
+    radii of a vessel rejected, at most 20 optimizer iterations with the bifurcation point's coordinates bound
+    to [0.05, 0.95], a sampling probability lowered by 0.9 in a cell that received a terminal, a convexity
+    tolerance of 1e-2 and a limit of 100 nonconvex attempts. Four of the defaults differ from the code's own
+    docstring (flow_ratio 10, threshold_exponent 1.0, n_points 100, n_closest_vessels 10, lines 65-81). The
+    paper's tree statistics, timings and Fig. 2C alignment may depend on them; which values the paper's runs
+    used is not stated. The optimizer is called as L-BFGS-B (as the paper says, p. 3) with a constraint
+    1 - a0 - a1 >= 0 (line 229) that this method does not accept: scipy ignores it with a warning, so only the
+    bounds hold.
+- id: q_hidden_defaults
+  kind: unstated_input
+  about: [q_numerator_code, q_divisor_code, P_root_code, P_term_code, param_Q_term, param_P_root, param_P_term]
+  citation: {file: svv/tree/data/data.py, lines: "269-278", quote: "0.125 / 2000.0, 'volumetric_flow'"}
+  text: >
+    The code's default terminal flow (0.125 / 2000.0 mL/s), root pressure (100 mmHg) and terminal pressure
+    (60 mmHg) appear nowhere in the paper, whose Table S1 lists Q and Delta P without values. They set the
+    absolute size of every tree (radii scale with the fourth root of flow over pressure drop). Why 0.125 and
+    2000 is not said.
+- id: q_biventricle_units
+  kind: reading
+  about: [tree_biventricle, run_biventricle_1000]
+  text: >
+    biventricle_tissue.stl has no stated unit and the code does not say whether it is the paper's biventricle
+    (Figs. 2E, 4A). Read in svv's units (cm) it is about 8.6 x 10.6 x 7.0 and encloses about 210 cm^3, the size
+    of a human heart's ventricles, which supports cm. The validations take it so; in mm its vessels would be
+    ten times smaller and none would pass schwarz2020's 400 um.
+- id: q_scale
+  kind: choice
+  about: [run_cube_1000, run_biventricle_1000]
+  text: >
+    The runs grow 1000-terminal trees, the size of Fig. 2E, three seeds each, to keep validation within
+    minutes (about 15 s per cube tree and 45 s per biventricle tree here). The paper's organ-scale trees
+    (10^4-10^6 terminals, Table S6) and its timings (Tables S5-S6, hardware-specific) are not rerun.
+- id: q_schwarz2020_unused
+  kind: choice
+  about: [tree_growth, tree_biventricle, schwarz2020/A_median_large,
+          schwarz2020/S_median_large, schwarz2020/d_f3a_median, schwarz2020/d_f4_symhi_median, schwarz2020/d_f4_symlo_median,
+          schwarz2020/L_median_all, schwarz2020/d_f2b_median, schwarz2020/share_all, schwarz2020/share_terminal,
+          schwarz2020/total_all, schwarz2020/total_terminal, schwarz2020/perfused_volume_total,
+          schwarz2020/perfused_volume_median]
+  text: >
+    Cross-validation job schwarz2020+svv_code (2026-11-09). Of schwarz2020's measurements, only the two large-vessel
+    medians (A_median_large, S_median_large) are compared with svv trees (the four val_biv_* entries); the
+    others were considered and not entered. (1) The cube trees (tree_growth) also give these medians, but a
+    1-cm cube is no heart: the medians would be taken over the few vessels of a tree whose size is an added
+    choice (cube_edge_added); sexton2025's record already sets its cube trees against them. (2) The per-class
+    curves (Fig. 3A daughter symmetry, Fig. 4 area growth by symmetry, Fig. 2B segment length) are indexed by
+    mother diameter, which no svv model takes as an input, and no model gives segment lengths. Its >=400 um
+    class differs from S_median_large's >500 um only in the threshold. (3) Table 1's segment counts and shares,
+    and the perfused volumes, follow from the number of terminals and the domain volume, which are inputs
+    here (1000 terminals against about 10^5; the shipped 210 cm^3 surface against 358 cm^3), not predictions.
+    Growing heart-scale trees to test them is beyond this record's run size (q_scale).
+- id: q_no_validation_vs_kassab1993
+  kind: choice
+  about: [tree_growth, tree_biventricle, seed_repeat, tree_parameters, resistance_update,
+          kassab1993/eD_rca_1, kassab1993/N_rca_1, kassab1993/SE_rca_1, kassab1993/figD_rca, kassab1993/figN_rca]
+  text: >
+    Validation job kassab1993+svv_code (2026-11-09). No svv_code model is validated against kassab1993's
+    measurements, and none is entered as a fit. kassab1993's measured values are pig coronary casts by
+    diameter-defined Strahler order: mean segment and element diameters and lengths, S/E, element counts per
+    order, the connectivity matrix and cumulative tree volumes (Tables 1-3, 5, 6, 9, 10; Figs. 6-11). No svv
+    model orders vessels by Strahler order or outputs a per-order table: tree_growth and tree_biventricle give
+    whole-tree statistics (terminal and segment counts, root and smallest diameter, Murray sums, median area
+    growth and symmetry above a diameter, the 0D root pressure); tree_parameters gives constants and
+    resistance_update one bifurcation. Considered and not used: (1) the Horton ratios of Table 4 are fits of
+    the paper's own data, and a grown tree's ratios would need a Strahler ordering the code does not do
+    (sexton2025's record sets its cube trees against those ratios); (2) root_diameter against the order-11
+    mean diameter, and min_diameter against order 1: a single root or the smallest segment is not the mean of
+    an order, and svv's diameters follow from its default root flow (0.0625 mL/s for 1000 terminals) and
+    pressures, not from pig LAD, LCX or RCA flows, which neither record states and no svv model takes as an
+    input; (3) n_segments, n_terminals_grown and domain_volume against the element counts and tree volumes:
+    these follow from the terminal count and domain, inputs here, and the pig trees' 10^5-10^6 elements are
+    beyond this record's run size (q_scale). In the other direction, svv_code has no measured data
+    (kassab1993/q_no_validation_vs_svv_code).
+  citation: {none: "a finding of the validation job between kassab1993 and svv_code, not a printed statement"}
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [tree_growth, tree_biventricle, seed_repeat, tree_parameters, resistance_update,
+          olufsen1999/co_measured, olufsen1999/inflow_fig4, olufsen1999/Zmod_md0_fig9b, olufsen1999/Zmod_md1_fig9b,
+          olufsen1999/Zphase_md0_fig9c, olufsen1999/Zphase_md1_fig9c, olufsen1999/p_aortic_fig12a,
+          olufsen1999/p_0cm_fig12b, olufsen1999/p_radial_fig12b, olufsen1999/Eh_r0_data_fig3]
+  text: >
+    Validation job olufsen1999+svv_code (2026-11-09). No svv_code model is validated against olufsen1999's
+    measurements, and none is entered as a fit. olufsen1999's measured values are human: a cardiac output
+    (4.14 l/min, ref. 20), the MR aortic inflow waveform (Fig. 4), the modulus and phase of a measured input
+    impedance against frequency (Fig. 9, md 0 and md 1), pressure waveforms in the aorta and the
+    subclavian-brachial-radial pull-back (Fig. 12, ref. 41), and Eh/r0 estimated from volume compliances
+    against r0 (Fig. 3). Every svv_code model is steady and returns either constants (tree_parameters), one
+    bifurcation (resistance_update) or whole-tree statistics of a grown tree (tree_growth, tree_biventricle,
+    seed_repeat), whose only pressure is the steady root pressure of the exported 0D network under svv's
+    default root flow. None outputs a time course, a frequency-dependent impedance or a flow set by a heart,
+    and none outputs a wall stiffness: the export's Olufsen wall law (zerod_tree.py line 141) is used with
+    k1 = 0 and reaches no output (relations.yaml). Considered and not used: P_root_0d against the mean of a
+    Fig. 12 pressure (not a recorded datum, and the root pressure of a 1000-terminal tree fed svv's default
+    0.0625 mL/s is a consequence of its default pressures, not a prediction of a human aortic pressure); the
+    0D network's input resistance against the zero-frequency end of Fig. 9 (no model outputs it, the
+    readings start at omega = 1-7 1/s, and a millimetre-scale synthetic tree is not the brachiocephalic
+    bed). In the other direction, svv_code has no measured data (olufsen1999/q_val_svv_code_scope).
+  citation: {none: "a finding of the validation job between olufsen1999 and svv_code, not a printed statement"}
+- id: q_no_validation_vs_schwarz_data
+  kind: choice
+  about: [tree_growth, tree_biventricle, resistance_update, seed_repeat, tree_parameters,
+          'schwarz_data/p_A_median_large', 'schwarz_data/p_S_median_large', 'schwarz_data/p_T1_all',
+          'schwarz_data/p_T1_terminal', 'schwarz_data/p_T1_dmed_term', 'schwarz_data/p_T1_lmed_all',
+          'schwarz_data/p_pct_bifurcations', 'schwarz_data/p_loops', 'schwarz_data/p_perfused_volume_total',
+          'schwarz_data/network_solution']
+  text: >
+    Validation job schwarz_data+svv_code (2026-11-09). No new validation is entered against schwarz_data. The
+    only measurements of schwarz_data that an svv model outputs are the median area growth 1.02 (mothers over
+    400 um) and daughter symmetry 0.59 (mothers over 500 um), which tree_biventricle and tree_growth give
+    (A_median_large, S_median_large and their _check forms). schwarz_data holds them as copies of schwarz2020's
+    printed values (p_A_median_large and p_S_median_large, from_datum schwarz2020/A_median_large and
+    S_median_large), and the release's network reproduces them (schwarz_data cmp_A_large, cmp_S_large). The four
+    val_biv_* entries already test tree_biventricle against those same printed values. A second set against the
+    copies would count one test twice. sexton2025's job decided the same for its svv_tree
+    (sexton2025/q_validation_schwarz_data). The cube trees are not entered, as in q_schwarz2020_unused.
+    The other measurements considered are all schwarz2020's printed values (from_source schwarz2020), and no
+    svv model has an output for them. (1) Table 1's class counts and shares, totals, terminal densities, median
+    and decile diameters and median lengths: these are absolute counts and sizes. They are set by the number of
+    terminals (1000 here against 100,961), the domain and where the tree stops, not by the growth rule. No svv
+    model outputs a median diameter, a length or a per-class count. min_diameter is the smallest vessel, not
+    Table 1's terminal median of 72.4 um. (2) The node-type shares (91% bifurcations) and the 3,202 loops: svv
+    grows loop-free binary trees by construction, so these are not predictions, and no output gives them.
+    (3) The perfused volumes: the domain volume is an input. (4) The statistics schwarz_data computes from the
+    released tree, rather than prints (Strahler ratios in tree_strahler, class medians in tree_branching and
+    tree_table1, the pressure share above a size in network_pressure_share), are model outputs there, not
+    measurements. No svv model orders vessels by Strahler order or gives a pressure share by size. The pair
+    suggested by shape, schwarz_data/network_solution and resistance_update, shares no measured quantity:
+    resistance_update solves one illustrative bifurcation, and network_solution's outputs are predictions.
+    In the other direction, svv_code has no measured data (schwarz_data/q_no_validation_vs_svv_code).
+  citation: {none: "a finding of the validation job between schwarz_data and svv_code, not a printed statement"}
+- id: q_no_validation_vs_sexton2025
+  kind: choice
+  about: [tree_growth, tree_biventricle, seed_repeat, tree_parameters, resistance_update,
+          'sexton2025/t_gyrus_8000_new', 'sexton2025/t_globus_pallidus_build', 'sexton2025/t_biventricle_1e6',
+          'sexton2025/t_annulus_1e6', 'sexton2025/t_1e6_text', 'sexton2025/t_build_convex_upper_figs8',
+          'sexton2025/t_build_convex_lower_figs8', 'sexton2025/q_ratio_piv_fig5f', 'sexton2025/live_count_fig5p',
+          'sexton2025/viability_fig5p', 'sexton2025/radial_viable_perfused_fig5p', 'sexton2025/area_live',
+          'sexton2025/t_append_array_figs2']
+  citation: {none: "a finding of the validation job between sexton2025 and svv_code, not a printed statement"}
+  text: >
+    Validation job sexton2025+svv_code (2026-11-09). No svv_code model is validated against sexton2025's
+    measurements, and none is entered as a fit. sexton2025 is the paper of this code and states no model of
+    one record explaining the other's data; its measurements are of three kinds. (1) Build and operation
+    times (pp. 3-4, Tables S5-S6, Figs. 2F, 2H, S2, S4B, S8). tree_growth and tree_biventricle output t_grow,
+    a build time, and run_cube_1000 grows 1000 terminals, one of the terminal counts of Fig. S8. Not entered:
+    a wall-clock time is a measurement of a machine running the code, not a prediction of the model. The
+    paper's times were taken on a "Windows 10 Dell Precision 7920 Tower with Intel Xeon Gold 5220 CPU @ 2.2GHz"
+    (p. 36) with the paper's version of the code; the runs here use other hardware and svv 0.0.57. t_grow also
+    differs from one rerun to the next, so the verdict would record the machine of that build. Fig. S8's two
+    convex-domain lines are not tied to named domains (which of the 10 engineering domains is not said), so no
+    run here has the measurement's domain; the Table S5-S6 domains (globus pallidus, 10^6-terminal biventricle
+    and annulus) are not shipped or beyond this record's run size (q_scale). (2) The PIV branch flow fractions
+    of the printed three-branch scaffold (Fig. 5F): resistance_update takes the daughters' flows as inputs and
+    returns radii and resistances, so it gives no flow split, and no model takes the scaffold's geometry. The
+    shape shared with sexton2025/bifurcation_network (a mass rate from flow, viscosity and lengths) is the
+    reduced resistance of one bifurcation: both are predictions, already related in relations.yaml, and
+    neither record measures a resistance. (3) Cell areas, live counts, viability and radial viable-cell
+    profiles (Figs. 5P, S15; pp. 34-35): no model here computes transport or cell survival. In the other
+    direction, svv_code has no measured data (sexton2025/q_validation_svv_code).
+- id: q_no_validation_vs_svzerod_code
+  kind: choice
+  about: [tree_growth, tree_biventricle, seed_repeat, tree_parameters, resistance_update,
+          'svzerod_code/coronary_released', 'svzerod_code/varres_released', 'svzerod_code/release_case',
+          'svzerod_code/windkessel_released_impedance', 'svzerod_code/impedance_released']
+  citation: {none: "a finding of the validation job between svv_code and svzerod_code, not a printed statement"}
+  text: >
+    Validation job svv_code+svzerod_code (2026-11-09). No validation is entered in either direction, and no
+    fit. Neither record holds a measurement: no datum of either has origin measured, and neither has figure
+    readings. svv_code's data are the code's defaults and values printed in sexton2025 (reported, or derived
+    as nu_paper and murray_identity_paper). svzerod_code's data are the release's settings, the expected
+    values written in its test cases (predicted), the stored results of those cases (run) and kim2010's
+    printed parameters and model flows (reported, predicted). None is an observation that a model of the
+    other record could be tested against. svv cites svZeroDSolver only as the program its 0D export is
+    written for (ref-svzerod). tree_growth and tree_biventricle already run the released solver on that
+    export, and the result is compared with svv's own growth pressures as consistency comparisons
+    (cmp_*_P_root_0d, q_export_pressure). That is a check of one code against the other, not a test against
+    data. Considered and not used: (1) the steady test cases of svzerod_code (tc_*), which give pressures and
+    flows of fixed resistor networks: these are the release's expected values, not measurements, and no svv
+    model takes their networks as input. (2) kim2010's coronary flows held in svzerod_code (k_Q_*): they are
+    kim2010's model predictions, not measurements, and are set by a patient's coronary boundary conditions
+    that no svv model has. See svzerod_code/q_no_validation_vs_svv_code.

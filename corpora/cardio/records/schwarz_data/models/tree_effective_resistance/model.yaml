@@ -1,0 +1,26 @@
+id: tree_effective_resistance
+name: weight-corrected effective resistance of the released left coronary tree, (P_in - P_cap) / inflow per 100 g perfused tissue
+role: processing
+software: true
+built_from: [network_solution]
+stated: {file: explanation_of_data.txt, lines: "120", quote: "The pressure in the node [N/m2], as calculated from solving the Kirchhoff and Poiseuille laws."}
+# Added by the ModelAtlas job mynard2014+schwarz_data (2026-11-09), for comparing the tree with lumped coronary
+# resistances given per 100 g of tissue, such as mynard2014's total effective LM resistance (pLM - pRA)/qLM in
+# mmHg·min·(100g LV)/mL (p. 12). The release states no such resistance; this is our arithmetic on our solution.
+equation: >
+  the steady Poiseuille-Kirchhoff solution of network_solution on the released network; Q = inflow of the two
+  inlets (LAD + LCX) in mL/min; perfused mass M = W f_tree (as network_solution's perfusion, the tree's share of
+  the heart's Voronoi volume); q = Q / (M / 100 g); R = (P_in - P_cap) / q, pressures in mmHg
+inputs:
+  P_in: {quantity: node_pressure, unit: Pa, description: pressure at the two inlets}
+  P_cap: {quantity: node_pressure, unit: Pa, description: pressure distal to every sink element's distal tree}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+  mu_p: {quantity: plasma_viscosity, unit: Pa*s}
+  W: {quantity: heart_weight, unit: kg}
+  f_tree: {quantity: tree_volume_fraction, unit: dimensionless}
+outputs:
+  Q_in: {quantity: segment_flow, unit: mL/min, description: total inflow of the LAD and LCX inlets}
+  q_per_mass: {quantity: lm_flow_per_mass, unit: mL/min/hg, description: "inflow per 100 g of the tree's perfused tissue (W f_tree)"}
+  R_eff: {quantity: effective_coronary_resistance, unit: mmHg*min*hg/mL, description: "(P_in - P_cap) / q_per_mass"}
+settings: {file: "Human Left Coronary graph.mat"}
+stochastic: false

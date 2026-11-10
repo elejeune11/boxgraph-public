@@ -1,0 +1,89 @@
+# ModelAtlas job with mynard2014: no relation entered. yong2025 never cites mynard2014; its Mynard references
+# (pp. 2, 3, 7, 9, 10, Table 1) are all to Mynard and Smolich 2016 (ref-mynard2016), a different paper, not in
+# this corpus. mynard2014 predates yong2025 and cannot cite it. So no relation is stated, and no yong2025 datum is
+# taken from mynard2014 (cited.yaml gets no line).
+# Nothing is proposed either. The physics the two share, a coronary microvascular resistance that rises in
+# systole, is written differently: mynard2014 Eq. 6 makes it volume-dependent (R = R0 V0^2/V^2, with
+# intramyocardial pressure from CEP and SIP, Eq. 8) inside multiscale_coronary, which is not runnable; yong2025
+# Eqs. 10-11 drive it by the chamber activation function (squared form adapted, p. 3, from the elastance-based
+# variable resistance of earlier work, not from Mynard). Neither is a limit or truncation of the other, and with
+# one side not runnable a proposed relation could only be unverifiable. The runnable mynard2014 models are
+# processing formulas (ratios, differences, (pLM - pRA)/qLM); yong2025 has no resistance-from-pressure-drop model,
+# and joining their plain ratios (heart_rate_ratio, fold_change, dsfr_from_means) would be too plain to mean anything.
+# ModelAtlas job with spaan1981: no relation entered. yong2025 cites spaan1981 twice (p. 4 "set the external
+# pressure Pk,ext (t) variable to incorporate the effect of myocardial contraction (Spaan et al., 1981)"; p. 8
+# "IMP is recognised as a crucial factor ... (Algranati et al., 2010; Spaan et al., 1981)") as the physiological
+# reason for a time-varying external pressure, not as the source of an equation: its P_im = 0.6 P_V (Eq. 12) is
+# taken from Baird et al. (1970). No yong2025 datum comes from spaan1981, so cited.yaml gets no line.
+# Nothing is proposed. The shape match potential_source_eq2 ~ coronary_closed_loop is only a shared output
+# dimension: spaan1981 Eq. 2 (p_lc = -q_c R_a + p_im) is an algebraic Thevenin equivalent between the phasic
+# (a.c.) components of measured pressure and flow, with the capacitance assumed not to impede the phasic flow;
+# coronary_closed_loop is a full closed-loop ODE network with ~55 inputs. No mapping writes the closed loop's
+# inputs from q_c, R_a and p_im, and no stated limit turns one into the other; a relation could only be
+# unverifiable or too loose to mean anything. waterfall_20_layer (spaan1981) is not runnable and is a different
+# (waterfall, tissue-pressure-gradient) mechanism from yong2025's compliance-under-P_im compartments.
+# ModelAtlas job with korakianitis2006: no stated model relation, one proposed. yong2025 cites korakianitis2006 twice: p. 3,
+# "more advanced valve models exist for valvular dysfunction (Korakianitis and Shi, 2006; ...)", a contrast with
+# its own on/off resistive valves (Eq. 6), not a derivation; and p. 12, systemic and pulmonary "parameters are
+# primarily based on Korakianitis and Shi (2006) with minor adjustments of compliance ... The systemic arterial
+# compartment was consolidated", a statement about parameter values, linked value by value in cited.yaml (with
+# q_korakianitis_pc for the one resistance that differs). The cardiac model is sourced elsewhere (Blanco and
+# Feijoo 2010): a different activation (Eqs. 4-5 against korakianitis2006 Eqs. 3, 5), linear valves against the
+# orifice law sqrt(dP) of Eq. 6, no inertances, one systemic arterial compartment instead of sinus, artery,
+# arteriole and capillary, and three coronary territories that korakianitis2006 has none of. So neither closed
+# loop is a limit, substitution or truncation of the other, and their shared outputs (none: korakianitis2006's
+# models give chamber, aortic and valve quantities, yong2025's coronary_closed_loop and coronary_block_svzerod
+# give coronary flows and DSFRs) leave nothing to test. The shape match circulation_onoff_corrected ~
+# coronary_block_svzerod is only shared port dimensions. One relation is proposed below, on the ventricular
+# activation alone: yong2025 Eqs. 3-4 are korakianitis2006's corrected Eqs. 2-3 written with T_vr = T_s2 - T_s1.
+- id: rel_yong_elastance_korakianitis_corrected
+  kind: same_as
+  a: korakianitis2006/elastance_eq2_5_corrected
+  b: yong2025/elastance_waveform
+  mapping: {Emax: "Elvs", Emin: "Elvd", Tvc: "Ts1", Tvr: "Ts2 - Ts1", T: "T", t: "t"}
+  output_map: {E: Elv}
+  regime: {Elvs: [1.5, 3.0], Elvd: [0.05, 0.2], Ela_max: [0.15, 0.3], Ela_min: [0.1, 0.15], T: [0.8, 1.2],
+           Ts1: [0.2, 0.35], Ts2: [0.4, 0.6], Tpwb: [0.65, 0.75], Tpww: [0.05, 0.09], t: [0, 3]}
+  provenance: proposed
+  reason: >
+    korakianitis2006's ventricular elastance with Eq. 3 corrected (the form of its Fig. 2 and of the authors'
+    CellML code) is E = E_d + (E_s - E_d)/2 e(t) with e = 1 - cos(pi t/T_s1) up to T_s1, 1 + cos(pi (t - T_s1)/
+    (T_s2 - T_s1)) up to T_s2, 0 after; yong2025 Eqs. 3-4 are E = (E_max - E_min) e_v + E_min with e_v = 1/2 of
+    the same two cosine arcs over T_vc and T_vr. They are the same function with E_max = E_s, E_min = E_d,
+    T_vc = T_s1 and T_vr = T_s2 - T_s1, both taken within the period. yong2025 sources its cardiac parameters
+    from Blanco and Feijoo (2010), not from korakianitis2006, and does not state the relation; it is proposed
+    because the two records' ventricles share this activation. The printed (uncorrected) Eq. 3 is not this
+    function (it gives a negative elastance), so the relation is to the corrected variant only.
+# ModelAtlas job with kim2010: one stated relation, nothing proposed, no cited value. yong2025 says (p. 3) of
+# its coronary vascular bed "Our model is based on Mantero et al. (1992) and Kim et al. (2010)"; p. 2 cites
+# Kim et al. only as an example of LPMs that use intramyocardial pressure and compliance. kim2010's coronary
+# block (p. 4, Eq. 5) is Ra - Ca - Ra-micro - Cim(P_im) - (Rv + Rv-micro); yong2025's bed (Sec. 2.3) is
+# Ra - Ca - Rmicro(t) - Cm(P_im) - Rv with capillary and venous microvascular resistance lumped into Rmicro and
+# Rmicro made time-varying (Eqs. 9-11). kim2010's record holds that block only in its zero-frequency form
+# (coronary_flow_split, stenosed_lad_flow: mean flow ~ 1/q0, q0 = Ra + Ra-micro + Rv + Rv-micro); yong2025's
+# steady form is coronary_flow_split (flow ~ 1/(Ra + Rmicro + Rv)). The stated relation is entered between
+# these two steady forms, as derived_from with the paper's words as its steps: unverifiable, since the outputs
+# differ (kim2010 gives flows per outlet from a total flow, yong2025 percent shares) and kim2010 has four LAD,
+# four LCX and three RCA outlets where yong2025 has one bed each. The shape match stenosed_lad_flow ~
+# coronary_block_svzerod is only shared port dimensions: the second is a closed-loop-driven svZeroDSolver run
+# with ~55 inputs and time-varying resistance, with no mapping from two steady beds' resistances and a mean
+# pressure. No yong2025 datum is taken from kim2010: its coronary parameters (Supp. p. 13, Table S2) come from
+# coronary flow as 4% of cardiac output (cited to Hall 2016, though kim2010 also assumes 4.0%), splits from
+# Sankaran et al. 2012 and Gallinoro et al. 2021, and the distribution of Fossan et al. 2018; Rmicro,min/max
+# from Seligman et al. 2022. So cited.yaml gets no line.
+- id: rel_yong_coronary_bed_kim
+  kind: derived_from
+  a: kim2010/coronary_flow_split
+  b: yong2025/coronary_flow_split
+  mapping: {Ra_lad: "0.750061683*Ra_a", Rm_lad: "0.750061683*Ram_a", Rv_lad: "0.750061683*Rv_a",
+            Ra_lcx: "0.750061683*Ra_e", Rm_lcx: "0.750061683*Ram_e", Rv_lcx: "0.750061683*Rv_e",
+            Ra_rca: "0.750061683*Ra_i", Rm_rca: "0.750061683*Ram_i", Rv_rca: "0.750061683*Rv_i"}
+  steps:
+    - "adopt the RCRCR coronary bed with intramyocardial pressure of Kim et al. (2010), one bed per territory (LAD, LCx, RCA)"
+    - "lump capillary and venous microvascular resistance into Rmicro and exclude venous compliance"
+    - "make Rmicro time-varying (Eqs. 9-11) with cycle mean equal to the constant resistance"
+    - "set the territory flow split by the series resistances Ra + Rmicro + Rv (Supp. Table S2)"
+  assumptions:
+    - "mapping: one kim2010 outlet per territory (a for LAD, e for LCX, i for RCA) and kim2010's Rv + Rv-micro carried as yong2025's Rv, which keeps each bed's series total; 1 kdyn*s/cm^5 = 0.750061683 mmHg*s/ml"
+  provenance: stated
+  citation: {page: 3, printed_page: "3", quote: "Our model is based on Mantero et al. (1992) and Kim et al. (2010).", where: "Sec. 2.3"}

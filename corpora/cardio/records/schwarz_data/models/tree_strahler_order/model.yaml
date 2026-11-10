@@ -1,0 +1,35 @@
+id: tree_strahler_order
+name: per-order element and segment statistics of the released network in Kassab's diameter-defined Strahler orders
+role: processing
+software: true
+built_from: [tree_strahler]
+stated: {file: explanation_of_data.txt, lines: "61", quote: "The file Human Left Coronary graph.mat contains all the data that was used for this study."}
+equation: >
+  the orders of tree_strahler (kassab1993 Eq. 1); for order n: element and segment counts, mean element
+  and segment diameter and length, SD of the element diameters, S/E = segments / elements (kassab1993
+  Table 5), connectivity C(n, m) = elements of order n springing directly from elements of order m /
+  elements of order m (kassab1993 p. 13), for m = n and m = n + 1
+inputs:
+  P_in: {quantity: node_pressure, unit: Pa, description: inlet pressure of the flow solution that sets the flow direction}
+  P_cap: {quantity: node_pressure, unit: Pa}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+  mu_p: {quantity: plasma_viscosity, unit: Pa*s}
+  n: {quantity: strahler_order, unit: dimensionless}
+outputs:
+  N_elem: {quantity: element_count, unit: dimensionless, description: elements of order n}
+  N_seg: {quantity: segment_count, unit: dimensionless, description: segments of order n}
+  D_elem: {quantity: order_mean_diameter, unit: um, description: mean element diameter of order n}
+  D_elem_sd: {quantity: order_diameter_sd, unit: um, description: SD of the element diameters of order n}
+  L_elem: {quantity: order_mean_length, unit: mm, description: mean element length of order n}
+  D_seg: {quantity: order_mean_diameter, unit: um, description: mean segment diameter of order n}
+  L_seg: {quantity: order_mean_length, unit: mm, description: mean segment length of order n}
+  SE: {quantity: segments_per_element, unit: dimensionless}
+  C_same: {quantity: connectivity_ratio, unit: dimensionless, description: "C(n, n)"}
+  C_next: {quantity: connectivity_ratio, unit: dimensionless, description: "C(n, n + 1)"}
+settings:
+  file: "Human Left Coronary graph.mat"
+  rule: pair
+  element_diameter: mean
+  max_iter: 50
+  fit_lo: 1
+stochastic: false

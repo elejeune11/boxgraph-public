@@ -1,0 +1,21 @@
+id: svzerodsolver_assembly
+name: modular lumped-parameter network assembled from blocks, integrated by generalized-alpha with Newton-Raphson
+role: model
+stated: {page: 4, quote: "automatically assembles the local equations and degrees of freedom for each block", where: "Software details"}
+equation: >
+  (in words) each block contributes local equations in its degrees of freedom; the solver assembles them
+  into a global system of non-linear differential algebraic equations, integrated in time "using the
+  implicit generalized-alpha scheme (Jansen et al., 2000) with Newton-Raphson iterations"; run for a set
+  number of time steps and cardiac cycles or until mean quantities of consecutive cycles differ by less
+  than a threshold
+inputs:
+  Q_in: {quantity: blood_flow_rate, unit: mL/s, description: "an inflow boundary condition (flow block); the network itself is the .json configuration"}
+outputs:
+  P_in: {quantity: blood_pressure, unit: mmHg, description: "pressure at the network inlet (and every other node)"}
+from_words: true
+runnable: false
+not_runnable_reason: >
+  The paper states no equation of any block, no spectral radius or other setting of the generalized-alpha
+  scheme, no Newton tolerance and no steady-cycle threshold; it refers to the online documentation for
+  all of them (p. 4). The released solver is run, with its own equations and settings, in the code record
+  svzerod_code.

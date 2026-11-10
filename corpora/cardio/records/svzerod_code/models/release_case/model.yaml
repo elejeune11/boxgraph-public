@@ -1,0 +1,15 @@
+id: release_case
+name: one of the release's test cases rerun with the released solver, one pressure and one flow read from its output
+role: model
+stated: {file: tests/test_solver.py, lines: "61-64", quote: "run all test cases and compare against stored reference solution"}
+equation: "the network the case file (tests/cases/<case>.json) configures, assembled from the code's blocks and integrated by the code's generalized-alpha scheme with Newton iterations"
+software: true
+inputs: {}
+outputs:
+  P: {quantity: case_pressure, unit: dyn/cm^2, description: "settings P: [row name, column] at output row `row`"}
+  Q: {quantity: case_flow, unit: mL/s, description: "settings Q: [row name, column] at output row `row`"}
+settings: {case: steadyFlow_R_R, P: [branch0_seg0, pressure_in], Q: [branch0_seg0, flow_in], row: 0}
+stochastic: false
+# The case files set their own simulation parameters (time steps per cycle, cycles, tolerance); the
+# adapter changes nothing in them. Each case is run as released, in the separate simulation
+# interpreter (corpus/cardio/envs/sim, svzerod 3.2 built from this commit).

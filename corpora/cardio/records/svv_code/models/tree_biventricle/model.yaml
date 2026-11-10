@@ -1,0 +1,54 @@
+id: tree_biventricle
+name: open-loop tree grown by the released svVascularize in the biventricle surface shipped with the code, with the same checks as tree_growth
+role: model
+software: true
+stochastic: true
+built_from: [tree_growth]
+stated: {file: svv/tree/tree.py, lines: "567-569", quote: "def n_add(self, n, **kwargs):"}
+equation: >
+  as tree_growth, with Domain(pyvista.read(biventricle_tissue.stl)) in place of the cube; svv's defaults
+  throughout. The surface has no stated unit; read in the code's cgs units it spans about 8.6 x 10.6 x 7.0
+  and encloses about 210 (cm^3, a heart-sized volume; q_biventricle_units)
+inputs:
+  n_terminals: {quantity: terminal_count, unit: dimensionless}
+outputs:
+  n_terminals_grown: {quantity: terminal_count, unit: dimensionless}
+  n_segments: {quantity: segment_count, unit: dimensionless}
+  root_diameter: {quantity: vessel_diameter, unit: um}
+  min_diameter: {quantity: vessel_diameter, unit: um}
+  domain_volume: {quantity: domain_volume, unit: cm^3}
+  t_grow: {quantity: build_time, unit: s}
+  beta_sum_max: {quantity: murray_sum, unit: dimensionless}
+  beta_sum_min: {quantity: murray_sum, unit: dimensionless}
+  radius_sum_max: {quantity: murray_sum, unit: dimensionless}
+  radius_sum_min: {quantity: murray_sum, unit: dimensionless}
+  radius_sum_median: {quantity: murray_sum, unit: dimensionless}
+  check_radius_sum_max: {quantity: murray_sum, unit: dimensionless}
+  check_radius_sum_min: {quantity: murray_sum, unit: dimensionless}
+  radius_dev_max: {quantity: radius_deviation, unit: dimensionless}
+  frac_radius_dev_1pct: {quantity: vessel_fraction, unit: dimensionless}
+  root_radius_dev: {quantity: radius_deviation, unit: dimensionless}
+  rstar_root_dev: {quantity: resistance_deviation, unit: dimensionless}
+  flow_sum_dev_max: {quantity: flow_deviation, unit: dimensionless}
+  terminal_flow_dev_max: {quantity: flow_deviation, unit: dimensionless}
+  A_median_all: {quantity: area_growth, unit: dimensionless}
+  S_median_all: {quantity: daughter_symmetry, unit: dimensionless}
+  A_median_large: {quantity: area_growth, unit: dimensionless, description: "median over mothers wider than d_A_large_um, svv's stored radii"}
+  S_median_large: {quantity: daughter_symmetry, unit: dimensionless, description: "median over mothers wider than d_S_large_um, svv's stored radii"}
+  n_bif_A_large: {quantity: bifurcation_count, unit: dimensionless}
+  n_bif_S_large: {quantity: bifurcation_count, unit: dimensionless}
+  A_median_large_check: {quantity: area_growth, unit: dimensionless}
+  S_median_large_check: {quantity: daughter_symmetry, unit: dimensionless}
+  P_root_0d: {quantity: tree_pressure, unit: mmHg}
+  P_root_0d_mu: {quantity: tree_pressure, unit: mmHg}
+  mu_export: {quantity: dynamic_viscosity, unit: cP}
+  outlet_R_max: {quantity: outlet_resistance, unit: dyn*s/cm^5}
+  n_outlets: {quantity: terminal_count, unit: dimensionless}
+  outlet_flow_dev_max: {quantity: flow_deviation, unit: dimensionless}
+  P_out_max: {quantity: outlet_pressure_0d, unit: mmHg}
+settings:
+  seed: 1
+  seed_order: before
+  domain_file: biventricle_tissue.stl
+  d_A_large_um: 400
+  d_S_large_um: 500

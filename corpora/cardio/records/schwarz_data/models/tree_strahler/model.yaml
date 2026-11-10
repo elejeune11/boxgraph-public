@@ -1,0 +1,43 @@
+id: tree_strahler
+name: Kassab's diameter-defined Strahler orders and Horton fits of the released network
+role: processing
+software: true
+built_from: [tree_table1, network_solution]
+stated: {file: explanation_of_data.txt, lines: "61", quote: "The file Human Left Coronary graph.mat contains all the data that was used for this study."}
+equation: >
+  kassab1993 Eq. 1 (p. 4) on the flow-directed graph (flow of network_solution): conventional Strahler, then
+  repeatedly: order of a segment = m (largest daughter order), + 1 iff two daughters of order m meet and
+  d > [(D_m + SD_m) + (D_(m+1) - SD_(m+1))]/2, with D, SD the mean and SD of the element diameters of an
+  order, until no order changes; elements = segments of one order in series (kassab1993 p. 8); Horton fits
+  (kassab1993 Eqs. 2-5) log10 X_n = a + b n over orders fit_lo..top of the mean element diameter (um),
+  the mean element length (um) and the element count; ratio 10^b (diameter, length) and 10^-b (number)
+inputs:
+  P_in: {quantity: node_pressure, unit: Pa, description: inlet pressure of the flow solution that sets the flow direction}
+  P_cap: {quantity: node_pressure, unit: Pa}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+  mu_p: {quantity: plasma_viscosity, unit: Pa*s}
+outputs:
+  n_orders: {quantity: strahler_order, unit: dimensionless, description: highest order of the network}
+  iterations: {quantity: iteration_count, unit: dimensionless, description: cycles of the Eq. 1 rule done}
+  converged: {quantity: convergence_flag, unit: dimensionless, description: "1 if the last cycle changed no order, else 0"}
+  n_segments: {quantity: segment_count, unit: dimensionless}
+  n_elements: {quantity: element_count, unit: dimensionless, description: elements of all orders}
+  a_D: {quantity: horton_intercept_diameter, unit: dimensionless}
+  b_D: {quantity: horton_slope_diameter, unit: dimensionless}
+  R2_D: {quantity: horton_fit_r2, unit: dimensionless}
+  ratio_D: {quantity: horton_ratio_diameter, unit: dimensionless}
+  a_L: {quantity: horton_intercept_length, unit: dimensionless}
+  b_L: {quantity: horton_slope_length, unit: dimensionless}
+  R2_L: {quantity: horton_fit_r2, unit: dimensionless}
+  ratio_L: {quantity: horton_ratio_length, unit: dimensionless}
+  a_N: {quantity: horton_intercept_number, unit: dimensionless}
+  b_N: {quantity: horton_slope_number, unit: dimensionless}
+  R2_N: {quantity: horton_fit_r2, unit: dimensionless}
+  ratio_N: {quantity: horton_ratio_number, unit: dimensionless, description: N_(n-1)/N_n}
+settings:
+  file: "Human Left Coronary graph.mat"
+  rule: pair
+  element_diameter: mean
+  max_iter: 50
+  fit_lo: 1
+stochastic: false

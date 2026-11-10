@@ -1,0 +1,12 @@
+- {id: ref_varres_npts, run: run_ram_released_lca, setting: n_pts, factors: [1, 2, 4], mode: multiply, output: Ram_mean,
+   tolerance: "0.01%", tolerance_basis: "added: a tenth of the printed precision of yong2025's mean (61.31, half a unit is 0.008%)", tolerance_added: true}
+- {id: ref_varres_cprobe, run: run_ram_released_lca, setting: tau_probe, factors: [1, 2, 4], mode: divide, output: Ram_mean,
+   tolerance: "0.01%", tolerance_basis: "added: as ref_varres_npts; checks the probe capacitance is small enough not to filter Ram(t)", tolerance_added: true}
+- {id: ref_varres_tc_cprobe, run: run_ram_released_tc, setting: tau_probe, factors: [1, 2, 4], mode: divide, output: Ram_peak,
+   tolerance: "0.1%", tolerance_basis: "added: well below the printed precision of the case's stated peak (200)", tolerance_added: true}
+- {id: ref_cor_npts, run: run_cor_c_rest_released, setting: n_pts, factors: [1, 2, 4], mode: multiply, output: Q_min,
+   tolerance: "0.1%", tolerance_basis: "added: the tolerance of the relation between the block and kim2010's equation is 0.1%", tolerance_added: true}
+- {id: ref_wk_npts, run: run_wk_man, setting: n_pts, factors: [1, 2, 4], mode: multiply, output: modulus,
+   tolerance: "0.1%", tolerance_basis: "added: the tolerance of the relation between the block and westerhof1971's impedance is 0.1%", tolerance_added: true}
+- {id: ref_imp_N, run: run_imp_released, setting: N, factors: [1, 2, 4], mode: multiply, output: P_max,
+   tolerance: "1%", tolerance_basis: "added: shows how the block's discrete pressure peak settles as the kernel is sampled more finely; the restated Eq. 38 changes in the same way, since N is the discretization of the paper's own convolution", tolerance_added: true}

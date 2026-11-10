@@ -1,0 +1,27 @@
+id: reduced_resistance_s10_beta4
+name: reduced resistance of a parent with two terminal daughters, Eq. S10 with beta_k^4 (variant)
+role: model
+variant_of: reduced_resistance_s10
+corrections:
+  - equation: "Eq. S10"
+    change: "beta_k^4 / R*_k in the sum over daughters instead of the printed beta_k / R*_k"
+    evidence: >
+      The paper says Eq. S10 follows from Eqs. S1, S2, S4, S6 and S7 (p. 4). By Eq. S7 a daughter subtree of
+      reduced resistance R*_k and radius r_k = beta_k r_p has resistance R*_k / (beta_k^4 r_p^4); daughters in
+      parallel (Eqs. S3-S4) then give (sum_k beta_k^4 / R*_k)^-1 as the subtree's reduced resistance referred
+      to r_p. The printed beta_k (first power) does not follow from those equations, and the paper's released
+      code, svVascularize, uses beta^4 (svv/tree/utils/c_update.py lines 35-37; bifurcation.py line 2183).
+stated: {page: 12, quote: "general relationship for the reduced resistance of any vessel", where: "Eq. S10"}
+equation: "R*_i = 8 mu L_i / pi + (sum_{k in C} beta_k^4 / R*_k)^-1"
+inputs:
+  mu: {quantity: dynamic_viscosity, unit: cP}
+  gamma: {quantity: murray_exponent, unit: dimensionless}
+  l_p: {quantity: vessel_length, unit: cm}
+  l_a: {quantity: vessel_length, unit: cm}
+  l_b: {quantity: vessel_length, unit: cm}
+  Q_a: {quantity: vessel_flow, unit: ml/s}
+  Q_b: {quantity: vessel_flow, unit: ml/s}
+outputs:
+  Rstar_p: {quantity: reduced_resistance, unit: dyn*s/cm}
+settings: {}
+stochastic: false

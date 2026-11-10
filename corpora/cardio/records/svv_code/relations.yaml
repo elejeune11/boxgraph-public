@@ -1,0 +1,148 @@
+# Relations to Schwarz et al. (2020), schwarz2020: none. The code does not cite the paper; ref-schwarz2020 names only the
+# measured tree the validations compare grown trees with (validations.yaml), a comparison of data, not of models. The pair
+# suggested by shape (schwarz2020/wall_shear_stress_eq6 and resistance_update) is not related: one is the force balance
+# tau = dP d/(4 l) on one segment, the other svv's R* and radius update on a bifurcation; they share only pressure ports.
+# Schwarz's Poiseuille conductance (Eq. 5) enters svv's terminal R* = 8 mu l/pi, but resistance_update returns only the
+# parent's R* combined with its daughters, which no mapping reduces to one segment's conductance. The area growth svv's
+# ratios give (beta_a^2 + beta_b^2) would be Schwarz's Eq. 8 with S = (Q_b l_b/(Q_a l_a))^(1/4) and g = gamma, but no model
+# here outputs it, and no paper states it, so no helper model is added. No svv_code datum takes a value from schwarz2020.
+# Relations to the released schwarz2020 tree (schwarz_data; ModelAtlas job schwarz_data + svv_code, 2026-11-09): none,
+# stated or proposed. Neither release cites the other (svv's code and docs do not name the Schwarz tree; the release's
+# guide predates svv), so nothing is stated, and no datum of either data.yaml takes a value from the other (both
+# cited.yaml unchanged; svv_code's validations are against schwarz2020's printed values, not schwarz_data's).
+# - schwarz_data/network_solution and resistance_update, the pair suggested by shape (lengths and pressures). Both are
+#   steady Poiseuille flow, but network_solution reads every diameter, length and distal conductance from the released
+#   file and takes only boundary pressures, hematocrit, plasma viscosity and statistics thresholds, while
+#   resistance_update takes one bifurcation's three lengths, two flows, mu, gamma and two pressures and returns svv's R*,
+#   ratios and radii. No expression in one model's inputs gives the other's: the geometry resistance_update needs is in
+#   network_solution's file, not its ports (and copying it is forbidden), and network_solution has no flows as inputs
+#   and no Murray exponent. Neither reduces to the other in a limit; the shared Poiseuille segment law is already
+#   recorded against the paper (schwarz2020/segment_conductance_eq5, above).
+# - schwarz_data/tree_branching (and tree_table1, tree_strahler) against tree_growth / tree_biventricle: the same
+#   statistics (median area growth over mothers > 400 um, median daughter symmetry over mothers > 500 um) taken on two
+#   different trees, one measured and one grown. Their inputs do not map (flow-solution pressures and class edges against
+#   a terminal count and svv's defaults); setting the values side by side is validation (validations.yaml, against
+#   schwarz2020's printed 1.02 and 0.59, which schwarz_data recomputes from the release in cmp_A_large and cmp_S_large), not a relation
+#   between models. No helper model is added.
+# Relations to svZeroDSolver (svzerod_code; ModelAtlas job svv_code + svzerod_code, 2026-11-09): none. svv cites the
+# solver only as the program its 0D export is written for (ref-svzerod; svv/utils/solvers/solver_0d.py), and
+# tree_growth / tree_biventricle already run the released solver on svv's own export (P_root_0d, outlet flows): that is
+# a use of the solver inside our models, not a relation between two charts. No svzerod_code model takes the inputs of a
+# svv model or of a vessel network: its models are the coronary (kim2010, yong2025), impedance (olufsen2000) and
+# Windkessel blocks and fixed test cases (release_case has no inputs). resistance_update's Poiseuille drops on one
+# bifurcation could be set against a three-vessel BloodVessel network, but no svzerod_code model is such a network and
+# neither code states that relation in a form that needs a helper model, so none is added. No svv_code datum takes a
+# value from svzerod_code, and no svzerod_code datum from svv_code; cited.yaml is unchanged.
+# Relations to Kassab et al. (1993), kassab1993 (ModelAtlas job kassab1993 + svv_code, 2026-11-09): none. The code
+# does not cite the paper (references.yaml has no entry for it; only a comment in validations.yaml names its Horton
+# ratios, as compared in sexton2025's record), and a 1993 paper cannot cite the code. kassab1993's models are
+# statistics of measured casts: least-squares Horton fits of log10 diameter, length and number against Strahler
+# order (Eqs. 2-5), ratio = 10^b (Eq. 3), per-order area and volume sums (Eqs. 6a, 7a) and the connectivity-matrix
+# extrapolation (Eqs. 10-11), all with per-order tables as inputs. svv_code's models grow a tree from a terminal count
+# and a domain (tree_growth, tree_biventricle, seed_repeat), give svv's default constants (tree_parameters) or update
+# R* at one bifurcation (resistance_update); none orders vessels by Strahler order or outputs a per-order table, so no
+# mapping sends one model's inputs to the other's. Feeding a grown tree's Strahler statistics to the Horton fits would
+# compare data, not models, and needs an ordering the code does not do; no helper model is added. No datum in either
+# record takes a value from the other; neither cited.yaml is changed.
+# Relations to Olufsen (1999), olufsen1999 (ModelAtlas job olufsen1999 + svv_code, 2026-11-09): none. The code uses
+# olufsen1999's wall model only inside its 0D export (zerod_tree.py line 141, Eh/r0 = k1 exp(k2 r) + k3, Eq. 6; line
+# 167, C = 3 l pi r^2 / (2 Eh/r0), the compliance of Eq. 5 linearised at A = A0), and no svv_code model outputs a
+# stiffness or a capacitance as a function of radius: tree_growth and tree_biventricle return statistics of a grown
+# tree and the root pressure of the exported network, with k1 = 0 (rigid walls), so the wall model does not reach any
+# output. Restating those two lines as a helper would check only our transcription, not the release, so none is added;
+# the attribution itself is already a stated relation one level up (sexton2025/rel_olufsen_material_olufsen1999, Eq. S26).
+# olufsen1999's structured tree (asymmetric binary tree with radius exponent xi and ratios alpha, beta) and svv's grown
+# tree share the power-law radius rule r_p^xi = r_a^xi + r_b^xi (olufsen1999 Eq. 21 against Eq. S5), but svv's
+# daughter ratios come from flows and reduced resistances of a grown geometry, not from fixed alpha, beta: no mapping
+# sends one model's inputs to the other's. The k2 the export takes from olufsen1999 is linked in cited.yaml.
+# The code's reduced-resistance update against sexton2025's Eq. S10, as printed and with beta^4 (sexton2025's
+# variant). mapping: b's input -> expression in a's inputs; b's extra inputs (pressures) do not enter R*.
+- id: rel_update_s10_beta4
+  kind: same_as
+  a: sexton2025/reduced_resistance_s10_beta4
+  b: svv_code/resistance_update
+  mapping: {mu: mu, gamma: gamma, l_p: l_p, l_a: l_a, l_b: l_b, Q_a: Q_a, Q_b: Q_b, P_root: "100", P_term: "60"}
+  output_map: {Rstar_p: Rstar_p}
+  regime:
+    mu: [3, 5]
+    gamma: [2, 3]
+    l_p: [0.02, 0.5]
+    l_a: [0.01, 0.3]
+    l_b: [0.01, 0.3]
+    Q_a: [0.00001, 0.001]
+    Q_b: [0.00001, 0.001]
+  tolerance: 0.000001
+  provenance: proposed
+  reason: >
+    svv's update_resistance (c_update.py lines 32-37) computes the parent's R* from its daughters by Eqs. S6,
+    S9 and Eq. S10 with beta^4, the form sexton2025's record writes as the variant of the printed Eq. S10
+    (q_s10_code). The two should agree to rounding for any bifurcation of two terminal daughters.
+- id: rel_update_s10_printed
+  kind: same_as
+  a: sexton2025/reduced_resistance_s10
+  b: svv_code/resistance_update
+  mapping: {mu: mu, gamma: gamma, l_p: l_p, l_a: l_a, l_b: l_b, Q_a: Q_a, Q_b: Q_b, P_root: "100", P_term: "60"}
+  output_map: {Rstar_p: Rstar_p}
+  regime:
+    mu: [3, 5]
+    gamma: [2, 3]
+    l_p: [0.02, 0.5]
+    l_a: [0.01, 0.3]
+    l_b: [0.01, 0.3]
+    Q_a: [0.00001, 0.001]
+    Q_b: [0.00001, 0.001]
+  tolerance: 0.000001
+  provenance: proposed
+  reason: >
+    The paper says its code implements its tree equations; this tests whether the code's update is Eq. S10 as
+    printed (beta_k, first power). It is expected not to be (q_s10_code): the relation is kept so the build
+    shows the code and the printed equation apart.
+# ModelAtlas job sexton2025 + svv_code (2026-11-09). sexton2025 says only that "The code is available in GitHub at
+# https://github.com/SimVascular/svVascularize ... (48)" (p. 7, data availability): it names the code as its own but
+# states no relation between a printed equation and a part of the code, so the relations below are proposed, as
+# the two above are. Not related here: sexton2025/svv_tree and tree_growth both grow a tree with the released svv,
+# but the paper's model takes gamma, alpha_r, alpha_l, mu, rho, Q_term and the pressures as ports and the code's
+# takes svv's defaults, and a numeric test would grow 40 trees per side; the two adapters are compared through
+# their data instead (validations.yaml). sexton2025's other models (balanced_tree_n2, murray_beta, speedup,
+# pixels_per_cell, olufsen_material_s26, kinematic_viscosity) have no counterpart among svv_code's models.
+# No datum of either record that names the other lacks its from_datum, except outlet_R_zero_paper, which
+# sexton2025 prints only in words (Movie S2 caption) and its record does not enter: cited.yaml is unchanged.
+- id: rel_update_bifurcation_network
+  kind: same_as
+  a: sexton2025/bifurcation_network
+  b: svv_code/resistance_update
+  mapping: {mu: mu, gamma: gamma, l_p: l_p, l_a: l_a, l_b: l_b, Q_a: Q_a, Q_b: Q_b, P_root: "100", P_term: "60"}
+  output_map: {Rstar_p: Rstar_p}
+  regime:
+    mu: [3, 5]
+    gamma: [2, 3]
+    l_p: [0.02, 0.5]
+    l_a: [0.01, 0.3]
+    l_b: [0.01, 0.3]
+    Q_a: [0.00001, 0.001]
+    Q_b: [0.00001, 0.001]
+  tolerance: 0.000001
+  provenance: proposed
+  reason: >
+    The paper says Eq. S10 combines Eqs. S1, S2, S4, S6 and S7 (p. 12); bifurcation_network solves that
+    combination directly as a Poiseuille network (parent in series with two daughters in parallel, daughter
+    radii beta_k r_p from Eqs. S6 and S9, R* = R_total r_p^4), without using Eq. S10. svv's update_resistance
+    (c_update.py lines 32-37) computes the parent's R* from the same bifurcation with Eq. S10 written with
+    beta^4. If the code's update is the network the paper derives Eq. S10 from, the two agree to rounding for
+    any bifurcation of two terminal daughters. Ports are the same quantities in the same units (mu in cP,
+    lengths in cm, flows in ml/s, R* in dyn s/cm); the pressures enter only svv's radius update, not R*, and
+    are set to svv's default root and terminal pressures in mmHg.
+- id: rel_defaults_tree_parameters
+  kind: same_as
+  a: sexton2025/svv_defaults
+  b: svv_code/tree_parameters
+  mapping: {}
+  output_map: {mu: mu}
+  regime: {}
+  provenance: proposed
+  reason: >
+    Both models read a default TreeParameters() of the released svv, sexton2025's from the svv 0.0.57 package
+    installed from PyPI (the package the paper names, p. 7), svv_code's from the code folder at commit 5ca73e4,
+    which the corpus list says is the same release. Neither takes inputs; the relation checks that the two give
+    the same viscosity of Eq. S1 (kinematic viscosity times density, in cP), the default the paper's Table S1
+    prints differently (4 cP).

@@ -306,3 +306,53 @@
     1D network (larger_arteries_1d), which is not runnable and is not built for the coronary tree. In the
     other direction see mynard2014 q_no_validation_vs_olufsen1999.
   citation: {page: 3, quote: "the square of the wave propagation velocity"}
+- id: q_val_schwarz_data_scope
+  kind: choice
+  about: [area_ratio_eq21, asymmetry_eq21, structured_tree_impedance, dc_root_radius_power, terminal_branch_count, schwarz_data/p_A_median_large, schwarz_data/p_S_median_large, schwarz_data/p_T1_all]
+  text: >
+    Validation job olufsen1999+schwarz_data (2026-11-09). schwarz_data (the released human left coronary
+    tree of schwarz2020) does not cite this paper, and this paper predates it, so no comparison is stated by
+    either. One is entered: Eq. 21 with the printed xi = 2.76 and gamma = 0.41 against the tree's measured
+    median area growth 1.02 for segments over 400 um (val_eta_eq21_vs_coronary_area_growth). Open choices in
+    it: (1) a median of per-bifurcation area growth is set against a constant meant to hold at every
+    bifurcation; (2) the 400 um threshold is schwarz2020's, and this paper states no size range for its
+    eta other than the structured tree's (root to r_min = 0.01 cm); (3) gamma_printed is used rather than
+    eta_chosen itself, since Eq. 21 does not give back 1.16 from 2.76 and 0.41 exactly (q_asymmetry_eq21);
+    either way the predicted ratio is about 1.16-1.17. Considered and not entered: (a) the tree's measured
+    median daughter symmetry S = 0.59 (mothers over 500 um, schwarz_data/p_S_median_large) against
+    asymmetry_eq21's gamma: gamma is S squared at one bifurcation, a different quantity, and the median of
+    S squared is not the square of a median in general, so the two are not mapped; no model here outputs S.
+    (b) Table 1's segment counts, shares, terminal densities and perfused volumes: structured_tree_impedance
+    and dc_root_radius_power output only impedances and a power, and terminal_branch_count counts the
+    terminals of a symmetric tree from a total arteriolar area this tree does not give, while the tree's
+    terminal segments are where the cast's resolution ends (about 30 um), not arterioles. (c) The tree's
+    hemodynamic results (flows, pressures, conductances by diameter) are outputs of schwarz_data's own model
+    with imputed distal conductances (origin run or predicted), not measurements. (d) The tree's DC
+    resistance power (tree_structured_params p_dc) is not a measurement either.
+  citation: {page: 7, quote: "The parameters j, h, and g are not independent but are"}
+- id: q_val_sexton2025_scope
+  kind: choice
+  about: [structured_tree_impedance, stiffness_eq6, windkessel_eq7, sexton2025/q_ratio_piv_fig5f, sexton2025/olufsen_material_s26]
+  text: >
+    Validation job olufsen1999+sexton2025 (2026-11-09): no validation entered. sexton2025 (which cites this
+    paper as its ref. 75 for the material law of its 1D solver, its Eq. S26 = Eq. 6 here) measures build
+    and operation times of its code, cell areas, counts and viability in printed tissue, and branch flow
+    fractions of a printed three-branch network by PIV (Fig. 5F). No model here gives any of these: the
+    structured tree builds its own self-similar tree from a root radius and gives an input impedance, not
+    the flow split of a network whose geometry it does not take; Eq. 6 and the Windkessel give stiffness and
+    impedance. In the other direction, no model of sexton2025 gives this paper's measured impedances,
+    pressures, inflow or cardiac output (sexton2025/q_validation_olufsen1999).
+  citation: {page: 3, quote: "The data and the fitted curve are shown in Fig. 3"}
+- id: q_val_svv_code_scope
+  kind: choice
+  about: [structured_tree_impedance, area_ratio_eq21, asymmetry_eq21, stiffness_eq6, svv_code/q_no_validation_vs_olufsen1999]
+  text: >
+    Validation job olufsen1999+svv_code (2026-11-09): no validation entered. svv_code is software; its record
+    holds no measured data (its data are the code's constants and settings, and its results are outputs of
+    its own runs), so no model here has a measurement of svv_code to be tested against. The statistics of
+    svv's grown trees (area growth, daughter symmetry, Murray sums) are run outputs, not measurements: setting
+    area_ratio_eq21 against them would compare two models, which is a relation, not a validation, and
+    svv_code/relations.yaml already records why no mapping links the structured tree to svv's grown tree. In
+    the other direction, no svv_code model gives this paper's measured cardiac output, inflow, impedances,
+    pressures or Eh/r0 (svv_code/q_no_validation_vs_olufsen1999).
+  citation: {none: "a finding of the validation job between olufsen1999 and svv_code, not a printed statement"}

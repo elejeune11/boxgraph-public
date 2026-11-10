@@ -1,0 +1,55 @@
+id: svv_code
+kind: software
+title: "svVascularize (svv): synthetic vascular tree generation and reduced-order simulation export (source at commit 5ca73e4, svv 0.0.57)"
+authors: [Zachary Sexton]
+year: 2025
+url: https://github.com/SimVascular/svVascularize
+version: "sha256:f6edc04bfcf8e2157dc756bcb1bddd27ee9e8cca3259b7bd02ee0564fb1e2d1a"
+licence: BSD-3-Clause
+language: python
+file: corpus/cardio/code/svv_code
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-09"}
+notes: >
+  What the code is. svVascularize at commit 5ca73e4 (git archive, no history; svv/__init__.py
+  __version__ 0.0.57, the same Python files as svv 0.0.57 on PyPI). Author from setup.py (Zachary Sexton);
+  setup.py declares license 'MIT' but the only licence text, Copyright-Notice.txt (Stanford University, the
+  Regents of the University of California and others), is the three-clause BSD licence, entered here. The
+  year is the paper's (the code states none). Python: svv/tree (Tree, TreeParameters in data/data.py, the
+  root in branch/root.py, growth in branch/bifurcation.py and utils/c_local_optimize.py, the R* update in
+  utils/c_update.py), svv/domain (implicit tissue domains, seeding), svv/forest (closed-loop connection, not
+  read), svv/simulation (export to 0D, 1D and 3D; only the 0D export, zero_d/zerod_tree.py, is read), a GUI
+  (not read), and biventricle_tissue.stl. Entry points: Domain(surface).create/solve/build,
+  Tree().set_domain/set_root/n_add, export_0d_simulation. The models import svv from the code folder and run
+  it in the separate environment corpus/cardio/envs/sim (SVV_TELEMETRY_DISABLED=1); the 0D export is run there
+  with svZeroDSolver. Nothing of the code is copied into the record.
+
+  How it relates to the paper. sexton2025 describes the algorithm (Eqs. S1-S10, Table S1) and the 0D
+  formulation (Eqs. S27-S30); the code is checked against those, and the code's constants are tied to the
+  paper's (from_datum). Trees are grown at svv's own defaults, 1000 terminals (Fig. 2E's size) in a 1-cm cube
+  (added) and in the shipped biventricle, three seeds each.
+
+  What it reproduces. The default exponents (3, 2, 1) and density (1.06) are Table S1/S3's. svv's own
+  reduced-resistance update gives ratios that satisfy the paper's identity and radii that bring the root
+  pressure exactly to the terminal pressure (run_bifurcation); it is Eq. S10 with beta^4, not as printed
+  (rel_update_s10_*, q_s10_code). In grown trees the stored ratios satisfy the identity, the flows Eq. S3,
+  and the stored R* and root radius equal what svv's own check functions recompute; the check's radii obey
+  Eq. S5 exactly. The exported 0D outlets have zero resistance, as Movie S2 says.
+
+  What it does not, and every difference from the paper. (1) Viscosity: 0.036 cm^2/s against Table S3's
+  0.037 (close); the growth uses 3.816 cP and the 0D export and 3D set-up 3.6 cP, both inside the rounding
+  of the printed "4" cP; the export's 0.04 viscosity argument is unused (q_viscosity_code). (2) The radii svv
+  stores and exports are not the radii its own check gives for about two thirds of vessels, so Eq. S5 fails
+  on them (cmp_*_radius_max not reproduced; q_svv_radii). (3) The 0D export of a tree needs a root pressure
+  about 5 mmHg below the 100 mmHg the tree was grown for, about 3 mmHg below with the growth's viscosity, and
+  its outlet flows depart widely from the terminal flow (q_export_pressure). (4) The zero outlet resistance
+  comes from a terminal test that finds no terminals (q_export_outlets). (5) update_resistance never ends on a
+  table of more than one depth (q_update_resistance_loop). (6) A seed repeats a tree exactly only when it is
+  set before the domain is built; set after, as sexton2025's record did, it has no effect (q_seed; this
+  contradicts sexton2025's q_svv_nonrepeatable, which was left unchanged). (7) Hidden choices: the default
+  flow and pressures (q_hidden_defaults) and a dozen growth settings, four of them unlike the code's own
+  docstring, and an optimizer constraint L-BFGS-B ignores (q_hidden_growth_settings). Organ-scale trees and
+  timings are not rerun (q_scale).
+
+  Against the measured tree (validations.yaml). In the heart-sized biventricle, svv's gamma = 3 trees give a
+  large-vessel area growth above schwarz2020's 1.02 and a daughter symmetry below its 0.59, over about 30 and
+  12 bifurcations per tree (q_biventricle_units for the domain's unit).

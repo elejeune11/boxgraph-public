@@ -1,0 +1,30 @@
+id: menon2025
+kind: article
+title: "svZeroDSolver: A modular package for lumped-parameter cardiovascular simulations"
+authors: [Karthik Menon, Jakob Richter, Martin R. Pfaller, Jonathan Pham, Emilin M. Mathew, Kaitlin E. Harold, Nicholas C. Dorn, Aekaansh Verma, Alison L. Marsden]
+year: 2025
+venue: Journal of Open Source Software 10(109), 7595
+doi: 10.21105/joss.07595
+file: corpus/cardio/2025_Menon.pdf
+page_range: [1, 8]
+pages: {1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-09"}
+notes: >
+  A software paper (JOSS) for svZeroDSolver. It prints no numerical inputs, no equations and no
+  numerical results: no parameter values, no simulation outputs, no tables, and its one figure
+  (Fig. 1, p. 4) is a class diagram of the block types, with nothing to read. The record therefore
+  holds no data, runs or comparisons. What it does hold is the paper's description in words of the
+  solver and its blocks, as five models that cannot be run from this paper (the assembly of blocks
+  from a .json configuration integrated with the generalized-alpha scheme and Newton-Raphson
+  iterations; the Windkessel boundary condition; the coronary boundary condition with
+  intramyocardial pressure; the hyperbolic-tangent heart valve; the cardiac chamber as a
+  time-varying capacitor and inductor). The paper sends the reader to the online documentation for
+  every block's equations (p. 4); those equations and their tests are checked in the code record
+  svzerod_code (commit 87bbadc), where the released solver is run, so these models are the nodes
+  that relate the paper to the code and to the papers its blocks cite (kim2010, Vignon-Clementel et
+  al. 2006, Kim et al. 2009). Left out: the statement of need, the survey of other packages (p. 3)
+  and the future plans (p. 5), which state no model. Fig. 1 lists the blocks "at the time of
+  writing"; it has no impedance block (olufsen2000) and no variable-resistance coronary block
+  (yong2025), which the code at commit 87bbadc has (question q_blocks_after_paper). The claim that
+  the solver "has also been verified by comparing with high-fidelity three dimensional simulations"
+  rests on Pfaller et al. 2022, which is not in this review (question q_verification_claim).

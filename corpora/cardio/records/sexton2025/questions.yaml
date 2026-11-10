@@ -1,0 +1,328 @@
+- id: q_s10_beta
+  kind: possible_error
+  about: [reduced_resistance_s10, reduced_resistance_s10_beta4, cmp_s10_vs_network, cmp_s10_beta4_vs_network,
+          cmp_tree_rstar_s10, cmp_tree_rstar_s10_beta4, cmp_tree_root_s10, cmp_tree_root_s10_beta4,
+          cmp_tree4000_root_s10, cmp_tree4000_root_s10_beta4]
+  citation: {page: 12, quote: "general relationship for the reduced resistance of any vessel", where: "Eq. S10"}
+  text: >
+    Eq. S10 is printed with beta_k / R*_k in the sum over daughters. The paper says it follows from Eqs. S1,
+    S2, S4, S6 and S7, and those give beta_k^4 / R*_k (a daughter of radius beta_k r_p and reduced resistance
+    R*_k has resistance R*_k / (beta_k r_p)^4). The variant reduced_resistance_s10_beta4 equals the network
+    solved from S1-S4 and S7 (cmp_s10_beta4_vs_network) and the printed form does not (cmp_s10_vs_network).
+    On svv's own trees the beta^4 form reproduces svv's stored root R* and root diameter, and the printed form
+    does not (cmp_tree_rstar_*, cmp_tree_root_*): the released code uses beta^4 (svv/tree/utils/c_update.py
+    lines 35-37; svv/tree/branch/bifurcation.py line 2183). The printed equation is most likely a typesetting
+    slip; both forms are kept.
+- id: q_svv_radii
+  kind: unexplained_difference
+  about: [svv_tree, cmp_tree_radius_sum_max, cmp_tree_radius_sum_min, cmp_tree_radius_sum_median,
+          cmp_tree4000_radius_sum_max, cmp_tree4000_radius_sum_min, cmp_tree4000g2_radius_sum_max,
+          cmp_tree_beta_sum_max, cmp_tree_beta_sum_min]
+  citation: {page: 12, quote: "we can propagate radii calculations from the parent-daughter diameter ratios", where: text}
+  text: >
+    The paper computes the root radius from Eq. S8 and propagates radii down the tree by the
+    parent-daughter ratios (p. 12). In trees grown with the released svv (0.0.57), the stored flows, reduced
+    resistances and ratios satisfy Eqs. S3, S6, S9 and S10-with-beta^4 at every bifurcation, and the stored
+    ratios satisfy the printed identity sum beta^gamma = 1 (cmp_tree_beta_sum_*). The stored root radius is
+    Eq. S8's. But the stored radii of the other vessels (column 21, which svv exports to its solids and
+    centerlines) are svv's root radius times its column 28, and column 28 is not the product of the stored
+    ratios along the path from the root for many vessels (output radius_dev_stored and
+    frac_radius_dev_1pct). The stored radii therefore break the power law of Eq. S5 at some bifurcations, in
+    both directions (cmp_tree_radius_sum_max and _min against the printed identity; the median is one). The
+    column appears to be updated incrementally during growth (svv/tree/branch/bifurcation.py around lines
+    687-1070) and not refreshed for every downstream vessel. Whether the paper's printed trees and their CFD
+    models carry the same deviation is not known. svv's column 26 (depth) also does not equal the generation
+    counted from the root in these trees; svv_tree counts generations itself.
+- id: q_svv_viscosity
+  kind: unexplained_difference
+  about: [cmp_svv_mu, cmp_svv_nu, svv_defaults]
+  citation: {page: 67, quote: "dynamic viscosity cP 4", where: "Table S1"}
+  text: >
+    Tables S1 and S3 give mu = 4 cP and nu = 0.037 (with rho = 1.06). The released svv stores a kinematic
+    viscosity of 0.036 cm^2/s and a density of 1.06 g/cm^3 by default (svv/tree/data/data.py lines 263-268) and
+    puts their product in Eq. S1 (bifurcation.py line 2162), a viscosity below Table S1's (cmp_svv_mu,
+    cmp_svv_nu). The default trees therefore use a slightly lower viscosity than the paper states; radii
+    scale with its fourth root, so the effect on a tree is small. svv_tree passes the paper's mu / rho instead.
+- id: q_viscosity_main_text
+  kind: possible_error
+  about: [mu_p5, cmp_nu_p5]
+  citation: {page: 5, quote: "blood (ρ = 1.06 g/cm3 and ν = 0.04 cP", where: text}
+  text: >
+    The main text states the fluid of the pulsatile simulation as "rho = 1.06 g/cm3 and nu = 0.04 cP" "similar
+    to whole blood". The symbol is that of kinematic viscosity and the unit that of dynamic viscosity, and the
+    value is a hundredth of Table S1/S3's 4 cP. Read as a dynamic viscosity in cP it gives a kinematic
+    viscosity far from Table S3's (cmp_nu_p5). 0.04 P (= 4 cP) or 0.04 cm^2/s (close to Table S3's nu) would
+    both fit "whole blood"; the printed value is kept.
+- id: q_table_units
+  kind: possible_error
+  about: [nu_t3, cmp_nu_t3]
+  citation: {page: 69, quote: "kinematic viscosity cm · s 0.037", where: "Table S3"}
+  text: >
+    Several units and cross-references in the supplement are printed wrongly. Table S3: kinematic viscosity
+    in "cm · s" (cm^2/s), compliance in "cm5/g/s2" (cm^4 s^2/g), inertia in "g/cm" (g/cm^4), resistance in
+    "dyne/cm5" (dyne s/cm^5); Table S1: resistance "dyne/cm5" and reduced resistance "dyne · cm3" (dyne s/cm).
+    p. 21 gives the density of culture media in g/cm^2 and calls Eqs. S22-S23 "Eq. S31" and "Eq. S32". The
+    Fig. S5 caption sends the reader to Table S6 for the volumetric errors, which are in Table S4. nu_t3 is
+    entered in cm^2/s; its value, 0.037, is close to Table S3's mu/rho but rounds differently (cmp_nu_t3).
+- id: q_speedup
+  kind: unexplained_difference
+  about: [speedup_abstract, cmp_speedup]
+  citation: {page: 1, quote: "advances accelerate vascular generation 230-fold", where: abstract}
+  text: >
+    The abstract claims a 230-fold acceleration. The paper does not say how it is computed. The only pair of
+    build times the main text sets side by side, 59.96 hours elsewhere against a median of 15 min for
+    8000-terminal brain-gyrus trees (p. 3), gives a different factor (cmp_speedup). Table S5's 1000-terminal
+    benchmark against a serial CCO code gives per-domain ratios of benchmark to build time that are all well
+    below 230, so it is not the source either.
+- id: q_svv_nonrepeatable
+  kind: numerics
+  about: [svv_tree, run_tree_1000, run_tree_4000, run_tree_4000_g2]
+  text: >
+    svv's growth is random. Seeding Python's random, numpy's global generator and the domain's own generator
+    (Domain.set_random_seed) with the same seed does not repeat a tree in this release: two growths with seed 1
+    gave different trees (checked before the record was built). Every svv_tree run therefore uses five seeds
+    and its value is the mean with two standard errors; the spread is part of each verdict. Because a run does
+    not repeat, a rebuilt record may differ within that spread. The model has no numerical setting to refine
+    (the growth has no step size or mesh of its own; the number of terminals is an input), so no refinement
+    series is recorded; the dependence on tree size is shown by the 1000- and 4000-terminal runs.
+- id: q_svv_seed_order
+  kind: reading
+  about: [q_svv_nonrepeatable, svv_tree, run_tree_1000, run_tree_4000, run_tree_4000_g2]
+  text: >
+    (Audit.) q_svv_nonrepeatable attributes the non-repeating trees to svv. The code points to the run script
+    instead. svv's Domain draws its sample points from its own generator (svv/domain/domain.py lines 877, 969,
+    998). Domain.build() creates that generator when there is none (lines 460-461), as PCG64 seeded with
+    Domain.random_seed (line 190), which is still None at that point, so it is seeded from OS entropy.
+    Domain.set_random_seed() only stores the seed (lines 179-184); it does not rebuild the generator.
+    svv_tree's grow.py calls dom.set_random_seed(seed) after dom.build(), so the seed it states never reaches
+    the generator that places the terminals. The tree code has no generator of its own (no other random
+    source under svv/tree), and grow.py seeds Python's random and numpy's global generator. Setting the seed
+    before build(), or calling set_random_generator() after set_random_seed(), may make a fixed seed repeat.
+    This audit could not run svv to test it, and it left grow.py unchanged: an edit would rerun every tree.
+    Until it is tested, the run-to-run spread in run_tree_* is the spread of unseeded trees, which is still a
+    fair spread over seeds. The claim that the release itself does not repeat is not established.
+- id: q_tree_settings
+  kind: unstated_input
+  about: [cube_edge_added, Q_term_added, P_root_added, P_term_added, svv_tree]
+  citation: {page: 67, quote: "Vascular Generation Symbols and Constants", where: "Table S1"}
+  text: >
+    For tree generation the paper gives the exponents and the viscosity (Table S1) but no flows, pressures,
+    domain sizes or optimisation settings (Table S1 lists Q and Delta P without values). The record uses
+    svv's own defaults for terminal flow (0.125/2000 mL/s) and pressures (100 and 60 mmHg), a 1-cm cube
+    (the cube of Fig. S1), and leaves every other setting of svv's growth (candidate points, optimiser,
+    collision clearance, domain reconstruction) at svv's defaults. Flow, pressures and cube size only scale
+    the tree, which matters for the statistics restricted to absolute diameters (400 and 500 um); each is run
+    with an alternative.
+- id: q_organ_scale
+  kind: choice
+  about: [svv_tree]
+  citation: {page: 4, quote: "At 1 million outlets, vessel diameters ranged from", where: text}
+  text: >
+    The organ-scale results (trees of 10^4 to 10^6 terminals in the biventricle and annulus, "At 1 million
+    outlets, vessel diameters ranged from 1.2 mm to 5 um", mean tissue distances of about 180-190 um, Table S6's
+    build times) need trees far beyond what a run here can grow in minutes, and the biventricle of the paper
+    is not specified beyond its figures. They are not entered. The 1000- and 4000-terminal cube trees test
+    the same algorithm and constants at a modest size.
+- id: q_fig_s10_units
+  kind: reading
+  about: [svv_tree]
+  citation: {page: 59, quote: "standard deviations of average distances are 0.11", where: "Fig. S10 caption"}
+  text: >
+    Fig. S10's caption prints the mean tissue-to-vessel distances (0.11, 0.047, 0.018 for the biventricle;
+    0.10, 0.042, 0.019 for the annulus) without a unit. The main text's "~180 to 190 um" at 10^6 terminals
+    (p. 4) matches them only if they are in cm. Not entered (q_organ_scale).
+- id: q_validation_schwarz
+  kind: choice
+  about: [svv_tree, 'schwarz2020/A_median_large', 'schwarz2020/S_median_large']
+  text: >
+    The synthetic trees are compared with schwarz2020's measured human tree only through dimensionless
+    branching statistics (area growth and daughter symmetry of large bifurcations), which the radius rule
+    and the attachment of terminals set whatever the organ's size. The synthetic tree differs from the
+    measured one in domain (1-cm cube against a left ventricle of about 358 cm3), terminals (4000 against about
+    10^5), radius rule (Murray exponent 3 from Table S1; the human large vessels behave as about 2), smallest
+    vessel (about 20 um against the cast's 30 um) and root size (about 0.7 mm against several mm). The
+    thresholds are schwarz2020's absolute 400 and 500 um; in the synthetic tree only its first generations
+    pass them, so few bifurcations enter each median (n_bif_A_large, n_bif_S_large). A rerun with gamma = 2,
+    the paper's own lower bound, is kept beside the gamma = 3 tree. Not entered, because the comparison would
+    not mean what it says: segment counts and lengths per diameter class (they scale with the density of
+    terminals, about 4000 per cm3 here against about 280 per cm3 in the heart, and with where the tree stops),
+    and the share of pressure lost above a vessel size (svv fixes every terminal at its terminal pressure, 60
+    of 100 mmHg by default, so the share is set by the boundary condition, not the tree).
+- id: q_validation_kassab
+  kind: choice
+  about: [svv_tree, 'kassab1993/t4_D_ratio_e_lad', 'kassab1993/t4_D_ratio_e_lcx', 'kassab1993/t4_L411_ratio_e_lad',
+          'kassab1993/t4_L411_ratio_e_lcx', 'kassab1993/t4_N_ratio_e_lad', 'kassab1993/t4_N_ratio_e_lcx']
+  text: >
+    The Horton ratios of the synthetic tree are fitted over its own orders (about 7, from about 20 um to the
+    root) and compared with the pig coronaries' ratios fitted over 11 orders (length: orders 4-11). The order
+    rule is kassab1993's diameter-defined Strahler ('pair' rule, element diameters the plain mean of their
+    segments), written for svv's binary trees as schwarz_data's tree_strahler is for the human network. Order
+    numbers themselves are not compared, only ratios, which a shared Horton law fixes over any range.
+- id: q_validation_kassab_scope
+  kind: choice
+  about: [svv_tree, 'kassab1993/t4_D_ratio_e_rca', 'kassab1993/t4_L411_ratio_e_rca', 'kassab1993/t4_N_ratio_e_rca',
+          'kassab1993/t4_L13_ratio_e_lad', 'kassab1993/t4_N_ratio_s_lad']
+  text: >
+    What of kassab1993 is and is not tested against sexton2025 (pair pass, 2026-11-09). Neither paper cites
+    the other (sexton2025's morphometric reference for its coronary-like trees is ref. 41, infant coronary
+    diameters, p. 4). Entered: the element-based Horton ratios of diameter, length (orders 4-11) and number
+    for all three pig trees (RCA added in this pass beside the LAD and LCX). Not entered: (1) the
+    segment-based ratios of Table 4, because svv_tree fits its ratios over elements only and has no
+    segment-based output; (2) the length ratios of orders 1-3, because the synthetic tree's smallest vessels
+    (about 20 um) lie near the pig's order 4, so it has no vessels of the pig's orders 1-3; (3) the per-order
+    means of diameter, length and count (Tables 1-3 and the order models), because these are absolute sizes
+    and counts that the cube's size, the number of terminals and where the tree stops set, not the branching
+    law; (4) the Horton intercepts a, which are tied to the order numbering, and the order numbers differ
+    between a 7-order and an 11-order tree. In the other direction, no model of kassab1993 predicts a
+    measurement of sexton2025: kassab1993's models are Horton fits and order statistics of the pig casts,
+    while sexton2025's measurements are build and operation times, cell areas, viabilities and counts, and
+    PIV branch flows in a printed scaffold, none of which a morphometric fit of pig arteries gives. So
+    kassab1993 gets no validations.
+
+# ---- figure pass (2026-11-09)
+- id: q_fig2b_scaling
+  kind: unexplained_difference
+  about: [clock_recompute_fig2b, clock_naive_fig2b, balanced_tree_n2, cmp_fig2b_recompute]
+  citation: {page: 3, quote: "Plots reference bifurcation depth in full, balanced trees", where: "Fig. 2B caption"}
+  text: >
+    Fig. 2B's red lines are straight on its log-C against linear-B axes. Read from the figure, the dashed
+    'Recompute Entire Tree, C α N^2' line rises about 0.046 decades per bifurcation depth and the dotted 'Naive
+    Implementation, C α (N*E)^2' line about 0.067. A full, balanced tree of depth B (the caption's reference)
+    has N = 2^(B+1) - 1 vessels, so N^2 rises about 0.60 decades per depth: at B = 80 C α N^2 would exceed
+    the dashed line by about 40 decades (cmp_fig2b_recompute). The lines fit N growing by about 5% per depth,
+    not doubling. What N stands for in the plotted scalings (vessels on one path, a tree grown one vessel per
+    step, or another count) is not stated. The ratio of the two lines also grows with B, so if both use the
+    same N, the plotted E grows with depth too, which the panel does not say.
+- id: q_fig2f_axis_label
+  kind: possible_error
+  about: [t_mesh_eval_fig2f, t_implicit_eval_fig2f]
+  citation: {page: 3, quote: "Scaling complexity for mesh-based versus implicit evaluations", where: "Fig. 2F"}
+  text: >
+    Fig. 2F's log time axis labels its three decade ticks, from the top, "10^-5", "10^-4", "10^-5". The top
+    label cannot be right: the decade above 10^-4 is 10^-3. The readings use only the two lower labels.
+- id: q_fig5f_piv_sum
+  kind: unexplained_difference
+  about: [q_ratio_piv_fig5f, q_ratio_cfd_fig5f, q_ratio_cfd_mean_fig5f, cmp_fig5f_cfd_vs_piv]
+  citation: {page: 6, quote: "Normalized flow rates (q/qin) from PIV", where: "Fig. 5F"}
+  text: >
+    Read from Fig. 5F, the three CFD branch ratios (about 0.26, 0.40, 0.31) add to about 0.97 and their
+    average, the dashed line, is about 0.33: the three branches carry nearly all of the inlet flow in the CFD,
+    and the averaged line is then near 1/3 whatever the split. The three PIV means (about 0.33, 0.16, 0.20)
+    add to only about 0.70, so about 30% of the measured inlet flow is not found in the three branches. The
+    paper reports no significant difference between the branches ("n.s."), but does not say where the rest
+    of the flow went (measurement plane, profile assumption in converting PIV velocities to flows, or leaks).
+- id: q_fig_s10_units_axis
+  kind: reading
+  about: [dist_hist_biv_1e4_figs10, dist_hist_ann_1e4_figs10]
+  citation: {page: 58, quote: "Average tissue distance distributions to nearest vessel", where: "Fig. S10A-B x axes"}
+  text: >
+    Bears on q_fig_s10_units: Fig. S10's x axes are labelled "Distance to nearest vessel (cm)", so the
+    caption's unitless means (0.11, 0.047, 0.018; 0.10, 0.042, 0.019) are in cm, as the main text's ~180-190 um
+    at 10^6 terminals implies. The histograms read in this pass peak near 0.10-0.11 (1E4), 0.04-0.05 (1E5) and
+    0.015-0.02 cm (1E6), as those means lead one to expect; the means themselves are not recomputed (a mean
+    over a read histogram is not a run the record can make).
+- id: q_fig2hi_points
+  kind: reading
+  about: [t_obb_fit_fig2h, n_obb_fit_fig2i]
+  citation: {page: 3, quote: "Sphere proximity alone is cheap but less accurate", where: "Fig. 2H-I"}
+  text: >
+    Fig. 2H and 2I draw a red line through 51 points each but do not say what it is (a fit, and of which
+    form). Only the lines are read; the points with their +-2 SD bars overlap their neighbours at this
+    density and were not separable reliably (figures.md).
+- id: q_validation_olufsen1999
+  kind: choice
+  about: [olufsen_material_s26, svv_tree, bifurcation_network, q_ratio_piv_fig5f, olufsen1999/p_aortic_fig12a,
+          olufsen1999/p_0cm_fig12b, olufsen1999/p_radial_fig12b, olufsen1999/Zmod_md0_fig9b, olufsen1999/Zmod_md1_fig9b,
+          olufsen1999/Zphase_md0_fig9c, olufsen1999/Zphase_md1_fig9c, olufsen1999/co_measured, olufsen1999/inflow_fig4]
+  citation: {page: 22, printed_page: "S14", quote: "we default synthetic vascular networks to an Olufsen material model shown here", where: "Eq. S26"}
+  text: >
+    Validation job olufsen1999+sexton2025 (2026-11-09): no validation entered, in either direction. This
+    paper cites olufsen1999 (ref. 75) once, for the constitutive law of its 1D formulation (Eq. S26), and
+    compares nothing with its data. (1) Models here against olufsen1999's measurements (cardiac output and
+    the inflow curve of ref. 20; the input impedance of Fig. 9, md 0 and md 1; the pressures of Fig. 12,
+    ref. 41): olufsen_material_s26 gives pressure from lumen area, reference area and reference pressure,
+    none of which olufsen1999 measured with its pressures, and with k1-k3 it is olufsen1999's own Eq. 6
+    (whose fit to the Fig. 3 points is that record's work; those points are estimates, not measurements).
+    The 1D solver it closes is not a model of this record. svv_tree, bifurcation_network and the
+    reduced-resistance models give steady branching statistics and resistances of synthetic trees, not
+    impedance spectra, flows or pressure waves of the human brachiocephalic or systemic arteries. (2)
+    olufsen1999's models against the measurements here (build and operation times of the code, cell areas,
+    counts and viability, the radial viable-cell profiles, and the PIV branch flow fractions of Fig. 5F):
+    none of its models gives a quantity of these; its structured tree builds its own self-similar tree from a
+    root radius and gives an impedance, not the flow split of the printed three-branch network, whose
+    geometry it does not take as input.
+- id: q_validation_olufsen2000
+  kind: choice
+  about: [olufsen_material_s26, svv_tree, bifurcation_network, kinematic_viscosity, q_ratio_piv_fig5f,
+          olufsen2000/inflow_fig3, olufsen2000/q_aortic_arc_meas_fig7, olufsen2000/q_femoral_meas_fig7,
+          olufsen2000/p_systolic_cuff, olufsen2000/p_diastolic_cuff, olufsen2000/r_t_ascending_aorta,
+          olufsen2000/heart_rate_results, olufsen2000/T_fig3_caption, olufsen2000/network_1d]
+  citation: {none: "a finding of the validation job olufsen2000+sexton2025; the paper cites ref. 19 only on p. 1, with no comparison"}
+  text: >
+    Validation job olufsen2000+sexton2025 (2026-11-09): no validation entered, in either direction. This
+    paper cites olufsen2000 (ref. 19) once, on p. 1, among structured and morphometric trees that "provide
+    boundary conditions for 3D simulations (19, 20)", and compares nothing with its data. (1) Models here
+    against olufsen2000's measurements (the MR inflow of Fig. 3 and the MR flows of Fig. 7 at eight sites,
+    the cuff pressures 120/80 mmHg, the heart rate 51/min and period 1.1 s, the ascending-aortic radius of
+    Table 1): olufsen_material_s26 gives a pressure from lumen area, reference area and stiffness, and
+    olufsen2000 measures no area or wall data at the cuff site (the brachial artery); the 1D solver it
+    closes is not a model of this record. svv_tree, bifurcation_network and the reduced-resistance models
+    give steady branching statistics and resistances of synthetic trees, not pulsatile flows or pressures of
+    the human systemic arteries; kinematic_viscosity gives nu, which olufsen2000 does not measure (its
+    rho and mu are reported inputs). (2) olufsen2000's models against the measurements here (build and
+    operation times, cell areas, counts and viability, radial viable-cell profiles, and the PIV branch flow
+    fractions of Fig. 5F): network_1d is not runnable and models the human large arteries, not the printed
+    three-branch hydrogel network; the structured-tree ratios (area_ratio_eq21, asymmetry_eq21, scaling_eq22),
+    tube_law_eq14, circle_area, boundary_layer_lighthill, period_from_heart_rate and kinematic_viscosity give
+    no quantity measured here. The kinematic-viscosity models share a form (relations.yaml,
+    rel_kinematic_viscosity_olufsen2000), but neither record measures nu. The reverse direction is in
+    olufsen2000/q_no_validation_vs_sexton2025.
+- id: q_validation_schwarz_data
+  kind: choice
+  about: [svv_tree, olufsen_material_s26, murray_beta, bifurcation_network, q_ratio_piv_fig5f,
+          'schwarz_data/p_A_median_large', 'schwarz_data/p_S_median_large', 'schwarz_data/p_T1_all',
+          'schwarz_data/p_T1_dmed_all', 'schwarz_data/p_T1_lmed_all', 'schwarz_data/p_T1_dens_total_epi',
+          'schwarz_data/p_pct_bifurcations', 'schwarz_data/network_solution']
+  citation: {none: "a finding of the validation job schwarz_data+sexton2025, not a printed statement; the paper does not cite schwarz2020"}
+  text: >
+    Validation job schwarz_data+sexton2025 (2026-11-09): no validation entered, in either direction. The paper
+    does not cite Schwarz et al.; its morphometric reference for coronary-like trees is ref. 41, infant coronary
+    diameters (p. 4). (1) Models here against schwarz_data's measurements. The only ones a model here predicts
+    are the median area growth 1.02 (mothers over 400 um) and daughter symmetry 0.59 (mothers over 500 um),
+    which svv_tree outputs (A_median_large, S_median_large). schwarz_data holds them as copies of schwarz2020's
+    printed values (p_A_median_large, p_S_median_large, from_datum A_median_large and S_median_large), and
+    svv_tree is already validated against those same printed measurements, at gamma 3 and 2
+    (val_A_large_schwarz, val_S_large_schwarz, *_g2; q_validation_schwarz). A second entry against the copies
+    would count one test twice, as olufsen2012's job decided for the same datum (olufsen2012/q_val_schwarz_data_scope).
+    Not entered: the Table 1 counts, diameter deciles and median lengths (overall, by terminal status and by
+    layer), the terminal densities, the perfused volumes and the loop count: they are absolute sizes and counts
+    set by the domain, the number of terminals (4000 in a 1-cm3 cube, about 4000 per cm3, against about 280 per
+    cm3 in the heart) and where the tree stops, not by the growth rule, and svv_tree has no output for a median
+    diameter, a median length or a density. The node-type shares (91% bifurcations, 8% trifurcations): svv grows
+    binary trees by construction, so all-bifurcations is an input, not a prediction, and no output gives it. The
+    diameter range "1.2 mm to 5 um" at 10^6 outlets (p. 4) is a result of this paper, not a measurement, and an
+    organ-scale run is beyond a modest run (q_organ_scale). murray_beta gives radius ratios at a set symmetry and
+    exponent, not an area growth (no output gives beta_i^2 + beta_j^2); olufsen_material_s26 gives pressure from
+    lumen area and wall stiffness, which the cast does not measure; schwarz_data's pressures and flows are the
+    release's own solution, not measurements. (2) schwarz_data's models against the measurements here (build and
+    operation times, cell areas, counts and viability, radial viable-cell profiles, and the PIV branch flow
+    fraction of Fig. 5F): network_solution and the tree statistics are tied to the released human network file and
+    take no other geometry, so none gives the flow split of the printed three-branch scaffold or any time or cell
+    count. network_solution and olufsen_material_s26 share only the shape "pressure from a length and a pressure":
+    one is a Poiseuille-Kirchhoff solve, the other a wall law, and neither predicts a measurement of the other
+    record. The reverse direction is in schwarz_data/q_no_validation_vs_sexton2025.
+- id: q_validation_svv_code
+  kind: choice
+  about: [svv_tree, bifurcation_network, reduced_resistance_s10, reduced_resistance_s10_beta4, svv_defaults,
+          'svv_code/resistance_update', 'svv_code/tree_growth']
+  citation: {none: "a finding of the validation job sexton2025+svv_code, not a printed statement"}
+  text: >
+    Validation job sexton2025+svv_code (2026-11-09): no validation entered, in either direction. svv_code
+    records released code and has no measured data (no datum of origin measured, no figure readings), so no
+    model here can be validated against it. Its values are code constants and outputs of its own runs
+    (predictions), which the existing relations and comparisons already set against this paper's equations
+    (e.g. bifurcation_network against svv_code/resistance_update, same shape, both computing a reduced
+    resistance). In the other direction, svv_code's models against this paper's build times, PIV flow
+    fractions and cell measurements are considered and not entered for the reasons in
+    svv_code/q_no_validation_vs_sexton2025 (timings measured on the paper's stated hardware, p. 36; no model
+    gives a flow split or cell survival).

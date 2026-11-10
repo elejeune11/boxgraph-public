@@ -1,0 +1,227 @@
+# Synthetic trees grown with the released svVascularize against the measured coronary trees in the corpus.
+# The tree is svv_tree on the paper's constants (Table S1: gamma = 3, cost exponents 2 and 1, mu = 4 cP;
+# Table S3: rho = 1.06), 4000 terminals in a 1-cm cube, five seeds; the value is the mean over seeds with
+# its spread. How it differs from the measured trees, and why the comparison still means something, is in
+# each basis and in q_validation_schwarz and q_validation_kassab. Nothing of the synthetic tree was fitted
+# to these measurements.
+
+# ---- against schwarz2020, the human left coronary tree (area growth and daughter symmetry of large vessels)
+- id: val_A_large_schwarz
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: A_median_large
+  against: 'schwarz2020/A_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth}
+  conditions_ok: >
+    a synthetic 1-cm cube tree of 4000 terminals against one human left coronary tree of about 10^5 terminal
+    segments; both are the median of (dL^2 + dS^2)/dM^2 over bifurcations whose mother is wider than 400 um
+  basis: >
+    schwarz2020 measured that "for segments larger than 400 um, on average the cross-sectional area remained
+    stable (median area growth: 1.02)" (p. 5) and read it as a branching exponent close to 2 rather than
+    Murray's 3 (p. 11). sexton2025 grows its trees with a power-law radius rule of exponent 3 (Eq. S5,
+    Table S1) and says physiological exponents lie between 2 and 3 (p. 11). Area growth is dimensionless and
+    is set at each bifurcation by the radius rule and the daughters' asymmetry, not by the size of the organ,
+    so it tests whether the generated trees branch like the measured coronaries. The differences: domain
+    (a 1-cm cube against a whole left ventricle of about 358 cm3), terminals (4000 against about 100961),
+    smallest vessel (svv's terminals reach about 20 um; the cast stops near 30 um) and the threshold in
+    absolute diameter, which the synthetic tree's root (about 0.7 mm) passes only in its first generations
+    (the number of bifurcations used is svv_tree's n_bif_A_large). The radii are those svv stores and exports;
+    the output A_median_large_beta gives the same median with radii propagated by svv's own ratios (q_svv_radii).
+- id: val_S_large_schwarz
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: S_median_large
+  against: 'schwarz2020/S_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': daughter_symmetry}
+  conditions_ok: >
+    as val_A_large_schwarz, for the median of dS/dL over bifurcations whose mother is wider than 500 um
+  basis: >
+    schwarz2020: "for large mother diameters (>500 um) the median observed symmetry ratio was 0.59" (p. 9).
+    In a constrained constructive optimization tree the daughter symmetry follows from where new terminals
+    attach and from the flows the daughters carry; it is dimensionless, so a tree that branches like the
+    coronaries should give a similar median. The same differences as val_A_large_schwarz apply; above 500 um
+    only the first few generations of the synthetic tree count (n_bif_S_large).
+- id: val_A_large_schwarz_g2
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_range_lo, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 201}
+  replicates: 5
+  output: A_median_large
+  against: 'schwarz2020/A_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth}
+  conditions_ok: as val_A_large_schwarz, with the tree grown with gamma = 2
+  basis: >
+    As val_A_large_schwarz, with gamma = 2, the lower end of the range sexton2025 calls physiological (p. 11)
+    and the exponent schwarz2020 reads from its large vessels. The exponent was not chosen to match: it is the
+    paper's own stated bound, and gamma = 2 makes the area of a symmetric bifurcation exactly conserved.
+- id: val_S_large_schwarz_g2
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_range_lo, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 201}
+  replicates: 5
+  output: S_median_large
+  against: 'schwarz2020/S_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': daughter_symmetry}
+  conditions_ok: as val_S_large_schwarz, with the tree grown with gamma = 2
+  basis: As val_S_large_schwarz, with gamma = 2 (p. 11's lower bound).
+
+# ---- against kassab1993, the pig coronary arteries (Horton ratios of diameter-defined Strahler orders)
+- id: val_kassab_D_lad
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_D
+  against: 'kassab1993/t4_D_ratio_e_lad'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_diameter': horton_ratio_diameter}
+  conditions_ok: >
+    a synthetic tree of about 7 orders (about 20 um to 0.7 mm) against the pig LAD's 11 orders (about 9 um
+    to the main stem); a Horton ratio is meant to hold over the whole tree, which kassab1993's straight-line
+    fits with R2 near 0.99 assert, so ratios fitted over different ranges may be set side by side
+  basis: >
+    kassab1993 orders the pig coronary arteries by its diameter-defined Strahler rule (Eq. 1) and fits log10
+    of the mean element diameter against order (Eq. 2), giving D_n/D_(n-1) = 1.84 for the LAD by elements
+    (Table 4). svv_tree orders the synthetic tree by the same rule (as schwarz_data's tree_strahler does for
+    the human tree) and fits the same law. The ratio is dimensionless and fixed by the branching rule and
+    the tree's topology, so a synthetic tree that branches like the coronaries should give a ratio near the
+    pig's. The trees differ in species (pig against a synthetic tree with no species), in domain (the pig
+    heart against a 1-cm cube) and in range of orders; nothing was fitted to the pig data.
+- id: val_kassab_D_lcx
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_D
+  against: 'kassab1993/t4_D_ratio_e_lcx'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_diameter': horton_ratio_diameter}
+  conditions_ok: as val_kassab_D_lad, against the pig LCX
+  basis: As val_kassab_D_lad, against the pig LCX's element diameter ratio (1.89, Table 4).
+- id: val_kassab_L_lad
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_L
+  against: 'kassab1993/t4_L411_ratio_e_lad'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_length': horton_ratio_length}
+  conditions_ok: >
+    the pig LAD's orders 4-11 (kassab1993 fits length in two pieces) against all orders of the synthetic
+    tree, whose smallest vessels (about 20 um) lie near the pig's order 4
+  basis: >
+    kassab1993 fits log10 of the mean element length against order (Eq. 4) and prints 2.02 for the pig LAD's
+    orders 4-11 by elements (Table 4). svv_tree fits the same law to the synthetic tree's element lengths.
+    Element lengths in a constrained constructive optimization tree scale with the spacing of terminals,
+    which the cube and the number of terminals set; the ratio between orders is still dimensionless and is
+    what a shared Horton length law would fix.
+- id: val_kassab_L_lcx
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_L
+  against: 'kassab1993/t4_L411_ratio_e_lcx'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_length': horton_ratio_length}
+  conditions_ok: as val_kassab_L_lad, against the pig LCX
+  basis: As val_kassab_L_lad, against the pig LCX's element length ratio for orders 4-11 (2.20, Table 4).
+- id: val_kassab_N_lad
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_N
+  against: 'kassab1993/t4_N_ratio_e_lad'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_number': horton_ratio_number}
+  conditions_ok: as val_kassab_D_lad
+  basis: >
+    kassab1993 fits log10 of the number of elements against order (Eq. 5) and prints N_(n-1)/N_n = 3.51 for
+    the pig LAD by elements (Table 4). svv_tree counts the synthetic tree's elements per order and fits the
+    same law. The number ratio is the branching rate between orders, dimensionless and independent of the
+    tree's size.
+- id: val_kassab_N_lcx
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_N
+  against: 'kassab1993/t4_N_ratio_e_lcx'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_number': horton_ratio_number}
+  conditions_ok: as val_kassab_D_lad, against the pig LCX
+  basis: As val_kassab_N_lad, against the pig LCX's element number ratio (3.57, Table 4).
+
+# ---- the pig RCA, the third tree of kassab1993 Table 4 (same synthetic runs as the LAD and LCX entries)
+- id: val_kassab_D_rca
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_D
+  against: 'kassab1993/t4_D_ratio_e_rca'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_diameter': horton_ratio_diameter}
+  conditions_ok: as val_kassab_D_lad, against the pig RCA
+  basis: >
+    As val_kassab_D_lad, against the pig RCA's element diameter ratio (1.81, Table 4). The RCA, LAD and LCX
+    are three measured trees of the same hearts; none is a better match for a synthetic cube tree than the
+    others, so all three are entered.
+- id: val_kassab_L_rca
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_L
+  against: 'kassab1993/t4_L411_ratio_e_rca'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_length': horton_ratio_length}
+  conditions_ok: as val_kassab_L_lad, against the pig RCA
+  basis: As val_kassab_L_lad, against the pig RCA's element length ratio for orders 4-11 (2.12, Table 4).
+- id: val_kassab_N_rca
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  output: ratio_N
+  against: 'kassab1993/t4_N_ratio_e_rca'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_number': horton_ratio_number}
+  conditions_ok: as val_kassab_D_lad, against the pig RCA
+  basis: As val_kassab_N_lad, against the pig RCA's element number ratio (3.50, Table 4).

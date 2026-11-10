@@ -1,0 +1,37 @@
+id: topology_workbook
+name: Table 1 counts and branching numbers recomputed from Topology data.xlsx (element diameters and lengths, flow-based mother and daughter diameters)
+role: processing
+software: true
+built_from: [stochastic_table2, tree_table1]
+stated: {file: explanation_of_data.txt, lines: "231", quote: "This shows pairs of diameters and length for all the entrances in Internal Elements and Source Elements."}
+equation: >
+  counts and percentiles of the diameter-length rows; per class the number of elements; nodes with one
+  mother and two daughters: S = dS/dL, A = (dL^2 + dS^2)/dM^2, medians above d_S_large and d_A_large,
+  least squares A = c_d dM + c_S S + c_0 on d_fit_lo <= dM <= d_fit_hi (dM in m)
+inputs:
+  d: {quantity: vessel_diameter, unit: um, description: lower bound of the diameter class}
+  d_S_large: {quantity: vessel_diameter, unit: um}
+  d_A_large: {quantity: vessel_diameter, unit: um}
+  d_fit_lo: {quantity: vessel_diameter, unit: um}
+  d_fit_hi: {quantity: vessel_diameter, unit: um}
+outputs:
+  n_rows: {quantity: segment_count, unit: dimensionless, description: element rows of 'diameter-length'}
+  n_internal: {quantity: segment_count, unit: dimensionless, description: "rows numbered below 1000000"}
+  n_source: {quantity: segment_count, unit: dimensionless, description: "rows numbered 1000000 and above"}
+  n_class: {quantity: segment_count, unit: dimensionless}
+  d_med: {quantity: median_segment_diameter, unit: um}
+  d_p10: {quantity: diameter_decile_low, unit: um}
+  d_p90: {quantity: diameter_decile_high, unit: um}
+  l_med: {quantity: median_segment_length, unit: um}
+  n_node_rows: {quantity: node_count, unit: dimensionless, description: rows of 'mother-daughter diams'}
+  n_nodes: {quantity: node_count, unit: dimensionless, description: nodes with one mother and two daughters}
+  S_median_large: {quantity: daughter_symmetry, unit: dimensionless}
+  A_median_large: {quantity: area_growth, unit: dimensionless}
+  c_d: {quantity: area_growth_fit_coefficient_d, unit: dimensionless, description: "coefficient of dM, dM in m"}
+  c_S: {quantity: area_growth_fit_coefficient_S, unit: dimensionless}
+  c_0: {quantity: area_growth_fit_intercept, unit: dimensionless}
+  fit_r2: {quantity: area_growth_fit_r2, unit: dimensionless}
+settings:
+  file: "Topology data.xlsx"
+  class_edges_um: [30, 45, 60, 75, 90, 105, 120, 150, 200, 400]
+stochastic: false

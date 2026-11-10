@@ -1,0 +1,366 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units.
+# The code's headers state which paper each block follows; those statements are the stated relations
+# below (citation: file and line). a is the paper's equation (restated in this record from the paper,
+# or the paper's own record's model), b is the released block run by the released solver, or the
+# code ported.
+
+# --- open-loop coronary block (OpenLoopCoronaryBC) against kim2010's coronary bed equation
+- id: rel_coronary_kim2010_qmin
+  kind: same_as
+  a: svzerod_code/coronary_kim2010_ode
+  b: svzerod_code/coronary_released
+  mapping: {P_mean: P_mean, P_amp: P_amp, Pim_mean: Pim_mean, Pim_amp: Pim_amp, Ra: Ra, Ram: Ram, Rv: Rv, Ca: Ca, Cim: Cim, Pv: "0", T: T}
+  output_map: {Q_min: Q_min}
+  regime:
+    P_mean: [60, 120]
+    P_amp: [5, 40]
+    Pim_mean: [0, 100]
+    Pim_amp: [10, 100]
+    Ra: [30, 270]
+    Ram: [10, 300]
+    Rv: [5, 140]
+    Ca: [0.2, 1.1]
+    Cim: [2, 10]
+    T: [0.6, 1.2]
+  tolerance: 0.001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+  assumptions:
+    - "kim2010's Rv + Rv-micro is the code's single Rv1 (the code lumps the two venous resistances, which enter kim2010's coefficients only as their sum)."
+    - "kim2010's equation has no venous pressure; the code's P_v is set to 0, the case in which the two can agree (q_venous_pressure_term)."
+    - "The output compared is the smallest inflow over a cycle under a sinusoidal inlet pressure and a sinusoidal intramyocardial pressure a quarter period apart: the part of the response that depends on Ca, Cim and dPim/dt. The 0.1% tolerance is ours; it covers the solver's time discretization (501 points per cycle)."
+# --- ModelAtlas job kim2010 + svzerod_code (2026-11-09). The same block against kim2010's own record (its charts,
+# not this record's restatement): kim2010's two steady models, the split of the total coronary flow over the eleven
+# outlets (coronary_flow_split) and the flow through the stenosed LAD into outlets c and d (stenosed_lad_flow), each
+# against the released solver run on the same network (coronary_split_released, coronary_pair_released). The code's
+# header cites kim2010 for the block; kim2010 (2010) predates the code and names no solver. In the steady state
+# the capacitances carry no current and a constant Pim does no work, so their values cannot change the flows; they
+# are set to fixed values of the size of kim2010's Table 3 (Ca 0.5, Cim 4 x 10^-6 cm^5/dyn) and Pim to 0.
+# kim2010's other models (cardiac output, contractility and pressure increases, flow fractions and sums) are
+# arithmetic on printed values with no block in the code; no relation is proposed for them.
+- id: rel_kim_split_lad
+  kind: same_as
+  a: kim2010/coronary_flow_split
+  b: svzerod_code/coronary_split_released
+  mapping: {Q_total: Q_total, Pv: "0", Pim: "0",
+            Ra_a: Ra_a, Ram_a: Ram_a, Rv_a: Rv_a, Ca_a: "0.5", Cim_a: "4",
+            Ra_b: Ra_b, Ram_b: Ram_b, Rv_b: Rv_b, Ca_b: "0.5", Cim_b: "4",
+            Ra_c: Ra_c, Ram_c: Ram_c, Rv_c: Rv_c, Ca_c: "0.5", Cim_c: "4",
+            Ra_d: Ra_d, Ram_d: Ram_d, Rv_d: Rv_d, Ca_d: "0.5", Cim_d: "4",
+            Ra_e: Ra_e, Ram_e: Ram_e, Rv_e: Rv_e, Ca_e: "0.5", Cim_e: "4",
+            Ra_f: Ra_f, Ram_f: Ram_f, Rv_f: Rv_f, Ca_f: "0.5", Cim_f: "4",
+            Ra_g: Ra_g, Ram_g: Ram_g, Rv_g: Rv_g, Ca_g: "0.5", Cim_g: "4",
+            Ra_h: Ra_h, Ram_h: Ram_h, Rv_h: Rv_h, Ca_h: "0.5", Cim_h: "4",
+            Ra_i: Ra_i, Ram_i: Ram_i, Rv_i: Rv_i, Ca_i: "0.5", Cim_i: "4",
+            Ra_j: Ra_j, Ram_j: Ram_j, Rv_j: Rv_j, Ca_j: "0.5", Cim_j: "4",
+            Ra_k: Ra_k, Ram_k: Ram_k, Rv_k: Rv_k, Ca_k: "0.5", Cim_k: "4"}
+  output_map: {Q_LAD: Q_LAD}
+  regime: &kim_split_regime
+    Q_total: [1, 20]
+    Ra_a: [30, 1000]
+    Ra_b: [30, 1000]
+    Ra_c: [30, 1000]
+    Ra_d: [30, 1000]
+    Ra_e: [30, 1000]
+    Ra_f: [30, 1000]
+    Ra_g: [30, 1000]
+    Ra_h: [30, 1000]
+    Ra_i: [30, 1000]
+    Ra_j: [30, 1000]
+    Ra_k: [30, 1000]
+    Ram_a: [10, 1000]
+    Ram_b: [10, 1000]
+    Ram_c: [10, 1000]
+    Ram_d: [10, 1000]
+    Ram_e: [10, 1000]
+    Ram_f: [10, 1000]
+    Ram_g: [10, 1000]
+    Ram_h: [10, 1000]
+    Ram_i: [10, 1000]
+    Ram_j: [10, 1000]
+    Ram_k: [10, 1000]
+    Rv_a: [5, 500]
+    Rv_b: [5, 500]
+    Rv_c: [5, 500]
+    Rv_d: [5, 500]
+    Rv_e: [5, 500]
+    Rv_f: [5, 500]
+    Rv_g: [5, 500]
+    Rv_h: [5, 500]
+    Rv_i: [5, 500]
+    Rv_j: [5, 500]
+    Rv_k: [5, 500]
+  tolerance: 0.001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+  assumptions:
+    - "kim2010's Rv + Rv-micro is the code's single Rv1 (both records' Rv ports measure the sum)."
+    - "kim2010's equation has no venous pressure and its split assumes the same mean outlet pressure at every outlet; the network feeds all eleven blocks from one junction through zero resistances, with P_v = 0 and constant Pim = 0 (a constant P_v common to all outlets would not change the split either)."
+    - "The capacitances are not inputs of kim2010's steady split; they are fixed at Table-3-sized values. The 0.1% tolerance is ours."
+- id: rel_kim_split_lcx
+  kind: same_as
+  a: kim2010/coronary_flow_split
+  b: svzerod_code/coronary_split_released
+  mapping: {Q_total: Q_total, Pv: "0", Pim: "0",
+            Ra_a: Ra_a, Ram_a: Ram_a, Rv_a: Rv_a, Ca_a: "0.5", Cim_a: "4",
+            Ra_b: Ra_b, Ram_b: Ram_b, Rv_b: Rv_b, Ca_b: "0.5", Cim_b: "4",
+            Ra_c: Ra_c, Ram_c: Ram_c, Rv_c: Rv_c, Ca_c: "0.5", Cim_c: "4",
+            Ra_d: Ra_d, Ram_d: Ram_d, Rv_d: Rv_d, Ca_d: "0.5", Cim_d: "4",
+            Ra_e: Ra_e, Ram_e: Ram_e, Rv_e: Rv_e, Ca_e: "0.5", Cim_e: "4",
+            Ra_f: Ra_f, Ram_f: Ram_f, Rv_f: Rv_f, Ca_f: "0.5", Cim_f: "4",
+            Ra_g: Ra_g, Ram_g: Ram_g, Rv_g: Rv_g, Ca_g: "0.5", Cim_g: "4",
+            Ra_h: Ra_h, Ram_h: Ram_h, Rv_h: Rv_h, Ca_h: "0.5", Cim_h: "4",
+            Ra_i: Ra_i, Ram_i: Ram_i, Rv_i: Rv_i, Ca_i: "0.5", Cim_i: "4",
+            Ra_j: Ra_j, Ram_j: Ram_j, Rv_j: Rv_j, Ca_j: "0.5", Cim_j: "4",
+            Ra_k: Ra_k, Ram_k: Ram_k, Rv_k: Rv_k, Ca_k: "0.5", Cim_k: "4"}
+  output_map: {Q_LCX: Q_LCX}
+  regime: *kim_split_regime
+  tolerance: 0.001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+  assumptions:
+    - "As rel_kim_split_lad, for the flow summed over outlets e-h."
+- id: rel_kim_split_rca
+  kind: same_as
+  a: kim2010/coronary_flow_split
+  b: svzerod_code/coronary_split_released
+  mapping: {Q_total: Q_total, Pv: "0", Pim: "0",
+            Ra_a: Ra_a, Ram_a: Ram_a, Rv_a: Rv_a, Ca_a: "0.5", Cim_a: "4",
+            Ra_b: Ra_b, Ram_b: Ram_b, Rv_b: Rv_b, Ca_b: "0.5", Cim_b: "4",
+            Ra_c: Ra_c, Ram_c: Ram_c, Rv_c: Rv_c, Ca_c: "0.5", Cim_c: "4",
+            Ra_d: Ra_d, Ram_d: Ram_d, Rv_d: Rv_d, Ca_d: "0.5", Cim_d: "4",
+            Ra_e: Ra_e, Ram_e: Ram_e, Rv_e: Rv_e, Ca_e: "0.5", Cim_e: "4",
+            Ra_f: Ra_f, Ram_f: Ram_f, Rv_f: Rv_f, Ca_f: "0.5", Cim_f: "4",
+            Ra_g: Ra_g, Ram_g: Ram_g, Rv_g: Rv_g, Ca_g: "0.5", Cim_g: "4",
+            Ra_h: Ra_h, Ram_h: Ram_h, Rv_h: Rv_h, Ca_h: "0.5", Cim_h: "4",
+            Ra_i: Ra_i, Ram_i: Ram_i, Rv_i: Rv_i, Ca_i: "0.5", Cim_i: "4",
+            Ra_j: Ra_j, Ram_j: Ram_j, Rv_j: Rv_j, Ca_j: "0.5", Cim_j: "4",
+            Ra_k: Ra_k, Ram_k: Ram_k, Rv_k: Rv_k, Ca_k: "0.5", Cim_k: "4"}
+  output_map: {Q_RCA: Q_RCA}
+  regime: *kim_split_regime
+  tolerance: 0.001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+  assumptions:
+    - "As rel_kim_split_lad, for the flow summed over outlets i-k."
+- id: rel_kim_stenosed_lad
+  kind: same_as
+  a: kim2010/stenosed_lad_flow
+  b: svzerod_code/coronary_pair_released
+  mapping: {P: P, Pv: Pv, Pim: "0",
+            Ra_c: Ra_c, Ram_c: Ram_c, Rv_c: Rv_c, Ca_c: "0.5", Cim_c: "4",
+            Ra_d: Ra_d, Ram_d: Ram_d, Rv_d: Rv_d, Ca_d: "0.5", Cim_d: "4"}
+  regime:
+    P: [40, 110]
+    Pv: [0, 10]
+    Ra_c: [30, 1000]
+    Ram_c: [10, 1000]
+    Rv_c: [5, 500]
+    Ra_d: [30, 1000]
+    Ram_d: [10, 1000]
+    Rv_d: [5, 500]
+  tolerance: 0.001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+  assumptions:
+    - "kim2010's Rv + Rv-micro is the code's single Rv1; kim2010's P_v (which it says it assigned to set Rv) is the code's P_v, both in mmHg."
+    - "Steady state: the capacitances (fixed at Table-3-sized values) and a constant Pim = 0 do not enter the flow. The 0.1% tolerance is ours."
+# --- time-varying coronary block (OpenLoopCoronaryVarResBC) against yong2025's Eq. 9
+- id: rel_ram_yong_port
+  kind: same_as
+  a: svzerod_code/ram_yong_eq9
+  b: svzerod_code/ram_code_port
+  mapping: {Ram_min: Ram_min, Ram_max: Ram_max, T_vc: T_vc, T_vr: T_vr, T: T}
+  output_map: {Ram_mean: Ram_mean}
+  regime:
+    Ram_min: [20, 80]
+    Ram_max: [90, 300]
+    T_vc: [0.2, 0.4]
+    T_vr: [0.1, 0.3]
+    T: [0.8, 1.2]
+  tolerance: 0.000001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "16", quote: "resistance based on \\cite yong25."}
+  assumptions:
+    - "yong2025's Rmicro,min and Rmicro,max are the code's Ra2_min and Ra2_max, and its e_v(t) (Eq. 4, the ventricular activation) the code's e(t) with T_vc, T_vr."
+    - "The output compared is the time average over a cycle, which yong2025 sets equal to its mean resistance through k."
+- id: rel_ram_yong_released
+  kind: same_as
+  a: svzerod_code/ram_yong_eq9
+  b: svzerod_code/varres_released
+  mapping: {Ram_min: Ram_min, Ram_max: Ram_max, T_vc: T_vc, T_vr: T_vr, T: T, Ra: "1", Rv: "10"}
+  output_map: {Ram_mean: Ram_mean}
+  regime:
+    Ram_min: [20, 80]
+    Ram_max: [90, 300]
+    T_vc: [0.2, 0.4]
+    T_vr: [0.1, 0.3]
+    T: [0.8, 1.2]
+  tolerance: 0.001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "16", quote: "resistance based on \\cite yong25."}
+  assumptions:
+    - "As rel_ram_yong_port, with the resistance read back from the released solver's inlet pressure under a constant flow (Ra = 1 and Rv = 10 mmHg s/mL in series are subtracted). The 0.1% tolerance is ours: it covers the time discretization and the small probe capacitances."
+# --- impedance block (ImpedanceBC) against olufsen2000's Eq. 38 discretized as its Appendix B says
+- id: rel_impedance_olufsen_pmax
+  kind: approximated_by
+  a: svzerod_code/impedance_olufsen_eq38
+  b: svzerod_code/impedance_released
+  mapping: {Q0: Q0, Q1: Q1, Z: Z, tau: tau, T: T}
+  output_map: {P_max: P_max}
+  regime:
+    Q0: [1, 5]
+    Q1: [0.2, 1.5]
+    Z: [500, 20000]
+    tau: [0.05, 0.5]
+    T: [0.5, 1.2]
+  tolerance: 0.005
+  provenance: stated
+  citation: {file: src/model/ImpedanceBC.h, lines: "18-21", quote: "following the structured-tree outflow condition of \\cite olufsen2000."}
+  assumptions:
+    - "The code's kernel z_m is olufsen2000's z(t_m) times dt (the code's comment, ImpedanceBC.cpp lines 35-36); both use N = 128 steps per period."
+    - "The block is compared in its periodic state (after its first cycle, in which the code omits the history terms: q_impedance_startup)."
+    - "approximated_by, not same_as: the solver's generalized-alpha step blends the convolution sum of two successive steps, so the block's pressure differs from the discrete sum by a term that falls with the step (q_impedance_alpha); the 0.5% tolerance is ours."
+# --- Windkessel block (WindkesselBC) against westerhof1971's three-element model
+- id: rel_windkessel_westerhof_modulus
+  kind: same_as
+  a: westerhof1971/impedance_3el
+  b: svzerod_code/windkessel_released_impedance
+  mapping: {Rc: Rc, Rp: Rp, C: C, f: f}
+  output_map: {modulus: modulus}
+  regime:
+    Rc: [50, 250]
+    Rp: [800, 5000]
+    C: [100, 1000]
+    f: [0.5, 10]
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    The code's RCR block (WindkesselBC.h: Rp in series with C parallel to Rd) is the circuit of
+    westerhof1971's three-element model (Fig. 1A: Rc in series with Rp parallel to C), so its input
+    impedance under a sinusoidal flow should be westerhof1971's. The code cites Vignon & Taylor 2004
+    (docs/references.bib vignon04), which is not in this review.
+  assumptions:
+    - "The code's proximal Rp is westerhof1971's Rc and the code's distal Rd its Rp; Pd = 0."
+    - "The 0.1% tolerance is ours; it covers the solver's time discretization (401 points per period)."
+- id: rel_windkessel_westerhof_phase
+  kind: same_as
+  a: westerhof1971/impedance_3el
+  b: svzerod_code/windkessel_released_impedance
+  mapping: {Rc: Rc, Rp: Rp, C: C, f: f}
+  output_map: {phase: phase}
+  regime:
+    Rc: [50, 250]
+    Rp: [800, 5000]
+    C: [100, 1000]
+    f: [0.5, 10]
+  tolerance: 0.001
+  provenance: proposed
+  reason: As rel_windkessel_westerhof_modulus, for the phase of the input impedance.
+  assumptions:
+    - "As rel_windkessel_westerhof_modulus."
+# --- Windkessel block (WindkesselBC) against stergiopulos1999's three-element windkessel (Fig. 1, top left).
+# Unit factors: 1 mmHg*s/ml = 1333.22387415 g/cm^4/s; 1 ml/mmHg = 1e6/1333.22387415 cm^4*s^2/Mg.
+# Outputs convert automatically. The regime covers the paper's dog and human values (Tables 1-3).
+# The code has no block with an inertance parallel to the proximal resistance, so stergiopulos1999's
+# four-element windkessel (zin_4wk) has no counterpart in the release and no relation here.
+- id: rel_windkessel_stergiopulos_wk3_modulus
+  kind: same_as
+  a: stergiopulos1999/zin_3wk
+  b: svzerod_code/windkessel_released_impedance
+  mapping: {Rc: "1333.22387415*Rc", Rp: "1333.22387415*Rp", C: "1000000*C/1333.22387415", f: "f"}
+  output_map: {modulus: mod}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    The code's RCR block (WindkesselBC.h: proximal Rp in series with C parallel to Rd) is the circuit of
+    stergiopulos1999's three-element windkessel (Fig. 1, top left: Rc in series with Rp parallel to C), so
+    its input impedance under a sinusoidal flow should be the paper's Rc + Rp/(1 + j omega Rp C). Neither
+    source cites the other (the code cites Vignon & Taylor 2004; the paper predates the code).
+  assumptions:
+    - "The code's proximal Rp is stergiopulos1999's Rc (characteristic impedance) and the code's distal Rd its Rp (peripheral resistance); Pd = 0. The relation joins the circuits; it does not say the paper's fitted Zc of a dog is the parameter any svZeroDSolver user enters."
+    - "The 0.1% tolerance is ours; it covers the solver's time discretization (401 points per period)."
+- id: rel_windkessel_stergiopulos_wk3_phase
+  kind: same_as
+  a: stergiopulos1999/zin_3wk
+  b: svzerod_code/windkessel_released_impedance
+  mapping: {Rc: "1333.22387415*Rc", Rp: "1333.22387415*Rp", C: "1000000*C/1333.22387415", f: "f"}
+  output_map: {phase: phase}
+  regime: {Rp: [0.5, 6], Rc: [0.03, 0.6], C: [0.1, 3], f: [0.1, 20]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: As rel_windkessel_stergiopulos_wk3_modulus, for the phase of the input impedance.
+  assumptions:
+    - "As rel_windkessel_stergiopulos_wk3_modulus."
+# --- ModelAtlas job svzerod_code + yong2025 (2026-11-09). The time-varying coronary block's header cites yong2025
+# (OpenLoopCoronaryVarResBC.h line 16); yong2025 itself never mentions svZeroDSolver. The relations above join the
+# block to this record's own restatement of yong2025 Eq. 9 (ram_yong_eq9); the three below join it to yong2025's
+# own chart, rmicro_eq10 (Eqs. 9-11 with Rmicro,min = frac Rbar and sqrt(Rmicro,max) = kPH sqrt(k Rbar) as
+# printed in Eq. 11). The code takes the minimum and maximum directly, so the mapping is yong2025's Eqs. 10-11
+# themselves. Regime: Tvc + Tvr <= T throughout (both models assume the activation ends within the cycle).
+# Not related: yong2025/coronary_block_svzerod already runs this release's CORONARY_VAR_RES block, driven by
+# yong2025's closed loop (~55 inputs); it shares only port dimensions with coronary_kim2010_ode, and no mapping
+# writes its closed-loop inputs from a sinusoidal inlet and Pim, so no relation is proposed. yong2025's
+# elastance_waveform has no counterpart model here (the chamber block is checked only through test cases).
+- id: rel_yong_rmicro_code_port_mean
+  kind: same_as
+  a: yong2025/rmicro_eq10
+  b: svzerod_code/ram_code_port
+  mapping: {Ram_min: "frac/100*Rbar", Ram_max: "k_ph**2*k*Rbar", T_vc: "Tvc", T_vr: "Tvr", T: "T"}
+  output_map: {Ram_mean: R_mean}
+  regime: {Rbar: [30, 120], frac: [60, 90], k: [1.2, 3.0], k_ph: [1.0, 1.5], Tvc: [0.2, 0.4], Tvr: [0.1, 0.3], T: [0.8, 1.2]}
+  tolerance: 0.000001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "16", quote: "resistance based on \\cite yong25."}
+  assumptions:
+    - "yong2025's Rmicro,min (frac Rbar, Eqs. 10-11) and Rmicro,max (kPH^2 k Rbar, Eq. 11 as printed) are the code's Ra2_min and Ra2_max; e_n(t) = e_v(t) of Eq. 4 is the code's e(t) with T_vc, T_vr. The relation joins the formulas: the code does not take Rbar, frac or k, and how a user chooses Ra2_min and Ra2_max is not in the code (q_varres_vs_yong)."
+    - "The output compared is the cycle average, which yong2025 sets equal to its mean resistance through k; the port averages by the midpoint rule (1e5 points), so the tolerance 1e-6 is ours."
+- id: rel_yong_rmicro_code_port_peak
+  kind: same_as
+  a: yong2025/rmicro_eq10
+  b: svzerod_code/ram_code_port
+  mapping: {Ram_min: "frac/100*Rbar", Ram_max: "k_ph**2*k*Rbar", T_vc: "Tvc", T_vr: "Tvr", T: "T"}
+  output_map: {Ram_peak: R_max}
+  regime: {Rbar: [30, 120], frac: [60, 90], k: [1.2, 3.0], k_ph: [1.0, 1.5], Tvc: [0.2, 0.4], Tvr: [0.1, 0.3], T: [0.8, 1.2]}
+  tolerance: 0.000001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "16", quote: "resistance based on \\cite yong25."}
+  assumptions:
+    - "As rel_yong_rmicro_code_port_mean, for the largest resistance over the cycle (e = 1 at t = Tvc); the port takes the largest of its 1e5 midpoint samples, so the tolerance 1e-6 is ours."
+- id: rel_yong_rmicro_released_mean
+  kind: same_as
+  a: yong2025/rmicro_eq10
+  b: svzerod_code/varres_released
+  mapping: {Ram_min: "frac/100*Rbar", Ram_max: "k_ph**2*k*Rbar", T_vc: "Tvc", T_vr: "Tvr", T: "T", Ra: "1", Rv: "10"}
+  output_map: {Ram_mean: R_mean}
+  regime: {Rbar: [30, 120], frac: [60, 90], k: [1.2, 3.0], k_ph: [1.0, 1.5], Tvc: [0.2, 0.4], Tvr: [0.1, 0.3], T: [0.8, 1.2]}
+  tolerance: 0.001
+  provenance: stated
+  citation: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "16", quote: "resistance based on \\cite yong25."}
+  assumptions:
+    - "As rel_yong_rmicro_code_port_mean, with the resistance read back from the released solver's inlet pressure under a constant flow (Ra = 1 and Rv = 10 mmHg s/mL in series are subtracted; they are probe values of ours, not yong2025's). The 0.1% tolerance is ours: it covers the time discretization and the small probe capacitances, as in rel_ram_yong_released."
+# --- ModelAtlas job olufsen2000 + svzerod_code (2026-11-09). The impedance block against olufsen2000's own record.
+- id: rel_impedance_block_from_olufsen_network
+  kind: derived_from
+  a: olufsen2000/network_1d
+  b: svzerod_code/impedance_released
+  mapping: {}
+  steps:
+    - "keep only the outflow condition at one outlet, p(x_L, t) = integral over one period of q(x_L, tau) z(x_L, t - tau) dtau (olufsen2000 Eq. 38), dropping the 1D large-artery equations (Eqs. 6, 13-18)"
+    - "take the impulse response z as an input instead of computing it from the structured tree (Eqs. 19-22, 27, 33, 35-37 and the inverse Fourier transform)"
+    - "discretize the convolution over one period in N steps (Appendix B, Fig. B3) with the kernel given as weights z_m = z(t_m) dt, and add an offset pressure P_d"
+  provenance: stated
+  citation: {file: src/model/ImpedanceBC.h, lines: "18-21", quote: "following the structured-tree outflow condition of \\cite olufsen2000."}
+  assumptions:
+    - >
+      The code's header says the impedance block follows olufsen2000's structured-tree outflow condition. In
+      the olufsen2000 record that condition is not a model of its own: it is the outflow boundary of network_1d,
+      which is not runnable (its inflow is a plotted curve and its numerics are unstated), and the kernel z it
+      convolves with is computed inside it from tree quantities that are not its ports. b's inputs (Q0, Q1, Z,
+      tau, T: a sinusoidal outlet flow and an exponential kernel added in this record) cannot be written in a's
+      input symbols, so no mapping or regime is given and the relation is unverifiable as recorded. The
+      convolution itself is checked against olufsen2000's Eq. 38 through this record's restatement
+      (rel_impedance_olufsen_pmax, a = svzerod_code/impedance_olufsen_eq38); the structured tree that gives z
+      is not in the code (q_impedance_kernel_not_computed), and no other olufsen2000 model (tube law, radius
+      scaling, asymmetry, boundary layer) has a counterpart in the code.

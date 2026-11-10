@@ -1,0 +1,137 @@
+- id: q_equations_in_docs
+  kind: unstated_model
+  about: [svzerodsolver_assembly, windkessel_bc, coronary_bc, valve_tanh, chamber_elastance_inductor]
+  text: >
+    The paper states no equation, circuit or parameter for any block and no setting of the time
+    integrator; it points to the online documentation and Developer Guide for all of them. None of the
+    paper's models can therefore be run from the paper. The equations are taken from the code at
+    commit 87bbadc in the record svzerod_code; whether the documentation the paper cites matched that
+    commit at publication is not known from this record.
+  citation: {page: 4, quote: "The governing equations and circuit representation for each block are available in the documentation", where: "Software details"}
+- id: q_blocks_after_paper
+  kind: reading
+  about: [svzerodsolver_assembly, coronary_bc]
+  text: >
+    Fig. 1 lists the blocks "at the time of writing": BloodVessel, BloodVesselJunction,
+    ChamberElastanceInductor, ClosedLoopCoronaryBC (Left/Right), ClosedLoopHeartPulmonary,
+    ClosedLoopRCRBC, FlowReferenceBC, Junction, OpenLoopCoronaryBC, PressureReferenceBC, ResistanceBC,
+    ResistiveJunction, ValveTanh, WindkesselBC. It has no impedance block (olufsen2000) and no
+    variable-resistance coronary block (yong2025), which the code record svzerod_code (commit 87bbadc,
+    November 2026) contains; those blocks are therefore not described by this paper, and the text on
+    p. 5 does not mention an impedance boundary condition.
+  citation: {page: 4, quote: "Various zero-dimensional blocks included in svZeroDSolver at the time of writing", where: "Fig. 1"}
+- id: q_verification_claim
+  kind: overstated_claim
+  about: [svzerodsolver_assembly]
+  text: >
+    The paper says the solver's accuracy "has also been verified by comparing with high-fidelity three
+    dimensional simulations" (Pfaller et al. 2022) and is assessed by continuous integration tests. No
+    result of either is printed here, and Pfaller et al. 2022 is not in this review. The release's own
+    test cases and stored results are rerun in svzerod_code as a consistency check; agreement with 3D
+    simulations is not checked anywhere in this review.
+  citation: {page: 3, quote: "has also been verified by comparing with high-fidelity three dimensional simulations", where: text}
+- id: q_audit_blocks_without_models
+  kind: reading
+  about: [svzerodsolver_assembly]
+  text: >
+    (Audit.) The paper names more block kinds than the record has models for: blood vessel blocks
+    "with non-linear resistors to model vascular stenoses", junctions between blood vessels
+    (BloodVesselJunction, Junction, ResistiveJunction in Fig. 1), flow, pressure and resistance
+    boundary blocks, and the ClosedLoopHeartPulmonary block of Fig. 1, as well as the
+    svZeroDCalibrator application (p. 2), which fits blood vessel parameters. Like the five recorded
+    models, none of these is stated as an equation here, so a model of each would be in words only and
+    not runnable from this paper. The stenosis blood vessel block in particular is the block the paper
+    points to as its documentation example, and it is the one most likely to be related to other papers
+    (Mirramezani et al. 2019). Whether these should be added as word models (nodes that tie the paper to
+    svzerod_code) is left to the reading; the record's scope was not changed.
+  citation: {page: 5, quote: "non-linear resistors to model vascular stenoses, junctions between blood vessels", where: "Software details"}
+- id: q_audit_code_record_missing
+  kind: reading
+  about: [svzerodsolver_assembly, windkessel_bc, coronary_bc, valve_tanh, chamber_elastance_inductor]
+  text: >
+    (Audit.) The notes, the models' not_runnable_reason and q_blocks_after_paper defer every equation
+    to the code record svzerod_code (commit 87bbadc) and say what it contains, including a commit date
+    "November 2026". At the time of this audit there is no svzerod_code record in the corpus, so none of
+    those statements can be checked from the records; they should be confirmed once that record exists.
+  citation: {none: "concerns another record, not a statement of this paper"}
+- id: q_coronary_citation
+  kind: reading
+  about: [coronary_bc, windkessel_bc]
+  text: >
+    The block sentence on p. 5 cites H. Kim et al. 2010, H. J. Kim et al. 2009, Menon et al. 2023,
+    Menon, Khan et al. 2024, Mirramezani et al. 2019 and Vignon-Clementel et al. 2006 together, without
+    saying which block follows which source. The attribution of the open-loop coronary block to kim2010
+    and the Windkessel block to Vignon-Clementel et al. comes from the code headers (svzerod_code), not
+    from this paper.
+  citation: {page: 5, quote: "build closed-loop circulation models (H. Kim et al., 2010", where: text}
+- id: q_no_validation_vs_kim2010
+  kind: choice
+  about: [coronary_bc, windkessel_bc, svzerodsolver_assembly, valve_tanh, chamber_elastance_inductor]
+  text: >
+    (Cross-validation with kim2010; validation job kim2010+menon2025, 2026-11-09.) No validation is
+    entered in either direction. Direction 1, this record's models against kim2010's measurements:
+    kim2010's only measurements are the Gould et al. canine mean flows against percent diameter
+    reduction in its Fig. 6 (kim2010/gould_rest_fig6, kim2010/gould_hyperemia_fig6). None of this
+    record's five models is runnable (runnable: false, q_equations_in_docs): the paper states no
+    equation, parameter or integrator setting, so none can be run on those conditions. None of them has
+    a stenosis input either. The coronary block's equations and the released solver are run in the code
+    record svzerod_code, which is the place for such a test. Even there, the Gould flows sit on a cc/s
+    axis whose scaling from dog to patient is not stated (kim2010/q_fig6_gould_scaling). Direction 2,
+    kim2010's models against this record's measurements: this paper prints no data at all (no data.yaml;
+    its one figure is a class diagram), so there is nothing to validate against. The paper cites kim2010
+    only as one source of its block types, and it does not say that it reproduces or compares with any
+    kim2010 result. See kim2010/q_no_validation_vs_menon2025.
+  citation: {page: 5, quote: "build closed-loop circulation models (H. Kim et al., 2010", where: text}
+- id: q_no_validation_vs_stergiopulos1999
+  kind: choice
+  about: [windkessel_bc, coronary_bc, svzerodsolver_assembly, valve_tanh, chamber_elastance_inductor]
+  text: >
+    (Cross-validation with stergiopulos1999; validation job menon2025+stergiopulos1999, 2026-11-09.) No
+    validation is entered in either direction. Direction 1, this record's models against
+    stergiopulos1999's measurements (Tables 1-2 R_p, Z_c, C_PPM, C_AR of seven dogs and two human beats,
+    the measured aortic input impedance of dog 71 in Fig. 5, the pressure and flow waves of Figs. 1, 3,
+    4): the nearest model here is windkessel_bc, whose circuit would give an input impedance, but like
+    the other four models it is runnable: false (q_equations_in_docs). The paper does not say how many
+    elements the block has, nor any parameter, so it cannot be run on dog 71's or the human beats'
+    conditions. The released RCR block is run against Fig. 5 in svzerod_code, which is the place for
+    that test (stergiopulos1999/q_no_validation_vs_svzerod_code). Direction 2, stergiopulos1999's
+    models (zin_3wk, zin_4wk, ...) against this record's measurements: this paper prints no data
+    (no data.yaml; its one figure is a class diagram, figures.md), so there is nothing to validate
+    against. The paper does not cite Stergiopulos et al. 1999 or the four-element windkessel at all.
+  citation: {page: 5, quote: "pressure and resistors blocks, windkessel boundary conditions", where: "Software details"}
+- id: q_no_validation_vs_svzerod_code
+  kind: choice
+  about: [chamber_elastance_inductor, windkessel_bc, coronary_bc, valve_tanh, svzerodsolver_assembly]
+  text: >
+    (Cross-validation with svzerod_code; validation job menon2025+svzerod_code, 2026-11-09.) No validation
+    is entered in either direction. Direction 1, this record's models against svzerod_code's
+    measurements: svzerod_code measures nothing. Its data are values read from the code and its test
+    cases (origin reported), the stored results of the release's test cases (origin run) and results the
+    cases' descriptions or cited papers state (origin predicted). It has no figure readings. None of these
+    is a measurement, and in any case none of this record's five models is runnable (q_equations_in_docs).
+    The pairing named chamber_elastance_inductor beside svzerod_code/impedance_olufsen_eq38 because both
+    give a pressure from a flow and time. They are different things, though: a cardiac chamber's pressure
+    against an outlet pressure from a structured-tree convolution kernel. Direction 2, svzerod_code's
+    models against this record's measurements: this paper prints no data (no data.yaml; its one figure is
+    a class diagram, figures.md). The code is the release this paper describes. Its blocks are checked
+    against their own test cases and the papers they cite in svzerod_code. That is a check of consistency,
+    not a validation against measurement. See svzerod_code/q_no_validation_vs_menon2025.
+  citation: {page: 4, quote: "The governing equations and circuit representation for each block are available in the documentation", where: "Software details"}
+- id: q_no_validation_vs_westerhof1971
+  kind: choice
+  about: [windkessel_bc, coronary_bc, svzerodsolver_assembly, valve_tanh, chamber_elastance_inductor]
+  text: >
+    (Cross-validation with westerhof1971; validation job menon2025+westerhof1971, 2026-11-09.) No validation
+    is entered in either direction. Direction 1, this record's models against westerhof1971's measurements
+    (the d-c input resistances of the dog and cat systemic and pulmonary beds in the captions of Figs. 2-5,
+    westerhof1971/rdc_*_meas, and the measured input impedance modulus and phase read from Figs. 2-5,
+    westerhof1971/f2_*_read ... f5_*_read): the nearest model here is windkessel_bc, whose circuit would
+    give an input impedance, but like the other four models it is runnable: false (q_equations_in_docs).
+    The paper does not say how many elements the block has, nor give any parameter, so it cannot be run on
+    any of those beds' conditions. The released three-element RCR block is run with westerhof1971's Table 1
+    values against those impedances in svzerod_code (svzerod_code/validations.yaml, val_rcr_w71_*), which is
+    the place for that test. Direction 2, westerhof1971's models (impedance_3el, rdc_eq1a, tau_rpc, ...)
+    against this record's measurements: this paper prints no data (no data.yaml; its one figure is a class
+    diagram, figures.md), so there is nothing to validate against. The paper does not cite Westerhof et al.
+    1971 and does not say that its Windkessel block reproduces or compares with any of its results.
+  citation: {page: 5, quote: "pressure and resistors blocks, windkessel boundary conditions", where: "Software details"}

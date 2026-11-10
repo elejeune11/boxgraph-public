@@ -1,0 +1,22 @@
+id: impedance_released
+name: the released impedance block (IMPEDANCE) under a sinusoidal inflow and an exponential impulse response
+role: model
+stated: {file: src/model/ImpedanceBC.h, lines: "18-21", quote: "following the structured-tree outflow condition of \\cite olufsen2000."}
+equation: "P_{n+1} = P_d + z_0 Q_{n+1} + sum_{m=1}^{N_k-1} z_m Q_{n+1-m} (ImpedanceBC.h line 26), z_m the discrete convolution weights"
+described_from: olufsen2000
+software: true
+inputs:
+  Q0: {quantity: outlet_flow_mean, unit: cm^3/s}
+  Q1: {quantity: outlet_flow_amplitude, unit: cm^3/s}
+  Z: {quantity: kernel_resistance, unit: dyn*s/cm^5}
+  tau: {quantity: kernel_time_constant, unit: s}
+  T: {quantity: cardiac_cycle_length, unit: s}
+outputs:
+  P_mean: {quantity: outlet_pressure_mean, unit: dyn/cm^2}
+  P_max: {quantity: outlet_pressure_max, unit: dyn/cm^2}
+  P_min: {quantity: outlet_pressure_min, unit: dyn/cm^2}
+settings: {N: 128, n_cycles: 4}
+stochastic: false
+# N time steps per cycle (the kernel length, as the block requires; 128 as in the release's own
+# impedance test case) and n_cycles cycles are ours. The adapter passes z_m = z(m dt) dt, following the
+# code's comment that the kernel entries are discrete convolution weights with no dt scaling.

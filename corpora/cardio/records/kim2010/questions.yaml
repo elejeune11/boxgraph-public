@@ -202,3 +202,87 @@
     three-element impedance) have no stenosis input and no coronary flow output, so none gives that
     quantity. See westerhof1971/q_no_validation_vs_kim2010.
   citation: {page: 3, quote: "impedance using a three-element Windkessel model", where: text}
+- id: q_no_validation_vs_schwarz_data
+  kind: choice
+  about: [stenosed_lad_flow, coronary_flow_split, coronary_fraction_flow, coronary_total_sum, cardiac_output_sv, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with schwarz_data, the released human left coronary tree of Schwarz et al. 2020;
+    validation job kim2010+schwarz_data, 2026-11-09.) No validation is entered in either direction. Kim et
+    al. (2010) precede the release and do not cite it, and the release does not cite Kim et al. Direction
+    1, this record's models against schwarz_data's measurements: schwarz_data measures anatomy only (Table
+    1 counts, shares, terminal densities and diameter and length medians by class; node types, loops,
+    daughter symmetry and area growth at the nodes; skeleton counts). Its flows, pressures and perfusions
+    are outputs of its own network model (network_solution), not measurements. This record's runnable
+    models give a patient's mean coronary flows from its own Table 3 bed resistances (coronary_flow_split,
+    stenosed_lad_flow), 4.0% of cardiac output (coronary_fraction_flow), CO = SV/T, sums and percentage
+    rules. None gives a diameter, length, count or ratio of a vessel tree. Direction 2, schwarz_data's
+    models against this record's measurements: this record's only measurements are the Gould et al.
+    (ref. 7) canine mean flows of Fig. 6 (gould_rest_fig6, gould_hyperemia_fig6). They are plotted against
+    percent diameter reduction of a temporary stenosis made in the canine left circumflex artery (p. 13,
+    "created temporary stenosis in the left circumflex artery of canines"), on a cc/s axis whose scaling
+    to the human patient is not stated (q_fig6_gould_scaling; their quantity, gould_plotted_mean_flow, is
+    kept apart from a flow for that reason). network_solution and the tree models have no stenosis input,
+    so only the 0% points could be set against the tree's inlet flows (Q_LAD, Q_LCX). The quantity on the
+    two sides would then be the same only through the unstated scaling. The comparison would also cross a
+    dog's LCX under rest or Hypaque hyperemia with a cast, arrested human LAD and LCX solved without tone
+    at 90/20 mmHg. A verdict would test the unknown scaling, not the tree, so it is not entered. The
+    patient's measured cardiac output and brachial pulse pressure, which the boundary conditions were
+    tuned to (p. 5), are not printed. This record's LAD, LCX and RCA flows (Table 4, p. 3201 text) and its
+    Table 3 bed resistances are 3D-model results and patient-tuned parameters, not measurements. Setting
+    them beside the tree's inlet flows or its effective resistance (tree_effective_resistance) is a
+    relation between two models, left to the relation job. See schwarz_data/q_no_validation_vs_kim2010.
+  citation: {page: 13, printed_page: "3207", quote: "Hypaque to simulate hyperemic conditions in canine", where: text}
+- id: q_no_validation_vs_menon2025
+  kind: choice
+  about: [stenosed_lad_flow, coronary_flow_split, coronary_fraction_flow, coronary_total_sum, cardiac_output_sv, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with menon2025, the svZeroDSolver paper; validation job kim2010+menon2025,
+    2026-11-09.) No validation is entered in either direction. menon2025 cites this paper only as one of
+    the sources of its coronary and closed-loop blocks. Direction 1, this record's models against
+    menon2025's measurements: menon2025 prints no data, so it has no measurements; its one figure is a
+    class diagram. Direction 2, menon2025's models against this record's measurements: this record's only
+    measurements are the Gould et al. (ref. 7) canine mean flows of Fig. 6 (gould_rest_fig6,
+    gould_hyperemia_fig6). None of menon2025's five models (its solver assembly and the Windkessel,
+    coronary, valve and chamber blocks) is runnable, because that paper states no equations or parameters
+    (menon2025/q_equations_in_docs). None of them takes a stenosis either. The Gould values are also on an
+    axis whose scaling to the patient is not stated (q_fig6_gould_scaling). Running the released
+    svZeroDSolver coronary block on this paper's own parameters belongs to the code record svzerod_code.
+    See menon2025/q_no_validation_vs_kim2010.
+  citation: {page: 11, printed_page: "3205", quote: "also plotted the experimental results of Gould et al. for", where: text}
+- id: q_no_validation_vs_svzerod_code
+  kind: choice
+  about: [stenosed_lad_flow, coronary_flow_split, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with svzerod_code, the released svZeroDSolver; validation job kim2010+svzerod_code,
+    2026-11-09.) No validation is entered in either direction. Direction 1, this record's models against
+    svzerod_code's measurements: a code record measures nothing. Direction 2, svzerod_code's models against
+    this record's measurements, the Gould et al. (ref. 7) canine flows of Fig. 6 (gould_rest_fig6,
+    gould_hyperemia_fig6): svzerod_code/coronary_pair_released gives stenosed LAD mean flow from the mean
+    pressure downstream of the stenosis with this paper's Table 3 human beds, but no pressure is printed
+    for Gould's dogs (Table 4's are this paper's 3D results for the patient), it has no stenosis or
+    hyperemia input, and the plotted Gould values are on an axis whose scaling is not stated
+    (q_fig6_gould_scaling; quantity gould_plotted_mean_flow, kept apart from stenosed_lad_mean_flow). A
+    verdict would test that scaling and this paper's 3D simulation, not the released block. The block's
+    agreement with this paper's printed flows is svzerod_code's reproduction, not a validation. See
+    svzerod_code/q_no_validation_vs_kim2010.
+  citation: {page: 11, printed_page: "3205", quote: "also plotted the experimental results of Gould et al. for", where: text}
+- id: q_no_validation_vs_yong2025
+  kind: choice
+  about: [stenosed_lad_flow, coronary_flow_split, coronary_fraction_flow, gould_rest_fig6, gould_hyperemia_fig6]
+  text: >
+    (Cross-validation with yong2025; validation job kim2010+yong2025, 2026-11-09.) No validation is entered
+    in either direction. yong2025 cites this paper as one basis of its coronary model (yong2025 p. 3, "Our
+    model is based on Mantero et al. (1992) and Kim et al. (2010)"), but says nothing about this paper's
+    measurements. Direction 1, this record's models against yong2025's measurements: those are the in vivo
+    diastolic-to-systolic flow ratios of its Table 1 and Fig. 8 caption (peak_dsfr, mean_dsfr; Seligman et
+    al. 2022, Bedaux et al. 2001, van Wolferen et al. 2008) and the in vivo Doppler velocity and MR flow
+    waveforms of its Figs. 6 and 8. The models here are steady: stenosed_lad_flow, coronary_flow_split and
+    coronary_fraction_flow give only cycle-mean flows, with no systolic or diastolic phase, so none gives a
+    DSFR, a velocity or a waveform; yong2025 prints no cycle-mean flow measured in its subjects as a value,
+    and its subjects' bed resistances and pressures are printed in neither paper. Direction 2, yong2025's
+    models against this record's measurements, the Gould et al. (ref. 7) canine flows of Fig. 6
+    (gould_rest_fig6, gould_hyperemia_fig6): yong2025's closed-loop and svZeroDSolver models have no
+    stenosis and no hyperemia input, model an unstenosed human coronary tree, and the plotted Gould values
+    are on an axis whose scaling is not stated (q_fig6_gould_scaling). A verdict would test that scaling,
+    not the model. See yong2025/q_no_validation_vs_kim2010.
+  citation: {page: 11, printed_page: "3205", quote: "also plotted the experimental results of Gould et al. for", where: text}

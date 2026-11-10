@@ -1,0 +1,32 @@
+id: coronary_kim2010_ode
+name: kim2010's lumped coronary bed equation (p. 4 coefficients) restated, periodic solution under sinusoidal pressures
+role: model
+stated: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+equation: >
+  P + p1 dP/dt + p2 d2P/dt2 = q0 Q + q1 dQ/dt + q2 d2Q/dt2 + b1 dPim/dt with kim2010 p. 4:
+  p0 = 1, p1 = Ra-micro Ca + (Rv + Rv-micro)(Ca + Cim), p2 = Ca Cim Ra-micro (Rv + Rv-micro),
+  q0 = Ra + Ra-micro + Rv + Rv-micro, q1 = Ra Ca (Ra-micro + Rv + Rv-micro) + Cim (Ra + Ra-micro)(Rv + Rv-micro),
+  q2 = Ca Cim Ra Ra-micro (Rv + Rv-micro), b0 = 0, b1 = Cim (Rv + Rv-micro)
+described_from: kim2010
+inputs:
+  P_mean: {quantity: coronary_inlet_pressure_mean, unit: mmHg}
+  P_amp: {quantity: coronary_inlet_pressure_amplitude, unit: mmHg}
+  Pim_mean: {quantity: intramyocardial_pressure_mean, unit: mmHg}
+  Pim_amp: {quantity: intramyocardial_pressure_amplitude, unit: mmHg}
+  Ra: {quantity: coronary_arterial_resistance, unit: kdyn*s/cm^5}
+  Ram: {quantity: coronary_arterial_micro_resistance, unit: kdyn*s/cm^5}
+  Rv: {quantity: coronary_venous_resistance_sum, unit: kdyn*s/cm^5}
+  Ca: {quantity: coronary_arterial_capacitance, unit: cm^5/Mdyn}
+  Cim: {quantity: intramyocardial_capacitance, unit: cm^5/Mdyn}
+  T: {quantity: cardiac_cycle_length, unit: s}
+outputs:
+  Q_mean: {quantity: coronary_bed_flow_mean, unit: cm^3/s}
+  Q_max: {quantity: coronary_bed_flow_max, unit: cm^3/s}
+  Q_min: {quantity: coronary_bed_flow_min, unit: cm^3/s}
+settings: {n_pts: 501}
+stochastic: false
+# kim2010 prints the coefficients (p. 4) and the integral solution its operators use (p. 3), not the
+# differential equation itself; the equation above is the one those coefficients belong to (its
+# integral solution has the printed k1, k2, A, B, Z, Y), and its steady limit q0 Q = P is the one
+# kim2010's record uses. The code is cited for the block it checks (the source of this model is
+# kim2010: described_from). n_pts samples the cycle at the same points as coronary_released.

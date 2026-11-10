@@ -1,0 +1,47 @@
+id: tree_branching
+name: daughter symmetry and area growth at the flow-directed bifurcations of the released network (Eqs. 1-2, Figs. 3-4)
+role: processing
+software: true
+built_from: [tree_table1, network_solution]
+stated: {file: explanation_of_data.txt, lines: "243", quote: "daughter symmetry versus mother diameter in 3-nodes with one mother (inflow) segment"}
+equation: >
+  mothers flow into a node, daughters out (flow of network_solution); nodes with one mother and two
+  daughters; S = dS/dL, A = (dL^2 + dS^2)/dM^2; per mother class: n, median and quartiles of S, n and
+  median A for S > S_split and S <= S_split; median S for dM > d_S_large, median A for dM > d_A_large;
+  least squares A = c_d dM + c_S S + c_0 on d_fit_lo <= dM <= d_fit_hi
+inputs:
+  P_in: {quantity: node_pressure, unit: Pa, description: inlet pressure of the flow solution}
+  P_cap: {quantity: node_pressure, unit: Pa}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+  mu_p: {quantity: plasma_viscosity, unit: Pa*s}
+  d: {quantity: vessel_diameter, unit: um, description: lower bound of the mother diameter class}
+  d_S_large: {quantity: vessel_diameter, unit: um, description: "mothers larger than this enter the large-vessel median symmetry (p. 9: 500 um)"}
+  d_A_large: {quantity: vessel_diameter, unit: um, description: "mothers larger than this enter the large-vessel median area growth (p. 5: 400 um)"}
+  d_fit_lo: {quantity: vessel_diameter, unit: um}
+  d_fit_hi: {quantity: vessel_diameter, unit: um}
+outputs:
+  n_nodes_class: {quantity: node_count, unit: dimensionless, description: one-mother two-daughter nodes whose mother is in the class}
+  S_median: {quantity: daughter_symmetry, unit: dimensionless}
+  S_q1: {quantity: symmetry_quartile_low, unit: dimensionless}
+  S_q3: {quantity: symmetry_quartile_high, unit: dimensionless}
+  n_symhi: {quantity: node_count, unit: dimensionless, description: nodes of the class with S > 0.5}
+  n_symlo: {quantity: node_count, unit: dimensionless, description: nodes of the class with S <= 0.5}
+  A_median_symhi: {quantity: area_growth, unit: dimensionless}
+  A_median_symlo: {quantity: area_growth, unit: dimensionless}
+  n_nodes: {quantity: node_count, unit: dimensionless, description: all one-mother two-daughter nodes kept}
+  n_multi_mother: {quantity: node_count, unit: dimensionless, description: internal nodes with more than one inflowing element}
+  S_median_large: {quantity: daughter_symmetry, unit: dimensionless}
+  A_median_large: {quantity: area_growth, unit: dimensionless}
+  c_d: {quantity: area_growth_fit_coefficient_d, unit: dimensionless, description: "coefficient of dM, dM in m"}
+  c_d_mm: {quantity: area_growth_fit_coefficient_d, unit: dimensionless, description: "coefficient of dM, dM in mm"}
+  c_S: {quantity: area_growth_fit_coefficient_S, unit: dimensionless}
+  c_0: {quantity: area_growth_fit_intercept, unit: dimensionless}
+  fit_r2: {quantity: area_growth_fit_r2, unit: dimensionless}
+  n_fit: {quantity: node_count, unit: dimensionless}
+settings:
+  file: "Human Left Coronary graph.mat"
+  class_edges_um: [30, 45, 60, 75, 90, 105, 120, 150, 200, 400]
+  ratio_limit: null
+  require_l_gt_d: false
+  S_split: 0.5
+stochastic: false

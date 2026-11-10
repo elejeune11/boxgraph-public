@@ -1,0 +1,19 @@
+id: rmicro_waveform
+name: time-varying microvascular resistance Rmicro(t) at a time in the cycle (Eqs. 10-11)
+role: model
+stated: {page: 3, printed_page: "3", quote: "with k determined such that mean Rmicro (t) match the desired constant", where: "Eqs. 9-11"}
+equation: "Rmicro-LCA(t) = [(sqrt(k_LCA Rmicro_bar) - sqrt(0.7 Rmicro_bar)) en(t) + sqrt(0.7 Rmicro_bar)]^2 (Eq. 10); Rmicro-RCA(t) = [(k_PH sqrt(k_RCA Rmicro_bar) - sqrt(0.75 Rmicro_bar)) en(t) + sqrt(0.75 Rmicro_bar)]^2 (Eq. 11); en(t) = ev(t) of Eq. 4"
+inputs:
+  Rbar: {quantity: microvascular_resistance_mean, unit: mmHg*s/ml}
+  frac: {quantity: basal_resistance_fraction, unit: percent}
+  k: {quantity: resistance_scale_factor, unit: dimensionless}
+  k_ph: {quantity: ph_resistance_factor, unit: dimensionless}
+  Tvc: {quantity: contraction_duration, unit: s}
+  Tvr: {quantity: relaxation_duration, unit: s}
+  T: {quantity: heart_period, unit: s}
+  t: {quantity: time_in_cycle, unit: s, description: "time from the start of ventricular contraction"}
+outputs:
+  R: {quantity: microvascular_resistance, unit: mmHg*s/ml}
+settings: {}
+built_from: [rmicro_eq10]
+stochastic: false

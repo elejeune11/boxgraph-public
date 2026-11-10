@@ -1,83 +1,98 @@
 id: schwarz_data
 kind: software
-title: "Data of 'Topologic and Hemodynamic Characteristics of the Human Coronary Arterial Circulation': network graph, hemodynamics tables and demonstration code"
+title: "Data of 'Topologic and Hemodynamic Characteristics of the Human Coronary Arterial Circulation': skeleton, network graph, data tables and demonstration code"
 authors: [Janina C. V. Schwarz, Monique G. J. T. B. van Lier, Jeroen P. H. M. van den Wijngaard, Maria Siebes, Ed VanBavel]
 year: 2020
 url: https://doi.org/10.34894/XYF65X
 file: corpus/cardio/code/schwarz_data
 language: matlab
 licence: CC-BY-4.0
-version: "sha256:ce83525df89d923f3d7020e97a014d776feaa3a47ad2eb1901ffa0cc95892d58"
-reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-07"}
+version: "sha256:31b851c646e571adf231ba502ea3f74bc4257d1594ec1c8dc48fa37984183c23"
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-08"}
 notes: >
-  What the source is. Part of the data released with schwarz2020 (DataverseNL, doi 10.34894/XYF65X,
-  CC BY 4.0, as the explanation document states; no LICENSE file). Present: the network itself,
-  'Human Left Coronary graph.mat' (MATLAB 5 file, struct TreeQ with IN, SN, SE, IE, info, settings;
-  added in the second pass, SHA-1 7be3d814..., downloaded from the repository and covered by the
-  digest in `version`), three hemodynamics workbooks (hemodynamics_hum06.xlsx: the reconstructed
-  heart's solution, per-territory perfusion, class medians and power fits for Figs. 5-6;
-  hemodynamics_in-silicoHum6P.xlsx: the in silico trees of the final iteration;
-  hemodynamics_in-silicoHighP.xlsx: those of the first iteration), the authors'
-  DemonstrationCode.m (Matlab, about 100 lines; no entry point beyond its script sections),
-  MANIFEST.TXT and the explanation of the data (cited from explanation_of_data.txt, our plain-text
-  copy of the .docx). Not present: the skeleton, 'Gdistal variations.xlsx',
-  'final_tree_bifurcation_summary_all-ld.xlsx', 'Topology data.xlsx' and 'termseg_density.xlsx'.
-  The authors' analysis software is not released (the explanation says so). year and authors are
-  the paper's; language matlab is that of the demonstration code and the .mat file. log.md lists
-  what each pass added and changed.
+  What the source is. The data released with schwarz2020 (DataverseNL, doi 10.34894/XYF65X). The
+  repository marks it CC0; the data guide states CC BY 4.0, which is recorded as the licence. There
+  is no LICENSE file. The whole release is now in the folder, except the release's copy of the
+  paper's PDF, and the digest in `version` covers all of it. Each file added after the first reading
+  was downloaded from the repository and checked against its SHA-1. The files are: 'Human Left
+  Coronary skeleton.txt' (the raw skeleton: 3,913,549 centre points in 288,198 segments, LAD, LCX
+  and RCA); 'Human Left Coronary graph.mat' (struct TreeQ, the LAD and LCX graph with the stored
+  hemodynamic solution); 'Topology data.xlsx' (element diameters and lengths, and flow-based mother
+  and daughter diameters, made with DemonstrationCode.m); 'final_tree_bifurcation_summary_all-ld.xlsx'
+  (data points of Figs. 2-4); 'termseg_density.xlsx' (Table 1); 'Gdistal variations.xlsx' (per-element
+  results of the 1000 stochastic simulations and the deterministic runs, Table 2); the three
+  hemodynamics workbooks (Figs. 5-6 and the power laws); DemonstrationCode.m (Matlab, about 100 lines,
+  not run); MANIFEST.TXT; and the guide 'Schwarz-2019 explanation of data.docx', cited from our
+  plain-text copy explanation_of_data.txt. The authors' analysis software is not released. year and
+  authors are those of the paper. log.md says what each of the three passes added and changed.
 
-  How it was read. Values the release states (boundary pressures, graph counts, pixel size, heart
-  weight, volume fraction, graph-building settings, outlier rules, class and simulation counts) are
-  data cited by file and lines, linked to the paper's datum where that record has one. Workbook
-  adapters (software: true, our own xlsx reader) read the fits, perfusion values and class medians:
-  hemodynamics_workbook, perfusion_sheet, network_medians. Small models of our own derive a velocity
-  exponent, a pressure fraction, a flow ratio, the element total and an implied tissue density.
-  DemonstrationCode.m only extracts data from the .mat file; its two parts stay recorded as models
-  (demo_element_export, demo_mother_daughter), not runnable, with no port. Second pass: the network
-  is read with scipy.io.loadmat and nothing of it is copied. network_solution, our own solver (not
-  a port; software: true only to read the file at run time), solves the paper's model on it: Eq. 3
-  in Eq. 5 per segment, sinks in series with the release's distal conductances TreeQ.SE.Gdist,
-  Kirchhoff at the 98,022 internal nodes, a sparse solve, then class medians, the paper's power-law
-  fits, flow, shear stress and perfusion statistics. It is run on the pressures stored in
-  TreeQ.SE.sourceP with the hematocrit and plasma viscosity the stored conductances imply
-  (run_net_release; added inputs) and on the paper's stated 90/20 mmHg and Hd 0.4 (run_net_paper).
-  A few stored values are data, cited by field path, written to 6 figures, and the workbook's class
-  medians of classes 1-11 are written to 4 figures with their cells named (q_typed_precision).
+  How it was read. Values the release states are data cited by file and lines. Values held only in
+  binary or spreadsheet files are cited by field path or by sheet and cell; a few of them are typed
+  to 6 or 4 figures (q_typed_precision). Every model is our own code. It is marked `software: true`
+  only so that it can read the files at run time, and nothing of the files is copied. Second pass:
+  network_solution solves the paper's Poiseuille-Kirchhoff model (Eqs. 3-5, Pries viscosity) on the
+  network. Third pass:
+  - tree_table1 and tree_summary recount Table 1 and the p. 5 topology from the network.
+  - tree_branching computes the Eq. 1-2 branching statistics at the bifurcations, with mothers and
+    daughters set by the flow of network_solution.
+  - termseg_workbook, topology_workbook and bifurcation_workbook recompute the same results from each
+    workbook's data points.
+  - stochastic_table2 recomputes Table 2 from the per-element sheets.
+  - skeleton_network streams the 440 MB skeleton and checks it against the network.
+  The paper's printed values are copied in with from_source, and from_datum where schwarz2020's
+  record holds them.
 
-  What reproduces. The released fits reproduce every power law the paper prints (prefactor,
-  exponent, r2 of the conductance, flow, pressure and velocity laws, and the in silico Gis), and the
-  released perfusion values its territory count, median and interquartile range. Element counts
-  add up to the paper's 202,184. Second pass: the rerun reproduces the stored solution at every
-  value checked: the conductances of the two inlets, an internal and a sink segment, both inlet
-  flows, a node pressure and a shear stress. So the stored solution is the Poiseuille-Kirchhoff
-  solution of the paper's equations, with Hd 0.45, plasma viscosity 1.0 mPa s and 11998.8/2666.4
-  N/m2. From its own segments it then reproduces the paper's printed results: all four power laws
-  with their r2 (the conductance law on the distal conductance Q/(P_down - P_cap), with a positive
-  exponent, and the 2.18 of the internal segments), the 36.6 ml/min median of arteries above 1 mm,
-  the perfusion median and interquartile range, the 4,954 territories, the 358 cm3 perfused volume
-  and the 20.2 mm3 median territory. It also gives the approximate 32%, about 3,000 times and
-  around 5 Pa without a verdict. The workbook's class medians for 43.8-239.7 um agree to about 1%
-  or better, but not to all 4 figures recorded (q_class_rule).
+  What reproduces. First and second pass: the network rerun reproduces the stored solution. With the
+  stored 90/20 mmHg and Hd 0.45, it also reproduces every printed power law, the flows, the perfusion
+  statistics and the volumes (see log.md and the questions). Third pass:
+  - Table 1 is reproduced in every cell, from the network and from termseg_density.xlsx. That covers
+    the class counts and shares of all and of terminal segments, the LV densities and their shares,
+    the totals, the diameter medians and interdecile ranges, and the length medians. The
+    'diameter-length' sheet of Topology data.xlsx gives the class counts and the All column too.
+  - The p. 5 topology: 91% bifurcations, 8% trifurcations and 3,202 loops (the cycle rank of the
+    graph).
+  - The p. 8 interquartile range of territory volume (7.2-56.5 mm3).
+  - The p. 9 median symmetry 0.59 (mothers > 500 um) and the p. 5 median area growth 1.02
+    (> 400 um), from the network, Topology data.xlsx and the bifurcation workbook.
+  - Every group size printed above Fig. 4's bars.
+  - All of Table 2 that carries a verdict: the CV and MAD medians and 95th percentiles, PCC and beta
+    for both deterministic models, and the text's 7.4%. These match the workbook's own 'Table 2'
+    sheet as well. The two flow MADs are printed as bounds and get no verdict.
+  - The stored network solution is the deterministic 'median G' run of the Table 2 workbook, not the
+    'power fit' run (q_stored_solution_median_g).
+  - The skeleton holds the counts the guide states. Each network element names a skeleton segment
+    of its own, and the remaining 86,014 segments are the RCA, loose segments and segments removed in
+    cleaning.
 
-  What does not, and differences from the paper. (1) The heart conductance exponent is positive in
-  the workbook and in the rerun: the printed minus sign (p. 7) is a misprint (q_G_exponent_sign).
-  (2) The printed velocity and flow laws disagree under Poiseuille flow because of the linear-space
-  fitting, which the rerun confirms on the same solution (q_velocity_flow_fits). (3) The
-  shear-stress peak at 630 um is the smoothed workbook medians' class (close). The pooled medians,
-  and the rerun's 20 um classes, peak lower (q_wss_peak). (4) The guide's N/m2 boundary pressures
-  (11970, 2660) are the mmHg labels times 133. The network holds and uses 11998.8 and 2666.4
-  (x 133.32), consistent with 90 and 20 mmHg; the first reading's statement that the solution used
-  the guide's values was wrong and is corrected in q_pressure_conversion. (5) The stored
-  conductances use Hd 0.45, not the paper's 0.4. At 0.4 they are not reproduced, and the paper's
-  results only fall within the rounding of the printed '0.4' (q_hematocrit). The 'pries1996' label
-  is Pries 1994's in vivo relation, and the plasma viscosity is 1.0 mPa s (q_viscosity_label). (6) A
-  power law fitted to the imputed distal conductances is not the printed in silico law (q_gdist_law).
-  (7) The final-iteration workbook has one more class in four sheets than the 63 stated
-  (q_hum6p_classes). (8) Choices the paper does not state: CVlim 1, 30 um for diameterless elements,
-  removal of the poorest 0.5% of terminal elements, the 1.15 outlier rule (q_hidden_choices), and
-  the tissue density the perfusion weights imply (q_density). Table 1's two >= 400 um terminal
-  segments are the inlets (q_terminal_includes_inlets). Not checked: Table 2 (its 1000 stochastic
-  simulations need in silico distributions not released), Table 1's class counts and the branching
-  statistics of Figs. 2-4 (computable from the network but not modelled here), the workbook classes
-  above 240 um (their class rule is unstated), the workbooks' 'all' and 'pooled' fits, the in silico
-  flow, pressure and velocity laws, and DemonstrationCode.m (Matlab, not run).
+  What does not, and differences from the paper and the guide. Earlier passes: the heart
+  conductance exponent's minus sign (p. 7) is a misprint; the hematocrit is 0.45, not the stated 0.4;
+  the guide's N/m2 pressures are rounded conversions; the 'pries1996' label names Pries 1994; and the
+  other points are in q_G_exponent_sign, q_hematocrit, q_pressure_conversion, q_viscosity_label,
+  q_velocity_flow_fits, q_wss_peak, q_class_rule, q_hum6p_classes, q_gdist_law, q_density and
+  q_hidden_choices. Third pass:
+  (1) The area-growth regression A = -0.66 dM + 0.34 S + 1.13 (r2 0.047; p. 5) is not reproduced,
+  with or without the guide's outlier rules and from either the network or Topology data.xlsx. The
+  dM coefficient has the printed size only with dM in mm (q_area_growth_fit).
+  (2) The guide says that elements shorter than their diameter and nodes with a daughter over 1.15
+  times the mother were excluded. Yet the printed branching numbers and Fig. 4's group sizes follow
+  from all nodes, and with the rules applied they are no longer reproduced (q_outlier_rules).
+  (3) Table 1's counts depend on the release's floating-point class edges. With exact decimal edges,
+  the 1,814 elements given the assumed 30 um fall out of the first class (q_class_edges).
+  (4) The LV densities are per cm3 of the summed Voronoi volumes of a region's terminal elements, a
+  choice stated nowhere (q_region_volume).
+  (5) The guide says a skeleton point has 18 neighbour slots. The file has 15, and its header names
+  14 (q_skeleton_slots).
+  (6) The skeleton's raw radii give the stored element diameter only where no correction was made.
+  The correction rule is not released, and the raw median is below Table 1's 92.3 um
+  (q_skeleton_diameters).
+  (7) Table 2's statistics are not defined in the paper. They are reproduced with pooled per-element
+  medians and 95th percentiles (Matlab's percentile rule) and with beta taken as the slope of the
+  stochastic median on the deterministic run (q_table2_reading).
+  Not checked here:
+  - The class medians behind Figs. 2B, 3A and 4. They are computed (net_L_classes, net_S_classes,
+    net_A_*_classes and wbb_*_classes), but the paper gives them only as box plots, which
+    schwarz2020's record reads. The comparison is left to the relation and validation jobs
+    (q_figure_curves).
+  - The 1000 stochastic simulations themselves. The in silico conductance distributions are not
+    released.
+  - DemonstrationCode.m, which is Matlab. Its output, Topology data.xlsx, agrees with the network.

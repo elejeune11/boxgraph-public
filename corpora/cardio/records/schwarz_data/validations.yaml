@@ -1,0 +1,372 @@
+# Cross-record validations against schwarz2020 (validation job schwarz2020+schwarz_data, third pass, 2026-11-08).
+# Values are read at build time. schwarz2020 plots its measured branching statistics only as box plots
+# (Figs. 2B, 3A, 4), which its record reads from the page (origin measured). The models here compute the
+# same statistic per class from the released files: tree_table1 and tree_branching from the network
+# (TreeQ, mothers and daughters set by the flow of the network solution), bifurcation_workbook from the
+# data points of the workbook the guide says the figures were drawn from. Nothing was fitted to the
+# figures, so each is a validation; what it tests is whether the plotted measurements are those of the
+# released reconstruction (q_validation_figs_2_4). Only the medians and box edges are entered: no model
+# here outputs whisker ends or the histograms of Figs. 2A, 3B and 3C.
+
+# ---- Fig. 2B, segment length per diameter class, from the network
+- id: val_f2b_median_network
+  model: tree_table1
+  sweep: {d: 'schwarz2020/d_f2b_median'}
+  output: L_median
+  against: 'schwarz2020/d_f2b_median'
+  purpose: validation
+  quantities: {'schwarz2020/segment_length': median_segment_length, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    schwarz2020 plots the segment length of its reconstructed left coronary tree as box plots for ten
+    diameter classes (p. 6, "Segment length-diameter relation for ten diameter classes"); the figure
+    reading d_f2b_median is the median line of each box, by class lower bound. tree_table1 takes the median
+    length of the elements of each class of the released network (TreeQ.IE and TreeQ.SE, "the coronary
+    arterial network of a single human heart as described in the paper", explanation_of_data.txt line 32),
+    with the class edges of Table 1, which it reproduces count for count (cmp_t1_all). So the network
+    should give the plotted medians. schwarz2020's datum is the median line, so its quantity
+    segment_length is this record's median_segment_length; its x, the class lower bound, is this model's d.
+- id: val_f2b_q1_network
+  model: tree_table1
+  sweep: {d: 'schwarz2020/d_f2b_q1'}
+  output: L_q1
+  against: 'schwarz2020/d_f2b_q1'
+  purpose: validation
+  quantities: {'schwarz2020/segment_length': length_quartile_low, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f2b_median_network, for the left box edge, the 25th percentile of segment length per class
+    (schwarz2020 figures.md: box plots with 1.5 IQR whiskers per the caption), against tree_table1's first
+    quartile of the element lengths of the class. The percentile rule of the plot is not stated; the
+    figure reading's interval is wider than the difference between common rules at these class sizes.
+- id: val_f2b_q3_network
+  model: tree_table1
+  sweep: {d: 'schwarz2020/d_f2b_q3'}
+  output: L_q3
+  against: 'schwarz2020/d_f2b_q3'
+  purpose: validation
+  quantities: {'schwarz2020/segment_length': length_quartile_high, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f2b_median_network, for the right box edge, the 75th percentile of segment length per class,
+    against tree_table1's third quartile of the element lengths of the class.
+
+# ---- Fig. 3A, daughter symmetry per mother diameter class, from the network
+- id: val_f3a_median_network
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  sweep: {d: 'schwarz2020/d_f3a_median'}
+  output: S_median
+  against: 'schwarz2020/d_f3a_median'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': daughter_symmetry, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    schwarz2020 plots daughter symmetry S = dS/dL (Eq. 1, p. 4) at the bifurcations of the reconstructed
+    tree as box plots for ten mother diameter classes (p. 7, "Daughter symmetry for (A) ten mother
+    diameter classes"); d_f3a_median is the median line of each box. tree_branching takes the nodes of the
+    released network with one inflowing mother and two daughters (the guide: "daughter symmetry versus
+    mother diameter in 3-nodes with one mother (inflow) segment", explanation_of_data.txt line 243), with
+    the flow direction of the stored solution's boundary pressures, and gives the median S per mother
+    class. It reproduces the p. 9 median symmetry 0.59 and Fig. 4's group sizes (cmp_S_large, cmp_f4_*),
+    so it should give the plotted medians. The inputs only set the flow direction; they are the ones of
+    run_branch_classes.
+- id: val_f3a_q1_network
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  sweep: {d: 'schwarz2020/d_f3a_q1'}
+  output: S_q1
+  against: 'schwarz2020/d_f3a_q1'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': symmetry_quartile_low, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f3a_median_network, for the left box edge (25th percentile of daughter symmetry per mother
+    class), against tree_branching's first quartile of S.
+- id: val_f3a_q3_network
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  sweep: {d: 'schwarz2020/d_f3a_q3'}
+  output: S_q3
+  against: 'schwarz2020/d_f3a_q3'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': symmetry_quartile_high, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f3a_median_network, for the right box edge (75th percentile of daughter symmetry per mother
+    class), against tree_branching's third quartile of S.
+
+# ---- Fig. 4, area growth per mother class and symmetry group, from the network
+- id: val_f4_symhi_median_network
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  sweep: {d: 'schwarz2020/d_f4_symhi_median'}
+  output: A_median_symhi
+  against: 'schwarz2020/d_f4_symhi_median'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    schwarz2020 plots area growth A = (dL^2 + dS^2)/dM^2 (Eq. 2, p. 4) per mother diameter class, split by
+    daughter symmetry 0.5-1.0 (light boxes) and 0.0-0.5 (dark) (p. 8, "Area growth and mother diameter
+    relation"); d_f4_symhi_median is the median line of the light boxes. tree_branching gives the median A
+    of the one-mother two-daughter nodes of each mother class with S > 0.5, the split whose group sizes
+    reproduce the numbers printed above Fig. 4's boxes (cmp_f4_*). The 30-45 um light box shows no median
+    line and is not read.
+- id: val_f4_symlo_median_network
+  model: tree_branching
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_S_large: p_d_S_large, d_A_large: p_d_A_large, d_fit_lo: p_A_fit_lo, d_fit_hi: p_A_fit_hi}
+  sweep: {d: 'schwarz2020/d_f4_symlo_median'}
+  output: A_median_symlo
+  against: 'schwarz2020/d_f4_symlo_median'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f4_symhi_median_network, for the dark boxes (daughter symmetry 0.0-0.5), against tree_branching's
+    median A of the nodes of each mother class with S <= 0.5.
+
+# ---- The same medians from the workbook the figures were drawn from
+- id: val_f2b_median_workbook
+  model: bifurcation_workbook
+  inputs: {d_S_large: p_d_S_large}
+  sweep: {d: 'schwarz2020/d_f2b_median'}
+  output: L_median
+  against: 'schwarz2020/d_f2b_median'
+  purpose: validation
+  quantities: {'schwarz2020/segment_length': median_segment_length, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    The guide says of final_tree_bifurcation_summary_all-ld.xlsx: "This excel sheet was used for generating
+    the plots in Fig. 2-3-4 in the paper" (explanation_of_data.txt line 235). bifurcation_workbook takes the
+    median of each class's column of its 'length dclass' sheet, so it should give the median line of each
+    box of Fig. 2B (schwarz2020 d_f2b_median). It checks the plot against its own data points, beside the
+    network check val_f2b_median_network.
+- id: val_f3a_median_workbook
+  model: bifurcation_workbook
+  inputs: {d_S_large: p_d_S_large}
+  sweep: {d: 'schwarz2020/d_f3a_median'}
+  output: S_median
+  against: 'schwarz2020/d_f3a_median'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': daughter_symmetry, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f2b_median_workbook, for the median of each class's column of the workbook's 'symmetry' sheet,
+    against the median lines of Fig. 3A (schwarz2020 d_f3a_median).
+- id: val_f4_symhi_median_workbook
+  model: bifurcation_workbook
+  inputs: {d_S_large: p_d_S_large}
+  sweep: {d: 'schwarz2020/d_f4_symhi_median'}
+  output: A_median_hi
+  against: 'schwarz2020/d_f4_symhi_median'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f2b_median_workbook, for the median of the workbook's 'area' column '<class>, sym 0.50-1.00',
+    against the median lines of Fig. 4's light boxes (schwarz2020 d_f4_symhi_median).
+- id: val_f4_symlo_median_workbook
+  model: bifurcation_workbook
+  inputs: {d_S_large: p_d_S_large}
+  sweep: {d: 'schwarz2020/d_f4_symlo_median'}
+  output: A_median_lo
+  against: 'schwarz2020/d_f4_symlo_median'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth, 'schwarz2020/diameter_class_lower_bound': vessel_diameter}
+  basis: >
+    As val_f2b_median_workbook, for the median of the workbook's 'area' column '<class>, sym 0.00-0.50',
+    against the median lines of Fig. 4's dark boxes (schwarz2020 d_f4_symlo_median).
+
+# ---- Against chilian1986's microvascular pressures as a percentage of aortic pressure
+# (validation job chilian1986+schwarz_data, 2026-11-09). network_pressure_share solves the released tree
+# (network_solution's solver, the release's Hd and plasma viscosity and its distal pressure P_sink_mat) with the
+# inlet at the mean aortic pressure chilian1986 measured beside each vessel class, and gives the median of
+# 100 P / P_in over the tree's segments in that class's diameter window. Common to all three: the tree is one
+# arrested, cast human left coronary tree solved in steady flow with no tone (schwarz2020 p. 11) and imputed distal
+# conductances below its ~30 um ends; chilian1986 measured cat subepicardial microvessels with micropipettes in the
+# beating left ventricle (Methods), time-averaged over the beat. The share is still the same quantity on both sides
+# (mean local pressure over the pressure at the coronary inlet, the aorta), and it is set by the resistance
+# upstream of the vessel against the resistance downstream, which is what both papers use it for (chilian1986
+# Methods p. 5: "if microvascular pressure is 70% of aortic pressure, then 30% of the total resistance is
+# proximal"). The windows are added (added.yaml); the choices are in q_validation_vs_chilian1986.
+- id: val_chilian_pct_70_130_ctl
+  model: network_pressure_share
+  inputs: {P_in: 'chilian1986/t4_sart_mean_ao', P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_lo: d_lo_chilian_70_130_added, d_hi: d_hi_chilian_70_130_added}
+  output: share_median
+  against: 'chilian1986/res_pct_70_130_ctl'
+  purpose: validation
+  quantities: {'chilian1986/mean_pressure_percent_of_aortic': pressure_fraction, 'chilian1986/mean_aortic_pressure': node_pressure}
+  conditions_ok: >
+    chilian1986's value is with coronary tone intact (control), the only measurement it has in vessels of this size
+    (no small arterioles were measured under papaverine, Table 5); the tree has no tone. In chilian1986's own data
+    dilation raises the share at a given size (medium arterioles 77% control, 90% papaverine, Table 6), so a toneless
+    tree should give a share at least as high as this control value if the two beds were alike. The inlet is the
+    aortic mean beside the small arterioles of Table 4 (98 ± 14 um), the class this 70-130 um statement describes.
+  basis: >
+    chilian1986 states "the microvascular pressure in coronary arterioles 70-130 um in diameter was 50-55% of aortic
+    pressure" (p. 5). network_pressure_share gives the same ratio over the released tree's 70-130 um segments.
+    Nothing of the tree was fitted to it: the diameters and lengths are measured on the cast, the distal
+    conductances imputed from in silico trees (q_gdist_law). The vessels differ in species (cat against human),
+    heart size and position (chilian1986's are subepicardial; the tree's 70-130 um segments lie in every layer of the
+    wall) and state (beating against arrested and steady).
+- id: val_chilian_pct_mart_pap
+  model: network_pressure_share
+  inputs: {P_in: 'chilian1986/t5_mart_mean_ao', P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_lo: d_lo_chilian_mart_added, d_hi: d_hi_chilian_mart_added}
+  output: share_median
+  against: 'chilian1986/t6_mart_pap_mean'
+  purpose: validation
+  quantities: {'chilian1986/mean_pressure_percent_of_aortic': pressure_fraction, 'chilian1986/mean_aortic_pressure': node_pressure}
+  basis: >
+    chilian1986 Table 6 (p. 9) gives the mean pressure of medium arterioles (192 ± 8 um) as a percentage of mean
+    aortic pressure during papaverine infusion (90 ± 4%, n = 5), its arithmetic on the pressures it measured
+    (Table 5, p. 8: 60 ± 3 against 66 ± 3 mmHg). Papaverine abolishes tone ("maximal coronary vasodilation"), the state
+    closest to the toneless tree, so of chilian1986's values this is the most direct test. network_pressure_share
+    gives the median share over the released tree's segments in the window chilian1986 itself gives for this class
+    ("arterioles 180-220 um in diameter", p. 5). It differs in species, heart size, wall layer and in being steady
+    and arrested (see the comment above); nothing of the tree was fitted to it.
+- id: val_chilian_pct_lart_pap
+  model: network_pressure_share
+  inputs: {P_in: 'chilian1986/t5_lart_mean_ao', P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           d_lo: d_lo_chilian_lart_added, d_hi: d_hi_chilian_lart_added}
+  output: share_median
+  against: 'chilian1986/t6_lart_pap_mean'
+  purpose: validation
+  quantities: {'chilian1986/mean_pressure_percent_of_aortic': pressure_fraction, 'chilian1986/mean_aortic_pressure': node_pressure}
+  basis: >
+    As val_chilian_pct_mart_pap, for chilian1986's large arterioles during papaverine (325 ± 18 um, n = 14; Table 6
+    96 ± 4%, from Table 5's 67 ± 4 against 70 ± 3 mmHg). chilian1986 prints no diameter range for this class; the
+    window is the class mean ± one standard deviation recovered from its SE (added).
+
+# ---- Against kassab1993's Horton ratios of the pig coronary arterial trees (validation job kassab1993+schwarz_data,
+# 2026-11-09). tree_strahler applies kassab1993's diameter-defined Strahler ordering (Eq. 1, p. 4) and Horton fits
+# (Eqs. 2-5) to the released network, on the release's own boundary pressures and rheology (as run_net_release; the
+# flow only sets the direction). kassab1993's Table 4 (p. 10) gives the same statistics of its pig casts, by elements
+# and by segments, for RCA, LAD and LCX. Only the ratios are compared: order numbers do not correspond (the pig casts
+# reach order 1 at about 9 um; the released tree stops at about 30 um and its order 1 is about 77 um), so the
+# intercepts a, the per-order means and counts, S/E and the connectivity matrix are not entered
+# (q_validation_kassab1993). Element-based ratios are used because tree_strahler fits elements. LAD and LCX are
+# entered, since the release is the human LAD and LCX as one tree; the RCA is not in the release. How the two differ:
+# species (farm pigs of about 30 kg against one adult human heart), preparation (kassab1993: KCl-arrested hearts
+# cast with silicone elastomer held at 80 mmHg, measured under the microscope; the release: one cast human heart
+# imaged by micro-CT), and the range of each fit (pig orders 1-11 from the capillaries to the main stems; the tree's
+# 8 orders from about 77 um to 3.4 mm). The ratio of a Horton law is the statistic both describe the tree by, and a
+# difference is one of anatomy or of fit range, which the question keeps apart. Nothing of the tree was fitted to the
+# pig data, so each is a validation.
+- id: val_kassab_D_ratio_lad
+  model: tree_strahler
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added}
+  output: ratio_D
+  against: 'kassab1993/t4_D_ratio_e_lad'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_diameter': horton_ratio_diameter}
+  conditions_ok: >
+    pig LAD against the human left coronary tree (LAD and LCX together), with fit ranges that differ (pig orders
+    1-11 from about 9 um, the tree's 8 orders from about 77 um); a Horton ratio is meant to hold over the whole
+    tree, which is what kassab1993's straight-line fits with R2 near 0.99 assert, so the ratios may be set side
+    by side
+  basis: >
+    kassab1993 fits log10 of the mean element diameter of each order against order (Eq. 2) and gives
+    D_n/D_(n-1) = 10^b (Eq. 3; Table 4, p. 10, "Empirical constants a and b of Eqs. 2, 4, and 5"), 1.84 for the
+    pig LAD by elements. tree_strahler orders the released human network by the same Eq. 1 and fits the same
+    Eq. 2 to its mean element diameters (its choices in q_strahler_choices). If the diameter-defined Horton law
+    of the coronary arteries is one law across hearts, as kassab1993's near-equal ratios for its three trees
+    suggest, the human tree should give a ratio near the pig's.
+- id: val_kassab_D_ratio_lcx
+  model: tree_strahler
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added}
+  output: ratio_D
+  against: 'kassab1993/t4_D_ratio_e_lcx'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_diameter': horton_ratio_diameter}
+  conditions_ok: >
+    pig LCX against the human left coronary tree (LAD and LCX together), with different fit ranges, as for
+    val_kassab_D_ratio_lad
+  basis: >
+    As val_kassab_D_ratio_lad, against the pig LCX's element diameter ratio, 1.89 (Table 4, p. 10).
+- id: val_kassab_L_ratio_lad
+  model: tree_strahler
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added}
+  output: ratio_L
+  against: 'kassab1993/t4_L411_ratio_e_lad'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_length': horton_ratio_length}
+  conditions_ok: >
+    pig LAD orders 4-11 against the human left coronary tree's 8 orders. kassab1993 fits length in two pieces
+    (orders 1-3 and 4-11); its orders 4-11 start near the tree's truncation (about 30 um) and so cover the range
+    the tree resolves: of the printed ratios this is the closest in range, though the tree has no orders that
+    would be the pig's orders 4-5
+  basis: >
+    kassab1993 fits log10 of the mean element length against order (Eq. 4) and prints the ratio 10^b for orders
+    4-11, 2.02 for the pig LAD by elements (Table 4, p. 10; text p. 10, "2.12, 2.02, and 2.20, respectively, for
+    orders 4-11"). tree_strahler fits the same Eq. 4 to the mean element lengths of the human tree's orders. An
+    element is a vessel between branchings into vessels of its own order, so its length ratio is what a Horton
+    length law shared by the two trees would fix.
+- id: val_kassab_L_ratio_lcx
+  model: tree_strahler
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added}
+  output: ratio_L
+  against: 'kassab1993/t4_L411_ratio_e_lcx'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_length': horton_ratio_length}
+  conditions_ok: >
+    pig LCX orders 4-11 against the human left coronary tree's 8 orders, as for val_kassab_L_ratio_lad
+  basis: >
+    As val_kassab_L_ratio_lad, against the pig LCX's element length ratio for orders 4-11, 2.20 (Table 4, p. 10).
+- id: val_kassab_N_ratio_lad
+  model: tree_strahler
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added}
+  output: ratio_N
+  against: 'kassab1993/t4_N_ratio_e_lad'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_number': horton_ratio_number}
+  conditions_ok: >
+    pig LAD orders 1-11 (the element numbers of kassab1993's Table 9) against the counted elements of the human
+    tree's 8 orders; the number ratio is the branching rate from one order to the next, which a Horton number law
+    shared by the two trees would fix over any range of orders
+  basis: >
+    kassab1993 fits log10 of the number of elements of each order against order (Eq. 5) and prints the ratio
+    N_(n-1)/N_n, 3.51 for the pig LAD by elements (Table 4, p. 10). tree_strahler fits Eq. 5 to the element counts
+    of the human tree's orders and takes the ratio the same way (10^-b), as kassab1993's record's fit models do.
+- id: val_kassab_N_ratio_lcx
+  model: tree_strahler
+  inputs: {P_in: P_inlet_mat, P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added}
+  output: ratio_N
+  against: 'kassab1993/t4_N_ratio_e_lcx'
+  purpose: validation
+  quantities: {'kassab1993/horton_ratio_number': horton_ratio_number}
+  conditions_ok: >
+    pig LCX orders 1-11 against the human left coronary tree's 8 orders, as for val_kassab_N_ratio_lad
+  basis: >
+    As val_kassab_N_ratio_lad, against the pig LCX's element number ratio, 3.57 (Table 4, p. 10).
+
+# ---- Against mynard2014's measured weight-corrected circumflex flow (validation job mynard2014+schwarz_data,
+# 2026-11-09). tree_effective_resistance (added by the relation job of this pair) solves the released tree with
+# network_solution's solver and gives the LAD + LCX inflow per 100 g of the tissue the tree perfuses (W f_tree), at the
+# inlet pressure it is given. mynard2014 measured, in nine anaesthetised adult sheep, the mean proximal Cx flow per
+# 100 g of the Cx territory stained with India ink (Table 1, p. 30), with the mean aortic pressure beside it. The tree
+# is run with its inlet at that measured aortic pressure and its distal pressure at the release's own 20 mmHg. Only the
+# adults are entered; the newborn lambs and mynard2014's effective resistances are not (q_validation_vs_mynard2014).
+- id: val_mynard_cxq_adult
+  model: tree_effective_resistance
+  inputs: {P_in: 'mynard2014/aobp_mean_adult', P_cap: P_sink_mat, Hd: Hd_release_added, mu_p: mu_p_release_added,
+           W: heart_weight_doc, f_tree: Vtree_of_Vtot}
+  output: q_per_mass
+  against: 'mynard2014/cxq_adult'
+  purpose: validation
+  quantities: {'mynard2014/cx_flow_per_mass': lm_flow_per_mass, 'mynard2014/mean_aortic_pressure': node_pressure}
+  conditions_ok: >
+    Both sides are the mean arterial inflow of a left coronary bed per 100 g of the myocardium that bed supplies, the
+    weight-normalised flow both papers use to compare hearts of different size (mynard2014 p. 10: "the weight of the
+    stained portion of myocardium used to normalize Cx blood flows"). The beds differ: the Cx alone and its stained
+    territory in sheep, against the LAD and LCX together and their Voronoi territory in the human tree; a flow per
+    mass of supplied tissue is meant to be comparable across territories, which is why mynard2014 reports it. The
+    states differ more: anaesthetised adult sheep, beating, with coronary tone, time-averaged over the beat and
+    draining to the right atrium; against one arrested, cast human left coronary tree solved in steady flow with no
+    tone (schwarz2020 p. 11), its distal conductances imputed in silico below its ~30 um ends and its outflow at the
+    release's 20 mmHg. The inlet is the sheep's measured mean aortic pressure, which mynard2014 itself prescribes at
+    the left main inlet (p. 10); the tree has no left main, so its LAD and LCX inlets take it directly.
+  basis: >
+    network_solution is the release's Poiseuille-Kirchhoff model of the measured human anatomy, and its inflow per
+    100 g at a given perfusion pressure is the perfusion that anatomy gives without vasomotor tone. mynard2014's
+    measured 71 ± 35 mL/min/100g (Table 1, p. 30, "CxQ mean (mL/min/100g) 71 ± 35") is resting perfusion with tone
+    intact. Nothing of the tree was fitted to it. A toneless bed should carry at least the resting flow at the same
+    pressure if the beds were alike, so a tree flow far above the sheep's measures the tone and species difference,
+    and a flow below it would say the tree's resistance (with its imputed distal conductances, q_gdist_law) is too
+    high for any resting state.

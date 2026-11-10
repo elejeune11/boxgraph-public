@@ -1,0 +1,62 @@
+id: svv_tree
+name: open-loop synthetic tree grown by constrained constructive optimization with the released svVascularize, its branching statistics and the tree equations recomputed on it
+role: model
+software: true
+stochastic: true
+stated: {page: 12, quote: "Subsequent generation of vascular trees are the realization of random sampling processes", where: "Eqs. S1-S10, Table S1"}
+equation: >
+  svv grows the tree (one new terminal per step, each bifurcation placed to minimise the tree cost
+  sum l_i^alpha_l r_i^alpha_r; Hagen-Poiseuille vessels, Eq. S1; flows summed, Eq. S3; equal terminal
+  pressure; daughter ratios Eqs. S6 and S9; reduced resistance Eq. S10; root radius Eq. S8). Our code then
+  computes: area growth A = (dL^2 + dS^2)/dM^2 and symmetry S = dS/dL at every bifurcation, medians over all
+  and over large mothers; the Eq. S6 identity beta_L^gamma + beta_R^gamma with svv's stored ratios; the
+  Eq. S5 sum (r_L^gamma + r_R^gamma)/r_p^gamma with svv's stored radii; Kassab's diameter-defined Strahler
+  orders and Horton ratios; and R*_root and the root diameter from Eqs. S6, S8, S9 and S10 recomputed on the
+  tree, with Eq. S10 as printed (beta_k) and with beta_k^4
+inputs:
+  n_terminals: {quantity: terminal_count, unit: dimensionless}
+  cube_edge: {quantity: domain_edge_length, unit: cm, description: edge of the cubic tissue domain}
+  gamma: {quantity: murray_exponent, unit: dimensionless}
+  alpha_r: {quantity: cost_radius_exponent, unit: dimensionless}
+  alpha_l: {quantity: cost_length_exponent, unit: dimensionless}
+  mu: {quantity: dynamic_viscosity, unit: cP, description: "given to svv as kinematic viscosity mu/rho with density rho"}
+  rho: {quantity: fluid_density, unit: g/cm^3}
+  Q_term: {quantity: terminal_flow, unit: ml/s, description: flow of every terminal vessel}
+  P_root: {quantity: tree_pressure, unit: mmHg, description: pressure at the root inlet}
+  P_term: {quantity: tree_pressure, unit: mmHg, description: pressure at every terminal outlet}
+outputs:
+  n_terminals_grown: {quantity: terminal_count, unit: dimensionless}
+  n_segments: {quantity: segment_count, unit: dimensionless}
+  root_diameter: {quantity: vessel_diameter, unit: um, description: svv's root diameter}
+  min_diameter: {quantity: vessel_diameter, unit: um}
+  A_median_all: {quantity: area_growth, unit: dimensionless, description: "median over all bifurcations, svv's stored radii"}
+  S_median_all: {quantity: daughter_symmetry, unit: dimensionless}
+  A_median_large: {quantity: area_growth, unit: dimensionless, description: "median over bifurcations whose mother is wider than d_A_large_um"}
+  S_median_large: {quantity: daughter_symmetry, unit: dimensionless, description: "median over bifurcations whose mother is wider than d_S_large_um"}
+  n_bif_A_large: {quantity: bifurcation_count, unit: dimensionless}
+  n_bif_S_large: {quantity: bifurcation_count, unit: dimensionless}
+  murray_sum_max: {quantity: murray_sum, unit: dimensionless, description: "largest beta_L^gamma + beta_R^gamma over bifurcations, svv's stored ratios"}
+  murray_sum_min: {quantity: murray_sum, unit: dimensionless}
+  murray_radius_sum_max: {quantity: murray_sum, unit: dimensionless, description: "largest (r_L^gamma + r_R^gamma)/r_p^gamma, svv's stored radii"}
+  murray_radius_sum_min: {quantity: murray_sum, unit: dimensionless}
+  murray_radius_sum_median: {quantity: murray_sum, unit: dimensionless}
+  radius_dev_stored: {quantity: radius_deviation, unit: dimensionless, description: "largest |r_stored / r_propagated - 1|, r_propagated = root radius times svv's stored ratios down the tree"}
+  frac_radius_dev_1pct: {quantity: vessel_fraction, unit: dimensionless, description: share of vessels whose stored radius differs by more than 1% from the propagated one}
+  A_median_all_beta: {quantity: area_growth, unit: dimensionless, description: "as A_median_all, with propagated radii"}
+  S_median_all_beta: {quantity: daughter_symmetry, unit: dimensionless}
+  A_median_large_beta: {quantity: area_growth, unit: dimensionless}
+  S_median_large_beta: {quantity: daughter_symmetry, unit: dimensionless}
+  t_grow: {quantity: build_time, unit: s, description: wall-clock time of the growth on the machine that ran it}
+  n_orders: {quantity: strahler_order, unit: dimensionless}
+  ratio_D: {quantity: horton_ratio_diameter, unit: dimensionless}
+  ratio_L: {quantity: horton_ratio_length, unit: dimensionless}
+  ratio_N: {quantity: horton_ratio_number, unit: dimensionless, description: N_(n-1)/N_n}
+  rstar_root_svv: {quantity: reduced_resistance, unit: dyn*s/cm}
+  rstar_root_s10: {quantity: reduced_resistance, unit: dyn*s/cm, description: "Eq. S10 as printed, recomputed on the tree"}
+  rstar_root_s10_beta4: {quantity: reduced_resistance, unit: dyn*s/cm, description: "Eq. S10 with beta^4, recomputed on the tree"}
+  root_diameter_s10: {quantity: vessel_diameter, unit: um, description: Eq. S8 with rstar_root_s10}
+  root_diameter_s10_beta4: {quantity: vessel_diameter, unit: um, description: Eq. S8 with rstar_root_s10_beta4}
+settings:
+  seed: 1
+  d_A_large_um: 400
+  d_S_large_um: 500

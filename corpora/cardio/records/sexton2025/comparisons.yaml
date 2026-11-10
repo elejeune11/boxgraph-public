@@ -1,0 +1,72 @@
+# ---- the released code's constants against Tables S1 and S3
+- {id: cmp_svv_gamma, purpose: consistency, computed: svv_default_gamma, printed: gamma_t1,
+   note: "svv's default Murray exponent against Table S1's gamma"}
+- {id: cmp_svv_alpha_r, purpose: consistency, computed: svv_default_alpha_r, printed: alpha_r_t1}
+- {id: cmp_svv_alpha_l, purpose: consistency, computed: svv_default_alpha_l, printed: alpha_l_t1}
+- {id: cmp_svv_mu, purpose: consistency, computed: svv_default_mu, printed: mu_t1,
+   note: "the viscosity svv puts in Eq. S1, its kinematic viscosity times its density (0.036 x 1.06)"}
+- {id: cmp_svv_rho, purpose: consistency, computed: svv_default_rho, printed: rho_t3}
+- {id: cmp_svv_nu, purpose: consistency, computed: svv_default_nu, printed: nu_t3}
+
+# ---- the identity of Eq. S6 (p. 12), in the paper's own form and in trees grown by svv
+- {id: cmp_murray_beta, purpose: reproduction, computed: murray_beta_sum, printed: murray_identity,
+   note: Eq. S6 as printed gives the identity the paper states}
+- {id: cmp_tree_beta_sum_max, purpose: consistency, computed: t1000_beta_sum_max, printed: murray_identity,
+   note: "largest beta_L^gamma + beta_R^gamma over the bifurcations, with the ratios svv stores (columns 23-24)"}
+- {id: cmp_tree_beta_sum_min, purpose: consistency, computed: t1000_beta_sum_min, printed: murray_identity}
+- {id: cmp_tree4000_beta_sum_max, purpose: consistency, computed: t4000_beta_sum_max, printed: murray_identity}
+- {id: cmp_tree4000g2_beta_sum_max, purpose: consistency, computed: t4000g2_beta_sum_max, printed: murray_identity,
+   note: gamma = 2}
+- {id: cmp_tree_radius_sum_max, purpose: consistency, computed: t1000_radius_sum_max, printed: murray_identity,
+   note: "largest (r_L^gamma + r_R^gamma) / r_p^gamma over the bifurcations, with the radii svv stores and exports
+   (column 21); beta_i = r_i / r_p by Eq. S6, so the printed identity applies to them (q_svv_radii)"}
+- {id: cmp_tree_radius_sum_min, purpose: consistency, computed: t1000_radius_sum_min, printed: murray_identity}
+- {id: cmp_tree_radius_sum_median, purpose: consistency, computed: t1000_radius_sum_median, printed: murray_identity}
+- {id: cmp_tree4000_radius_sum_max, purpose: consistency, computed: t4000_radius_sum_max, printed: murray_identity}
+- {id: cmp_tree4000_radius_sum_min, purpose: consistency, computed: t4000_radius_sum_min, printed: murray_identity}
+- {id: cmp_tree4000g2_radius_sum_max, purpose: consistency, computed: t4000g2_radius_sum_max, printed: murray_identity,
+   note: gamma = 2}
+
+# ---- Eq. S10 as printed and with beta^4, against the network it is said to combine and against svv
+#      (both sides computed: no printed precision, so no verdict; the difference is the finding)
+- {id: cmp_s10_vs_network, purpose: consistency, computed: rstar_s10, printed: rstar_network,
+   note: "Eq. S10 as printed against the same bifurcation solved from Eqs. S1-S4 and S7 (q_s10_beta)"}
+- {id: cmp_s10_beta4_vs_network, purpose: consistency, computed: rstar_s10_beta4, printed: rstar_network,
+   note: the variant with beta^4 against the same network}
+- {id: cmp_tree_rstar_s10, purpose: consistency, computed: t1000_rstar_s10, printed: t1000_rstar_svv,
+   note: "R* of the root recomputed bottom-up with Eq. S10 as printed on svv's own trees, against svv's stored R*"}
+- {id: cmp_tree_rstar_s10_beta4, purpose: consistency, computed: t1000_rstar_s10_beta4, printed: t1000_rstar_svv}
+- {id: cmp_tree_root_s10, purpose: consistency, computed: t1000_root_d_s10, printed: t1000_root_d,
+   note: "root diameter from Eq. S8 with the printed Eq. S10, against svv's root diameter"}
+- {id: cmp_tree_root_s10_beta4, purpose: consistency, computed: t1000_root_d_s10_beta4, printed: t1000_root_d}
+- {id: cmp_tree4000_root_s10, purpose: consistency, computed: t4000_root_d_s10, printed: t4000_root_d}
+- {id: cmp_tree4000_root_s10_beta4, purpose: consistency, computed: t4000_root_d_s10_beta4, printed: t4000_root_d}
+
+# ---- arithmetic the paper prints
+- {id: cmp_nu_t3, purpose: reproduction, computed: nu_from_t3, printed: nu_t3,
+   note: "Table S3's nu from its own mu and rho"}
+- {id: cmp_nu_p5, purpose: consistency, computed: nu_from_p5, printed: nu_t3,
+   note: "the main text's fluid (p. 5), whose viscosity is printed 0.04 cP, against Table S3's kinematic viscosity (q_viscosity_main_text)"}
+- {id: cmp_px_live, purpose: reproduction, computed: px_live_calc, printed: px_live}
+- {id: cmp_px_dead, purpose: reproduction, computed: px_dead_calc, printed: px_dead}
+- {id: cmp_speedup, purpose: reproduction, computed: speedup_calc, printed: speedup_abstract,
+   conditions_ok: "the abstract's 230-fold names no tree size; the only build times the main text sets side by side are these 8000-terminal ones (p. 3)",
+   note: "q_speedup"}
+- {id: cmp_speedup_table_s5_max, purpose: reproduction, computed: speedup_table_s5_max, printed: speedup_abstract,
+   conditions_ok: "the abstract's 230-fold names no tree size; Table S5 is the paper's only benchmark against another CCO code (1000 terminals), and its largest ratio bounds every other",
+   note: "audit; q_speedup"}
+- {id: cmp_t1e6_biventricle, purpose: consistency, computed: t_biventricle_1e6, printed: t_1e6_text,
+   note: "audit: Table S6's million-terminal biventricle time against the main text's 'about 5 hours' (approximate: no verdict)"}
+- {id: cmp_t1e6_annulus, purpose: consistency, computed: t_annulus_1e6, printed: t_1e6_text,
+   note: "audit: as cmp_t1e6_biventricle, for the annulus"}
+
+# ---- figure pass (2026-11-09)
+- {id: cmp_fig5f_cfd_vs_piv, purpose: validation, computed: q_ratio_cfd_fig5f, printed: q_ratio_piv_fig5f,
+   conditions_ok: "the same printed network and branches; the paper sets the CFD '+' beside the PIV mean +- SD in one panel",
+   note: "figure pass: the paper's CFD branch flow ratios against its PIV measurements (both read from Fig. 5F)"}
+- {id: cmp_fig2b_recompute, purpose: reproduction, computed: clock_recompute_n2_calc, printed: clock_recompute_fig2b,
+   note: "figure pass: the dashed line against C = C0 (2^(B+1) - 1)^2 (q_fig2b_scaling)"}
+- {id: cmp_fig5p_count_bars, purpose: consistency, computed: live_count_fig5p, printed: live_count_printed_fig5p,
+   note: "figure pass: the bars of Fig. 5P(iii) against the values printed in the caption and above the bars"}
+- {id: cmp_fig5p_viability_bars, purpose: consistency, computed: viability_fig5p, printed: viability_printed_fig5p,
+   note: "figure pass: the bars of Fig. 5P(iii) against the caption's viabilities"}

@@ -1,0 +1,8 @@
+# Values of the code taken from olufsen1999 (ModelAtlas job olufsen1999 + svv_code, 2026-11-09).
+# The 0D export's wall model is named "olufsen" (zerod_tree.py lines 16-17, 140-141: k1 exp(k2 r) + k3), and
+# the code's paper, sexton2025, attributes its "Olufsen material model" (Eq. S26, p. 22) to its ref. 75 =
+# olufsen1999. Only k2 is olufsen1999's value: k1 = 0 and k3 = 1.0e7 are the rigid-wall setting sexton2025
+# describes on p. 22 ("for rigid wall simulations k1 is set to zero and k3 is a sufficiently high, but
+# physically arbitrary, value"), not olufsen1999's fit (k1 2.00 x 10^7, k3 8.65 x 10^5 g/s^2/cm), so k3 is
+# not linked. olufsen2000 prints the same k2 but takes it from olufsen1999 (its ref. 21).
+- {datum: k2_export_code, from_source: olufsen1999, from_datum: k2_fit, evidence: "zerod_tree.py line 17 sets the 'olufsen' material's k2 = -22.5267 (1/cm), the decay rate of Eh/r0 = k1 exp(k2 r0) + k3 at line 141; olufsen1999 p. 3 fits the same form (Eq. 6) with k2 = -22.53 cm^-1, which -22.5267 rounds to. The code's paper attributes the Olufsen material model to olufsen1999 (sexton2025 p. 22, ref. 75). With the code's default k1 = 0 the value does not enter the exported capacitances."}

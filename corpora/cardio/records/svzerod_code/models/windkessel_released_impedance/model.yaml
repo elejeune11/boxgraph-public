@@ -1,0 +1,18 @@
+id: windkessel_released_impedance
+name: the released Windkessel block (RCR) under a sinusoidal inflow, its input impedance at that frequency
+role: model
+stated: {file: src/model/WindkesselBC.h, lines: "13-16", quote: "Windkessel RCR boundary condition."}
+equation: "R_d Q_in - P_c + P_ref - R_d C dP_c/dt = 0, P_in - P_c - R_p Q_in = 0 (WindkesselBC.h lines 33-39); Z = P1/Q1 from the first Fourier coefficients over the last period"
+software: true
+inputs:
+  Rc: {quantity: windkessel_proximal_resistance, unit: g/cm^4/s}
+  Rp: {quantity: windkessel_distal_resistance, unit: g/cm^4/s}
+  C: {quantity: windkessel_capacitance, unit: cm^4*s^2/Mg}
+  f: {quantity: frequency, unit: Hz}
+outputs:
+  modulus: {quantity: input_impedance_modulus, unit: g/cm^4/s}
+  phase: {quantity: input_impedance_phase, unit: degree}
+settings: {n_pts: 401, n_tau: 12, Q0: 100.0, Q1: 50.0}
+stochastic: false
+# Settings are ours: n_pts time points per period, n_tau time constants Rd C of run before the last
+# period is read, and the probe flow (mL/s), which a linear block's impedance does not depend on.

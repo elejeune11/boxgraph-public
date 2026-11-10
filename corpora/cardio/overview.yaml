@@ -2,6 +2,11 @@
 # page comes from the build. Used by
 #   make build CORPUS=cardio
 title: "Cardiovascular models: a literature review"
+notice:
+  title: "Work in progress:"
+  text: results are produced by agent jobs and not yet reviewed by people;
+  link: check a record before citing it
+  href: https://github.com/elejeune11/boxgraph-public
 intro:
   - All models are wrong, but some are useful (George E. P. Box). This page is a literature review of 0D (lumped-parameter) and 1D models of the cardiovascular system, from the heart and the large arteries to the coronary circulation and the viscosity of blood in microvessels, in which each paper's models are taken as stated and put to work, to see where each one holds.
   - Every value is traced to the page it was printed on. Every model is rebuilt and run on the paper's own inputs and compared with what the paper reports, at the precision it was printed with. Relations between the models of different papers, such as a Windkessel and the arterial network it lumps, are tested rather than assumed. Released model code and released data, among them a whole human coronary arterial tree, are checked against the paper they belong to, and a model of one paper is judged against what another paper measured.
@@ -82,6 +87,184 @@ case_studies:
           not 0.89. For velocity or shear stress by vessel size, the network's values are the
           ones to use, not the fitted laws.
         show: "comparison: schwarz_data/cmp_net_v_from_Q"
+
+  - id: release
+    teaches: A whole release against its paper
+    title: Every table, rebuilt from the files
+    summary: >-
+      Beyond the solved tree, Schwarz et al. released the raw skeleton it was traced from
+      (3.9 million centre points), the workbooks behind their figures and tables, and the
+      thousand stochastic simulations behind Table 2. Each printed table is recomputed here from
+      those files, the files are checked against each other, and what the paper leaves unsaid
+      (how a statistic was formed, which simulation was released) is settled by runs.
+    steps:
+      - text: >-
+          Table 1 counts the segments of the tree by diameter class. Recomputed from the
+          network, every count is reproduced ...
+        show: "comparison: schwarz_data/cmp_t1_all"
+      - text: >-
+          ... but only with the class edges the release itself uses, which are off by a rounding
+          error in the sixteenth digit. With exact edges, the 1,814 segments given the default
+          diameter of 30 um fall out of the first class. A count can depend on a detail no paper
+          would print.
+        show: "question: schwarz_data/q_class_edges"
+      - text: >-
+          The table's segment densities in the three layers of the wall are reproduced too, once
+          the volume they are taken per is found by trying: the tissue supplied by the end
+          segments of each layer, a choice neither the paper nor the data guide states.
+        show: "comparison: schwarz_data/cmp_t1_dens_endo"
+      - text: >-
+          Table 2 summarises a thousand simulations with randomly drawn downstream conductances.
+          Its legend does not say how its statistics were formed; recomputed from the per-segment
+          sheets of the release, every entry is reproduced with one reading of them.
+        show: "comparison: schwarz_data/cmp_t2_Q_cv_med"
+      - text: >-
+          The paper ran the stochastic simulations and two deterministic ones, and does not say
+          which one the released tree holds. Its stored pressures match the run with median
+          downstream conductances ...
+        show: "comparison: schwarz_data/cmp_gdist_P_IE1_medG"
+      - text: >-
+          ... and not the run with power-law conductances. The flow laws of the previous case
+          study are therefore the laws of that one run.
+        show: "comparison: schwarz_data/cmp_gdist_P_IE1_fit"
+      - text: >-
+          At each branching the paper measures how evenly the flow divides (symmetry) and how
+          the cross-sectional area grows. The printed median symmetry is reproduced over all
+          branch points of the tree ...
+        show: "comparison: schwarz_data/cmp_S_large"
+      - text: >-
+          ... but not with the outlier rules the data guide says were applied. The printed
+          results were taken on all branch points; the guide describes a selection the paper
+          did not use.
+        show: "comparison: schwarz_data/cmp_S_large_rules"
+      - text: >-
+          The linear regression of area growth on mother diameter and symmetry printed on p. 5
+          is not reproduced, from the network or from the release's own workbook.
+        show: "comparison: schwarz_data/cmp_A_fit_c_S"
+      - text: >-
+          Its diameter coefficient is not reproduced either, but it is of the printed size only
+          with diameters in millimetres; with the micrometres of the paper's text it would be a
+          thousand times smaller. The unit of the printed fit is not the unit the paper states.
+        show: "comparison: schwarz_data/cmp_A_fit_c_d_mm"
+      - text: >-
+          Last, the raw skeleton against the tree made from it. Every segment of the tree names
+          its own skeleton segment; the rest of the skeleton is the right coronary artery, which
+          the paper did not analyse, and pieces removed in cleaning.
+        show: "comparison: schwarz_data/cmp_skel_elements_found"
+      - text: >-
+          The guide says each centre point lists 18 neighbours; the file has 15. A reader who
+          followed the guide would take the radius and segment columns from the wrong place.
+          A released file is only as usable as its description, and checking one against the
+          other is what makes the next study that builds on them possible.
+        show: "comparison: schwarz_data/cmp_skel_slots"
+
+  - id: crossing
+    teaches: One measured anatomy against the literature
+    title: The human tree against the other papers
+    summary: >-
+      The released tree is the only whole human coronary arterial tree in the review. Models and
+      measurements of other papers, made in pigs, cats, sheep and in models of other vascular
+      beds, are set against it: the tree's solution against what was measured in beating hearts,
+      and the laws other models assume against what the tree's bifurcations show. None is
+      reproduced, and the ways they fail say where the tree, and the laws, stop.
+    steps:
+      - text: >-
+          Solved at the mean aortic pressure Mynard et al. (2014) measured in adult sheep, the
+          tree carries about 260 ml/min per 100 g of the tissue it supplies. The sheep's measured
+          flow is 71 ± 35, nearly four times less, about the ratio between a dilated coronary bed
+          and one at rest.
+        show: "validation: schwarz_data/val_mynard_cxq_adult"
+      - text: >-
+          Chilian et al. (1986) measured the pressure in small coronary arteries of the beating cat
+          heart. In vessels of 70-130 um it is 50-55% of the aortic pressure; in the tree, solved at
+          the same aortic pressure, about 34%.
+        show: "validation: schwarz_data/val_chilian_pct_70_130_ctl"
+      - text: >-
+          With the arterioles dilated, the state that matches a tree without tone, the measured
+          pressure at about 200 um is 90% of the aortic pressure; the tree's is about 40%.
+        show: "validation: schwarz_data/val_chilian_pct_mart_pap"
+      - text: >-
+          The two results point the same way: too much flow goes through the tree, and too much
+          of the pressure is spent in its larger vessels. The tree ends at 30 um with a fixed
+          pressure at its ends, so it has no resistance from the arterioles and capillaries below
+          that size, which would explain both. The record's own reading, below, puts the pressure
+          gap down to anatomy and heart size: the long arteries of a human heart against a small
+          cat heart. Which of the two weighs more, the comparisons alone cannot say.
+        show: "question: schwarz_data/q_validation_vs_chilian1986"
+      - text: >-
+          Kassab et al. (1993) summarised the pig coronary tree by ratios between successive
+          vessel orders. Ordered the same way, the human tree's vessels grow less in diameter from
+          one order to the next (1.69 against the pig's 1.84) ...
+        show: "validation: schwarz_data/val_kassab_D_ratio_lad"
+      - text: >-
+          ... and branch more: each order holds about 4.6 times as many vessels as the next, against
+          3.5 in the pig.
+        show: "validation: schwarz_data/val_kassab_N_ratio_lad"
+      - text: >-
+          Olufsen's structured trees, written for the large arteries and used for outflow
+          conditions in many 1D models, take a cross-sectional area ratio of about 1.17 at every
+          branching. The tree's measured median at its branchings above 400 um is 1.02: its
+          daughters together are barely larger than their mother.
+        show: "validation: olufsen1999/val_eta_eq21_vs_coronary_area_growth"
+      - text: >-
+          Not every pair can be compared. Spaan (1981) measured the beating, compressed dog heart,
+          a state a steady tree cannot be run in; the record says so and why, rather than force a
+          comparison.
+        show: "question: schwarz_data/q_no_validation_vs_spaan1981"
+
+  - id: synthetic
+    teaches: A generated tree against a measured one
+    title: A grown tree against the human tree
+    summary: >-
+      Sexton et al. (2025) grow vascular trees by an optimization rule, with released code
+      (svVascularize). The record runs the released code, checks it against the paper's
+      equations, and sets the grown trees against the measured human tree of Schwarz et al.
+      (2020) and the pig trees of Kassab et al. (1993). Nothing was tuned to match: the
+      settings are the paper's or the code's own.
+    steps:
+      - text: >-
+          Before any comparison: growth is random, and a stated seed should make a tree repeat.
+          It does not. Reading the code shows why: the seed is stored after the generator that
+          places the terminals has already been made, so it never reaches it. Every run is
+          therefore repeated with several seeds, and each value carries its spread.
+        show: "question: sexton2025/q_svv_seed_order"
+      - text: >-
+          The paper propagates radii down the tree by a power law, so at every branching the
+          daughters' radii cubed sum to the mother's. The ratios the code stores obey it; the
+          radii it stores and exports do not everywhere: at the worst branching the sum is about
+          four times the mother's.
+        show: "comparison: sexton2025/cmp_tree_radius_sum_max"
+      - text: >-
+          Grown with the paper's settings (Murray's exponent 3), the large branchings widen the
+          tree: the daughters' total area is about 1.20 times the mother's, where the human tree's
+          median above 400 um is 1.02.
+        show: "validation: sexton2025/val_A_large_schwarz"
+      - text: >-
+          Their symmetry matches: the smaller daughter is about 0.64 of the larger, against the
+          human 0.59, within the spread over seeds.
+        show: "validation: sexton2025/val_S_large_schwarz"
+      - text: >-
+          The paper gives 2 as the lower end of physiological exponents. Grown with 2, the area
+          is conserved exactly (1.00), by the rule itself, but the daughters become less
+          symmetric (0.45): one setting fixes one statistic and breaks the other.
+        show: "validation: sexton2025/val_S_large_schwarz_g2"
+      - text: >-
+          In the heart-shaped domain shipped with the code, at its defaults, the result is the
+          same in kind: area growth 1.10, symmetry 0.42.
+        show: "validation: svv_code/val_biv_A_large_schwarz"
+      - text: >-
+          Against the pig's ratios between vessel orders, the grown tree branches like the pig
+          (3.6 vessels per order against 3.5) ...
+        show: "validation: sexton2025/val_kassab_N_lad"
+      - text: >-
+          ... but its diameters and lengths grow too slowly from order to order (1.52 against
+          1.84 in diameter, 1.50 against 2.02 in length).
+        show: "validation: sexton2025/val_kassab_D_lad"
+      - text: >-
+          How far these comparisons reach is set by how the trees differ: a 1-cm cube and 4000
+          terminals against a whole human ventricle and about 10^5. The record says which
+          statistics survive that difference and why.
+        show: "question: sexton2025/q_validation_schwarz"
 
   - id: parameter
     teaches: A parameter across three papers

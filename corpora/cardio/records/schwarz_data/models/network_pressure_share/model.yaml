@@ -1,0 +1,26 @@
+id: network_pressure_share
+name: mean pressure of the released network's segments in a diameter range, as a percentage of the inlet pressure
+role: processing
+software: true
+built_from: [network_solution]
+stated: {file: explanation_of_data.txt, lines: "120", quote: "The pressure in the node [N/m2], as calculated from solving the Kirchhoff and Poiseuille laws."}
+equation: >
+  the steady Poiseuille-Kirchhoff solution of network_solution on the released network; over the segments
+  with d_lo <= d <= d_hi: n, and the median and quartiles of 100 P / P_in, P the mid-segment pressure
+  (P_up + P_down)/2; also the proximal share of the network's driving pressure at the median,
+  100 (P_in - P) / (P_in - P_cap)
+inputs:
+  P_in: {quantity: node_pressure, unit: Pa, description: pressure at the two inlets}
+  P_cap: {quantity: node_pressure, unit: Pa, description: pressure distal to every sink element's distal tree}
+  Hd: {quantity: discharge_hematocrit, unit: dimensionless}
+  mu_p: {quantity: plasma_viscosity, unit: Pa*s}
+  d_lo: {quantity: vessel_diameter, unit: um, description: smallest segment diameter taken}
+  d_hi: {quantity: vessel_diameter, unit: um, description: largest segment diameter taken}
+outputs:
+  n_seg: {quantity: segment_count, unit: dimensionless, description: segments with d_lo <= d <= d_hi}
+  share_median: {quantity: pressure_fraction, unit: percent, description: median of 100 P / P_in over those segments}
+  share_q1: {quantity: pressure_fraction, unit: percent, description: 25th percentile of 100 P / P_in}
+  share_q3: {quantity: pressure_fraction, unit: percent, description: 75th percentile of 100 P / P_in}
+  proximal_median: {quantity: pressure_fraction, unit: percent, description: "100 (P_in - P) / (P_in - P_cap) at the median P: the share of the inlet-to-sink pressure drop spent upstream"}
+settings: {file: "Human Left Coronary graph.mat"}
+stochastic: false

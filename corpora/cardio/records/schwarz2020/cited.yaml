@@ -1,0 +1,47 @@
+# Values of this paper whose numbers are in its released data, schwarz_data (relation job
+# schwarz2020+schwarz_data, 2026-11-08). The release's guide says the plots of Fig. 5 were made from
+# Hemodynamics_hum06.xlsx: "Conductance/Flow/Pressure/WSS/Velocity: the aggregate data used for making
+# the plots in Fig. 5; in 64 diameter classes" (explanation_of_data.txt lines 262-265). schwarz_data
+# holds that workbook's class medians of classes 1-11 (cells B2:B12 of each sheet) as data, so each
+# 'cast, median' curve read from Fig. 5B-E is linked to its sheet's medians.
+# Not linked:
+# - Fig. 5A 'cast, median' (read at 400-4000 um): the conductance medians schwarz_data holds are those
+#   of classes 1-11 (44-240 um), outside the read range.
+# - The IQR edges of Fig. 5B-E, the fit lines, the in silico curves (Hemodynamics_in-silicoHum6P.xlsx)
+#   and Fig. 6 (sheet 'perfusion'): schwarz_data holds none of those numbers as data; its runs
+#   (network_medians, perfusion_sheet, hemodynamics_workbook) compute them, and they are compared there.
+# - Table 1 and Figs. 2-4: their numbers are computed by schwarz_data's runs on the network and the
+#   workbooks (tree_table1, termseg_workbook, tree_branching, bifurcation_workbook) and compared with
+#   the paper there; schwarz_data holds no released datum of them to link to.
+# - Table 2's flow CV (CV_flow_table2, 0.074) is the release's 'Table 2' sheet value 0.07436
+#   (schwarz_data wb_T2_Q_cv_med), but a link checks the paper's rounded 0.074 at the precision of the
+#   release's 0.07436 and would report the paper's rounding as a mismatch. It is left unlinked; the
+#   agreement is schwarz_data's comparisons of its stochastic_table2 run and of wb_T2_Q_cv_med with the
+#   paper's printed Table 2.
+- datum: d_f5b_cast
+  from_source: schwarz_data
+  from_datum: wb_P_classes
+  evidence: >
+    Fig. 5B's brown line 'cast, median' is the median pressure per diameter class of the heart; the
+    release's guide says Hemodynamics_hum06.xlsx holds 'the aggregate data used for making the plots in
+    Fig. 5', and its sheet 'pressure' column B is the 'median pooled P (mmHg)' per class.
+- datum: d_f5c_cast
+  from_source: schwarz_data
+  from_datum: wb_Q_classes
+  evidence: >
+    Fig. 5C's brown line 'cast, median' is the median flow per diameter class; Hemodynamics_hum06.xlsx
+    (the data of Fig. 5, guide lines 262-265), sheet 'flow' column B, 'median pooled Flow (ml/min)'.
+- datum: d_f5d_cast
+  from_source: schwarz_data
+  from_datum: wb_v_classes
+  evidence: >
+    Fig. 5D's brown line 'cast, median' is the median centerline velocity per diameter class;
+    Hemodynamics_hum06.xlsx (the data of Fig. 5, guide lines 262-265), sheet 'velocity', the class
+    medians in cm/s.
+- datum: d_f5e_cast
+  from_source: schwarz_data
+  from_datum: wb_wss_classes
+  evidence: >
+    Fig. 5E's brown line 'cast, median' is the median wall shear stress per diameter class;
+    Hemodynamics_hum06.xlsx (the data of Fig. 5, guide lines 262-265), sheet 'wss', the class medians
+    in Pa.

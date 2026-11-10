@@ -1,0 +1,68 @@
+# A tree grown by the released svVascularize, at its own defaults, in the heart-shaped domain shipped with
+# it, against schwarz2020's measured human left coronary tree. Nothing of the synthetic tree was fitted to
+# these measurements; svv's defaults were not changed. sexton2025's record compares cube trees with the same
+# measurements (and kassab1993's Horton ratios); this one changes the domain to a heart.
+- id: val_biv_A_large_schwarz
+  model: tree_biventricle
+  inputs: {n_terminals: n_term_1000_paper}
+  settings: {seed: 11}
+  replicates: 3
+  output: A_median_large
+  against: 'schwarz2020/A_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth}
+  conditions_ok: >
+    a synthetic tree of 1000 terminals in a biventricle of about 210 cm^3 against one human left coronary
+    tree of about 10^5 terminal segments perfusing about 358 cm^3; both the median of (dL^2 + dS^2)/dM^2
+    over bifurcations whose mother is wider than 400 um
+  basis: >
+    schwarz2020 measured that above 400 um "the cross-sectional area remained stable (median area growth:
+    1.02)" (p. 5), a branching exponent near 2. svv grows with gamma = 3 by default (data.py line 281, as
+    Table S1). Area growth is dimensionless and set at each bifurcation by the radius rule and the daughters'
+    asymmetry. Grown in a heart of human size (the surface read in cm), the synthetic root (about 0.8 mm)
+    passes 400 um over its first few generations (n_bif_A_large, about 40 bifurcations), so the median is
+    taken over large vessels of a heart-sized tree, as schwarz2020's is. Differences: the synthetic tree has
+    100 times fewer terminals, its root flow is svv's default (0.0625 mL/s for 1000 terminals, far below a
+    human left coronary), its domain is both ventricles rather than the left one, and its radii are the ones
+    svv stores and exports, which depart from Eq. S5 (q_svv_radii); val_biv_A_large_check gives the median
+    with svv's own check radii.
+- id: val_biv_S_large_schwarz
+  model: tree_biventricle
+  inputs: {n_terminals: n_term_1000_paper}
+  settings: {seed: 11}
+  replicates: 3
+  output: S_median_large
+  against: 'schwarz2020/S_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': daughter_symmetry}
+  conditions_ok: as val_biv_A_large_schwarz, for the median of dS/dL over mothers wider than 500 um
+  basis: >
+    schwarz2020: "for large mother diameters (>500 um) the median observed symmetry ratio was 0.59" (p. 9).
+    In a constrained constructive optimization tree the daughter symmetry follows from where the terminals
+    attach and the flows the daughters carry; it is dimensionless. The same differences as
+    val_biv_A_large_schwarz; above 500 um about 17 bifurcations of each synthetic tree count (n_bif_S_large).
+- id: val_biv_A_large_check
+  model: tree_biventricle
+  inputs: {n_terminals: n_term_1000_paper}
+  settings: {seed: 11}
+  replicates: 3
+  output: A_median_large_check
+  against: 'schwarz2020/A_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/area_growth': area_growth}
+  conditions_ok: as val_biv_A_large_schwarz, with the radii svv's own check functions give
+  basis: >
+    As val_biv_A_large_schwarz, with the radii that follow from svv's root radius (Eq. S8) and its stored
+    ratios (svv's naive_radius), which obey Eq. S5 with gamma = 3 exactly: the area growth the paper's tree
+    equations themselves give, set beside the one of the radii svv exports.
+- id: val_biv_S_large_check
+  model: tree_biventricle
+  inputs: {n_terminals: n_term_1000_paper}
+  settings: {seed: 11}
+  replicates: 3
+  output: S_median_large_check
+  against: 'schwarz2020/S_median_large'
+  purpose: validation
+  quantities: {'schwarz2020/daughter_symmetry': daughter_symmetry}
+  conditions_ok: as val_biv_S_large_schwarz, with the radii svv's own check functions give
+  basis: As val_biv_S_large_schwarz, with svv's check radii (see val_biv_A_large_check).

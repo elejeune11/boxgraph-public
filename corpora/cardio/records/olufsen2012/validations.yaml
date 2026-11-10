@@ -23,3 +23,36 @@
     ratio of radii); with it the model is the same form as schwarz2020's Eq. 8, and the same number as the
     right-hand form of Eq. 2.18 with gamma = S^2 (q_schwarz_gamma_form). xi rests on Olufsen (1999), not on
     schwarz2020's coronary nodes, so this is a test.
+
+# Cross-validation against schwarz_data, the released human left coronary tree (validation job
+# olufsen2012+schwarz_data, 2026-11-09). Neither source cites the other. What was considered and not entered is in
+# q_val_schwarz_data_scope.
+- id: val_eta_eq218_tree_vs_coronary_area_growth
+  model: area_ratio_eq218
+  inputs: {xi: xi_base, gamma: gamma_base}
+  output: eta
+  against: 'schwarz_data/p_A_median_large'
+  purpose: validation
+  quantities: {'schwarz_data/area_growth': area_ratio}
+  conditions_ok: >
+    This paper's systemic structured trees stand for the small arteries of man from the terminal large arteries
+    down to r_min = 100 um (p. 9), with one xi and gamma, and so one eta, at every bifurcation ('constant scaling
+    throughout each of the vascular beds', p. 9). The measurement is the median over the bifurcations of one human
+    left coronary tree, cast in the arrested, vasodilated state, with mothers wider than 400 um (radii above
+    200 um), inside that size range. Same species and the same kind of vessel (distributing systemic arteries);
+    a different organ (femoral bed against the heart), and a median over many asymmetric bifurcations against a
+    constant meant to hold at each. The median of the ratio is the statistic closest to such a constant. The
+    tree's own asymmetry is not imposed: the model is run at the tree this paper builds, as its prediction.
+  basis: >
+    'As in previous studies (Olufsen 1999), for both the systemic and the pulmonary trees, we let xi = 2.76,
+    eta = 1.16 and gamma = 0.41' (p. 9), with eta tied to xi and gamma by Eq. 2.18. The right-hand form of
+    Eq. 2.18 is the form this paper computes with (its Fig. 8(a) is reproduced by it, q_fig8a_gamma_form), so
+    area_ratio_eq218 at the printed xi and gamma is the area ratio of the bifurcations of the trees this paper
+    simulates: its prediction of the area ratio of a real systemic arterial bifurcation of that size. The
+    release's area growth A (daughters' summed area over the mother's) is the same ratio as eta of Eq. 2.18's
+    left-hand form; schwarz2020 printed its median 1.02 for segments over 400 um ('on average the
+    cross-sectional area remained stable', schwarz2020 p. 5) and schwarz_data reproduces it from the network.
+    Nothing here was fitted to it: xi and gamma come from Olufsen (1999) and the literature it cites. The printed
+    gamma is used, not the printed eta = 1.16, which Eq. 2.18 does not give back exactly (q_eta_base); the tree is
+    built from xi and gamma. This is the same test as olufsen1999/val_eta_eq21_vs_coronary_area_growth, here for
+    the 2012 paper's own statement of the tree.

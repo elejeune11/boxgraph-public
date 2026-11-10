@@ -1,0 +1,37 @@
+id: bifurcation_workbook
+name: branching statistics behind Figs. 2-4, recomputed from the data points of final_tree_bifurcation_summary_all-ld.xlsx
+role: processing
+software: true
+built_from: [stochastic_table2]
+stated: {file: explanation_of_data.txt, lines: "235", quote: "This excel sheet was used for generating the plots in Fig. 2-3-4 in the paper."}
+equation: >
+  per class: the counts of segsPerDiam, the number and median of the values in the class's column of
+  'length dclass', 'symmetry' and the two 'area' columns; node shares from furctype; median symmetry of
+  'moth diam - daught symmetry' for mother diameter > d_S_large; median of the >= 400 um 'area' columns
+inputs:
+  d: {quantity: vessel_diameter, unit: um, description: lower bound of the (mother) diameter class}
+  d_S_large: {quantity: vessel_diameter, unit: um}
+outputs:
+  n_segments: {quantity: segment_count, unit: dimensionless, description: "segsPerDiam!B, elements of the class"}
+  n_mothers: {quantity: node_count, unit: dimensionless, description: "segsPerDiam!C, one-mother nodes whose mother is in the class"}
+  n_length: {quantity: segment_count, unit: dimensionless, description: "values in the class's column of 'length dclass'"}
+  L_median: {quantity: median_segment_length, unit: um}
+  n_sym: {quantity: node_count, unit: dimensionless, description: "values in the class's column of 'symmetry'"}
+  S_median: {quantity: daughter_symmetry, unit: dimensionless}
+  n_area_hi: {quantity: node_count, unit: dimensionless, description: "values in '<class>, sym 0.50-1.00' of 'area'"}
+  n_area_lo: {quantity: node_count, unit: dimensionless, description: "values in '<class>, sym 0.00-0.50'"}
+  A_median_hi: {quantity: area_growth, unit: dimensionless}
+  A_median_lo: {quantity: area_growth, unit: dimensionless}
+  pct_3: {quantity: node_type_share, unit: percent}
+  pct_4: {quantity: node_type_share, unit: percent}
+  pct_more: {quantity: node_type_share, unit: percent}
+  n_internal_nodes: {quantity: node_count, unit: dimensionless, description: sum of furctype!B}
+  n_length_all: {quantity: segment_count, unit: dimensionless, description: "values of 'length all mm'"}
+  L_median_all: {quantity: median_segment_length, unit: um}
+  n_pairs: {quantity: node_count, unit: dimensionless, description: "rows of 'moth diam - daught symmetry'"}
+  S_median_large: {quantity: daughter_symmetry, unit: dimensionless}
+  A_median_top_class: {quantity: area_growth, unit: dimensionless, description: "median of the two '>= 400 um' columns of 'area' pooled"}
+settings:
+  file: final_tree_bifurcation_summary_all-ld.xlsx
+  class_edges_um: [30, 45, 60, 75, 90, 105, 120, 150, 200, 400]
+stochastic: false

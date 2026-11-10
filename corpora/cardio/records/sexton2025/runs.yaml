@@ -1,0 +1,102 @@
+# ---- the released code's own constants
+- id: run_defaults
+  model: svv_defaults
+  inputs: {}
+  outputs: {gamma: svv_default_gamma, alpha_r: svv_default_alpha_r, alpha_l: svv_default_alpha_l,
+            mu: svv_default_mu, nu: svv_default_nu, rho: svv_default_rho, Q_term: svv_default_Q_term,
+            P_root: svv_default_P_root, P_term: svv_default_P_term}
+
+# ---- trees grown with svv in a cube with the paper's constants (five seeds each: the growth is random
+#      and, in this release, does not repeat for a fixed seed; the value is the mean over seeds)
+- id: run_tree_1000
+  model: svv_tree
+  inputs: {n_terminals: n_term_1000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 1}
+  replicates: 5
+  outputs: {murray_sum_max: t1000_beta_sum_max, murray_sum_min: t1000_beta_sum_min,
+            murray_radius_sum_max: t1000_radius_sum_max, murray_radius_sum_min: t1000_radius_sum_min,
+            murray_radius_sum_median: t1000_radius_sum_median, root_diameter: t1000_root_d,
+            root_diameter_s10: t1000_root_d_s10, root_diameter_s10_beta4: t1000_root_d_s10_beta4,
+            rstar_root_svv: t1000_rstar_svv, rstar_root_s10: t1000_rstar_s10, rstar_root_s10_beta4: t1000_rstar_s10_beta4}
+  note: >
+    1000 terminals as the cube tree of Fig. 2E. Settings the paper does not state (cube size, terminal flow,
+    root and terminal pressure) are added inputs; everything else of svv's growth is left at svv's defaults.
+- id: run_tree_4000
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_t1, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 101}
+  replicates: 5
+  outputs: {murray_sum_max: t4000_beta_sum_max, murray_radius_sum_max: t4000_radius_sum_max,
+            murray_radius_sum_min: t4000_radius_sum_min, root_diameter: t4000_root_d,
+            root_diameter_s10: t4000_root_d_s10, root_diameter_s10_beta4: t4000_root_d_s10_beta4,
+            A_median_large: t4000_A_large, S_median_large: t4000_S_large}
+  note: >
+    4000 terminals, one of the sizes of Fig. S8 and the largest that keeps five seeds within a few minutes
+    here; it gives a root of about 0.7 mm, so that some mothers exceed schwarz2020's 400 and 500 um.
+- id: run_tree_4000_g2
+  model: svv_tree
+  inputs: {n_terminals: n_term_4000, cube_edge: cube_edge_added, gamma: gamma_range_lo, alpha_r: alpha_r_t1,
+           alpha_l: alpha_l_t1, mu: mu_t1, rho: rho_t3, Q_term: Q_term_added, P_root: P_root_added,
+           P_term: P_term_added}
+  settings: {seed: 201}
+  replicates: 5
+  outputs: {murray_sum_max: t4000g2_beta_sum_max, murray_radius_sum_max: t4000g2_radius_sum_max,
+            A_median_large: t4000g2_A_large, S_median_large: t4000g2_S_large}
+  note: >
+    As run_tree_4000 with gamma = 2, the lower end of the range the paper calls physiological (p. 11), the
+    exponent schwarz2020 finds closer to its large coronaries; the paper itself generates with gamma = 3.
+
+# ---- Eq. S6 and Eq. S10 on one bifurcation
+- id: run_murray_beta
+  model: murray_beta
+  inputs: {gamma: gamma_t1, ratio: ratio_added}
+  outputs: {beta_sum: murray_beta_sum}
+- id: run_s10
+  model: reduced_resistance_s10
+  inputs: {mu: mu_t1, gamma: gamma_t1, l_p: l_parent_added, l_a: l_a_added, l_b: l_b_added, Q_a: Q_a_added, Q_b: Q_b_added}
+  outputs: {Rstar_p: rstar_s10}
+- id: run_s10_beta4
+  model: reduced_resistance_s10_beta4
+  inputs: {mu: mu_t1, gamma: gamma_t1, l_p: l_parent_added, l_a: l_a_added, l_b: l_b_added, Q_a: Q_a_added, Q_b: Q_b_added}
+  outputs: {Rstar_p: rstar_s10_beta4}
+- id: run_bif_network
+  model: bifurcation_network
+  inputs: {mu: mu_t1, gamma: gamma_t1, l_p: l_parent_added, l_a: l_a_added, l_b: l_b_added, Q_a: Q_a_added, Q_b: Q_b_added}
+  outputs: {Rstar_p: rstar_network}
+
+# ---- arithmetic the paper prints
+- id: run_nu_t3
+  model: kinematic_viscosity
+  inputs: {mu: mu_t3, rho: rho_t3}
+  outputs: {nu: nu_from_t3}
+- id: run_nu_p5
+  model: kinematic_viscosity
+  inputs: {mu: mu_p5, rho: rho_p5}
+  outputs: {nu: nu_from_p5}
+- id: run_px_live
+  model: pixels_per_cell
+  inputs: {area: area_live, res: pixel_res}
+  outputs: {n_px: px_live_calc}
+- id: run_px_dead
+  model: pixels_per_cell
+  inputs: {area: area_dead, res: pixel_res}
+  outputs: {n_px: px_dead_calc}
+- id: run_speedup
+  model: speedup
+  inputs: {t_ref: t_gyrus_8000_ref, t_new: t_gyrus_8000_new}
+  outputs: {factor: speedup_calc}
+- id: run_speedup_table_s5_max
+  model: speedup
+  inputs: {t_ref: t_globus_pallidus_bench, t_new: t_globus_pallidus_build}
+  outputs: {factor: speedup_table_s5_max}
+  note: "audit: the largest ratio of benchmark to build time among Table S5's twenty domains (q_speedup)"
+- id: run_fig2b_recompute
+  model: balanced_tree_n2
+  inputs: {C0: c0_fig2b_added}
+  sweep: {B: clock_recompute_fig2b}
+  outputs: {C: clock_recompute_n2_calc}
+  note: "figure pass: the caption's own scaling C α N^2 for full balanced trees, at the depths read from the dashed line"

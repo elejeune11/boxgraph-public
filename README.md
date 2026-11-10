@@ -1,5 +1,12 @@
 # BoxGraph
 
+> [!WARNING]
+> **Work in progress.** BoxGraph and its corpora are under active development, and the
+> format, the code and the results may still change. The records are written by agent jobs
+> and checked by the validator, but not yet by people. Treat a verdict as a pointer to where
+> a paper and its rebuild disagree, not as a finding about the paper, and check the record
+> before citing it.
+
 > All models are wrong, but some are useful. — George E. P. Box
 
 Papers build on each other's models and parameter values, but the links are

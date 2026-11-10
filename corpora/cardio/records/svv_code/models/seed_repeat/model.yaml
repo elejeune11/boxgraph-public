@@ -1,0 +1,21 @@
+id: seed_repeat
+name: the same svVascularize tree grown twice with the same seed, and how far the two differ
+role: model
+software: true
+built_from: [tree_growth]
+stated: {file: svv/domain/domain.py, lines: "179-190", quote: "self.random_generator = np.random.Generator(np.random.PCG64(seed=self.random_seed))"}
+equation: >
+  two growths in two processes, each with Python's random and numpy's global generator seeded with `seed`
+  and Domain.set_random_seed(seed) called before Domain.create (seed_order before) or after Domain.build
+  (seed_order after_build); the root's distal end and every radius compared between the two trees
+inputs:
+  n_terminals: {quantity: terminal_count, unit: dimensionless}
+  cube_edge: {quantity: domain_edge_length, unit: cm}
+outputs:
+  root_end_distance: {quantity: point_distance, unit: cm, description: distance between the two roots' distal ends}
+  radius_diff_max: {quantity: radius_deviation, unit: dimensionless, description: "largest |r_1 / r_2 - 1| over vessels of the same index"}
+  root_diameter_diff: {quantity: radius_deviation, unit: dimensionless}
+settings:
+  seed: 7
+  seed_order: before
+stochastic: false

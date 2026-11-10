@@ -1,0 +1,52 @@
+id: termseg_workbook
+name: Table 1 as termseg_density.xlsx holds it (counts, shares, LV densities, regional diameters and lengths)
+role: processing
+software: true
+built_from: [stochastic_table2]
+stated: {file: explanation_of_data.txt, lines: "249-250", quote: "Data for Table 1"}
+equation: >
+  per class: SegType counts and percentages, Region densities and 100 density / column sum; totals of
+  SegType row 13 and of the Region columns; per region: count, median, 10th and 90th percentile of the
+  'diam per region' values and median of 'length per region'
+inputs:
+  d: {quantity: vessel_diameter, unit: um, description: lower bound of the diameter class}
+outputs:
+  class_lo: {quantity: vessel_diameter, unit: um, description: "SegType!A, the class's lower edge as stored"}
+  n_all: {quantity: segment_count, unit: dimensionless}
+  share_all: {quantity: segment_share, unit: percent}
+  n_internal: {quantity: segment_count, unit: dimensionless}
+  n_terminal: {quantity: segment_count, unit: dimensionless}
+  share_terminal: {quantity: segment_share, unit: percent}
+  n_all_total: {quantity: segment_count, unit: dimensionless}
+  n_internal_total: {quantity: segment_count, unit: dimensionless}
+  n_terminal_total: {quantity: segment_count, unit: dimensionless}
+  dens_epi: {quantity: terminal_density, unit: 1/cm^3}
+  dens_mid: {quantity: terminal_density, unit: 1/cm^3}
+  dens_endo: {quantity: terminal_density, unit: 1/cm^3}
+  dshare_epi: {quantity: terminal_density_share, unit: percent}
+  dshare_mid: {quantity: terminal_density_share, unit: percent}
+  dshare_endo: {quantity: terminal_density_share, unit: percent}
+  dens_total_epi: {quantity: terminal_density, unit: 1/cm^3}
+  dens_total_mid: {quantity: terminal_density, unit: 1/cm^3}
+  dens_total_endo: {quantity: terminal_density, unit: 1/cm^3}
+  n_epi: {quantity: segment_count, unit: dimensionless}
+  n_mid: {quantity: segment_count, unit: dimensionless}
+  n_endo: {quantity: segment_count, unit: dimensionless}
+  n_regions: {quantity: segment_count, unit: dimensionless, description: values in the three region columns together}
+  n_regions_stated: {quantity: segment_count, unit: dimensionless, description: "'diam per region'!E3, 'total number of entries'"}
+  d_med_epi: {quantity: median_segment_diameter, unit: um}
+  d_p10_epi: {quantity: diameter_decile_low, unit: um}
+  d_p90_epi: {quantity: diameter_decile_high, unit: um}
+  l_med_epi: {quantity: median_segment_length, unit: um}
+  d_med_mid: {quantity: median_segment_diameter, unit: um}
+  d_p10_mid: {quantity: diameter_decile_low, unit: um}
+  d_p90_mid: {quantity: diameter_decile_high, unit: um}
+  l_med_mid: {quantity: median_segment_length, unit: um}
+  d_med_endo: {quantity: median_segment_diameter, unit: um}
+  d_p10_endo: {quantity: diameter_decile_low, unit: um}
+  d_p90_endo: {quantity: diameter_decile_high, unit: um}
+  l_med_endo: {quantity: median_segment_length, unit: um}
+settings:
+  file: termseg_density.xlsx
+  class_edges_um: [30, 45, 60, 75, 90, 105, 120, 150, 200, 400]
+stochastic: false

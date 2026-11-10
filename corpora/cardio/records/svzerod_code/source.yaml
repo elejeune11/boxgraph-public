@@ -1,0 +1,65 @@
+id: svzerod_code
+kind: software
+title: "svZeroDSolver: the lumped-parameter (0D) solver of SimVascular (source at commit 87bbadc)"
+authors: ["Stanford University, The Regents of the University of California, and others"]
+year: 2025
+url: https://github.com/SimVascular/svZeroDSolver
+version: "sha256:8c7da476a641fd5bd4abcefc8c4c76d150e7ee5a95714e09ce7efb98615e49e1"
+licence: BSD-3-Clause
+language: c++
+file: corpus/cardio/code/svzerod_code
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-09"}
+notes: >
+  What the code is. svZeroDSolver at commit 87bbadc109d4 (git archive, no history; pyproject version
+  3.2, LICENSE BSD-3-Clause, copyright 2016-2025 Stanford University, the Regents of the University of
+  California and others; no author list in the code, menon2025 is its paper). C++ in src/: model/ holds
+  the blocks (each header states its equations, circuit and the paper it follows), solve/ the
+  simulation parameters and the generalized-alpha integrator with Newton iterations, algebra/ the
+  sparse system, optimize/ the calibrator; a Python interface (module svzerod, svzerod.simulate(config))
+  built from this source is installed in the separate environment corpus/cardio/envs/sim (svzerod 3.2),
+  and the record's software models run it there in a subprocess. tests/cases/*.json are 44 test
+  configurations, 41 with stored results in tests/cases/results/ (tests/test_solver.py compares a rerun
+  with them at rtol = atol = 1e-7, 0.2 for one case); docs/references.bib lists the cited papers. The
+  calibrator, svZeroDTuner, the GUI and the visualization applications are not read. Nothing of the
+  code is copied here: the models load or run it from the code folder at run time.
+
+  How it relates to the paper. menon2025 prints no equation, parameter or result (q_menon_prints_nothing),
+  so the code is checked against (1) its own test cases, (2) the papers its block headers cite, run on
+  those papers' own inputs where they print them, and (3) the paper's equations restated in our code,
+  tied to the released blocks by relations. Hidden choices written only in the code: rho_infty 0.5,
+  absolute tolerance 1e-8, 30 Newton iterations, steady initialization by default, a 1% cycle-to-cycle
+  criterion and a default period of 1.0 (q_hidden_solver_settings); the cases state no units
+  (q_case_units).
+
+  What it reproduces. (1) Test cases rerun as released: all 38 analytical values the descriptions state
+  for steady and pulsatile cases at t0 are reproduced, except the two pulsatile_R_RCR_derivative values,
+  whose description copies the t0 "Solutions" of a case that outputs all cycles: those solutions are the
+  steady initial state, not the periodic one (q_t0_is_initial_state). 16 of 18 stored-result values are
+  reproduced to their printed 10 decimals; the two in coupledBlock_closedLoopHeart_withCoronaries are
+  not (stored left atrial flow 0.0387 against about -3e-5 rerun), a difference the release's test hides
+  with a 20% tolerance for that case only (q_coupled_tolerance). Outside the record all 41 cases pass the
+  release's own 1e-7 test. (2) kim2010: the open-loop coronary block equals kim2010's coronary bed
+  equation (p. 4 coefficients) to 7e-5 over the tested range of inputs (relation rel_coronary_kim2010_qmin,
+  verified), given that the code lumps Rv + Rv-micro into one resistance and adds a venous pressure kim2010's
+  equation does not have (equal at P_v = 0; q_venous_pressure_term). Run on kim2010's Table 3 beds and
+  Table 4 pressures, the released block gives the same steady flows and verdicts as kim2010's own record:
+  Table 4 at rest 1 of 5 reproduced, 2 close; moderate exercise 4 of 5; the LAD/LCX/RCA split 1 of 6
+  reproduced, 3 close; these differences are kim2010's (a 3D model whose outlet pressures are not
+  printed; q_kim_results_as_in_record). Table 3's capacitances, not in kim2010's record, are entered here
+  (q_kim_capacitances). (3) yong2025: the time-varying coronary block's Ram(t) is yong2025's Eq. 9 with
+  Eq. 4 (port verified to 1e-14, released block to 2e-5; rel_ram_yong_port, rel_ram_yong_released); it
+  takes Ram_min and Ram_max directly instead of yong's mean, 0.7/0.75 and k (q_varres_vs_yong). On
+  yong2025's printed minimum, maximum and timing it gives means of about 61.68 and 78.43 against the
+  printed 61.31 and 78.04, reproduced only within the rounding of the printed Tvc, Tvr and cycle length
+  (q_yong_mean_timing, q_yong_timing); the peak equals the printed maximum. yong2025's closed-loop flows
+  are not run here (the closed loop with Pim = 0.6 ventricular pressure is not in the block). The block
+  loses its time variation silently when the capacitances are tiny (q_varres_small_capacitance).
+  (4) olufsen2000: the impedance block applies Eq. 38 discretized as in Appendix B; its periodic mean
+  equals the restated discrete sum, its peak differs by up to 4e-4 over the tested range, an O(dt^2)
+  effect of the generalized-alpha step (rel_impedance_olufsen_pmax, approximated_by within 0.5%;
+  q_impedance_alpha). The structured-tree impedance itself is not in the code (q_impedance_kernel_not_computed);
+  the first cycle omits the history terms (q_impedance_startup). (5) The RCR block's input impedance
+  equals westerhof1971's three-element model to 3e-5 in modulus and phase (proposed relations; the code
+  cites Vignon & Taylor 2004, not in this review: q_windkessel_source). The chamber (time-varying rest
+  volume, unlike suga1973) and tanh valve blocks cite papers outside the review and are checked only
+  through test cases (q_chamber_vrest, q_valve_source, q_other_blocks).

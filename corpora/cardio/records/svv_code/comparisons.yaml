@@ -1,0 +1,49 @@
+# ---- the code's defaults, as run, against Tables S1 and S3
+- {id: cmp_gamma, purpose: consistency, computed: param_gamma, printed: gamma_paper, note: "svv's default Murray exponent against Table S1"}
+- {id: cmp_alpha_r, purpose: consistency, computed: param_alpha_r, printed: alpha_r_paper}
+- {id: cmp_alpha_l, purpose: consistency, computed: param_alpha_l, printed: alpha_l_paper}
+- {id: cmp_rho, purpose: consistency, computed: param_rho, printed: rho_paper}
+- {id: cmp_nu, purpose: consistency, computed: param_nu, printed: nu_paper, note: q_viscosity_code}
+- {id: cmp_mu_growth, purpose: consistency, computed: param_mu, printed: mu_s1_paper,
+   note: "the viscosity svv's growth puts in Eq. S1 (nu * rho) against Table S1's 4 cP (q_viscosity_code)"}
+
+# ---- svv's update on one bifurcation against the identity the paper states and the pressures it is built for
+- {id: cmp_bif_identity, purpose: reproduction, computed: bif_beta_sum, printed: murray_identity_paper,
+   note: "the ratios svv's update_resistance writes satisfy the paper's sum beta^gamma = 1"}
+- {id: cmp_bif_P_end_a, purpose: consistency, computed: bif_P_end_a, printed: P_term_code,
+   note: "with svv's radii, Eqs. S1-S2 bring the root pressure down to the terminal pressure along each path"}
+- {id: cmp_bif_P_end_b, purpose: consistency, computed: bif_P_end_b, printed: P_term_code}
+
+# ---- trees grown by svv in a cube: the tree equations, svv's own check, svv's own 0D export
+- {id: cmp_cube_n_term, purpose: consistency, computed: cube_n_term, printed: n_term_1000_paper}
+- {id: cmp_cube_beta_max, purpose: reproduction, computed: cube_beta_sum_max, printed: murray_identity_paper,
+   note: "largest beta_L^gamma + beta_R^gamma with svv's stored ratios"}
+- {id: cmp_cube_beta_min, purpose: reproduction, computed: cube_beta_sum_min, printed: murray_identity_paper}
+- {id: cmp_cube_radius_max, purpose: reproduction, computed: cube_radius_sum_max, printed: murray_identity_paper,
+   note: "largest (r_L^gamma + r_R^gamma)/r_p^gamma with the radii svv stores and exports; by Eq. S6 these are beta^gamma (q_svv_radii)"}
+- {id: cmp_cube_radius_min, purpose: reproduction, computed: cube_radius_sum_min, printed: murray_identity_paper}
+- {id: cmp_cube_radius_median, purpose: reproduction, computed: cube_radius_sum_median, printed: murray_identity_paper}
+- {id: cmp_cube_check_max, purpose: reproduction, computed: cube_check_sum_max, printed: murray_identity_paper,
+   note: "the same with the radii svv's own check functions (naive, naive_radius) recompute from the tree"}
+- {id: cmp_cube_check_min, purpose: reproduction, computed: cube_check_sum_min, printed: murray_identity_paper}
+- {id: cmp_cube_P_root_0d, purpose: consistency, computed: cube_P_root_0d, printed: P_root_code,
+   note: "the root pressure svv's 0D export of its own tree needs to deliver the root flow with the outlets at svv's terminal pressure, against the root pressure the tree was grown for (q_export_pressure)"}
+- {id: cmp_cube_P_root_0d_mu, purpose: consistency, computed: cube_P_root_0d_mu, printed: P_root_code,
+   note: "the same with the export's viscosity replaced by the growth's (nu * rho): what remains is the stored radii (q_svv_radii)"}
+- {id: cmp_cube_mu_export, purpose: consistency, computed: cube_mu_export, printed: mu_s3_paper,
+   note: "the viscosity of the exported 0D resistances against Table S3's CFD viscosity (q_viscosity_code)"}
+- {id: cmp_cube_outlet_R, purpose: reproduction, computed: cube_outlet_R, printed: outlet_R_zero_paper,
+   note: "the outlet resistances svv exports against Movie S2's 'zero resistance' outlets (q_export_outlets)"}
+- {id: cmp_cube_n_outlets, purpose: consistency, computed: cube_n_outlets, printed: n_term_1000_paper}
+
+# ---- the same in the biventricle shipped with the code
+- {id: cmp_biv_n_term, purpose: consistency, computed: biv_n_term, printed: n_term_1000_paper}
+- {id: cmp_biv_beta_max, purpose: reproduction, computed: biv_beta_sum_max, printed: murray_identity_paper}
+- {id: cmp_biv_beta_min, purpose: reproduction, computed: biv_beta_sum_min, printed: murray_identity_paper}
+- {id: cmp_biv_radius_max, purpose: reproduction, computed: biv_radius_sum_max, printed: murray_identity_paper, note: q_svv_radii}
+- {id: cmp_biv_radius_min, purpose: reproduction, computed: biv_radius_sum_min, printed: murray_identity_paper}
+- {id: cmp_biv_check_max, purpose: reproduction, computed: biv_check_sum_max, printed: murray_identity_paper}
+- {id: cmp_biv_P_root_0d, purpose: consistency, computed: biv_P_root_0d, printed: P_root_code, note: q_export_pressure}
+- {id: cmp_biv_P_root_0d_mu, purpose: consistency, computed: biv_P_root_0d_mu, printed: P_root_code}
+- {id: cmp_biv_mu_export, purpose: consistency, computed: biv_mu_export, printed: mu_s3_paper}
+- {id: cmp_biv_outlet_R, purpose: reproduction, computed: biv_outlet_R, printed: outlet_R_zero_paper, note: q_export_outlets}

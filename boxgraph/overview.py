@@ -429,6 +429,17 @@ def _case_studies(syn: dict, content: dict, outdir: Path, content_dir: Path | No
     return out
 
 
+def _notice(n: dict | None) -> str:
+    """The overview text's notice as a strip above every view (empty when there is none)."""
+    if not n:
+        return ""
+    parts = [f"<b>{html.escape(n['title'])}</b>"] if n.get("title") else []
+    parts += [html.escape(n["text"])] if n.get("text") else []
+    if n.get("link") and n.get("href"):
+        parts.append(f'<a href="{html.escape(n["href"])}">{html.escape(n["link"])}</a>.')
+    return '<div class="notice" role="note">' + " ".join(parts) + "</div>"
+
+
 def render_overview(syn: dict, outdir: str | Path, title: str = "Synthesis overview", content: dict | None = None,
                     content_dir: str | Path | None = None) -> Path:
     """Write the overview page (index.html, and img/ for case-study figures) into outdir. Images a case study shows
@@ -450,6 +461,7 @@ def render_overview(syn: dict, outdir: str | Path, title: str = "Synthesis overv
     data["title"] = title
     payload = json.dumps(data, sort_keys=True, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     page = (_PAGE.replace("__TITLE__", html.escape(title))
+            .replace("__NOTICE__", _notice(content.get("notice")))
             .replace("__DATA__", payload))
     path = outdir / "index.html"
     path.write_text(page)
@@ -477,7 +489,7 @@ _PAGE = r"""<title>__TITLE__</title>
   --paper: #13181d; --panel: #1a2128; --ink: #e4e8ec; --muted: #9aa5b0; --rule: #2e3943; --grid: #1f272e;
   --accent: #6cc3cc; --accent-soft: #1d3a3e; --link: #a9b8c6; --cited: #d8b65a;
   --ok: #6cc28a; --near: #e0ad4a; --off: #e88576; --none: #6d7882; color-scheme: dark }
-body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.55; }
 .wrap { max-width: 1180px; margin: 0 auto; padding-block: 36px 64px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid; gap: 44px; }
@@ -596,9 +608,11 @@ details > div { padding: 0 16px 16px; display: grid; gap: 10px; }
 .ev img { border: 1px solid var(--rule); border-radius: 4px; }
 .ev .detail { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
 footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 18px; }
+.notice { background: var(--accent-soft); color: var(--ink); font-size: 13px; line-height: 1.45; padding: 8px 16px;
+  text-align: center; border-bottom: 1px solid var(--rule); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
-
+__NOTICE__
 <div class="wrap" id="app"></div>
 <script type="application/json" id="ov-data">__DATA__</script>
 <script>

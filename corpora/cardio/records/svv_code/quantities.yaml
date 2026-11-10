@@ -1,0 +1,47 @@
+# The same ids as sexton2025's record wherever the quantity is the same, so the build can set the code's
+# values beside the paper's.
+- {id: murray_exponent, name: power-law exponent of the parent-daughter radius rule, dimension: dimensionless, description: "gamma in r_parent^gamma = sum r_i^gamma (Eq. S5); svv's murray_exponent"}
+- {id: cost_radius_exponent, name: radius exponent of the tree cost, dimension: dimensionless, description: "alpha_r; svv's radius_exponent"}
+- {id: cost_length_exponent, name: length exponent of the tree cost, dimension: dimensionless, description: "alpha_l; svv's length_exponent"}
+- {id: dynamic_viscosity, name: dynamic viscosity of the perfusing fluid, dimension: "[mass]/[length]/[time]"}
+- {id: kinematic_viscosity, name: kinematic viscosity of the perfusing fluid, dimension: "[length]**2/[time]"}
+- {id: fluid_density, name: density of the perfusing fluid, dimension: "[mass]/[length]**3"}
+- {id: terminal_flow, name: flow of each terminal vessel during tree generation, dimension: "[length]**3/[time]"}
+- {id: default_flow_numerator, name: the flow svv divides by 2000 to give its default terminal flow, dimension: "[length]**3/[time]", description: "data.py line 270 writes the default terminal flow as 0.125 / 2000.0; the code says nothing of what either number is"}
+- {id: default_flow_divisor, name: the number svv divides 0.125 mL/s by to give its default terminal flow, dimension: dimensionless}
+- {id: tree_pressure, name: pressure at the root inlet or the terminal outlets during tree generation, dimension: "[mass]/[length]/[time]**2"}
+- {id: domain_edge_length, name: edge length of a cubic tissue domain, dimension: "[length]"}
+- {id: domain_volume, name: volume of the tissue domain svv grows a tree in, dimension: "[length]**3"}
+- {id: terminal_count, name: number of terminal vessels (outlets) of a tree, dimension: dimensionless}
+- {id: segment_count, name: number of vessel segments of a tree, dimension: dimensionless}
+- {id: bifurcation_count, name: number of bifurcations counted, dimension: dimensionless}
+- {id: vessel_length, name: length of a vessel segment, dimension: "[length]"}
+- {id: vessel_flow, name: volumetric flow in a vessel segment, dimension: "[length]**3/[time]"}
+- {id: vessel_diameter, name: diameter of a vessel segment, dimension: "[length]"}
+- {id: reduced_resistance, name: reduced resistance R* = R r^4 of a vessel and its subtree, dimension: "[mass]/[time]", description: "Eq. S7; dyn s cm^-5 times cm^4"}
+- {id: bifurcation_ratio, name: daughter over parent radius at a bifurcation (beta), dimension: dimensionless, description: Eq. S6}
+- {id: murray_sum, name: "sum over the daughters of (daughter radius / parent radius)^gamma", dimension: dimensionless, description: "one when Eq. S5 holds at the bifurcation"}
+- {id: radius_deviation, name: relative difference between two radii of the same vessel, dimension: dimensionless}
+- {id: resistance_deviation, name: relative difference between two reduced resistances of the same vessel, dimension: dimensionless}
+- {id: flow_deviation, name: relative difference between a flow and the flow it should equal, dimension: dimensionless, description: "|Q - Q_expected| / Q_expected"}
+- {id: vessel_fraction, name: share of the vessels of a tree, dimension: dimensionless}
+- {id: point_distance, name: distance between two points of two trees, dimension: "[length]"}
+- {id: area_growth, name: "area growth at a bifurcation, (dL^2 + dS^2)/dM^2", dimension: dimensionless, description: "schwarz2020 Eq. 2; dL >= dS the daughters, dM the mother"}
+- {id: daughter_symmetry, name: "daughter symmetry at a bifurcation, dS/dL", dimension: dimensionless, description: schwarz2020 Eq. 1}
+- {id: build_time, name: wall-clock time to generate a tree, dimension: "[time]"}
+- {id: outlet_pressure_0d, name: pressure at an outlet of svv's exported 0D model, dimension: "[mass]/[length]/[time]**2"}
+- {id: outlet_resistance, name: resistance of an outlet boundary condition of a 0D model, dimension: "[mass]/[length]**4/[time]"}
+# ---- algorithmic settings written only in the code (no unit of measurement)
+- {id: nonconvex_attempt_limit, name: number of placements outside a nonconvex domain svv tolerates before it treats the domain as convex, dimension: dimensionless, description: "max_nonconvex_count"}
+- {id: flow_ratio_cutoff, name: largest ratio of a candidate vessel's flow to the terminal flow at which svv still attaches a new terminal to it, dimension: dimensionless, description: "flow_ratio in add_vessel"}
+- {id: threshold_exponent, name: exponent of the terminal count in svv's minimum distance of a new terminal, dimension: dimensionless, description: "threshold = V^(1/3) / n_terminals^threshold_exponent"}
+- {id: threshold_adjuster, name: factor by which svv shrinks the minimum distance when no candidate point is found, dimension: dimensionless}
+- {id: candidate_point_count, name: number of candidate terminal points svv draws per attempt, dimension: dimensionless}
+- {id: candidate_vessel_count, name: number of nearest vessels svv tries to connect each candidate point to, dimension: dimensionless}
+- {id: optimizer_iteration_limit, name: largest number of iterations of the bifurcation-point optimizer, dimension: dimensionless}
+- {id: optimizer_bound, name: bound on the barycentric coordinates of the bifurcation point, dimension: dimensionless}
+- {id: proximity_factor, name: multiple of a vessel's radius within which svv rejects a candidate terminal point, dimension: dimensionless}
+- {id: sampling_decay, name: factor by which svv lowers the sampling probability of a mesh cell that received a terminal, dimension: dimensionless}
+- {id: convexity_tolerance, name: tolerance on a domain's convexity (volume over convex-hull volume) below which svv treats it as nonconvex, dimension: dimensionless}
+- {id: wall_stiffness_exponent, name: "k2 of the Olufsen wall model, Yh/r0 = k1 exp(k2 r0) + k3", dimension: "1/[length]"}
+- {id: wall_stiffness_constant, name: "k3 of the Olufsen wall model", dimension: "[mass]/[length]/[time]**2"}

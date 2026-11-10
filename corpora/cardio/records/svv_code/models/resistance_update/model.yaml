@@ -1,0 +1,30 @@
+id: resistance_update
+name: svv's reduced-resistance and radius update (c_update.py) on one bifurcation, run as released
+role: model
+software: true
+stated: {file: svv/tree/utils/c_update.py, lines: "35-37", quote: "(lbif ** 4.0) / data[left, 25] + (rbif ** 4.0) / data[right, 25]"}
+equation: >
+  c_update.py lines 32-37 and 49: r_L/r_R = (Q_L R*_L / (Q_R R*_R))^(1/4) (Eq. S9);
+  beta_L = (1 + (r_L/r_R)^-gamma)^(-1/gamma), beta_R = (1 + (r_L/r_R)^gamma)^(-1/gamma) (Eq. S6);
+  R*_p = 8 nu l_p / pi + (beta_L^4 / R*_L + beta_R^4 / R*_R)^-1 (Eq. S10 with beta^4); terminal R* = 8 nu l / pi;
+  r_root = (R*_root Q_root / (P_root - P_term))^(1/4) (Eq. S8), r_child = beta r_parent (lines 46-68)
+inputs:
+  mu: {quantity: dynamic_viscosity, unit: cP, description: "the code's nu argument; the growth passes kinematic viscosity times density"}
+  gamma: {quantity: murray_exponent, unit: dimensionless}
+  l_p: {quantity: vessel_length, unit: cm}
+  l_a: {quantity: vessel_length, unit: cm}
+  l_b: {quantity: vessel_length, unit: cm}
+  Q_a: {quantity: vessel_flow, unit: ml/s}
+  Q_b: {quantity: vessel_flow, unit: ml/s}
+  P_root: {quantity: tree_pressure, unit: mmHg}
+  P_term: {quantity: tree_pressure, unit: mmHg}
+outputs:
+  Rstar_p: {quantity: reduced_resistance, unit: dyn*s/cm, description: R* of the parent that svv writes}
+  beta_a: {quantity: bifurcation_ratio, unit: dimensionless}
+  beta_b: {quantity: bifurcation_ratio, unit: dimensionless}
+  beta_sum: {quantity: murray_sum, unit: dimensionless, description: "beta_a^gamma + beta_b^gamma"}
+  d_p: {quantity: vessel_diameter, unit: um, description: parent diameter from svv's Eq. S8}
+  P_end_a: {quantity: tree_pressure, unit: mmHg, description: "P_root minus the Poiseuille drops of parent and daughter a with svv's radii"}
+  P_end_b: {quantity: tree_pressure, unit: mmHg}
+settings: {}
+stochastic: false

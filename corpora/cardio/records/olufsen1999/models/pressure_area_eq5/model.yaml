@@ -1,0 +1,20 @@
+# Helper added for ModelAtlas: the state equation Eq. 5 with Eh/r0 from Eq. 6, as printed, and
+# A0 = pi r0^2 as printed after Eq. 5. sexton2025 (Eq. S26, p. 22) states that it uses this "Olufsen
+# material model" (its ref. 75 = this paper); this form lets that relation be tested. No printed
+# result of this record is computed from it.
+id: pressure_area_eq5
+name: pressure from cross-sectional area with Eh/r0 from the exponential fit (Eq. 5 with Eq. 6)
+role: model
+stated: {page: 3, printed_page: "H259", quote: "pr0 (x) 2 is the cross-sectional area at zero", where: "Eq. 5, with Eq. 6"}
+equation: "p(x, t) - p0 = (4/3) Eh/r0(x) [1 - sqrt(A0(x)/A(x, t))] (5); A0 = pi r0^2; Eh/r0 = k1 exp(k2 r0) + k3 (6)"
+inputs:
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  r0: {quantity: vessel_radius, unit: cm}
+  p0: {quantity: surrounding_pressure, unit: g/s^2/cm}
+  A: {quantity: vessel_cross_sectional_area, unit: cm^2}
+outputs:
+  p: {quantity: arterial_pressure, unit: g/s^2/cm}
+settings: {}
+stochastic: false

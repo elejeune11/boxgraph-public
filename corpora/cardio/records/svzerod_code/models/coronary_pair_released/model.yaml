@@ -1,0 +1,25 @@
+id: coronary_pair_released
+name: the released open-loop coronary block on kim2010's outlets c and d in parallel, steady flow at a constant pressure
+role: model
+stated: {file: src/model/OpenLoopCoronaryBC.cpp, lines: "19-26", quote: "// -P_in + (Ra+Ram+Rv)Q_in + Pv = 0"}
+equation: "steady: Q = (P - Pv)/(Ra_c + Ram_c + Rv_c) + (P - Pv)/(Ra_d + Ram_d + Rv_d), produced by the solver from its steady initial condition and constant inputs"
+described_from: kim2010
+software: true
+inputs:
+  P: {quantity: stenosed_lad_mean_pressure, unit: mmHg}
+  Pv: {quantity: coronary_venous_pressure, unit: mmHg}
+  Pim: {quantity: intramyocardial_pressure, unit: mmHg}
+  Ra_c: {quantity: coronary_arterial_resistance, unit: kdyn*s/cm^5}
+  Ram_c: {quantity: coronary_arterial_micro_resistance, unit: kdyn*s/cm^5}
+  Rv_c: {quantity: coronary_venous_resistance_sum, unit: kdyn*s/cm^5}
+  Ca_c: {quantity: coronary_arterial_capacitance, unit: cm^5/Mdyn}
+  Cim_c: {quantity: intramyocardial_capacitance, unit: cm^5/Mdyn}
+  Ra_d: {quantity: coronary_arterial_resistance, unit: kdyn*s/cm^5}
+  Ram_d: {quantity: coronary_arterial_micro_resistance, unit: kdyn*s/cm^5}
+  Rv_d: {quantity: coronary_venous_resistance_sum, unit: kdyn*s/cm^5}
+  Ca_d: {quantity: coronary_arterial_capacitance, unit: cm^5/Mdyn}
+  Cim_d: {quantity: intramyocardial_capacitance, unit: cm^5/Mdyn}
+outputs:
+  Q: {quantity: stenosed_lad_mean_flow, unit: cm^3/s}
+settings: {n_pts: 11, n_cycles: 2}
+stochastic: false

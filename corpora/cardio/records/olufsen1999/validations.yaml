@@ -1,0 +1,29 @@
+# Cross-record validations (validation job olufsen1999+schwarz_data, 2026-11-09).
+# Only one measurement of schwarz_data is a quantity a runnable model here gives on the measurement's conditions:
+# the median area growth of the human left coronary tree's bifurcations with mothers over 400 um. What was
+# considered and not entered is in q_val_schwarz_data_scope.
+- id: val_eta_eq21_vs_coronary_area_growth
+  model: area_ratio_eq21
+  inputs: {xi: xi_chosen, gamma: gamma_printed}
+  output: eta
+  against: 'schwarz_data/p_A_median_large'
+  purpose: validation
+  quantities: {'schwarz_data/area_growth': area_ratio}
+  conditions_ok: >
+    olufsen1999's structured tree stands for the small systemic arteries of man, from a root radius of a few
+    mm down to r_min = 0.01 cm, and keeps eta "constant throughout the tree" (p. 7); the measurement is the
+    median over the bifurcations of one human left coronary tree, cast in the arrested, vasodilated state,
+    whose mothers are wider than 400 um, inside that size range. Same species and the same kind of vessel
+    (distributing arteries); different organ, and a median over many asymmetric bifurcations against a
+    constant meant to hold at each. A median of the ratio is the statistic closest to such a constant.
+  basis: >
+    Eq. 21 (p. 7, "The parameters j, h, and g are not independent but are related as follows") gives the area
+    ratio eta = (r_d1^2 + r_d2^2)/r_pa^2 of a bifurcation from the radius exponent and the asymmetry ratio. The
+    paper chooses xi = 2.76 "on the basis of these reports" (p. 6) and eta = 1.16 with gamma = 0.41 (p. 7) from
+    the literature on measured arterial bifurcations (Uylings, ref. 51; Zamir, ref. 55; refs. 16, 32), to hold
+    "throughout the tree". Its own xi and gamma, run through Eq. 21, are therefore its prediction of the area
+    ratio of a real arterial bifurcation. schwarz2020's area growth A is the same ratio (daughters' total area
+    over the mother's, schwarz_data q_olufsen_params (2)); it measured a median of 1.02 for segments over
+    400 um ("on average the cross-sectional area remained stable", schwarz2020 p. 5). Nothing here was fitted
+    to that measurement. gamma_printed (0.41) is used, not the eta = 1.16 that Eq. 21 does not exactly give back with
+    it (q_asymmetry_eq21): the printed xi and gamma are what the tree is built from.

@@ -65,6 +65,9 @@
     times the mother diameter are excluded as outliers, as are elements shorter than their diameter.
     The paper's p. 4 condition that segment length be larger than diameter is stated for the
     elimination of spurious terminal segments, not as an exclusion from the analysis.
+    Third pass: the bifurcation workbook and the paper's printed numbers show that the results the
+    paper prints for the branching (Fig. 4's group sizes, the 0.59 and 1.02) were taken on all nodes,
+    without the 1.15 and length rules (q_outlier_rules).
   citation: {file: explanation_of_data.txt, lines: "235", quote: "largest daughter diameter exceeded 1.15 times the mother diameter"}
 - id: q_viscosity_label
   kind: reading
@@ -92,6 +95,9 @@
     says the two source elements above 400 um are the two inlets (LAD, LCX). So the two terminal
     segments of the >= 400 um class in Table 1 are the coronary entrances, counted as terminal
     segments.
+    Third pass: termseg_density.xlsx SegType!A15 notes the same ('this includes the two entrance
+    elements'), and the recount of the network's source elements gives Table 1's terminal column,
+    the two >= 400 um elements included (cmp_t1_terminal).
   citation: {file: explanation_of_data.txt, lines: "250", quote: "the two with diameter above 400 micron are the entrance elements"}
 - id: q_hum6p_classes
   kind: possible_error
@@ -193,6 +199,16 @@
     deterministic Gdist), Table 1's class counts and the branching statistics (Figs. 2-4), which
     the network could give but which this record's models do not compute, and DemonstrationCode.m,
     which is Matlab and is not run (its two parts stay unported).
+    Third pass: no longer applies to the files. The skeleton, 'Topology data.xlsx',
+    'final_tree_bifurcation_summary_all-ld.xlsx', 'termseg_density.xlsx' and 'Gdistal variations.xlsx'
+    are now in the folder (each checked against its SHA-1), and runs check what they could not:
+    Table 1 from the network and from two workbooks (cmp_t1_*, cmp_wbt_*, cmp_wbo_*), the topology of
+    p. 5 (cmp_pct_*, cmp_loops), the branching numbers and Fig. 4's group sizes (cmp_f4_*, cmp_S_large,
+    cmp_A_large, cmp_A_fit_*), Table 2 from the per-element results of the 1000 simulations
+    (cmp_t2_*; the in silico conductance distributions themselves are still not released, so the
+    simulations are not rerun), and the skeleton against the network (cmp_skel_*). Still not run:
+    DemonstrationCode.m. Its output, the two sheets of 'Topology data.xlsx', is read by
+    topology_workbook and agrees with the network (cmp_wbo_*).
   citation: {file: MANIFEST.TXT, lines: "8", quote: "Human Left Coronary graph.mat"}
 - id: q_no_validation_vs_schwarz2020
   kind: choice
@@ -253,12 +269,13 @@
   citation: {file: explanation_of_data.txt, lines: "265", quote: "the aggregate data used for making the plots in Fig. 5; in 64 diameter classes"}
 - id: q_typed_precision
   kind: choice
-  about: [P_inlet_mat, P_sink_mat, G_LCX_mat, G_LAD_mat, G_SE1_mat, G_IE1_mat, Q_LCX_mat, Q_LAD_mat, P_IN1_mat, wss_IE1_mat, wb_d_classes, wb_P_classes, wb_Q_classes, wb_G_classes, wb_wss_classes, wb_v_classes]
+  about: [P_inlet_mat, P_sink_mat, G_LCX_mat, G_LAD_mat, G_SE1_mat, G_IE1_mat, Q_LCX_mat, Q_LAD_mat, P_IN1_mat, wss_IE1_mat, wb_d_classes, wb_P_classes, wb_Q_classes, wb_G_classes, wb_wss_classes, wb_v_classes, P_IE1_mid_mat, P_SE1_mid_mat, wb_T2_P_cv_med, wb_T2_Q_cv_med, wb_T2_WSS_cv_med]
   text: >
     The network file and the workbooks hold doubles, not printed numbers, and a software record
     cannot cite a binary field or a cell for the checker to read back. The reader therefore wrote the
     few network values used for checking to 6 significant figures and the workbook class medians to 4,
-    naming the field path or the cells. The verdicts against them test agreement to that precision,
+    naming the field path or the cells. Third pass: the same for two more stored mid-element pressures
+    (6 figures) and the 24 entries of the 'Table 2' sheet of 'Gdistal variations.xlsx' (4 figures). The verdicts against them test agreement to that precision,
     which is a choice of the reader, not of the authors.
   citation: {none: "a choice of the reader"}
 - id: q_gdist_law
@@ -271,6 +288,9 @@
     cmp_net_Gdist_b). The printed law was fitted on the in silico segments themselves, over a range
     the paper does not state precisely ('larger vessels'), so the two need not agree; the
     comparison only shows that the printed law is not a fit to the imputed values.
+    Third pass: 'Gdistal variations.xlsx' shows by runs that the stored solution is the deterministic
+    'median G' one, not the 'power fit' one (q_stored_solution_median_g): the imputed conductances are
+    the class medians, so no power law need fit them.
   citation: {file: explanation_of_data.txt, lines: "144", quote: "Gdist: Conductance of the simulated distal tree, excluding this sink element"}
 - id: q_no_validation_vs_schwarz2020_network
   kind: choice
@@ -299,4 +319,524 @@
     segment_conductance_eq5 run on a network segment would only predict the stored conductances
     TreeQ.SE.G / TreeQ.IE.G, which are outputs of the authors' software (origin run), not measurements.
     network_solution already reproduces them through Eqs. 3 and 5 (cmp_net_G_*).
+    Third pass (read job, 2026-11-08): the rest of the release adds runs that recompute schwarz2020's
+    measured values from the released files: Table 1 (tree_table1, tree_summary, termseg_workbook,
+    topology_workbook), the topology of p. 5, the branching values of pp. 5 and 9 and the group sizes
+    of Fig. 4 (tree_branching, bifurcation_workbook, topology_workbook). These are counts and
+    statistics of the same reconstruction the paper measured, entered here as reproductions against
+    copies of its printed values. Whether any counts as a validation, and the comparison of the class
+    statistics with schwarz2020's figure readings (q_figure_curves), is left to the relation and
+    validation jobs.
   citation: {none: "a finding of the cross-record job between schwarz_data and schwarz2020, not a printed statement"}
+
+# ---- third pass: the rest of the release
+- id: q_class_edges
+  kind: reading
+  about: [tree_table1, cmp_t1_all, cmp_t1_terminal, termseg_workbook, diam_if_all_0, p_T1_all]
+  text: >
+    Table 1's diameter classes (30-45 ... >= 400 um) are reproduced count for count from the network
+    only with the class edges the release itself uses: termseg_density.xlsx stores them as the edge in
+    micrometres times 1e-6 times 1e6 (SegType!A2 is 29.999999999999996, A3 44.99999999999999), and the
+    element diameters are compared after the same scaling (d * 1e6). With the exact decimal edges, the
+    1,814 elements whose diameter is the assumed 30 um of diam_if_all_0 (d * 1e6 = 29.999999999999996)
+    fall below the first class and are lost, and elements at 45, 60, ... um move one class down. The
+    paper's classes are lower-edge inclusive; neither it nor the guide says that its counts depend on
+    this floating-point detail. tree_table1 and the other models use the release's edges (_tree.py).
+  citation: {file: explanation_of_data.txt, lines: "225", quote: "we assumed a minimal diameter of 30 micron for the vessels"}
+- id: q_region_volume
+  kind: choice
+  about: [tree_table1, tree_summary, cmp_t1_dens_epi, cmp_t1_dens_total_epi, termseg_workbook]
+  text: >
+    Neither the paper nor the guide says per which volume the LV densities of Table 1 are taken. They
+    are reproduced, class by class and in total, as the number of terminal elements of a region
+    (TreeQ.SE.regionID 1, 2, 3) per cm^3 of the summed Voronoi volumes (TreeQ.SE.VVoronoi) of the
+    terminal elements of that region (cmp_t1_dens_*, and termseg_density.xlsx 'Region' to all digits).
+    So the densities are numbers per volume perfused from the measured end segments of the region.
+  citation: {file: explanation_of_data.txt, lines: "251", quote: "Data are density in n/cm3."}
+- id: q_outlier_rules
+  kind: unexplained_difference
+  about: [daughter_ratio_limit_doc, run_branch, run_branch_rules, cmp_f4_n_symhi, cmp_f4_n_symlo, cmp_S_large, cmp_A_large, cmp_S_large_rules, cmp_A_large_rules, cmp_wbb_n_area_hi, cmp_wbb_n_area_lo, q_hidden_choices]
+  text: >
+    The guide says that in several sheets of final_tree_bifurcation_summary_all-ld.xlsx elements
+    shorter than their diameter and nodes whose larger daughter exceeds 1.15 times the mother were
+    excluded. The sheets behind Figs. 3 and 4 and the paper's printed numbers show no such selection:
+    the group sizes printed above Fig. 4's bars equal the counts of the sheet 'area' and the counts of
+    all flow-directed one-mother two-daughter nodes of the network (cmp_f4_*, cmp_wbb_n_area_*), and
+    the printed 0.59 (p. 9) and 1.02 (p. 5) are the medians over all such nodes (cmp_S_large,
+    cmp_A_large; also from Topology data.xlsx, cmp_wbo_*). Applying the two rules changes them
+    (run_branch_rules: cmp_S_large_rules, cmp_A_large_rules) and removes most nodes of the 30-45 um
+    class. Which sheets the rules were applied to is not said; for the printed values they were not.
+    The 30-45 um class keeps area growth up to about 50 (Fig. 4), which the paper attributes to
+    measurement error (p. 10).
+  citation: {file: explanation_of_data.txt, lines: "235", quote: "In several sheets as indicated below, we selected data on quality and removed outliers"}
+- id: q_area_growth_fit
+  kind: unexplained_difference
+  about: [tree_branching, topology_workbook, cmp_A_fit_c_d_m, cmp_A_fit_c_d_mm, cmp_A_fit_c_S, cmp_A_fit_c_0, cmp_A_fit_r2, cmp_A_fit_c_d_mm_rules, cmp_A_fit_c_S_rules, cmp_A_fit_c_0_rules, cmp_A_fit_r2_rules, cmp_wbo_A_fit_c_S, cmp_wbo_A_fit_c_0, cmp_wbo_A_fit_r2, p_A_fit_c_d, schwarz2020/q_A_fit_unit, schwarz2020/area_growth_linear_fit]
+  text: >
+    The linear regression A = -0.66 dM + 0.34 S + 1.13 (dM in [75, 600] um, r2 = 0.047; p. 5) is not
+    reproduced. A least-squares fit of Eq. 2's A on dM and S over the flow-directed one-mother
+    two-daughter nodes with 75 <= dM <= 600 um gives a different symmetry coefficient, intercept and r2,
+    from the network (cmp_A_fit_*) and from Topology data.xlsx alike (cmp_wbo_A_fit_*); the dM
+    coefficient is of the printed size only with dM in mm (cmp_A_fit_c_d_mm), which bears out
+    schwarz2020's q_A_fit_unit. With the guide's outlier rules the coefficients move towards the printed
+    ones but do not reach them (cmp_A_fit_*_rules). The selection of nodes behind the printed fit
+    (which nodes, which range end inclusive, which outliers) is not released; the sheet 'area' holds A
+    without the mother diameters, so the fit cannot be redone from the workbook either.
+  citation: {none: "the fit is printed in schwarz2020 p. 5; the release does not hold the data it was fitted on as such"}
+- id: q_table2_reading
+  kind: reading
+  about: [stochastic_table2, cmp_t2_P_beta_fit, cmp_t2_Q_beta_fit, cmp_t2_WSS_cv_med, cmp_t2wb_P_cv_p95, p_T2_Q_mad_med]
+  text: >
+    Table 2's legend does not say how its statistics were formed. The workbook's per-element sheets
+    reproduce every printed entry and the workbook's own 'Table 2' sheet (cmp_t2_*, cmp_t2wb_*) when:
+    CV and MAD are the median and 95th percentile over all 202,184 elements of the per-element values
+    (the sheet's 95th percentiles follow Matlab's prctile rule); PCC is Pearson's r over the elements
+    between the stochastic median (column A) and a deterministic run (E 'power fit', C 'median G'); and
+    beta is the slope of the least-squares line of the stochastic median on the deterministic run, with
+    an intercept. Flow and wall shear stress share their CV to all digits, as they must: in a given
+    segment the shear stress is proportional to the flow. The flow MADs are printed as bounds
+    ('<0.001', '<0.01 ml/min') and get no verdict. Flow and shear stress in the sheets are signed (the
+    stored direction), and the correlations are taken on the signed values.
+  citation: {file: explanation_of_data.txt, lines: "256-260", quote: "P_CoV: Coefficient of variation (i.e. stdev/mean) of mid-element pressure in all elements"}
+- id: q_stored_solution_median_g
+  kind: reading
+  about: [stochastic_table2, cmp_gdist_P_IE1_medG, cmp_gdist_P_IE1_fit, cmp_gdist_Q_LCX_medG, cmp_gdist_Q_LCX_fit, network_solution, q_gdist_law, schwarz2020/network_hemodynamics]
+  text: >
+    The paper's hemodynamic results come from 1000 stochastic simulations and two deterministic ones
+    (p. 6). Which one the released network holds is not said. The stored solution (TreeQ.IE.P, SE.P,
+    SE.Q) equals the deterministic 'median G' run of 'Gdistal variations.xlsx' (column C) at every place
+    compared, and differs from the 'power fit' run (column E): cmp_gdist_*. So TreeQ.SE.Gdist are the
+    median in silico conductances of 2.5% diameter classes, and the Fig. 5 medians and power laws that
+    network_solution reproduces are those of the 'median G' model, not of the stochastic medians.
+  citation: {file: explanation_of_data.txt, lines: "256", quote: "Columns C, D and E show the results for the simulation taking the median, the mean and the fit"}
+- id: q_skeleton_slots
+  kind: possible_error
+  about: [skel_neighbour_slots_doc, cmp_skel_slots, skeleton_network]
+  text: >
+    The guide says each centre point of the skeleton has 18 neighbour positions. The file has 15 on every
+    one of its 3,913,549 point lines (22 fields: ID, three coordinates, 15 neighbours, radius, standard
+    deviation, segment), and its header row names 14 'NeigbbourID' columns. A reader following the guide
+    would misread the radius and segment columns. The record parses the lines by their field count.
+  citation: {file: explanation_of_data.txt, lines: "43", quote: "There are 18 positions available here, for up to 18 neighbours."}
+- id: q_skeleton_diameters
+  kind: reading
+  about: [skeleton_network, run_skeleton, cmp_skel_dmed, cmp_skel_elements_found, CVlim, diam_if_all_0]
+  text: >
+    Every network element names its own skeleton segment (cmp_skel_elements_found,
+    cmp_skel_segments_in_network); the skeleton's other segments are the RCA, loose segments and those
+    removed in cleaning. Most elements end on the skeleton nodes their segment ends on (skel_n_same_ends);
+    the rest were rejoined when triangles and poor terminal segments were removed. The element diameter
+    taken afresh from the skeleton (mean of 2 x radius x 30 um over the centre points with
+    Stddev/Radius <= CVlim, 30 um if none) equals the stored diameter for most terminal elements and
+    about two thirds of the internal ones (skel_n_d_match_terminal, skel_n_d_match_internal); the others
+    were corrected from neighbouring segments, as the paper says (p. 4: 'corrected by interpolation from
+    diameters of neighboring segments'). The median of these raw diameters is below Table 1's 92.3 um
+    (cmp_skel_dmed): the correction raises underestimated diameters. Which points the authors kept
+    beyond CVlim, and the correction rule itself, are not released.
+  citation: {file: explanation_of_data.txt, lines: "203", quote: "We have used these two fields to replace the diameter of elements"}
+- id: q_figure_curves
+  kind: choice
+  about: [net_L_classes, net_S_classes, net_A_symhi_classes, net_A_symlo_classes, wbb_L_classes, wbb_S_classes, wbb_A_hi_classes, wbb_A_lo_classes, schwarz2020/d_f2b_median, schwarz2020/d_f3a_median, schwarz2020/d_f4_symhi_median, schwarz2020/d_f4_symlo_median]
+  text: >
+    The class medians and quartiles behind Figs. 2B, 3A and 4 are recomputed here from the network
+    (run_t1_classes, run_branch_classes) and from the workbook's data points (run_bifwb_classes); the
+    counts behind them are compared with printed counts (Table 1, Fig. 4's group sizes). The paper
+    prints these medians only as box plots, which schwarz2020's record reads from the figures. A run of
+    this record cannot be compared with another record's figure reading inside this record, so the
+    medians are left uncompared here, for the relation and validation jobs between the two records.
+  citation: {none: "a choice of the reader"}
+- id: q_validation_figs_2_4
+  kind: choice
+  about: [tree_table1, tree_branching, bifurcation_workbook, q_figure_curves, q_no_validation_vs_schwarz2020_network, schwarz2020/d_f2b_median, schwarz2020/d_f3a_median, schwarz2020/d_f4_symhi_median, schwarz2020/d_f4_symlo_median]
+  text: >
+    (Validation job schwarz2020+schwarz_data, third pass with the whole release, 2026-11-08.) This answers
+    q_figure_curves, which is kept as it was. Twelve validations are entered here (validations.yaml), and
+    they are the first between the two records. schwarz2020's figure readings of Figs. 2B, 3A and 4 (origin
+    measured) are judged against this record's statistics of the released files: the median and box
+    edges of segment length per diameter class (tree_table1), and of daughter symmetry per mother class
+    (tree_branching). Also the median area growth per mother class, for symmetry above and at or below
+    0.5 (tree_branching). Separately, the medians from the workbook the guide says the figures were drawn
+    from (bifurcation_workbook). All twelve come out reproduced within the readings' intervals.
+    Choices made and still open:
+    (1) What these test. They are not tests of a physical model. The models are the paper's stated
+    statistics (Eqs. 1-2, the class edges of Table 1) run on the released reconstruction. A reproduced
+    verdict says that the plotted measurements are those of the released network and workbook. Nothing
+    was fitted to the figures, so the purpose is validation, not fit_quality.
+    (2) The quartile rule of the box plots is not stated, and the models use their own. The box edges are
+    within the readings' intervals anyway.
+    (3) Mother and daughter are set by the flow of the stored boundary pressures (run_branch_classes'
+    inputs), and every node is kept. The guide's outlier rules are not applied: the paper's printed
+    numbers follow from all nodes (q_outlier_rules).
+    (4) The class lower bound of schwarz2020's figure readings (diameter_class_lower_bound) is mapped to
+    vessel_diameter. That is the quantity these models declare for their class input d, which is
+    described as the class lower bound.
+    (5) The reading of the median line (quantity segment_length there) is mapped to median_segment_length
+    here, and the box edges to the length and symmetry quartiles.
+    Not entered: the whisker ends, which no model here outputs; the histograms of Figs. 2A, 3B and 3C, for
+    which no model here gives bin counts or frequencies; and the workbook's quartiles, for which
+    bifurcation_workbook gives only medians. Nothing measured of schwarz_data is entered against a
+    schwarz2020 model; see schwarz2020/q_no_validation_vs_schwarz_data_release.
+  citation: {file: explanation_of_data.txt, lines: "235", quote: "This excel sheet was used for generating the plots in Fig. 2-3-4 in the paper."}
+- id: q_strahler_choices
+  kind: choice
+  about: [tree_strahler, tree_strahler_order, kassab1993/horton_diameter_fit_11, kassab1993/horton_length_fit_4to11, kassab1993/horton_number_fit_11]
+  text: >
+    (Relation job kassab1993+schwarz_data, 2026-11-09.) tree_strahler and tree_strahler_order apply
+    kassab1993's diameter-defined Strahler ordering (its Eq. 1, p. 4) and Horton fits (Eqs. 2-5) to the
+    released network, so that kassab1993's order statistics of the pig trees can be set against the same
+    statistics of this human tree. Neither source orders this network by Strahler; every choice below is
+    ours. (1) Direction: the flow of the network solution on the stored boundary pressures (as
+    run_net_release); a segment's daughters are the segments flowing out of its downstream node. The
+    network's 3,202 loops are crossed one way under that flow. (2) The rule. kassab1993 says both "when two
+    vessels of a given order meet, the order number of the offspring is increased by one if and only if its
+    diameter is larger ... by an amount specified by a criterion" and "a vessel is of order n if and only
+    if its diameter lies between these bounds". The model's default ('pair') takes the first literally: a
+    segment's order is its largest daughter order m, plus one only where two daughters of order m meet and
+    its diameter exceeds Eq. 1b. It converges here in 13 cycles to 8 orders (about 77 um to 3.4 mm mean
+    element diameter); the diameter ranges of successive orders still overlap (order 4: 261 +- 103 um,
+    order 5: 413 +- 166 um), unlike kassab1993's claim that the final orders do not. The setting
+    'one_step' (raise by one wherever the diameter exceeds Eq. 1b, without the meeting condition) does not
+    converge in 50 cycles, oscillates between 10 and 14 orders and gives a much smaller diameter ratio
+    (1.24 at its 50th cycle); a variant that raises the order as often as the diameter exceeds the bounds
+    collapses to a single order. So only 'pair' gives a usable ordering of this tree. (3) Element diameter:
+    kassab1993 does not say how an element's diameter follows from its segments'; the mean of the
+    segments' diameters is used. The length-weighted mean does not converge in 50 cycles, but at its 50th
+    cycle the Horton ratios are close (diameter 1.72 against 1.69, length 1.90 against 1.87, number 4.72
+    against 4.55). (4) Elements: a segment continues into its widest daughter of its own order; a daughter
+    of a merge continues the widest parent. (5) The truncation: the network stops at about 30 um, where
+    kassab1993's casts reach the capillaries (order 1 there is about 9 um). Order 1 here is the smallest
+    resolved vessels, terminal segments of any diameter are order 1 before revision, and order numbers do
+    not correspond between the two papers; only the ratios and the shape of the laws may be compared.
+    (6) Only the left coronary tree (LAD and LCX together, one network) is in the release; kassab1993
+    orders RCA, LAD and LCX apart. No run is entered in this job (runs are not among the files it may
+    write); the cross-record validation job runs these models in its own entries.
+  citation: {file: explanation_of_data.txt, lines: "61", quote: "The file Human Left Coronary graph.mat contains all the data that was used for this study."}
+- id: q_olufsen_params
+  kind: choice
+  about: [tree_structured_params, tree_branching, network_solution, olufsen1999/xi_chosen, olufsen1999/eta_chosen, olufsen1999/gamma_printed, olufsen1999/lrr_iberall, olufsen1999/lrr_default, olufsen1999/dc_radius_power_printed]
+  text: >
+    (Relation job olufsen1999+schwarz_data, 2026-11-09.) tree_structured_params measures olufsen1999's
+    structured-tree parameters on the released network. Its choices, none stated by either source:
+    (1) Bifurcations are tree_branching's: nodes with one inflowing mother and two outflowing daughters
+    under the flow of the release's solution inputs, all nodes kept (as the paper's printed branching
+    numbers are, q_outlier_rules). olufsen1999's tree is binary; the network also has trifurcations (8%)
+    and loops, which are left out of the node statistics. (2) gamma = (dS/dL)^2 and eta = (dL^2 + dS^2)/dM^2
+    are olufsen1999's Eq. 20 with radii replaced by diameters (the ratios are the same); eta is schwarz2020's
+    area growth A. (3) xi is solved per node from Eq. 19. Where the larger daughter is at least as wide as
+    the mother (about 23-30% of the nodes, by threshold) no positive exponent fits; such nodes are counted
+    as xi = +inf in the median rather than dropped, since dropping them would bias the median low (the
+    median over the solvable nodes alone is 2.0 at dM >= 200 um, against 2.8 with them). The median
+    is therefore a median of per-node exponents, not the exponent of a fit of Eq. 19 to all nodes.
+    (4) lrr is the element length over its radius. An element runs from node to node, so every side
+    branch, however small, cuts a vessel; olufsen1999's vessel runs from one bifurcation of its binary
+    tree to the next, where both daughters are comparable. The tree's median l/r (about 5-10) is
+    therefore not the l/r of a vessel between comparable branchings, which would be longer; no rule
+    for joining elements into such vessels is stated by either source, so none is applied here.
+    (5) The DC power p is the least-squares slope of ln R_root on ln r over elements with flow, where
+    R_root = (P_up - P_cap)/Q is the steady resistance seen from the element's upstream end to the
+    distal pressure (olufsen1999 Eq. 18's Z(0, 0) of a tree rooted there, here including the release's
+    imputed distal conductances below each sink element, q_gdist_law). In a network with loops this is
+    an effective resistance of the element's flow path, not that of a separate subtree. olufsen1999's p
+    is from varying the root radius of trees with a fixed minimum radius (dc_root_radius_power); the
+    tree's is a slope across the vessels of one tree, whose distal ends are set by the cast's 30 um
+    truncation and the imputed conductances. No run is entered in this job; the validation job runs the
+    model in its own entries.
+  citation: {file: explanation_of_data.txt, lines: "243", quote: "daughter symmetry versus mother diameter in 3-nodes with one mother (inflow) segment"}
+- id: q_rel_eq31_software_run
+  kind: numerics
+  about: [rel_network_solution_approx_olufsen2012_eq31, network_solution]
+  text: >
+    Relation job olufsen2012+schwarz_data (2026-11-09). rel_network_solution_approx_olufsen2012_eq31 sets
+    olufsen2012's Eq. 3.1 (p_sys = 60 log10 r - 110, the log-linear summary of its structured tree's mean
+    pressures) against the class-median pressure of this tree's solution, for r from 100 to 500 um and a
+    distal pressure from 0 to 20 mmHg. Its test comes out unverifiable, but only because the relation test
+    runs each model without the source folder, and network_solution, like every model here that loads the
+    release (software: true), reads the file from it and stops. The mapping and regime are not the cause.
+    Run directly on the release, the model gives class-median pressures above Eq. 3.1 across the whole regime,
+    by more than the stated 0.2 tolerance at most points, so the relation is expected to be not verified once
+    the test can run it. The difference is largest at the small radii with the 20 mmHg distal pressure (Eq. 3.1
+    reaches 10 mmHg at r = 100 um, its bed's r_min). The tree's pressure also rises more steeply with log r
+    between r = 100 and 400 um than 60 mmHg per decade. The relation is left as entered, so that it is tested
+    when the test can run software models.
+- id: q_lumen_volume_vs_spaan1981
+  kind: choice
+  about: [tree_lumen_volume_fraction, spaan1981/artery_fraction_printed, spaan1981/small_artery_volume_fraction]
+  text: >
+    Relation job schwarz_data+spaan1981 (2026-11-09). No relation joins the two records' models (see
+    relations.yaml), but they meet at one statistic: spaan1981 estimates the volume of the small
+    (intramural) arteries as one third of the capillary volume, 0.023 of myocardial volume (p. 8, a rule of
+    thumb from Berne and Levy), and quotes 5% of wall volume for intramural arteries plus veins in the
+    arrested, maximally dilated dog heart. tree_lumen_volume_fraction, added for this, gives the lumen volume
+    of the released segments in a diameter window over the tree's summed Voronoi volume. Choices in it,
+    stated by neither source: (1) each segment is a cylinder with its stored diameter and length; (2) the
+    tissue volume is the sum of TreeQ.SE.VVoronoi, the volume network_solution's perfusion uses; (3) which
+    window stands for spaan1981's 'small arteries' is not defined by spaan1981 (no diameters given), so the
+    window is an input. The comparison differs in kind on each side, which the validation job must state:
+    spaan1981's 0.023 is an estimate (one third of a computed capillary fraction) for the beating dog heart;
+    the tree is one arrested human left coronary tree, cast filled (its filling pressure sets the stored
+    diameters), truncated at about 30 um, so arterioles below that are missing and its fraction is a lower
+    bound on the arterial volume of the same tissue. Run directly on the release, the whole tree's lumen is
+    on the order of 1% of the perfused volume and the segments up to 400 um about a third of that, well
+    below 0.023; no run is entered in this job, the validation job runs the model in its own entries.
+  citation: {file: explanation_of_data.txt, lines: "163", quote: "Perfusion: Tissue perfusion, calculated as Q / (heart weight* VVoronoi / sum (all Voronoi volumes))"}
+- id: q_validation_vs_chilian1986
+  kind: choice
+  about: [network_pressure_share,
+          d_lo_chilian_70_130_added, d_hi_chilian_70_130_added, d_lo_chilian_mart_added, d_hi_chilian_mart_added,
+          d_lo_chilian_lart_added, d_hi_chilian_lart_added, chilian1986/res_pct_70_130_ctl,
+          chilian1986/t6_mart_pap_mean, chilian1986/t6_lart_pap_mean]
+  text: >
+    Validation job chilian1986+schwarz_data (2026-11-09). Neither source cites the other (schwarz2020 cites Chilian
+    1991). Three validations (val_chilian_pct_70_130_ctl, val_chilian_pct_mart_pap, val_chilian_pct_lart_pap) set the released tree's pressure share by vessel size (network_pressure_share) against
+    chilian1986's microvascular pressure as a percentage of aortic pressure. Choices, stated by neither paper:
+    (1) The tree's statistic is the median over every segment in the window, in every layer of the wall;
+    chilian1986's is the mean over a few subepicardial vessels (n = 5-14) chosen by visibility.
+    (2) The windows are added: 70-130 um as chilian1986 states it; 180-220 um for the medium arterioles from its
+    results text; the large arterioles' window is our mean ± one SD from Table 5 (added.yaml).
+    (3) The inlet is the mean aortic pressure chilian1986 measured beside each class, the measurement's printed
+    condition. The distal pressure stays at the release's 20 mmHg (P_sink_mat): chilian1986 states none for the cat,
+    and the network is linear only in P_in - P_cap, so the share depends on P_cap / P_in. At the release's own
+    90 mmHg inlet the share is a few points lower; at a zero distal pressure it would be lower still. Neither
+    alternative brings the share near chilian1986's values, judged by a direct run of the model on the release.
+    (4) The share against a 98 um control class uses Table 4's small-arteriole aortic mean as the condition of the
+    "70-130 um" statement (p. 5), which Table 6 does not list.
+    Not entered: (a) Table 6's control values for large and medium arterioles (96%, 77%): the tree has no tone, and
+    chilian1986 measured both classes dilated, which is the matching state (entered). The 70-130 um control value is
+    entered only because no dilated value exists at that size. (b) The venular values: the tree is arterial only.
+    (c) The absolute pressures of Tables 4-5 (mmHg): no model here outputs pressure over a diameter window;
+    network_solution's P_class is per 20 um class at one diameter, and the share is what chilian1986 reports as
+    its result; the share at the measured aortic pressure carries the same information. (d) The perfusion of
+    Table 3 (132 and 339 ml/min/100 g): the tree's perfusion (network_solution perf_median) is per perfusion
+    territory of a human heart at 90/20 mmHg with imputed distal conductances and no venous side, while
+    chilian1986's is microsphere flow in cat subepicardium at 66-78 mmHg; the tree has no input that sets the
+    resistance of the cat's vasculature, so the model would not be run on the measurement's conditions.
+    (e) Fig. 3's diameters and the 15% diameter changes on exposure to air: no model here predicts a diameter
+    change. (f) The resistance shares (25%, 45-50%, 10%) are chilian1986's arithmetic on the same shares, so they
+    add no measurement beyond the three entered.
+    How the two differ, and why the comparison still means something: a dog or cat coronary bed and this human
+    tree have the same branching physics, and the share upstream of a vessel size is the question both papers ask
+    (schwarz2020 p. 11 compares its ~32% at 100 um with Chilian 1991). A tree where the large epicardial arteries
+    and long intramural runs of a human heart already spend most of the pressure, against a small cat heart in
+    which 300 um arterioles sit near the aortic pressure, is a difference of anatomy and size that this result
+    makes visible, not a failure of either record.
+  citation: {none: "a finding of the validation job between chilian1986 and schwarz_data, not a printed statement"}
+- id: q_validation_kassab1993
+  kind: choice
+  about: [tree_strahler, tree_strahler_order, kassab1993/t4_D_ratio_e_lad, kassab1993/t4_D_ratio_e_lcx,
+          kassab1993/t4_L411_ratio_e_lad, kassab1993/t4_L411_ratio_e_lcx, kassab1993/t4_N_ratio_e_lad,
+          kassab1993/t4_N_ratio_e_lcx]
+  text: >
+    Validation job kassab1993+schwarz_data (2026-11-09); its entries are val_kassab_D_ratio_lad, _lcx,
+    val_kassab_L_ratio_lad, _lcx, val_kassab_N_ratio_lad, _lcx in validations.yaml. Neither source cites the other for a prediction: the release
+    and its guide do not name Kassab; kassab1993 is the earlier paper. Six validations set tree_strahler's Horton
+    ratios of the released human left coronary tree (diameter, length, number, by elements) against kassab1993's
+    Table 4 ratios for the pig LAD and LCX. Choices, stated by neither source: (1) The tree's ordering is
+    tree_strahler's, with all its choices (q_strahler_choices: flow direction from the release's solution, the
+    'pair' rule, element diameter as the mean of its segments, all 8 orders in the fit). (2) Element-based ratios,
+    since tree_strahler counts and measures elements; kassab1993's segment-based ratios (Table 4) are not entered.
+    (3) Length: kassab1993 prints two length ratios per tree; the orders 4-11 ratio is entered as the one whose
+    range (from about 30 um up) the tree covers; the orders 1-3 ratio (1.14-1.19) is for vessels below the tree's
+    truncation and is not entered. (4) LAD and LCX: the release is one tree holding both, so each pig tree is a
+    separate test of the same statistic; the RCA ratios are not entered (no RCA in the release).
+    (5) Fit range: the pig diameter and number fits run over orders 1-11, from capillary-sized arterioles to the
+    main stems, while the tree's 8 orders run from about 77 um to 3.4 mm, which in the pig would be about orders
+    5-11. kassab1993 prints no ratio over its orders 5-11 for diameter or number, so the ranges cannot be
+    matched; if the pig's law bends at the small orders (as its length law does), part of any difference is
+    range, not anatomy.
+    Not entered: (a) per-order mean diameters, lengths and counts (Tables 1-3, 9), S/E (Table 5) and the
+    connectivity matrix (Table 6): they are indexed by order, and the tree's order n is not the pig's order n
+    (order numbering starts at the smallest vessel kept, which differs by a factor of about 8 in diameter); an
+    order-to-order map (from the top, or by diameter) is a choice neither paper supports, and would decide the
+    verdict. (b) The Horton intercepts a and the fit R2: a depends on the numbering, R2 is a quality of a fit,
+    not a measurement of a tree. (c) The cumulative volumes and element totals (pp. 13-14): those of a pig heart
+    to the capillaries, against a human tree truncated at 30 um; no model here is run on the pig's conditions.
+    (d) The figure readings of Figs. 6-11: they plot the same per-order tables. In the other direction, no model
+    of kassab1993 predicts a measurement of this record: its models take per-order pig means, counts or
+    connectivity as inputs, and this record's measurements (Table 1 shares, densities and medians by diameter
+    class, topology, symmetry and area growth at nodes, perfused volumes) are not by order
+    (kassab1993/q_validation_schwarz_data).
+    How the two differ, and why the comparison still means something: a pig and a human heart, a cast with
+    silicone elastomer to the capillaries against a micro-CT of a cast to about 30 um; the ratios of a Horton law
+    are the statistics kassab1993 offers as the description of a coronary tree, and tree_strahler computes them by
+    kassab1993's own rule, so a human tree that differs from the pig's is a finding about the anatomy or about the
+    rule on a tree with loops and trifurcations, not a failure of either record.
+  citation: {none: "a finding of the validation job between kassab1993 and schwarz_data, not a printed statement"}
+- id: q_no_validation_vs_kim2010
+  kind: choice
+  about: [network_solution, tree_effective_resistance, kim2010/gould_rest_fig6, kim2010/gould_hyperemia_fig6]
+  text: >
+    Validation job kim2010+schwarz_data (2026-11-09). No validation is entered in either direction, and
+    neither source cites the other. Measurements of kim2010: only the Gould et al. canine mean flows that
+    its Fig. 6 plots against percent diameter reduction of a temporary stenosis in the dog's left
+    circumflex artery (kim2010 p. 13). They are drawn on a cc/s axis whose scaling to the human patient
+    kim2010 does not state (kim2010/q_fig6_gould_scaling). No model of this record has a stenosis. Only
+    the 0% points could be set against network_solution's inlet flows (Q_LAD, Q_LCX), and the two
+    quantities would be the same only through that unstated scaling. They would also differ in species,
+    artery, state (rest or contrast hyperemia in vivo, against an arrested cast solved in steady flow
+    without tone at 90/20 mmHg) and heart size. A verdict would judge the scaling, not the tree.
+    kim2010's other numbers (LAD, LCX and RCA mean flows, cardiac output, the Table 3 bed resistances)
+    are results of its 3D model or parameters tuned to one patient, not measurements. Setting them beside
+    the tree's inlet flows or effective resistance relates two models; that is the relation job's work.
+    In the other direction, no kim2010 model gives a quantity this record measures: its models give
+    mean coronary flows from bed resistances or a share of cardiac output, not a diameter, a length, a
+    count or a branching statistic. See kim2010/q_no_validation_vs_schwarz_data.
+  citation: {none: "a finding of the validation job between kim2010 and schwarz_data, not a printed statement"}
+- id: q_validation_vs_mynard2014
+  kind: choice
+  about: [tree_effective_resistance, network_solution, P_sink_mat, mynard2014/cxq_adult,
+          mynard2014/cxq_newborn, mynard2014/reff_adult_text, mynard2014/reff_newborn_text]
+  text: >
+    Validation job mynard2014+schwarz_data (2026-11-09). Neither source cites the other. One validation is entered,
+    val_mynard_cxq_adult: the released tree's LAD + LCX inflow per 100 g of perfused tissue, solved with its inlet at
+    the adult sheep's measured mean aortic pressure (80 mmHg), against the sheep's measured mean Cx flow per 100 g of
+    the stained Cx territory, 71 ± 35 mL/min/100g (mynard2014 Table 1). The tree gives about 260 mL/min/100g, some 3.7
+    times the sheep's mean and far outside its SD: not reproduced. The size of the gap is that of a resting flow
+    against a fully dilated one (a coronary flow reserve of 3-4), which is what one expects of a cast tree solved
+    without tone against beating hearts with tone intact; the tree's imputed distal conductances (q_gdist_law), which
+    set most of its resistance, and the species are the other differences. The verdict is a result, not a failure.
+    Choices made: (1) the distal pressure is the release's 20 mmHg (P_sink_mat), the pressure its distal conductances
+    were imputed against, not mynard2014's right atrial 5 mmHg, which sits below a venous bed the tree does not have;
+    with 5 mmHg the tree's flow would be higher still (the network is linear: (80 - 5)/(80 - 20) = 1.25 times).
+    (2) Cx flow per Cx territory is set against the tree's total flow per total territory; both are mean arterial
+    inflow per 100 g of the myocardium the vessels supply. (3) The inlet is the aortic mean, which mynard2014
+    prescribes at the left main; the tree starts at the LAD and LCX.
+    Considered and not entered: (a) the newborn lambs (cxq_newborn, 129 ± 38 at 78 ± 11 mmHg): an adult human tree
+    says nothing about the neonatal sheep heart, whose weight-corrected flow is "almost twice that in adults"
+    (mynard2014 p. 11) at a heart rate 1.9 times higher; the adult sheep is the closer comparison. (b) mynard2014's effective
+    resistances 0.72 ± 0.35 and 0.34 ± 0.09 mmHg·min·100g/mL (tree_effective_resistance R_eff, about 0.23 at
+    80/20 mmHg): they are not measurements; the paper calls them (pLM - pRA)/qLM without saying whether qLM is
+    measured or simulated, includes the venous side and the intramyocardial compression (40-42% of it, p. 12), and
+    they do not follow from Table 1's means (mynard2014/q_reff). The flow, which the resistance rests on, is tested
+    instead. (c) The measured Cx flow waveforms of Figs. 7-8 (fig7*_meas, fig8*_meas): the tree is steady and has no
+    waveform, and the time-mean of a reading is not a datum. (d) The other measurements of Table 1 (weights, heart
+    rate, pressures) and Table 2 (waveform features): no model here gives them.
+    In the other direction no mynard2014 model predicts a measurement of this record: multiscale_coronary is not
+    runnable; effective_resistance needs a measured flow, and this record has none (its flows are network_solution's
+    outputs); the remaining models are ratios, differences, wave speed and allometric segment-length scaling between
+    two animals, none a statistic of one tree's diameters, lengths, counts or branching
+    (mynard2014/q_no_validation_vs_schwarz_data).
+  citation: {none: "a finding of the validation job between mynard2014 and schwarz_data, not a printed statement"}
+- id: q_no_validation_vs_mynard2015
+  kind: choice
+  about: [network_solution, tree_effective_resistance, tree_table1, mynard2015/lad_flow_fig4_invivo,
+          mynard2015/cs_flow_fig4_invivo, mynard2015/d_cs_human, mynard2015/t6_aort_mean_ref, mynard2015/t6_co_ref]
+  text: >
+    Validation job mynard2015+schwarz_data (2026-11-09). No validation is entered in either direction; neither source
+    cites the other (relations.yaml). This record's models against mynard2015's measurements: mynard2015 measures
+    nothing in the coronary arteries that the released tree's steady solution gives. (a) Its only coronary arterial
+    measurement is the in vivo LAD flow waveform of Fig. 4 (lad_flow_fig4_invivo, from its ref. 35), a velocity
+    waveform converted to flow "by assuming the same peak flow value as in the model" (mynard2015/q_fig4_scaled_velocity):
+    its amplitude, and so its time-mean, is mynard2015's model's, not a measurement. network_solution's Q_LAD is a
+    steady flow of an arrested, cast, toneless tree with no waveform, and the time-mean of a reading is not a datum.
+    (b) The coronary sinus flow waveform (cs_flow_fig4_invivo) and diameter (d_cs_human, 0.81 cm) are venous; the tree
+    has no veins. (c) The Table 6 reference ranges (heart rate, cardiac output, SVR, PVR, chamber volumes, EF, mean and
+    pulse pressures, E/A, dP/dt) are of the whole circulation; no model here gives them. The mean aortic pressure
+    (t6_aort_mean_ref, 80 to 113 mmHg) is an input of network_solution, not an output, and coronary flow is not
+    measured as a share of cardiac output, so no flow fraction can be compared. (d) The other Fig. 4 waveforms are
+    of non-coronary vessels. The tree's coronary flow per 100 g is set against a measurement of mynard2014 instead
+    (val_mynard_cxq_adult, q_validation_vs_mynard2014). For the other direction see
+    mynard2015/q_no_validation_vs_schwarz_data.
+  citation: {none: "a finding of the validation job between mynard2015 and schwarz_data, not a printed statement"}
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [network_solution, tree_structured_params, tree_effective_resistance, olufsen1999/co_measured, olufsen1999/inflow_fig4, olufsen1999/Zmod_md0_fig9b, olufsen1999/p_aortic_fig12a, olufsen1999/xi_chosen, olufsen1999/eta_chosen, olufsen1999/lrr_iberall]
+  text: >
+    Validation job olufsen1999+schwarz_data (2026-11-09). No model of this record is entered against a
+    measurement of olufsen1999. Its measurements are all of the systemic circulation of man: the cardiac
+    output and the ascending-aortic inflow of Fig. 4 (ref. 20), the brachiocephalic input impedance md 0 and
+    md 1 of Fig. 9 (refs. 26-27), and the aortic, subclavian, brachial and radial pressures of Fig. 12
+    (ref. 41). The models here solve or measure the left coronary arterial tree only; none gives a cardiac
+    output, an aortic flow, a brachiocephalic impedance or a peripheral systemic pressure, and the coronary
+    inflow (network_solution Q_LAD + Q_LCX) is a part of the cardiac output, not the same quantity. The
+    structured-tree parameters tree_structured_params measures (xi, gamma, eta, l/r, p) have counterparts in
+    olufsen1999 (xi_chosen 2.76, eta_chosen 1.16, gamma_printed 0.41, lrr_iberall 50 +- 10,
+    dc_radius_power_printed ~3), but those are choices taken from the literature (origin reported or derived)
+    or a prediction of its own model (p), not measurements, so they are not validation targets; the
+    relation job set them side by side (q_olufsen_params). In the other direction olufsen1999's Eq. 21 is
+    entered against this record's measured median area growth: olufsen1999/val_eta_eq21_vs_coronary_area_growth,
+    and olufsen1999/q_val_schwarz_data_scope says what else was considered.
+  citation: {none: "a finding of the validation job between olufsen1999 and schwarz_data, not a printed statement"}
+- id: q_no_validation_vs_olufsen2012
+  kind: choice
+  about: [network_solution, tree_structured_params, tree_table1, olufsen2012/lnl_fig5_points_large,
+          olufsen2012/lnl_fig5_points_small, olufsen2012/q_fig3a_aorta, olufsen2012/q_fig3b_pulm]
+  text: >
+    Validation job olufsen2012+schwarz_data (2026-11-09). No model of this record is entered against a
+    measurement of olufsen2012, and neither source cites the other. olufsen2012 measures two things: the mean
+    lengths and radii of human pulmonary arteries by Strahler order (Fig. 5, from Huang et al. 1996) and the
+    MRI inflows to the ascending aorta and main pulmonary artery of Fig. 3 (inputs of its network model). The
+    models here solve or measure the human left coronary arterial tree only. Its segment lengths by diameter
+    (tree_table1) are of coronary segments between nodes, while Huang's points are pulmonary vessels averaged by
+    order (elements, from casts down to about 10 um): a different organ and a different vessel definition, so
+    the tree's lengths are a second measurement, not a prediction of the pulmonary ones. No model here gives an
+    aortic or pulmonary inflow waveform; the tree's steady coronary inflow is a small part of the aortic flow.
+    olufsen2012's other numbers (Table 2, Eq. 3.1, Figs. 6-13) are results of its own model, not measurements;
+    Eq. 3.1 is set beside network_solution as a relation (rel_network_solution_approx_olufsen2012_eq31), and its
+    tree parameters xi, gamma, eta, l_rr are taken from the literature (reported), not measured. In the other
+    direction olufsen2012's Eq. 2.18 at its own tree values is entered against this record's measured median area
+    growth (olufsen2012/val_eta_eq218_tree_vs_coronary_area_growth); olufsen2012/q_val_schwarz_data_scope says
+    what else was considered.
+  citation: {none: "a finding of the validation job between olufsen2012 and schwarz_data, not a printed statement"}
+- id: q_no_validation_vs_spaan1981
+  kind: choice
+  about: [tree_lumen_volume_fraction, tree_effective_resistance, network_pressure_share, network_solution,
+          spaan1981/artery_fraction_printed, spaan1981/total_blood_volume_morgenstern, spaan1981/wedge_pressure,
+          spaan1981/ra_vs_rc_filled_square_fig6, spaan1981/p_im_mean, spaan1981/area_fig4a]
+  text: >
+    Validation job schwarz_data+spaan1981 (2026-11-09). No validation is entered in either direction; neither
+    source cites the other. spaan1981's measurements are of the beating, anaesthetized dog heart in vivo: p_lc
+    against q_c (Fig. 5), R_a against R_c (Fig. 6), p_im, the systolic LV pressure, the wedge pressure, the Fig. 4A
+    area and one LV mass. Every one is a phasic quantity, a quantity of an intact bed with its venous side, or an
+    input: the released tree's solution is steady, has no wall compliance and no intramyocardial pump, so it gives
+    no p_lc, q_c, R_a, p_im or volume swing; its inlet-to-distal resistance (tree_effective_resistance) is per 100 g
+    of perfused tissue and has no venous resistance, while spaan1981's R_c = R_a + R_v includes R_v and is stated
+    for no perfused mass (relations.yaml); the wedge pressure would set this tree's distal pressure, which is an
+    input here (P_sink_mat), not an output. The one place the records meet, the arterial lumen volume fraction
+    (q_lumen_volume_vs_spaan1981, tree_lumen_volume_fraction), was considered and not entered: (1) spaan1981's
+    0.023 (artery_fraction_printed, origin estimated) is not a measurement but the output of its own rule-of-thumb
+    model (one third of a capillary fraction computed from a chosen diameter and density); setting the tree against
+    it would judge a measured anatomy by an estimate, the wrong way round; (2) the reverse, spaan1981's model judged
+    against the tree, is not possible either, since that model's inputs are capillary diameter and density, which
+    the tree (truncated at about 30 um) does not have, and this record holds no datum of the lumen fraction, only
+    a run; (3) spaan1981 defines its 'small arteries' by no diameter, so any window is our choice, and the tree,
+    missing the arterioles below its truncation, gives only a lower bound on the same tissue's arterial volume. The
+    10-15% total blood volume spaan1981 quotes from Morgenstern et al. (measured by them, dye dilution, beating
+    dog) includes capillaries and veins and is a different quantity from the tree's arterial lumen fraction. The
+    difference between the tree's fraction and 0.023 stays a relation-level observation (q_lumen_volume_vs_spaan1981),
+    not a verdict. See spaan1981/q_no_validation_vs_schwarz_data.
+  citation: {none: "a finding of the validation job between schwarz_data and spaan1981, not a printed statement"}
+- id: q_no_validation_vs_sexton2025
+  kind: choice
+  about: [network_solution, network_pressure_share, tree_table1, tree_branching, tree_strahler,
+          sexton2025/q_ratio_piv_fig5f, sexton2025/viability_fig5p, sexton2025/t_gyrus_8000_new,
+          sexton2025/olufsen_material_s26, sexton2025/svv_tree]
+  text: >
+    Validation job schwarz_data+sexton2025 (2026-11-09). No model of this record is entered against a measurement
+    of sexton2025, and sexton2025 does not cite Schwarz et al. sexton2025's measurements are build and operation
+    times of its software, cell areas, live-cell counts, viabilities and radial viable-cell profiles in printed
+    hydrogels, and the PIV branch flow fractions of a printed three-branch scaffold (Fig. 5F). The models here solve
+    or measure the released human left coronary network only (network_solution, network_pressure_share and the
+    tree_* statistics read TreeQ from the release file); none takes another geometry, so none gives the scaffold's
+    flow split, and none gives a time or a cell count. network_solution and sexton2025's olufsen_material_s26 share
+    the shape "pressure from a length and a pressure" but no quantity: one is a steady Poiseuille-Kirchhoff solve
+    of the cast's geometry, the other a wall law relating pressure to lumen area and stiffness, which the cast does
+    not measure. The statistics this record computes on the human tree (area growth, symmetry, Strahler ratios,
+    pressure share) are model outputs here, not measurements, so a synthetic tree is not validated against them;
+    the measured medians they rest on are schwarz2020's, against which sexton2025's svv_tree is already validated
+    (sexton2025/val_A_large_schwarz, val_S_large_schwarz). In the other direction see
+    sexton2025/q_validation_schwarz_data.
+  citation: {none: "a finding of the validation job between schwarz_data and sexton2025, not a printed statement"}
+- id: q_no_validation_vs_svv_code
+  kind: choice
+  about: [network_solution, network_pressure_share, tree_table1, tree_branching, tree_strahler,
+          'svv_code/tree_growth', 'svv_code/tree_biventricle', 'svv_code/resistance_update']
+  text: >
+    Validation job schwarz_data+svv_code (2026-11-09). No model of this record is entered against svv_code: the
+    code record has no measured data. Its values are the code's constants, the outputs of trees it grows, and an
+    illustrative bifurcation. The models here solve or measure the released human network only (TreeQ read from
+    the release file), and none takes a synthetic tree as input. network_solution and svv_code/resistance_update,
+    the pair suggested by shape (lengths and pressures), are both steady Poiseuille models, but
+    resistance_update's pressures are outputs at added inputs, not measurements. For the other direction, svv
+    trees against this record's measurements, see svv_code/q_no_validation_vs_schwarz_data. Those measurements are
+    copies of schwarz2020's printed values, and svv_code is already validated against the originals.
+  citation: {none: "a finding of the validation job between schwarz_data and svv_code, not a printed statement"}

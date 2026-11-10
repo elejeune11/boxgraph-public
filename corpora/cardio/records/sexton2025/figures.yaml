@@ -1,0 +1,303 @@
+# Calibrated figure readings (figure pass, 2026-11-09). Every reading is made by the record's own code in
+# figures/, run on the page region rendered at `dpi`; figures.md says what was read and what was left out.
+
+# ---- Fig. 5F (p. 6): PIV flow ratios of three branches (1 Bottom, 2 Middle, 3 Top), with CFD ----
+- id: fig5f_piv
+  page: 6
+  where: "Fig. 5F"
+  what: "the error bar of each branch (blue Bottom, red Middle, green Top): its midpoint, the mean of the N = 3 PIV measurements, and its ends (+-1 SD)"
+  dpi: 1200
+  crop: [5400, 1720, 6920, 3000]
+  x: {quantity: branch_index, unit: dimensionless}
+  y: {quantity: branch_flow_fraction, unit: dimensionless}
+  mode: code
+  code: figures/fig5f_piv.py
+  at: ["1", "2", "3"]
+  error_bars: sd
+  error_bars_citation: {page: 6, quote: "Error bars indicate ± 1 SD"}
+- id: fig5f_cfd
+  page: 6
+  where: "Fig. 5F"
+  what: "the grey '+' of each branch: the individual CFD value of that branch"
+  dpi: 1200
+  crop: [5400, 1720, 6920, 3000]
+  x: {quantity: branch_index, unit: dimensionless}
+  y: {quantity: branch_flow_fraction, unit: dimensionless}
+  mode: code
+  code: figures/fig5f_cfd.py
+  at: ["1", "2", "3"]
+- id: fig5f_cfd_mean
+  page: 6
+  where: "Fig. 5F"
+  what: "the grey dashed line (averaged CFD), read at each branch's column"
+  dpi: 1200
+  crop: [5400, 1720, 6920, 3000]
+  x: {quantity: branch_index, unit: dimensionless}
+  y: {quantity: branch_flow_fraction, unit: dimensionless}
+  mode: code
+  code: figures/fig5f_cfd_mean.py
+  at: ["1", "2", "3"]
+
+# ---- Fig. 5P(iii) (p. 6): integrated viable cell count and viability, Perfused (1) and Media Ctrl (2) ----
+- id: fig5p_count
+  page: 6
+  where: "Fig. 5P(iii), left"
+  what: "the two black bars (1 Perfused, 2 Media Ctrl) of integrated live cell count normalized to media control, with the upper error bars"
+  dpi: 1200
+  crop: [3860, 7360, 4160, 8140]
+  x: {quantity: construct_condition_index, unit: dimensionless}
+  y: {quantity: normalized_live_cell_count, unit: dimensionless}
+  mode: code
+  code: figures/fig5p_count.py
+  at: ["1", "2"]
+  error_bars: sd
+  error_bars_citation: {page: 6, quote: "count [perfused: (417 ± 37)-fold higher] and viability (perfused: 37.8 ± 33.6%"}
+- id: fig5p_viability
+  page: 6
+  where: "Fig. 5P(iii), right"
+  what: "the two black bars (1 Perfused, 2 Media Ctrl) of viability in the core region, with the upper error bars"
+  dpi: 1200
+  crop: [4250, 7360, 4520, 8140]
+  x: {quantity: construct_condition_index, unit: dimensionless}
+  y: {quantity: cell_viability, unit: percent}
+  mode: code
+  code: figures/fig5p_viability.py
+  at: ["1", "2"]
+  error_bars: sd
+  error_bars_citation: {page: 6, quote: "count [perfused: (417 ± 37)-fold higher] and viability (perfused: 37.8 ± 33.6%"}
+
+# ---- Fig. 5P(ii), bottom (p. 6): radial profiles of average viable cell count ----
+- {id: fig5p2_perfused, page: 6, where: "Fig. 5P(ii)", what: "the green line under the Perfused image (panel 1, the only one with a y axis)",
+   dpi: 1200, crop: [4500, 6700, 6950, 7120], x: {quantity: normalized_radius, unit: dimensionless}, y: {quantity: viable_cell_count_radial, unit: dimensionless},
+   mode: code, code: figures/fig5p2_perfused.py, at: ["0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95"]}
+- {id: fig5p2_media, page: 6, where: "Fig. 5P(ii)", what: "the green line under the Media Control image (panel 2), where it stands clear of the x axis",
+   dpi: 1200, crop: [4500, 6700, 6950, 7120], x: {quantity: normalized_radius, unit: dimensionless}, y: {quantity: viable_cell_count_radial, unit: dimensionless},
+   mode: code, code: figures/fig5p2_media.py, at: ["0.9", "0.95"]}
+- {id: fig5p2_pbs, page: 6, where: "Fig. 5P(ii)", what: "the green line under the PBS Control image (panel 3), where it stands clear of the x axis",
+   dpi: 1200, crop: [4500, 6700, 6950, 7120], x: {quantity: normalized_radius, unit: dimensionless}, y: {quantity: viable_cell_count_radial, unit: dimensionless},
+   mode: code, code: figures/fig5p2_pbs.py, at: ["0.8", "0.9", "0.95"]}
+
+# ---- Fig. 1G (p. 2): bulk tissue concentration against network size, moving averages ----
+- id: fig1g_lat_i
+  page: 2
+  where: "Fig. 1G(i)"
+  what: "the blue line (Lat., lattice networks) in the convex cube domain"
+  dpi: 1000
+  crop: [900, 4250, 3100, 5600]
+  x: {quantity: vessel_count, unit: dimensionless}
+  y: {quantity: tissue_concentration_ratio, unit: dimensionless}
+  mode: code
+  code: figures/fig1g_lat_i.py
+  at: ["30", "50", "100", "200", "500", "1000"]
+- id: fig1g_vas_i
+  page: 2
+  where: "Fig. 1G(i)"
+  what: "the orange line (Vas., synthetic vasculature) in the convex cube domain"
+  dpi: 1000
+  crop: [900, 4250, 3100, 5600]
+  x: {quantity: vessel_count, unit: dimensionless}
+  y: {quantity: tissue_concentration_ratio, unit: dimensionless}
+  mode: code
+  code: figures/fig1g_vas_i.py
+  at: ["50", "100", "200", "500", "1000", "2000", "3000"]
+- id: fig1g_lat_ii
+  page: 2
+  where: "Fig. 1G(ii)"
+  what: "the green line (Lat., lattice networks) in the nonconvex biventricle domain"
+  dpi: 1000
+  crop: [3420, 4250, 5720, 5600]
+  x: {quantity: vessel_count, unit: dimensionless}
+  y: {quantity: tissue_concentration_ratio, unit: dimensionless}
+  mode: code
+  code: figures/fig1g_lat_ii.py
+  at: ["40", "50", "100", "200", "300"]
+- id: fig1g_vas_ii
+  page: 2
+  where: "Fig. 1G(ii)"
+  what: "the red line (Vas., synthetic vasculature) in the nonconvex biventricle domain"
+  dpi: 1000
+  crop: [3420, 4250, 5720, 5600]
+  x: {quantity: vessel_count, unit: dimensionless}
+  y: {quantity: tissue_concentration_ratio, unit: dimensionless}
+  mode: code
+  code: figures/fig1g_vas_ii.py
+  at: ["40", "50", "100", "200", "500", "1000", "2000", "3000"]
+
+# ---- Fig. 2B (p. 3): theoretical clock cycles against bifurcation depth ----
+- {id: fig2b_recompute, page: 3, where: "Fig. 2B", what: "the red dashed line labelled 'Recompute Entire Tree, C α N^2'",
+   dpi: 1000, crop: [3350, 3900, 5550, 5650], x: {quantity: bifurcation_depth, unit: dimensionless}, y: {quantity: clock_cycles, unit: dimensionless},
+   mode: code, code: figures/fig2b_recompute.py, at: ["5", "10", "20", "30", "40", "50", "60", "70"]}
+- {id: fig2b_naive, page: 3, where: "Fig. 2B", what: "the red dotted line labelled 'Naive Implementation, C α (N*E)^2'",
+   dpi: 1000, crop: [3350, 3900, 5550, 5650], x: {quantity: bifurcation_depth, unit: dimensionless}, y: {quantity: clock_cycles, unit: dimensionless},
+   mode: code, code: figures/fig2b_naive.py, at: ["5", "10", "20", "30", "40", "50"]}
+
+# ---- Fig. 2C, 2F, 2H, 2I (p. 3) ----
+- id: fig2c_approx
+  page: 3
+  where: "Fig. 2C"
+  what: "the red solid line: median alignment of the prior approximation (N = 100)"
+  dpi: 1000
+  crop: [5450, 3900, 7300, 5650]
+  x: {quantity: bifurcation_depth, unit: dimensionless}
+  y: {quantity: bifurcation_alignment, unit: dimensionless}
+  mode: code
+  code: figures/fig2c_approx.py
+  at: ["2", "5", "10", "15", "20", "25", "30", "40", "50", "60", "70", "78"]
+- id: fig2c_pb
+  page: 3
+  where: "Fig. 2C"
+  what: "the blue solid line: median alignment of partial binding (N = 100)"
+  dpi: 1000
+  crop: [5450, 3900, 7300, 5650]
+  x: {quantity: bifurcation_depth, unit: dimensionless}
+  y: {quantity: bifurcation_alignment, unit: dimensionless}
+  mode: code
+  code: figures/fig2c_pb.py
+  at: ["2", "5", "10", "15", "20", "25", "30", "40", "50", "60", "70", "78"]
+- id: fig2f_mesh
+  page: 3
+  where: "Fig. 2F"
+  what: "the red line (mesh-based point evaluation), dashed and solid together"
+  dpi: 1000
+  crop: [5450, 5550, 7430, 7200]
+  x: {quantity: point_count, unit: dimensionless}
+  y: {quantity: operation_time, unit: s}
+  mode: code
+  code: figures/fig2f_mesh.py
+  at: ["10", "25", "50", "100", "200", "300", "400", "490"]
+- id: fig2f_implicit
+  page: 3
+  where: "Fig. 2F"
+  what: "the blue line (partial implicit volume evaluation), dashed and solid together"
+  dpi: 1000
+  crop: [5450, 5550, 7430, 7200]
+  x: {quantity: point_count, unit: dimensionless}
+  y: {quantity: operation_time, unit: s}
+  mode: code
+  code: figures/fig2f_implicit.py
+  at: ["25", "50", "100", "200", "300", "400", "490"]
+- id: fig2h_fit
+  page: 3
+  where: "Fig. 2H"
+  what: "the red line drawn through the OBB collision times (the legend pairs it with the black squares)"
+  dpi: 1000
+  crop: [3600, 7130, 5450, 8380]
+  x: {quantity: tree_size, unit: dimensionless}
+  y: {quantity: operation_time, unit: s}
+  mode: code
+  code: figures/fig2h_fit.py
+  at: ["10", "50", "100", "200", "300", "400", "490"]
+- id: fig2h_sphere
+  page: 3
+  where: "Fig. 2H"
+  what: "the blue sphere-proximity dots, which overlap into one band, traced as a line"
+  dpi: 1000
+  crop: [3600, 7130, 5450, 8380]
+  x: {quantity: tree_size, unit: dimensionless}
+  y: {quantity: operation_time, unit: s}
+  mode: code
+  code: figures/fig2h_sphere.py
+  at: ["10", "50", "100", "200", "300", "400", "490"]
+- id: fig2i_fit
+  page: 3
+  where: "Fig. 2I"
+  what: "the red line drawn through the average number of OBB evaluations"
+  dpi: 1000
+  crop: [5500, 7130, 7350, 8380]
+  x: {quantity: tree_size, unit: dimensionless}
+  y: {quantity: obb_evaluation_count, unit: dimensionless}
+  mode: code
+  code: figures/fig2i_fit.py
+  at: ["10", "50", "100", "200", "300", "400", "490"]
+
+# ---- Fig. S2D-F (p. 39): data-structure timings, mean lines (shading +-2 SD, 100 reruns) ----
+- {id: figs2d_array, page: 39, where: "Fig. S2D", what: "the blue line (Array): mean time to find the optimal branch appendage",
+   dpi: 1000, crop: [1650, 5100, 4150, 7020], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2d_array.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2d_linked, page: 39, where: "Fig. S2D", what: "the orange line (Linked-List): mean time to find the optimal branch appendage",
+   dpi: 1000, crop: [1650, 5100, 4150, 7020], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2d_linked.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2d_vectorized, page: 39, where: "Fig. S2D", what: "the green line (Vectorized Linked-List): mean time to find the optimal branch appendage",
+   dpi: 1000, crop: [1650, 5100, 4150, 7020], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2d_vectorized.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2e_array, page: 39, where: "Fig. S2E", what: "the blue line (Array): mean radii rescaling time",
+   dpi: 1000, crop: [4200, 5100, 6750, 7020], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2e_array.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2e_linked, page: 39, where: "Fig. S2E", what: "the orange line (Linked-List): mean radii rescaling time",
+   dpi: 1000, crop: [4200, 5100, 6750, 7020], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2e_linked.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2f_array_any, page: 39, where: "Fig. S2F", what: "the blue line (Array Any Collision): mean collision detection time",
+   dpi: 1000, crop: [1650, 7060, 4150, 9030], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2f_array_any.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2f_array_all, page: 39, where: "Fig. S2F", what: "the orange line (Array All Collision): mean collision detection time",
+   dpi: 1000, crop: [1650, 7060, 4150, 9030], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2f_array_all.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2f_linked_any, page: 39, where: "Fig. S2F", what: "the green line (Linked-List Any Collision): mean collision detection time",
+   dpi: 1000, crop: [1650, 7060, 4150, 9030], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2f_linked_any.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+- {id: figs2f_linked_all, page: 39, where: "Fig. S2F", what: "the red line (Linked-List All Collision): mean collision detection time",
+   dpi: 1000, crop: [1650, 7060, 4150, 9030], x: {quantity: tree_size, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs2f_linked_all.py, at: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]}
+
+# ---- Fig. S10 (p. 58): histograms of tissue distance to the nearest vessel (bins covered by another colour are not read) ----
+- {id: figs10a_1e4, page: 58, where: "Fig. S10A", what: "the blue histogram (1E4 vessels), biventricle",
+   dpi: 1000, crop: [2400, 1150, 6900, 4650], x: {quantity: distance_to_nearest_vessel, unit: cm}, y: {quantity: subregion_count, unit: dimensionless},
+   mode: code, code: figures/figs10a_1e4.py,
+   at: ["0.065", "0.07", "0.075", "0.08", "0.085", "0.09", "0.095", "0.1", "0.11", "0.115", "0.12", "0.125", "0.13", "0.135", "0.14", "0.145", "0.15", "0.155", "0.16", "0.165", "0.17", "0.175", "0.18", "0.185", "0.19", "0.195", "0.2", "0.205", "0.21", "0.215", "0.22", "0.225", "0.23", "0.235", "0.24", "0.27", "0.28"]}
+- {id: figs10a_1e5, page: 58, where: "Fig. S10A", what: "the orange histogram (1E5 vessels), biventricle",
+   dpi: 1000, crop: [2400, 1150, 6900, 4650], x: {quantity: distance_to_nearest_vessel, unit: cm}, y: {quantity: subregion_count, unit: dimensionless},
+   mode: code, code: figures/figs10a_1e5.py,
+   at: ["0.025", "0.0275", "0.03", "0.0325", "0.035", "0.0375", "0.04", "0.0425", "0.045", "0.0475", "0.05", "0.0525", "0.055", "0.0575", "0.06", "0.0625"]}
+- {id: figs10a_1e6, page: 58, where: "Fig. S10A", what: "the green histogram (1E6 vessels), biventricle",
+   dpi: 1000, crop: [2400, 1150, 6900, 4650], x: {quantity: distance_to_nearest_vessel, unit: cm}, y: {quantity: subregion_count, unit: dimensionless},
+   mode: code, code: figures/figs10a_1e6.py,
+   at: ["0.0025", "0.0075", "0.01", "0.0125", "0.015", "0.0175", "0.02", "0.0225", "0.025"]}
+- {id: figs10b_1e4, page: 58, where: "Fig. S10B", what: "the blue histogram (1E4 vessels), annulus",
+   dpi: 1000, crop: [2400, 5200, 6900, 8700], x: {quantity: distance_to_nearest_vessel, unit: cm}, y: {quantity: subregion_count, unit: dimensionless},
+   mode: code, code: figures/figs10b_1e4.py,
+   at: ["0.06", "0.065", "0.07", "0.075", "0.08", "0.085", "0.09", "0.095", "0.1", "0.105", "0.11", "0.115", "0.12", "0.125", "0.13", "0.135", "0.14", "0.145", "0.15", "0.155", "0.16", "0.165", "0.17", "0.175", "0.18", "0.185", "0.19", "0.195", "0.2", "0.205", "0.21", "0.215", "0.22", "0.24", "0.25"]}
+- {id: figs10b_1e5, page: 58, where: "Fig. S10B", what: "the orange histogram (1E5 vessels), annulus",
+   dpi: 1000, crop: [2400, 5200, 6900, 8700], x: {quantity: distance_to_nearest_vessel, unit: cm}, y: {quantity: subregion_count, unit: dimensionless},
+   mode: code, code: figures/figs10b_1e5.py,
+   at: ["0.025", "0.0275", "0.03", "0.0325", "0.035", "0.0375", "0.04", "0.0425", "0.045", "0.0475", "0.05", "0.0525", "0.055", "0.0575", "0.06"]}
+- {id: figs10b_1e6, page: 58, where: "Fig. S10B", what: "the green histogram (1E6 vessels), annulus",
+   dpi: 1000, crop: [2400, 5200, 6900, 8700], x: {quantity: distance_to_nearest_vessel, unit: cm}, y: {quantity: subregion_count, unit: dimensionless},
+   mode: code, code: figures/figs10b_1e6.py,
+   at: ["0.0025", "0.005", "0.0075", "0.01", "0.0125", "0.015", "0.0175", "0.02", "0.0225"]}
+
+# ---- Fig. S11C (p. 60): parabolic fits of example PIV velocity profiles ----
+- {id: figs11c_bottom, page: 60, where: "Fig. S11C", what: "the blue solid line: parabolic fit, Bottom channel",
+   dpi: 1000, crop: [4000, 4150, 7000, 6750], x: {quantity: radial_position, unit: um}, y: {quantity: axial_velocity, unit: um/s},
+   mode: code, code: figures/figs11c_bottom.py, at: ["-700", "-500", "-300", "-100", "0", "100", "300", "500", "700"]}
+- {id: figs11c_middle, page: 60, where: "Fig. S11C", what: "the red solid line: parabolic fit, Middle channel",
+   dpi: 1000, crop: [4000, 4150, 7000, 6750], x: {quantity: radial_position, unit: um}, y: {quantity: axial_velocity, unit: um/s},
+   mode: code, code: figures/figs11c_middle.py, at: ["-450", "-300", "-100", "0", "100", "300", "450"]}
+- {id: figs11c_top, page: 60, where: "Fig. S11C", what: "the green solid line: parabolic fit, Top channel",
+   dpi: 1000, crop: [4000, 4150, 7000, 6750], x: {quantity: radial_position, unit: um}, y: {quantity: axial_velocity, unit: um/s},
+   mode: code, code: figures/figs11c_top.py, at: ["-500", "-300", "-100", "0", "100", "300", "500"]}
+
+# ---- Fig. S4B (p. 42): implicit reconstruction time ----
+- {id: figs4b_pu, page: 42, where: "Fig. S4B", what: "the blue line (Partition of Unity)",
+   dpi: 1000, crop: [1600, 3350, 7000, 5300], x: {quantity: point_count, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs4b_pu.py, at: ["80", "100", "200", "500", "1000", "2000", "3000", "5000"]}
+- {id: figs4b_global, page: 42, where: "Fig. S4B", what: "the orange line (Global)",
+   dpi: 1000, crop: [1600, 3350, 7000, 5300], x: {quantity: point_count, unit: dimensionless}, y: {quantity: operation_time, unit: s},
+   mode: code, code: figures/figs4b_global.py, at: ["80", "100", "200", "500", "1000", "2000", "3000", "5000"]}
+
+# ---- Fig. S15A(i) (p. 65): cell area histograms, live and dead (bars a few px tall are not found) ----
+- {id: figs15a_live, page: 65, where: "Fig. S15A(i)", what: "the green bars (Live), every bar standing on the axis",
+   dpi: 1200, crop: [2350, 1450, 4550, 3300], x: {quantity: cell_area, unit: um^2}, y: {quantity: cell_count, unit: dimensionless},
+   mode: code, code: figures/figs15a_live.py, at: []}
+- {id: figs15a_dead, page: 65, where: "Fig. S15A(i)", what: "the red bars (Dead), every bar standing on the axis",
+   dpi: 1200, crop: [2350, 1450, 4550, 3300], x: {quantity: cell_area, unit: um^2}, y: {quantity: cell_count, unit: dimensionless},
+   mode: code, code: figures/figs15a_dead.py, at: []}
+
+# ---- Fig. S8 (p. 51): build times of convex domains (the two red lines) ----
+- {id: figs8_upper, page: 51, where: "Fig. S8", what: "the upper of the two dark red lines (convex tissue domains), at its four points, with +-1 SD bars",
+   dpi: 1000, crop: [2000, 1200, 6600, 4750], x: {quantity: terminal_count, unit: dimensionless}, y: {quantity: build_time, unit: s},
+   mode: code, code: figures/figs8_upper.py, at: ["100", "1000", "4000", "8000"],
+   error_bars: sd, error_bars_citation: {page: 51, quote: "Error bars are ± 1SD"}}
+- {id: figs8_lower, page: 51, where: "Fig. S8", what: "the lower of the two dark red lines (convex tissue domains), at its four points, with +-1 SD bars",
+   dpi: 1000, crop: [2000, 1200, 6600, 4750], x: {quantity: terminal_count, unit: dimensionless}, y: {quantity: build_time, unit: s},
+   mode: code, code: figures/figs8_lower.py, at: ["100", "1000", "4000", "8000"],
+   error_bars: sd, error_bars_citation: {page: 51, quote: "Error bars are ± 1SD"}}

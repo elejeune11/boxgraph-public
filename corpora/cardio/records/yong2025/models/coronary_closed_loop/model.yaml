@@ -1,0 +1,341 @@
+id: coronary_closed_loop
+name: closed-loop circulation with LAD, LCx and RCA coronary territories, time-varying microvascular resistance and intramyocardial pressure (Eqs. 1-14, Fig. 1)
+role: model
+stated:
+  page: 2
+  printed_page: '2'
+  quote: The coronary circulation is modelled using a closed-loop LPM as
+  where: Sec. 2, Eqs. 1-14, Fig. 1, Supp. Tables S1-S2
+equation: Q_k = (P_k,1 - P_k,2)/R_k (1); Q_k = dC_k(P_k,lumen - P_k,ext)/dt (2); E_k(t) = (E_k,max - E_k,min) e_n(t) + E_k,min (3); e_v(t) = 1/2[1 - cos(pi t/T_vc)], 0<=t<=T_vc; 1/2[1 + cos(pi (t - T_vc)/T_vr)],
+  T_vc<t<=T_vc+T_vr; 0 after (4); e_a(t) as Eq. 5; Q_valve = (P_n,1 - P_n,2)/R_valve, R_valve = R_open or R_closed (6); Rmicro-LCA(t) = [(sqrt(k_LCA Rbar) - sqrt(0.7 Rbar)) e_n(t) + sqrt(0.7 Rbar)]^2 (10);
+  Rmicro-RCA(t) = [(k_PH sqrt(k_RCA Rbar) - sqrt(0.75 Rbar)) e_n(t) + sqrt(0.75 Rbar)]^2 (11); P_k,ext = P_im = 0.6 P_V (12); pDSFR = max_{Tes<=t<=Ted} Q / max_{0<=t<=Tes} Q (13); mDSFR = int_{Tes}^{Ted}
+  Q dt / int_0^{Tes} Q dt (14); circuit of Fig. 1
+inputs:
+  Emax_ra:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_ra:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_rv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_rv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_la:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_la:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emax_lv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Emin_lv:
+    quantity: chamber_elastance
+    unit: mmHg/ml
+  Tvc_rv:
+    quantity: contraction_duration
+    unit: s
+  Tvr_rv:
+    quantity: relaxation_duration
+    unit: s
+  Tvc_lv:
+    quantity: contraction_duration
+    unit: s
+  Tvr_lv:
+    quantity: relaxation_duration
+    unit: s
+  Tac_ra:
+    quantity: contraction_duration
+    unit: s
+  Tar_ra:
+    quantity: relaxation_duration
+    unit: s
+  tac_ra:
+    quantity: atrial_contraction_onset
+    unit: s
+  tar_ra:
+    quantity: atrial_relaxation_onset
+    unit: s
+  Tac_la:
+    quantity: contraction_duration
+    unit: s
+  Tar_la:
+    quantity: relaxation_duration
+    unit: s
+  tac_la:
+    quantity: atrial_contraction_onset
+    unit: s
+  tar_la:
+    quantity: atrial_relaxation_onset
+    unit: s
+  T:
+    quantity: heart_period
+    unit: s
+  R_open:
+    quantity: valve_resistance
+    unit: mmHg*s/ml
+  R_closed:
+    quantity: valve_resistance
+    unit: mmHg*s/ml
+  R_ao:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_sa:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_sv:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pa:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pc:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  R_pvn:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  C_sa:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_sv:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_pa:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  C_pvn:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Ra_lad:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_lad:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_lad:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_lad:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_lad:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ra_lcx:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_lcx:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_lcx:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_lcx:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_lcx:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ra_rca:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  Ca_rca:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rm_rca:
+    quantity: microvascular_resistance_mean
+    unit: mmHg*s/ml
+  Cm_rca:
+    quantity: vascular_compliance
+    unit: ml/mmHg
+  Rv_rca:
+    quantity: vascular_resistance
+    unit: mmHg*s/ml
+  k_lca:
+    quantity: resistance_scale_factor
+    unit: dimensionless
+  k_rca:
+    quantity: resistance_scale_factor
+    unit: dimensionless
+  k_ph:
+    quantity: ph_resistance_factor
+    unit: dimensionless
+  frac_lca:
+    quantity: basal_resistance_fraction
+    unit: percent
+  frac_rca:
+    quantity: basal_resistance_fraction
+    unit: percent
+  imp_ratio:
+    quantity: imp_ratio
+    unit: dimensionless
+  P_init:
+    quantity: initial_pressure
+    unit: mmHg
+outputs:
+  Qs_mean_lad:
+    quantity: coronary_flow_systolic_mean
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  Qd_mean_lad:
+    quantity: coronary_flow_diastolic_mean
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  Qs_peak_lad:
+    quantity: coronary_flow_systolic_peak
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  Qd_peak_lad:
+    quantity: coronary_flow_diastolic_peak
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  Q_mean_lad:
+    quantity: coronary_flow_cycle_mean
+    unit: ml/s
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  pDSFR_lad:
+    quantity: peak_dsfr
+    unit: dimensionless
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  mDSFR_lad:
+    quantity: mean_dsfr
+    unit: dimensionless
+    description: LAD distal (intramural) arterial flow, through Rmicro
+  Qs_mean_lcx:
+    quantity: coronary_flow_systolic_mean
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  Qd_mean_lcx:
+    quantity: coronary_flow_diastolic_mean
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  Qs_peak_lcx:
+    quantity: coronary_flow_systolic_peak
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  Qd_peak_lcx:
+    quantity: coronary_flow_diastolic_peak
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  Q_mean_lcx:
+    quantity: coronary_flow_cycle_mean
+    unit: ml/s
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  pDSFR_lcx:
+    quantity: peak_dsfr
+    unit: dimensionless
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  mDSFR_lcx:
+    quantity: mean_dsfr
+    unit: dimensionless
+    description: LCx distal (intramural) arterial flow, through Rmicro
+  Qs_mean_rca:
+    quantity: coronary_flow_systolic_mean
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  Qd_mean_rca:
+    quantity: coronary_flow_diastolic_mean
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  Qs_peak_rca:
+    quantity: coronary_flow_systolic_peak
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  Qd_peak_rca:
+    quantity: coronary_flow_diastolic_peak
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  Q_mean_rca:
+    quantity: coronary_flow_cycle_mean
+    unit: ml/s
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  pDSFR_rca:
+    quantity: peak_dsfr
+    unit: dimensionless
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  mDSFR_rca:
+    quantity: mean_dsfr
+    unit: dimensionless
+    description: RCA distal (intramural) arterial flow, through Rmicro
+  Qs_mean_gcv:
+    quantity: coronary_flow_systolic_mean
+    unit: ml/s
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  Qd_mean_gcv:
+    quantity: coronary_flow_diastolic_mean
+    unit: ml/s
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  Qs_peak_gcv:
+    quantity: coronary_flow_systolic_peak
+    unit: ml/s
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  Qd_peak_gcv:
+    quantity: coronary_flow_diastolic_peak
+    unit: ml/s
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  Q_mean_gcv:
+    quantity: coronary_flow_cycle_mean
+    unit: ml/s
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  pDSFR_gcv:
+    quantity: peak_dsfr
+    unit: dimensionless
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  mDSFR_gcv:
+    quantity: mean_dsfr
+    unit: dimensionless
+    description: 'great cardiac vein: flow through the LAD venous resistance'
+  CO:
+    quantity: cardiac_output
+    unit: l/min
+  Pao_max:
+    quantity: aortic_pressure_max
+    unit: mmHg
+  Pao_min:
+    quantity: aortic_pressure_min
+    unit: mmHg
+  Pao_mean:
+    quantity: aortic_pressure_mean
+    unit: mmHg
+  Ppa_max:
+    quantity: pa_pressure_max
+    unit: mmHg
+    description: pressure at the pulmonary valve outlet, before the pulmonary artery resistance
+  Ppa_min:
+    quantity: pa_pressure_min
+    unit: mmHg
+  Ppa_mean:
+    quantity: pa_pressure_mean
+    unit: mmHg
+  SV:
+    quantity: stroke_volume
+    unit: ml
+  EF:
+    quantity: ejection_fraction
+    unit: percent
+  sys_frac:
+    quantity: systolic_duration_fraction
+    unit: percent
+  sys_dia_ratio:
+    quantity: systolic_diastolic_duration_ratio
+    unit: percent
+  cor_frac:
+    quantity: coronary_flow_fraction
+    unit: percent
+  left_frac:
+    quantity: left_coronary_flow_fraction
+    unit: percent
+  periodicity:
+    quantity: periodicity_change
+    unit: percent
+settings:
+  dt: 0.01
+  t_end: 60.0
+  variable_resistance: true
+  imp: true
+  dsfr: integral
+stochastic: false

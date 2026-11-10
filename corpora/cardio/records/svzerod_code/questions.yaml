@@ -1,0 +1,408 @@
+- id: q_menon_prints_nothing
+  kind: unstated_model
+  about: [release_case, coronary_released, varres_released, impedance_released, windkessel_released_impedance]
+  text: >
+    The paper this code was released with, menon2025, prints no equation, parameter or result (its
+    record holds five models in words, none runnable: q_equations_in_docs there). Nothing the code
+    computes can therefore be compared with menon2025 itself. What is compared here: the code against
+    its own test cases (the analytical solutions their descriptions state, and the results stored with
+    the release), and each block against the paper its header cites (kim2010, yong2025, olufsen2000)
+    or, for the Windkessel block, the three-element model of westerhof1971.
+- id: q_case_units
+  kind: unstated_input
+  about: [case_pressure, case_flow, release_case]
+  text: >
+    The test cases (tests/cases/*.json), the solver and its documentation in this folder state no
+    units; the solver works in whatever consistent units it is given. The record reads the cases'
+    pressures and flows as dyn/cm^2 and mL/s (the cgs units of the release's coronary examples). No
+    verdict depends on it: every comparison of a case is between the case's own numbers.
+- id: q_hidden_solver_settings
+  kind: choice
+  about: [abs_tol_default, nliter_default, rho_infty_default, cycle_error_default, period_default]
+  text: >
+    The solver's numerical defaults are written only in the code: spectral radius rho_infty = 0.5 of
+    the generalized-alpha scheme, absolute Newton tolerance 1e-8 on a residual that mixes pressures,
+    flows and volumes, at most 30 Newton iterations per step, a steady initial condition by default
+    (solved with a time step of a tenth of the period, ImpedanceBC.h), a 1% cycle-to-cycle criterion
+    when it is switched on, and a period of 1.0 when none is defined. menon2025 names the scheme and the
+    Newton iterations (p. 4) but none of these values. Every run of this record uses them.
+  citation: {file: src/solve/SimulationParameters.cpp, lines: "340-353", quote: 'sim_config.value("rho_infty", 0.5)'}
+- id: q_t0_is_initial_state
+  kind: overstated_claim
+  about: [tc_pRCR_Pin, tc_pRCR_Pout, tc_pcor_Pin, tc_pcor_Pout, tc_pRCRd_Pin, tc_pRCRd_Pout, cmp_tc_pRCRd_Pin, st_pRCR_Pin]
+  text: >
+    The pulsatile cases' descriptions give as "Solutions" the pressures at t0, the start of the cardiac
+    cycle, as the steady values Q(0) times the total resistance (4620 and 4400 for R -> RCR, 880 and 660
+    for R -> coronary). The rerun gives them exactly in the first output row only because those cases
+    output all cycles and their first row is the solver's steady initial state; in the periodic state the
+    pressure at the start of a cycle is lower (the release's own stored result for R -> RCR at 10 s,
+    st_pRCR_Pin, is about 3494). pulsatileFlow_R_RCR_derivative.json, which outputs only the last cycle,
+    copies the same "Solutions", and the rerun's t0 pressures do not match them
+    (cmp_tc_pRCRd_Pin, cmp_tc_pRCRd_Pout): the stated solutions test the steady initialization, not the
+    dynamics, and are wrong for the case that outputs the periodic cycle. The release's test compares
+    with stored results, not with these statements.
+  citation: {file: tests/cases/pulsatileFlow_R_RCR_derivative.json, lines: "17", quote: "inlet pressure (at time = t0) = outlet pressure + Q(t = 0) * R_poiseuille = 4400 + 2.2 * 100 = 4620"}
+- id: q_stored_precision
+  kind: numerics
+  about: [cmp_st_pcor_Pin, cmp_st_pvar_Pin, cmp_st_pimp_Pin, cmp_st_pRCR_Pin, cmp_st_valve_P, cmp_st_valve_Q, cmp_st_chamber_P, cmp_st_chamber_Q, cmp_st_clhcor_Pin, cmp_st_clhcor_Qin, cmp_st_coupled_PLA, rtol_tests]
+  text: >
+    The stored results are written to 10 decimals, more digits than the solver's own tolerances fix:
+    the release's test (tests/utils.py) accepts a value when |y - y_ref| <= 1e-7 + 1e-7 |y_ref|. Rerun
+    with the pinned build (svzerod 3.2 from this commit) outside the record, every stored value of all
+    41 cases with stored results passes that test (the two mismatched-period cases, which have none,
+    fail by design, as the release expects). Some values of pulsatile cases differ from the stored ones
+    by up to about 1e-9 relative, beyond their printed 10 decimals; the values compared in this record
+    (the last output time of eight cases) happen to agree to the printed digits, except in
+    coupledBlock_closedLoopHeart_withCoronaries (q_coupled_tolerance). A difference at the 10th
+    decimal would be far below the release's own tolerance (a different build or platform), not an
+    error of the code.
+  citation: {file: tests/utils.py, lines: "17", quote: "RTOL_PRES = 1.0e-7"}
+- id: q_coupled_tolerance
+  kind: numerics
+  about: [rtol_coupled_coronaries, cmp_st_coupled_QLA, cmp_st_coupled_PLA]
+  text: >
+    For coupledBlock_closedLoopHeart_withCoronaries.json alone the release's test loosens its tolerance
+    from 1e-7 to 2.0e-1 for pressures and flows, with no comment. Rerun, that case differs from its
+    stored result by more than 1e-7: at output row 902 of Q_LA:CLH (t = 0.894 s) the stored left atrial
+    flow is 0.0387 and the rerun gives about -3e-5, a difference the 0.2 absolute part of the tolerance
+    hides. Whether the stored result or the current code is the intended one is not said.
+  citation: {file: tests/test_solver.py, lines: "69-71", quote: "rtol_pres = 2.0e-1"}
+- id: q_venous_pressure_term
+  kind: reading
+  about: [coronary_released, coronary_kim2010_ode, Pv_zero, rel_coronary_kim2010_qmin]
+  text: >
+    The code's open-loop coronary block is kim2010's circuit (Ra, Ca, Ra-micro, Cim with Pim, venous
+    resistance) with two differences in form: kim2010's two venous resistances Rv and Rv-micro, which
+    its coefficients use only as their sum, are one resistance Rv1 in the code; and the code adds a
+    venous pressure P_v, while kim2010's printed equation (p. 4: b0 = 0, no venous term) has none,
+    although kim2010 says it assigned a venous pressure to set Rv. With P_v = 0 the two agree (relation
+    rel_coronary_kim2010_qmin). The code also subtracts Pim(0) and the initial pressure across Cim, so its
+    volume V_im starts at zero (OpenLoopCoronaryBC.cpp lines 67-85); this changes no flow.
+- id: q_kim_capacitances
+  kind: reading
+  about: [k_Ca_c_R, k_Cim_c_R, coronary_pair_released, coronary_split_released]
+  text: >
+    kim2010's Table 3 prints Ca and Cim, which kim2010's record does not enter; they are entered here
+    from the page (p. 7, checked on the image), without a datum of kim2010 to link to. They do not
+    change any steady flow compared here; they enter only the dynamic side-by-side run.
+- id: q_kim_results_as_in_record
+  kind: unexplained_difference
+  about: [cmp_k_lad_75_E2, cmp_k_lad_60_R, cmp_k_lad_75_R, cmp_k_split_lad_E1, cmp_k_split_lcx_E1, cmp_k_split_lad_rest, cmp_k_split_lcx_rest]
+  text: >
+    The released coronary block, given kim2010's Table 3 beds and Table 4 pressures, gives the same
+    steady flows as kim2010's record computes from the paper's equation (stenosed_lad_flow,
+    coronary_flow_split): the verdicts against Table 4 and the text's LAD, LCX and RCA flows are the
+    same, and so are their differences, whose reasons are kim2010's (its questions q_table4_pressure_location,
+    q_stenosis_75_exercise, q_split_difference): the paper's flows come from a 3D simulation whose
+    outlet pressures are not printed. Nothing in them is a difference between the code and the paper.
+- id: q_varres_vs_yong
+  kind: reading
+  about: [ram_code_port, ram_yong_eq9, varres_released, rel_ram_yong_port]
+  text: >
+    The code's time-varying block takes Ram_min and Ram_max directly, where yong2025 builds them from
+    the mean resistance (0.7 and 0.75 times it, and k times it, Eqs. 10-11) with a factor kPH for
+    pulmonary hypertension; given the same minimum and maximum, the code's Ram(t) is yong2025's Eq. 9
+    with the ventricular activation of Eq. 4 (relation rel_ram_yong_port). The code starts e(t) at the
+    start of each of its own cycles (t mod period); yong2025's ventricular activation starts at t = 0 of
+    its cycle too. In the code the steady initial condition uses Ram at t = 0, Ram_min
+    (OpenLoopCoronaryBC.cpp line 14). yong2025 couples the bed to a closed loop with Pim = 0.6 times
+    ventricular pressure (Eq. 12); that loop is not in this block and is not run here.
+- id: q_yong_mean_timing
+  kind: reading
+  about: [cmp_y_port_lca_fig2, cmp_y_port_rca_fig2, cmp_y_released_lca_fig2, cmp_y_released_rca_fig2, cmp_y_port_lca_S2, cmp_y_port_rca_S2]
+  text: >
+    With yong2025's printed minimum and maximum (42.92, 124.82 LCA; 58.53, 144.53 RCA), Tvc = 0.34 s,
+    Tvr = 0.15 s and a 1 s cycle taken at their printed values, the time average of Ram(t) is about
+    61.68 and 78.43 mmHg s/mL (the code's port, the released block and yong2025's own Eq. 9 in closed
+    form agree), against the printed means 61.31 and 78.04. The mean depends on the active time
+    Tvc + Tvr, and the printed means follow from about 0.480 s instead of 0.49 s: inside the rounding of
+    the printed timings (0.34 and 0.15 each to half a hundredth, and a cycle printed as "1s"), which is
+    why the build judges them reproduced. The code is not the source of the 0.6% difference; which
+    timing yong2025 used for its means is not said.
+- id: q_yong_timing
+  kind: reading
+  about: [y_Tvc, y_Tvr]
+  text: >
+    The column heads of yong2025's Supp. Table S1 (p. 12) are not in the extracted text and show only
+    their units on the page; the ventricles' 0.34 s and 0.15 s are read as Tvc and Tvr from the order of
+    Eq. 4 and from the atria's four timing columns (Tac, Tar, tac, tar).
+- id: q_varres_small_capacitance
+  kind: numerics
+  about: [varres_released, ref_varres_cprobe]
+  text: >
+    The block's equations are written multiplied by Cim Rv (OpenLoopCoronaryBC.h lines 35-47), so with a
+    very small Cim the residual falls under the solver's absolute tolerance (1e-8) and the Newton
+    iterations stop at once: with Ca = Cim = 1e-12 mL/mmHg the block returns Ram_min at every time
+    (the time-varying part is lost silently) and at 1e-9 the result is erratic; a fixed 1e-6 worked for
+    yong2025's resistances but, applied to the release's own varres test case read in mmHg s/mL
+    (resistances of 0.04 to 0.15), again returned Ram_min throughout. The probe here therefore sets the
+    capacitances from a time constant, C = 1e-4 s / (Ram_max + Rv) (refined). In the units of a real coronary bed (Cim of order 1 mL/mmHg, or 1e-6 cm^5/dyn
+    with resistances of order 1e5 dyn s/cm^5) the product is not small; the caveat is for users who
+    set near-zero capacitances.
+- id: q_impedance_kernel_not_computed
+  kind: unstated_model
+  about: [impedance_released, impedance_olufsen_eq38]
+  text: >
+    The code's impedance block takes the impulse response z as input; the structured tree that gives it
+    in olufsen2000 (the root impedance recursion and its inverse Fourier transform) is not in this
+    code, so olufsen2000's structured-tree impedance is not checked here, only the convolution (Eq. 38)
+    the block applies. The kernel must be given as discrete weights z(t_m) dt: the code's comment says
+    so (ImpedanceBC.cpp lines 35-36), its header calls them discrete-time convolution weights, and it
+    must have exactly one period's worth of steps.
+- id: q_impedance_startup
+  kind: reading
+  about: [impedance_released]
+  text: >
+    The block omits the history terms of the convolution until one full cycle has been computed, "to
+    reproduce the reference implementation", so the first cycle is not a solution (ImpedanceBC.h). That
+    reference implementation is not in this review; olufsen2000 (Fig. B3) says the sum uses the
+    previous period's values for the older steps but not what is used in the first period. The runs here
+    discard the first cycle.
+  citation: {file: src/model/ImpedanceBC.h, lines: "36-38", quote: "This reproduces the reference implementation, which gates"}
+- id: q_impedance_alpha
+  kind: numerics
+  about: [impedance_released, impedance_olufsen_eq38, rel_impedance_olufsen_pmax, ref_imp_N]
+  text: >
+    The block's periodic pressure has the same mean as olufsen2000's discretized Eq. 38 to rounding,
+    but its peak and trough differ slightly (about 2e-4 relative at 128 steps per cycle with the added
+    kernel here, falling roughly as the square of the step). A likely reason: the history sum is put
+    into the residual as a constant evaluated once per step while the generalized-alpha scheme solves
+    the algebraic equation at an intermediate time, blending two steps. The difference is small against
+    any printed precision but means the block is not exactly the paper's discrete convolution.
+- id: q_windkessel_source
+  kind: reading
+  about: [windkessel_released_impedance, rel_windkessel_westerhof_modulus]
+  text: >
+    The Windkessel block cites Vignon & Taylor 2004 (docs/references.bib vignon04), which is not in this
+    review; menon2025 cites Vignon-Clementel et al. 2006. Its circuit is checked against westerhof1971's
+    three-element model instead, whose impedance it should equal under the mapping in relations.yaml.
+- id: q_chamber_vrest
+  kind: reading
+  about: [rc_chamber_last, st_chamber_P]
+  text: >
+    The chamber block ChamberElastanceInductor computes P = E(t)(V - V_rest(t)) with a rest volume that
+    itself moves with the activation, V_rest(t) = (1 - A(t))(Vrd - Vrs) + Vrs (ChamberElastanceInductor.h
+    lines 46-92), citing Kerckhoffs et al. 2007, not in this review. The time-varying elastance of
+    suga1973 has a constant volume intercept; the code's form reduces to it only when Vrd = Vrs. The
+    block is checked here only through the release's own test case (stored result), not against an
+    elastance paper.
+  citation: {file: src/model/ChamberElastanceInductor.h, lines: "90", quote: "V_{rest}(t)= \\{1-A(t)\\}(V_{rd}-V_{rs})+V_{rs}"}
+- id: q_valve_source
+  kind: reading
+  about: [rc_valve_last, st_valve_P]
+  text: >
+    The valve block ValveTanh switches its resistance between Rmin and Rmax with
+    (1 + tanh(k (P_out - P_in)))/2, citing Pfaller et al. 2019 (not in this review); menon2025 says only
+    that the valve uses a hyperbolic tangent. It is checked here only through the release's own test case.
+- id: q_other_blocks
+  kind: unstated_model
+  about: [release_case]
+  text: >
+    Blocks the release has but no paper of this review describes (the closed-loop heart, the spherical
+    chamber with active stress, the piecewise valve, the closed-loop coronary blocks, the resistive and
+    blood-vessel junctions) are checked only by rerunning the release's test cases against its stored
+    results. The calibrator and svZeroDTuner (src/optimize, applications) and the GUI are not read.
+- id: q_no_cross_validation_korakianitis2006
+  kind: unstated_model
+  about: [coronary_kim2010_ode, coronary_released, release_case]
+  text: >
+    Cross-validation against korakianitis2006 finds nothing to test, in either direction. That record
+    holds no measurement: its data are its Tables 1-5 parameters (origin reported) and its own model's
+    results (predicted, derived), and every figure reading there is of model output (korakianitis2006
+    figures.md: "it shows no measurements"). This record holds none either: its data are code
+    defaults, test-case inputs and stated solutions (reported), values of the papers the blocks cite
+    (reported, predicted) and the release's stored results (run). coronary_kim2010_ode and
+    korakianitis2006/circulation_onoff_corrected share only a port shape: the first is an open-loop
+    coronary bed, the second a closed-loop circulation with chambers and valves, and neither predicts
+    a quantity the other measures. How the release's ChamberElastanceInductor and ValveTanh blocks
+    relate to korakianitis2006's elastance and valve equations is a relation between models for the
+    later job, not a validation.
+- id: q_val_stergiopulos1999_choices
+  kind: choice
+  about: [windkessel_released_impedance]
+  text: >
+    (Cross-validation with stergiopulos1999, 2026-11-09; validations val_rcr_std_d71_mod/ph and
+    val_rcr_fit_d71_mod/ph_vs_stergiopulos.) Choices made in judging the released RCR block
+    against dog 71's measured input impedance (stergiopulos1999 Fig. 5). (1) Neither the code nor menon2025
+    cites stergiopulos1999; the validation rests on the shared circuit only. (2) The standard set uses C_PPM,
+    as Fig. 5 does (stergiopulos1999 q_fig5_standard_values); C_AR (0.239 ml/mmHg) is the alternative, not
+    entered. (3) The standard Z_c is the mean modulus of the 3rd-10th harmonics of the same measured
+    impedance and R_p its 0 Hz value, so the standard-set modulus is not fully independent of the data at
+    harmonics 3-5; the phase and the first two harmonics are the real test. It is entered as a validation
+    because no parameter was fitted by the windkessel. (4) The windkessel fits of Table 1 were made to the same
+    dog's pressure with its flow as input, so those two entries are fit quality. (5) Not used: the
+    four-element windkessel values (the release has no RCR block with an inertance parallel to the proximal
+    resistance); the human type A and C beats (stergiopulos1999 has no measured impedance for them; their
+    averaged impedance is in westerhof2009, another pair); the measured flow and pressure waves of Figs. 1 and 4
+    (the release could be driven by a flow wave, but no model here takes a read curve as an inflow, and the
+    paper gives no initial pressure; stergiopulos1999 q_waves_model); Table 1's standard R_p, Z_c, C as such
+    (measured parameters, which the RCR block takes as inputs and does not predict). (6) Outcome: all four are
+    not reproduced point by point. With the standard set the block gives a first-harmonic modulus of about
+    0.436 mmHg s/ml against 0.236 measured, the same as stergiopulos1999's own zin_3wk (its
+    q_fig5_vs_measured), so the difference is the three-element windkessel's lack of inertance, which that
+    paper argues, not a difference between the code and the circuit.
+  citation: {file: src/model/WindkesselBC.h, lines: "13-16", quote: "Windkessel RCR boundary condition."}
+- id: q_no_cross_validation_suga1973
+  kind: unstated_model
+  about: [release_case, ram_code_port, varres_released]
+  text: >
+    Cross-validation against suga1973 (2026-11-09) finds nothing to test, in either direction. This record
+    measures nothing, so only its models could be judged, against suga1973's measurements: the per-dog Vd,
+    Emax, Tmax, [(dP/dt)/P]max and heart rates of its Tables 1-2 (control and epinephrine), and the
+    normalized elastance EN(tN) of its Fig. 5 (fig5_s1 to fig5_s4). The one block of the release that has
+    an elastance, ChamberElastanceInductor, is in this record only as release_case, which reruns a fixed
+    test case and outputs a case pressure and flow; it takes no inputs, so it cannot be run on a dog's
+    conditions, and it outputs no Emax, Tmax, Vd or E(t)/Emax. Even as a block, Emax, Tmax and Vd would be
+    its inputs (its Emax, activation timing and rest volume), not predictions, and its rest volume moves
+    with the activation, unlike suga1973's constant Vd (q_chamber_vrest). ram_code_port, ram_yong_eq9 and
+    varres_released use a cosine activation over Tvc and Tvr, but they output a microvascular resistance,
+    not a normalized ventricular elastance: the two only share a time shape, and mapping
+    microvascular_resistance onto normalized_pv_ratio would map two quantities that only share a form.
+    Neither the code (no mention of Suga in src/ or docs/) nor menon2025 cites suga1973. See
+    suga1973/q_crossval_svzerod_code.
+  citation: {file: src/model/ChamberElastanceInductor.h, lines: "90", quote: "V_{rest}(t)= \\{1-A(t)\\}(V_{rd}-V_{rs})+V_{rs}"}
+# ---- cross-validation with westerhof1971, 2026-11-09 ----
+- id: q_val_westerhof1971_rp_added
+  kind: choice
+  about: [wk_rd_w71_dog_syst, wk_rd_w71_dog_pulm, wk_rd_w71_cat_syst, wk_rd_w71_cat_pulm, windkessel_released_impedance]
+  text: >
+    (Validations val_rcr_w71_*.) westerhof1971 records its R_c and R_p as one quantity,
+    resistor_resistance, while this record distinguishes windkessel_proximal_resistance and
+    windkessel_distal_resistance, and a validation maps a quantity of the other record to one quantity here.
+    resistor_resistance is mapped to the proximal resistance and R_c is read from westerhof1971 at build
+    time; the distal R_p of each bed is entered in added.yaml (wk_rd_w71_*) as the value westerhof1971's
+    Table 1 prints for it. These added values are copies of printed values, not assumptions, but the build
+    does not check them against westerhof1971 as it checks data with from_datum. Their alternatives are the
+    as-built R_p implied by each built model's measured d-c resistance less R_c (Fig. 2-5 captions).
+    Mapping the other way (R_p read, R_c added) would be equivalent.
+  citation: {file: src/model/WindkesselBC.h, lines: "13-16", quote: "Windkessel RCR boundary condition."}
+- id: q_val_westerhof1971_choices
+  kind: choice
+  about: [windkessel_released_impedance]
+  text: >
+    (Validations val_rcr_w71_*.) Measurements of westerhof1971 used: the input impedances measured on its
+    four hydraulic models (Figs. 2-3 fully drawn lines, Figs. 4-5 crosses) and the pooled in vivo dog
+    impedances (Figs. 2-3 dots), each against the RCR block run with that bed's Table 1 values. Not used:
+    (1) the circles of Figs. 4-5, measured after an adapter was added whose inertia 'plays a major role'
+    (westerhof1971 p. 5); neither paper gives its inertance and the RCR block has no element for it. (2) The
+    d-c resistances of the four built models (captions): the block's modulus at 0 Hz is Rp + Rd, but the
+    block is driven by a sinusoid and there is no frequency datum at 0 Hz; westerhof1971's own Eq. 1a model
+    already compares them. (3) The theoretical lines of Figs. 4-5 are predictions of westerhof1971's model,
+    not measurements (the block's agreement with that model is rel_windkessel_westerhof_*). (4) The liquid
+    viscosity and density measured on p. 3 are inputs of the tube design, which the block does not predict.
+    No model of westerhof1971 can be judged against this record, which measures nothing. Above a few hertz
+    the hydraulic models show the inertance of their tubes (westerhof1971 q_hydraulic_inertance), which the
+    three-element circuit cannot follow, so not-reproduced verdicts there are a finding about the circuit,
+    not about the code.
+  citation: {file: src/model/WindkesselBC.h, lines: "13-16", quote: "Windkessel RCR boundary condition."}
+# ---- cross-validation with kim2010, 2026-11-09 ----
+- id: q_no_validation_vs_kim2010
+  kind: choice
+  about: [coronary_pair_released, coronary_split_released, coronary_released, coronary_kim2010_ode]
+  text: >
+    (Validation job kim2010+svzerod_code, 2026-11-09.) No validation is entered in either direction. This
+    record measures nothing, so only its models can be judged, against kim2010's measurements. kim2010's
+    only measurements are the Gould et al. (kim2010 ref. 7) canine mean flows of its Fig. 6
+    (kim2010/gould_rest_fig6, kim2010/gould_hyperemia_fig6), plotted against percent diameter reduction of
+    a temporary stenosis in the canine left circumflex artery. The model closest to them is
+    coronary_pair_released (the released coronary block on kim2010's LAD outlets c and d), which outputs
+    stenosed_lad_mean_flow, but (1) it takes the mean pressure downstream of the stenosis, not a diameter
+    reduction, and neither paper gives that pressure for Gould's dogs: the only such pressures are kim2010's
+    Table 4 values, which are results of kim2010's 3D human simulation (k_P_lad_*); (2) its resistances are
+    kim2010's Table 3 values tuned to a human patient at rest and exercise, not to a dog at rest or under
+    Hypaque hyperemia; (3) the Gould values are on a cc/s axis whose scaling to the patient is not stated
+    (kim2010/q_fig6_gould_scaling), so kim2010 keeps them as gould_plotted_mean_flow, which is not the same
+    quantity as stenosed_lad_mean_flow. A run at kim2010's predicted pressures would set kim2010's own
+    simulation against Gould's data through an unknown scaling, not test the block; the block against
+    kim2010's printed flows is already this record's reproduction (cmp_k_lad_*, cmp_k_split_*;
+    q_kim_results_as_in_record). coronary_split_released, coronary_released and coronary_kim2010_ode
+    output unstenosed bed flows, which Gould did not measure in these units. kim2010's own models cannot be
+    judged against this record, which measures nothing. See kim2010/q_no_validation_vs_svzerod_code.
+  citation: {file: src/model/OpenLoopCoronaryBC.h, lines: "15", quote: "Open loop coronary boundary condition based on \\cite kim_coronary."}
+# ---- cross-validation with yong2025, 2026-11-09 ----
+- id: q_no_validation_vs_yong2025
+  kind: unstated_model
+  about: [varres_released, ram_code_port, ram_yong_eq9, coronary_released, coronary_kim2010_ode, coronary_pair_released, coronary_split_released]
+  text: >
+    (Validation job svzerod_code+yong2025, 2026-11-09.) No validation is entered in either direction.
+    This record measures nothing (no datum has origin measured; the stored test-case results are the
+    release's own runs), so only its models could be judged, against yong2025's measurements: the in vivo
+    peak and mean diastolic-to-systolic flow ratios of its Table 1 (invivo_pDSFR_lad/rca/gcv,
+    invivo_mDSFR_lad/rca/gcv, from Seligman et al. 2022 and Bedaux et al. 2001) and the PH means of the
+    Fig. 8 caption (invivo_mDSFR_lad_PH/rca_PH, van Wolferen et al. 2008), and the in vivo waveforms of
+    Figs. 6 and 8 (fig6a_lad_invivo, fig6b_rca_invivo as Doppler velocity in cm/s; fig6c_gcv_invivo,
+    fig8a/b_*_invivo as MR flow). (1) varres_released, ram_code_port and ram_yong_eq9 are the block
+    described from yong2025, but each outputs a microvascular resistance (mean, peak or Ram(t)) under a
+    probe flow, not a flow or a flow ratio; yong2025 measures no resistance (Fig. 2A, Sen et al. 2013, has
+    no y ticks and is not read). (2) coronary_released, coronary_kim2010_ode, coronary_pair_released and
+    coronary_split_released give bed flows (mean, max, min) under sinusoidal or constant inlet and
+    intramyocardial pressures; they do not split the cycle into systole and diastole, so give no DSFR, and
+    the measurements' conditions (each subject's aortic and intramyocardial pressure, which yong2025 takes
+    as 0.6 times ventricular pressure from its own closed loop) are printed in neither paper, so the blocks
+    cannot be run on them. A Doppler velocity also needs a vessel area neither paper gives for these
+    subjects. Running the released block inside yong2025's closed loop is yong2025's own model
+    coronary_block_svzerod, whose judgement against these measurements is yong2025's (its Fig. 6/8
+    validations against the rescaled curves), not this record's. The shared port shape of
+    coronary_kim2010_ode and yong2025/coronary_block_svzerod is a relation between models, not a
+    validation. See yong2025/q_no_validation_vs_svzerod_code.
+  citation: {file: src/model/OpenLoopCoronaryVarResBC.h, lines: "14-16", quote: "Open loop coronary boundary condition with time-varying microvascular"}
+# ---- cross-validation with olufsen2000, 2026-11-09 ----
+- id: q_no_validation_vs_olufsen2000
+  kind: unstated_input
+  about: [impedance_released, impedance_olufsen_eq38, windkessel_released_impedance, release_case, olufsen2000/inflow_fig3, olufsen2000/p_systolic_cuff, olufsen2000/p_diastolic_cuff, olufsen2000/q_l_subclavian_meas_fig7]
+  text: >
+    (Validation job olufsen2000+svzerod_code, 2026-11-09.) No validation is entered in either direction. This
+    record measures nothing, so only its models could be judged, against olufsen2000's measurements: the MR
+    ascending-aortic inflow (olufsen2000/inflow_fig3), the MR flows at nine sites (Fig. 7, *_meas_fig7), the cuff
+    pressures 120/80 mmHg, the ascending-aortic radius (Table 1), the cycle length 1.1 s and the heart rate 51 per
+    minute of one subject. (1) The impedance block (impedance_released) and its restatement
+    (impedance_olufsen_eq38) are described from olufsen2000's outflow condition, Eq. 38, but they apply a given
+    impulse response z(t) to a given outlet flow; the structured tree that gives z(t) is not in the code
+    (q_impedance_kernel_not_computed) and olufsen2000 prints no z(t) or outlet flow in numbers. Run on the
+    subject's conditions they would need a kernel and an outlet flow neither paper states, and choosing them
+    to land on 120/80 mmHg would be a fit, not a test. The cuff pressures are also measured at the arm, not at an
+    outlet the block terminates, and olufsen2000 itself relates them only loosely to its simulated
+    left-subclavian pressure (olufsen2000/q_cuff_pressure_claim). (2) The block outputs a pressure from a flow;
+    the Fig. 3 and Fig. 7 flows are measurements of inflow and of flow inside a 1D network, which only
+    olufsen2000's network_1d (not runnable, olufsen2000/q_network_not_runnable) predicts; the release has no 1D
+    vessel network of this anatomy. (3) windkessel_released_impedance gives an input impedance, which olufsen2000
+    does not measure, and release_case reruns fixed test cases with no inputs. (4) Radius, cycle length and heart
+    rate are inputs of any model, not outputs of a block. olufsen2000's own models cannot be judged against this
+    record, which measures nothing. The relation between impedance_released and olufsen2000's Eq. 38
+    (described_from) is already this record's reproduction of the convolution (run_imp_released against
+    run_imp_olufsen), not a validation. See olufsen2000/q_no_validation_vs_svzerod_code.
+  citation: {file: src/model/ImpedanceBC.h, lines: "18-21", quote: "following the structured-tree outflow condition of \\cite olufsen2000."}
+# ---- cross-validation with menon2025, 2026-11-09 ----
+- id: q_no_validation_vs_menon2025
+  kind: choice
+  about: [impedance_olufsen_eq38, impedance_released, windkessel_released_impedance, coronary_released, varres_released, release_case]
+  text: >
+    (Validation job menon2025+svzerod_code, 2026-11-09.) No validation is entered in either direction.
+    This record's models could only be judged against menon2025's measurements, and menon2025 prints none:
+    no data.yaml, no number, and its one figure (Fig. 1) is a class diagram with nothing to read
+    (menon2025 figures.md). menon2025's models could only be judged against this record's measurements,
+    and there are none here either. No datum has origin measured; the stored test-case results are the
+    release's own runs (origin run); there are no figure readings. menon2025's five models are also
+    runnable: false (menon2025/q_equations_in_docs). The pairing named
+    menon2025/chamber_elastance_inductor beside impedance_olufsen_eq38 because both give a pressure from a
+    flow and time. But one is a cardiac chamber's pressure and the other an outlet pressure from
+    olufsen2000's convolution, and neither is measured. How the code relates to its paper is recorded in
+    q_menon_prints_nothing. See menon2025/q_no_validation_vs_svzerod_code.
+  citation: {file: src/model/ImpedanceBC.h, lines: "18-21", quote: "following the structured-tree outflow condition of \\cite olufsen2000."}
+# ---- cross-validation with svv_code, 2026-11-09 ----
+- id: q_no_validation_vs_svv_code
+  kind: choice
+  about: [coronary_released, coronary_pair_released, coronary_split_released, varres_released, release_case,
+          windkessel_released_impedance, impedance_released,
+          'svv_code/tree_growth', 'svv_code/tree_biventricle', 'svv_code/resistance_update']
+  citation: {none: "a finding of the validation job between svv_code and svzerod_code, not a printed statement"}
+  text: >
+    (Validation job svv_code+svzerod_code, 2026-11-09.) No validation is entered in either direction, and
+    no fit. svv_code measures nothing. Its data are svv's defaults and values printed in sexton2025, and it
+    has no figure readings, so no model here can be tested against it. This record measures nothing either.
+    Its data are the release's settings, the test cases' expected values and stored results, and kim2010's
+    printed parameters and model flows, so svv_code's models cannot be tested against it. The link between
+    the two codes is svv's 0D export, which svv_code's tree_growth and tree_biventricle run with this
+    solver. Those runs are compared, as consistency checks, with svv's own growth pressures
+    (svv_code/q_export_pressure, q_export_outlets). That checks one code against the other, not against
+    data. See svv_code/q_no_validation_vs_svzerod_code.
