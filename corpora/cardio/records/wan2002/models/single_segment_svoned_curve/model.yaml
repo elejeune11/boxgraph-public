@@ -1,0 +1,37 @@
+id: single_segment_svoned_curve
+name: single elastic segment of Fig. 1, run with the released svOneDSolver, flow and pressure at a time of the last cycle
+role: model
+stated: {page: 6, printed_page: "200", quote: "We first consider pulsatile flow in an elastic tube with a", where: "Results, Fig. 1"}
+equation: "as single_segment_svoned; outputs interpolated linearly at time t of the last computed cycle (t = 0 at its start)"
+built_from: [single_segment_svoned]
+inputs:
+  t: {quantity: time_in_cycle, unit: s}
+  r0: {quantity: vessel_radius, unit: cm}
+  L: {quantity: vessel_length, unit: cm}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  n: {quantity: profile_exponent, unit: dimensionless}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  R: {quantity: outlet_resistance, unit: g/s/cm^4}
+  p_ref: {quantity: reference_pressure, unit: mmHg}
+outputs:
+  Q_in: {quantity: flow_rate, unit: cm^3/s, description: inlet node}
+  Q_out: {quantity: flow_rate, unit: cm^3/s, description: outlet node}
+  p_in: {quantity: arterial_pressure, unit: mmHg, description: inlet node}
+  p_out: {quantity: arterial_pressure, unit: mmHg, description: outlet node}
+settings:
+  n_elements: 16
+  steps_per_cycle: 100
+  n_cycles: 3
+  quad_points: 2
+  tolerance: 1.0e-8
+  formulation: 1
+  stabilization: 1
+  q_init: 0.0
+  inflow_file: corpus/cardio/code/svoned_code/Tests/SystemTests/cases/05_bifurcation_RCR.in
+  inflow_table: AORTAFLOW
+stochastic: false
+# Written for a sweep over a reading of Fig. 1 (time axis), which this reading job could not make:
+# figures are read in a later stage, which can run it with sweep: {t: <the Fig. 1 reading>}.

@@ -1,0 +1,45 @@
+id: bifurcation_svoned
+name: symmetric bifurcation with inflow and equal resistance outlets (Fig. 2), run with the released svOneDSolver
+role: model
+stated: {page: 6, printed_page: "200", quote: "We next consider pulsatile flow in a symmetric", where: "Results, Fig. 2; Eqs. 1-2, 5-8, 11-14, 41"}
+equation: >
+  Eqs. 1-2, 6, 11, 14 in each segment as in single_segment_svoned; Q(0, t) = Qin(t) at the inlet (7); p - QR = 0 at each
+  outlet (8); at the junction sum Q_in - sum Q_out = 0 and equal pressures (41), enforced with Lagrange multipliers (42-43).
+  Segment lengths n_in h and n_br h. Solved by the released svOneDSolver (commit 8939eed).
+inputs:
+  n_in: {quantity: element_count, unit: dimensionless, description: "elements of the inlet branch"}
+  n_br: {quantity: element_count, unit: dimensionless, description: "elements of each daughter branch"}
+  h: {quantity: element_size, unit: cm}
+  r_in: {quantity: vessel_radius, unit: cm, description: "inlet branch, uniform"}
+  r_br: {quantity: vessel_radius, unit: cm, description: "each daughter branch, uniform"}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  n: {quantity: profile_exponent, unit: dimensionless}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  R: {quantity: outlet_resistance, unit: g/s/cm^4, description: "each outlet"}
+  p_ref: {quantity: reference_pressure, unit: mmHg}
+outputs:
+  p_in_max: {quantity: systolic_pressure, unit: mmHg, description: inlet node}
+  p_in_min: {quantity: diastolic_pressure, unit: mmHg, description: inlet node}
+  Q_r_max: {quantity: peak_flow_rate, unit: cm^3/s, description: right outlet}
+  Q_r_min: {quantity: minimum_flow_rate, unit: cm^3/s, description: right outlet}
+  Q_r_mean: {quantity: mean_flow_rate, unit: cm^3/s, description: right outlet}
+  p_r_max: {quantity: systolic_pressure, unit: mmHg, description: right outlet}
+  p_r_min: {quantity: diastolic_pressure, unit: mmHg, description: right outlet}
+  flow_asym: {quantity: flow_asymmetry, unit: cm^3/s, description: "max over the cycle of |Q right outlet - Q left outlet|"}
+  p_jump: {quantity: junction_pressure_jump, unit: mmHg, description: "max over the cycle of the pressure difference between the inlet branch's last node and each daughter's first node"}
+  mass_res: {quantity: junction_mass_residual, unit: cm^3/s, description: "max over the cycle of |Q into the junction - Q out of it|"}
+settings:
+  subdivide: 1            # finite elements per element of the paper (1 = the paper's mesh, p. 6)
+  steps_per_cycle: 100    # printed (p. 6)
+  n_cycles: 3             # printed (p. 6)
+  quad_points: 2
+  tolerance: 1.0e-8
+  formulation: 1          # q_advective_resistance
+  stabilization: 1
+  q_init: 0.0
+  inflow_file: corpus/cardio/code/svoned_code/Tests/SystemTests/cases/05_bifurcation_RCR.in
+  inflow_table: AORTAFLOW
+stochastic: false

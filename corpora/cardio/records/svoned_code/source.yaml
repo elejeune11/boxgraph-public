@@ -1,0 +1,55 @@
+id: svoned_code
+kind: software
+title: "svOneDSolver: the one-dimensional finite element solver of SimVascular (source at commit 8939eed)"
+authors: ["Stanford University, The Regents of the University of California, and others"]
+year: 2015
+url: https://github.com/SimVascular/svOneDSolver
+version: "sha256:5b794ba302fa3171b02f9c02862372594fb9671c9e613220d79245d48e809821"
+licence: "MIT (the SimVascular copyright notice with the MIT permission text, LICENSE.txt)"
+language: c++
+file: corpus/cardio/code/svoned_code
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-10"}
+notes: >
+  What the code is. svOneDSolver at commit 8939eed (git archive, no history). C++ in Code/Source: main.cxx
+  (entry point: OneDSolver file.in, -jsonInput, -legacyToJson), cvOneDBFSolver (time loop, Newton
+  iterations, TEXT/VTK output), cvOneDMthSegmentModel / cvOneDMthBranchModel (element residuals, stenosis
+  loss), cvOneDMaterialOlufsen / cvOneDMaterialLinear (constitutive laws), cvOneDSubdomain (boundary
+  conditions: resistance, RCR, coronary, pressure wave), sparse solvers (CSparse used here). Docs in
+  docs/source/content (theory.rst: the conservative space-time formulation, citing Hughes and Lubliner
+  1973, Olufsen 1999 and Wan et al. 2002; inputFileGuide.rst: the cards); Tests/SystemTests: 19 case
+  files, 13 of them checked by test_integration.py (77 values). The README names J. Wan and the other
+  wan2002 authors among the contributors; no release year is stated (the docs say copyright 2015). The
+  release is run as built in corpus/cardio/envs/oned (CSparse; docs/DECISIONS.md) by our adapters in a
+  subprocess; nothing of the code, its cases or its results is copied here.
+
+  What is checked and what it gives. (1) The release's own system tests rerun (release_case, 77 runs):
+  every value is within the test's own tolerance, but 41 of 77 differ from the printed analytical or stored
+  value beyond its last digit (relative 2e-8 to 3e-5; q_test_tolerances); the imposed flows and outlet
+  pressures are reproduced. (2) The stenosis loss, ported, reproduces the stenosis test case's own
+  derivation (La, Kv, the 130.58 dyn/cm^2 drop). (3) Constants: K1 = 2.00e7 and K2 = -22.5267 (constructor),
+  K3 = 8.65e5 (commented out there, set by the card), Kt = 1.52 and the factor 32 are linked to wan2002's
+  and olufsen1999's printed values by from_datum (k2 has two more digits: q_k2_digits). (4) Ports of the
+  OLUFSEN law, the profile terms and the stenosis loss are related to wan2002 Eqs. 6, 11, 15 and olufsen1999
+  Eq. 5 (relations.yaml, tested by the relation stage). (5) Boileau Benchmarks 2-4 (carotid, thoracic
+  aorta, aortic bifurcation) are run with the release, which represents them exactly (LINEAR material =
+  Eq. 3, exponent = profile order, RCR outlet = Eq. 9), and compared with the 3D reference curves read in
+  boileau2015 (17 validations); the carotid run settles under mesh, step and period refinement (changes
+  below 0.2%). (6) The RCR outlet under a sinusoidal flow converges at first order to the exact impedance
+  of the theory notes' map (cmp_rcr_b2_*, ref_rcr_b2_npts; q_rcr_first_order) and is related to
+  svzerod_code's RCR block (approximated_by, 2%).
+
+  Differences from the paper and the docs. The paper's advective form cannot be run with a resistance
+  outlet because that path reads a resistance value the solver never sets (q_advective_resistance_unset;
+  explains wan2002 q_advective_resistance). No impedance or wave outlet exists in the code although the
+  theory notes derive both and wan2002 announces the impedance one (q_impedance_not_in_code). The stenosis
+  uses an effective length La = 0.83 L + 1.64 D1 instead of the printed L (q_stenosis_effective_length). The
+  release's examples set the profile exponent to 1, not the paper's and the notes' Poiseuille 2
+  (q_profile_exponent_examples); the coronary case softens k1 to 1.48e7 (q_coronary_k1). The joint enforces
+  static, not total, pressure (q_junction_static_pressure). Numerics: Newton failures are only printed
+  (q_newton_not_converged), and the solver produces NaN at T/4400 on the carotid benchmark (q_dt_nan).
+
+  Not done here, and why. wan2002's single segment and bifurcation are rebuilt and run with this release in
+  wan2002's own record (single_segment_svoned, bifurcation_svoned), so they are not duplicated; its other
+  examples print no inputs. Benchmark 1 needs an absorbent outlet the release lacks; Benchmarks 5 (the
+  alastruey2011 network and its in vitro measurements) and 6 are not built (q_benchmark_scope). The
+  structured-tree impedance of olufsen1999/olufsen2000 cannot be compared: it is not in the code.

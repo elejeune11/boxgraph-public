@@ -1,0 +1,44 @@
+id: single_segment_svoned
+name: single elastic segment with inflow and resistance outlet (Fig. 1), run with the released svOneDSolver
+role: model
+stated: {page: 6, printed_page: "200", quote: "We first consider pulsatile flow in an elastic tube with a", where: "Results, Fig. 1; Eqs. 1-2, 5-8, 11-14"}
+equation: >
+  dS/dt + dQ/dz = 0 (1, psi = 0); dQ/dt + d/dz[(1 + delta) Q^2/S] + (S/rho) dp/dz = N Q/S + nu d2Q/dz2 (2, f = 0);
+  delta = 1/(1 + n), N = -2(n + 2) pi nu (6); p = p0 + (4/3)(Eh/r0)(1 - sqrt(S0/S)) (11), Eh/r0 = k1 exp(k2 r0) + k3 (14);
+  Q(0, t) = Qin(t) (7); p - QR = 0 at the outlet (8); S(z, 0) = S0 = pi r0^2, Q(z, 0) = q_init (9).
+  Solved by the released svOneDSolver (commit 8939eed) with its stabilized space-time finite elements.
+inputs:
+  r0: {quantity: vessel_radius, unit: cm, description: "nominal radius, uniform"}
+  L: {quantity: vessel_length, unit: cm}
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  n: {quantity: profile_exponent, unit: dimensionless}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s, description: "passed to the solver as the dynamic viscosity nu*rho"}
+  R: {quantity: outlet_resistance, unit: g/s/cm^4}
+  p_ref: {quantity: reference_pressure, unit: mmHg, description: "p0 of Eq. 11: the pressure at which S = S0 (the solver's material reference pressure)"}
+outputs:
+  Q_in_max: {quantity: peak_flow_rate, unit: cm^3/s, description: inlet node}
+  Q_in_min: {quantity: minimum_flow_rate, unit: cm^3/s, description: inlet node}
+  Q_out_max: {quantity: peak_flow_rate, unit: cm^3/s, description: outlet node}
+  Q_out_min: {quantity: minimum_flow_rate, unit: cm^3/s, description: outlet node}
+  Q_out_mean: {quantity: mean_flow_rate, unit: cm^3/s, description: outlet node}
+  p_in_max: {quantity: systolic_pressure, unit: mmHg, description: inlet node}
+  p_in_min: {quantity: diastolic_pressure, unit: mmHg, description: inlet node}
+  p_in_mean: {quantity: mean_pressure, unit: mmHg, description: inlet node}
+  p_out_max: {quantity: systolic_pressure, unit: mmHg, description: outlet node}
+  p_out_min: {quantity: diastolic_pressure, unit: mmHg, description: outlet node}
+  delay: {quantity: peak_flow_delay, unit: s, description: "time of the outlet flow peak minus that of the inlet flow peak, each refined by a parabola"}
+settings:
+  n_elements: 16          # printed (p. 6)
+  steps_per_cycle: 100    # printed (p. 6)
+  n_cycles: 3             # printed (p. 6); features are taken from the last cycle
+  quad_points: 2          # not printed (q_quadrature)
+  tolerance: 1.0e-8       # Newton tolerance, not printed (q_quadrature)
+  formulation: 1          # the release's conservative form; the paper's advective form (0) fails with a resistance outlet (q_advective_resistance)
+  stabilization: 1        # the paper's stabilization term (Eqs. 32-34)
+  q_init: 0.0             # Q0 of Eq. 9, not printed
+  inflow_file: corpus/cardio/code/svoned_code/Tests/SystemTests/cases/05_bifurcation_RCR.in   # q_inflow_waveform
+  inflow_table: AORTAFLOW
+stochastic: false

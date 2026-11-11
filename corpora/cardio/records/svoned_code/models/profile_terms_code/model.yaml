@@ -1,0 +1,18 @@
+# Ports Code/Source/cvOneDMaterial.h lines 99-103 (SetProfileExponent) and 107
+# (UpdateKinematicViscosity). The material constructor order matters in the release: the material
+# manager sets density and viscosity before the exponent (cvOneDMaterialManager.cxx lines 63-65), so N
+# is computed with the card's kinematic viscosity, as here.
+id: profile_terms_code
+name: the release's momentum-flux correction and viscous loss coefficient from the profile exponent (port of cvOneDMaterial.h)
+role: model
+stated: {file: Code/Source/cvOneDMaterial.h, lines: "99-103", quote: "N = -2.0*myPI*kinematicViscosity*(profile_exponent+2.0);"}
+equation: "nu = mu/rho (line 107); delta = 1/(1 + n) (line 100); N = -2 pi nu (n + 2) (line 102)"
+inputs:
+  mu: {quantity: dynamic_viscosity, unit: g/cm/s, description: "the MATERIAL card's viscosity (dynamic)"}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  n: {quantity: profile_exponent, unit: dimensionless, description: "the MATERIAL card's exponent"}
+outputs:
+  delta: {quantity: momentum_flux_correction, unit: dimensionless}
+  N: {quantity: viscous_loss_coefficient, unit: cm^2/s}
+settings: {}
+stochastic: false

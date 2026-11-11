@@ -1,0 +1,14 @@
+id: diastolic_systolic_velocity_ratio
+name: diastolic-to-systolic ratio of a Doppler velocity trace (ratio of time-means and ratio of integrals)
+role: processing
+stated: {page: 4, printed_page: "1770", quote: "we have considered diastole to start with the onset", where: "Analysis of Hemodynamic Data"}
+equation: "ratio_mean = mean_{ts..end} U / mean_{start..ts} U ; ratio_integral = int_{ts}^{end} U dt / int_{start}^{ts} U dt"
+from_words: true
+inputs:
+  U: {quantity: coronary_doppler_velocity, unit: m/s, curve: {quantity: time_in_cycle, unit: ms}}
+  ts: {quantity: time_in_cycle, unit: ms, description: "end of systole (start of diastole) on the figure's time axis"}
+outputs:
+  ratio_mean: {quantity: velocity_ratio_diastolic_systolic_mean, unit: dimensionless}
+  ratio_integral: {quantity: velocity_ratio_diastolic_systolic_integral, unit: dimensionless}
+settings: {}
+stochastic: false

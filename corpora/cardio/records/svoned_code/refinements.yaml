@@ -1,0 +1,17 @@
+# Benchmark 2 with the released solver: the mesh, time step and number of periods are ours (the
+# benchmark leaves them to each scheme; boileau2015 Table I lists those of the six schemes). Tolerance
+# 0.5%: about the RMS pressure error of the six schemes against the 3D solution (boileau2015 Table IV,
+# 0.20-0.28%) doubled, so that a setting change below it cannot alter what the validations show.
+- {id: ref_b2_steps_P, run: run_b2, setting: steps_per_cycle, factors: [0.5, 1, 2], mode: multiply, output: P,
+   tolerance: "0.5%", tolerance_basis: "added: about twice the six schemes' E_P^RMS against 3D in boileau2015 Table IV", tolerance_added: true}
+- {id: ref_b2_steps_Q, run: run_b2, setting: steps_per_cycle, factors: [0.5, 1, 2], mode: multiply, output: Q,
+   tolerance: "1%", tolerance_basis: "added: about twice the six schemes' E_Q^RMS against 3D in boileau2015 Table IV (0.26-0.39%) and the flow's own variation", tolerance_added: true}
+- {id: ref_b2_elements_P, run: run_b2, setting: n_elements, factors: [1, 2, 4], mode: multiply, output: P,
+   tolerance: "0.5%", tolerance_basis: "added: as ref_b2_steps_P", tolerance_added: true}
+- {id: ref_b2_elements_Q, run: run_b2, setting: n_elements, factors: [1, 2, 4], mode: multiply, output: Q,
+   tolerance: "1%", tolerance_basis: "added: as ref_b2_steps_Q", tolerance_added: true}
+- {id: ref_b2_cycles_P, run: run_b2, setting: n_cycles, factors: [1, 1.5, 2], mode: multiply, output: P,
+   tolerance: "0.5%", tolerance_basis: "added: whether 8 periods reach the periodic state, at the precision of ref_b2_steps_P", tolerance_added: true}
+# The RCR outlet: steps per period of the sinusoidal probe
+- {id: ref_rcr_b2_npts, run: run_rcr_b2, setting: n_pts, factors: [1, 2, 4], mode: multiply, output: modulus,
+   tolerance: "0.5%", tolerance_basis: "added: the 0.1% to which svzerod_code's relations hold its own RCR block, widened for this first-order scheme", tolerance_added: true}

@@ -1,0 +1,23 @@
+id: profile_terms_eq3_5_nu
+name: delta and N from their definitions (Eqs. 3-5), with the viscosity factor in Eq. 4
+role: model
+stated: {page: 2, printed_page: "196", quote: "The variables d and N are defined as", where: "Eqs. 3-5"}
+equation: "delta = (1/S) int_S (phi^2 - 1) da (3); N = nu oint_dS dphi/dm dl (4, corrected); phi(r) = ((n + 2)/n)(1 - (r/R)^n) (5)"
+variant_of: profile_terms_eq3_5
+corrections:
+  - equation: Eq. 4
+    change: "N = nu oint dphi/dm dl instead of the printed N = oint dphi/dm dl"
+    evidence: >
+      Dimensions: N multiplies Q/S in the momentum equation (Eq. 2), whose terms have the units of dQ/dt
+      (cm^3/s^2), so N must have units of cm^2/s; the printed integral of Eq. 4 is dimensionless. The paper's
+      own result, Eq. 6, N = -2(n + 2) pi nu, and the text on p. 3 ("given by -8 pi nu for the case of
+      Poiseuille flow") carry the factor nu that Eq. 4 lacks.
+built_from: [profile_terms_eq3_5]
+inputs:
+  n: {quantity: profile_exponent, unit: dimensionless}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+outputs:
+  delta: {quantity: momentum_flux_correction, unit: dimensionless}
+  N: {quantity: viscous_loss_coefficient, unit: cm^2/s}
+settings: {}
+stochastic: false

@@ -365,18 +365,37 @@ def validate(lr: LoadedRecord, run: bool = True, cache_dir: Path | None = None) 
     # ---- runs, comparisons, refinements --------------------------------------
     node_ids = {k for k, v in ids.items() if v in ("datum", "added", "output")}
     model_ids = {m.id for m in rec.models}
+    # which nodes are curves: a table or figure datum, a swept run's outputs, a curve port's output
+    models_by_id = {m.id: m for m in rec.models}
+    is_curve = {d.id: d.table is not None or d.figure is not None for d in rec.data}
+    for r in rec.runs:
+        m = models_by_id.get(r.model)
+        for sym, port in (m.outputs.items() if m else ()):
+            is_curve[r.outputs.get(sym, f"{r.id}.{sym}")] = bool(r.sweep) or port.curve is not None
+
+    def check_curve_ports(where, m, inputs):
+        for sym, vid in inputs.items():
+            port = m.inputs.get(sym) if m else None
+            if port is None or vid not in is_curve:
+                continue
+            if port.curve and not is_curve[vid]:
+                E(f"{where}: input {sym} takes a curve; {vid} is a single value")
+            elif not port.curve and is_curve[vid]:
+                E(f"{where}: input {sym} takes one number; {vid} is a curve "
+                  "(sweep over its x values, or give the model a curve port)")
+
     for r in rec.runs:
         if r.model not in model_ids:
             E(f"run {r.id}: unknown model {r.model!r}")
         for sym, vid in {**r.inputs, **r.sweep}.items():
             if vid not in node_ids:
                 E(f"run {r.id}: input {sym} refers to unknown {vid!r}")
+        check_curve_ports(f"run {r.id}", models_by_id.get(r.model), r.inputs)
     for c in rec.comparisons:
         for side in (c.computed, c.printed):
             if side not in node_ids:
                 E(f"comparison {c.id}: refers to unknown {side!r}")
     # ---- models against another record's measurements --------------------------
-    models_by_id = {m.id: m for m in rec.models}
     quantity_ids = {q.id for q in rec.quantities}
     seen_v: set[str] = set()
     for v in rec.validations:
@@ -401,6 +420,7 @@ def validate(lr: LoadedRecord, run: bool = True, cache_dir: Path | None = None) 
         for sym, vid in {**v.inputs, **v.sweep}.items():
             if "/" not in vid and vid not in node_ids:
                 E(f"{where}: input {sym} refers to unknown {vid!r}")
+        check_curve_ports(where, models_by_id.get(v.model), {s: i for s, i in v.inputs.items() if "/" not in i})
         if v.against.count("/") != 1 or v.against.split("/")[0] in ("", rec.source.id):
             E(f"{where}: against must name a datum of another record, as '<record>/<datum>' (got {v.against!r})")
         for there, here in v.quantities.items():

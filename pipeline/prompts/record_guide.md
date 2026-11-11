@@ -186,6 +186,18 @@ def symbolic():   # optional but wanted for closed-form models: same names, same
   choice in the run's `note` and as a `choice` question.
 - One model per distinct equation or algorithm that produces a printed
   result. Use `built_from` when one model calls another's logic.
+- **A model that processes a whole curve** (an average over a cycle, a
+  derivative, a wave separation, a peak, an area under a trace) declares a
+  curve port: `U: {quantity: velocity, unit: m/s, curve: {quantity: time, unit: s}}`.
+  A run gives it a table or figure datum, and model.py receives
+  `inputs["U"] = {"x": [...], "y": [...]}`, converted to the port's units
+  (points without both x and y are left out). A curve output port is
+  declared the same way, and model.py returns `{"x": [...], "y": [...]}`;
+  it is compared point by point with a printed curve at the same x values
+  (resample onto the printed curve's x if needed, by taking that curve as
+  another curve input). A sweep runs a model once per x value; a curve
+  port runs it once on the whole curve. Relations are not tested between
+  curve models; say so with a question if one matters.
 
 ### `runs.yaml`, `comparisons.yaml`, `refinements.yaml`
 ```yaml

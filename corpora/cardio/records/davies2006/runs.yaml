@@ -1,0 +1,187 @@
+# ---- Table 2: proportions from the cumulative means (ratio of means; the paper averaged per-subject ratios)
+- id: run_share_from_cumulative
+  model: wave_share
+  inputs: {I1: t2_cum_w1, I2: t2_cum_w2, I3: t2_cum_w3, I4: t2_cum_w4, I5: t2_cum_w5, I6: t2_cum_w6}
+  outputs: {p1: share_calc_w1, p2: share_calc_w2, p3: share_calc_w3, p4: share_calc_w4, p5: share_calc_w5, p6: share_calc_w6}
+  note: The six waves' summed cumulative means stand for the cycle total (the paper's total may include smaller waves).
+# ---- 55% of wave intensity with ventricular relaxation (waves 4-6)
+- id: run_relaxation_from_table
+  model: relaxation_share
+  inputs: {p4: t2_share_w4, p5: t2_share_w5, p6: t2_share_w6}
+  outputs: {s: relaxation_share_from_table}
+- id: run_relaxation_from_cumulative
+  model: relaxation_share
+  inputs: {p4: share_calc_w4, p5: share_calc_w5, p6: share_calc_w6}
+  outputs: {s: relaxation_share_from_cumulative}
+# ---- 94% of accelerating wave energy from waves 2 and 5
+- id: run_accelerating_from_table
+  model: accelerating_share
+  inputs: {p2: t2_share_w2, p5: t2_share_w5, p6: t2_share_w6}
+  outputs: {s: accelerating_share_from_table}
+- id: run_accelerating_from_cumulative
+  model: accelerating_share
+  inputs: {p2: share_calc_w2, p5: share_calc_w5, p6: share_calc_w6}
+  outputs: {s: accelerating_share_from_cumulative}
+# ---- whole cohort from the LVH (n1 = 10) and non-LVH (n2 = 20 - 10) groups
+- id: run_pooled_systolic
+  model: pooled_systolic
+  inputs: {N: n_subjects, n1: n_lvh, m1: sbp_lvh, s1: sbp_lvh_sd, m2: sbp_nonlvh, s2: sbp_nonlvh_sd}
+  outputs: {mean: sbp_pooled_mean, sd: sbp_pooled_sd}
+- id: run_pooled_diastolic
+  model: pooled_diastolic
+  inputs: {N: n_subjects, n1: n_lvh, m1: dbp_lvh, s1: dbp_lvh_sd, m2: dbp_nonlvh, s2: dbp_nonlvh_sd}
+  outputs: {mean: dbp_pooled_mean, sd: dbp_pooled_sd}
+- id: run_pooled_share_w5
+  model: pooled_share_w5
+  inputs: {N: n_subjects, n1: n_lvh, m1: share_w5_lvh, m2: share_w5_nonlvh}
+  outputs: {mean: share_w5_pooled}
+- id: run_pooled_share_w1
+  model: pooled_share_w1
+  inputs: {N: n_subjects, n1: n_lvh, m1: share_w1_lvh, m2: share_w1_nonlvh}
+  outputs: {mean: share_w1_pooled}
+# ---- reproducibility percentages, against the cohort mean pressures (q_replicate_percent)
+- id: run_replicate_systolic
+  model: replicate_percent_systolic
+  inputs: {sd: rep_sd_sbp, mean: sbp_all}
+  outputs: {pct: rep_pct_sbp_calc}
+- id: run_replicate_diastolic
+  model: replicate_percent_diastolic
+  inputs: {sd: rep_sd_dbp, mean: dbp_all}
+  outputs: {pct: rep_pct_dbp_calc}
+# ---- P value printed with r = -0.15 (added by the audit, q_p_fsuction_septum)
+- id: run_p_fsuction_septum
+  model: correlation_p_value
+  inputs: {r: r_fsuction_septum, n: n_correlation_added}
+  outputs: {p: p_fsuction_septum_calc}
+# ---- "only one quarter" the slope
+- id: run_slope_ratio
+  model: slope_ratio
+  inputs: {a: slope_lvh, b: slope_nonlvh}
+  outputs: {r: slope_ratio_calc}
+
+# ---- curve ports (2026-11-11): wave intensity analysis rebuilt on the digitized traces of Figs. 3 and 5 ----
+- id: run_wia_fig3
+  model: wia_traces
+  inputs: {P: fig3_pressure_trace, U: fig3_velocity_trace, rho: rho_blood, xp: fig3_wi_plus_trace, xm: fig3_wi_minus_trace, pp: fig3_wi_plus_peak_values, pm: fig3_wi_minus_peak_values}
+  settings: {}
+  outputs: {c: wia_fig3_c, sum_dP2: wia_fig3_sum_dP2, sum_dU2: wia_fig3_sum_dU2, WIp: wia_fig3_WIp, WIm: wia_fig3_WIm, WIp_peaks: wia_fig3_WIp_peaks, WIm_peaks: wia_fig3_WIm_peaks, WIp_max: wia_fig3_WIp_max, WIm_min: wia_fig3_WIm_min, Pp: wia_fig3_Pp, Pm: wia_fig3_Pm, Up: wia_fig3_Up, Um: wia_fig3_Um}
+  note: "10 ms reading grid, no filter"
+- id: run_wia_fig3_sg50
+  model: wia_traces
+  inputs: {P: fig3_pressure_trace, U: fig3_velocity_trace, rho: rho_blood, xp: fig3_wi_plus_trace, xm: fig3_wi_minus_trace, pp: fig3_wi_plus_peak_values, pm: fig3_wi_minus_peak_values}
+  settings: {sg_window_ms: 50}
+  outputs: {c: wia_fig3_sg50_c, sum_dP2: wia_fig3_sg50_sum_dP2, sum_dU2: wia_fig3_sg50_sum_dU2, WIp: wia_fig3_sg50_WIp, WIm: wia_fig3_sg50_WIm, WIp_peaks: wia_fig3_sg50_WIp_peaks, WIm_peaks: wia_fig3_sg50_WIm_peaks, WIp_max: wia_fig3_sg50_WIp_max, WIm_min: wia_fig3_sg50_WIm_min, Pp: wia_fig3_sg50_Pp, Pm: wia_fig3_sg50_Pm, Up: wia_fig3_sg50_Up, Um: wia_fig3_sg50_Um}
+  note: "added choice: a Savitzky-Golay window of 50 ms (order 2) before differencing (q_wia_rebuilt)"
+- id: run_wia_fig3_2ms
+  model: wia_traces
+  inputs: {P: fig3_pressure_trace_2ms, U: fig3_velocity_trace_2ms, rho: rho_blood, xp: fig3_wi_plus_trace, xm: fig3_wi_minus_trace, pp: fig3_wi_plus_peak_values, pm: fig3_wi_minus_peak_values}
+  settings: {step_ms: 2}
+  outputs: {c: wia_fig3_2ms_c, sum_dP2: wia_fig3_2ms_sum_dP2, sum_dU2: wia_fig3_2ms_sum_dU2, WIp: wia_fig3_2ms_WIp, WIm: wia_fig3_2ms_WIm, WIp_peaks: wia_fig3_2ms_WIp_peaks, WIm_peaks: wia_fig3_2ms_WIm_peaks, WIp_max: wia_fig3_2ms_WIp_max, WIm_min: wia_fig3_2ms_WIm_min, Pp: wia_fig3_2ms_Pp, Pm: wia_fig3_2ms_Pm, Up: wia_fig3_2ms_Up, Um: wia_fig3_2ms_Um}
+  note: "the 2 ms readings, differenced every 2 ms"
+- id: run_wia_fig3_2ms_s10
+  model: wia_traces
+  inputs: {P: fig3_pressure_trace_2ms, U: fig3_velocity_trace_2ms, rho: rho_blood, xp: fig3_wi_plus_trace, xm: fig3_wi_minus_trace, pp: fig3_wi_plus_peak_values, pm: fig3_wi_minus_peak_values}
+  settings: {step_ms: 10}
+  outputs: {c: wia_fig3_2ms_s10_c, sum_dP2: wia_fig3_2ms_s10_sum_dP2, sum_dU2: wia_fig3_2ms_s10_sum_dU2, WIp: wia_fig3_2ms_s10_WIp, WIm: wia_fig3_2ms_s10_WIm, WIp_peaks: wia_fig3_2ms_s10_WIp_peaks, WIm_peaks: wia_fig3_2ms_s10_WIm_peaks, WIp_max: wia_fig3_2ms_s10_WIp_max, WIm_min: wia_fig3_2ms_s10_WIm_min, Pp: wia_fig3_2ms_s10_Pp, Pm: wia_fig3_2ms_s10_Pm, Up: wia_fig3_2ms_s10_Up, Um: wia_fig3_2ms_s10_Um}
+  note: "the 2 ms readings subsampled every 10 ms: the base of the reading-grid refinement"
+- id: run_c_fig3
+  model: single_point_wave_speed
+  inputs: {sum_dP2: wia_fig3_sum_dP2, sum_dU2: wia_fig3_sum_dU2, rho: rho_blood}
+  outputs: {c: c_fig3_single_point}
+  note: "the printed single-point equation on the sums of the 10 ms trace increments over the read span (about one cycle)"
+- id: run_cum_fig3_digitized
+  model: cumulative_wi_curve
+  inputs: {WIp: fig3_wi_plus_trace, WIm: fig3_wi_minus_trace}
+  settings: {t1: 100, t2: 140, t3: 160, t4: 445, t5: 450, t6: 475, search_ms: 15, total: six}
+  outputs: {I1: cum_fig3_digitized_I1, I2: cum_fig3_digitized_I2, I3: cum_fig3_digitized_I3, I4: cum_fig3_digitized_I4, I5: cum_fig3_digitized_I5, I6: cum_fig3_digitized_I6, p1: cum_fig3_digitized_p1, p2: cum_fig3_digitized_p2, p3: cum_fig3_digitized_p3, p4: cum_fig3_digitized_p4, p5: cum_fig3_digitized_p5, p6: cum_fig3_digitized_p6}
+  note: "wave times t1..t6 from the circled labels of Fig. 3 (q_wia_rebuilt); total = six"
+- id: run_cum_fig3_digitized_cycle
+  model: cumulative_wi_curve
+  inputs: {WIp: fig3_wi_plus_trace, WIm: fig3_wi_minus_trace}
+  settings: {t1: 100, t2: 140, t3: 160, t4: 445, t5: 450, t6: 475, search_ms: 15, total: cycle}
+  outputs: {I1: cum_fig3_digitized_cycle_I1, I2: cum_fig3_digitized_cycle_I2, I3: cum_fig3_digitized_cycle_I3, I4: cum_fig3_digitized_cycle_I4, I5: cum_fig3_digitized_cycle_I5, I6: cum_fig3_digitized_cycle_I6, p1: cum_fig3_digitized_cycle_p1, p2: cum_fig3_digitized_cycle_p2, p3: cum_fig3_digitized_cycle_p3, p4: cum_fig3_digitized_cycle_p4, p5: cum_fig3_digitized_cycle_p5, p6: cum_fig3_digitized_cycle_p6}
+  note: "wave times t1..t6 from the circled labels of Fig. 3 (q_wia_rebuilt); total = cycle"
+- id: run_cum_fig3_computed
+  model: cumulative_wi_curve
+  inputs: {WIp: wia_fig3_WIp, WIm: wia_fig3_WIm}
+  settings: {t1: 100, t2: 140, t3: 160, t4: 445, t5: 450, t6: 475, search_ms: 15, total: six}
+  outputs: {I1: cum_fig3_computed_I1, I2: cum_fig3_computed_I2, I3: cum_fig3_computed_I3, I4: cum_fig3_computed_I4, I5: cum_fig3_computed_I5, I6: cum_fig3_computed_I6, p1: cum_fig3_computed_p1, p2: cum_fig3_computed_p2, p3: cum_fig3_computed_p3, p4: cum_fig3_computed_p4, p5: cum_fig3_computed_p5, p6: cum_fig3_computed_p6}
+  note: "wave times t1..t6 from the circled labels of Fig. 3 (q_wia_rebuilt); total = six"
+- id: run_dsr_fig3_relaxation
+  model: diastolic_systolic_velocity_ratio
+  inputs: {U: fig3_velocity_trace, ts: ts_fig3_relaxation}
+  outputs: {ratio_mean: dsr_fig3_relaxation_mean, ratio_integral: dsr_fig3_relaxation_integral}
+  note: "for the diameter-free test against yong2025's LCx mDSFR (q_yong2025_dsfr)"
+- id: run_dsr_fig3_incisura
+  model: diastolic_systolic_velocity_ratio
+  inputs: {U: fig3_velocity_trace, ts: ts_fig3_incisura}
+  outputs: {ratio_mean: dsr_fig3_incisura_mean, ratio_integral: dsr_fig3_incisura_integral}
+  note: "for the diameter-free test against yong2025's LCx mDSFR (q_yong2025_dsfr)"
+- id: run_wia_fig5
+  model: wia_traces
+  inputs: {P: fig5_pressure_trace, U: fig5_velocity_trace, rho: rho_blood, xp: fig5_wi_plus_trace, xm: fig5_wi_minus_trace, pp: fig5_wi_plus_peak_values, pm: fig5_wi_minus_peak_values}
+  settings: {}
+  outputs: {c: wia_fig5_c, sum_dP2: wia_fig5_sum_dP2, sum_dU2: wia_fig5_sum_dU2, WIp: wia_fig5_WIp, WIm: wia_fig5_WIm, WIp_peaks: wia_fig5_WIp_peaks, WIm_peaks: wia_fig5_WIm_peaks, WIp_max: wia_fig5_WIp_max, WIm_min: wia_fig5_WIm_min, Pp: wia_fig5_Pp, Pm: wia_fig5_Pm, Up: wia_fig5_Up, Um: wia_fig5_Um}
+  note: "10 ms reading grid, no filter"
+- id: run_wia_fig5_sg50
+  model: wia_traces
+  inputs: {P: fig5_pressure_trace, U: fig5_velocity_trace, rho: rho_blood, xp: fig5_wi_plus_trace, xm: fig5_wi_minus_trace, pp: fig5_wi_plus_peak_values, pm: fig5_wi_minus_peak_values}
+  settings: {sg_window_ms: 50}
+  outputs: {c: wia_fig5_sg50_c, sum_dP2: wia_fig5_sg50_sum_dP2, sum_dU2: wia_fig5_sg50_sum_dU2, WIp: wia_fig5_sg50_WIp, WIm: wia_fig5_sg50_WIm, WIp_peaks: wia_fig5_sg50_WIp_peaks, WIm_peaks: wia_fig5_sg50_WIm_peaks, WIp_max: wia_fig5_sg50_WIp_max, WIm_min: wia_fig5_sg50_WIm_min, Pp: wia_fig5_sg50_Pp, Pm: wia_fig5_sg50_Pm, Up: wia_fig5_sg50_Up, Um: wia_fig5_sg50_Um}
+  note: "added choice: a Savitzky-Golay window of 50 ms (order 2) before differencing (q_wia_rebuilt)"
+- id: run_wia_fig5_2ms
+  model: wia_traces
+  inputs: {P: fig5_pressure_trace_2ms, U: fig5_velocity_trace_2ms, rho: rho_blood, xp: fig5_wi_plus_trace, xm: fig5_wi_minus_trace, pp: fig5_wi_plus_peak_values, pm: fig5_wi_minus_peak_values}
+  settings: {step_ms: 2}
+  outputs: {c: wia_fig5_2ms_c, sum_dP2: wia_fig5_2ms_sum_dP2, sum_dU2: wia_fig5_2ms_sum_dU2, WIp: wia_fig5_2ms_WIp, WIm: wia_fig5_2ms_WIm, WIp_peaks: wia_fig5_2ms_WIp_peaks, WIm_peaks: wia_fig5_2ms_WIm_peaks, WIp_max: wia_fig5_2ms_WIp_max, WIm_min: wia_fig5_2ms_WIm_min, Pp: wia_fig5_2ms_Pp, Pm: wia_fig5_2ms_Pm, Up: wia_fig5_2ms_Up, Um: wia_fig5_2ms_Um}
+  note: "the 2 ms readings, differenced every 2 ms"
+- id: run_wia_fig5_2ms_s10
+  model: wia_traces
+  inputs: {P: fig5_pressure_trace_2ms, U: fig5_velocity_trace_2ms, rho: rho_blood, xp: fig5_wi_plus_trace, xm: fig5_wi_minus_trace, pp: fig5_wi_plus_peak_values, pm: fig5_wi_minus_peak_values}
+  settings: {step_ms: 10}
+  outputs: {c: wia_fig5_2ms_s10_c, sum_dP2: wia_fig5_2ms_s10_sum_dP2, sum_dU2: wia_fig5_2ms_s10_sum_dU2, WIp: wia_fig5_2ms_s10_WIp, WIm: wia_fig5_2ms_s10_WIm, WIp_peaks: wia_fig5_2ms_s10_WIp_peaks, WIm_peaks: wia_fig5_2ms_s10_WIm_peaks, WIp_max: wia_fig5_2ms_s10_WIp_max, WIm_min: wia_fig5_2ms_s10_WIm_min, Pp: wia_fig5_2ms_s10_Pp, Pm: wia_fig5_2ms_s10_Pm, Up: wia_fig5_2ms_s10_Up, Um: wia_fig5_2ms_s10_Um}
+  note: "the 2 ms readings subsampled every 10 ms: the base of the reading-grid refinement"
+- id: run_c_fig5
+  model: single_point_wave_speed
+  inputs: {sum_dP2: wia_fig5_sum_dP2, sum_dU2: wia_fig5_sum_dU2, rho: rho_blood}
+  outputs: {c: c_fig5_single_point}
+  note: "the printed single-point equation on the sums of the 10 ms trace increments over the read span (about one cycle)"
+- id: run_cum_fig5_digitized
+  model: cumulative_wi_curve
+  inputs: {WIp: fig5_wi_plus_trace, WIm: fig5_wi_minus_trace}
+  settings: {t1: 80, t2: 120, t3: 130, t4: 390, t5: 405, t6: 420, search_ms: 15, total: six}
+  outputs: {I1: cum_fig5_digitized_I1, I2: cum_fig5_digitized_I2, I3: cum_fig5_digitized_I3, I4: cum_fig5_digitized_I4, I5: cum_fig5_digitized_I5, I6: cum_fig5_digitized_I6, p1: cum_fig5_digitized_p1, p2: cum_fig5_digitized_p2, p3: cum_fig5_digitized_p3, p4: cum_fig5_digitized_p4, p5: cum_fig5_digitized_p5, p6: cum_fig5_digitized_p6}
+  note: "wave times t1..t6 from the circled labels of Fig. 5 (q_wia_rebuilt); total = six"
+- id: run_cum_fig5_digitized_cycle
+  model: cumulative_wi_curve
+  inputs: {WIp: fig5_wi_plus_trace, WIm: fig5_wi_minus_trace}
+  settings: {t1: 80, t2: 120, t3: 130, t4: 390, t5: 405, t6: 420, search_ms: 15, total: cycle}
+  outputs: {I1: cum_fig5_digitized_cycle_I1, I2: cum_fig5_digitized_cycle_I2, I3: cum_fig5_digitized_cycle_I3, I4: cum_fig5_digitized_cycle_I4, I5: cum_fig5_digitized_cycle_I5, I6: cum_fig5_digitized_cycle_I6, p1: cum_fig5_digitized_cycle_p1, p2: cum_fig5_digitized_cycle_p2, p3: cum_fig5_digitized_cycle_p3, p4: cum_fig5_digitized_cycle_p4, p5: cum_fig5_digitized_cycle_p5, p6: cum_fig5_digitized_cycle_p6}
+  note: "wave times t1..t6 from the circled labels of Fig. 5 (q_wia_rebuilt); total = cycle"
+- id: run_cum_fig5_computed
+  model: cumulative_wi_curve
+  inputs: {WIp: wia_fig5_WIp, WIm: wia_fig5_WIm}
+  settings: {t1: 80, t2: 120, t3: 130, t4: 390, t5: 405, t6: 420, search_ms: 15, total: six}
+  outputs: {I1: cum_fig5_computed_I1, I2: cum_fig5_computed_I2, I3: cum_fig5_computed_I3, I4: cum_fig5_computed_I4, I5: cum_fig5_computed_I5, I6: cum_fig5_computed_I6, p1: cum_fig5_computed_p1, p2: cum_fig5_computed_p2, p3: cum_fig5_computed_p3, p4: cum_fig5_computed_p4, p5: cum_fig5_computed_p5, p6: cum_fig5_computed_p6}
+  note: "wave times t1..t6 from the circled labels of Fig. 5 (q_wia_rebuilt); total = six"
+- id: run_dsr_fig5_relaxation
+  model: diastolic_systolic_velocity_ratio
+  inputs: {U: fig5_velocity_trace, ts: ts_fig5_relaxation}
+  outputs: {ratio_mean: dsr_fig5_relaxation_mean, ratio_integral: dsr_fig5_relaxation_integral}
+  note: "for the diameter-free test against yong2025's LCx mDSFR (q_yong2025_dsfr)"
+- id: run_dsr_fig5_incisura
+  model: diastolic_systolic_velocity_ratio
+  inputs: {U: fig5_velocity_trace, ts: ts_fig5_incisura}
+  outputs: {ratio_mean: dsr_fig5_incisura_mean, ratio_integral: dsr_fig5_incisura_integral}
+  note: "for the diameter-free test against yong2025's LCx mDSFR (q_yong2025_dsfr)"
+
+# ---- Figs. 6 and 7: group means and correlations from the read markers (curve ports; q_fig6_groups_run) ----
+- id: run_fig6_groups
+  model: scatter_group_stats
+  inputs: {Y: fig6_suction_vs_septum}
+  outputs: {y_low: fig6_share_w5_nonlvh, y_high: fig6_share_w5_lvh, x_low: fig6_septum_nonlvh, x_high: fig6_septum_lvh, n_high: fig6_n_lvh, r: fig6_r_suction_septum}
+  note: "groups split at septum 1.2 cm, the paper's LVH criterion (p. 5)"
+- id: run_fig7_r
+  model: scatter_correlation_fig7
+  inputs: {Y: fig7_fsuction_vs_age}
+  outputs: {r: fig7_r_fsuction_age}

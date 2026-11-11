@@ -1,0 +1,561 @@
+# ---- velocity profile (Eqs. 5-6) -------------------------------------------------------------
+- id: n_poiseuille
+  quantity: profile_exponent
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {page: 2, printed_page: "196", quote: "We assume a Poiseuille profile for our problem, and thus", where: "text after Eq. 6"}
+
+# ---- constitutive law (Eq. 14), default constants from Olufsen [11] -------------------------
+- id: k1_default
+  quantity: stiffness_fit_amplitude
+  unit: g/s^2/cm
+  origin: reported
+  printed: "2 x 10^7"
+  citation: {page: 3, printed_page: "197", quote: "to experimental data and are set to default values of k1", where: "text after Eq. 14"}
+  from_source: olufsen1999
+- id: k2_default
+  quantity: stiffness_fit_rate
+  unit: 1/cm
+  origin: reported
+  printed: "-22.53"
+  citation: {page: 3, printed_page: "197", quote: "k2 ¼ 222:53 cm21", where: "text after Eq. 14"}
+  from_source: olufsen1999
+- id: k3_default
+  quantity: stiffness_fit_offset
+  unit: g/s^2/cm
+  origin: reported
+  printed: "8.65 x 10^5"
+  citation: {page: 3, printed_page: "197", quote: "8:65 £ 105 g%s22 %cm21", where: "text after Eq. 14"}
+  from_source: olufsen1999
+
+# ---- stenosis model (Eqs. 15-16), after Seeley and Young [12] --------------------------------
+- id: Kt_stenosis
+  quantity: stenosis_turbulent_coefficient
+  unit: dimensionless
+  origin: reported
+  printed: "1.52"
+  citation: {page: 3, printed_page: "197", quote: "K t ¼ 1:52", where: "Eq. 16"}
+  from_source: ref-12
+- id: Kv_factor_stenosis
+  quantity: stenosis_viscous_factor
+  unit: dimensionless
+  origin: reported
+  printed: "32"
+  citation: {page: 3, printed_page: "197", quote: "K v ¼ 32 ð16Þ", where: "Eq. 16"}
+  from_source: ref-12
+
+# ---- single segment (Fig. 1) -------------------------------------------------------------------
+- id: r0_segment
+  quantity: vessel_radius
+  unit: cm
+  origin: reported
+  printed: "0.4"
+  citation: {page: 6, printed_page: "200", quote: "was specified to be 0.4 cm and the vessel length was", where: text}
+- id: L_segment
+  quantity: vessel_length
+  unit: cm
+  origin: reported
+  printed: "16"
+  citation: {page: 6, printed_page: "200", quote: "specified to be 16 cm (length to diameter ratio of 20)", where: text}
+- id: LD_segment
+  quantity: length_to_diameter_ratio
+  unit: dimensionless
+  origin: derived
+  printed: "20"
+  citation: {page: 6, printed_page: "200", quote: "specified to be 16 cm (length to diameter ratio of 20)", where: text}
+- id: elements_segment
+  quantity: element_count
+  unit: dimensionless
+  origin: reported
+  printed: "16"
+  citation: {page: 6, printed_page: "200", quote: "total of 16 finite elements were utilized and the solution", where: text}
+  note: "the setting n_elements of model single_segment_svoned"
+- id: steps_segment
+  quantity: time_steps_per_cycle
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {page: 6, printed_page: "200", quote: "was computed using 100 time steps per cardiac cycle for a", where: text}
+  note: "the setting steps_per_cycle of model single_segment_svoned"
+- id: cycles_segment
+  quantity: cardiac_cycle_count
+  unit: dimensionless
+  origin: reported
+  printed: "3"
+  citation: {page: 6, printed_page: "200", quote: "total of three cardiac cycles. Figure 1 depicts the results", where: text}
+  note: "printed as a word, 'three'; the setting n_cycles of model single_segment_svoned"
+
+# ---- symmetric bifurcation (Fig. 2) ------------------------------------------------------------
+- id: elements_bifurcation
+  quantity: element_count
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {page: 6, printed_page: "200", quote: "consisted of 50 elements with the element size of 1 cm; 16", where: text}
+- id: element_size_bifurcation
+  quantity: element_size
+  unit: cm
+  origin: reported
+  printed: "1"
+  citation: {page: 6, printed_page: "200", quote: "consisted of 50 elements with the element size of 1 cm; 16", where: text}
+- id: elements_bifurcation_inlet
+  quantity: element_count
+  unit: dimensionless
+  origin: reported
+  printed: "16"
+  citation: {page: 6, printed_page: "200", quote: "elements in the inlet branch and 17 each in the left and", where: text}
+- id: elements_bifurcation_branch
+  quantity: element_count
+  unit: dimensionless
+  origin: reported
+  printed: "17"
+  citation: {page: 6, printed_page: "200", quote: "elements in the inlet branch and 17 each in the left and", where: text}
+- id: steps_bifurcation
+  quantity: time_steps_per_cycle
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {page: 6, printed_page: "200", quote: "right branches. The solution was computed using 100 time", where: text}
+  note: "the setting steps_per_cycle of model bifurcation_svoned"
+- id: cycles_bifurcation
+  quantity: cardiac_cycle_count
+  unit: dimensionless
+  origin: reported
+  printed: "3"
+  citation: {page: 6, printed_page: "200", quote: "steps per cardiac cycle for a total of three cardiac cycles", where: text}
+  note: "printed as a word, 'three'; the setting n_cycles of model bifurcation_svoned"
+
+# ---- aorto-iliac treatment plans (Table I, Fig. 4) ---------------------------------------------
+- id: left_iliac_diameter_reduction
+  quantity: stenosis_diameter_reduction
+  unit: percent
+  origin: reported
+  printed: "50"
+  citation: {page: 6, printed_page: "200", quote: "the left iliac artery has a 50% reduction in diameter", where: text}
+  note: "added by the audit; the only printed stenosis dimension of the aorto-iliac case (its length and the proximal diameter are not printed, q_examples_not_runnable)"
+- id: steps_plans
+  quantity: time_steps_per_cycle
+  unit: dimensionless
+  origin: reported
+  printed: "200"
+  citation: {page: 7, printed_page: "201", quote: "pressure fields over five cardiac cycles with 200 time steps", where: text}
+- id: cycles_plans
+  quantity: cardiac_cycle_count
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {page: 7, printed_page: "201", quote: "pressure fields over five cardiac cycles with 200 time steps", where: text}
+  note: "printed as a word, 'five'"
+
+# ---- cost of the 1D and 3D solutions -------------------------------------------------------------
+- id: dof_3d
+  quantity: degrees_of_freedom
+  unit: dimensionless
+  origin: reported
+  printed: "~500000"
+  citation: {page: 8, printed_page: "202", quote: "involved approximately 500,000 degrees-of-freedom and", where: text}
+  note: "printed 'approximately 500,000'"
+- id: cpu_3d
+  quantity: cpu_time
+  unit: min
+  origin: reported
+  printed: "~25000"
+  citation: {page: 8, printed_page: "202", quote: "approximately 25,000 cpu minutes of solution time", where: text}
+  note: "printed 'approximately 25,000'"
+- id: dof_1d
+  quantity: degrees_of_freedom
+  unit: dimensionless
+  origin: reported
+  printed: "<500"
+  citation: {page: 8, printed_page: "202", quote: "500 degrees-of-freedom and less than 5 cpu minutes of", where: text}
+  note: "printed 'less than 500'"
+- id: cpu_1d
+  quantity: cpu_time
+  unit: min
+  origin: reported
+  printed: "<5"
+  citation: {page: 8, printed_page: "202", quote: "500 degrees-of-freedom and less than 5 cpu minutes of", where: text}
+  note: "printed 'less than 5'"
+- id: speedup_printed
+  quantity: speedup_factor
+  unit: dimensionless
+  origin: derived
+  printed: "~5000"
+  citation: {page: 2, printed_page: "196", quote: "flow problem can be solved roughly 5000 times faster", where: text}
+  note: "printed 'roughly 5000'; the paper does not say it is the ratio of the CPU times of p. 8, but no other figures for the two times are given"
+
+# ---- Table I: mean flow (cc/s), 1D and 3D, and their difference (%) -----------------------------
+# Generated rows follow (one 1D, one 3D and one Difference datum per row of Table I, p. 7).
+- {id: q1d_pre_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "50.10", citation: {page: 7, printed_page: "201", quote: "Aorta 50.10 50.15 0", where: "Table I, Preoperative"}}
+- {id: q3d_pre_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "50.15", citation: {page: 7, printed_page: "201", quote: "Aorta 50.10 50.15 0", where: "Table I, Preoperative"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_pre_aorta, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "0", citation: {page: 7, printed_page: "201", quote: "Aorta 50.10 50.15 0", where: "Table I, Preoperative"}}
+- {id: q1d_pre_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "2.29", citation: {page: 7, printed_page: "201", quote: "R femoral 2.29 3.60 236", where: "Table I, Preoperative"}}
+- {id: q3d_pre_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "3.60", citation: {page: 7, printed_page: "201", quote: "R femoral 2.29 3.60 236", where: "Table I, Preoperative"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_pre_rfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-36", citation: {page: 7, printed_page: "201", quote: "R femoral 2.29 3.60 236", where: "Table I, Preoperative"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_pre_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "7.76", citation: {page: 7, printed_page: "201", quote: "L femoral 7.76 7.73 0", where: "Table I, Preoperative"}}
+- {id: q3d_pre_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "7.73", citation: {page: 7, printed_page: "201", quote: "L femoral 7.76 7.73 0", where: "Table I, Preoperative"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_pre_lfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "0", citation: {page: 7, printed_page: "201", quote: "L femoral 7.76 7.73 0", where: "Table I, Preoperative"}}
+- {id: q1d_pre_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "1.21", citation: {page: 7, printed_page: "201", quote: "R popliteal 1.21 0.50 142", where: "Table I, Preoperative"}}
+- {id: q3d_pre_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "0.50", citation: {page: 7, printed_page: "201", quote: "R popliteal 1.21 0.50 142", where: "Table I, Preoperative"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_pre_rpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "142", citation: {page: 7, printed_page: "201", quote: "R popliteal 1.21 0.50 142", where: "Table I, Preoperative"}}
+- {id: q1d_pre_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "4.58", citation: {page: 7, printed_page: "201", quote: "L popliteal 4.58 4.53 1", where: "Table I, Preoperative"}}
+- {id: q3d_pre_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "4.53", citation: {page: 7, printed_page: "201", quote: "L popliteal 4.58 4.53 1", where: "Table I, Preoperative"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_pre_lpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "1", citation: {page: 7, printed_page: "201", quote: "L popliteal 4.58 4.53 1", where: "Table I, Preoperative"}}
+- {id: q1d_femfem_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "57.64", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q3d_femfem_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "57.67", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, Angioplasty with Fem-Fem bypass"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_femfem_aorta, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "0", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q1d_femfem_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "6.67", citation: {page: 7, printed_page: "201", quote: "R femoral 6.67 7.40 210", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q3d_femfem_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "7.40", citation: {page: 7, printed_page: "201", quote: "R femoral 6.67 7.40 210", where: "Table I, Angioplasty with Fem-Fem bypass"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_femfem_rfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-10", citation: {page: 7, printed_page: "201", quote: "R femoral 6.67 7.40 210", where: "Table I, Angioplasty with Fem-Fem bypass"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_femfem_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "15.72", citation: {page: 7, printed_page: "201", quote: "L femoral 15.72 12.45 26", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q3d_femfem_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "12.45", citation: {page: 7, printed_page: "201", quote: "L femoral 15.72 12.45 26", where: "Table I, Angioplasty with Fem-Fem bypass"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_femfem_lfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "26", citation: {page: 7, printed_page: "201", quote: "L femoral 15.72 12.45 26", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q1d_femfem_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "3.75", citation: {page: 7, printed_page: "201", quote: "R popliteal 3.75 2.70 39", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q3d_femfem_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "2.70", citation: {page: 7, printed_page: "201", quote: "R popliteal 3.75 2.70 39", where: "Table I, Angioplasty with Fem-Fem bypass"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_femfem_rpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "39", citation: {page: 7, printed_page: "201", quote: "R popliteal 3.75 2.70 39", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q1d_femfem_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "5.34", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.34 4.83 10", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q3d_femfem_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "4.83", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.34 4.83 10", where: "Table I, Angioplasty with Fem-Fem bypass"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_femfem_lpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "10", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.34 4.83 10", where: "Table I, Angioplasty with Fem-Fem bypass"}}
+- {id: q1d_afb_e2e_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "57.64", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, AFB with end to end anastomosis"}}
+- {id: q3d_afb_e2e_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "57.67", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, AFB with end to end anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2e_aorta, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "0", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, AFB with end to end anastomosis"}}
+- {id: q1d_afb_e2e_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "8.98", citation: {page: 7, printed_page: "201", quote: "R femoral 8.98 10.25 212", where: "Table I, AFB with end to end anastomosis"}}
+- {id: q3d_afb_e2e_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "10.25", citation: {page: 7, printed_page: "201", quote: "R femoral 8.98 10.25 212", where: "Table I, AFB with end to end anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2e_rfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-12", citation: {page: 7, printed_page: "201", quote: "R femoral 8.98 10.25 212", where: "Table I, AFB with end to end anastomosis"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_afb_e2e_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "6.79", citation: {page: 7, printed_page: "201", quote: "L femoral 6.79 9.17 226", where: "Table I, AFB with end to end anastomosis"}}
+- {id: q3d_afb_e2e_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "9.17", citation: {page: 7, printed_page: "201", quote: "L femoral 6.79 9.17 226", where: "Table I, AFB with end to end anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2e_lfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-26", citation: {page: 7, printed_page: "201", quote: "L femoral 6.79 9.17 226", where: "Table I, AFB with end to end anastomosis"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_afb_e2e_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "5.05", citation: {page: 7, printed_page: "201", quote: "R popliteal 5.05 4.72 7", where: "Table I, AFB with end to end anastomosis"}}
+- {id: q3d_afb_e2e_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "4.72", citation: {page: 7, printed_page: "201", quote: "R popliteal 5.05 4.72 7", where: "Table I, AFB with end to end anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2e_rpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "7", citation: {page: 7, printed_page: "201", quote: "R popliteal 5.05 4.72 7", where: "Table I, AFB with end to end anastomosis"}}
+- {id: q1d_afb_e2e_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "5.72", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.72 5.85 22", where: "Table I, AFB with end to end anastomosis"}}
+- {id: q3d_afb_e2e_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "5.85", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.72 5.85 22", where: "Table I, AFB with end to end anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2e_lpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-2", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.72 5.85 22", where: "Table I, AFB with end to end anastomosis"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_afb_e2s_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "57.64", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, AFB with end to side anastomosis"}}
+- {id: q3d_afb_e2s_aorta, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "57.67", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, AFB with end to side anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2s_aorta, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "0", citation: {page: 7, printed_page: "201", quote: "Aorta 57.64 57.67 0", where: "Table I, AFB with end to side anastomosis"}}
+- {id: q1d_afb_e2s_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "8.24", citation: {page: 7, printed_page: "201", quote: "R femoral 8.24 11.05 225", where: "Table I, AFB with end to side anastomosis"}}
+- {id: q3d_afb_e2s_rfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "11.05", citation: {page: 7, printed_page: "201", quote: "R femoral 8.24 11.05 225", where: "Table I, AFB with end to side anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2s_rfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-25", citation: {page: 7, printed_page: "201", quote: "R femoral 8.24 11.05 225", where: "Table I, AFB with end to side anastomosis"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_afb_e2s_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "8.07", citation: {page: 7, printed_page: "201", quote: "L femoral 8.07 13.02 238", where: "Table I, AFB with end to side anastomosis"}}
+- {id: q3d_afb_e2s_lfem, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "13.02", citation: {page: 7, printed_page: "201", quote: "L femoral 8.07 13.02 238", where: "Table I, AFB with end to side anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2s_lfem, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-38", citation: {page: 7, printed_page: "201", quote: "L femoral 8.07 13.02 238", where: "Table I, AFB with end to side anastomosis"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_afb_e2s_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "4.64", citation: {page: 7, printed_page: "201", quote: "R popliteal 4.64 5.15 210", where: "Table I, AFB with end to side anastomosis"}}
+- {id: q3d_afb_e2s_rpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "5.15", citation: {page: 7, printed_page: "201", quote: "R popliteal 4.64 5.15 210", where: "Table I, AFB with end to side anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2s_rpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-10", citation: {page: 7, printed_page: "201", quote: "R popliteal 4.64 5.15 210", where: "Table I, AFB with end to side anastomosis"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+- {id: q1d_afb_e2s_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "5.66", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.66 6.03 26", where: "Table I, AFB with end to side anastomosis"}}
+- {id: q3d_afb_e2s_lpop, quantity: mean_flow_rate, unit: cm^3/s, origin: predicted, printed: "6.03", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.66 6.03 26", where: "Table I, AFB with end to side anastomosis"}, from_source: ref-1, note: "the 3D solution of Taylor et al. [1]"}
+- {id: diff_afb_e2s_lpop, quantity: flow_difference_1d_3d, unit: percent, origin: derived, printed: "-6", citation: {page: 7, printed_page: "201", quote: "L popliteal 5.66 6.03 26", where: "Table I, AFB with end to side anastomosis"}, note: "the minus sign is read from the page image; the OCR gives a 2"}
+
+# ---- figure readings (figures.yaml, figures.md): Figs. 1-5, flow and pressure against time in the cycle ----
+- id: fig1_flow_inlet_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig1_flow_inlet
+  citation: {page: 6, where: "Fig. 1, Volume Flow", quote: "Problem description and results for single segment model"}
+- id: fig1_flow_outlet_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig1_flow_outlet
+  citation: {page: 6, where: "Fig. 1, Volume Flow", quote: "Problem description and results for single segment model"}
+- id: fig1_pres_inlet_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig1_pres_inlet
+  citation: {page: 6, where: "Fig. 1, Pressure", quote: "Problem description and results for single segment model"}
+- id: fig1_pres_outlet_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig1_pres_outlet
+  citation: {page: 6, where: "Fig. 1, Pressure", quote: "Problem description and results for single segment model"}
+- id: fig2a_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig2a_flow
+  citation: {page: 7, where: "Fig. 2 A - Inlet", quote: "Problem description and results for symmetric bifurcation segment model"}
+- id: fig2a_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig2a_pres
+  citation: {page: 7, where: "Fig. 2 A - Inlet", quote: "Problem description and results for symmetric bifurcation segment model"}
+- id: fig2b_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig2b_flow
+  citation: {page: 7, where: "Fig. 2 B - Right Iliac", quote: "Problem description and results for symmetric bifurcation segment model"}
+- id: fig2b_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig2b_pres
+  citation: {page: 7, where: "Fig. 2 B - Right Iliac", quote: "Problem description and results for symmetric bifurcation segment model"}
+- id: fig2c_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig2c_flow
+  citation: {page: 7, where: "Fig. 2 C - Left Iliac", quote: "Problem description and results for symmetric bifurcation segment model"}
+- id: fig3a_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig3a_flow
+  citation: {page: 8, where: "Fig. 3 A - Aorta", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3a_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig3a_pres
+  citation: {page: 8, where: "Fig. 3 A - Aorta", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3b_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig3b_flow
+  citation: {page: 8, where: "Fig. 3 B - Celiac", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3b_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig3b_pres
+  citation: {page: 8, where: "Fig. 3 B - Celiac", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3c_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig3c_flow
+  citation: {page: 8, where: "Fig. 3 C - Superior Mesenteric", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3c_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig3c_pres
+  citation: {page: 8, where: "Fig. 3 C - Superior Mesenteric", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3d_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig3d_flow
+  citation: {page: 8, where: "Fig. 3 D - Left Renal", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3d_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig3d_pres
+  citation: {page: 8, where: "Fig. 3 D - Left Renal", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3e_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig3e_flow
+  citation: {page: 8, where: "Fig. 3 E - Right Renal", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3e_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig3e_pres
+  citation: {page: 8, where: "Fig. 3 E - Right Renal", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3f_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig3f_flow
+  citation: {page: 8, where: "Fig. 3 F - Left Iliac", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3f_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig3f_pres
+  citation: {page: 8, where: "Fig. 3 F - Left Iliac", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3g_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig3g_flow
+  citation: {page: 8, where: "Fig. 3 G - Right Iliac", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig3g_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig3g_pres
+  citation: {page: 8, where: "Fig. 3 G - Right Iliac", quote: "Problem description and results for idealized abdominal aorta"}
+- id: fig4a_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4a_flow
+  citation: {page: 9, where: "Fig. 4 A - Inlet", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4a_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4a_pres
+  citation: {page: 9, where: "Fig. 4 A - Inlet", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4b_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4b_flow
+  citation: {page: 9, where: "Fig. 4 B - Graft", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4b_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4b_pres
+  citation: {page: 9, where: "Fig. 4 B - Graft", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4c_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4c_flow
+  citation: {page: 9, where: "Fig. 4 C - Graft Right", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4c_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4c_pres
+  citation: {page: 9, where: "Fig. 4 C - Graft Right", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4d_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4d_flow
+  citation: {page: 9, where: "Fig. 4 D - Graft Left", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4d_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4d_pres
+  citation: {page: 9, where: "Fig. 4 D - Graft Left", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4e_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4e_flow
+  citation: {page: 9, where: "Fig. 4 E - Right Iliac", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4e_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4e_pres
+  citation: {page: 9, where: "Fig. 4 E - Right Iliac", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4f_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4f_flow
+  citation: {page: 9, where: "Fig. 4 F - Left Iliac", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4f_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4f_pres
+  citation: {page: 9, where: "Fig. 4 F - Left Iliac", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4g_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4g_flow
+  citation: {page: 9, where: "Fig. 4 G - Right Femoral", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4g_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4g_pres
+  citation: {page: 9, where: "Fig. 4 G - Right Femoral", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4h_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4h_flow
+  citation: {page: 9, where: "Fig. 4 H - Left Femoral", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4h_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4h_pres
+  citation: {page: 9, where: "Fig. 4 H - Left Femoral", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4i_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4i_flow
+  citation: {page: 9, where: "Fig. 4 I - Right Popliteal", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4i_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4i_pres
+  citation: {page: 9, where: "Fig. 4 I - Right Popliteal", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4j_flow_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig4j_flow
+  citation: {page: 9, where: "Fig. 4 J - Left Popliteal", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig4j_pres_read
+  quantity: arterial_pressure
+  unit: "mmHg"
+  origin: predicted
+  figure: fig4j_pres
+  citation: {page: 9, where: "Fig. 4 J - Left Popliteal", quote: "Volume flow rate and pressure are depicted at inlet, outlets"}
+- id: fig5a_3d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5a_3d
+  citation: {page: 10, where: "Fig. 5 A - Inlet Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}
+  note: "the three-dimensional finite element solution the paper compares its 1D method with"
+- id: fig5a_1d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5a_1d
+  citation: {page: 10, where: "Fig. 5 A - Inlet Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}
+- id: fig5b_3d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5b_3d
+  citation: {page: 10, where: "Fig. 5 B - Native Aorta Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}
+  note: "the three-dimensional finite element solution the paper compares its 1D method with"
+- id: fig5b_1d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5b_1d
+  citation: {page: 10, where: "Fig. 5 B - Native Aorta Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}
+- id: fig5c_3d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5c_3d
+  citation: {page: 10, where: "Fig. 5 C - Bypass Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}
+  note: "the three-dimensional finite element solution the paper compares its 1D method with"
+- id: fig5c_1d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5c_1d
+  citation: {page: 10, where: "Fig. 5 C - Bypass Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}
+- id: fig5d_3d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5d_3d
+  citation: {page: 10, where: "Fig. 5 D - Outlet Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}
+  note: "the three-dimensional finite element solution the paper compares its 1D method with"
+- id: fig5d_1d_read
+  quantity: flow_rate
+  unit: "cm^3/s"
+  origin: predicted
+  figure: fig5d_1d
+  citation: {page: 10, where: "Fig. 5 D - Outlet Flow", quote: "Volume flow rate for three-dimensional and one-dimensional"}

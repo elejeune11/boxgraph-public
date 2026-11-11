@@ -1,0 +1,16 @@
+# The paper states its mesh, time step and number of cycles but no tolerance; 1% is added, below the
+# about 2-3 mmHg (1-2%) that the pressure axes of Figs. 1-2 can be read to.
+- {id: ref_seg_elements, run: run_segment, setting: n_elements, factors: [1, 2, 4, 8], mode: multiply, output: p_in_max,
+   tolerance: "1%", tolerance_basis: "added: about the precision a pressure can be read from Fig. 1 (axis 40-200 mmHg)", tolerance_added: true}
+- {id: ref_seg_steps, run: run_segment, setting: steps_per_cycle, factors: [1, 2, 4, 8], mode: multiply, output: p_in_max,
+   tolerance: "1%", tolerance_basis: "added: about the precision a pressure can be read from Fig. 1 (axis 40-200 mmHg)", tolerance_added: true}
+- {id: ref_seg_steps_qout, run: run_segment, setting: steps_per_cycle, factors: [1, 2, 4, 8], mode: multiply, output: Q_out_max,
+   tolerance: "1%", tolerance_basis: "added: about the precision a flow can be read from Fig. 1 (axis 20-90 cc/s)", tolerance_added: true}
+- {id: ref_seg_steps_delay, run: run_segment, setting: steps_per_cycle, factors: [1, 2, 4, 8], mode: multiply, output: delay,
+   tolerance: "0.005", tolerance_basis: "added: 5 ms, about a quarter of the paper's time step (0.009 s) and below what Fig. 1's time axis (0-1 s) can be read to", tolerance_added: true}
+- {id: ref_seg_cycles, run: run_segment, setting: n_cycles, factors: [1, 2, 4], mode: multiply, output: p_in_min,
+   tolerance: "1%", tolerance_basis: "added: whether three cycles reach a periodic state, at the precision of Fig. 1's pressure axis", tolerance_added: true}
+- {id: ref_bif_mesh, run: run_bifurcation, setting: subdivide, factors: [1, 2, 4], mode: multiply, output: p_in_max,
+   tolerance: "1%", tolerance_basis: "added: about the precision a pressure can be read from Fig. 2", tolerance_added: true}
+- {id: ref_bif_steps, run: run_bifurcation, setting: steps_per_cycle, factors: [1, 2, 4, 8], mode: multiply, output: Q_r_max,
+   tolerance: "1%", tolerance_basis: "added: about the precision a flow can be read from Fig. 2", tolerance_added: true}

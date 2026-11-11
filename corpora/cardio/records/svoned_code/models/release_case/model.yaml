@@ -1,0 +1,18 @@
+# Runs the released executable (corpus/cardio/envs/oned/build/bin/OneDSolver, built from this commit
+# with CSparse; docs/DECISIONS.md) on a case file read from the code folder, as run_oned and
+# read_results_1d of test_integration.py do (lines 46-96), and selects as get_result_value does (lines
+# 99-116). The case files set their own mesh, time step, tolerance and formulation; nothing is
+# changed.
+id: release_case
+name: one of the release's system test cases rerun with the released solver, one selection of its output
+role: model
+stated: {file: Tests/SystemTests/test_integration.py, lines: "21-32", quote: "def run_simulation_and_assert_results(testCaseName, tmpdir, exePath, resultData, run_func):"}
+equation: "the network the case file (Tests/SystemTests/cases/<case>.in) configures, solved by the release's stabilized space-time finite elements (docs/source/content/theory.rst) with its Newton iterations"
+software: true
+inputs: {}
+outputs:
+  P: {quantity: case_pressure, unit: g/cm/s^2, description: "the selection (seg, node, time, fun) of the pressure files"}
+  Q: {quantity: case_flow, unit: cm^3/s, description: "the same selection of the flow files"}
+  S: {quantity: case_area, unit: cm^2, description: "the same selection of the area files"}
+settings: {case: tube_r, seg: 0, node: 0, time: -1, fun: point}
+stochastic: false

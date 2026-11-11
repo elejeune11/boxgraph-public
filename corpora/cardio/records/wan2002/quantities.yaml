@@ -1,0 +1,50 @@
+# Velocity profile and momentum terms (Eqs. 2-6)
+- {id: profile_exponent, name: exponent n of the axisymmetric velocity profile, dimension: "dimensionless", description: "n in Eq. 5; n = 2 is Poiseuille"}
+- {id: momentum_flux_correction, name: momentum-flux correction of the velocity profile, dimension: "dimensionless", description: "delta of Eqs. 2, 3 and 6"}
+- {id: viscous_loss_coefficient, name: viscous loss coefficient of the momentum equation, dimension: "[length]**2/[time]", description: "N of Eqs. 2, 6 and 17: the friction term is N Q/S"}
+- {id: profile_wall_gradient_integral, name: integral of the profile's outward normal derivative around the lumen, dimension: "dimensionless", description: "the right-hand side of Eq. 4 as printed (no viscosity factor)"}
+- {id: kinematic_viscosity, name: kinematic viscosity of blood, dimension: "[length]**2/[time]", description: "nu"}
+- {id: blood_density, name: density of blood, dimension: "[mass]/[length]**3", description: "rho"}
+# Constitutive law (Eqs. 11-14) and wave propagation
+- {id: stiffness_fit_amplitude, name: amplitude k1 of the exponential fit of Eh/r0, dimension: "[mass]/[length]/[time]**2", description: "k1 in Eq. 14"}
+- {id: stiffness_fit_rate, name: exponential rate k2 of the fit of Eh/r0 in r0, dimension: "1/[length]", description: "k2 in Eq. 14"}
+- {id: stiffness_fit_offset, name: asymptotic offset k3 of the fit of Eh/r0, dimension: "[mass]/[length]/[time]**2", description: "k3 in Eq. 14"}
+- {id: wall_stiffness_Eh_over_r0, name: Young's modulus times wall thickness over the reference radius, dimension: "[mass]/[length]/[time]**2", description: "Eh/r0 of Eqs. 11 and 14"}
+- {id: vessel_radius, name: luminal radius of a vessel in its reference state, dimension: "[length]", description: "r0(z) = (S0/pi)^(1/2), Eq. 13; the nominal radius of the examples"}
+- {id: vessel_cross_sectional_area, name: luminal cross-sectional area, dimension: "[length]**2", description: "S(z, t)"}
+- {id: reference_pressure, name: pressure at which the lumen has its reference area S0, dimension: "[pressure]", description: "p0(z) = p(z, 0) of Eqs. 11-12"}
+- {id: arterial_pressure, name: blood pressure in a vessel, dimension: "[pressure]", description: "p(z, t)"}
+- {id: reference_wave_speed, name: pulse wave speed at the reference area, dimension: "[length]/[time]", description: "eigenvalue of A (Eq. 21) at Q = 0, S = S0: ((S/rho) dp/dS)^(1/2)"}
+- {id: pulse_transit_time, name: time for a pulse to travel the length of a vessel, dimension: "[time]"}
+# Geometry and discretization of the examples
+- {id: vessel_length, name: length of a vessel segment, dimension: "[length]"}
+- {id: length_to_diameter_ratio, name: ratio of a vessel's length to its diameter, dimension: "dimensionless"}
+- {id: element_count, name: number of finite elements, dimension: "dimensionless"}
+- {id: element_size, name: length of one finite element, dimension: "[length]"}
+- {id: time_steps_per_cycle, name: number of time steps per cardiac cycle, dimension: "dimensionless"}
+- {id: cardiac_cycle_count, name: number of cardiac cycles computed, dimension: "dimensionless"}
+- {id: outlet_resistance, name: resistance of an outflow boundary, dimension: "[mass]/[length]**4/[time]", description: "R of Eq. 8, p = QR"}
+# Results of the examples
+- {id: time_in_cycle, name: time within the cardiac cycle, dimension: "[time]"}
+- {id: flow_rate, name: instantaneous volume flow rate, dimension: "[length]**3/[time]", description: "Q(z, t)"}
+- {id: mean_flow_rate, name: volume flow rate averaged over a cardiac cycle, dimension: "[length]**3/[time]", description: "the mean flow of Table I"}
+- {id: peak_flow_rate, name: largest volume flow rate over a cardiac cycle, dimension: "[length]**3/[time]"}
+- {id: minimum_flow_rate, name: smallest volume flow rate over a cardiac cycle, dimension: "[length]**3/[time]"}
+- {id: systolic_pressure, name: largest pressure over a cardiac cycle, dimension: "[pressure]"}
+- {id: diastolic_pressure, name: smallest pressure over a cardiac cycle, dimension: "[pressure]"}
+- {id: mean_pressure, name: pressure averaged over a cardiac cycle, dimension: "[pressure]"}
+- {id: peak_flow_delay, name: time from the peak of the inlet flow to the peak of the outlet flow, dimension: "[time]"}
+- {id: flow_asymmetry, name: largest difference over a cycle between the flows of two branches, dimension: "[length]**3/[time]"}
+- {id: junction_pressure_jump, name: largest difference over a cycle between the pressures of the segments meeting at a junction, dimension: "[pressure]"}
+- {id: junction_mass_residual, name: largest imbalance over a cycle between the flow into and out of a junction, dimension: "[length]**3/[time]"}
+- {id: flow_difference_1d_3d, name: difference of the 1D mean flow from the 3D mean flow, dimension: "dimensionless", description: "the Difference (%) column of Table I"}
+# Stenosis model (Eqs. 15-17)
+- {id: stenosis_turbulent_coefficient, name: turbulent (expansion) loss coefficient of the stenosis model, dimension: "dimensionless", description: "Kt of Eqs. 15-16"}
+- {id: stenosis_viscous_factor, name: numerical factor of the viscous loss coefficient Kv of the stenosis model, dimension: "dimensionless", description: "the 32 of Eq. 16"}
+- {id: stenosis_length, name: length of a stenosis, dimension: "[length]", description: "L of Eqs. 16-17"}
+- {id: stenosis_pressure_drop, name: pressure loss across a stenosis, dimension: "[pressure]", description: "Delta p of Eq. 15"}
+- {id: stenosis_diameter_reduction, name: reduction of a vessel's luminal diameter in a stenosis, dimension: "dimensionless", description: "1 - D1/D0; 50% gives S0/S1 = 4 in Eqs. 15-17"}
+# Cost of computation
+- {id: degrees_of_freedom, name: number of degrees of freedom of a discretized model, dimension: "dimensionless"}
+- {id: cpu_time, name: CPU time of a solution, dimension: "[time]"}
+- {id: speedup_factor, name: ratio of the 3D to the 1D solution time, dimension: "dimensionless"}

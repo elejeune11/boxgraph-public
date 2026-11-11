@@ -275,3 +275,36 @@
     them. The measured flows and pressures need network_1d, which is not runnable (q_network_not_runnable).
     Details in svzerod_code/q_no_validation_vs_olufsen2000.
   citation: {page: 11, printed_page: "1291", quote: "pressures were 120/80 mmHg 共measured with a cuff兲; for", where: text}
+- id: q_no_validation_vs_svoned_code
+  kind: choice
+  about: [kinematic_viscosity, tube_law_eq14, network_1d, inflow_fig3, q_aortic_arc_meas_fig7, q_l_subclavian_meas_fig7,
+          q_femoral_meas_fig7, p_systolic_cuff, p_diastolic_cuff, r_t_ascending_aorta, T_fig3_caption, heart_rate_results,
+          svoned_code/profile_terms_code, svoned_code/boileau_vessel_svoned]
+  text: >
+    (Validation job olufsen2000+svoned_code, 2026-11-10; the release's theory notes cite olufsen1999, not this paper.)
+    No validation is entered in either direction. svoned_code is software and holds no measurement, so no model here
+    can be judged against it; the shared shape of kinematic_viscosity and svoned_code/profile_terms_code (nu from
+    rho and mu) joins two computations on reported inputs, not a model and a measurement. In the other direction,
+    this paper's measurements are the MR flows of Figs. 3 and 7, the cuff pressures 120/80 mmHg, the inlet radius
+    of Table 1, the 1.1 s cycle and the heart rate of 51 per minute. The flows and pressures depend on the whole
+    arterial network with structured-tree outflow; svOneDSolver has no impedance outflow (svoned_code/
+    q_impedance_not_in_code), its runnable solver models in that record are a single uniform vessel and the
+    Benchmark 4 bifurcation with RCR outlets, and running one vessel of this subject with an RCR would need
+    terminal R1, C, R2 that neither source prints, which would be fitted to these same curves (not a test). Its
+    inflow is also a released benchmark file (a setting), not this paper's Fig. 3. The algebraic ports (OLUFSEN
+    law: pressure from area; profile terms; RCR impedance; stenosis loss) give no radius, period, heart rate,
+    flow waveform or arm pressure of this subject. Details in svoned_code/q_no_validation_vs_olufsen2000.
+  citation: {page: 11, printed_page: "1291", quote: "pressures were 120/80 mmHg 共measured with a cuff兲; for", where: text}
+- id: q_no_validation_vs_wan2002
+  kind: choice
+  about: [network_1d, tube_law_eq14, q_aortic_des_meas_fig7, q_aorta_bif_meas_fig7, q_iliac_meas_fig7, p_systolic_cuff,
+          p_diastolic_cuff, wan2002/abdominal_aorta_1d]
+  text: >
+    (Validation job olufsen2000+wan2002, 2026-11-10.) No validation is entered in either direction. wan2002 holds no
+    measured datum: its values are reported inputs, derived numbers and its own simulation results, so no model here
+    can be judged against it. network_1d and wan2002/abdominal_aorta_1d share the shape of their ports, but both are
+    not runnable (q_network_not_runnable) and they model different networks. In the other direction, no model of
+    wan2002 can be run on this subject's conditions to give the Fig. 7 flows or the cuff pressures without geometry
+    and outlet resistances that neither paper prints, which would be fitted to these same curves. Details in
+    wan2002/q_val_olufsen2000_none.
+  citation: {page: 11, printed_page: "1291", quote: "pressures were 120/80 mmHg 共measured with a cuff兲; for", where: text}

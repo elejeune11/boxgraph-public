@@ -406,3 +406,69 @@
     solver. Those runs are compared, as consistency checks, with svv's own growth pressures
     (svv_code/q_export_pressure, q_export_outlets). That checks one code against the other, not against
     data. See svv_code/q_no_validation_vs_svzerod_code.
+- id: q_no_validation_vs_svoned_code
+  kind: choice
+  about: [coronary_kim2010_ode, coronary_released, coronary_pair_released, coronary_split_released, varres_released, release_case,
+          windkessel_released_impedance, impedance_released]
+  citation: {none: "a finding of the validation job between svoned_code and svzerod_code, not a printed statement"}
+  text: >
+    (Validation job svoned_code+svzerod_code, 2026-11-10.) No validation is entered, in either direction, and no
+    fit. svoned_code measures nothing. Its data are svOneDSolver's settings, the expected values of its system
+    tests and the benchmark inputs, and it has no figure readings, so no model here can be tested against it.
+    This record measures nothing either (see q_no_validation_vs_svv_code), so svoned_code's models cannot be
+    tested against it. The pair was proposed because coronary_kim2010_ode and svoned_code/boileau_bifurcation_svoned
+    have the same signature (a flow from [length]**4*[time]**2/[mass] and time). That is a coincidence of
+    dimensions: a lumped coronary bed under sinusoidal pressures and a 1D aortic bifurcation predict no quantity
+    the other measures. The shared RCR outlet is related model to model in svoned_code's relations.yaml
+    (rel_rcr_svzerod_modulus, rel_rcr_svzerod_phase): a check of one code against the other, not against data.
+    See svoned_code/q_no_validation_vs_svzerod_code.
+- id: q_no_relation_davies2006
+  kind: choice
+  about: [coronary_kim2010_ode, coronary_released, coronary_pair_released, coronary_split_released, varres_released]
+  citation: {none: "a finding of the relation job between davies2006 and svzerod_code, not a printed statement"}
+  text: >
+    (Relation job davies2006+svzerod_code, 2026-11-10.) Nothing is entered between this record and davies2006,
+    the human coronary wave intensity measurements. Neither source mentions the other: the code's block headers
+    and docs/references.bib do not cite it, and the 2006 paper is older than the code. So no relation is stated,
+    and neither record takes a value from the other (no cited.yaml lines). None is proposed. davies2006's models
+    are signal processing of measured increments (wave separation, single-point wave speed, wave intensity) and
+    arithmetic on group statistics. This record's models are lumped coronary beds and resistances, and they have
+    no wave speed, no wave propagation and no velocity. No input of one maps onto an input of the other. A 0D
+    block gives no forward/backward split, so it cannot predict a separated wave intensity. No validation is
+    entered either. coronary_released and coronary_kim2010_ode give the flow extrema of a bed driven by a
+    sinusoidal pressure and a kim2010 bed (one subject's tuned resistances). davies2006 measures Doppler velocity
+    with no vessel diameter, and its pressures would be inputs, not predictions. This is the gap that
+    davies2006/q_validation_candidates and davies2006/q_no_validation_vs_kim2010 already describe for the same
+    kim2010 beds. See davies2006/q_no_relation_svzerod_code.
+# ---- cross-validation with davies2006, 2026-11-10 ----
+- id: q_no_validation_vs_davies2006
+  kind: unstated_input
+  about: [coronary_released, coronary_kim2010_ode, coronary_pair_released, coronary_split_released, varres_released,
+          ram_code_port, ram_yong_eq9, impedance_released, impedance_olufsen_eq38, windkessel_released_impedance, release_case,
+          'davies2006/velocity_lvh', 'davies2006/velocity_nonlvh', 'davies2006/sbp_all', 'davies2006/dbp_all',
+          'davies2006/fig3_pressure_trace', 'davies2006/fig3_velocity_trace', 'davies2006/t2_peak_w2', 'davies2006/t2_cum_w5']
+  citation: {none: "a finding of the validation job between davies2006 and svzerod_code, not a printed statement"}
+  text: >
+    (Validation job davies2006+svzerod_code, 2026-11-10.) No validation is entered in either direction, and no fit;
+    no validations.yaml line is added. Each of davies2006's measurements was checked against each block here.
+    (1) Wave intensities (Table 2 peaks and cumulative values of waves 1-6, their shares, the Fig. 3-5 WI+ and WI-
+    traces and peaks): no block has a wave speed or propagation, so none gives a forward/backward separation; the
+    blocks' outputs are cycle summaries (flow mean/max/min, mean and peak Ram, pressure mean/max/min, impedance
+    modulus/phase), not time derivatives of pressure and velocity, so not even the net intensity can be formed.
+    (2) Mean coronary velocity (0.43 ± 0.52 and 0.42 ± 0.35 m/s) and the velocity rises in relaxation and
+    contraction: coronary_released, coronary_kim2010_ode, coronary_pair_released and coronary_split_released give
+    bed flows in cm^3/s, not velocities. A comparison would need a vessel area davies2006 does not print (it gives
+    only the 0.014-inch wire diameter), a factor from Doppler peak to cross-sectional mean velocity
+    (davies2006/q_mean_velocity_meaning), the bed's resistances and capacitances for these 20 subjects, which
+    neither source states (the only coronary values here are kim2010's beds of one patient and the release's test
+    values), and a cycle length, since davies2006 prints no heart rate. With all of these added the test could not
+    fail on anything measured. (3) Pressures (146/81 mmHg cohort, the group values, the Fig. 3 and 5 coronary
+    pressure traces): in the coronary blocks pressure is an input, not an output. impedance_released and
+    impedance_olufsen_eq38 give an outlet pressure from an outlet flow and an impulse response, and
+    windkessel_released_impedance an impedance; davies2006 measures no flow and no impedance, and a kernel or
+    Windkessel chosen to land on 146/81 mmHg would be a fit to that measurement, not a test. (4) varres_released,
+    ram_code_port and ram_yong_eq9 give a microvascular resistance, which davies2006 does not measure;
+    release_case reruns fixed test cases. (5) The relations davies2006 reports (suction share against septal
+    thickness, age or wave speed; the regression slopes) are trends over subjects that no block models. The other
+    direction is empty because this record measures nothing. See davies2006/q_no_validation_vs_svzerod_code and
+    q_no_relation_davies2006.

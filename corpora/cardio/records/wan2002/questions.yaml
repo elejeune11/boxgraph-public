@@ -1,0 +1,349 @@
+- id: q_eq4_viscosity
+  kind: possible_error
+  about: [profile_terms_eq3_5, profile_terms_eq3_5_nu, profile_terms_eq6]
+  text: >
+    Eq. 4 is printed as N = oint dphi/dm dl, which is dimensionless, while N Q/S in Eq. 2 must have the
+    units of dQ/dt, so N needs units of cm^2/s. Eq. 6 (N = -2(n + 2) pi nu) and p. 3 ("-8 pi nu for the
+    case of Poiseuille flow") carry a factor nu that Eq. 4 lacks. The record keeps Eq. 4 as printed
+    (profile_terms_eq3_5, output Nint) and adds the variant with the factor nu (profile_terms_eq3_5_nu),
+    compared with Eq. 6 in cmp_N_eq4_nu_eq6 and rel_N_eq6_from_eq4_nu. The release's theory notes
+    (docs/source/content/theory.rst) give only the result N = -8 pi nu.
+  citation: {page: 2, printed_page: "196", quote: "where da is the cross-sectional area form, dl is the", where: "Eq. 4"}
+- id: q_advective_resistance
+  kind: choice
+  about: [single_segment_svoned, bifurcation_svoned, run_segment, run_bifurcation]
+  text: >
+    The paper solves the advective (quasi-linear) form, Eqs. 19-35, with the resistance outlet imposed
+    as an essential condition (Eqs. 49-52). The released solver keeps that form as formulation 0, but
+    with a RESISTANCE outlet it stops at the first time step ("Calculated a NaN for the residual"):
+    on the paper's single segment here, and also on the release's own test cases tube_r, bifurcation_R
+    and 02_simpleArtery_Resistance switched to formulation 0 (they complete with formulation 1; the
+    pressure-outlet cases tube_pressure and bifurcation_P complete with both). The record therefore
+    runs the release's conservative form (formulation 1), whose resistance outlet is the boundary flux
+    term of the theory notes, not the paper's Eqs. 49-52. Whether the paper's own method gives the same
+    flows and pressures cannot be checked with the release.
+  citation: {page: 5, printed_page: "199", quote: "The resistance boundary condition amounts to a", where: "Eqs. 49-52"}
+- id: q_inflow_waveform
+  kind: unstated_input
+  about: [single_segment_svoned, single_segment_svoned_curve, bifurcation_svoned, bifurcation_svoned_curve, run_segment, run_bifurcation]
+  text: >
+    The inflow Qin(t) of Eq. 7 is given only as the plotted inlet curves of Figs. 1-3, with no values
+    and no period. The runs read the table AORTAFLOW of the release's test case
+    Tests/SystemTests/cases/05_bifurcation_RCR.in at run time (setting inflow_file; nothing of it is
+    copied here); its period, 0.9 s, is the last time of the table. By eye it has the shape of the
+    inlet flow of Fig. 1 (about 35 cc/s at t = 0, a peak near 80 cc/s at about 0.22 s, a minimum
+    near 27 cc/s at about 0.42 s, a second peak near 43 cc/s at about 0.62 s), but that is not checked
+    here: a reading of Fig. 1's inlet flow, with the curve model's Q_in swept over it, would check it.
+  citation: {page: 6, printed_page: "200", quote: "Volume flow rate is specified at the inlet and a resistance boundary condition", where: "Fig. 1 caption"}
+- id: q_segment_resistance
+  kind: unstated_input
+  about: [R_segment_added, run_segment]
+  text: >
+    The single segment's outlet resistance is not printed. The added value follows the ratio of outlet
+    pressure to outlet flow in Fig. 1 read by eye; a reading of both outlet curves would fix it (with
+    p = QR their ratio is R at every time), and would test whether Fig. 1's outlet obeys Eq. 8.
+  citation: {page: 6, printed_page: "200", quote: "at the inlet and a resistance boundary condition was specified at the outlet", where: "Fig. 1 caption"}
+- id: q_bifurcation_inputs
+  kind: unstated_input
+  about: [r_bif_inlet_added, r_bif_branch_added, R_bif_added, run_bifurcation]
+  text: >
+    For the bifurcation only the mesh is printed (16 elements in the inlet branch, 17 in each daughter,
+    1 cm each). The radii (the vessel "chosen to correspond approximately to the human aortic
+    bifurcation"), any taper (the drawing of Fig. 2 shows a tapering inlet branch), and the equal
+    outlet resistances are not; they are added. The run checks what the text claims qualitatively
+    (equal branch flows and pressures, pressure continuity and mass conservation at the junction:
+    outputs bif_flow_asym, bif_p_jump, bif_mass_res), not the plotted curves.
+  citation: {page: 6, printed_page: "200", quote: "dimensions of this vessel were chosen to correspond", where: text}
+- id: q_quadrature
+  kind: choice
+  about: [single_segment_svoned, bifurcation_svoned]
+  text: >
+    Settings the paper does not give and the solver needs: the number of quadrature points (2 here),
+    the Newton tolerance (1e-8), the initial flow Q0 of Eq. 9 (0 here) and the initial area (S0, at
+    the added reference pressure). The refinements of the mesh, the time step and the number of cycles
+    show whether the last cycle depends on them.
+  citation: {page: 2, printed_page: "196", quote: "The initial conditions for this problem are given by", where: "Eq. 9"}
+- id: q_fig1_delay
+  kind: unexplained_difference
+  about: [wave_speed_eq21, transit_segment_pred, seg_delay, single_segment_svoned]
+  text: >
+    In Fig. 1 the outlet flow and pressure lag the inlet ones by a time of the order of 0.1 s (read by
+    eye) over a 16 cm segment, a wave speed of order 1.5 m/s. The paper's own constitutive law at
+    r0 = 0.4 cm (Eqs. 11 and 14 with the default k1, k2, k3, and the eigenvalue of Eq. 21) gives a
+    transit time (transit_segment_pred) several times shorter, and the released solver's run gives a
+    peak-to-peak delay (seg_delay) of the same order as that transit time, not of Fig. 1's lag. Either
+    Fig. 1 was computed with other wall properties than the printed defaults, or with another length,
+    or its time axis differs; the paper does not say. A reading of Fig. 1 (both curves) would turn this
+    into a comparison.
+  citation: {page: 6, printed_page: "200", quote: "Note the propagation of the flow and pressure", where: "Fig. 1"}
+- id: q_table1_difference_definition
+  kind: reading
+  about: [flow_difference_table1]
+  text: >
+    Table I does not define its Difference (%). The record reads it as 100 (1D - 3D)/3D, the only one of
+    the obvious readings that gives the printed signs and magnitudes (relative to the 1D flow, the
+    preoperative R femoral row would be -57, not -36). Rounded to the nearest percent it gives the
+    printed values, one of them only within the rounding of the printed flows (q_table1_lpop_femfem);
+    truncation would instead miss the Fem-Fem R popliteal (39) and the end-to-end L femoral (-26) rows.
+  citation: {page: 7, printed_page: "201", quote: "Flow (cc/s) 1D 3D Difference (%)", where: "Table I"}
+- id: q_table1_lpop_femfem
+  kind: reading
+  about: [diff_femfem_lpop, cmp_diff_femfem_lpop]
+  text: >
+    Angioplasty with Fem-Fem bypass, L popliteal: the printed flows, 1D 5.34 and 3D 4.83 cc/s, give a
+    difference that rounds to 11, but 10 is printed. Within the rounding of the two printed flows the
+    difference can round to 10, and the comparison is reproduced only on that basis, so the paper
+    presumably computed it from unrounded flows; the printed table alone cannot tell.
+  citation: {page: 7, printed_page: "201", quote: "L popliteal 5.34 4.83 10", where: "Table I"}
+- id: q_ranking_claim
+  kind: overstated_claim
+  about: [cmp_1d3d_femfem_rfem, cmp_1d3d_afb_e2e_rfem, cmp_1d3d_afb_e2s_rfem, cmp_1d3d_femfem_lfem, cmp_1d3d_afb_e2e_lfem,
+          cmp_1d3d_afb_e2s_lfem, cmp_1d3d_femfem_rpop, cmp_1d3d_afb_e2e_rpop, cmp_1d3d_afb_e2s_rpop, cmp_1d3d_femfem_lpop,
+          cmp_1d3d_afb_e2e_lpop, cmp_1d3d_afb_e2s_lpop, aortoiliac_plans_1d]
+  text: >
+    The paper's stated goal is to "rank outcomes of proposed surgical procedures in the same order as a
+    fully three-dimensional simulation" (p. 2), and it reports that the 1D solutions "compare
+    favorably" (p. 8) and show "overall good agreement" (p. 9). In Table I the 1D and 3D columns order
+    the three treatment plans differently at every one of the four outlet locations: by the 3D flows
+    the end-to-side AFB gives the most flow at the R femoral, R popliteal and L popliteal locations
+    (8.24 vs 11.05, 4.64 vs 5.15, 5.66 vs 6.03 cc/s), while by the 1D flows the end-to-end AFB does
+    (8.98, 5.05, 5.72); at the L femoral the 1D puts the Fem-Fem plan first (15.72) and the 3D the
+    end-to-side AFB (13.02). The plan with the least flow is the same in both at every location
+    (Fem-Fem at three, end-to-end AFB at the L femoral); the first two places are swapped at all four.
+    No 1D-3D difference of a branch flow is within the printed precision (comparisons cmp_1d3d_*),
+    and they reach -38% and +142%. The paper does not discuss the ranking it set out to show.
+  citation: {page: 2, printed_page: "196", quote: "can rank outcomes of proposed surgical procedures in", where: text}
+- id: q_examples_not_runnable
+  kind: unstated_input
+  about: [abdominal_aorta_1d, aortoiliac_plans_1d, porcine_bypass_1d]
+  text: >
+    The idealized abdominal aorta (Fig. 3), the aorto-iliac case with its three treatment plans
+    (Table I, Fig. 4) and the porcine bypass (Fig. 5) cannot be rebuilt: the paper prints none of their
+    geometry, outlet resistances, stenosis dimensions, inflow values or (except for the plans' 200
+    steps and five cycles) numerical settings. Their 1D results are therefore not checked against
+    the paper's method; only the arithmetic of Table I's Difference column is. The 1D/3D comparison
+    itself (Table I, Fig. 5) is the paper's validation against Taylor et al. [1], whose 3D flows are
+    printed only here.
+  citation: {page: 6, printed_page: "200", quote: "abdominal aorta with varying vessel dimensions and", where: "Results"}
+- id: q_stenosis_length_code
+  kind: unexplained_difference
+  about: [stenosis_dp_eq15, stenosis_dp_eq17, aortoiliac_plans_1d, Kv_factor_stenosis]
+  text: >
+    Eq. 16 prints Kv = 32 (L/D0)(S0/S1)^2 with L the length of the stenosis. The released solver's
+    stenosis loss (Code/Source/cvOneDMthSegmentModel.cxx, lines 174-182) uses instead an effective
+    length La = 0.83 L + 1.64 D1 (D1 the diameter in the stenosis), with "La = L" commented out
+    (line 179); Kt = 1.52 (line 174) and N of Eq. 17 (lines 184-185 and the commented formula on line
+    213) agree with the paper. Seeley and Young [12], whom the paper cites for the formula, are not in
+    this review. Which form produced Table I is not stated. Both the printed form and the code's carry
+    the stated relation of Eq. 17 to Eq. 15 (rel_stenosis_eq17_from_eq15), which holds for either.
+  citation: {page: 3, printed_page: "197", quote: "the length of the stenosis", where: "Eq. 16"}
+- id: q_profile_exponent_release
+  kind: unexplained_difference
+  about: [n_poiseuille, single_segment_svoned]
+  text: >
+    The paper sets n = 2 (Poiseuille: delta = 1/3, N = -8 pi nu), and so do the release's theory notes
+    (theory.rst, "delta = 1/3, N = -8 pi nu"). The release computes delta = 1/(1 + n) and
+    N = -2 pi nu (n + 2) from the MATERIAL card's exponent field (Code/Source/cvOneDMaterial.h, lines
+    99-103), as Eq. 6 does. The release's test cases with physiological walls (Olufsen's default
+    k1, k2, k3: 02_simpleArtery_Resistance, 04_simpleArtery_Pressure, 05_bifurcation_RCR,
+    12_AortoFem_Pulse_R, 14_AortoFem_Pulse_RCR, the coronary case) and the example in
+    docs/source/content/inputFileGuide.rst set that exponent to 1.0, that is delta = 1/2 and
+    N = -6 pi nu, and bifurcation_RCR sets 9.0; only the near-rigid analytic tube and bifurcation cases
+    use the paper's 2. The runs here use the printed n = 2.
+  citation: {page: 2, printed_page: "196", quote: "We assume a Poiseuille profile for our problem, and thus", where: "text after Eq. 6"}
+- id: q_eq41_index
+  kind: reading
+  about: [bifurcation_svoned]
+  text: >
+    Eq. 41 (p. 5) sums over C = 1..m and C = 1..n but prints the summand as Q_i^in and Q_i^out, with an
+    index i that is not defined; Eq. 42 writes the same sum with Q_C. The record reads Eq. 41 as the sum of
+    Q_C, which is mass conservation at the junction as the text states. Added by the audit.
+  citation: {page: 5, printed_page: "199", quote: "following m þ n constraints must hold", where: "Eq. 41"}
+- id: q_reference_state_olufsen
+  kind: reading
+  about: [pressure_area_eq11, rel_pressure_area_olufsen1999, p_ref_added]
+  text: >
+    Eq. 11 has Olufsen's form, but its reference state differs in meaning: here S0 and p0 are the
+    initial area and pressure (Eqs. 9 and 12), while Olufsen [11] takes A0 at zero transmural pressure
+    with p0 the surrounding pressure, and fits k1, k2, k3 against that radius. Applying the same
+    constants at the radius of an initial state (the release's examples use 85 mmHg) gives a different
+    wall stiffness for the same vessel. The relation to olufsen1999 holds as a function; the added
+    reference pressure carries the alternatives 0 and 100 mmHg.
+  citation: {page: 2, printed_page: "196", quote: "used is that suggested by Olufsen", where: "Eqs. 11-12"}
+- id: q_fig1_curves
+  kind: unexplained_difference
+  about: [run_fig1_curves, cmp_fig1_Q_in, cmp_fig1_Q_out, cmp_fig1_p_in, cmp_fig1_p_out, single_segment_svoned_curve, q_fig1_delay, q_inflow_waveform]
+  text: >
+    Added by the figure stage. The calibrated readings of Fig. 1 turn the eye-read doubt of q_fig1_delay
+    into comparisons (cmp_fig1_*, one per plotted curve). The released solver's inlet flow, taken from the
+    release's inflow table (q_inflow_waveform), follows the reading of Fig. 1's inlet flow closely over the
+    whole cycle, so that table has the shape Fig. 1 plots. The run's outlet flow and pressure peak much
+    earlier than Fig. 1's dashed curves, and its pressures differ from the plotted ones, with the printed
+    radius, length and wall constants and the added density, viscosity, reference pressure and resistance.
+    Which unprinted input or setting (or which other wall law) gives Fig. 1's delay is not stated.
+  citation: {page: 6, printed_page: "200", quote: "Note the propagation of the flow and pressure", where: "Fig. 1"}
+- id: q_fig2_damping
+  kind: unexplained_difference
+  about: [run_fig2_curves, cmp_fig2_Q_in, cmp_fig2_p_in, cmp_fig2_Q_r, cmp_fig2_p_r, cmp_fig2_Q_l, r_bif_inlet_added, r_bif_branch_added, R_bif_added, q_bifurcation_inputs]
+  text: >
+    Added by the figure stage. In the readings of Fig. 2 each branch carries about half the inlet flow at
+    every time, in phase with it and with the same shape, and each pressure follows its flow; the
+    bifurcation behaves almost like a pair of resistances with no compliance. The released solver's run,
+    with the added radii and resistances, damps the branch flows strongly and gives a much smaller pressure
+    swing (cmp_fig2_*). The radii, any taper and the resistances of Fig. 2 are not printed
+    (q_bifurcation_inputs), so whether stiffer or narrower vessels reproduce the figure cannot be settled
+    from the paper.
+  citation: {page: 7, printed_page: "201", quote: "Note that the exit pressures and flow rates are identical for the two branch vessels", where: "Fig. 2 caption"}
+- id: q_fig_outlet_resistance
+  kind: reading
+  about: [R_segment_added, R_bif_added, q_segment_resistance, fig1_flow_outlet_read, fig1_pres_outlet_read, fig2b_flow_read, fig2b_pres_read]
+  text: >
+    Added by the figure stage; bears on q_segment_resistance. With p = QR at an outlet (Eq. 8) the ratio
+    of a plotted outlet pressure to its outlet flow must be the same at every time. In the readings it
+    nearly is: for Fig. 1's outlet (fig1_pres_outlet_read over fig1_flow_outlet_read) at about 2.25
+    mmHg s/cc, which is close to the added R_segment_added (3100 g/s/cm^4, about 2.3 mmHg s/cc); for
+    Fig. 2's right iliac outlet (fig2b_pres_read over fig2b_flow_read) at about 3.7 to 3.85 mmHg s/cc,
+    about 5000 g/s/cm^4, lower than the added R_bif_added (6200) and near its alternative 5200. These ratios
+    are taken by inspection of the readings: a model input is a scalar, so no run can divide two read
+    curves. The added values are left as they are.
+  citation: {page: 6, printed_page: "200", quote: "at the inlet and a resistance boundary condition was specified at the outlet", where: "Fig. 1 caption"}
+- id: q_fig4_table1
+  kind: unexplained_difference
+  about: [fig4i_flow_read, fig4j_flow_read, fig4g_flow_read, fig4h_flow_read, fig4a_flow_read, q1d_afb_e2e_rpop, q1d_afb_e2e_lpop, q1d_afb_e2e_rfem, q1d_afb_e2e_lfem, q1d_afb_e2e_aorta]
+  text: >
+    Added by the figure stage. Fig. 4 shows the 1D solution of the plan "AFB with end to end
+    anastomosis", whose mean flows are Table I's 1D column for that plan. In the readings, the right and
+    left popliteal flows (panels I and J) stay below 5 cc/s at every time read, and in the image over the
+    whole cycle, so their cycle means are below 5 cc/s, while Table I prints 5.05 (R popliteal) and 5.72
+    (L popliteal) cc/s. By inspection the inlet (panel A) and the femoral flows (G, H) are about as large
+    on average as the table's aorta, R femoral and L femoral values. Either Fig. 4 and Table I come
+    from different runs, or the popliteal panels show other locations than the table's rows; the paper
+    does not say. No run here averages a read curve (a model input is a scalar), so this is not a
+    comparison.
+  citation: {page: 9, printed_page: "203", quote: "Volume flow rate and pressure are depicted at inlet, outlets", where: "Fig. 4 caption"}
+
+# Added by the cross-validation job with reymond2009.
+- id: q_no_validation_vs_reymond2009
+  kind: choice
+  about: [wave_speed_eq21, abdominal_aorta_1d, bifurcation_svoned, single_segment_svoned, k1_default, k2_default, k3_default]
+  text: >
+    (Cross-validation with reymond2009, which cites this paper as ref. 69, job 2026-11-10.) No validation is
+    entered in either direction. reymond2009 cites this paper only as a row of its Table 1 survey of 1-D
+    models (p. 2), and neither paper says that its model explains or is compared with the other's data.
+    This paper prints no measurements (figures.md: every plot is a computed 1D or 3D result), so no model of
+    reymond2009 has anything here to be validated against.
+    In the other direction, reymond2009 measures flows and radial, carotid and temporal pressures in its own
+    subjects (Tables 4-5, Figs. 4-5), Senzaki et al.'s normalized elastance (Fig. 1B) and literature PWV
+    against lumen diameter (Fig. 3, pwv_lit_fig3). The 1-D solver models here (single_segment_svoned,
+    bifurcation_svoned, abdominal_aorta_1d) share the shape of reymond2009/arterial_tree_1d, but they run
+    this paper's idealized geometries with its own inflow, not reymond2009's tree or subjects, so they do
+    not give the flows or pressures measured there. The only quantity crossed is wave speed:
+    wave_speed_eq21 gives c0 = ((2/3)(Eh/r0)/rho)^(1/2) with Olufsen's Eh/r0 (k1_default, k2_default,
+    k3_default), the same law as mynard2015/wave_speed_eq3, which is validated against pwv_lit_fig3. But
+    wave_speed_eq21 takes the reference radius r0 (vessel_radius), while pwv_lit_fig3 is indexed by lumen
+    diameter. A radius and a diameter are different quantities, so the curve cannot be swept into this
+    port, and a validation entry cannot halve its index. This record's models may not be changed by this
+    job. A model that takes the diameter (or a sweep that converts the index) would make this test
+    possible. The k values were set "to experimental data" (p. 3), not to reymond2009's six sources, so it
+    would be a validation, not a fit.
+  citation: {page: 3, printed_page: "197", quote: "to experimental data and are set to default values of", where: "Eq. 14 text"}
+- id: q_no_validation_vs_westerhof1969
+  kind: choice
+  about: [wave_speed_eq21, single_segment_svoned, bifurcation_svoned, abdominal_aorta_1d, aortoiliac_plans_1d, porcine_bypass_1d]
+  text: >
+    No validation against westerhof1969 is entered, in either direction (cross-validation job 2026-11-10).
+    This paper cites it only as a lumped parameter model (p. 1) and never says its own model explains or
+    predicts westerhof1969's data; this record has no measured datum, so nothing here can test a
+    westerhof1969 model. westerhof1969's measurements are (a) the apparent wave velocity in man of
+    Luchsinger et al. and Gabe et al. per harmonic (Fig. 7; fig7_luchsinger_fig, fig7_gabe_fig) and (b) values
+    measured on its own analog: the RC decay times tau_normal, tau_stiff, tau_high, tau_low and the stiff-system
+    increases of impedance level and wave velocity (dZin_stiff_printed, dc_stiff_printed). (a) The nearest model
+    here is wave_speed_eq21, but it gives the local wave speed at rest (reference_wave_speed) of one vessel of
+    radius r0, while Fig. 7 plots an apparent velocity from phase delays of each harmonic along the whole aorta,
+    which includes reflections and varies with frequency; the two are different quantities, as westerhof1969's
+    own figures.md also holds for its phase velocity, and this model has no frequency input. (b) The analog
+    measurements belong to westerhof1969's 121-segment network, which no model here represents; wave_speed_eq21
+    gives a speed, not a relative increase, and a ratio of two runs cannot be formed by a validation entry.
+  citation: {page: 1, quote: "parameter models [2,3], one-dimensional linear pulse", where: text}
+- id: q_val_olufsen1999_scope
+  kind: choice
+  about: [stiffness_eq14, pressure_area_eq11, wave_speed_eq21, abdominal_aorta_1d, single_segment_svoned, bifurcation_svoned, k1_default, k2_default, k3_default]
+  text: >
+    (Cross-validation with olufsen1999, Wan's ref. 11, job 2026-11-10.) One entry, val_eq14_vs_olufsen1999_fig3_data,
+    as fit_quality: Wan's Eq. 14 with its default constants, which are olufsen1999's fit to its Fig. 3 data, against
+    those data. It is not a test of Wan's law; it repeats olufsen1999's own cmp_eq6_fig3_data through Wan's model.
+    No other measurement of olufsen1999 is predicted by a model here. inflow_fig4 (the measured MR inflow) is an
+    input of a 1D model, never its output. co_measured (4.14 l/min) is a measured cardiac output, which no model
+    here produces. The measured input impedances of Fig. 9 (Zmod_md0/md1_fig9b, Zphase_md0/md1_fig9c) need an
+    impedance model of the small arteries; Wan uses only resistance outlets (Eq. 8) and names Olufsen's
+    structured tree only as a better outflow condition (p. 11), with no model of it. The pressures of Fig. 12
+    (p_aortic_fig12a, p_0cm_fig12b, p_radial_fig12b; Remington and Wood, ref. 41) are measured in the human
+    aorta and subclavian-brachial-radial path; Wan's 1D models run its own idealized single segment,
+    bifurcation and abdominal aorta (the last not runnable), none of them that network with that inflow.
+    The shared port shape of olufsen1999/larger_arteries_1d and abdominal_aorta_1d does not make either predict
+    the other's data: both are not runnable, and they model different networks (relations.yaml). In the other
+    direction, this record has no measured datum (figures.md: every plot is a computed result), so no model of
+    olufsen1999 has anything here to be validated against.
+  citation: {page: 3, printed_page: "197", quote: "In this relationship, k1, k2, and k3 are derived by a best fit", where: "Eq. 14 text"}
+- id: q_val_olufsen2000_none
+  kind: choice
+  about: [abdominal_aorta_1d, single_segment_svoned, bifurcation_svoned, stiffness_eq14, pressure_area_eq11, wave_speed_eq21,
+          olufsen2000/network_1d, olufsen2000/q_aortic_des_meas_fig7, olufsen2000/q_aorta_bif_meas_fig7,
+          olufsen2000/q_iliac_meas_fig7, olufsen2000/p_systolic_cuff, olufsen2000/p_diastolic_cuff]
+  text: >
+    (Cross-validation with olufsen2000, job 2026-11-10.) No validation is entered in either direction. Wan cites
+    olufsen1999 as ref. 11 (p. 2, p. 11) and does not cite olufsen2000, and neither paper says one's model explains
+    the other's data. olufsen2000's measurements are the MR flows of Figs. 3 and 7 at nine sites, the cuff pressures
+    120/80 mmHg, the inlet radius of Table 1, the 1.1 s cycle and the heart rate of 51 per minute, all of one
+    subject. The flows at the descending aorta, the aortic bifurcation and the iliac (Fig. 7 F, G, H) lie in the
+    region Wan's abdominal_aorta_1d represents, and the two models share the shape of their ports, but
+    abdominal_aorta_1d is not runnable (q_examples_not_runnable: no dimension, resistance, mesh or time step printed)
+    and models an idealized aorta with resistance outlets set to Taylor et al.'s mean flows, not this subject's
+    network with its MR inflow. Running it on olufsen2000's conditions would need geometry and outlet resistances
+    neither paper prints for that subject; choosing them to match Fig. 7 would make it a fit, not a test. The
+    runnable single segment and bifurcation are Wan's own idealized examples. The algebraic models (Eq. 14 stiffness,
+    Eq. 11 pressure from area, Eq. 21 wave speed) give no flow, arm pressure, radius, period or heart rate, and
+    olufsen2000 measures no stiffness, area-pressure pair or wave speed for them to predict. In the other direction,
+    this record has no measured datum (every data entry is reported, derived or predicted, and every figure is a
+    computed result, figures.md), so no olufsen2000 model has anything here to be validated against.
+  citation: {page: 11, printed_page: "205", quote: "branches of arterial models. Olufsen [11] described a", where: text}
+- id: q_val_stergiopulos1992_none
+  kind: choice
+  about: [single_segment_svoned, bifurcation_svoned, bifurcation_svoned_curve, aortoiliac_plans_1d, abdominal_aorta_1d,
+          stenosis_dp_eq15, stenosis_dp_eq17, stergiopulos1992/PI_knee_gosling, stergiopulos1992/sys_ratio_ankle_fronek_normal,
+          stergiopulos1992/arterial_tree_1d]
+  text: >
+    (Cross-validation with stergiopulos1992, Wan's ref. 9, job 2026-11-10.) No validation is entered in either
+    direction. Wan cites ref. 9 twice: p. 3, for the underestimated viscous losses that motivate a stenosis model,
+    and p. 11, for its modified Windkessel outflow condition. Neither citation says that a model of either paper
+    explains or is compared with the other's data. stergiopulos1992's measurements are taken from other works: the
+    Gosling et al. pulsatility indices of Fig. 7 (aortic bifurcation, groin, knee and ankle in a patient with a
+    femoral stenosis) and the Fronek et al. segmental systolic pressure indices (thigh, knee and ankle over brachial,
+    group means of normal, aortoiliac and femoropopliteal subjects). Each needs a model of the path from the heart
+    to the leg, and for the systolic indices the arm as well. Wan's runnable models are its own idealized single
+    segment and symmetric bifurcation with resistance outlets, and neither represents those sites. Wan's networks
+    that come nearest are the abdominal aorta and the aorto-iliac plans, and both are not runnable
+    (q_examples_not_runnable). They also stop at the popliteal and have no arm. The stenosis laws (Eqs. 15, 17)
+    give a pressure drop, which neither measurement quantifies without its flow and geometry. The shared port
+    shape of arterial_tree_1d and bifurcation_svoned is only a shape (relations.yaml). In the other direction,
+    this record has no measured datum (figures.md: every plot is a computed result), so no stergiopulos1992 model
+    has anything here to be validated against.
+  citation: {page: 11, printed_page: "205", quote: "pulos et al. [9] use a modified Windkessel model to", where: text}
+- id: q_val_svoned_code_none
+  kind: choice
+  about: [single_segment_svoned, single_segment_svoned_curve, bifurcation_svoned, bifurcation_svoned_curve, abdominal_aorta_1d,
+          aortoiliac_plans_1d, porcine_bypass_1d, svoned_code/boileau_bifurcation_svoned, svoned_code/boileau_vessel_svoned,
+          svoned_code/release_case]
+  text: >
+    (Cross-validation with svoned_code, job 2026-11-10.) No validation is entered in either direction, and no fit.
+    Neither record holds a measurement. This record's data are reported inputs, derived values and the paper's computed
+    results (origins reported, derived, predicted). Every figure reading is a computed result: the 1D curves of
+    Figs. 1-4 and the 1D and 3D curves of Fig. 5 (figures.md). The paper itself says comparisons with experiment are
+    still needed (p. 10). svoned_code's data are the release's settings, the expected values of its system tests and
+    the benchmark inputs (reported, predicted, derived), with no figure readings. Its values taken from this paper
+    (from_source: wan2002) are reported parameters, not measurements. The pair was proposed because
+    svoned_code/boileau_bifurcation_svoned and bifurcation_svoned have the same signature. They are the same released
+    solver on two different bifurcations (Boileau's Benchmark 4 and Wan's symmetric example). How this paper's
+    printed results compare with that solver is already in this record's comparisons (cmp_fig1_*, cmp_fig2_*), as
+    reproduction of computed results, not validation against data. See svoned_code/q_val_wan2002_none.
+  citation: {page: 10, quote: "analysis and comparisons with experiment are needed to", where: text}

@@ -1,0 +1,17 @@
+id: scatter_group_stats
+name: group means (split at septum 1.2 cm) and correlation of the backward suction wave percentage with septal thickness, from the per-subject markers
+role: processing
+stated: {page: 6, printed_page: "1772", quote: "left ventricular septal wall thickness (r⫽⫺0.52, P⬍0.02,", where: "text; Fig. 6"}
+equation: "group means of x and y for septum <= 1.2 cm (non-LVH) and > 1.2 cm (LVH); r = Pearson correlation of y on x"
+from_words: true
+inputs:
+  Y: {quantity: share_wi_w5, unit: percent, curve: {quantity: septal_wall_thickness, unit: cm}}
+outputs:
+  y_low: {quantity: share_wi_w5, unit: percent, description: "mean over the markers at septum <= threshold (non-LVH)"}
+  y_high: {quantity: share_wi_w5, unit: percent, description: "mean over the markers at septum > threshold (LVH)"}
+  x_low: {quantity: septal_wall_thickness, unit: cm}
+  x_high: {quantity: septal_wall_thickness, unit: cm}
+  n_high: {quantity: subject_count, unit: dimensionless}
+  r: {quantity: r_suction_share_vs_septum, unit: dimensionless}
+settings: {threshold_cm: 1.2}
+stochastic: false

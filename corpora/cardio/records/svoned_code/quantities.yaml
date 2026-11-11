@@ -1,0 +1,54 @@
+# --- the release's own test cases (Tests/SystemTests): what its test reads from the TEXT output, in cgs
+- {id: case_pressure, name: pressure at a node of a release test case, dimension: "[pressure]", description: "the pressure files of the solver's TEXT output (dyn/cm^2)"}
+- {id: case_flow, name: volume flow rate at a node of a release test case, dimension: "[length]**3/[time]", description: "the flow files of the TEXT output (mL/s)"}
+- {id: case_area, name: lumen area at a node of a release test case, dimension: "[length]**2", description: "the area files of the TEXT output (cm^2)"}
+# --- constitutive laws (OLUFSEN and LINEAR materials)
+- {id: stiffness_fit_amplitude, name: amplitude k1 of the exponential fit of Eh/r0, dimension: "[mass]/[length]/[time]**2", description: "K1_ in cvOneDMaterialOlufsen; wan2002 Eq. 14, olufsen1999 Eq. 6"}
+- {id: stiffness_fit_rate, name: exponential rate k2 of the fit of Eh/r0 in r0, dimension: "1/[length]", description: "K2_"}
+- {id: stiffness_fit_offset, name: asymptotic offset k3 of the fit of Eh/r0, dimension: "[mass]/[length]/[time]**2", description: "K3_"}
+- {id: vessel_radius, name: lumen radius of a vessel at its reference pressure, dimension: "[length]", description: "ro of the release's materials (sqrt(S0/pi)); r_d of the Boileau benchmarks (the radius at diastolic pressure)"}
+- {id: reference_pressure, name: pressure at which a segment has its reference area, dimension: "[pressure]", description: "p1_ of the release's materials, the MATERIAL card's reference pressure"}
+- {id: vessel_cross_sectional_area, name: lumen cross-sectional area, dimension: "[length]**2", description: "S"}
+- {id: arterial_pressure, name: blood pressure given by a constitutive law, dimension: "[pressure]"}
+- {id: wall_stiffness_parameter, name: pressure-strain stiffness EHR of the LINEAR material, dimension: "[pressure]", description: "the MATERIAL card's k1 for LINEAR: p = p_ref + EHR (sqrt(S/S0) - 1)"}
+- {id: pressure_unit_factor, name: dyn/cm^2 per mmHg as written in the code, dimension: "dimensionless"}
+# --- profile and viscosity
+- {id: profile_exponent, name: exponent n of the axisymmetric velocity profile, dimension: "dimensionless", description: "the MATERIAL card's exponent; wan2002 Eq. 5's n; the Boileau benchmarks' profile order zeta"}
+- {id: momentum_flux_correction, name: momentum-flux correction of the velocity profile, dimension: "dimensionless", description: "delta"}
+- {id: viscous_loss_coefficient, name: viscous loss coefficient of the momentum equation, dimension: "[length]**2/[time]", description: "N: the friction term is N Q/S"}
+- {id: dynamic_viscosity, name: dynamic viscosity of blood, dimension: "[pressure]*[time]", description: "the MATERIAL card's viscosity"}
+- {id: kinematic_viscosity, name: kinematic viscosity of blood, dimension: "[length]**2/[time]", description: "nu = mu/rho"}
+- {id: blood_density, name: density of blood, dimension: "[mass]/[length]**3"}
+# --- stenosis loss
+- {id: stenosis_turbulent_coefficient, name: turbulent (expansion) loss coefficient of the stenosis model, dimension: "dimensionless", description: "Kt"}
+- {id: stenosis_viscous_factor, name: numerical factor of the viscous loss coefficient Kv, dimension: "dimensionless", description: "the 32 of Kv"}
+- {id: stenosis_viscous_coefficient, name: viscous loss coefficient Kv of the stenosis model, dimension: "dimensionless"}
+- {id: stenosis_length_factor, name: factor of the stenosis length in the code's effective length, dimension: "dimensionless", description: "the 0.83 of La = 0.83 L + 1.64 D1"}
+- {id: stenosis_diameter_factor, name: factor of the stenosis diameter in the code's effective length, dimension: "dimensionless", description: "the 1.64 of La = 0.83 L + 1.64 D1"}
+- {id: stenosis_effective_length, name: effective length of a stenosis in the viscous loss, dimension: "[length]", description: "La"}
+- {id: stenosis_length, name: length of a stenosis, dimension: "[length]"}
+- {id: stenosis_pressure_drop, name: pressure loss across a stenosis, dimension: "[pressure]"}
+- {id: flow_rate, name: volume flow rate, dimension: "[length]**3/[time]"}
+# --- solver settings written in the code
+- {id: newton_max_iterations, name: largest number of Newton iterations in a time step, dimension: "dimensionless"}
+# --- Boileau benchmarks run with the solver (validations.yaml)
+- {id: vessel_length, name: length of a vessel segment, dimension: "[length]"}
+- {id: wall_thickness, name: arterial wall thickness, dimension: "[length]"}
+- {id: youngs_modulus, name: Young's modulus of the arterial wall, dimension: "[pressure]"}
+- {id: diastolic_pressure, name: diastolic (reference) pressure of the tube law, dimension: "[pressure]"}
+- {id: outflow_pressure, name: pressure at which flow through the Windkessel ceases, dimension: "[pressure]", description: "Pout of Boileau Eq. 9; the release's RCR distal pressure Pd"}
+- {id: windkessel_proximal_resistance, name: proximal resistance of a three-element Windkessel, dimension: "[mass]/[length]**4/[time]", description: "R1 (Boileau), Rp (the release's RCR table, first value)"}
+- {id: windkessel_capacitance, name: compliance of a three-element Windkessel, dimension: "[length]**4*[time]**2/[mass]", description: "C (second value of the release's RCR table)"}
+- {id: windkessel_distal_resistance, name: distal resistance of a three-element Windkessel, dimension: "[mass]/[length]**4/[time]", description: "R2 (Boileau), Rd (third value of the RCR table)"}
+- {id: cardiac_period, name: period of the inflow, dimension: "[time]"}
+- {id: time, name: time, dimension: "[time]", description: "on the clock of a reference record (the 3D solution of a benchmark) or a README time"}
+- {id: time_lag, name: offset of the reference record's time origin from the start of the last 1D cycle, dimension: "[time]"}
+- {id: blood_pressure, name: blood pressure at a site, dimension: "[pressure]"}
+- {id: pressure_difference, name: pressure at the inlet minus pressure at the outlet of a vessel, dimension: "[pressure]"}
+- {id: volume_flow_rate, name: volume flow rate through a cross-section at a site, dimension: "[length]**3/[time]"}
+- {id: radius_change, name: change in lumen radius from its diastolic value, dimension: "[length]"}
+- {id: flow_asymmetry, name: difference between the outlet flows of two identical branches, dimension: "[length]**3/[time]"}
+# --- the RCR outlet under a sinusoidal flow
+- {id: frequency, name: frequency of the sinusoidal inflow, dimension: "1/[time]"}
+- {id: input_impedance_modulus, name: modulus of the input impedance, dimension: "[mass]/[length]**4/[time]"}
+- {id: input_impedance_phase, name: phase of the input impedance, dimension: "dimensionless"}

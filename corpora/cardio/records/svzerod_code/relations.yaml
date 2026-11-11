@@ -364,3 +364,44 @@
       (rel_impedance_olufsen_pmax, a = svzerod_code/impedance_olufsen_eq38); the structured tree that gives z
       is not in the code (q_impedance_kernel_not_computed), and no other olufsen2000 model (tube law, radius
       scaling, asymmetry, boundary layer) has a counterpart in the code.
+# --- ModelAtlas job svoned_code + svzerod_code (2026-11-10). Neither code cites the other. The released 1D solver's
+# RCR outlet against this block is already related in svoned_code/relations.yaml (rel_rcr_svzerod_*,
+# approximated_by, 2%: the 1D solver's first-order step). The two below join this block to the RCR map of the 1D
+# solver's theory notes (svoned_code/rcr_impedance_theory, its closed-form periodic impedance), so the 0D block is
+# checked against the 1D code's own statement of the outlet, not only against its first-order run.
+# Not related: svoned_code/boileau_bifurcation_svoned and coronary_kim2010_ode share only port dimensions (a flow
+# out of times and resistances/capacitances); one is a three-vessel 1D network with RCR outlets driven by a
+# measured inflow, the other a single coronary bed driven by sinusoidal inlet and intramyocardial pressures. No
+# mapping writes either's inputs from the other's, so no relation is proposed. The other svoned_code models
+# (constitutive law, profile terms, stenosis, single vessel) have no 0D block in this release.
+# Units: both resistances in g/cm^4/s; the theory port's C is in cm^4*s^2/g, this block's in cm^4*s^2/Mg (x 1e6).
+- id: rel_windkessel_svoned_theory_modulus
+  kind: same_as
+  a: svoned_code/rcr_impedance_theory
+  b: svzerod_code/windkessel_released_impedance
+  mapping: {Rc: Rc, Rp: Rd, C: "1000000*C", f: f}
+  output_map: {modulus: modulus}
+  regime: {Rc: [50, 250], Rd: [800, 5000], C: [1.0e-4, 1.0e-3], f: [0.5, 10]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    svOneDSolver's theory notes give the RCR outlet as the memory map Q = p/R - 1/(R^2 C) int p exp(-alpha (t - tau)) dtau,
+    alpha = (R + Rd)/(R Rd C) (theory.rst lines 263-267), whose periodic impedance is R + Rd/(1 + i omega Rd C);
+    svZeroDSolver's RCR block (WindkesselBC.h lines 33-39: proximal Rp in series with C parallel to Rd) is the same
+    circuit, so under a sinusoidal inflow its input impedance should be that function. Both are SimVascular's RCR
+    outlet; neither code states the correspondence.
+  assumptions:
+    - "The theory notes' R (proximal, the 1D input file's first RCR value) is this block's Rp (port Rc); their Rd (third value) is this block's Rd (port Rp); C is the same capacitance. The distal pressure (0 here; Pd in the 1D code) does not change the impedance at a non-zero frequency."
+    - "The 0.1% tolerance is ours; it covers this solver's time discretization (401 points per period), as in rel_windkessel_westerhof_modulus."
+- id: rel_windkessel_svoned_theory_phase
+  kind: same_as
+  a: svoned_code/rcr_impedance_theory
+  b: svzerod_code/windkessel_released_impedance
+  mapping: {Rc: Rc, Rp: Rd, C: "1000000*C", f: f}
+  output_map: {phase: phase}
+  regime: {Rc: [50, 250], Rd: [800, 5000], C: [1.0e-4, 1.0e-3], f: [0.5, 10]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: As rel_windkessel_svoned_theory_modulus, for the phase of the input impedance.
+  assumptions:
+    - "As rel_windkessel_svoned_theory_modulus."

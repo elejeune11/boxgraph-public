@@ -58,14 +58,16 @@ The review is kept in [`corpora/motor_clutch/`](corpora/motor_clutch/).
 **[Open the cardiovascular overview →](https://elejeune11.github.io/boxgraph-public/cardio/)** The
 same method on a second field, kept as a corpus of its own in [`corpora/cardio/`](corpora/cardio/):
 0D (lumped-parameter) and 1D models of the circulation, from the heart and the large arteries
-to the viscosity of blood in microvessels and the coronary circulation. Thirty-nine sources: papers, two
-chapters of a thesis, released CellML models, a released benchmark data set and the released data of
-coronary models. Its case studies show an equation that, as
+to the viscosity of blood in microvessels and the coronary circulation. Forty-seven sources: papers, two
+chapters of a thesis, released CellML models, a released benchmark data set, the released data of
+coronary models, and three released SimVascular codes (the 0D and 1D solvers and a vascular tree
+generator), built and run. Its case studies show an equation that, as
 printed, has the wrong dimensions and the corrected form its figure follows; a human coronary
 arterial tree of about 200,000 segments, released by its authors and solved again, which reproduces
-the paper's flows and settles a sign misprinted in its conductance law; and a parameter carried through
-three papers that is consistent with the equations printed beside it in none of them. Its
-sources are listed in [`corpora/cardio/papers.yaml`](corpora/cardio/papers.yaml).
+the paper's flows and settles a sign misprinted in its conductance law; a generated vascular tree set
+against the measured human tree; a 1D solver run against its paper and against 3D benchmark solutions;
+and a parameter carried through three papers that is consistent with the equations printed beside it
+in none of them. Its sources are listed in [`corpora/cardio/papers.yaml`](corpora/cardio/papers.yaml).
 
 ## Contents
 
@@ -554,7 +556,7 @@ Afterwards: read `build/<name>/report.html`, check the readings in
 
 ## Status
 
-Version 0.9. Results so far, known limits and next steps are in
+Version 0.10. Results so far, known limits and next steps are in
 [`docs/STATUS.md`](docs/STATUS.md).
 
 ## Licence

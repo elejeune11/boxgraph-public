@@ -1,0 +1,58 @@
+# Our input file for the released executable (helper boileau_vessel_svoned/svoned.py). The release's
+# own test cases bifurcation_P, bifurcation_R and bifurcation_RCR_staticFunc are this geometry
+# (lengths 8.6 and 8.5 cm, areas of radii 0.86 and 0.6 cm) made rigid, after Xiao et al. 2014
+# (bifurcation_R.in lines 1-2, 70-71), which is also the source of Boileau's Benchmark 4.
+id: boileau_bifurcation_svoned
+name: the aortic bifurcation of Boileau Benchmark 4 run with the released solver
+role: model
+stated: {file: Tests/SystemTests/cases/bifurcation_R.in, lines: "1-2", quote: "# Modelled from aortic bifurcation test case from"}
+equation: >
+  As boileau_vessel_svoned for each of three uniform vessels (aorta, two identical iliacs), LINEAR material per
+  vessel with p_ref = Pd, S0 = pi rd^2, EHR = (4/3) E h / rd and exponent n = zeta; one joint with one pressure
+  and conservation of mass (theory.rst line 524); an RCR outlet (R1, C, R2, Pout) at each iliac end.
+software: true
+built_from: [boileau_vessel_svoned]
+inputs:
+  La: {quantity: vessel_length, unit: cm, description: aorta}
+  rda: {quantity: vessel_radius, unit: cm, description: aorta}
+  ha: {quantity: wall_thickness, unit: cm, description: aorta}
+  Ea: {quantity: youngs_modulus, unit: g/cm/s^2, description: aorta}
+  Li: {quantity: vessel_length, unit: cm, description: each iliac}
+  rdi: {quantity: vessel_radius, unit: cm, description: each iliac}
+  hi: {quantity: wall_thickness, unit: cm, description: each iliac}
+  Ei: {quantity: youngs_modulus, unit: g/cm/s^2, description: each iliac}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  mu: {quantity: dynamic_viscosity, unit: g/cm/s}
+  Pd: {quantity: diastolic_pressure, unit: g/cm/s^2}
+  Pout: {quantity: outflow_pressure, unit: g/cm/s^2}
+  R1: {quantity: windkessel_proximal_resistance, unit: g/cm^4/s, description: each iliac outlet}
+  C: {quantity: windkessel_capacitance, unit: cm^4*s^2/g, description: each iliac outlet}
+  R2: {quantity: windkessel_distal_resistance, unit: g/cm^4/s, description: each iliac outlet}
+  zeta: {quantity: profile_exponent, unit: dimensionless}
+  T: {quantity: cardiac_period, unit: s}
+  t_ini: {quantity: time, unit: s}
+  lag: {quantity: time_lag, unit: s}
+  t: {quantity: time, unit: s}
+outputs:
+  P_mid: {quantity: blood_pressure, unit: g/cm/s^2, description: aortic midpoint}
+  Q_mid: {quantity: volume_flow_rate, unit: cm^3/s, description: aortic midpoint}
+  dr_mid: {quantity: radius_change, unit: cm, description: aortic midpoint}
+  P_end: {quantity: blood_pressure, unit: g/cm/s^2, description: "aortic end (the joint)"}
+  Q_end: {quantity: volume_flow_rate, unit: cm^3/s, description: "aortic end"}
+  dr_end: {quantity: radius_change, unit: cm, description: "aortic end"}
+  P_il: {quantity: blood_pressure, unit: g/cm/s^2, description: midpoint of the first iliac}
+  Q_il: {quantity: volume_flow_rate, unit: cm^3/s, description: midpoint of the first iliac}
+  dr_il: {quantity: radius_change, unit: cm, description: midpoint of the first iliac}
+  Q_asym: {quantity: flow_asymmetry, unit: cm^3/s, description: "outlet flow of the first iliac minus the second's"}
+settings:
+  n_elements_aorta: 34
+  n_elements_iliac: 34
+  steps_per_cycle: 1100
+  n_cycles: 10
+  quad_points: 2
+  tolerance: 1.0e-8
+  formulation: 1
+  stabilization: 1
+  q_init: inflow
+  inflow_file: boileau_data/Benchmark4_AorticBifurcation/inflow.txt
+stochastic: false

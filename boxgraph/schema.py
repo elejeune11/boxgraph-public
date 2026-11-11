@@ -282,10 +282,18 @@ class Added(Strict):
     scale: Literal["linear", "log10", "ln"] = "linear"
 
 
+class CurveAxis(Strict):
+    """The x axis of a curve port: the quantity a curve is indexed by, in the unit the model wants it."""
+
+    quantity: str
+    unit: str
+
+
 class Port(Strict):
     quantity: str
     unit: str
     scale: Literal["linear", "log10", "ln"] = "linear"
+    curve: CurveAxis | None = None  # the port takes or gives a whole curve, {"x": [...], "y": [...]}, indexed by this
     description: str | None = None
 
 

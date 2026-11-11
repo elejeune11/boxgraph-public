@@ -1,0 +1,18 @@
+id: pooled_diastolic
+name: whole-cohort mean and SD of diastolic pressure from the LVH and non-LVH group means and SDs
+role: processing
+stated: {page: 5, printed_page: "1771", quote: "pressure was 81⫾13 mm Hg. The mean blood pressure in the", where: text}
+equation: "mean = (n1 m1 + n2 m2)/N ; SD^2 = [(n1-1) s1^2 + (n2-1) s2^2 + n1 n2 (m1-m2)^2 / N] / (N-1), n2 = N - n1"
+from_words: true
+inputs:
+  N: {quantity: subject_count, unit: dimensionless}
+  n1: {quantity: subject_count, unit: dimensionless}
+  m1: {quantity: diastolic_bp, unit: mmHg}
+  s1: {quantity: diastolic_bp_sd, unit: mmHg}
+  m2: {quantity: diastolic_bp, unit: mmHg}
+  s2: {quantity: diastolic_bp_sd, unit: mmHg}
+outputs:
+  mean: {quantity: diastolic_bp, unit: mmHg}
+  sd: {quantity: diastolic_bp_sd, unit: mmHg}
+settings: {}
+stochastic: false

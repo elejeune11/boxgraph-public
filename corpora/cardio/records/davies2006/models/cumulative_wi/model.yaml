@@ -1,0 +1,17 @@
+id: cumulative_wi
+name: cumulative wave intensity of a wave (area under its wave intensity curve) and its proportion of the cycle total, per subject
+role: processing
+stated: {page: 4, printed_page: "1770", quote: "Cumulative wave intensity was calculated for each wave by", where: "Quantification of Waves"}
+equation: "I_k = integral over wave k of WI dt ; p_k = 100 I_k / sum over the cardiac cycle of cumulative WI"
+from_words: true
+runnable: false
+not_runnable_reason: >
+  It needs each subject's wave intensity trace (and where each wave starts and ends), which the paper does
+  not publish; the per-subject proportions are then averaged over the 20 subjects, which also needs the
+  per-subject values. The ratio-of-means form that can be run on Table 2 is wave_share.
+inputs:
+  WI_trace: {quantity: wave_intensity_net, unit: W/m^2/s^2}
+outputs:
+  I: {quantity: cumulative_wi_w5, unit: W/m^2/s}
+settings: {}
+stochastic: false

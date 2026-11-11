@@ -478,6 +478,9 @@ def test_relation(rel: Relation, records: dict[str, LoadedRecord], source: str |
                          status="pending", source=source)
     try:
         a, b = _side(rel.a, records, cache_dir), _side(rel.b, records, cache_dir)
+        for side in (a, b):
+            if any(p.curve for p in (*side.model.inputs.values(), *side.model.outputs.values())):
+                raise _Unverifiable(f"{side.gid} takes or gives a whole curve; relations are tested on single values")
         if rel.kind == RelationKind.same_as:
             same, note = _symbolic_same(rel, a, b)
             if same:

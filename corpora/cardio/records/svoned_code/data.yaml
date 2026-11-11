@@ -1,0 +1,273 @@
+# Values written in the code and its documentation. Paths are relative to the code folder. Units: the
+# input guide says all model quantities are in CGS units (docs/source/content/inputFileGuide.rst, line 18).
+
+# ---- OLUFSEN material: defaults of the constructor (Code/Source/cvOneDMaterialOlufsen.cxx). Every
+# material the solver uses is a copy of the one the MATERIAL card defines, whose K1, K2, K3 and
+# reference pressure overwrite these (cvOneDMaterialManager.cxx lines 59-69 and the copy operator,
+# lines 84-98), so they act only as written defaults.
+- id: k1_ctor
+  quantity: stiffness_fit_amplitude
+  unit: g/s^2/cm
+  origin: reported
+  printed: "2.00 x 10^7"
+  citation: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "58", quote: "K1_ = 2.00e7;"}
+  from_source: wan2002
+  from_datum: k1_default
+- id: k2_ctor
+  quantity: stiffness_fit_rate
+  unit: 1/cm
+  origin: reported
+  printed: "-22.5267"
+  citation: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "59", quote: "K2_ = -22.5267;"}
+  from_source: wan2002
+  from_datum: k2_default
+  note: "two more digits than the paper's -22.53 (q_k2_digits)"
+- id: k3_ctor_commented
+  quantity: stiffness_fit_offset
+  unit: g/s^2/cm
+  origin: reported
+  printed: "8.65 x 10^5"
+  citation: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "60", quote: "// K3_ = 8.65e5;"}
+  from_source: wan2002
+  from_datum: k3_default
+  note: "commented out in the constructor: K3 has no default and comes only from the MATERIAL card"
+- id: p1_ctor_mmHg
+  quantity: reference_pressure
+  unit: mmHg
+  origin: reported
+  printed: "85.0"
+  citation: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "51", quote: "p1_ = 1333.2237 * 85.0; // initial p.. systemic side"}
+  note: "written as 1333.2237 * 85.0 dyn/cm^2; overwritten by the card's reference pressure (cvOneDMaterialManager.cxx line 66); a pulmonary 20 mmHg is commented out on line 52"
+- id: mmhg_factor_ctor
+  quantity: pressure_unit_factor
+  unit: dimensionless
+  origin: reported
+  printed: "1333.2237"
+  citation: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "51", quote: "p1_ = 1333.2237 * 85.0;"}
+  note: "dyn/cm^2 per mmHg as the code writes it; the test cases' comments use 1333.22 (e.g. Tests/SystemTests/cases/05_bifurcation_RCR.in line 170)"
+
+# ---- the same constants in the code's theory notes (docs/source/content/theory.rst, line 73), which
+# give the law as 'that proposed by Olufsen [3]' (line 60)
+- id: k1_theory
+  quantity: stiffness_fit_amplitude
+  unit: g/s^2/cm
+  origin: reported
+  printed: "2 x 10^7"
+  citation: {file: docs/source/content/theory.rst, lines: "73", quote: "values in CGS units of 2x107"}
+  from_source: olufsen1999
+  from_datum: k1_fit
+  note: "printed '2x107' in the reStructuredText (a lost superscript)"
+- id: k2_theory
+  quantity: stiffness_fit_rate
+  unit: 1/cm
+  origin: reported
+  printed: "-22.53"
+  citation: {file: docs/source/content/theory.rst, lines: "73", quote: "-22.53 cm-1"}
+  from_source: olufsen1999
+  from_datum: k2_fit
+- id: k3_theory
+  quantity: stiffness_fit_offset
+  unit: g/s^2/cm
+  origin: reported
+  printed: "8.65 x 10^5"
+  citation: {file: docs/source/content/theory.rst, lines: "73", quote: "and 8.65x105"}
+  from_source: olufsen1999
+  from_datum: k3_fit
+
+# ---- the MATERIAL card of the input guide's example and of the release's physiological test cases
+- id: n_guide_example
+  quantity: profile_exponent
+  unit: dimensionless
+  origin: reported
+  printed: "1.0"
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "247", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 120000.0 1.0 2.0e7 -22.5267 8.65e5"}
+  from_source: wan2002
+  from_datum: n_poiseuille
+  note: "the sixth field, the 'Material Exponent' (line 261); the paper's Poiseuille profile is n = 2 (q_profile_exponent_examples)"
+- id: k3_guide_example
+  quantity: stiffness_fit_offset
+  unit: g/s^2/cm
+  origin: reported
+  printed: "8.65 x 10^5"
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "247", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 120000.0 1.0 2.0e7 -22.5267 8.65e5"}
+  from_source: wan2002
+  from_datum: k3_default
+- id: pref_guide_example
+  quantity: reference_pressure
+  unit: g/s^2/cm
+  origin: reported
+  printed: "120000.0"
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "247", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 120000.0 1.0 2.0e7 -22.5267 8.65e5"}
+  note: "about 90 mmHg; the guide calls it 'the pressure associated with the undeformed area of the vessel. Typically this is the diastolic pressure' (line 266)"
+- id: n_case05
+  quantity: profile_exponent
+  unit: dimensionless
+  origin: reported
+  printed: "1.0"
+  citation: {file: Tests/SystemTests/cases/05_bifurcation_RCR.in, lines: "171", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 113324.0 1.0 2.0e7 -22.5267 8.65e5"}
+  from_source: wan2002
+  from_datum: n_poiseuille
+  note: "the same card in 02_simpleArtery_Resistance.in (line 100), 04_simpleArtery_Pressure.in (100), 12_AortoFem_Pulse_R.in (1053), 14_AortoFem_Pulse_RCR.in (1062); bifurcation_RCR.in line 295 has 9.0"
+- id: pref_case05
+  quantity: reference_pressure
+  unit: g/s^2/cm
+  origin: reported
+  printed: "113324.0"
+  citation: {file: Tests/SystemTests/cases/05_bifurcation_RCR.in, lines: "171", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 113324.0 1.0 2.0e7 -22.5267 8.65e5"}
+  note: "'Ref Pressure 1333.22*85 where 85 is in mmHg' (line 170)"
+- id: rho_case05
+  quantity: blood_density
+  unit: g/cm^3
+  origin: reported
+  printed: "1.06"
+  citation: {file: Tests/SystemTests/cases/05_bifurcation_RCR.in, lines: "171", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 113324.0 1.0 2.0e7 -22.5267 8.65e5"}
+- id: mu_case05
+  quantity: dynamic_viscosity
+  unit: g/cm/s
+  origin: reported
+  printed: "0.04"
+  citation: {file: Tests/SystemTests/cases/05_bifurcation_RCR.in, lines: "171", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 113324.0 1.0 2.0e7 -22.5267 8.65e5"}
+- id: k1_coronary_case
+  quantity: stiffness_fit_amplitude
+  unit: g/s^2/cm
+  origin: reported
+  printed: "1.48 x 10^7"
+  citation: {file: Tests/SystemTests/cases/Left_coronary_inlet_pressure_wave_outlet_coronary.in, lines: "850", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 0 1.0 1.48e7 -22.5267 8.65e5"}
+  from_source: wan2002
+  from_datum: k1_default
+  note: "the coronary test case changes k1 and sets the reference pressure to 0 (q_coronary_k1)"
+
+# ---- stenosis loss (Code/Source/cvOneDMthSegmentModel.cxx, case STENOSIS)
+- id: Kt_code
+  quantity: stenosis_turbulent_coefficient
+  unit: dimensionless
+  origin: reported
+  printed: "1.52"
+  citation: {file: Code/Source/cvOneDMthSegmentModel.cxx, lines: "174", quote: "Kt = 1.52;"}
+  from_source: wan2002
+  from_datum: Kt_stenosis
+- id: Kv_factor_code
+  quantity: stenosis_viscous_factor
+  unit: dimensionless
+  origin: reported
+  printed: "32"
+  citation: {file: Code/Source/cvOneDMthSegmentModel.cxx, lines: "180", quote: "Kv = 32. * La / D[0] * 1.0/a*1.0/a;"}
+  from_source: wan2002
+  from_datum: Kv_factor_stenosis
+  note: "written '32.' (a C++ double literal)"
+- id: La_length_factor_code
+  quantity: stenosis_length_factor
+  unit: dimensionless
+  origin: reported
+  printed: "0.83"
+  citation: {file: Code/Source/cvOneDMthSegmentModel.cxx, lines: "178", quote: "La = 0.83*L + 1.64*D[1];"}
+  note: "not in wan2002, whose Eq. 16 has L (q_stenosis_effective_length)"
+- id: La_diameter_factor_code
+  quantity: stenosis_diameter_factor
+  unit: dimensionless
+  origin: reported
+  printed: "1.64"
+  citation: {file: Code/Source/cvOneDMthSegmentModel.cxx, lines: "178", quote: "La = 0.83*L + 1.64*D[1];"}
+  note: "not in wan2002 (q_stenosis_effective_length)"
+
+# ---- the nonlinear solver (Code/Source/cvOneDSolverDefinitions.h)
+- id: newton_max_iter
+  quantity: newton_max_iterations
+  unit: dimensionless
+  origin: reported
+  printed: "30"
+  citation: {file: Code/Source/cvOneDSolverDefinitions.h, lines: "43", quote: "#define MAX_NONLINEAR_ITERATIONS 30"}
+  note: "past it the solver prints 'Newton not converged' and goes on to the next step (cvOneDBFSolver.cxx lines 1975-1979; q_newton_not_converged)"
+
+# ---- the stenosis test case (Tests/SystemTests/cases/tube_stenosis_r.in): inputs and the derivation
+# the case's comments state (lines 35-64)
+- {id: tsr_rho, quantity: blood_density, unit: g/cm^3, origin: reported, printed: "1.06", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "31", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 0 2.0 1.0e15 -20 1e9"}}
+- {id: tsr_nu, quantity: kinematic_viscosity, unit: cm^2/s, origin: derived, printed: "0.03773584906", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "49", quote: "0.03773584906"}, note: "the case's comment 'kinematic visocity nu' = mu/rho = 0.04/1.06"}
+- {id: tsr_Q, quantity: flow_rate, unit: cm^3/s, origin: reported, printed: "100.0", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "21", quote: "0.0 100.0"}}
+- {id: tsr_S0, quantity: vessel_cross_sectional_area, unit: cm^2, origin: reported, printed: "10.0", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "16", quote: "SEGMENT seg0 0 10.0 50 0 1 10.0 10.0 0.0 MAT1 NONE"}}
+- {id: tsr_S1, quantity: vessel_cross_sectional_area, unit: cm^2, origin: reported, printed: "5.0", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "17", quote: "5.0 0.0 MAT1 STENOSIS"}, note: "the segment's inlet and outlet areas, 5.0 and 5.0"}
+- {id: tsr_L, quantity: stenosis_length, unit: cm, origin: reported, printed: "10.0", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "17", quote: "SEGMENT seg1 1 10.0 50 1 2"}, note: "the length of the stenosed segment seg1"}
+- {id: tsr_La, quantity: stenosis_effective_length, unit: cm, origin: derived, printed: "12.43793734", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "52", quote: "La = 0.83*L + 1.64*D1 = 12.43793734"}}
+- {id: tsr_Kv, quantity: stenosis_viscous_coefficient, unit: dimensionless, origin: derived, printed: "446.1729889", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "53", quote: "Kv = 32*La/D0*(S0/S1)^2 = 446.1729889"}}
+- {id: tsr_dp, quantity: stenosis_pressure_drop, unit: g/s^2/cm, origin: predicted, printed: "130.5759137", citation: {file: Tests/SystemTests/cases/tube_stenosis_r.in, lines: "59", quote: "delta P = K/2*rho * (Q/S1)^2 = 130.5759137"}}
+
+# ---- the release's system tests: the values Tests/SystemTests/test_integration.py asserts (lines
+# 140-244), each one selection of the TEXT output of one case. The test compares with
+# pytest.approx(expected, rel=rtol, abs=1e-8) (line 30); the comparisons here judge at the printed digits.
+- {id: tc_tube_pressure_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "11005.30965", citation: {file: Tests/SystemTests/test_integration.py, lines: "142", quote: "('pressure', 0, 0, -1, 'point', 11005.30965, 1e-7)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_tube_pressure_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "10000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "143", quote: "('pressure', 0, -1, -1, 'point', 10000.0, 1e-8)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_pressure_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "100.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "144", quote: "('flow', 0, -1, -1, 'point', 100.0, 1e-16)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-16 (abs 1e-8)"}
+- {id: tc_tube_pressure_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "1.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "145", quote: "('area', 0, -1, -1, 'point', 1.0, 1e-5)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_tube_pressure_wave_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "10000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "148", quote: "('pressure', 0, 0, -1, 'point', 10000.0, 1e-8)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_pressure_wave_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "9086.52306835", citation: {file: Tests/SystemTests/test_integration.py, lines: "149", quote: "('pressure', 0, -1, -1, 'point', 9086.52306835, 1e-4)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-4 (abs 1e-8)"}
+- {id: tc_tube_pressure_wave_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "90.8652306835", citation: {file: Tests/SystemTests/test_integration.py, lines: "150", quote: "('flow', 0, -1, -1, 'point', 90.8652306835, 1e-4)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-4 (abs 1e-8)"}
+- {id: tc_tube_pressure_wave_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "1.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "151", quote: "('area', 0, -1, -1, 'point', 1.0, 1e-5)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_tube_rcr_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "11005.30965", citation: {file: Tests/SystemTests/test_integration.py, lines: "154", quote: "('pressure', 0, 0, -1, 'point', 11005.30965, 1e-7)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_tube_rcr_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "10000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "155", quote: "('pressure', 0, -1, -1, 'point', 10000.0, 1e-8)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_rcr_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "100.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "156", quote: "('flow', 0, -1, -1, 'point', 100.0, 1e-16)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-16 (abs 1e-8)"}
+- {id: tc_tube_rcr_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "1.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "157", quote: "('area', 0, -1, -1, 'point', 1.0, 1e-5)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_tube_rcr_Pd_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "12005.30965", citation: {file: Tests/SystemTests/test_integration.py, lines: "160", quote: "('pressure', 0, 0, -1, 'point', 12005.30965, 1e-7)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_tube_rcr_Pd_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "11000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "161", quote: "('pressure', 0, -1, -1, 'point', 11000.0, 1e-8)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_rcr_Pd_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "100.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "162", quote: "('flow', 0, -1, -1, 'point', 100.0, 1e-16)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-16 (abs 1e-8)"}
+- {id: tc_tube_rcr_Pd_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "1.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "163", quote: "('area', 0, -1, -1, 'point', 1.0, 1e-5)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_tube_r_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "11005.30965", citation: {file: Tests/SystemTests/test_integration.py, lines: "166", quote: "('pressure', 0, 0, -1, 'point', 11005.30965, 1e-7)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_tube_r_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "10000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "167", quote: "('pressure', 0, -1, -1, 'point', 10000.0, 1e-8)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_r_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "100.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "168", quote: "('flow', 0, -1, -1, 'point', 100.0, 1e-16)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-16 (abs 1e-8)"}
+- {id: tc_tube_r_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "1.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "169", quote: "('area', 0, -1, -1, 'point', 1.0, 1e-5)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_tube_r_Pd_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "12005.30965", citation: {file: Tests/SystemTests/test_integration.py, lines: "172", quote: "('pressure', 0, 0, -1, 'point', 12005.30965, 1e-7)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_tube_r_Pd_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "11000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "173", quote: "('pressure', 0, -1, -1, 'point', 11000.0, 1e-8)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_r_Pd_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "100.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "174", quote: "('flow', 0, -1, -1, 'point', 100.0, 1e-16)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-16 (abs 1e-8)"}
+- {id: tc_tube_r_Pd_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "1.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "175", quote: "('area', 0, -1, -1, 'point', 1.0, 1e-5)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_tube_r_stab_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "11005.30965", citation: {file: Tests/SystemTests/test_integration.py, lines: "178", quote: "('pressure', 0, 0, -1, 'point', 11005.30965, 1e-7)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_tube_r_stab_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "10000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "179", quote: "('pressure', 0, -1, -1, 'point', 10000.0, 1e-8)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_r_stab_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "100.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "180", quote: "('flow', 0, -1, -1, 'point', 100.0, 1e-16)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-16 (abs 1e-8)"}
+- {id: tc_tube_r_stab_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "1.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "181", quote: "('area', 0, -1, -1, 'point', 1.0, 1e-5)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_tube_stenosis_r_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "10150.68211", citation: {file: Tests/SystemTests/test_integration.py, lines: "184", quote: "('pressure', 0, 0, -1, 'point', 10150.68211, 1e-6)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_tube_stenosis_r_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "10000.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "185", quote: "('pressure', 2, -1, -1, 'point', 10000.0, 1e-8)"}, note: "pressure, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-8 (abs 1e-8)"}
+- {id: tc_tube_stenosis_r_3, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "100.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "186", quote: "('flow', 0, -1, -1, 'point', 100.0, 1e-10)"}, note: "flow, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-10 (abs 1e-8)"}
+- {id: tc_tube_stenosis_r_4, quantity: case_area, unit: cm^2, origin: predicted, printed: "10.0", citation: {file: Tests/SystemTests/test_integration.py, lines: "187", quote: "('area', 0, -1, -1, 'point', 10.0, 1e-4)"}, note: "area, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-4 (abs 1e-8)"}
+- {id: tc_bifurcation_P_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "4039.45953118937", citation: {file: Tests/SystemTests/test_integration.py, lines: "190", quote: "('pressure', 0, 0, -1, 'point', 4039.45953118937, 1e-5)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_P_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "4026.67220709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "191", quote: "('pressure', 0, -1, -1, 'point', 4026.67220709878, 1e-5)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_P_3, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "4026.67220709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "192", quote: "('pressure', 1, 0, -1, 'point', 4026.67220709878, 1e-5)"}, note: "pressure, segment 1, inlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_P_4, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "4026.67220709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "193", quote: "('pressure', 2, 0, -1, 'point', 4026.67220709878, 1e-5)"}, note: "pressure, segment 2, inlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_P_5, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "4000.00", citation: {file: Tests/SystemTests/test_integration.py, lines: "194", quote: "('pressure', 1, -1, -1, 'point', 4000.00, 1e-5)"}, note: "pressure, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_P_6, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "4000.00", citation: {file: Tests/SystemTests/test_integration.py, lines: "195", quote: "('pressure', 2, -1, -1, 'point', 4000.00, 1e-5)"}, note: "pressure, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_P_7, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "196", quote: "('flow', 1, -1, -1, 'point', 3.9925, 1e-6)"}, note: "flow, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_P_8, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "197", quote: "('flow', 2, -1, -1, 'point', 3.9925, 1e-6)"}, note: "flow, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_R_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3997.46433118937", citation: {file: Tests/SystemTests/test_integration.py, lines: "200", quote: "('pressure', 0, 0, -1, 'point', 3997.46433118937, 1e-5)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "201", quote: "('pressure', 0, -1, -1, 'point', 3984.67700709878, 1e-5)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_3, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "202", quote: "('pressure', 1, 0, -1, 'point', 3984.67700709878, 1e-5)"}, note: "pressure, segment 1, inlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_4, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "203", quote: "('pressure', 2, 0, -1, 'point', 3984.67700709878, 1e-5)"}, note: "pressure, segment 2, inlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_5, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3958.0048", citation: {file: Tests/SystemTests/test_integration.py, lines: "204", quote: "('pressure', 1, -1, -1, 'point', 3958.0048, 1e-5)"}, note: "pressure, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_6, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3958.0048", citation: {file: Tests/SystemTests/test_integration.py, lines: "205", quote: "('pressure', 2, -1, -1, 'point', 3958.0048, 1e-5)"}, note: "pressure, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_7, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "206", quote: "('flow', 1, -1, -1, 'point', 3.9925, 1e-5)"}, note: "flow, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_8, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "207", quote: "('flow', 2, -1, -1, 'point', 3.9925, 1e-5)"}, note: "flow, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-5 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3997.46433118937", citation: {file: Tests/SystemTests/test_integration.py, lines: "210", quote: "('pressure', 0, 0, -1, 'point', 3997.46433118937, 1e-6)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "211", quote: "('pressure', 0, -1, -1, 'point', 3984.67700709878, 1e-6)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_3, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "212", quote: "('pressure', 1, 0, -1, 'point', 3984.67700709878, 1e-6)"}, note: "pressure, segment 1, inlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_4, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "213", quote: "('pressure', 2, 0, -1, 'point', 3984.67700709878, 1e-6)"}, note: "pressure, segment 2, inlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_5, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3958.0048", citation: {file: Tests/SystemTests/test_integration.py, lines: "214", quote: "('pressure', 1, -1, -1, 'point', 3958.0048, 1e-7)"}, note: "pressure, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_6, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3958.0048", citation: {file: Tests/SystemTests/test_integration.py, lines: "215", quote: "('pressure', 2, -1, -1, 'point', 3958.0048, 1e-7)"}, note: "pressure, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_7, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "216", quote: "('flow', 1, -1, -1, 'point', 3.9925, 1e-6)"}, note: "flow, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_R_stab_8, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "217", quote: "('flow', 2, -1, -1, 'point', 3.9925, 1e-6)"}, note: "flow, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "123878.022943", citation: {file: Tests/SystemTests/test_integration.py, lines: "220", quote: "('pressure', 0, 0, np.arange(100, 200), 'mean', 123878.022943, 1e-7)"}, note: "pressure, segment 0, inlet node, mean over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "168182.372624", citation: {file: Tests/SystemTests/test_integration.py, lines: "221", quote: "('pressure', 0, 0, np.arange(100, 200), 'max', 168182.372624, 1e-7)"}, note: "pressure, segment 0, inlet node, max over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_3, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "89237.6441223", citation: {file: Tests/SystemTests/test_integration.py, lines: "222", quote: "('pressure', 0, 0, np.arange(100, 200), 'min', 89237.6441223, 1e-7)"}, note: "pressure, segment 0, inlet node, min over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_4, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "123855.677783", citation: {file: Tests/SystemTests/test_integration.py, lines: "223", quote: "('pressure', 1, -1, np.arange(100, 200), 'mean', 123855.677783, 1e-7)"}, note: "pressure, segment 1, outlet node, mean over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_5, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "171598.373528", citation: {file: Tests/SystemTests/test_integration.py, lines: "224", quote: "('pressure', 1, -1, np.arange(100, 200), 'max', 171598.373528, 1e-7)"}, note: "pressure, segment 1, outlet node, max over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_6, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "87624.0897929", citation: {file: Tests/SystemTests/test_integration.py, lines: "225", quote: "('pressure', 1, -1, np.arange(100, 200), 'min', 87624.0897929, 1e-7)"}, note: "pressure, segment 1, outlet node, min over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_7, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "123855.677783", citation: {file: Tests/SystemTests/test_integration.py, lines: "226", quote: "('pressure', 2, -1, np.arange(100, 200), 'mean', 123855.677783, 1e-7)"}, note: "pressure, segment 2, outlet node, mean over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_8, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "171598.373528", citation: {file: Tests/SystemTests/test_integration.py, lines: "227", quote: "('pressure', 2, -1, np.arange(100, 200), 'max', 171598.373528, 1e-7)"}, note: "pressure, segment 2, outlet node, max over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_9, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "87624.0897929", citation: {file: Tests/SystemTests/test_integration.py, lines: "228", quote: "('pressure', 2, -1, np.arange(100, 200), 'min', 87624.0897929, 1e-7)"}, note: "pressure, segment 2, outlet node, min over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_10, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "7.557147487534", citation: {file: Tests/SystemTests/test_integration.py, lines: "229", quote: "('flow', 0, 0, np.arange(100, 200), 'mean', 7.557147487534, 1e-7)"}, note: "flow, segment 0, inlet node, mean over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_11, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.839024865141", citation: {file: Tests/SystemTests/test_integration.py, lines: "230", quote: "('flow', 1, -1, np.arange(100, 200), 'mean', 3.839024865141, 1e-7)"}, note: "flow, segment 1, outlet node, mean over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_12, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "24.0553490482", citation: {file: Tests/SystemTests/test_integration.py, lines: "231", quote: "('flow', 1, -1, np.arange(100, 200), 'max', 24.0553490482, 1e-7)"}, note: "flow, segment 1, outlet node, max over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_13, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "-3.35029015773", citation: {file: Tests/SystemTests/test_integration.py, lines: "232", quote: "('flow', 1, -1, np.arange(100, 200), 'min', -3.35029015773, 1e-7)"}, note: "flow, segment 1, outlet node, min over saved steps 100-199; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_1, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3997.46433118937", citation: {file: Tests/SystemTests/test_integration.py, lines: "235", quote: "('pressure', 0, 0, -1, 'point', 3997.46433118937, 1e-6)"}, note: "pressure, segment 0, inlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_2, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "236", quote: "('pressure', 0, -1, -1, 'point', 3984.67700709878, 1e-6)"}, note: "pressure, segment 0, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_3, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "237", quote: "('pressure', 1, 0, -1, 'point', 3984.67700709878, 1e-6)"}, note: "pressure, segment 1, inlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_4, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3984.67700709878", citation: {file: Tests/SystemTests/test_integration.py, lines: "238", quote: "('pressure', 2, 0, -1, 'point', 3984.67700709878, 1e-6)"}, note: "pressure, segment 2, inlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_5, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3958.0048", citation: {file: Tests/SystemTests/test_integration.py, lines: "239", quote: "('pressure', 1, -1, -1, 'point', 3958.0048, 1e-7)"}, note: "pressure, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_6, quantity: case_pressure, unit: g/cm/s^2, origin: predicted, printed: "3958.0048", citation: {file: Tests/SystemTests/test_integration.py, lines: "240", quote: "('pressure', 2, -1, -1, 'point', 3958.0048, 1e-7)"}, note: "pressure, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-7 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_7, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "241", quote: "('flow', 1, -1, -1, 'point', 3.9925, 1e-6)"}, note: "flow, segment 1, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}
+- {id: tc_bifurcation_RCR_staticFunc_8, quantity: case_flow, unit: cm^3/s, origin: predicted, printed: "3.9925", citation: {file: Tests/SystemTests/test_integration.py, lines: "242", quote: "('flow', 2, -1, -1, 'point', 3.9925, 1e-6)"}, note: "flow, segment 2, outlet node, at the last saved step; the test's relative tolerance 1e-6 (abs 1e-8)"}

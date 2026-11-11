@@ -1,0 +1,18 @@
+# The theory notes write the map with the absolute pressure p and no distal pressure; the code adds a
+# distal pressure Pd (cvOneDSubdomain.cxx line 310, 'wgyang 2019/4'), which does not change the
+# impedance at a non-zero frequency.
+id: rcr_impedance_theory
+name: input impedance of the RCR map of the theory notes at one frequency
+role: model
+stated: {file: docs/source/content/theory.rst, lines: "258-267", quote: "Windkessel RCR circuit model (0D, fully transient)"}
+equation: "Q(B,t) = [Q(B,0) - p0(B)/R] exp(-alpha t) + p(B,t)/R - 1/(R^2 C) int_0^t p(B,tau) exp(-alpha (t - tau)) dtau, alpha = (R + Rd)/(R Rd C); periodic part: Z = 1/(1/R - 1/(R^2 C (i omega + alpha)))"
+inputs:
+  Rc: {quantity: windkessel_proximal_resistance, unit: g/cm^4/s, description: "R of the theory notes"}
+  Rd: {quantity: windkessel_distal_resistance, unit: g/cm^4/s}
+  C: {quantity: windkessel_capacitance, unit: cm^4*s^2/g}
+  f: {quantity: frequency, unit: Hz}
+outputs:
+  modulus: {quantity: input_impedance_modulus, unit: g/cm^4/s}
+  phase: {quantity: input_impedance_phase, unit: degree}
+settings: {}
+stochastic: false

@@ -1,0 +1,24 @@
+id: aortoiliac_plans_1d
+name: 1D model of the aorto-iliac occlusive disease case and three treatment plans, with resistance outlets and the stenosis model (Table I, Fig. 4)
+role: model
+stated: {page: 7, printed_page: "201", quote: "Resting flow conditions were used to assess the blood", where: "Results, Table I, Fig. 4"}
+equation: >
+  Eqs. 1-2, 6, 11, 14 in each segment; the stenosis loss N of Eq. 17 in stenosed segments; prescribed
+  flows at every boundary for the preoperative case, then resistances R = p/Q from its mean pressures
+  at each outlet (p = QR) for the plans; 200 time steps per cycle, five cycles
+inputs:
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  Kt: {quantity: stenosis_turbulent_coefficient, unit: dimensionless}
+  cv: {quantity: stenosis_viscous_factor, unit: dimensionless}
+outputs:
+  Q_mean: {quantity: mean_flow_rate, unit: cm^3/s, description: "mean flow at the aorta, femoral and popliteal locations of Table I (1D column)"}
+runnable: false
+not_runnable_reason: >
+  The patient model's geometry (segment lengths, radii, the stenoses' lengths and areas, the bypass
+  grafts), the literature flow distribution used as the preoperative boundary flows [16], the inflow
+  waveform and the resistances computed from the preoperative pressures are not printed; the
+  geometry comes from the 3D model of Taylor et al. [1]. Only the resulting mean flows are printed
+  (Table I).
+stochastic: false

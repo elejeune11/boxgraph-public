@@ -266,6 +266,59 @@ case_studies:
           statistics survive that difference and why.
         show: "question: sexton2025/q_validation_schwarz"
 
+  - id: solver
+    teaches: A paper's method against its released solver
+    title: The 1D solver and its paper
+    summary: >-
+      Wan et al. (2002) describe the one-dimensional blood-flow method behind SimVascular's
+      released solver, svOneDSolver. The record builds the released code, runs it, reads it
+      line by line against the paper's equations, and runs it on the benchmarks of Boileau et
+      al. (2015), whose 3D reference solutions are released. Nothing was tuned: the settings
+      are the paper's, the release's or the benchmark's.
+    steps:
+      - text: >-
+          First, can the paper's own method be run? The release keeps the paper's formulation,
+          but with a resistance outlet, the paper's own condition, it stops at the first step
+          with a NaN. Reading the code shows why: that formulation divides by a boundary value
+          that is never set for a resistance outlet. Everything below uses the release's other
+          formulation.
+        show: "question: svoned_code/q_advective_resistance_unset"
+      - text: >-
+          The release's own tests compare its results with analytical solutions. Rerun, every
+          value passes the tests' tolerances, but about half differ from the printed expected
+          value in their last digits, so they are not reproduced at the precision printed.
+        show: "comparison: svoned_code/cmp_tc_tube_r_1"
+      - text: >-
+          The stenosis loss is not the paper's. Wan et al. print it with the stenosis length L;
+          the code uses an effective length 0.83 L + 1.64 D, with "La = L" commented out. The
+          release's stenosis test follows the code, and its expected pressure drop is reproduced
+          from that formula.
+        show: "comparison: svoned_code/cmp_tsr_dp"
+      - text: >-
+          The velocity profile differs too. The paper and the code's notes use a parabolic
+          profile; the release's physiological examples set a flatter one, with a quarter less
+          wall friction. The input guide does not say what that setting is.
+        show: "question: svoned_code/q_profile_exponent_examples"
+      - text: >-
+          Against the benchmarks' 3D solutions, the 1D pressures lie close to the 3D curves, here
+          in a single artery (benchmark 2). The verdict is "not reproduced" because every point
+          must fall within the precision of the curve read from the figure; the curves differ by
+          about a percent.
+        show: "validation: svoned_code/val_b2_P_vs_3d"
+      - text: >-
+          The pressure drop along the vessel, a small difference of two large pressures, is where
+          1D and 3D part most.
+        show: "validation: svoned_code/val_b3_dP_vs_3d"
+      - text: >-
+          At a bifurcation (benchmark 4), the flow into the iliac branch follows the 3D solution
+          closely.
+        show: "validation: svoned_code/val_b4_iliac_Q_vs_3d"
+      - text: >-
+          One outflow the paper announces is missing: the structured-tree impedance condition is
+          not in the release, so outflow from Olufsen's trees cannot be run with this solver.
+          svZeroDSolver is the SimVascular code that has it.
+        show: "question: svoned_code/q_impedance_not_in_code"
+
   - id: parameter
     teaches: A parameter across three papers
     title: The asymmetry of a structured tree

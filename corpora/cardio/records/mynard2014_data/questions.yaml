@@ -46,3 +46,31 @@
     aortic flow, aortic and LV pressure) are none of them a wave speed. The shared shape of the two
     wave_speed_eq1 models reflects that this one is described from mynard2014's Eq. 1; how the two differ
     is the subject of q_eq1_constants. In the other direction, see mynard2014/q_no_validation_vs_mynard2014_data.
+- id: q_no_relation_davies2006
+  kind: choice
+  about: [wave_speed_eq1, c0_lm_lad, D0_lm_lad]
+  text: >
+    (Relation job davies2006+mynard2014_data, 2026-11-10.) Nothing is entered between this record and
+    davies2006, the human coronary wave intensity measurements. The sheet cites only mynard2014, and
+    davies2006 (2006) is earlier, so neither states a relation and neither takes a value from the other.
+    None is proposed: wave_speed_eq1 (wave speed from diameter, scaled to a proximal Cx target) and
+    davies2006's single_point_wave_speed (wave speed from summed squared pressure and velocity increments)
+    share an output quantity but no input. No validation either: this record's values are model parameters,
+    not predictions, and davies2006 prints no wave speed value. See davies2006/q_no_relation_mynard2014_data.
+- id: q_no_validation_vs_davies2006
+  kind: choice
+  about: [wave_speed_eq1, c0_lm_lad, D0_lm_lad, c0_vs_D0_lm_lad]
+  text: >
+    (Validation job davies2006+mynard2014_data, 2026-11-10.) No validation is entered in either direction,
+    and no validations.yaml is written. This record's only model, wave_speed_eq1, outputs a reference wave
+    speed. davies2006 measures none it could be compared with: its wave speed is estimated per subject by the
+    single-point method but never printed (only its correlation with the forward suction wave share, r = 0.64),
+    and its Fig. 7 reading is kept on the axes as labelled (age, share of the forward suction wave;
+    davies2006/q_fig7_reading), so no measured wave speed datum exists. Even if one did, wave_speed_eq1 would
+    need a human left main or LAD diameter (davies2006 prints none, so it would be added) and it is scaled to
+    an assumed 9.0 m/s proximal Cx target, so its output there is a chosen value, not a prediction. davies2006's
+    other measurements (wave intensities, shares of each wave, pressures, Doppler velocities, their
+    correlations with septal thickness, relaxation and age) are not outputs of this model. In the other
+    direction this record holds no measurements: its L, D0 and c0 columns are model parameters (origin
+    reported) of sheep geometry, so davies2006's wave intensity models have nothing here to be tested against.
+    The conditions also differ (conscious humans against unscaled ovine parameters).

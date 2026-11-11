@@ -179,3 +179,16 @@
     Table 2 is checked value by value through from_datum instead. The errors_* models give error norms,
     which alastruey2011's record does not hold (its Tables 3-4 are left out).
   citation: {file: Benchmark5_37ArteryNetwork/README.txt, lines: "31", quote: "col 2 to 9: pressure P [kPa] or flow rate Q [ml/s] for Z={AorticArchII,ThoracicAortaII,LSubclavianI,RIliacFemoralII,LUlnar,RAnteriorTibial,RUlnar,Splenic}"}
+- id: q_no_validation_vs_svoned_code
+  kind: choice
+  about: [waveform, waveform_flow, waveform_pressure_difference, waveform_radius_change, errors_pressure, errors_flow, errors_pressure_difference, errors_radius_change, peak_loss_single_pulse]
+  text: >
+    (Cross-validation with svoned_code; cross-validation job 2026-11-10.) No validation is entered between this
+    record and svoned_code, in either direction. svoned_code is software and holds no measured datum, and this
+    record's models are adapters that read released columns, compute the paper's error norms or the B1 peak
+    loss; they predict nothing svOneDSolver outputs. This record also holds no measured datum: the in vitro
+    ExpData of Benchmark 5 is read from the released files by the waveform adapters and is not entered in
+    data.yaml, so svoned_code's models have no datum here to be validated against. They are compared instead with
+    the 3D curves of boileau2015 (svoned_code validations.yaml), and svoned_code does not build the Benchmark 5
+    network (svoned_code/q_benchmark_scope).
+  citation: {file: Benchmark5_37ArteryNetwork/README.txt, lines: "31", quote: "col 2 to 9: pressure P [kPa] or flow rate Q [ml/s] for Z={AorticArchII,ThoracicAortaII,LSubclavianI,RIliacFemoralII,LUlnar,RAnteriorTibial,RUlnar,Splenic}"}

@@ -1,0 +1,20 @@
+id: stenosis_dp_eq15
+name: pressure loss across a stenosis, Seeley and Young's empirical formula (Eqs. 15-16, as printed)
+role: model
+stated: {page: 3, printed_page: "197", quote: "an empirical formula for the pressure losses across models", where: "Eqs. 15-16"}
+equation: "Dp/(rho V0^2) = Kv/Re0 + (Kt/2)(S0/S1 - 1)^2 (15); Kt = 1.52, Kv = 32 (L/D0)(S0/S1)^2 (16)"
+described_from: ref-12
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  Q: {quantity: flow_rate, unit: cm^3/s, description: "flow through the stenosis; V0 = Q/S0"}
+  S0: {quantity: vessel_cross_sectional_area, unit: cm^2, description: "proximal vessel"}
+  S1: {quantity: vessel_cross_sectional_area, unit: cm^2, description: "in the stenosis"}
+  L: {quantity: stenosis_length, unit: cm}
+  Kt: {quantity: stenosis_turbulent_coefficient, unit: dimensionless}
+  cv: {quantity: stenosis_viscous_factor, unit: dimensionless, description: "the 32 of Eq. 16"}
+outputs:
+  dp: {quantity: stenosis_pressure_drop, unit: g/s^2/cm}
+settings: {}
+stochastic: false
+# D0 = 2 (S0/pi)^(1/2), Re0 = V0 D0/nu, as the text after Eq. 16 defines them.

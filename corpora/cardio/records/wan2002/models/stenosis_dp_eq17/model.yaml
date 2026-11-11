@@ -1,0 +1,23 @@
+id: stenosis_dp_eq17
+name: pressure loss across a stenosis from the modified viscous loss N of Eq. 17, through steady flow in the momentum equation (Eq. 2)
+role: model
+stated: {page: 3, printed_page: "197", quote: "This results in a modification to the viscous loss", where: "Eq. 17, with Eq. 2"}
+equation: >
+  N = -S1^2 Q0^2 [Kv/Re0 + (Kt/2)(S0/S1 - 1)^2] / (S0^2 Q1 L) (17), with Kv, Kt of Eq. 16;
+  steady, uniform flow in the stenosis (Eq. 2 with d/dt = 0, f = 0, S = S1, Q0 = Q1 = Q): (S1/rho) dp/dz = N Q/S1,
+  so the loss over its length is Dp = -rho N Q L / S1^2
+built_from: [stenosis_dp_eq15]
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  Q: {quantity: flow_rate, unit: cm^3/s}
+  S0: {quantity: vessel_cross_sectional_area, unit: cm^2}
+  S1: {quantity: vessel_cross_sectional_area, unit: cm^2}
+  L: {quantity: stenosis_length, unit: cm}
+  Kt: {quantity: stenosis_turbulent_coefficient, unit: dimensionless}
+  cv: {quantity: stenosis_viscous_factor, unit: dimensionless}
+outputs:
+  N: {quantity: viscous_loss_coefficient, unit: cm^2/s}
+  dp: {quantity: stenosis_pressure_drop, unit: g/s^2/cm}
+settings: {}
+stochastic: false

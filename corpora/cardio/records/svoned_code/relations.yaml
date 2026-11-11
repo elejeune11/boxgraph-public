@@ -1,0 +1,294 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units.
+# a is the paper's equation (in its own record), b the code: a port of the release's C++ (our code) or the
+# released solver run as a whole.
+
+# --- the constitutive law: the code's OLUFSEN material against the law as the papers print it
+- id: rel_olufsen_law_olufsen1999
+  kind: same_as
+  a: olufsen1999/pressure_area_eq5
+  b: svoned_code/olufsen_law_code
+  mapping: {k1: k1, k2: k2, k3: k3, r0: r0, p_ref: p0, S: A}
+  output_map: {p: p}
+  regime: {k1: [1.0e7, 3.0e7], k2: [-30, -15], k3: [5.0e5, 1.2e6], r0: [0.2, 1.5], p0: [0, 1.5e5], A: [0.1, 8]}
+  tolerance: 1.0e-9
+  provenance: stated
+  citation: {file: docs/source/content/theory.rst, lines: "60", quote: "The particular constitutive relationship that we have used is that proposed by Olufsen [3]_:"}
+  assumptions:
+    - "olufsen1999's p0 (the surrounding pressure, at which A = A0) is the code's reference pressure p1_; the code instead calls it 'the pressure associated with the undeformed area of the vessel. Typically this is the diastolic pressure' (inputFileGuide.rst line 266), so the same function is applied to another reference state (wan2002 q_reference_state_olufsen)."
+    - "A uniform segment: the code's radius ro is interpolated linearly between the segment's inlet and outlet radii (cvOneDMaterialOlufsen.cxx lines 154-162); with equal areas it is r0."
+- id: rel_olufsen_law_wan2002
+  kind: same_as
+  a: wan2002/pressure_area_eq11
+  b: svoned_code/olufsen_law_code
+  mapping: {k1: k1, k2: k2, k3: k3, r0: r0, p_ref: p0, S: S}
+  output_map: {p: p}
+  regime: {k1: [1.0e7, 3.0e7], k2: [-30, -15], k3: [5.0e5, 1.2e6], r0: [0.2, 1.5], p0: [0, 1.5e5], S: [0.1, 8]}
+  tolerance: 1.0e-9
+  provenance: proposed
+  reason: >
+    wan2002 Eq. 11 with Eq. 14 is the law the code's OLUFSEN material computes (GetEHR line 137, GetPressure
+    line 200), and wan2002's authors are among the code's named contributors (README.md); the code's theory
+    notes cite Olufsen for the law (theory.rst line 60), not wan2002.
+  assumptions:
+    - "wan2002's p0 = p(z, 0), the initial pressure, is the code's reference pressure p1_ from the MATERIAL card."
+
+# --- the profile terms: the code against wan2002 Eq. 6
+- id: rel_profile_wan2002_eq6
+  kind: same_as
+  a: wan2002/profile_terms_eq6
+  b: svoned_code/profile_terms_code
+  mapping: {mu: "nu", rho: "1", n: "n"}
+  regime: {n: [1, 10], nu: [0.02, 0.05]}
+  tolerance: 1.0e-12
+  provenance: proposed
+  reason: >
+    The code computes delta = 1/(1 + n) and N = -2 pi nu (n + 2) from the MATERIAL card's exponent
+    (cvOneDMaterial.h lines 99-103), the closed forms of wan2002 Eq. 6. The theory notes give only the
+    Poiseuille values delta = 1/3, N = -8 pi nu (theory.rst line 31) and cite Hughes and Lubliner [1] for them.
+  assumptions:
+    - "The code takes the dynamic viscosity and the density; with rho = 1 g/cm^3 its dynamic viscosity in poise equals wan2002's kinematic viscosity in cm^2/s, so N is compared at the same nu."
+
+# --- the stenosis loss: the code against wan2002 Eqs. 15-16 as printed
+- id: rel_stenosis_wan2002_eq15
+  kind: same_as
+  a: wan2002/stenosis_dp_eq15
+  b: svoned_code/stenosis_code
+  mapping: {rho: rho, nu: nu, Q: Q, S0: S0, S1: S1, L: L}
+  output_map: {dp: dp}
+  regime: {rho: [1.0, 1.1], nu: [0.03, 0.04], Q: [1, 100], S0: [1.0, 5.0], S1: [0.2, 0.9], L: [0.5, 3.0], Kt: [1.52, 1.52], cv: [32, 32]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    wan2002 introduces the stenosis model of its Eqs. 15-17 for the solver whose code this is; the code
+    keeps Kt = 1.52 and the factor 32 (cvOneDMthSegmentModel.cxx lines 174, 180) but puts an effective length
+    La = 0.83 L + 1.64 D1 where Eq. 16 prints L (line 178; 'La = L' commented out on line 179). The relation
+    therefore is expected to fail except where 0.83 L + 1.64 D1 = L, and records that difference
+    (q_stenosis_effective_length).
+  assumptions:
+    - "Steady flow, the same in the upstream and the stenosed segment; Kt and the factor 32 fixed at the printed values."
+
+# --- the RCR outlet: the 1D solver's against the 0D solver's (svzerod_code), same circuit, same inputs
+- id: rel_rcr_svzerod_modulus
+  kind: approximated_by
+  a: svzerod_code/windkessel_released_impedance
+  b: svoned_code/rcr_impedance_svoned
+  mapping: {Rc: Rc, Rd: Rp, C: "C/1000000", f: f}
+  output_map: {modulus: modulus}
+  regime: {Rc: [50, 250], Rp: [800, 3000], C: [100, 500], f: [0.5, 5]}
+  tolerance: 0.02
+  provenance: proposed
+  reason: >
+    Both releases of SimVascular have a three-element Windkessel outlet with a proximal resistance in series
+    with a capacitance parallel to a distal resistance (svOneDSolver: cvOneDSubdomain.cxx lines 305-310 and the
+    map of theory.rst lines 263-267; svZeroDSolver: WindkesselBC.h), so under the same sinusoidal flow both
+    should give its input impedance Rc + Rd/(1 + i omega Rd C).
+  assumptions:
+    - "svzerod_code's Rp (proximal) is the 1D solver's first RCR value and its Rd (distal) the third; svzerod_code's C is in cm^4 s^2/Mg, this record's in cm^4 s^2/g."
+    - "approximated_by: the 1D solver integrates the RCR convolution with a first-order step (1600 steps per period here: ref_rcr_b2_npts, cmp_rcr_b2_mod; q_rcr_first_order), the 0D solver with a second-order generalized-alpha step; the 2% tolerance is ours. The regime keeps Rd C f below 7.5 so that a run stays under a minute."
+- id: rel_rcr_svzerod_phase
+  kind: approximated_by
+  a: svzerod_code/windkessel_released_impedance
+  b: svoned_code/rcr_impedance_svoned
+  mapping: {Rc: Rc, Rd: Rp, C: "C/1000000", f: f}
+  output_map: {phase: phase}
+  regime: {Rc: [50, 250], Rp: [800, 3000], C: [100, 500], f: [0.5, 5]}
+  tolerance: 0.02
+  provenance: proposed
+  reason: As rel_rcr_svzerod_modulus, for the phase of the input impedance.
+  assumptions:
+    - "As rel_rcr_svzerod_modulus."
+
+# --- Boileau's tube law (Eq. 3, SI) against the code's OLUFSEN law (CGS) with k1 = 0: a = boileau2015, b = the port.
+# With k1 = 0, EHR = (4/3) k3; k3 = E h / rd makes EHR Boileau's beta/sqrt(Ad) = (4/3) E h / rd. Factors: Pa -> dyne/cm^2
+# 10, m -> cm 100, m^2 -> cm^2 1e4. Then P_B = Pext + Pd + EHR (x - 1) and p_O = Pext + Pd + EHR (1 - 1/x), x = sqrt(A/Ad):
+# equal with equal slope at A = Ad, differing by EHR (x - 1)^2 / x away from it.
+- id: rel_tube_law_boileau2015_olufsen_code
+  kind: approximated_by
+  a: boileau2015/tube_law_eq3
+  b: svoned_code/olufsen_law_code
+  mapping:
+    k1: "0"
+    k2: "0"
+    k3: "10*E*h/sqrt(Ad/pi)"
+    r0: "100*sqrt(Ad/pi)"
+    p_ref: "10*(Pd + Pext)"
+    S: "1e4*A"
+  output_map: {p: P}
+  regime: {A: [2.8e-5, 3.3e-5], Ad: [2.75e-5, 2.9e-5], Pd: [10000, 11000], E: [6.5e5, 7.5e5], h: [2.8e-4, 3.2e-4], Pext: [0, 0]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    The code runs Boileau's benchmarks with its LINEAR material, which is Boileau's Eq. 3 exactly
+    (boileau_vessel_svoned), but the record has no port of that material, so it cannot be related here. Its other
+    law, OLUFSEN (olufsen_law_code), p = p_ref + EHR (1 - sqrt(S0/S)) with EHR = (4/3)(k1 exp(k2 r0) + k3), with
+    k1 = 0 and k3 = E h / rd has Boileau's stiffness at the reference area (the same dP/dA at A = Ad, hence the
+    same wave speed of Eq. 5 there) but is linear in 1/sqrt(A), not sqrt(A). Neither source states this; the
+    relation measures how far the code's OLUFSEN law is from Boileau's over a cardiac cycle of Benchmark 2.
+  assumptions:
+    - "The regime is Boileau's Benchmark 2 (carotid, Table III: rd 3 mm, h 0.3 mm, E 700 kPa, Pd 10.933 kPa, Pext 0), widened a little, with areas from about 0.97 to 1.2 Ad: about the excursion Eq. 3 gives for the benchmark's pressures. The 5% tolerance is ours."
+    - "The mapping joins the forms, not the quantities: k3 here carries Boileau's E h / rd, not an Olufsen fit; Boileau's Pd + Pext is the code's reference pressure p1_."
+
+# --- the RCR outlet of the theory notes against olufsen1999's three-element windkessel (Eq. 7).
+# Units: g/s/cm^4 = g/cm^4/s; both capacitances in cm^4*s^2/g; omega = 2 pi f.
+- id: rel_rcr_theory_olufsen1999_windkessel_modulus
+  kind: same_as
+  a: olufsen1999/windkessel_eq7
+  b: svoned_code/rcr_impedance_theory
+  mapping: {Rc: R1, Rd: R2, C: CT, f: "omega/(2*pi)"}
+  output_map: {modulus: Zmod}
+  regime: {R1: [50, 250], R2: [800, 3000], CT: [1.0e-4, 5.0e-4], omega: [0.5, 30]}
+  tolerance: 1.0e-9
+  provenance: proposed
+  reason: >
+    The code's theory notes give the RCR outlet as a memory map, Q = p/R - 1/(R^2 C) int p exp(-alpha (t - tau)) dtau
+    with alpha = (R + Rd)/(R Rd C) (theory.rst lines 263-267), whose periodic impedance is R + Rd/(1 + i omega Rd C);
+    olufsen1999 Eq. 7 prints the three-element windkessel impedance (R1 + R2 + i omega CT R1 R2)/(1 + i omega CT R2),
+    the same function. The notes cite olufsen1999 only for the constitutive law (line 60), not for this outlet, so
+    neither source states the relation.
+  assumptions:
+    - "The theory notes' R (proximal) is Eq. 7's series R1, Rd its parallel R2, C its CT; the code's distal pressure Pd does not change the impedance at a non-zero frequency."
+- id: rel_rcr_theory_olufsen1999_windkessel_phase
+  kind: same_as
+  a: olufsen1999/windkessel_eq7
+  b: svoned_code/rcr_impedance_theory
+  mapping: {Rc: R1, Rd: R2, C: CT, f: "omega/(2*pi)"}
+  output_map: {phase: Zphase}
+  regime: {R1: [50, 250], R2: [800, 3000], CT: [1.0e-4, 5.0e-4], omega: [0.5, 30]}
+  tolerance: 1.0e-9
+  provenance: proposed
+  reason: As rel_rcr_theory_olufsen1999_windkessel_modulus, for the phase of the input impedance.
+  assumptions:
+    - "As rel_rcr_theory_olufsen1999_windkessel_modulus."
+
+# --- olufsen2000's state equation (Eq. 14) against the code's OLUFSEN material (relation job olufsen2000+svoned_code).
+# a = olufsen2000/tube_law_eq14, CGS (dyne/cm^2 = g/s^2/cm, cm, cm^2), b = the port. The code's EHR = (4/3)(k1 exp(k2 r0) + k3)
+# is olufsen2000 Eq. 14's (4/3) E h/r0 with Eh/r0 written by Eq. 15; Eq. 14 has E h/r0 as its own inputs, so the mapping puts
+# E h/r0 into k3 and sets k1 = k2 = 0 (EHR = (4/3) k3). No relation is entered between olufsen2000/kinematic_viscosity
+# (output nu) and profile_terms_code (outputs delta, N): the code computes nu = mu/rho only inside the port, so the two
+# models share inputs but not an output, and their shared shape is the trivial ratio mu/rho (a form too plain to relate).
+- id: rel_state_eq14_olufsen2000_code
+  kind: same_as
+  a: olufsen2000/tube_law_eq14
+  b: svoned_code/olufsen_law_code
+  mapping: {k1: "0", k2: "0", k3: "E*h/r0", r0: r0, p_ref: p0, S: A}
+  output_map: {p: p}
+  regime: {A: [0.1, 8], r0: [0.2, 1.5], E: [1.0e6, 1.0e7], h: [0.02, 0.2], p0: [0, 1.5e5]}
+  tolerance: 1.0e-9
+  provenance: proposed
+  reason: >
+    olufsen2000 Eq. 14, p - p0 = (4/3)(E h/r0)(1 - sqrt(A0/A)) with A0 = pi r0^2 (p. 5), is the pressure the code's
+    OLUFSEN material returns, p1_ + EHR (1 - sqrt(So_/S)) with So_ = pi ro^2 and EHR = (4/3)(K1 exp(K2 ro) + K3)
+    (cvOneDMaterialOlufsen.cxx lines 137, 150, 200), where the code's K1 exp(K2 ro) + K3 is olufsen2000's Eq. 15 for
+    E h/r0 with the same k1 = 2.00e7 and k2 = -22.53 (the code's constructor -22.5267). The code calls this
+    "Olufsen's constitutive law" (line 197) but its theory notes cite only olufsen1999 for it (theory.rst lines 60,
+    532), not olufsen2000, so neither source states the relation.
+  assumptions:
+    - "olufsen2000's p0 (p at A = A0) is the code's reference pressure p1_ from the MATERIAL card; the input guide calls it the pressure of the undeformed area, typically the diastolic pressure (inputFileGuide.rst line 266)."
+    - "A uniform segment: the code's radius ro is interpolated between inlet and outlet radii (lines 154-162); with equal areas it is r0."
+    - "The mapping joins the forms, not the quantities: k3 here carries olufsen2000's E h/r0, not the fit offset of Eq. 15."
+
+# --- stergiopulos1992's terminal modified windkessel (Eq. 7, as one harmonic) against the code's RCR outlet
+# (relation job stergiopulos1992+svoned_code). a = stergiopulos1992/terminal_impedance_eq7 (RT, R1/RT, CT, f),
+# b = the theory notes' map or the released executable. Units: dyn*s/cm^5 = g/cm^4/s; cm^5/dyn = cm^4*s^2/g.
+# Neither source cites the other: the code's references do not include stergiopulos1992, and the paper predates it.
+# Stergiopulos's stenosis law (Eq. 8, Young-Tsai form with Kv, Kt, Ku) is close to the code's (stenosis_code), but
+# the record has Eq. 8 only inside the 55-segment network (arterial_tree_1d), not as a model of its own, so no
+# relation is entered for it.
+- id: rel_rcr_theory_stergiopulos1992_eq7_modulus
+  kind: same_as
+  a: stergiopulos1992/terminal_impedance_eq7
+  b: svoned_code/rcr_impedance_theory
+  mapping: {Rc: "R1r*RT", Rd: "RT*(1 - R1r)", C: CT, f: f}
+  output_map: {modulus: mod}
+  regime: {RT: [1000, 30000], R1r: [0.05, 0.4], CT: [1.0e-6, 5.0e-4], f: [0.5, 10]}
+  tolerance: 1.0e-9
+  provenance: proposed
+  reason: >
+    stergiopulos1992 Eq. 7 (p. 2) is the modified windkessel dQ/dt = (1/R1) dp/dt + p/(R1 R2 CT) - (1 + R1/R2) Q/(R1 CT)
+    with R1 + R2 = RT, whose impedance at one frequency is R1 + R2/(1 + i omega R2 CT). The code's theory notes give the
+    RCR outlet as the memory map Q = p/R - 1/(R^2 C) int p exp(-alpha (t - tau)) dtau, alpha = (R + Rd)/(R Rd C)
+    (theory.rst lines 263-267), whose periodic impedance is R + Rd/(1 + i omega Rd C): the same three-element circuit.
+    Neither source states it.
+  assumptions:
+    - "The paper's series R1 = (R1/RT) RT is the code's proximal R, its R2 = RT - R1 the code's distal Rd, and its CT the code's C; the code's distal pressure Pd does not change the impedance at a non-zero frequency."
+    - "The mapping joins the forms, not the quantities: the paper's terminal RT and CT are Westerhof's lumped peripheral values, not inputs of any SimVascular case."
+- id: rel_rcr_theory_stergiopulos1992_eq7_phase
+  kind: same_as
+  a: stergiopulos1992/terminal_impedance_eq7
+  b: svoned_code/rcr_impedance_theory
+  mapping: {Rc: "R1r*RT", Rd: "RT*(1 - R1r)", C: CT, f: f}
+  output_map: {phase: phase}
+  regime: {RT: [1000, 30000], R1r: [0.05, 0.4], CT: [1.0e-6, 5.0e-4], f: [0.5, 10]}
+  tolerance: 1.0e-9
+  provenance: proposed
+  reason: As rel_rcr_theory_stergiopulos1992_eq7_modulus, for the phase of the impedance.
+  assumptions:
+    - "As rel_rcr_theory_stergiopulos1992_eq7_modulus."
+- id: rel_rcr_svoned_stergiopulos1992_eq7_modulus
+  kind: approximated_by
+  a: stergiopulos1992/terminal_impedance_eq7
+  b: svoned_code/rcr_impedance_svoned
+  mapping: {Rc: "R1r*RT", Rd: "RT*(1 - R1r)", C: CT, f: f}
+  output_map: {modulus: mod}
+  regime: {RT: [1000, 3000], R1r: [0.05, 0.2], CT: [1.0e-4, 5.0e-4], f: [0.5, 5]}
+  tolerance: 0.02
+  provenance: proposed
+  reason: >
+    As rel_rcr_theory_stergiopulos1992_eq7_modulus, with the released solver run as a whole: under a sinusoidal inflow
+    its RCR outlet should show the input impedance of Eq. 7's circuit.
+  assumptions:
+    - "As rel_rcr_theory_stergiopulos1992_eq7_modulus."
+    - "approximated_by: the solver integrates the RCR convolution with a first-order step (q_rcr_first_order); the 2% tolerance is ours. The regime keeps Rc >= 50 and Rd C f <= 7.5, as rel_rcr_svzerod_modulus, so that a run stays under a minute."
+- id: rel_rcr_svoned_stergiopulos1992_eq7_phase
+  kind: approximated_by
+  a: stergiopulos1992/terminal_impedance_eq7
+  b: svoned_code/rcr_impedance_svoned
+  mapping: {Rc: "R1r*RT", Rd: "RT*(1 - R1r)", C: CT, f: f}
+  output_map: {phase: phase}
+  regime: {RT: [1000, 3000], R1r: [0.05, 0.2], CT: [1.0e-4, 5.0e-4], f: [0.5, 5]}
+  tolerance: 0.02
+  provenance: proposed
+  reason: As rel_rcr_svoned_stergiopulos1992_eq7_modulus, for the phase of the impedance.
+  assumptions:
+    - "As rel_rcr_svoned_stergiopulos1992_eq7_modulus."
+
+# --- ModelAtlas job svoned_code + wan2002 (2026-11-10). The relations of the code to wan2002 (Eqs. 6, 11, 15)
+# are above; no new one is entered. What the code states about wan2002 (theory.rst, ref. [4]): its conservative
+# form replaces the advective form of [4] (lines 126, 384), its modified Newton-Raphson is that of [4] (line 492),
+# and its junction (pressure continuity and conservation of mass by Lagrange multipliers) and essential boundary
+# conditions are "exactly the same as in Wan et al." (line 525). None of these is a model of its own in either
+# record: the junction and the solution scheme exist only inside the network models, which both run this release.
+# Not related: svoned_code/boileau_bifurcation_svoned and wan2002/bifurcation_svoned share the shape of their ports
+# but are different cases of the same executable: LINEAR material (Boileau's Eq. 3, linear in sqrt(S)) against
+# OLUFSEN (Wan's Eq. 11, linear in 1/sqrt(S); rel_tube_law_boileau2015_olufsen_code measures the difference), RCR
+# outlets against resistances, Boileau's inflow against the release's AORTAFLOW table, and outputs at one time
+# against extremes over the cycle; no mapping of inputs makes one the other, nor a limit (an RCR with C -> 0 is a
+# resistance, but the tube laws stay different). The same holds for boileau_vessel_svoned against
+# wan2002/single_segment_svoned. No value of wan2002 lacks its link: the code's constants taken from wan2002
+# (k1, k2, k3, n, Kt, the factor 32) carry from_datum in data.yaml, and wan2002 takes no value from the code.
+# rel_profile_wan2002_eq6 above is unverifiable only because it has no output_map (both models give delta and N);
+# it is kept as it is, and the same relation is entered once per output so that each can be tested.
+- id: rel_profile_wan2002_eq6_delta
+  kind: same_as
+  a: wan2002/profile_terms_eq6
+  b: svoned_code/profile_terms_code
+  mapping: {mu: "nu", rho: "1", n: "n"}
+  output_map: {delta: delta}
+  regime: {n: [1, 10], nu: [0.02, 0.05]}
+  tolerance: 1.0e-12
+  provenance: proposed
+  reason: As rel_profile_wan2002_eq6, for the momentum-flux correction delta = 1/(1 + n) (cvOneDMaterial.h line 100).
+  assumptions:
+    - "As rel_profile_wan2002_eq6."
+- id: rel_profile_wan2002_eq6_N
+  kind: same_as
+  a: wan2002/profile_terms_eq6
+  b: svoned_code/profile_terms_code
+  mapping: {mu: "nu", rho: "1", n: "n"}
+  output_map: {N: N}
+  regime: {n: [1, 10], nu: [0.02, 0.05]}
+  tolerance: 1.0e-12
+  provenance: proposed
+  reason: As rel_profile_wan2002_eq6, for the viscous loss coefficient N = -2 pi nu (n + 2) (cvOneDMaterial.h line 102).
+  assumptions:
+    - "As rel_profile_wan2002_eq6: with rho = 1 g/cm^3 the code's dynamic viscosity in poise equals wan2002's kinematic viscosity in cm^2/s."

@@ -1,0 +1,23 @@
+# Ports Code/Source/cvOneDMthSegmentModel.cxx lines 160-182 for steady flow (equal flow in the
+# upstream and stenosed segments, q = 1). The release then turns the loss into a friction term over
+# the stenosed segment (lines 183-184) and keeps the Poiseuille friction when it is larger (lines
+# 216-221); for positive flow below 1e-6 it skips the loss altogether (lines 166-168). Those branches
+# are not ported.
+id: stenosis_code
+name: the release's stenosis pressure loss for steady flow (port of cvOneDMthSegmentModel.cxx)
+role: model
+stated: {file: Code/Source/cvOneDMthSegmentModel.cxx, lines: "178-182", quote: "La = 0.83*L + 1.64*D[1];"}
+equation: "Kt = 1.52; La = 0.83 L + 1.64 D1; Kv = 32 La/D0 (S0/S1)^2; Re0 = D0 Q/(S0 nu); dp = rho U0^2 [Kv/Re0 + Kt/2 (S0/S1 - 1)^2]"
+inputs:
+  rho: {quantity: blood_density, unit: g/cm^3}
+  nu: {quantity: kinematic_viscosity, unit: cm^2/s}
+  Q: {quantity: flow_rate, unit: cm^3/s, description: "flow through the stenosis"}
+  S0: {quantity: vessel_cross_sectional_area, unit: cm^2, description: "the upstream segment"}
+  S1: {quantity: vessel_cross_sectional_area, unit: cm^2, description: "the stenosed segment"}
+  L: {quantity: stenosis_length, unit: cm, description: "the stenosed segment's length"}
+outputs:
+  dp: {quantity: stenosis_pressure_drop, unit: g/s^2/cm}
+  Kv: {quantity: stenosis_viscous_coefficient, unit: dimensionless}
+  La: {quantity: stenosis_effective_length, unit: cm}
+settings: {}
+stochastic: false

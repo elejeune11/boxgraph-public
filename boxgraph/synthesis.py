@@ -367,6 +367,8 @@ def _cross_checks(records, sound, rel_results, rels, evaluated, cache_dir=None) 
             continue
         la, lb = records[sa], records[sb]
         ma, mb = model_by_id(la, ma_id), model_by_id(lb, mb_id)
+        if any(p.curve for m in (ma, mb) for p in (*m.inputs.values(), *m.outputs.values())):
+            continue  # a relation of curve models is never verified (atlas), so never carried across
         if rel.output_map:
             (bo, ao), = rel.output_map.items()
         else:

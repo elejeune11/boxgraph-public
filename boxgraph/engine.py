@@ -605,7 +605,25 @@ class Builder:
                 done.add(rid)
         return order
 
+    def _port_curve(self, v: Value, port, symbol: str, run_id: str) -> dict:
+        """A whole curve for a curve port: its points with both x and y, in the port's units."""
+        if v.quantity != port.quantity:
+            raise BuildError(f"run {run_id}: input {symbol} expects quantity {port.quantity!r}, got {v.id} measuring {v.quantity!r}")
+        if not v.is_table:
+            raise BuildError(f"run {run_id}: input {symbol} takes a curve; {v.id} is a single value")
+        if v.index_quantity != port.curve.quantity:
+            raise BuildError(f"run {run_id}: input {symbol} takes a curve indexed by {port.curve.quantity!r}; "
+                             f"{v.id} is indexed by {v.index_quantity!r}")
+        pts = [(x, y) for x, y in zip(v.index, v.values) if x is not None and y is not None]
+        if not pts:
+            raise BuildError(f"run {run_id}: input {symbol} ({v.id}) has no readable point")
+        return {"x": [U.convert(x, v.index_unit, port.curve.unit) for x, _ in pts],
+                "y": [U.convert(y, v.unit, port.unit, v.scale, port.scale) for _, y in pts]}
+
     def _port_value(self, v: Value, port, symbol: str, run_id: str) -> float:
+        if v.is_table:
+            raise BuildError(f"run {run_id}: input {symbol} takes one number; {v.id} is a curve "
+                             "(sweep over its x values, or give the model a curve port)")
         if v.quantity != port.quantity:
             raise BuildError(f"run {run_id}: input {symbol} expects quantity {port.quantity!r}, got {v.id} measuring {v.quantity!r}")
         if v.value is None:
@@ -643,8 +661,11 @@ class Builder:
                 v = vals[vid]
                 if v.kind == "added":
                     res.added_inputs.append(vid)
-                base_inputs[sym] = self._port_value(v, model.inputs[sym], sym, run.id)
-            res.inputs = dict(base_inputs)
+                port = model.inputs[sym]
+                base_inputs[sym] = (self._port_curve(v, port, sym, run.id) if port.curve
+                                    else self._port_value(v, port, sym, run.id))
+            res.inputs = {sym: ({"curve_of": run.inputs[sym], **x} if isinstance(x, dict) else x)
+                          for sym, x in base_inputs.items()}
             sweep_index = None
             if run.sweep:
                 if len(run.sweep) != 1:
@@ -687,6 +708,21 @@ class Builder:
         for sym, port in model.outputs.items():
             oid = run.outputs.get(sym, f"{run.id}.{sym}")
             res.outputs[sym] = oid
+            if port.curve:
+                got = [r.get(sym) for reps in results for r in reps]
+                if sweep_index is not None or len(got) != 1:
+                    res.error = f"output {sym} is a curve: it cannot be swept or repeated over seeds"
+                    return res, {}
+                c = got[0]
+                if not (isinstance(c, dict) and isinstance(c.get("x"), list) and isinstance(c.get("y"), list)
+                        and len(c["x"]) == len(c["y"])):
+                    res.error = f"output {sym} is a curve port: the model must return {{'x': [...], 'y': [...]}} of one length"
+                    return res, {}
+                new[oid] = Value(id=oid, quantity=port.quantity, unit=port.unit, scale=port.scale, origin=origin,
+                                 kind="output", index=[float(x) for x in c["x"]], index_quantity=port.curve.quantity,
+                                 index_unit=port.curve.unit, values=[None if y is None else float(y) for y in c["y"]],
+                                 conditions=cond, run=run.id)
+                continue
             if any(isinstance(r.get(sym), list) for reps in results for r in reps):
                 res.error = f"output {sym} is a list; use a sweep to produce a curve"
                 return res, {}

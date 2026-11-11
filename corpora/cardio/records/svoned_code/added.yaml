@@ -1,0 +1,57 @@
+# Inputs the code does not state. The Boileau benchmark values are copied from boileau2015 (the paper)
+# and boileau_data (its supporting data) so that this record's own runs and refinements can use them;
+# the validations (validations.yaml) take the values recorded in those records directly where they exist.
+
+# ---- Benchmark 2, common carotid artery (boileau2015 Table III, p. 9; boileau_data Benchmark2)
+- {id: b2_L, quantity: vessel_length, unit: mm, printed: "126", basis: "boileau2015 Table III (p. 9), 'Length, L 126 mm'; not recorded in boileau2015's record", alternatives: []}
+- {id: b2_rd, quantity: vessel_radius, unit: mm, printed: "3", basis: "boileau2015 Table III, 'Radius at diastolic pressure, rd 3 mm' (boileau2015/rd_car)", alternatives: []}
+- {id: b2_h, quantity: wall_thickness, unit: mm, printed: "0.3", basis: "boileau2015 Table III, 'Wall thickness, h 0.3 mm' (boileau2015/h_car)", alternatives: []}
+- {id: b2_E, quantity: youngs_modulus, unit: kPa, printed: "700.0", basis: "boileau2015 Table III, 'Young's modulus, E 700.0 kPa' (boileau2015/E_car)", alternatives: []}
+- {id: b2_rho, quantity: blood_density, unit: kg/m^3, printed: "1060", basis: "boileau2015 Table III, 'Blood density 1060 Kg m-3' (boileau2015/rho_car)", alternatives: []}
+- {id: b2_mu, quantity: dynamic_viscosity, unit: mPa*s, printed: "4", basis: "boileau2015 Table III, 'Blood viscosity 4 mPa s' (also Tables V and VII); not recorded in boileau2015's record", alternatives: []}
+- {id: b2_Pd, quantity: diastolic_pressure, unit: kPa, printed: "10.933", basis: "boileau2015 Table III, 'Diastolic pressure, Pd 10.933 kPa' (boileau2015/Pd_car)", alternatives: []}
+- {id: b2_Pout, quantity: outflow_pressure, unit: Pa, printed: "0", basis: "boileau2015 Table III, 'Outflow pressure, Pout 0' (boileau2015/Pout_car)", alternatives: []}
+- {id: b2_R1, quantity: windkessel_proximal_resistance, unit: Pa*s/m^3, printed: "2.4875 x 10^8", basis: "boileau2015 Table III, Windkessel resistance R1 (boileau2015/R1_car)", alternatives: []}
+- {id: b2_C, quantity: windkessel_capacitance, unit: m^3/Pa, printed: "1.7529 x 10^-10", basis: "boileau2015 Table III, Windkessel compliance C (boileau2015/C_car)", alternatives: []}
+- {id: b2_R2, quantity: windkessel_distal_resistance, unit: Pa*s/m^3, printed: "1.8697 x 10^9", basis: "boileau2015 Table III, Windkessel resistance R2 (boileau2015/R2_car)", alternatives: []}
+- {id: b2_zeta, quantity: profile_exponent, unit: dimensionless, printed: "2", basis: "boileau2015 Table III, 'Velocity profile order 2'; not recorded in boileau2015's record", alternatives: []}
+- {id: b2_T, quantity: cardiac_period, unit: s, printed: "1.1", basis: "boileau_data Benchmark2 inflow.txt line 2, '# period T=1.1' (boileau_data/period_b2)", alternatives: []}
+- {id: b2_tini, quantity: time, unit: s, printed: "8.8", basis: "boileau_data Benchmark2 README line 8, 'tini = 8.8 s' (boileau_data/tini_b2): the start of the last 1D cycle, 8 periods", alternatives: []}
+- id: b2_lag
+  quantity: time_lag
+  unit: s
+  printed: "0.056"
+  basis: >
+    boileau_data/lag_b2: not stated by the paper or its data; fitted by boileau_data's reader as the lag at
+    which the paper's error tables are reproduced from the released 1D and 3D files (boileau_data
+    q_alignment). It places the 3D record's t = 0 at t_ini + 0.056 s on the 1D clock, which is the clock of
+    the inflow series these runs use.
+  alternatives: ["0", "0.055"]
+  stands_for: the time origin of the 3D reference on the clock of the inflow series
+
+- id: b2_t_probe
+  quantity: time
+  unit: s
+  printed: "0.3"
+  basis: "Ours: a time near the pressure peak of the 3D record of Benchmark 2 (NumData/3D.txt), at which the run's mesh, time step and number of cycles are refined"
+  alternatives: ["0.1", "0.8"]
+  stands_for: the time at which run_b2 reads the solution
+
+# ---- the other benchmarks' values that boileau2015's record does not hold (the validations take the rest
+# from boileau2015 and boileau_data directly)
+- {id: b3_lag, quantity: time_lag, unit: s, printed: "0.057", basis: "boileau_data/lag_b3: fitted by boileau_data's reader to the paper's Table VI (boileau_data q_alignment), as b2_lag", alternatives: ["0", "0.055"], stands_for: "the time origin of the 3D reference of Benchmark 3 on the clock of the inflow series"}
+- {id: b4_lag, quantity: time_lag, unit: s, printed: "0.001", basis: "boileau_data/lag_b4: fitted by boileau_data's reader to the paper's Table VIII (boileau_data q_alignment), as b2_lag", alternatives: ["0"], stands_for: "the time origin of the 3D reference of Benchmark 4 on the clock of the inflow series"}
+- {id: b3_L, quantity: vessel_length, unit: cm, printed: "24.137", basis: "boileau2015 Table V (p. 11), 'Length, L 24.137 cm'; not recorded in boileau2015's record", alternatives: []}
+- {id: b3_zeta, quantity: profile_exponent, unit: dimensionless, printed: "9", basis: "boileau2015 Table V (p. 11), 'Velocity profile order 9'", alternatives: []}
+- {id: b4_La, quantity: vessel_length, unit: cm, printed: "8.6", basis: "boileau2015 Table VII (p. 13), aorta 'Length, L 8.6 cm'", alternatives: []}
+- {id: b4_Li, quantity: vessel_length, unit: cm, printed: "8.5", basis: "boileau2015 Table VII (p. 13), iliac 'Length, L 8.5 cm'", alternatives: []}
+- {id: b4_zeta, quantity: profile_exponent, unit: dimensionless, printed: "9", basis: "boileau2015 Table VII (p. 13), 'Velocity profile order 9'", alternatives: []}
+
+# ---- the RCR outlet probed at one frequency (rcr_impedance_svoned)
+- id: f_probe
+  quantity: frequency
+  unit: Hz
+  printed: "1"
+  basis: "Ours: a probe frequency near the heart rate, at which the carotid Windkessel of Benchmark 2 (b2_R1, b2_C, b2_R2) is run through the release's RCR outlet and compared with the theory notes' map"
+  alternatives: ["0.5", "5"]
+  stands_for: the frequency of the sinusoidal probe flow

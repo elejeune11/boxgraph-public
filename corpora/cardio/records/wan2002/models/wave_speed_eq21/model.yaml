@@ -1,0 +1,23 @@
+id: wave_speed_eq21
+name: pulse wave speed at rest from the advection matrix (Eq. 21) with Olufsen's law (Eqs. 11, 14), and the transit time over a segment
+role: model
+stated: {page: 3, printed_page: "197", quote: "we can rewrite the system of partial differential equations", where: "Eq. 21, with Eqs. 11 and 14"}
+equation: >
+  The eigenvalues of A (Eq. 21) at Q = 0 are +-c with c^2 = (U1/rho) dp/dS; with Eq. 11 at S = S0,
+  c0^2 = (2/3) (Eh/r0)/rho, Eh/r0 from Eq. 14; transit time L/c0
+built_from: [stiffness_eq14]
+inputs:
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm}
+  r0: {quantity: vessel_radius, unit: cm}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  L: {quantity: vessel_length, unit: cm}
+outputs:
+  c0: {quantity: reference_wave_speed, unit: cm/s}
+  t_transit: {quantity: pulse_transit_time, unit: s}
+settings: {}
+stochastic: false
+# The paper prints no wave speed; this gives the transit time its constitutive law implies for the
+# single segment of Fig. 1, for comparison with the delay between the inlet and outlet curves there
+# (q_fig1_delay).

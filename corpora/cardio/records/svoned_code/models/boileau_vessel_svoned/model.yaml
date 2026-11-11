@@ -1,0 +1,50 @@
+# Runs the released executable (built from this commit) on an input file our code writes (helper
+# svoned.py beside this file: cards of inputFileGuide.rst, TEXT output). The inflow is the benchmark's
+# Fourier series, parsed at run time from the boileau_data release (inflow.txt), sampled at the time
+# steps of one period; the release repeats an inflow table with the period of its last time
+# (cvOneDBFSolver.cxx line 1487). Values at t are read from the last computed period at phase (t_ini +
+# lag + t) mod T, linearly between saved steps. The cache key covers this code folder, not
+# boileau_data's files, which the boileau_data record pins by its own digest.
+id: boileau_vessel_svoned
+name: a uniform vessel with inflow and a Windkessel outlet (Boileau Benchmarks 2-3) run with the released solver
+role: model
+stated: {file: docs/source/content/inputFileGuide.rst, lines: "248", quote: "MATERIAL MAT1 LINEAR  1.06 0.04 120000.0 1.0 7.1e4"}
+equation: >
+  The release's 1D equations (theory.rst lines 19-23, psi = 0, f = 0) with delta = 1/(1 + n), N = -2 pi nu (n + 2)
+  (cvOneDMaterial.h lines 99-103); the LINEAR material p = p_ref + EHR (sqrt(S/S0) - 1) (cvOneDMaterialLinear.cxx
+  line 184) with p_ref = Pd, S0 = pi rd^2, EHR = (4/3) E h / rd, which is Boileau's tube law P = Pd + beta/Ad
+  (sqrt(A) - sqrt(Ad)), beta = (4/3) sqrt(pi) E h; Q(0, t) = Qin(t); the RCR outlet (R1, C, R2, Pout).
+software: true
+inputs:
+  L: {quantity: vessel_length, unit: cm}
+  rd: {quantity: vessel_radius, unit: cm, description: "radius at diastolic pressure; S0 = pi rd^2"}
+  h: {quantity: wall_thickness, unit: cm}
+  E: {quantity: youngs_modulus, unit: g/cm/s^2}
+  rho: {quantity: blood_density, unit: g/cm^3}
+  mu: {quantity: dynamic_viscosity, unit: g/cm/s}
+  Pd: {quantity: diastolic_pressure, unit: g/cm/s^2, description: "the material's reference pressure"}
+  Pout: {quantity: outflow_pressure, unit: g/cm/s^2, description: "the RCR table's fourth value, the distal pressure"}
+  R1: {quantity: windkessel_proximal_resistance, unit: g/cm^4/s}
+  C: {quantity: windkessel_capacitance, unit: cm^4*s^2/g}
+  R2: {quantity: windkessel_distal_resistance, unit: g/cm^4/s}
+  zeta: {quantity: profile_exponent, unit: dimensionless, description: "Boileau's velocity profile order, the release's exponent n"}
+  T: {quantity: cardiac_period, unit: s}
+  t_ini: {quantity: time, unit: s, description: "start of the last 1D cycle of the benchmark's data (README)"}
+  lag: {quantity: time_lag, unit: s, description: "the reference's t = 0 on the 1D clock is t_ini + lag"}
+  t: {quantity: time, unit: s, description: "time on the reference's clock"}
+outputs:
+  P: {quantity: blood_pressure, unit: g/cm/s^2, description: "midpoint node"}
+  dP: {quantity: pressure_difference, unit: g/cm/s^2, description: "inlet node minus outlet node"}
+  Q: {quantity: volume_flow_rate, unit: cm^3/s, description: "midpoint node"}
+  dr: {quantity: radius_change, unit: cm, description: "sqrt(S/pi) - rd at the midpoint node"}
+settings:
+  n_elements: 50          # not the benchmark's (each scheme chose its own, Table I); refined
+  steps_per_cycle: 1100   # dt = T/1100 (1 ms for T = 1.1 s); refined
+  n_cycles: 8             # the last of 8 periods is read; B2's data start their last cycle at 8 T
+  quad_points: 2
+  tolerance: 1.0e-8       # Newton tolerance; a step that does not converge is an error here
+  formulation: 1          # the release's conservative form
+  stabilization: 1
+  q_init: inflow          # initial flow = the inflow at t = 0 (from 0, steps below 1 ms fail: q_dt_nan); initial area S0 (at Pd)
+  inflow_file: boileau_data/Benchmark2_CommonCarotidArtery/inflow.txt   # relative to corpus/cardio/code
+stochastic: false

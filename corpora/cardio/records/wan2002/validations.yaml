@@ -1,0 +1,25 @@
+# Cross-record validations (validation job olufsen1999+wan2002, 2026-11-10).
+# Wan's Eq. 14 with its default k1, k2, k3, which are olufsen1999's fit (cited.yaml), run at the radii of
+# olufsen1999's Fig. 3 data. Those constants were fitted to these same data, so this is a fit, not a test.
+# What else was considered: q_val_olufsen1999_scope.
+- id: val_eq14_vs_olufsen1999_fig3_data
+  model: stiffness_eq14
+  inputs: {k1: k1_default, k2: k2_default, k3: k3_default}
+  sweep: {r0: 'olufsen1999/Eh_r0_data_fig3'}
+  output: Eh_r0
+  against: 'olufsen1999/Eh_r0_data_fig3'
+  purpose: fit_quality
+  quantities: {'olufsen1999/vessel_radius': vessel_radius, 'olufsen1999/wall_stiffness_Eh_over_r0': wall_stiffness_Eh_over_r0}
+  conditions_ok: >
+    olufsen1999's r0 and Eh/r0 are taken at zero transmural pressure; Wan's r0 is the radius of the
+    reference state S0 at the initial pressure p0 (Eqs. 9, 12, 13; q_reference_state_olufsen). Wan takes
+    Eq. 14 and its constants over from Olufsen [11] unchanged, so the law is meant for the radius Olufsen
+    fitted it against; the difference in reference state matters when the law is used in Eq. 11, not when
+    Eh/r0 is evaluated at a given radius as here.
+  basis: >
+    Eq. 14, Eh/r0 = k1 exp(k2 r0) + k3, with "k1, k2, and k3 ... derived by a best fit to experimental data"
+    (p. 3, "In this relationship, k1, k2, and k3 are derived by a best fit") and set to default values that
+    are olufsen1999's fitted constants (cited.yaml; Wan's ref. 11 = olufsen1999). olufsen1999 fitted them to
+    the Eh/r0 estimates it plots in Fig. 3 ("The data and the fitted curve are shown in Fig. 3", p. 3), which
+    are Eh_r0_data_fig3. The constants were fitted to this measurement, so it is entered as fit_quality: the
+    fit is Wan's three constants k1, k2, k3, fitted by Olufsen to these data.

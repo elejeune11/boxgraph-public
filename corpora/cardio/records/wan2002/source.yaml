@@ -1,0 +1,72 @@
+id: wan2002
+kind: article
+title: A One-dimensional Finite Element Method for Simulation-based Medical Planning for Cardiovascular Disease
+authors: [Jing Wan, Brooke Steele, Sean A. Spicer, Sven Strohband, Gonzalo R. Feijóo, Thomas J.R. Hughes, Charles A. Taylor]
+year: 2002
+venue: Computer Methods in Biomechanics and Biomedical Engineering 5(3), 195-206
+doi: 10.1080/10255840290010670
+file: corpus/cardio/2002_Wan.pdf
+page_range: [1, 12]
+pages: {1: "195", 2: "196", 3: "197", 4: "198", 5: "199", 6: "200", 7: "201", 8: "202", 9: "203", 10: "204", 11: "205", 12: "206"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-10"}
+notes: >
+  Scope. The paper's quantitative core: the 1D equations (Eqs. 1-2), the profile terms (Eqs. 3-6),
+  Olufsen's constitutive law (Eqs. 11-14), the stenosis model (Eqs. 15-17), the stabilized space-time
+  finite element method (Eqs. 19-40), branch points (Eqs. 41-44) and outflow conditions (Eqs. 45-52),
+  and five examples: a single segment (Fig. 1), a symmetric bifurcation (Fig. 2), an idealized
+  abdominal aorta (Fig. 3), an aorto-iliac case with three treatment plans (Table I, Fig. 4) and a
+  porcine bypass (Fig. 5). Impedance outflow is only announced ("currently implementing", p. 11): the
+  paper has no impedance equation. Its released code is the record svoned_code.
+
+  What is printed and checked. Few results are printed as numbers. Table I's Difference column is
+  reproduced from its 1D and 3D columns as 100 (1D - 3D)/3D for all 20 rows, one (Fem-Fem, L
+  popliteal) only within the rounding of the printed flows (q_table1_difference_definition,
+  q_table1_lpop_femfem). The paper's own 1D-against-3D validation is recorded as 20 comparisons of the
+  two printed columns: no branch flow agrees within the printed precision, and the 1D model orders the
+  three plans differently from 3D at every location, against the paper's stated aim of ranking plans
+  in the same order (q_ranking_claim). The length-to-diameter ratio 20, the 50 = 16 + 2 x 17 elements
+  and the "roughly 5000 times faster" (25,000 over 5 CPU minutes; approximate, no verdict) follow.
+  Eq. 6 follows from Eqs. 3-5 for delta, and for N only once Eq. 4 carries the factor nu that its
+  printed form lacks (q_eq4_viscosity; variant profile_terms_eq3_5_nu); Eq. 17 follows from Eq. 15 for
+  steady flow (stated relations, tested by the relation stage). The constitutive law is stated as
+  olufsen1999's (relations to its Eqs. 5-6), with a reference state of another meaning
+  (q_reference_state_olufsen).
+
+  The released solver. The single segment and the bifurcation are rebuilt from the printed radius,
+  length, mesh, time steps and cycles, with the printed k1, k2, k3 and n = 2, and run with
+  svOneDSolver (corpus/cardio/envs/oned, commit 8939eed) in a subprocess. Unprinted inputs are added:
+  density, viscosity, reference pressure, resistances, the bifurcation's radii (q_bifurcation_inputs,
+  q_segment_resistance), and the inflow waveform, read at run time from the release's test case
+  05_bifurcation_RCR.in, whose table has the shape of the plotted inlet flow (q_inflow_waveform). The
+  release's advective form, the paper's, stops with a NaN on any resistance outlet, even on the
+  release's own resistance test cases, so the runs use its conservative form (q_advective_resistance).
+  The runs are periodic by the third cycle and settle under refinement of mesh and time step (all
+  refinements belong to the model). The bifurcation conserves mass and pressure at the junction and is
+  symmetric to 1e-10, as the text claims. The single segment's peak delay, like the transit time the
+  constitutive law gives at r0 = 0.4 cm, is several times shorter than the lag Fig. 1 shows by eye
+  (q_fig1_delay). The paper's equations against the release: Eqs. 6, 11 and 14 are coded as printed
+  (k2 as -22.5267, which rounds to the printed -22.53), as are Eq. 17 and Kt = 1.52; the stenosis Kv
+  uses Seeley and Young's effective length instead of the printed L (q_stenosis_length_code); the
+  release's examples use profile exponent 1, not the paper's 2 (q_profile_exponent_release).
+
+  Left out, and why. Figures 1-5 are not read here: figure readings belong to the later figure stage.
+  The models single_segment_svoned_curve and bifurcation_svoned_curve are written for a sweep over
+  readings of Figs. 1 and 2 (inlet and outlet flow and pressure against time); they would check the
+  inflow, the added resistance and the delay. The abdominal aorta, the treatment plans and the porcine
+  bypass cannot be rebuilt: no geometry or boundary values are printed (q_examples_not_runnable). The
+  finite element formulas (Eqs. 24-40, 42-52) are recorded only through the solver that implements
+  them; the matrix absolute value of Eq. 34 and the Newton scheme produce no printed number. The
+  porcine bypass's "on the order of 50%" and "less than 10%" peak differences are read off Fig. 5 by
+  the paper and are left for the figure stage.
+
+  Figure stage (2026-11-10). Every plotted curve of Figs. 1-5 is now read by calibrated code (51
+  readings, figures.yaml and figures.md; only Fig. 2 C's pressure is left out, its axis labels are
+  illegible). The single segment and the bifurcation runs are swept over the readings' times and
+  compared with all plotted curves of Figs. 1 and 2 (cmp_fig1_*, cmp_fig2_*); Fig. 5's 1D curves
+  are compared with its 3D curves (cmp_fig5*_1d3d), and Fig. 2's two branches with each other.
+  The readings confirm that the release's inflow table has Fig. 1's inlet shape, turn q_fig1_delay
+  into comparisons (q_fig1_curves), show the bifurcation of Fig. 2 almost undamped where the run
+  with the added radii is strongly damped (q_fig2_damping), show both outlets obeying p = QR at a
+  nearly constant ratio (q_fig_outlet_resistance), and find Fig. 4's popliteal flows below Table
+  I's means for the same plan (q_fig4_table1). Figs. 3 and 4 are recorded but not compared: their
+  models cannot be rebuilt.

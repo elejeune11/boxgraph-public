@@ -1,0 +1,20 @@
+# Ports Code/Source/cvOneDMaterialOlufsen.cxx lines 135-139 (GetEHR), 147-162 (GetS1, Getr1 for a
+# segment whose inlet and outlet areas are equal) and 195-203 (GetPressure), line by line. The
+# released code is C++ and is run as a whole by the solver models; this port is our code (outputs
+# predicted).
+id: olufsen_law_code
+name: the release's OLUFSEN material, pressure from area (port of cvOneDMaterialOlufsen.cxx)
+role: model
+stated: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "195-203", quote: "double press = p1_ + EHR*(1.-sqrt(So_/S)); // dynes/cm^2"}
+equation: "EHR = 4/3 (K1 exp(K2 ro) + K3) (line 137); So = pi ro^2 (line 150); p = p1 + EHR (1 - sqrt(So/S)) (line 200)"
+inputs:
+  k1: {quantity: stiffness_fit_amplitude, unit: g/s^2/cm, description: "K1_, the MATERIAL card's k1"}
+  k2: {quantity: stiffness_fit_rate, unit: 1/cm, description: "K2_"}
+  k3: {quantity: stiffness_fit_offset, unit: g/s^2/cm, description: "K3_"}
+  r0: {quantity: vessel_radius, unit: cm, description: "ro, the radius of the segment's area S0 at the reference pressure (uniform segment)"}
+  p_ref: {quantity: reference_pressure, unit: g/s^2/cm, description: "p1_, the MATERIAL card's reference pressure"}
+  S: {quantity: vessel_cross_sectional_area, unit: cm^2}
+outputs:
+  p: {quantity: arterial_pressure, unit: g/s^2/cm}
+settings: {}
+stochastic: false

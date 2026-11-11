@@ -16,6 +16,14 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   at least 0.8 for quotes of six or more characters. Paraphrase fails.
 - **A table or curve** is one datum with an index condition. A run produces a
   curve by sweeping one input over the index of a printed table.
+- **A curve port** (`curve: {quantity, unit}` on a model input or output)
+  takes or gives a whole curve, as `{"x": [...], "y": [...]}` in the port's
+  units, so a model can process a measured trace (average it, differentiate
+  it, separate it into waves) instead of being run once per x value. A curve
+  port given one number, or a one-number port given a curve, is an error in
+  the validator and in the build. A curve output cannot be swept or
+  repeated over seeds. Relations between models with curve ports are
+  reported unverifiable: the atlas tests relations on sampled single values.
 - **Readers** are named in `source.yaml` (principle 13). A second reading is a
   second record version; the audit job is a second reading of the same paper
   that may correct transcription errors and must log every change in
@@ -601,3 +609,13 @@ corpus/cardio/envs/sim/bin/pip install corpus/cardio/code/svzerod_code
 
 svv's telemetry is turned off for every run (`SVV_TELEMETRY_DISABLED=1`). Without the environment,
 these models report that they cannot run, like any model whose released files are missing.
+
+svOneDSolver is a C++ executable with no Python interface. `corpus/cardio/envs/oned` holds it, built from
+the attached source at commit 8939eed with its own CSparse solver; the unit tests are off because they
+download GoogleTest, which the build does not need. Its 26 system tests pass with this build.
+
+```bash
+cmake -S corpus/cardio/code/svoned_code -B corpus/cardio/envs/oned/build \
+  -DsparseSolverType=csparse -DENABLE_UNIT_TEST=OFF -DCMAKE_BUILD_TYPE=Release
+cmake --build corpus/cardio/envs/oned/build -j8   # gives corpus/cardio/envs/oned/build/bin/OneDSolver
+```

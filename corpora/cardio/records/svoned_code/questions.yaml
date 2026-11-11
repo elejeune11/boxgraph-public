@@ -1,0 +1,328 @@
+- id: q_advective_resistance_unset
+  kind: possible_error
+  about: [release_case]
+  text: >
+    In the advective formulation (SOLVEROPTIONS formulation 0, the form of wan2002 Eqs. 19-35) a RESISTANCE
+    outlet is imposed as Q = p/R with R = GetBoundResistance() (cvOneDMthModelBase.cxx lines 168-174 and
+    416-418), which returns the subdomain's boundValue (cvOneDSubdomain.h line 113). For a RESISTANCE outlet
+    the solver sets only resistancevalue and Pd (cvOneDBFSolver.cxx lines 1617-1622, 'modified resistance
+    taking Pd wgyang'); boundValue is set only in the last branch, for other boundary types (line 1640), and
+    the subdomain constructor does not initialize it (cvOneDSubdomain.cxx lines 47-60). The advective form
+    therefore divides by an unset value, which explains why wan2002's record finds that formulation 0 stops
+    with a NaN on any resistance outlet, the release's own resistance cases included (wan2002
+    q_advective_resistance). The conservative form (formulation 1) reads resistancevalue and is unaffected;
+    every release test with a resistance outlet uses it. So the paper's own method with its resistance
+    condition (wan2002 Eqs. 49-52) cannot be run with this release.
+  citation: {file: Code/Source/cvOneDSubdomain.h, lines: "113", quote: "double GetBoundResistance(){return boundValue;}"}
+- id: q_test_tolerances
+  kind: numerics
+  about: [release_case]
+  text: >
+    test_integration.py compares each value with pytest.approx(expected, rel=rtol, abs=1e-8) (line 30), with
+    rtol from 1e-16 to 1e-4 per value. Most expected values are analytical solutions written to 8-15
+    digits (the Poiseuille-plus-resistance pressures of the tube cases, the bifurcation cases' junction and
+    inlet pressures), and bifurcation_RCR's are a stored earlier run. Rerun with this build (CSparse), every
+    value lies within the test's own tolerance, but 41 of the 77 values (37 pressures, 4 flows) differ from
+    the printed value beyond its last digit (relative differences from about 2e-8 to 3e-5; the largest,
+    tube_pressure_wave's outlet pressure and flow, within that case's 1e-4), so the comparisons here are not
+    reproduced at the printed precision. The solver's results deviate from the analytical steady solutions
+    at the level of its Newton tolerance and its small wall deformation (area 1.0000011 instead of 1 in the
+    near-rigid tube); the flows and outlet pressures that the boundary conditions fix are reproduced.
+  citation: {file: Tests/SystemTests/test_integration.py, lines: "30", quote: "assert resultValue == pytest.approx(expectedValue, rel=rtol, abs=1e-8)"}
+- id: q_impedance_not_in_code
+  kind: unexplained_difference
+  about: [rcr_impedance_svoned, rcr_impedance_theory]
+  text: >
+    The theory notes derive four outflow maps: resistance, RCR, impedance (lines 284-304, after the
+    structured-tree impedance of olufsen1999/olufsen2000) and a wave-in-a-tube condition (lines 306-375). The
+    code's boundary types are PRESSURE, FLOW, RESISTANCE, RESISTANCE_TIME, PRESSURE_WAVE, RCR, CORONARY and
+    COUPLED (cvOneDEnums.h; the names it parses, cvOneDModelManager.cxx lines 81-96): neither the impedance
+    nor the wave condition is in this release. The impedance outflow that wan2002 announces as being
+    implemented (p. 11) and olufsen2000's structured-tree outflow therefore cannot be run with svOneDSolver;
+    the impedance block of svZeroDSolver (svzerod_code/impedance_released) is the SimVascular code that has one.
+  citation: {file: docs/source/content/theory.rst, lines: "284", quote: "Impedance (1D, periodic)"}
+- id: q_profile_exponent_examples
+  kind: unexplained_difference
+  about: [n_guide_example, n_case05, run_profile_case05, profile_terms_code]
+  text: >
+    wan2002 sets n = 2, a Poiseuille profile (delta = 1/3, N = -8 pi nu), and so do the theory notes
+    (theory.rst line 31, 'Here we choose a time-varying, parabolic flow profile'). The code computes delta
+    and N from the MATERIAL card's sixth field, which the input guide names only 'Material Exponent'
+    (inputFileGuide.rst line 261), without saying that it is the profile exponent. Its example card
+    (line 247) and the release's physiological test cases (02, 04, 05, 12, 14 and the coronary case) set
+    it to 1.0, that is delta = 1/2 and N = -6 pi nu (run_profile_case05); bifurcation_RCR.in sets 9.0; only
+    the near-rigid analytic cases use 2.0. The examples thus carry 25% less wall friction and a 12.5% larger
+    momentum flux than the profile the paper and the notes state. The data n_guide_example and n_case05
+    are compared with wan2002's n = 2 through from_datum.
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "261", quote: "6. Material Exponent (double)"}
+- id: q_k2_digits
+  kind: reading
+  about: [k2_ctor]
+  text: >
+    The code's default k2 is -22.5267 cm^-1 (cvOneDMaterialOlufsen.cxx line 59), and the release's example
+    cards use the same value. olufsen1999 (p. 3), wan2002 (p. 3) and the code's own theory notes (theory.rst
+    line 73) print -22.53. The code's value rounds to the printed one, so the from_datum checks agree; where
+    the extra digits come from (a refit, or a conversion) is not said anywhere in the release.
+  citation: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "59", quote: "K2_ = -22.5267;"}
+- id: q_coronary_k1
+  kind: unexplained_difference
+  about: [k1_coronary_case]
+  text: >
+    The release's coronary test case (Left_coronary_inlet_pressure_wave_outlet_coronary.in line 850) uses
+    k1 = 1.48 x 10^7 g s^-2 cm^-1, not the default 2 x 10^7 of the code, the theory notes, olufsen1999 and
+    wan2002, with a reference pressure of 0. The file gives no reason for the softer walls. The case is not
+    among those test_integration.py checks.
+  citation: {file: Tests/SystemTests/cases/Left_coronary_inlet_pressure_wave_outlet_coronary.in, lines: "850", quote: "MATERIAL MAT1 OLUFSEN 1.06 0.04 0 1.0 1.48e7 -22.5267 8.65e5"}
+- id: q_stenosis_effective_length
+  kind: unexplained_difference
+  about: [stenosis_code, La_length_factor_code, La_diameter_factor_code, rel_stenosis_wan2002_eq15, cmp_tsr_La, cmp_tsr_Kv, cmp_tsr_dp]
+  text: >
+    wan2002 Eq. 16 prints Kv = 32 (L/D0)(S0/S1)^2 with L the stenosis length. The code uses an effective
+    length La = 0.83 L + 1.64 D1 (cvOneDMthSegmentModel.cxx line 178), with 'La = L' commented out (line
+    179); Kt = 1.52 and the factor 32 are the paper's. The release's stenosis test case states the same La
+    in its comments (tube_stenosis_r.in lines 52-53), and its expected pressure drop follows from it
+    (cmp_tsr_La, cmp_tsr_Kv, cmp_tsr_dp). For a stenosis of length L and throat diameter D1 the two differ
+    unless 0.17 L = 1.64 D1. The relation rel_stenosis_wan2002_eq15 records the difference; wan2002's record
+    raises it from the paper's side (wan2002 q_stenosis_length_code). Seeley and Young (1976), whom the paper
+    cites for the formula, are not in this review, so which form they give is not checked.
+  citation: {file: Code/Source/cvOneDMthSegmentModel.cxx, lines: "178", quote: "La = 0.83*L + 1.64*D[1];"}
+- id: q_newton_not_converged
+  kind: numerics
+  about: [newton_max_iter, boileau_vessel_svoned, boileau_bifurcation_svoned, rcr_impedance_svoned]
+  text: >
+    When the Newton iterations of a time step exceed 30 (cvOneDSolverDefinitions.h line 43) the solver prints
+    'Error: Newton not converged, exceed max iterations' and breaks out of the loop to the next time step
+    (cvOneDBFSolver.cxx lines 1975-1979): the run goes on and writes results. This record's adapters treat
+    that message as a failure. With the Newton tolerance 1e-8 of the release's static tests, the nearly rigid
+    tube with an RCR outlet under a pulsatile flow does not converge; rcr_impedance_svoned uses 1e-6.
+  citation: {file: Code/Source/cvOneDBFSolver.cxx, lines: "1975-1979", quote: "Error: Newton not converged, exceed max iterations"}
+- id: q_dt_nan
+  kind: numerics
+  about: [boileau_vessel_svoned, run_b2, ref_b2_steps_P, ref_b2_steps_Q]
+  text: >
+    On Benchmark 2 the released solver stops with 'Calculated a NaN for the residual' a few steps after the
+    start when the time step is made small: at T/4400 (0.25 ms) it fails whether started from rest or from
+    the inflow at t = 0, while T/550 to T/2200 run. A finer step should not break a stable implicit scheme;
+    the stabilization matrix tau = [2/dt I + ...]^-1 (theory.rst line 457) is a candidate, not checked.
+    The time-step refinement is therefore T/550, T/1100, T/2200 (ref_b2_steps_*). The runs start from the
+    inflow at t = 0 (setting q_init), which does not change the periodic state they read.
+  citation: {file: docs/source/content/theory.rst, lines: "457", quote: "\\boldsymbol{\\tau} = \\left[\\frac{2}{\\Delta t_n}\\mathbf{I}"}
+- id: q_rcr_first_order
+  kind: numerics
+  about: [rcr_impedance_svoned, cmp_rcr_b2_mod, cmp_rcr_b2_ph, ref_rcr_b2_npts, rel_rcr_svzerod_modulus, rel_rcr_svzerod_phase]
+  text: >
+    The RCR outlet's memory integral is advanced with the pressure of the previous step
+    (cvOneDSubdomain.cxx lines 416-455), a first-order scheme: under a sinusoidal flow its input impedance
+    approaches the exact value of the theory notes' map as 1/n with n steps per period (about 2-4% off at
+    400 steps, under 1% at 1600, in our trials). A pulsatile run with 1 ms steps carries an error of this
+    order in the outlet's pressure-flow relation. The comparisons cmp_rcr_b2_* and the refinement
+    ref_rcr_b2_npts show it at 1600 steps; the relations to svzerod_code allow 2%.
+  citation: {file: Code/Source/cvOneDSubdomain.cxx, lines: "452", quote: "MemD = MemD*exp(-alphaRCR*deltaTime)+previousP*expmDtOne(deltaTime);"}
+- id: q_junction_static_pressure
+  kind: choice
+  about: [boileau_bifurcation_svoned]
+  text: >
+    At a joint the release enforces one pressure and conservation of mass with Lagrange multipliers
+    (theory.rst line 524, 'exactly the same as in Wan et al.'; wan2002 Eq. 41). Boileau's benchmark keeps
+    the total pressure P + rho U^2/2 continuous (boileau2015 Eq. 8). At the bifurcation of Benchmark 4 the
+    two differ by the change of rho U^2/2 across the junction, of the order of 0.1 kPa at peak flow; the
+    validations of Benchmark 4 carry that difference.
+  citation: {file: docs/source/content/theory.rst, lines: "524", quote: "pressure continuity and conservation of mass are enforced using Lagrange multipliers"}
+- id: q_benchmark_numerics
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, run_b2, b2_lag, b3_lag, b4_lag]
+  text: >
+    The benchmarks leave the discretization to each scheme (boileau2015 Table I). Ours: elements of about
+    0.25 cm (50 for the carotid, 96 for the aorta, 34 per vessel at the bifurcation), 1 ms steps (T/1100,
+    T/955), 8, 10 and 10 periods with the last one read, quadrature 2, Newton tolerance 1e-8, the
+    conservative stabilized formulation, initial flow 0 at the reference area. The refinements of run_b2
+    test mesh, step and number of periods for the carotid. The 3D reference's time origin on the clock of
+    the inflow series is not stated by the paper or its data; the lags b2_lag, b3_lag and b4_lag are those
+    boileau_data's reader fitted to the paper's error tables for the six schemes (boileau_data q_alignment),
+    with 0 and 0.055 s as alternatives.
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "199", quote: "SOLVEROPTIONS 0.01 10 1000 4 INLETDATA FLOW 1.0e-3 1 1"}
+- id: q_benchmark_scope
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned]
+  text: >
+    Which Boileau benchmarks the release can run as specified. Benchmarks 2-4 (carotid, thoracic aorta,
+    aortic bifurcation): yes; their tube law is the LINEAR material, their profile the exponent, their
+    Windkessel the RCR outlet (validations.yaml). Benchmark 1 (a single pulse in a 10 m vessel with a
+    completely absorbent outlet): the release has no non-reflecting outlet; a resistance equal to the
+    characteristic impedance would approximate it only to first order in the pulse amplitude, so it is not
+    run. Benchmark 5 (the 37-artery network of alastruey2011, with single terminal resistances) and
+    Benchmark 6 (ADAN56) are networks of tapered vessels whose wave speed changes along each vessel
+    (boileau_data Benchmark5 mesh.txt, columns 8-9); the release's LINEAR material has one stiffness EHR per
+    material, so each tapered vessel would have to be split into pieces of constant stiffness, an
+    approximation of the benchmark, and a run of the whole network at a 1D-converged mesh takes minutes per
+    curve. They are not built in this record; the in vitro measurements of Benchmark 5
+    (boileau2015 Figs. 6-9, alastruey2011) are therefore not compared with this solver here.
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "135-140", quote: "*Outlet* Boundary Condition Type. The following *outlet* boundary conditions are supported:"}
+- id: q_olufsen_friction_unused
+  kind: unexplained_difference
+  about: [profile_terms_code, olufsen2000/boundary_layer_lighthill]
+  text: >
+    (Relation job olufsen2000+svoned_code, 2026-11-10.) The OLUFSEN material's GetN (cvOneDMaterialOlufsen.cxx
+    lines 273-281) computes Olufsen's boundary-layer friction, del = sqrt(nu T/(2 pi)) ('from Lighthill, olufsen's
+    thesis') and altN = -2 pi nu R/del, the friction of olufsen2000 p. 4 with its Lighthill estimate of the
+    boundary layer (olufsen2000/boundary_layer_lighthill), but returns N, the power-law coefficient
+    -2 pi nu (n + 2) of cvOneDMaterial.h line 102 (profile_terms_code); altN is never used. So a run with the OLUFSEN
+    material does not have olufsen2000's friction term; the two agree only where n + 2 = R/del. No relation between
+    the two friction forms is entered: olufsen2000's record has no model whose output is the friction coefficient,
+    and neither source states the relation.
+  citation: {file: Code/Source/cvOneDMaterialOlufsen.cxx, lines: "277", quote: "double altN = -2.0*PI*kinematicViscosity*R/del;"}
+- id: q_no_validation_vs_alastruey2011
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  text: >
+    (Cross-validation with alastruey2011; cross-validation job 2026-11-10.) No model of this record is validated
+    against a measurement of alastruey2011. The release does not cite that paper (its only Alastruey citation is
+    Xiao, Alastruey and Figueroa 2014, the source of the bifurcation cases), and neither source says the solver
+    explains the in vitro data. alastruey2011's measurements are: the phantom's properties (fluid density and
+    viscosity, the silicone's modulus and viscosity, each segment's length, radii, thickness and wave speed),
+    which are inputs, not outputs, of any 1D model; the uniaxial load and extension traces of Fig. 2, which no
+    model here gives (the release's materials are elastic laws of a vessel, not a stress-strain test); the
+    ensemble-averaged pressure and flow at the midpoints of Segments 3, 15, 24 and 30 of the 37-artery network
+    (Fig. 3) and the flow spectrum at Segment 24 (Fig. 4), which depend on the whole network. The record's
+    runnable 1D models are a single uniform vessel (boileau_vessel_svoned) and the Benchmark 4 bifurcation
+    (boileau_bifurcation_svoned); neither is that network, and running one segment of it alone with an RCR
+    outlet would replace the rest of the network by added inputs, so it would not be a test. The network
+    itself is not built here (q_benchmark_scope: tapered vessels, one stiffness per LINEAR material, minutes per
+    run), and this job may not add models. The algebraic ports (OLUFSEN law with constants fitted to human
+    arteries, profile terms, RCR impedance, stenosis loss) give quantities the paper does not measure. The
+    shared shape of network_1d and boileau_bifurcation_svoned is a coincidence of signature (density,
+    viscosity, lengths, times to flow), not a common configuration. In the other direction, this record holds
+    no measurement (software), so nothing of it is predicted by alastruey2011's models
+    (alastruey2011/q_no_validation_vs_svoned_code).
+  citation: {file: Tests/SystemTests/cases/bifurcation_R.in, lines: "2", quote: "# Xiao, N., Alastruey, J., Figueroa, C.A. A systematic comparison between 1-D and 3-D hemodynamics in compliant arterial models."}
+- id: q_no_validation_vs_boileau2015
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  text: >
+    (Cross-validation with boileau2015; cross-validation job 2026-11-10.) No new validation is entered against a
+    measurement of boileau2015. Its only measured data are the in vitro pressure and flow curves of the 37-artery
+    silicone network of [45] (Benchmark 5; boileau2015 fig{6..9}{a,b}_{P,Q}_exp_curve, Figs. 6-9), each at the
+    midpoint of one segment and each depending on the whole network. The record's runnable 1D models are a single
+    uniform vessel (boileau_vessel_svoned) and the Benchmark 4 bifurcation (boileau_bifurcation_svoned); neither is
+    that network, the network is not built here (q_benchmark_scope: tapered vessels, one stiffness per LINEAR
+    material, minutes per run), and this job may not add models. Running one measured segment alone with an RCR
+    outlet would replace the rest of the network by added inputs, so it would not be a test. The algebraic ports
+    (OLUFSEN law, profile terms, RCR impedance, stenosis loss, release cases) give no pressure or flow waveform of
+    that network. The Benchmark 2-4 entries already in validations.yaml compare the solver with the red 3D curves
+    of Figs. 3-5, which are model output of [33] (origin predicted), not measurements; they are kept unchanged.
+    In the other direction, this record holds no measurement (software), so no model of boileau2015 can be
+    validated against it (boileau2015/q_no_validation_vs_svoned_code). Nothing in the release says it explains
+    the in vitro data, and boileau2015 does not name the solver (its ref. 26, Steele, Wan et al., is background).
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "135-140", quote: "*Outlet* Boundary Condition Type. The following *outlet* boundary conditions are supported:"}
+- id: q_no_validation_vs_boileau_data
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  text: >
+    (Cross-validation with boileau_data; cross-validation job 2026-11-10.) No validation is entered against
+    boileau_data, in either direction, because neither record holds a measured datum. boileau_data's data.yaml has
+    only reported values (the B5 and B6 mesh files, README times, inflow periods) and derived ones (the paper's
+    error Tables IV, VI, VIII and X); the in vitro measurements of Benchmark 5 (ExpData) are not entered as data
+    there but read from the released files by its waveform adapters, so there is no datum to validate against.
+    The released 3D reference solutions of Benchmarks 2-4 are model output of [33], not measurements, and are
+    reached here through the red curves read in boileau2015 (the 17 validations already in validations.yaml).
+    The in vitro curves themselves are taken up against boileau2015's readings (q_no_validation_vs_boileau2015):
+    no model of this record builds that network. In the other direction this record is software and holds no
+    measurement, and boileau_data's models are adapters that read released files or compute error norms; they
+    predict nothing about the solver.
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "135-140", quote: "*Outlet* Boundary Condition Type. The following *outlet* boundary conditions are supported:"}
+- id: q_no_validation_vs_olufsen1999
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  text: >
+    (Cross-validation with olufsen1999, ref. [3] of theory.rst; cross-validation job 2026-11-10.) No validation is
+    entered, in either direction. This record is software and holds no measurement, so no olufsen1999 model can be
+    judged against it. olufsen1999's measurements are the input impedance spectra md 0 / md 1 of Fig. 9 (Mills et
+    al.), the pressure waveforms of Fig. 12 (Remington and Wood), the inflow of Fig. 4 and the cardiac output of
+    4.14 l/min; its Fig. 3 points are estimates of Eh/r0 (origin estimated), not measurements. None is a quantity a
+    model here gives on that measurement's conditions. (1) rcr_impedance_svoned and rcr_impedance_theory give the
+    impedance of an RCR outlet, but neither the paper nor the release prints R1, C, R2 for the bed of Fig. 9
+    (olufsen1999 fits its windkessel empirically and prints no values, p. 7), so all three would be added or fitted
+    to the same curves: not a test. The structured-tree impedance of olufsen1999 is not in the code
+    (q_benchmark_scope). (2) The Fig. 12 pressures depend on the whole systemic network; the runnable solver models
+    here are a single vessel and the Benchmark 4 bifurcation, and this job may not add models. (3) The inflow and
+    cardiac output are inputs of olufsen1999's 1D model, not outputs of any model here. (4) olufsen_law_code outputs
+    pressure from area, not Eh/r0, and its k1, k2, k3 are olufsen1999's fit to the Fig. 3 estimates, so even a
+    matching output would be a fit, not a test. That olufsen1999/pressure_area_eq5 and boileau_bifurcation_svoned
+    share a dimension (a pressure from a pressure and a length) is a coincidence of shape, not a shared measured
+    quantity; the law itself is already related in relations.yaml (rel_olufsen_law_olufsen1999). The release does
+    not claim to explain any of olufsen1999's measurements.
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "135-140", quote: "*Outlet* Boundary Condition Type. The following *outlet* boundary conditions are supported:"}
+- id: q_no_validation_vs_olufsen2000
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  text: >
+    (Validation job olufsen2000+svoned_code, 2026-11-10.) No validation is entered, in either direction. This record
+    is software and holds no measurement, so no olufsen2000 model can be judged against it; profile_terms_code and
+    olufsen2000/kinematic_viscosity share a shape (nu = mu/rho) but both run on reported blood properties, so
+    agreement would relate inputs, not test a model. olufsen2000's measurements are one subject's MR flows (the
+    inflow of Fig. 3 and the nine sites of Fig. 7), cuff pressures 120/80 mmHg at the arm, the ascending-aortic
+    radius 1.25 cm (Table 1), the 1.1 s cycle and a heart rate of 51 per minute. (1) The Fig. 7 flows and the arm
+    pressures depend on the whole systemic network with structured-tree outflow; the impedance outflow is not in
+    the release (q_impedance_not_in_code), the runnable solver models here are a single vessel and the Benchmark 4
+    bifurcation, and this job may not add models. Running one of the subject's vessels alone with an RCR outlet
+    would need R1, C, R2 that neither source prints, fitted to the same curves: not a test. boileau_vessel_svoned
+    also takes its inflow from a benchmark file (a setting), not olufsen2000's Fig. 3. (2) The radius, period and
+    heart rate are inputs of a 1D model, not outputs of any model here. (3) olufsen_law_code gives pressure from
+    area, and olufsen2000 prints no measured area at a measured pressure. The release does not cite olufsen2000
+    (theory.rst cites olufsen1999) and claims to explain none of its data. See olufsen2000/q_no_validation_vs_svoned_code.
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "135-140", quote: "*Outlet* Boundary Condition Type. The following *outlet* boundary conditions are supported:"}
+- id: q_no_validation_vs_stergiopulos1992
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  text: >
+    (Validation job stergiopulos1992+svoned_code, 2026-11-10.) No validation is entered, in either direction. This
+    record is software and holds no measurement, so no stergiopulos1992 model can be judged against it.
+    stergiopulos1992's measurements are taken from other works: the pulsatility indices of one patient with a
+    severe left femoral stenosis at the aortic bifurcation, groin, knee and ankle (Gosling et al., its Fig. 7), and
+    the group-mean thigh, knee and ankle to brachial systolic pressure indices of normal subjects and of patients
+    with aortoiliac or femoropopliteal disease (Fronek et al., its p. 9). Each depends on the whole arterial tree
+    from the heart to the lower leg, and the patients' stenosis severities, inflow and geometry are not printed.
+    (1) The runnable solver models here are a single uniform vessel (boileau_vessel_svoned) and the Benchmark 4
+    bifurcation (boileau_bifurcation_svoned), with the benchmarks' inflow files; neither is a body-scale tree with a
+    brachial and a leg path, the 55-segment tree of stergiopulos1992 Table 1 is not built in this record, and this
+    job may not add models. Running one leg artery alone with an RCR outlet would replace the rest of the tree by
+    added inputs and give no brachial reference: not a test. (2) stenosis_code gives the steady pressure drop across
+    one stenosis, and stergiopulos1992 measures no pressure drop across a stenosis (its stenosis results, Figs. 3-9,
+    are model output, recorded as predicted). (3) olufsen_law_code, profile_terms_code and the RCR impedance models
+    give a wall pressure from area, profile coefficients and a terminal impedance, none of which is measured there.
+    (4) release_case reruns the release's own test cases, not any configuration of that paper. The release does not
+    cite stergiopulos1992. The models are related in relations.yaml (the RCR outlet against Eq. 7), which is a
+    relation between models, not a validation against data. See stergiopulos1992/q_no_validation_vs_svoned_code.
+  citation: {file: docs/source/content/inputFileGuide.rst, lines: "135-140", quote: "*Outlet* Boundary Condition Type. The following *outlet* boundary conditions are supported:"}
+- id: q_no_validation_vs_svzerod_code
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  citation: {none: "a finding of the validation job between svoned_code and svzerod_code, not a printed statement"}
+  text: >
+    (Validation job svoned_code+svzerod_code, 2026-11-10.) No validation is entered, in either direction, and no
+    fit. Neither record holds a measurement. This record's data are the release's settings, the expected values
+    of its system tests and the benchmark inputs (origins reported, predicted, derived), and it has no figure
+    readings. svzerod_code's data are the 0D release's settings, its test cases' expected values and stored
+    results, and kim2010's printed parameters and model flows (origins reported, predicted, run), also with no
+    figure readings. A validation needs a measured datum, so none is possible. The pair was proposed because
+    boileau_bifurcation_svoned and svzerod_code/coronary_kim2010_ode have the same signature (a flow from
+    [length]**4*[time]**2/[mass] and time). That is a coincidence of dimensions: one is a 1D aortic bifurcation
+    driven by Benchmark 4's inflow, the other kim2010's lumped coronary bed under sinusoidal pressures, and
+    neither predicts a quantity the other measures. What the two codes share is the RCR outlet. It is related
+    model to model in relations.yaml (rel_rcr_svzerod_modulus, rel_rcr_svzerod_phase): one code against the
+    other, not against data. See svzerod_code/q_no_validation_vs_svoned_code.
+- id: q_val_wan2002_none
+  kind: choice
+  about: [boileau_vessel_svoned, boileau_bifurcation_svoned, olufsen_law_code, profile_terms_code, rcr_impedance_svoned, rcr_impedance_theory, release_case, stenosis_code]
+  citation: {none: "a finding of the validation job between svoned_code and wan2002, not a printed statement"}
+  text: >
+    (Validation job svoned_code+wan2002, 2026-11-10.) No validation is entered, in either direction, and no fit.
+    Neither record holds a measurement. This record's data are the release's settings, its system tests' expected
+    values and the benchmark inputs (origins reported, predicted, derived), with no figure readings. The values it
+    takes from wan2002 (ref-4, from_source: wan2002) are the paper's reported parameters. wan2002's data are reported,
+    derived or predicted, and all its figure readings are computed results (its figures.md: the 1D curves of Figs. 1-4
+    and the 1D and 3D curves of Fig. 5). The paper says comparisons with experiment are still needed (wan2002 p. 10).
+    boileau_bifurcation_svoned and wan2002/bifurcation_svoned share a signature because they are the same released
+    solver on two different bifurcations. Comparing them would be code against code, not code against data, and
+    wan2002's record already compares its printed curves with this solver (its cmp_fig1_*, cmp_fig2_*). See
+    wan2002/q_val_svoned_code_none.

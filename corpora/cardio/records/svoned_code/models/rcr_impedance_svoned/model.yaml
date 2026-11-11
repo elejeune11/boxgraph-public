@@ -1,0 +1,22 @@
+# Our input file for the released executable (helper boileau_vessel_svoned/svoned.py): a 1 cm tube of
+# area 1 cm^2, nearly rigid (OLUFSEN k1 = 1e15, k2 = -20, k3 = 1e9, reference pressure 0, as the
+# release's static test cases), with flow Q0 + Q1 sin(2 pi f t) and an RCR outlet with distal pressure
+# 0. Settings are ours: n_pts steps per period (refined), n_tau time constants Rd C run before the
+# last period is read, the probe flow (mL/s), and a Newton tolerance of 1e-6 (with 1e-8 Newton does
+# not converge on this stiff tube). The impedance of a linear outlet does not depend on Q0 and Q1.
+id: rcr_impedance_svoned
+name: the release's RCR outlet under a sinusoidal flow, its input impedance at that frequency
+role: model
+stated: {file: Code/Source/cvOneDSubdomain.cxx, lines: "305-308", quote: "alphaRCR = (proximalResistance+distalResistance)/(proximalResistance*distalResistance*capacitance);"}
+equation: "Q(B,t) = [Q(B,0) - p0/R] exp(-alpha t) + p(B,t)/R - 1/(R^2 C) int_0^t p(B,tau) exp(-alpha (t - tau)) dtau, alpha = (R + Rd)/(R Rd C) (theory.rst lines 265-267); Z = P1/Q1 at the outlet node over the last period"
+software: true
+inputs:
+  Rc: {quantity: windkessel_proximal_resistance, unit: g/cm^4/s, description: "the RCR table's first value (proximalResistance)"}
+  Rd: {quantity: windkessel_distal_resistance, unit: g/cm^4/s, description: "third value (distalResistance)"}
+  C: {quantity: windkessel_capacitance, unit: cm^4*s^2/g, description: "second value (capacitance)"}
+  f: {quantity: frequency, unit: Hz}
+outputs:
+  modulus: {quantity: input_impedance_modulus, unit: g/cm^4/s}
+  phase: {quantity: input_impedance_phase, unit: degree}
+settings: {n_pts: 1600, n_tau: 8, Q0: 100.0, Q1: 50.0, n_elements: 4, length: 1.0, area: 1.0, tolerance: 1.0e-6}
+stochastic: false

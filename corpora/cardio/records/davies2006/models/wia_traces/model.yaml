@@ -1,0 +1,33 @@
+id: wia_traces
+name: wave intensity analysis of a digitized pressure and velocity trace (single-point c, separation, WI+ and WI-)
+role: processing
+stated: {page: 4, printed_page: "1770", quote: "Using wave intensity analysis, it is possible to separate and quantify", where: "Eqs. for dP+-, c, WI+ and WI-"}
+equation: >
+  c = (1/rho) sqrt(sum dP^2 / sum dU^2); dP+- = (1/2)(dP +- rho c dU); WI+ = (1/(4 rho c)) (dP/dt + rho c dU/dt)^2;
+  WI- = -(1/(4 rho c)) (dP/dt - rho c dU/dt)^2
+described_from: ref-19
+built_from: [single_point_wave_speed, wave_separation, wi_separated]
+inputs:
+  P: {quantity: coronary_pressure, unit: Pa, curve: {quantity: time_in_cycle, unit: ms}}
+  U: {quantity: coronary_doppler_velocity, unit: m/s, curve: {quantity: time_in_cycle, unit: ms}}
+  rho: {quantity: blood_density, unit: kg/m^3}
+  xp: {quantity: wave_intensity_forward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}, description: "the digitized WI+ trace; only its x values are used (the times to resample onto)"}
+  xm: {quantity: wave_intensity_backward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}, description: "the digitized WI- trace; only its x values are used"}
+  pp: {quantity: wave_intensity_forward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}, description: "the digitized WI+ maxima; only their times are used (where to search the computed maxima)"}
+  pm: {quantity: wave_intensity_backward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}, description: "the digitized WI- minima; only their times are used"}
+outputs:
+  c: {quantity: wave_speed, unit: m/s}
+  sum_dP2: {quantity: sum_squared_pressure_increments, unit: Pa^2}
+  sum_dU2: {quantity: sum_squared_velocity_increments, unit: m^2/s^2}
+  WIp: {quantity: wave_intensity_forward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}}
+  WIm: {quantity: wave_intensity_backward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}}
+  WIp_peaks: {quantity: wave_intensity_forward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}, description: "largest computed WI+ within peak_halfwidth_ms of each digitized maximum"}
+  WIm_peaks: {quantity: wave_intensity_backward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}, description: "most negative computed WI- within peak_halfwidth_ms of each digitized minimum"}
+  WIp_max: {quantity: wave_intensity_forward, unit: W/m^2/s^2, description: "largest computed WI+ of the trace"}
+  WIm_min: {quantity: wave_intensity_backward, unit: W/m^2/s^2, description: "most negative computed WI- of the trace"}
+  Pp: {quantity: coronary_pressure_forward, unit: Pa, curve: {quantity: time_in_cycle, unit: ms}, description: "sum of dP+ from the first sample"}
+  Pm: {quantity: coronary_pressure_backward, unit: Pa, curve: {quantity: time_in_cycle, unit: ms}, description: "sum of dP- from the first sample"}
+  Up: {quantity: coronary_velocity_forward, unit: m/s, curve: {quantity: time_in_cycle, unit: ms}, description: "sum of dU+ = dP+/(rho c) from the first sample"}
+  Um: {quantity: coronary_velocity_backward, unit: m/s, curve: {quantity: time_in_cycle, unit: ms}, description: "sum of dU- = -dP-/(rho c) from the first sample"}
+settings: {step_ms: 10, sg_window_ms: 0, sg_order: 2, peak_halfwidth_ms: 15}
+stochastic: false

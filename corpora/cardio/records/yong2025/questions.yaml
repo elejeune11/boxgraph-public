@@ -410,3 +410,84 @@
     page: 3
     quote: Our model is based on Mantero et al. (1992) and Kim et al. (2010)
     where: Sec. 2.3
+- id: q_no_relation_davies2006
+  kind: choice
+  about: [coronary_closed_loop, coronary_closed_loop_mean_dsfr, coronary_waveform, coronary_block_svzerod, dsfr_from_means, fold_change]
+  text: >
+    (Relation and validation job davies2006+yong2025, 2026-11-10.) Nothing is entered between this record and
+    davies2006, the human left coronary wave intensity measurements. This paper does not cite it (its Davies
+    references are other papers), takes no value from it (no cited.yaml line), and states no relation. None is
+    proposed: davies2006's models process measured pressure and velocity increments with a wave speed and blood
+    density; this record's models are a 0D closed loop and closed-form resistance, elastance and ratio rules. They
+    share no input, and the paper says itself (p. 9) that a lumped model cannot model wave propagation and
+    reflection, so it gives no forward/backward wave intensity to set against davies2006's Table 2. No validation
+    either way. (1) davies2006 measures peak Doppler velocity (0.42 +- 0.35 m/s non-LVH), not flow; comparing the
+    rebuild's LAD or LCx mean flow needs an added diameter and a peak-to-mean factor, and the SDs are as large as
+    the means, so no verdict could fail (the same gap as davies2006/q_no_validation_vs_kim2010). The rebuild's
+    absolute flows also scale with the added circulating volume. (2) The one comparison that would not need a
+    diameter is a diastolic-to-systolic ratio of mean velocity from davies2006's digitized circumflex velocity
+    traces (Figs. 3 and 5) against this record's LCx mDSFR: a ratio of means of velocity equals one of flow when
+    the diameter and profile are fixed over the cycle. It is not entered: a model port cannot take a figure curve,
+    davies2006 does not mark end-systole on its traces (it would be an added choice), each trace is one subject
+    (Fig. 5 with LVH), and davies2006 prints no such ratio. (3) davies2006's LVH group is left ventricular
+    hypertrophy; this record's hypertrophy configuration (PH) is of the right ventricle and changes the RCA, so it
+    does not model that group. (4) Pressures (146/81 mmHg) set this model's level only through the added volume;
+    they are not a prediction to test. See davies2006/q_no_relation_yong2025.
+  citation:
+    page: 9
+    quote: capable of modelling wave propagation and reflection whilst LPM is not
+    where: Sec. 4.2
+- id: q_no_validation_vs_davies2006
+  kind: choice
+  about: [coronary_closed_loop, coronary_closed_loop_mean_dsfr, coronary_waveform, coronary_block_svzerod, area_to_diameter]
+  text: >
+    (Validation job davies2006+yong2025, 2026-11-10, second pass.) No validation is entered: none of this
+    record's models gives a quantity davies2006 measured, under its conditions. (1) Velocity. davies2006's
+    velocities (mean_coronary_velocity 0.42 +- 0.35 and 0.43 +- 0.52 m/s; the phase increments 0.51 and 0.14
+    m/s; the Doppler traces of its Figs. 3 and 5) are Doppler peak velocities. No model here outputs a velocity:
+    coronary_closed_loop, coronary_waveform and coronary_block_svzerod give flows (ml/s), and area_to_diameter
+    gives only a diameter. So adding a vessel diameter and a peak-to-mean factor to added.yaml, which the
+    batch asks for and to run both ways, would still give no run whose output is a velocity. The flow-to-velocity
+    step would be arithmetic outside any model, and the record cannot do that. Even then the verdict would rest
+    on the added diameter, the added factor and the added circulating volume, judged against SDs as large as the
+    means. (2) Pressures. davies2006's 146/81 mmHg (143/80 non-LVH) are group means at an unstated site of a
+    catheterized cohort, not of the normal subject this model is tuned to. The rebuild's aortic pressure level
+    is set by the added initial pressure (7 mmHg, alternative 10), so a comparison would test that added input,
+    not the model. (3) Wave intensities, their cumulative values and shares (davies2006 Table 2, Figs. 3-7): this
+    is a lumped model with no wave speed and no forward/backward separation (p. 9). (4) LVH: davies2006's group
+    has left ventricular hypertrophy; this record's PH configuration is a right ventricular one. davies2006 prints no
+    heart rate, no diastolic-to-systolic ratio and no vessel diameter. See davies2006/q_no_validation_of_yong2025_measurements
+    for the other direction.
+  citation:
+    page: 9
+    quote: capable of modelling wave propagation and reflection whilst LPM is not
+    where: Sec. 4.2
+- id: q_davies2006_dsfr_curves
+  kind: choice
+  about: [coronary_closed_loop, coronary_closed_loop_mean_dsfr, q_no_relation_davies2006, q_eq14_definition]
+  text: >
+    (Validation job davies2006+yong2025 with curve ports, 2026-11-11.) The diameter-free test left by
+    q_no_relation_davies2006 can now be computed on davies2006's side: its runs run_dsr_fig3_* and run_dsr_fig5_*
+    give the diastolic-to-systolic ratio of the circumflex Doppler velocity of its Figs. 3 and 5. End-systole is
+    an added input there, run at the onset of relaxation and at the pressure incisura. The ratio of time-means is
+    about 1.6-1.9 for the Fig. 3 subject and 2.0-2.3 for the Fig. 5 (LVH) subject. This record's normal-case LCx
+    mDSFR is about 2.84 as a ratio of means (coronary_closed_loop_mean_dsfr) and 5.27 by Eq. 14 as printed. No
+    entry is made in validations.yaml. The davies2006 ratio is a run output computed from a figure, not a measured
+    datum with a precision, so a validation against it would get no verdict. The model's LCx output is the
+    distal intramural flow through Rmicro, while the Doppler wire is in the proximal epicardial artery. Each trace
+    is one subject (Fig. 5 with LV hypertrophy, which this record does not model). See davies2006/q_yong2025_dsfr.
+  citation: {page: 5, printed_page: "5", quote: "where Q(t) is the time-varying flow rate", where: "Eq. 14"}
+- id: q_validation_rerun_curve_ports
+  kind: choice
+  about: [q_davies2006_dsfr_curves, q_no_validation_vs_davies2006, invivo_mDSFR_lad, invivo_mDSFR_rca, fig6a_lad_invivo_d, fig6b_rca_invivo_d, coronary_closed_loop_mean_dsfr]
+  text: >
+    (Validation job davies2006+yong2025, curve-port rerun, 2026-11-11, second look.) Still no entry in
+    validations.yaml. This record's measured mDSFR values are LAD, RCA and GCV (and LAD and RCA in PH). It has
+    no measured LCx value, so davies2006's circumflex velocity ratio has no measured target here. davies2006's
+    processing model diastolic_systolic_velocity_ratio cannot run on this record's in vivo traces
+    (fig6a_lad_invivo_d, fig6b_rca_invivo_d) to check invivo_mDSFR_lad and invivo_mDSFR_rca. Those traces are
+    indexed by cardiac_cycle_fraction, a dimensionless quantity, while its port takes time in ms. No in vivo
+    end-systole is printed here. The other way, coronary_closed_loop_mean_dsfr's LCx mDSFR (about 2.84) has no
+    davies2006 measured datum to be judged against: there the ratio is a run output from one subject's figure.
+    See davies2006/q_validation_rerun_curve_ports.
+  citation: {page: 7, printed_page: "7", quote: "Validation of simulated coronary artery and vein results for normal physiology", where: "Fig. 6"}

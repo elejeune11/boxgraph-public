@@ -1,0 +1,79 @@
+# ---- cohort ----
+- {id: subject_count, name: number of subjects in a group, dimension: dimensionless}
+- {id: subject_group, name: subject group (LVH or non-LVH), dimension: dimensionless, description: "used as a condition: LVH = septal wall thickness > 1.2 cm"}
+- {id: age, name: age of the subjects, dimension: "[time]"}
+- {id: septal_wall_thickness, name: left ventricular septal wall thickness, dimension: "[length]"}
+- {id: systolic_bp, name: mean systolic blood pressure of a group, dimension: "[pressure]"}
+- {id: systolic_bp_sd, name: standard deviation across subjects of systolic blood pressure, dimension: "[pressure]"}
+- {id: diastolic_bp, name: mean diastolic blood pressure of a group, dimension: "[pressure]"}
+- {id: diastolic_bp_sd, name: standard deviation across subjects of diastolic blood pressure, dimension: "[pressure]"}
+- {id: mean_coronary_velocity, name: mean coronary blood flow velocity (intracoronary Doppler), dimension: "[length]/[time]"}
+# ---- recording ----
+- {id: sampling_rate, name: "acquisition rate of the pressure, velocity and ECG signals", dimension: "1/[time]"}
+- {id: pressure_velocity_delay, name: processing delay of the Doppler signal behind the pressure signal (in vitro bolus tests), dimension: "[time]"}
+- {id: velocity_time_shift, name: time by which every velocity signal was advanced, dimension: "[time]"}
+- {id: injection_count, name: number of in vitro saline bolus injections for timing calibration, dimension: dimensionless}
+- {id: blood_density, name: density of blood, dimension: "[mass]/[length]**3"}
+- {id: replicate_sd_systolic, name: SD of the difference of systolic pressure between replicate 30 s recordings, dimension: "[pressure]"}
+- {id: replicate_sd_diastolic, name: SD of the difference of diastolic pressure between replicate 30 s recordings, dimension: "[pressure]"}
+- {id: replicate_sd_peak_velocity, name: SD of the difference of peak Doppler velocity between replicate 30 s recordings, dimension: "[length]/[time]"}
+- {id: replicate_percent_systolic, name: replicate SD of systolic pressure as a percentage of its mean value, dimension: dimensionless}
+- {id: replicate_percent_diastolic, name: replicate SD of diastolic pressure as a percentage of its mean value, dimension: dimensionless}
+- {id: replicate_percent_peak_velocity, name: replicate SD of peak Doppler velocity as a percentage of its mean value, dimension: dimensionless}
+# ---- wave intensity analysis (instantaneous) ----
+- {id: pressure_increment, name: incremental change of coronary pressure between samples (dP), dimension: "[pressure]"}
+- {id: velocity_sample_increment, name: incremental change of blood velocity between samples (dU), dimension: "[length]/[time]"}
+- {id: pressure_increment_forward, name: part of a pressure increment originating proximally (dP+), dimension: "[pressure]"}
+- {id: pressure_increment_backward, name: part of a pressure increment originating distally (dP-), dimension: "[pressure]"}
+- {id: pressure_rate, name: time derivative of coronary pressure (dP/dt), dimension: "[pressure]/[time]"}
+- {id: velocity_rate, name: time derivative of coronary blood velocity (dU/dt), dimension: "[length]/[time]**2"}
+- {id: sum_squared_pressure_increments, name: "sum of dP^2 over an integer number of cardiac cycles", dimension: "[pressure]**2"}
+- {id: sum_squared_velocity_increments, name: "sum of dU^2 over an integer number of cardiac cycles", dimension: "[length]**2/[time]**2"}
+- {id: wave_speed, name: local coronary wave speed (single-point estimate), dimension: "[length]/[time]"}
+- {id: wave_intensity_forward, name: wave intensity of waves originating proximally (WI+), dimension: "[mass]/[time]**5", description: "W m^-2 s^-2, defined from time derivatives of P and U"}
+- {id: wave_intensity_backward, name: wave intensity of waves originating distally (WI-), dimension: "[mass]/[time]**5", description: "W m^-2 s^-2; negative or zero by its formula"}
+- {id: wave_intensity_net, name: net wave intensity (WInet = dP/dt dU/dt), dimension: "[mass]/[time]**5"}
+# ---- Table 2: the six waves (whole cohort, mean of LMS, LAD and Cx per subject) ----
+# Peak values carry the sign Table 2 prints (accelerating +, decelerating -; q_table2_sign).
+- {id: peak_wi_w1, name: "peak wave intensity of the early backward-traveling pushing wave (wave 1)", dimension: "[mass]/[time]**5"}
+- {id: peak_wi_w2, name: "peak wave intensity of the early (dominant) forward-traveling pushing wave (wave 2)", dimension: "[mass]/[time]**5"}
+- {id: peak_wi_w3, name: "peak wave intensity of the late backward-traveling pushing wave (wave 3)", dimension: "[mass]/[time]**5"}
+- {id: peak_wi_w4, name: "peak wave intensity of the forward-traveling suction wave (wave 4)", dimension: "[mass]/[time]**5"}
+- {id: peak_wi_w5, name: "peak wave intensity of the (dominant) backward-traveling suction wave (wave 5)", dimension: "[mass]/[time]**5"}
+- {id: peak_wi_w6, name: "peak wave intensity of the late forward-traveling pushing wave (wave 6)", dimension: "[mass]/[time]**5"}
+- {id: cumulative_wi_w1, name: "cumulative wave intensity (area under the curve) of wave 1", dimension: "[mass]/[time]**4"}
+- {id: cumulative_wi_w2, name: "cumulative wave intensity of wave 2", dimension: "[mass]/[time]**4"}
+- {id: cumulative_wi_w3, name: "cumulative wave intensity of wave 3", dimension: "[mass]/[time]**4"}
+- {id: cumulative_wi_w4, name: "cumulative wave intensity of wave 4", dimension: "[mass]/[time]**4"}
+- {id: cumulative_wi_w5, name: "cumulative wave intensity of wave 5", dimension: "[mass]/[time]**4"}
+- {id: cumulative_wi_w6, name: "cumulative wave intensity of wave 6", dimension: "[mass]/[time]**4"}
+- {id: share_wi_w1, name: "wave 1 as a percentage of the total cumulative wave intensity of the cycle", dimension: dimensionless}
+- {id: share_wi_w2, name: "wave 2 as a percentage of the total cumulative wave intensity", dimension: dimensionless}
+- {id: share_wi_w3, name: "wave 3 as a percentage of the total cumulative wave intensity", dimension: dimensionless}
+- {id: share_wi_w4, name: "wave 4 as a percentage of the total cumulative wave intensity", dimension: dimensionless}
+- {id: share_wi_w5, name: "wave 5 as a percentage of the total cumulative wave intensity", dimension: dimensionless}
+- {id: share_wi_w6, name: "wave 6 as a percentage of the total cumulative wave intensity", dimension: dimensionless}
+- {id: share_wi_relaxation, name: percentage of the cumulative wave intensity occurring with ventricular relaxation, dimension: dimensionless, description: "waves 4, 5 and 6"}
+- {id: share_accelerating_two_waves, name: percentage of the accelerating wave energy that comes from waves 2 and 5, dimension: dimensionless}
+- {id: velocity_rise_in_phase, name: incremental increase of coronary flow velocity during a phase of the cycle, dimension: "[length]/[time]"}
+# ---- relations reported between subjects ----
+- {id: r_suction_share_vs_septum, name: correlation of the backward suction wave percentage with septal wall thickness, dimension: dimensionless}
+- {id: r_suction_vs_pushing, name: correlation of the early forward pushing wave with the backward suction wave, dimension: dimensionless}
+- {id: slope_suction_vs_pushing, name: regression slope of the backward suction wave on the early forward pushing wave, dimension: dimensionless}
+- {id: slope_ratio_lvh, name: ratio of the LVH to the non-LVH regression slope of suction on pushing wave, dimension: dimensionless}
+- {id: r_forward_suction_share_vs_age, name: correlation of the forward suction wave percentage with age, dimension: dimensionless}
+- {id: r_forward_suction_share_vs_septum, name: correlation of the forward suction wave percentage with wall thickness, dimension: dimensionless}
+- {id: r_forward_suction_share_vs_wave_speed, name: correlation of the forward suction wave percentage with coronary wave speed, dimension: dimensionless}
+- {id: r_late_backward_pushing_vs_age, name: correlation of the late backward pushing wave with age, dimension: dimensionless}
+- {id: p_forward_suction_share_vs_septum, name: P value of the correlation of the forward suction wave percentage with wall thickness, dimension: dimensionless}
+# ---- traces of single subjects (Figs. 3-5; added by the figure reading) ----
+- {id: time_in_cycle, name: time within the cardiac cycle, dimension: "[time]", description: "the time axis of Figs. 3-5 (0 at the start of the plotted beat)"}
+- {id: coronary_pressure, name: instantaneous coronary arterial pressure (pressure wire), dimension: "[pressure]"}
+- {id: coronary_doppler_velocity, name: "instantaneous coronary blood velocity (peak of the Doppler spectrum, flow wire)", dimension: "[length]/[time]", description: "not the cross-sectional mean velocity (q_mean_velocity_meaning)"}
+- {id: coronary_pressure_forward, name: "forward (proximally originating) part of coronary pressure, P+ = sum of dP+", dimension: "[pressure]", description: "accumulated from the first sample of a trace"}
+- {id: coronary_pressure_backward, name: "backward (distally originating) part of coronary pressure, P- = sum of dP-", dimension: "[pressure]", description: "accumulated from the first sample of a trace"}
+- {id: coronary_velocity_forward, name: "forward part of coronary velocity, U+ = sum of dP+/(rho c)", dimension: "[length]/[time]"}
+- {id: coronary_velocity_backward, name: "backward part of coronary velocity, U- = sum of -dP-/(rho c)", dimension: "[length]/[time]"}
+- {id: velocity_ratio_diastolic_systolic_mean, name: ratio of the time-mean Doppler velocity in diastole to that in systole, dimension: dimensionless}
+- {id: velocity_ratio_diastolic_systolic_integral, name: ratio of the time integral of Doppler velocity over diastole to that over systole, dimension: dimensionless}
+- {id: recording_site,name: coronary artery of the recording, dimension: dimensionless, description: "used as a condition: left main stem, LAD or circumflex"}

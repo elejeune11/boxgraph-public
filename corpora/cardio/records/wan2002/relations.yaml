@@ -1,0 +1,140 @@
+# Relations the paper states. Units: dyn/cm^2 = g/s^2/cm.
+# The constitutive law "suggested by Olufsen [11]" (p. 2): Eq. 11 here is olufsen1999's Eq. 5, and Eq. 14
+# its Eq. 6, with S for A. The reference states differ in name (q_reference_state_olufsen).
+- id: rel_pressure_area_olufsen1999
+  kind: same_as
+  a: wan2002/pressure_area_eq11
+  b: olufsen1999/pressure_area_eq5
+  mapping: {k1: "k1", k2: "k2", k3: "k3", r0: "r0", p0: "p0", A: "S"}
+  output_map: {p: p}
+  regime: {k1: [1.0e7, 3.0e7], k2: [-30, -15], k3: [5.0e5, 1.2e6], r0: [0.1, 1.5], p0: [0, 1.5e5], S: [0.02, 10.0]}
+  provenance: stated
+  citation: {page: 2, printed_page: "196", quote: "used is that suggested by Olufsen", where: "Eq. 11"}
+- id: rel_stiffness_olufsen1999
+  kind: same_as
+  a: wan2002/stiffness_eq14
+  b: olufsen1999/stiffness_eq6
+  mapping: {k1: "k1", k2: "k2", k3: "k3", r0: "r0"}
+  output_map: {Eh_r0: Eh_r0}
+  regime: {k1: [1.0e7, 3.0e7], k2: [-30, -15], k3: [5.0e5, 1.2e6], r0: [0.05, 1.5]}
+  provenance: stated
+  citation: {page: 2, printed_page: "196", quote: "used is that suggested by Olufsen", where: "Eqs. 11 and 14"}
+# Eq. 6 is stated to follow from the definitions (Eqs. 3-4) on the profile of Eq. 5 ("then we have").
+- id: rel_delta_eq6_from_eq3
+  kind: same_as
+  a: wan2002/profile_terms_eq6
+  b: wan2002/profile_terms_eq3_5
+  mapping: {n: "n"}
+  output_map: {delta: delta}
+  regime: {n: [1, 12], nu: [0.03, 0.05]}
+  provenance: stated
+  citation: {page: 2, printed_page: "196", quote: "the profile to be axisymmetric and of the form", where: "Eqs. 3-6"}
+- id: rel_N_eq6_from_eq4_nu
+  kind: same_as
+  a: wan2002/profile_terms_eq6
+  b: wan2002/profile_terms_eq3_5_nu
+  mapping: {n: "n", nu: "nu"}
+  output_map: {N: N}
+  regime: {n: [1, 12], nu: [0.03, 0.05]}
+  provenance: stated
+  citation: {page: 2, printed_page: "196", quote: "the profile to be axisymmetric and of the form", where: "Eqs. 3-6"}
+  assumptions: ["Eq. 4 with the factor nu that Eq. 6 carries (variant profile_terms_eq3_5_nu; q_eq4_viscosity)"]
+# Eq. 17 is stated to result from Eq. 15 ("This results in a modification to the viscous loss function N").
+- id: rel_stenosis_eq17_from_eq15
+  kind: same_as
+  a: wan2002/stenosis_dp_eq15
+  b: wan2002/stenosis_dp_eq17
+  mapping: {rho: "rho", nu: "nu", Q: "Q", S0: "S0", S1: "S1", L: "L", Kt: "Kt", cv: "cv"}
+  output_map: {dp: dp}
+  regime: {rho: [1.0, 1.1], nu: [0.03, 0.05], Q: [1, 100], S0: [0.2, 5.0], S1: [0.05, 0.2], L: [0.5, 5.0], Kt: [1.52, 1.52], cv: [32, 32]}
+  provenance: stated
+  citation: {page: 3, printed_page: "197", quote: "This results in a modification to the viscous loss", where: "Eqs. 15-17"}
+  assumptions: ["steady, uniform flow through the stenosis, Q0 = Q1, integrated over its length L with Eq. 2"]
+# Westerhof et al. [3] is cited only as a lumped parameter model (p. 1); no relation is stated.
+# Proposed: Wan's wave speed at rest (Eq. 21 with Eqs. 11, 14) is Westerhof's lossless phase velocity
+# c = 1/sqrt(L'C') with L' = rho/(pi r0^2) (Fig. 1 key, n = 1) and the compliance per length of
+# Wan's own law, dS/dp at S0 = 3 pi r0^3/(2 Eh) with Eh = r0 (k1 exp(k2 r0) + k3). That compliance is
+# Westerhof's C' = 3 pi r^2 (a+1)^2/(E(2a+1)) in its thin-wall limit a = r/h -> oo (C' -> 3 pi r^3/(2Eh)).
+- id: rel_wave_speed_westerhof_phase_velocity
+  kind: same_as
+  a: wan2002/wave_speed_eq21
+  b: westerhof1969/phase_velocity
+  mapping: {Lp: "rho/(pi*r0**2)", Cp: "3*pi*r0**2/(2*(k1*exp(k2*r0) + k3))"}
+  output_map: {c: c0}
+  regime: {k1: [1.0e7, 3.0e7], k2: [-30, -15], k3: [5.0e5, 1.2e6], r0: [0.1, 1.5], rho: [1.0, 1.1], L: [1, 50]}
+  provenance: proposed
+  reason: >
+    Both are the lossless wave speed sqrt(S/(rho dS/dp)). Wan's c0^2 = (2/3)(Eh/r0)/rho equals Westerhof's
+    1/(L'C') with L' = rho/S and a thin-walled C' = 3 pi r0^3/(2Eh); the mapping uses that thin-wall C'
+    because Wan's law gives only the product Eh, not h. Westerhof's C' for a wall of finite thickness is
+    larger than the thin-wall one by the factor 2(a+1)^2/(a(2a+1)), which tends to 1 as a = r/h -> oo
+    (1.2 at a = 10), so for thick walls the two wave speeds differ.
+    Only the forms are related; Wan's Eh/r0 fit and Westerhof's E, r, h are not the same quantities.
+# Proposed: Wan's wave speed at rest (Eq. 21 with Olufsen's law, Eqs. 11, 14) against olufsen1999's own
+# c0 (p. 3 with Eq. 6). Neither paper states it. Olufsen's printed c0^2 carries the factor 4/3, which does
+# not follow from its Eq. 5 (olufsen1999 q_wave_speed_factor); the variant with the factor 2/3 that Eq. 5
+# gives is the form Wan's Eq. 21 gives from the same law. Both are entered, so the check shows which holds.
+- id: rel_wave_speed_olufsen1999_eq5factor
+  kind: same_as
+  a: wan2002/wave_speed_eq21
+  b: olufsen1999/wave_speed_eq6_eq5factor
+  mapping: {rho: "rho", k1: "k1", k2: "k2", k3: "k3", r0: "r0"}
+  output_map: {c0: c0}
+  regime: {k1: [1.0e7, 3.0e7], k2: [-30, -15], k3: [5.0e5, 1.2e6], r0: [0.1, 1.5], rho: [1.0, 1.1], L: [1, 50]}
+  provenance: proposed
+  reason: >
+    Both are c0^2 = (A/rho) dp/dA at A = A0 for the same constitutive law (Wan Eq. 11 = Olufsen Eq. 5,
+    stated in rel_pressure_area_olufsen1999), with Eh/r0 = k1 exp(k2 r0) + k3: Wan through the
+    eigenvalues of Eq. 21, olufsen1999 through its definition of c0 on p. 3 with the factor Eq. 5 gives.
+    The forms only are related; L enters only Wan's transit time.
+- id: rel_wave_speed_olufsen1999_printed
+  kind: same_as
+  a: wan2002/wave_speed_eq21
+  b: olufsen1999/wave_speed_eq6
+  mapping: {rho: "rho", k1: "k1", k2: "k2", k3: "k3", r0: "r0"}
+  output_map: {c0: c0}
+  regime: {k1: [1.0e7, 3.0e7], k2: [-30, -15], k3: [5.0e5, 1.2e6], r0: [0.1, 1.5], rho: [1.0, 1.1], L: [1, 50]}
+  provenance: proposed
+  reason: >
+    The same wave speed as rel_wave_speed_olufsen1999_eq5factor, with olufsen1999's c0 as printed
+    (factor 4/3). If the printed factor is a misprint, as Eq. 5 suggests, this relation fails by a factor
+    sqrt(2) in c0; Wan's Eq. 21 with the same law gives the factor 2/3.
+# Not related: olufsen1999/larger_arteries_1d and wan2002/abdominal_aorta_1d share ports (k1, k2, k3 ->
+# p) but model different networks (Olufsen's systemic tree of Fig. 1 with structured-tree outlets; Wan's
+# idealized abdominal aorta with resistance outlets), and neither is runnable. Wan (p. 11) mentions
+# Olufsen's combined 1D and impedance approach only as a better outflow condition, not as its own model.
+# --- ModelAtlas job olufsen2000 + wan2002 (2026-11-10). wan2002 does not cite olufsen2000 (its ref. 11 is
+# olufsen1999), so no relation is stated. One is proposed: Olufsen's state equation as olufsen2000 prints it
+# (Eq. 14 with the stiffness of Eq. 15) is Wan's Eq. 11 with Eq. 14. Not related, for the same reasons as
+# with olufsen1999 above: olufsen2000/network_1d and wan2002/abdominal_aorta_1d share the shape of their
+# ports (k1, k2, k3 -> q, p) but model different networks with different outflow conditions (structured-tree
+# impedance against resistances), and neither is runnable. No value of wan2002 is taken from olufsen2000
+# (k1, k2, k3 come from olufsen1999 and are linked there), so cited.yaml gets no line.
+- id: rel_pressure_area_olufsen2000_eq14
+  kind: same_as
+  a: olufsen2000/tube_law_eq14
+  b: wan2002/pressure_area_eq11
+  mapping: {k1: "0", k2: "0", k3: "E*h/r0", r0: "r0", p0: "p0", S: "A"}
+  output_map: {p: p}
+  regime: {A: [0.02, 10.0], r0: [0.1, 1.5], E: [1.0e+6, 1.0e+8], h: [0.002, 0.2], p0: [0, 1.5e+5]}
+  provenance: proposed
+  reason: >
+    olufsen2000 Eq. 14 (p. 5), p - p0 = (4/3)(E h/r0)(1 - sqrt(A0/A)) with A0 = pi r0^2, is Wan's Eq. 11,
+    p = p0 + (4/3) Eh/r0 (1 - sqrt(S0/S)) with S0 = pi r0^2 (Eq. 13), S for A. Both write the stiffness as
+    Eh/r0 = k1 exp(k2 r0) + k3 (olufsen2000 Eq. 15, Wan Eq. 14). The olufsen2000 helper model takes E and h
+    as ports, so the mapping puts the whole stiffness in Wan's constant term (k3 = E h/r0, k1 = k2 = 0): the
+    relation checks that the two laws agree for any stiffness, Eq. 15's form included. Only the forms are
+    related: k3 here carries E h/r0, not the fit offset. Wan's p0 is p(z, 0), olufsen2000's the pressure at
+    A = A0 (q_reference_state_olufsen). Both ports are CGS (dyne/cm^2 = g/(s^2 cm)).
+# --- ModelAtlas job stergiopulos1992 + wan2002 (2026-11-10). No relation entered. wan2002 cites
+# stergiopulos1992 (ref-9) twice, neither time for a model of its own: p. 3 ("results in an underestimation
+# of viscous losses [9]") as the reason for a stenosis model, which Wan then takes from Seeley and Young
+# [12]; p. 11 ("use a modified Windkessel model to account for") as an outflow condition Wan does not use
+# (its outlets are resistances, Eq. 8). Not proposed: Wan's Eq. 15 with Q > 0 is the steady part of
+# stergiopulos1992's Eq. 8 (dQ/dt = 0, Kv = 32 (L/D0)(S0/S1)^2), but Eq. 8 exists only inside
+# stergiopulos1992's network models, not as a model of its own, and neither paper states the relation, so
+# no helper model is added for it. Not related: stergiopulos1992/arterial_tree_1d and
+# wan2002/bifurcation_svoned share the shape of their ports (pressure from density, length) but model
+# different networks (55 segments with windkessel outlets and the logarithmic wall law of Eq. 9, against a
+# symmetric bifurcation with resistance outlets and Olufsen's law). No value of wan2002 is taken from
+# stergiopulos1992, so cited.yaml gets no line.

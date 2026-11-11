@@ -1,0 +1,64 @@
+id: davies2006
+kind: article
+title: Evidence of a dominant backward-propagating "suction" wave responsible for diastolic coronary filling in humans, attenuated in left ventricular hypertrophy
+authors: [Justin E. Davies, Zachary I. Whinnett, Darrel P. Francis, Charlotte H. Manisty, Jazmin Aguado-Sierra, Keith Willson, Rodney A. Foale, Iqbal S. Malik, Alun D. Hughes, Kim H. Parker, Jamil Mayet]
+year: 2006
+venue: Circulation 113, 1768-1778
+doi: 10.1161/CIRCULATIONAHA.105.603050
+file: corpus/cardio/2006_Davies.pdf
+page_range: [2, 12]
+pages: {2: "1768", 3: "1769", 4: "1770", 5: "1771", 6: "1772", 7: "1773", 8: "1774", 9: "1775", 10: "1776", 11: "1777", 12: "1778"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-10"}
+notes: >
+  PDF page 1 is the journal's cover page and is not part of the source. The author list is the one printed
+  on p. 2 (eleven authors); the job description also named Tyberg, who is not on the printed byline.
+  The paper is a measurement study: simultaneous intracoronary pressure and Doppler velocity in the left
+  main stem, LAD and circumflex of 20 people (10 with LVH, septal wall > 1.2 cm), analysed by wave
+  intensity. Its printed results are group statistics (mean ± SD) of six identified waves (Table 2) and
+  of the cohort, plus correlations; all are entered as measured data with their spread and group
+  (conditions subject_group LVH / non-LVH where the paper splits them).
+  Models. The wave intensity analysis is entered as the paper states it (wave separation dP+-, the
+  single-point wave speed, WI+-, WInet), but none of these can be run on printed inputs: the paper
+  prints no wave speed, no pressure or velocity derivative and no per-subject trace, and the scalar
+  ports of a model cannot take a digitized waveform (q_wia_not_run). The one check made on them is
+  the paper's own statement that WInet is the sum of WI+ and WI- (relation rel_winet_sum, tested by
+  ModelAtlas). Cumulative intensity (area under each wave) and the per-subject proportion are given in
+  words only and need the unpublished per-subject traces (not runnable, q_cumulative_not_runnable).
+  What the record checks is the arithmetic of the printed numbers: (1) Table 2's proportions against
+  the shares its own cumulative means give (ratio of means, a weak test judged at the printed SD,
+  q_share_ratio_of_means); (2) the 55% of wave intensity in relaxation (waves 4-6), from the printed
+  proportions and from the cumulative means; (3) the abstract's 94% of accelerating wave energy from
+  waves 2 and 5, which neither the proportions nor the cumulative means give (about 90%;
+  q_accel_94); (4) the whole-cohort SBP and DBP mean and SD from the LVH and non-LVH group values
+  (n = 10 each), and the whole-cohort suction-wave and early backward pushing wave percentages from
+  their group means; (5) the reproducibility percentages (5.2 mmHg as 3%, 1.9 mmHg as 2.5% of the
+  mean value), read against the cohort mean pressures (q_replicate_percent); (6) the LVH/non-LVH
+  regression slope ratio against "one quarter" (no precision, no verdict).
+  Signs: Table 2 prints peak intensities with the sign of the wave's effect on flow (accelerating +,
+  decelerating -), not the sign of WI+ or WI- (q_table2_sign); entered as printed.
+  Left out (feed no model): p values, the 13 female subjects, drug and risk-factor counts, the
+  sensitivity range of +-30% on wave speed, the 1.6 cm septum of the Fig. 5 subject, the 140 ms
+  plateau time, and the abstract's repetition of Table 2 values (same digits as the table).
+  Figures were not digitized in this reading: the figure-rendering commands were not available to the
+  reading job (q_figures_not_read). Figs. 3-5 (pressure, velocity, WI+ and WI- traces of single
+  subjects) and Figs. 6-7 (scatter of per-subject percentages) remain to be read; Fig. 7's age axis
+  (0-30 years) and its percentages disagree with the printed cohort (q_fig7_axes). Fig. 8 is a cartoon.
+  Validation: no model in the corpus that is runnable predicts these quantities under shared conditions
+  (q_validation_candidates); the measurements are entered so that a later validation job can use them.
+  Figure pass (2026-11-10): the figures were then read with calibrated code (figures.yaml, figures.md,
+  q_figures_read). Read: Figs. 3 and 5 in full (WI+, WI- and their extrema, pressure and velocity), the
+  WI+ and WI- traces and extrema of the three panels of Fig. 4, and all 20 markers of Figs. 6 and 7. Fig.
+  4's pressure and velocity boxes are left out (in the scan the two lines cannot be kept apart). These
+  readings add no run or comparison: a model port cannot take a figure curve (q_fig_traces_not_run,
+  q_fig6_groups). The readings confirm q_fig7_axes (q_fig7_reading) and the figure side of q_table2_sign
+  (q_fig3_signs), and show that Fig. 3 and Fig. 4's circumflex panel are one recording
+  (q_fig3_fig4_same_recording). No existing value was changed.
+  Curve-port pass (2026-11-11): the wave intensity analysis is now run on the digitized traces of Figs. 3 and 5
+  (wia_traces: single-point c, separation, WI+ and WI-, compared with the plotted WI traces and their extrema;
+  q_wia_rebuilt). A 2 ms re-reading of the traces gives a reading-grid refinement, which does not settle
+  (q_wia_grid). Cumulative intensities and shares are computed from one subject's curves and set against Table 2
+  as a consistency check (q_cumulative_rebuilt), with wave 4 of the rebuild smaller than plotted
+  (q_wave4_rebuilt_small). Fig. 6's group means, septum means, n and r, and Fig. 7's r, are reproduced from the
+  read markers (q_fig6_groups_run). The diastolic-to-systolic velocity ratio is computed for the yong2025 test,
+  but no validation is entered (q_yong2025_dsfr). Nothing existing was changed: the new models, runs,
+  comparisons, refinements, four 2 ms readings and four added end-systole times are additions.

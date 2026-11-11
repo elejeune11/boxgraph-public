@@ -1,0 +1,24 @@
+id: cumulative_wi_curve
+name: cumulative wave intensity of each of the six waves and its share, from one subject's WI+ and WI- curves
+role: processing
+stated: {page: 4, printed_page: "1770", quote: "Cumulative wave intensity was calculated for each wave by", where: "Quantification of Waves"}
+equation: "I_k = integral over wave k of |WI| dt ; p_k = 100 I_k / total cumulative wave intensity in the cardiac cycle"
+from_words: true
+inputs:
+  WIp: {quantity: wave_intensity_forward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}}
+  WIm: {quantity: wave_intensity_backward, unit: W/m^2/s^2, curve: {quantity: time_in_cycle, unit: ms}}
+outputs:
+  I1: {quantity: cumulative_wi_w1, unit: W/m^2/s}
+  I2: {quantity: cumulative_wi_w2, unit: W/m^2/s}
+  I3: {quantity: cumulative_wi_w3, unit: W/m^2/s}
+  I4: {quantity: cumulative_wi_w4, unit: W/m^2/s}
+  I5: {quantity: cumulative_wi_w5, unit: W/m^2/s}
+  I6: {quantity: cumulative_wi_w6, unit: W/m^2/s}
+  p1: {quantity: share_wi_w1, unit: percent}
+  p2: {quantity: share_wi_w2, unit: percent}
+  p3: {quantity: share_wi_w3, unit: percent}
+  p4: {quantity: share_wi_w4, unit: percent}
+  p5: {quantity: share_wi_w5, unit: percent}
+  p6: {quantity: share_wi_w6, unit: percent}
+settings: {t1: 100, t2: 140, t3: 160, t4: 445, t5: 450, t6: 475, search_ms: 15, total: six}
+stochastic: false

@@ -1,4 +1,4 @@
-# Status: version 0.9 (2026-11-02)
+# Status: version 0.10 (2026-11-11)
 
 ## What exists
 
@@ -21,6 +21,9 @@
   error bars (SEM, SD, 95% CI, range, unstated) carry the outer bar as their
   interval. On eight real panels with known truth the agents' own code beat
   the shared digitizer (0.25% error, 98% coverage, against 0.46-0.60%).
+- **Curve ports** (v0.10): a model input or output may take or give a whole
+  curve, so a model can process a measured trace (average it, differentiate
+  it, separate it into waves) rather than be run once per x value.
 - **Models with randomness**: run with several seeds (5 by default); the
   computed value is the mean ± 2 standard errors and verdicts compare intervals.
 - **Adding papers** (`pipeline/`): `python -m pipeline.add` registers a PDF;
@@ -241,7 +244,7 @@ simulation is "qualitatively similar" to Chan's fixed-step one is tested as an
 approximation within a 10% tolerance the relator chose, and is not verified
 (the paper itself says the shapes differ).
 
-## The cardio corpus (v0.9)
+## The cardio corpus (v0.9-0.10)
 
 A second review, kept as a corpus of its own in `corpora/cardio/`: 0D
 (lumped-parameter) and 1D models of the cardiovascular system, from the heart
@@ -263,29 +266,50 @@ pump), Chilian 1986 (microvascular pressures in the beating heart), Kassab 1993
 Mynard 2014 and 2015 (a validated left coronary model; the whole adult
 circulation in 1D), Schwarz 2020 (a human left coronary tree), and the released
 data of Mynard 2014, Mynard 2015 and Schwarz 2020 (without the network file of
-Schwarz 2020, which was too large to upload). Its 96 jobs cost $146.52 (read
-$37.78, audit $10.81, digitize $43.49, relate $22.59, validate $31.85). With
-it, the corpus has 39 sources and its ledger 327 passed jobs ($580.46). The
-counts below are those of the first five batches.
+Schwarz 2020, which was too large to upload).
+
+Three more batches followed (v0.10):
+
+- **Batch 7, SimVascular codes and grown trees:** Menon 2025 and Yong 2025
+  (0D closed-loop and coronary models), Sexton 2025 and the released
+  svVascularize code (vascular trees grown by optimization, set against the
+  human tree of Schwarz 2020 and the pig trees of Kassab 1993), and the
+  released svZeroDSolver.
+- **Batch 8, the 1D solver:** Wan 2002 and the released svOneDSolver, built and
+  run on the 1D benchmarks of Boileau 2015 against its released 3D reference
+  solutions. The paper's own formulation cannot be run with a resistance
+  outlet in the release (it divides by a value the code never sets).
+- **Batch 9, human coronary measurements:** Davies 2006, pressure and Doppler
+  velocity in the left coronary arteries of 20 people, analysed by wave
+  intensity. No model in the corpus predicts what it measured (the models
+  that compute coronary wave intensity cannot be run, and the others give
+  flow, not velocity); each pair says why. With curve ports, the paper's
+  wave intensity analysis is rebuilt from its own plotted pressure and
+  velocity traces and compared with its plotted wave intensities.
+
+The corpus now has 47 sources and its ledger 454 passed jobs: 47 read,
+35 audit, 35 digitize, 169 relate and 168 validate. Recorded cost: $798.93
+(read $238.92, audit $52.62, digitize $242.94, relate $129.97, validate
+$134.48).
 
 The build (`build/cardio/synthesis.json`):
 
-- 92 relations (53 verified, 12 not verified, 3 refuted, 2 ambiguous,
-  22 unverifiable) and nine families;
-- 73 cross-paper runs checked, over 11 relations;
-- 1833 cited values checked;
-- 234 validations of one paper's models against another paper's
-  measurements: 215 tests (14 reproduced, 17 close, 183 not reproduced,
-  one without a verdict) and 19 fits (none reproduced);
-- 561 findings: 416 not reproduced, 74 that depend on an added input,
-  43 family conflicts, 23 cited values, three refuted relations, two that
+- 174 relations (113 verified, 21 not verified, 4 refuted, 2 ambiguous,
+  34 unverifiable) and 21 families;
+- 244 cross-paper runs checked;
+- 2377 cited values, 703 of them with a verdict (655 reproduced, 4 close,
+  24 not reproduced, 20 without a verdict);
+- 318 validations of one paper's models against another paper's
+  measurements: 295 tests (32 reproduced, 17 close, 245 not reproduced,
+  one without a verdict) and 23 fits (one reproduced). Most measured
+  curves are judged point by point at the precision of a figure reading;
+- 831 findings: 650 not reproduced, 91 that depend on an added input,
+  52 family conflicts, 24 cited values, three refuted relations, 11 that
   belong to the numerics;
-- 11 corrected variants of misprinted models, in six records
-  (Korakianitis 2006, Olufsen 2004, Pries 1990, Pries 2005, Shi 2013
-  chapter 2, the Smith CellML code).
+- 17 corrected variants of misprinted models.
 
-Reproduction across the corpus: 1537 comparisons reproduced, 67 close,
-503 not reproduced, 58 without a verdict, with the rounding of printed inputs
+Reproduction across the corpus: 2045 comparisons reproduced, 89 close,
+788 not reproduced, 76 without a verdict, with the rounding of printed inputs
 taken into account (DECISIONS, Rounded inputs in verdicts).
 
 Corrected variants: Korakianitis and Shi 2006 as printed reproduces 2 of 117
@@ -296,9 +320,12 @@ on 10 of 246 comparisons, reported apart as "reproduction, corrected". Pries
 1990's Eq. 7 has the wrong dimensions as printed; the variant with the factor
 (D/(D - W))^4 reproduces all five Fig. 3 curves read.
 
-The overview's three case studies are Pries 1990's Eq. 7, one entry of
-Boileau 2015's Table VI against the released waveforms (12.95% printed,
-2.95% computed), and Olufsen's asymmetry ratio across 1999, 2000 and 2012.
+The overview's seven case studies: Pries 1990's Eq. 7, a coronary tree solved
+again, Boileau 2015's tables rebuilt from the released files (one entry of
+Table VI: 12.95% printed, 2.95% computed), the human tree of Schwarz 2020
+against the other papers, a grown tree against the human tree (Sexton 2025),
+the 1D solver against its paper (Wan 2002 and svOneDSolver), and Olufsen's
+asymmetry ratio across 1999, 2000 and 2012.
 These findings have not yet been reviewed by a person.
 
 ## Known limits
@@ -313,6 +340,11 @@ These findings have not yet been reviewed by a person.
   question is Eq. 6's printed form (q_eq6_exponent).
 - Cross-paper checks run stochastic models once, not with repeated seeds.
 - Cross-paper checks do not yet carry curves across papers.
+- Relations between models with curve ports are not tested (the atlas
+  samples single values); they are reported unverifiable.
+- Traces read from a printed figure limit what can be rebuilt from them: a
+  10 ms reading step smooths narrow peaks, and finer steps pick up the
+  image's pixel staircase (Davies 2006, q_wia_grid).
 - The evaluation corpus is one synthetic paper; the figure-reading test is
   eight real panels.
 - **Costs of stopped attempts are not priced**: an attempt stopped at a time

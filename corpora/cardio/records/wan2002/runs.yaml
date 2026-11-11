@@ -1,0 +1,66 @@
+# ---- velocity profile: Eq. 6 against the definitions of Eqs. 3-5 ----
+- {id: run_profile_eq6, model: profile_terms_eq6, inputs: {n: n_poiseuille, nu: nu_added}, outputs: {delta: delta_eq6_pred, N: N_eq6_pred}}
+- {id: run_profile_eq3_5, model: profile_terms_eq3_5, inputs: {n: n_poiseuille}, outputs: {delta: delta_eq3_pred, Nint: Nint_eq4_pred}}
+- {id: run_profile_eq3_5_nu, model: profile_terms_eq3_5_nu, inputs: {n: n_poiseuille, nu: nu_added}, outputs: {delta: delta_eq3_nu_pred, N: N_eq4_nu_pred}}
+
+# ---- constitutive law at the single segment's radius, and the transit time it implies ----
+- {id: run_stiffness_segment, model: stiffness_eq14, inputs: {k1: k1_default, k2: k2_default, k3: k3_default, r0: r0_segment}, outputs: {Eh_r0: Eh_r0_segment_pred}}
+- {id: run_wave_speed_segment, model: wave_speed_eq21, inputs: {k1: k1_default, k2: k2_default, k3: k3_default, r0: r0_segment, rho: rho_added, L: L_segment}, outputs: {c0: c0_segment_pred, t_transit: transit_segment_pred}}
+
+# ---- arithmetic printed in the text ----
+- {id: run_LD_segment, model: length_diameter_ratio, inputs: {L: L_segment, r0: r0_segment}, outputs: {LD: LD_segment_pred}}
+- {id: run_elements_bifurcation, model: element_total, inputs: {n_in: elements_bifurcation_inlet, n_br: elements_bifurcation_branch}, outputs: {n_tot: elements_bifurcation_pred}}
+- {id: run_speedup, model: speedup_ratio, inputs: {cpu3: cpu_3d, cpu1: cpu_1d}, outputs: {s: speedup_pred}}
+
+# ---- the single segment of Fig. 1 with the released svOneDSolver (paper's mesh and time step) ----
+- id: run_segment
+  model: single_segment_svoned
+  inputs: {r0: r0_segment, L: L_segment, k1: k1_default, k2: k2_default, k3: k3_default, n: n_poiseuille, rho: rho_added, nu: nu_added, R: R_segment_added, p_ref: p_ref_added}
+  outputs: {Q_in_max: seg_Q_in_max, Q_in_min: seg_Q_in_min, Q_out_max: seg_Q_out_max, Q_out_min: seg_Q_out_min, Q_out_mean: seg_Q_out_mean,
+            p_in_max: seg_p_in_max, p_in_min: seg_p_in_min, p_in_mean: seg_p_in_mean, p_out_max: seg_p_out_max, p_out_min: seg_p_out_min, delay: seg_delay}
+  note: "16 elements, 100 steps per cycle, 3 cycles as printed; the release's conservative formulation, since its advective one (the paper's) stops with a resistance outlet (q_advective_resistance); inflow from the release (q_inflow_waveform)"
+
+# ---- the symmetric bifurcation of Fig. 2 with the released svOneDSolver ----
+- id: run_bifurcation
+  model: bifurcation_svoned
+  inputs: {n_in: elements_bifurcation_inlet, n_br: elements_bifurcation_branch, h: element_size_bifurcation, r_in: r_bif_inlet_added, r_br: r_bif_branch_added,
+           k1: k1_default, k2: k2_default, k3: k3_default, n: n_poiseuille, rho: rho_added, nu: nu_added, R: R_bif_added, p_ref: p_ref_added}
+  outputs: {p_in_max: bif_p_in_max, p_in_min: bif_p_in_min, Q_r_max: bif_Q_r_max, Q_r_min: bif_Q_r_min, Q_r_mean: bif_Q_r_mean,
+            p_r_max: bif_p_r_max, p_r_min: bif_p_r_min, flow_asym: bif_flow_asym, p_jump: bif_p_jump, mass_res: bif_mass_res}
+  note: "16 + 2 x 17 elements of 1 cm, 100 steps per cycle, 3 cycles as printed; radii and resistances added (q_bifurcation_inputs)"
+
+# ---- Table I: the Difference column from the 1D and 3D columns ----
+- {id: run_diff_pre_aorta, model: flow_difference_table1, inputs: {q1d: q1d_pre_aorta, q3d: q3d_pre_aorta}, outputs: {diff: diff_pre_aorta_pred}}
+- {id: run_diff_pre_rfem, model: flow_difference_table1, inputs: {q1d: q1d_pre_rfem, q3d: q3d_pre_rfem}, outputs: {diff: diff_pre_rfem_pred}}
+- {id: run_diff_pre_lfem, model: flow_difference_table1, inputs: {q1d: q1d_pre_lfem, q3d: q3d_pre_lfem}, outputs: {diff: diff_pre_lfem_pred}}
+- {id: run_diff_pre_rpop, model: flow_difference_table1, inputs: {q1d: q1d_pre_rpop, q3d: q3d_pre_rpop}, outputs: {diff: diff_pre_rpop_pred}}
+- {id: run_diff_pre_lpop, model: flow_difference_table1, inputs: {q1d: q1d_pre_lpop, q3d: q3d_pre_lpop}, outputs: {diff: diff_pre_lpop_pred}}
+- {id: run_diff_femfem_aorta, model: flow_difference_table1, inputs: {q1d: q1d_femfem_aorta, q3d: q3d_femfem_aorta}, outputs: {diff: diff_femfem_aorta_pred}}
+- {id: run_diff_femfem_rfem, model: flow_difference_table1, inputs: {q1d: q1d_femfem_rfem, q3d: q3d_femfem_rfem}, outputs: {diff: diff_femfem_rfem_pred}}
+- {id: run_diff_femfem_lfem, model: flow_difference_table1, inputs: {q1d: q1d_femfem_lfem, q3d: q3d_femfem_lfem}, outputs: {diff: diff_femfem_lfem_pred}}
+- {id: run_diff_femfem_rpop, model: flow_difference_table1, inputs: {q1d: q1d_femfem_rpop, q3d: q3d_femfem_rpop}, outputs: {diff: diff_femfem_rpop_pred}}
+- {id: run_diff_femfem_lpop, model: flow_difference_table1, inputs: {q1d: q1d_femfem_lpop, q3d: q3d_femfem_lpop}, outputs: {diff: diff_femfem_lpop_pred}}
+- {id: run_diff_afb_e2e_aorta, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2e_aorta, q3d: q3d_afb_e2e_aorta}, outputs: {diff: diff_afb_e2e_aorta_pred}}
+- {id: run_diff_afb_e2e_rfem, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2e_rfem, q3d: q3d_afb_e2e_rfem}, outputs: {diff: diff_afb_e2e_rfem_pred}}
+- {id: run_diff_afb_e2e_lfem, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2e_lfem, q3d: q3d_afb_e2e_lfem}, outputs: {diff: diff_afb_e2e_lfem_pred}}
+- {id: run_diff_afb_e2e_rpop, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2e_rpop, q3d: q3d_afb_e2e_rpop}, outputs: {diff: diff_afb_e2e_rpop_pred}}
+- {id: run_diff_afb_e2e_lpop, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2e_lpop, q3d: q3d_afb_e2e_lpop}, outputs: {diff: diff_afb_e2e_lpop_pred}}
+- {id: run_diff_afb_e2s_aorta, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2s_aorta, q3d: q3d_afb_e2s_aorta}, outputs: {diff: diff_afb_e2s_aorta_pred}}
+- {id: run_diff_afb_e2s_rfem, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2s_rfem, q3d: q3d_afb_e2s_rfem}, outputs: {diff: diff_afb_e2s_rfem_pred}}
+- {id: run_diff_afb_e2s_lfem, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2s_lfem, q3d: q3d_afb_e2s_lfem}, outputs: {diff: diff_afb_e2s_lfem_pred}}
+- {id: run_diff_afb_e2s_rpop, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2s_rpop, q3d: q3d_afb_e2s_rpop}, outputs: {diff: diff_afb_e2s_rpop_pred}}
+- {id: run_diff_afb_e2s_lpop, model: flow_difference_table1, inputs: {q1d: q1d_afb_e2s_lpop, q3d: q3d_afb_e2s_lpop}, outputs: {diff: diff_afb_e2s_lpop_pred}}
+
+# ---- Figs. 1 and 2 as curves: the released solver at the times of the figure readings ----
+- id: run_fig1_curves
+  model: single_segment_svoned_curve
+  inputs: {r0: r0_segment, L: L_segment, k1: k1_default, k2: k2_default, k3: k3_default, n: n_poiseuille, rho: rho_added, nu: nu_added, R: R_segment_added, p_ref: p_ref_added}
+  sweep: {t: fig1_flow_inlet_read}
+  outputs: {Q_in: fig1_Q_in_pred, Q_out: fig1_Q_out_pred, p_in: fig1_p_in_pred, p_out: fig1_p_out_pred}
+  note: "the run of run_segment, read at 0.05-0.85 s of its last cycle; all four readings of Fig. 1 are at these times"
+- id: run_fig2_curves
+  model: bifurcation_svoned_curve
+  inputs: {n_in: elements_bifurcation_inlet, n_br: elements_bifurcation_branch, h: element_size_bifurcation, r_in: r_bif_inlet_added, r_br: r_bif_branch_added, k1: k1_default, k2: k2_default, k3: k3_default, n: n_poiseuille, rho: rho_added, nu: nu_added, R: R_bif_added, p_ref: p_ref_added}
+  sweep: {t: fig2a_flow_read}
+  outputs: {Q_in: fig2_Q_in_pred, p_in: fig2_p_in_pred, Q_r: fig2_Q_r_pred, p_r: fig2_p_r_pred, Q_l: fig2_Q_l_pred, p_l: fig2_p_l_pred}
+  note: "the run of run_bifurcation, read at 0.05-0.85 s of its last cycle; all readings of Fig. 2 are at these times"
