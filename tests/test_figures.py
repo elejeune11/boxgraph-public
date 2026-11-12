@@ -270,11 +270,12 @@ def test_a_standalone_spec_is_read_by_the_same_code_as_the_build(paper, tmp_path
 
 
 @needs_poppler
-def test_without_the_pdf_figure_readings_are_checked_for_structure_only(paper, tmp_path):
-    """Without its PDF (never committed), a record's figure readings are checked for structure; running them needs the PDF."""
+def test_without_the_pdf_or_saved_readings_the_figures_are_left_out_not_errors(paper, tmp_path):
+    """Without its PDF (never committed) and no saved readings, the record is sound and warns that its figures are left out."""
     new, rec, _ = copy(paper, tmp_path)
     (new / "corpus" / "fig.pdf").unlink()
     structure = validate(load_record(rec), run=False)
     assert structure.sound, structure.errors
     full = validate(load_record(rec), cache_dir=tmp_path / "c")
-    assert any("source file" in e for e in full.errors)
+    assert full.sound, full.errors
+    assert any("source file" in w and "left out" in w for w in full.warnings)

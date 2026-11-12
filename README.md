@@ -437,6 +437,7 @@ corpora/<name>/records/<id>/
   validations.yaml   models of this source judged against another source's measurements
   figures.yaml       calibrated figure readings, re-read from the page by every build
   figures/*.py       the code that reads each figure, run by every build
+  readings.json      the numbers read from each figure, saved by the build for copies without the papers
   audit.md figures.md  the audit's and the figure job's logs
   ingest.json        digest and page range of the ingested PDF
   text/ pages/       page text and images from ingest (git-ignored)

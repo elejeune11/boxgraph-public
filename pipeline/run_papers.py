@@ -284,7 +284,7 @@ def _tokens(u: dict) -> str:
 
 def _build(title: str) -> int:
     content = ["--overview", OVERVIEW] if (ROOT / OVERVIEW).exists() else []
-    return subprocess.run([str(ROOT / VENV / "boxgraph"), "build", RECORDS, "--out", BUILD, "--cache", CACHE, "--title", title,
+    return subprocess.run([str(ROOT / VENV / "boxgraph"), "build", RECORDS, "--out", BUILD, "--cache", CACHE, "--save-readings", "--title", title,
                            *content],
                           cwd=ROOT, check=False).returncode
 

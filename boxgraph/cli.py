@@ -47,7 +47,7 @@ def _build(args) -> int:
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     cache = Path(args.cache) if args.cache else out / "cache"  # a shared cache reuses runs made elsewhere
-    syn = build_synthesis(Path(args.records), cache_dir=cache)
+    syn = build_synthesis(Path(args.records), cache_dir=cache, save_readings=args.save_readings)
     (out / "records").mkdir(exist_ok=True)
     for sid, b in syn["builds"].items():
         (out / "records" / f"{sid}.json").write_text(json.dumps(b, indent=1, default=str))
@@ -271,6 +271,8 @@ def main(argv=None) -> int:
     b.add_argument("--standalone", action="store_true", help="embed the explorer's images in the page (one file)")
     b.add_argument("--overview", help="YAML with the overview's introduction, links and case studies")
     b.add_argument("--cache", help="cache directory for model runs (default: OUT/cache)")
+    b.add_argument("--save-readings", action="store_true",
+                   help="save the numbers read from each figure beside its record (readings.json), for builds without the papers")
     b.set_defaults(fn=_build)
     vl = sub.add_parser("validations", help="judge the models of some records against measurements in the others")
     vl.add_argument("records")

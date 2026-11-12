@@ -56,7 +56,7 @@ read:
 
 build:
 	$(NEED)
-	$(BG) build $(RECORDS) --out $(OUT) --cache build/cache --title "BoxGraph Synthesis" $(if $(wildcard $(CONTENT)),--overview $(CONTENT))
+	$(BG) build $(RECORDS) --out $(OUT) --cache build/cache --save-readings --title "BoxGraph Synthesis" $(if $(wildcard $(CONTENT)),--overview $(CONTENT))
 
 clean:
 	rm -rf build .pytest_cache

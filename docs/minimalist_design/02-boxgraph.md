@@ -180,6 +180,11 @@ spans, and how thick the line is. That precision is labelled as added,
 because the paper did not print it. A figure read only by eye, without a
 calibration, gets no verdict.
 
+The papers themselves are not published with a corpus. A build that reads a
+figure therefore keeps the numbers it read beside the record, so a copy of the
+corpus without the papers still has them; a build that has the paper reads
+the figure again and checks them.
+
 Measured data are read from figures like any other values, with their error
 bars. A measured value with an error bar is judged by the bar, as a value
 printed with ± is, widened by how precisely the bar's ends could be read.

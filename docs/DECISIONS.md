@@ -480,6 +480,27 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   before the limit resets would only fail again); any other error is
   retried with a request to continue where the agent stopped.
 
+## Saved figure readings (v0.10)
+
+- **A build that reads a figure saves the numbers it read** beside the
+  record, in `readings.json` (`boxgraph build --save-readings`; `make build`
+  and the pipeline's builds pass it). The papers are never published, so
+  without these numbers a public copy of a corpus could not build any value
+  read from a figure.
+- **They are a product of the build, not part of the record.** They are not
+  authored or edited, and they are not in the record's digest. Each figure's
+  entry carries a fingerprint of its recipe (the reading as recorded, and its
+  code); a reading whose recipe has changed since it was saved is stale and
+  is not used.
+- **With the paper, the figure is read again and checked** against the
+  saved numbers; any difference is reported as a warning, and the page, not
+  the saved file, is used.
+- **Without the paper, the saved numbers are used**, marked as such.
+- **With neither, only that figure is left out**: its values, and the runs
+  and comparisons that need them, are reported as left out, and the rest of
+  the record is still sound and judged. A missing paper is no longer an
+  error of the record.
+
 ## Rounded inputs in verdicts (v0.9)
 
 - **Why.** In the cardiovascular corpus most results that missed were off by

@@ -317,9 +317,17 @@ def validate(lr: LoadedRecord, run: bool = True, cache_dir: Path | None = None) 
         if not any(d.figure == fr.id for d in rec.data):
             W(f"{where}: no datum uses this reading")
     if rec.figures and lr.source_file() is None:
-        msg = f"figure readings need the source file, and {rec.source.file!r} was not found"
-        # without running, only the readings' structure is checked: the PDF is never committed
-        (E if run else W)(msg if run else msg + "; their structure was checked, their values were not read")
+        # the PDF is never committed: the numbers saved by a build that read it stand in for it,
+        # and a figure with neither is left out, not an error of the record (DECISIONS, Saved figure readings)
+        from .engine import load_saved_readings, reading_recipe
+
+        saved = load_saved_readings(lr)
+        missing = sorted(fr.id for fr in rec.figures
+                         if saved.get(fr.id, {}).get("recipe") != reading_recipe(lr, fr))
+        msg = f"the source file {rec.source.file!r} was not found; figure readings use their saved numbers"
+        if missing:
+            msg += f", and {', '.join(missing)} (no saved reading for its recipe) {'is' if len(missing) == 1 else 'are'} left out"
+        W(msg)
 
     # ---- models -------------------------------------------------------------
     question_about = {x for q in rec.questions for x in q.about}

@@ -480,6 +480,71 @@ def _index_mismatch(cv: Value, pv: Value) -> str | None:
     return None
 
 
+# ---- saved figure readings (DECISIONS, Saved figure readings) ---------------
+READINGS_FILE = "readings.json"
+_READING_KEYS = ("x", "found", "y", "lo", "hi", "bar_lo", "bar_hi", "bar_lo_outer", "bar_hi_outer")
+
+
+def reading_recipe(lr: LoadedRecord, fr) -> str:
+    """A fingerprint of how a figure is read: its reading as recorded, and its code if it has any."""
+    h = hashlib.sha256(json.dumps(fr.model_dump(mode="json"), sort_keys=True).encode())
+    if fr.mode == "code" and fr.code and (lr.path / fr.code).exists():
+        h.update((lr.path / fr.code).read_bytes())
+    return h.hexdigest()[:16]
+
+
+def load_saved_readings(lr: LoadedRecord) -> dict:
+    f = lr.path / READINGS_FILE
+    if not f.exists():
+        return {}
+    try:
+        return json.loads(f.read_text())
+    except (OSError, ValueError):
+        return {}
+
+
+def save_readings(lr: LoadedRecord, figures: dict[str, dict]) -> bool:
+    """Write the numbers read from each figure beside the record. Only figures read from the page
+    are saved; a figure taken from the saved file, or not read, keeps what was saved. Returns
+    whether the file changed."""
+    saved = load_saved_readings(lr)
+    out = {}
+    for fr in sorted(lr.record.figures, key=lambda f: f.id):
+        res = figures.get(fr.id)
+        if res is not None and not res.get("from_saved") and not res.get("errors") and res.get("readings"):
+            out[fr.id] = {"recipe": reading_recipe(lr, fr), "where": fr.where, "page": fr.page,
+                          "readings": [{k: r[k] for k in _READING_KEYS if k in r} for r in res["readings"]]}
+        elif fr.id in saved:
+            out[fr.id] = saved[fr.id]
+    f = lr.path / READINGS_FILE
+    text = json.dumps(out, indent=1, sort_keys=True) + "\n"
+    if not out:
+        if f.exists():
+            f.unlink()
+            return True
+        return False
+    if f.exists() and f.read_text() == text:
+        return False
+    f.write_text(text)
+    return True
+
+
+def _differences(read: list[dict], saved: list[dict], rel: float = 1e-6) -> list[str]:
+    """Where a reading of the page differs from the saved one."""
+    out = []
+    if [r.get("x") for r in read] != [r.get("x") for r in saved]:
+        return ["the positions read differ"]
+    for a, b in zip(read, saved):
+        for k in _READING_KEYS[1:]:
+            va, vb = a.get(k), b.get(k)
+            if isinstance(va, (int, float)) and isinstance(vb, (int, float)) and not isinstance(va, bool):
+                if abs(va - vb) > rel * max(abs(va), abs(vb), 1e-12):
+                    out.append(f"at x = {a['x']:g}: {k} read {va:.6g}, saved {vb:.6g}")
+            elif va != vb:
+                out.append(f"at x = {a['x']:g}: {k} read {va!r}, saved {vb!r}")
+    return out
+
+
 class Builder:
     def __init__(self, lr: LoadedRecord, cache_dir: Path | None = None, timeout: int = DEFAULT_TIMEOUT):
         self.lr = lr
@@ -488,6 +553,7 @@ class Builder:
         self.timeout = timeout
         self.figures = {f.id: f for f in self.rec.figures}
         self.figure_results: dict[str, dict] = {}
+        self.saved_readings = load_saved_readings(lr)
         self._rounding_runs: dict[tuple, Any] = {}  # (run, input, end) -> output values, within one build
         self._rounding_half: dict[str, tuple] = {}  # comparison -> (half-widths in computed units, inputs varied)
 
@@ -531,12 +597,30 @@ class Builder:
         return img
 
     def read_figure(self, fid: str, overlay_to=None) -> dict:
-        """Read a figure from its page, applying its recorded calibration."""
+        """Read a figure from its page, applying its recorded calibration. Without the page, the
+        numbers saved by an earlier build are used if they were read by the same recipe."""
         if fid in self.figure_results and overlay_to is None:
             return self.figure_results[fid]
         from . import figures as FG
 
         fr = self.figures[fid]
+        saved = self.saved_readings.get(fid)
+        recipe = reading_recipe(self.lr, fr)
+        fresh = saved is not None and saved.get("recipe") == recipe
+        state = "none" if saved is None else ("matches" if fresh else "stale")
+        if self.lr.source_file() is None:
+            res = {"id": fid, "where": fr.where, "what": fr.what, "page": fr.page, "readings": [], "errors": [],
+                   "notes": [], "saved": state, "from_saved": False}
+            if fresh:
+                res.update(readings=[dict(r) for r in saved["readings"]], from_saved=True)
+                res["notes"].append("read from the saved reading: the source file is not available")
+            else:
+                why = ("there is no saved reading" if saved is None
+                       else "its saved reading was made by another recipe (save it again with the source file)")
+                res["notes"].append(f"left out: the source file is not available and {why}")
+                res["unavailable"] = True
+            self.figure_results[fid] = res
+            return res
         out = overlay_to
         if out is None and self.cache_dir is not None:
             out = self.cache_dir.parent / "figures" / self.rec.source.id / f"{fid}.png"
@@ -549,6 +633,14 @@ class Builder:
         except (BuildError, subprocess.CalledProcessError, OSError) as e:
             res = {"id": fid, "where": fr.where, "what": fr.what, "page": fr.page, "readings": [], "errors": [str(e)],
                    "notes": []}
+        res["from_saved"] = False
+        res["saved"] = state
+        if fresh and not res["errors"]:
+            diffs = _differences(res["readings"], saved["readings"])
+            if diffs:
+                res["saved"] = "differs"
+                res["notes"].append("differs from the saved reading: " + "; ".join(diffs[:5])
+                                    + (f" (and {len(diffs) - 5} more)" if len(diffs) > 5 else ""))
         self.figure_results[fid] = res
         return res
 
@@ -959,6 +1051,25 @@ class Builder:
         out["belongs_to"] = "model" if settled and out["shift"] <= tval else "numerics"
         return out
 
+    def _left_out(self) -> dict[str, str]:
+        """Runs and comparisons that depend on a figure that could not be read (no source file and no
+        saved reading): they are left out, not counted as errors of the record."""
+        why: dict[str, str] = {}
+        for d in self.rec.data:
+            if d.figure and self.read_figure(d.figure).get("unavailable"):
+                why[d.id] = f"{d.id} is read from figure {d.figure}, which could not be read without the source file"
+        for r in self._run_order():
+            src = next((why[i] for i in [*r.inputs.values(), *r.sweep.values()] if i in why), None)
+            if src:
+                why[r.id] = src
+                for oid in r.outputs.values():
+                    why[oid] = src
+        for c in self.rec.comparisons:
+            src = why.get(c.computed) or why.get(c.printed)
+            if src:
+                why[c.id] = src
+        return why
+
     def build(self) -> RecordBuild:
         b = RecordBuild(source=self.rec.source.id, digest=self.lr.digest())
         vals, runs, comps = self.evaluate()
@@ -968,12 +1079,18 @@ class Builder:
             b.problems += [f"figure {fid}: {e}" for e in res["errors"]]
             b.warnings += [f"figure {fid}: {n}" for n in res["notes"]]
         b.values, b.runs, b.comparisons = vals, runs, comps
+        left_out = self._left_out()
         for rr in runs.values():
-            if not rr.ok:
+            if rr.id in left_out:
+                b.warnings.append(f"run {rr.id}: left out: {left_out[rr.id]}")
+            elif not rr.ok:
                 b.problems.append(f"run {rr.id}: {rr.error}")
             b.warnings += [f"run {rr.id}: {n}" for n in rr.notes]
         for cr in comps.values():
-            if not cr.ok:
+            if cr.id in left_out:
+                b.warnings.append(f"comparison {cr.id}: left out: {left_out[cr.id]}")
+                cr.ok, cr.verdict, cr.error = False, None, f"left out: {left_out[cr.id]}"
+            elif not cr.ok:
                 b.problems.append(f"comparison {cr.id}: {cr.error}")
         for ref in self.rec.refinements:
             b.refinements[ref.id] = self._refine(ref, vals)

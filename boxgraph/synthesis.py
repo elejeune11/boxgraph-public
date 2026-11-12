@@ -26,6 +26,7 @@ from . import units as U
 from .atlas import families as compute_families
 from .atlas import test_relation
 from .engine import Builder, BuildError, RecordBuild, execute
+from .engine import save_readings as _save_readings
 from .schema import Comparison, ComparisonPurpose, Provenance, Run
 from .store import LoadedRecord, RecordLoadError, load_record, model_by_id
 from .validate import validate
@@ -604,7 +605,9 @@ def _graph(records, sound, cross) -> nx.DiGraph:
 # --------------------------------------------------------------------------
 
 
-def build_synthesis(root: str | Path, cache_dir: Path | None = None) -> dict:
+def build_synthesis(root: str | Path, cache_dir: Path | None = None, save_readings: bool = False) -> dict:
+    """Build every record under `root` and the Synthesis. With save_readings, the numbers read from
+    each record's figures are saved beside it (DECISIONS, Saved figure readings)."""
     root = Path(root)
     records, papers = _load(root)
     builds: dict[str, RecordBuild] = {}
@@ -613,6 +616,8 @@ def build_synthesis(root: str | Path, cache_dir: Path | None = None) -> dict:
         lr = records[sid]
         rep = validate(lr, run=False)
         b = Builder(lr, cache_dir=cache_dir).build() if rep.sound else None
+        if b is not None and save_readings:
+            _save_readings(lr, b.figures)
         builds[sid] = b
         papers[sid] = _paper_summary(lr, b, rep)
         if papers[sid]["sound"]:
