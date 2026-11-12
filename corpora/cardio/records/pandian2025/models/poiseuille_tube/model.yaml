@@ -1,0 +1,17 @@
+id: poiseuille_tube
+name: mean velocity and wall shear stress in one straight rigid tube under the CFD boundary pressures (reader's check)
+role: model
+stated: {none: "added by the reader as a consistency check: the steady Navier-Stokes equations the paper solves in the vessels (p. 11) reduce to Poiseuille flow in one straight rigid tube; the paper's model is a 3D network with a porous wall and interstitium, which this ignores"}
+from_words: true
+equation: "v_mean = (p_in - p_out) r^2 / (8 mu L); tau_w = (p_in - p_out) r / (2 L)"
+inputs:
+  p_in: {quantity: boundary_pressure, unit: Pa}
+  p_out: {quantity: boundary_pressure, unit: Pa}
+  r: {quantity: vessel_radius, unit: um}
+  mu: {quantity: fluid_viscosity, unit: Pa*s}
+  L: {quantity: flow_path_length, unit: um}
+outputs:
+  v_mean: {quantity: vessel_mean_velocity, unit: um/s}
+  tau_w: {quantity: wall_shear_stress, unit: dyne/cm^2}
+settings: {}
+stochastic: false

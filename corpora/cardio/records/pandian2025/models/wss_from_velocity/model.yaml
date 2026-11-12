@@ -1,0 +1,14 @@
+id: wss_from_velocity
+name: Poiseuille wall shear stress from a mean velocity in a straight tube (reader's check)
+role: model
+stated: {none: "added by the reader as a consistency check between the printed average velocity (about 100 um/s, p. 5) and the printed average wall shear stress (about 0.1 dyn/cm2, p. 7); the paper computes its wall shear stress from the 3D CFD"}
+from_words: true
+equation: "tau_w = 4 mu v_mean / r"
+inputs:
+  v: {quantity: vessel_mean_velocity, unit: um/s}
+  r: {quantity: vessel_radius, unit: um}
+  mu: {quantity: fluid_viscosity, unit: Pa*s}
+outputs:
+  tau_w: {quantity: wall_shear_stress, unit: dyne/cm^2}
+settings: {}
+stochastic: false

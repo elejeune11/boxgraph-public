@@ -1,0 +1,106 @@
+# Values written in the code and its sample files, as written. Paths are relative to the code folder.
+# In vitro throughout: the code processes images of an engineered network in a device.
+
+# ---------------------------------------------------------------- the sample image stack (ImageJ TIFF tags)
+# matlab-scripts/test-3D-stack/Control-Dex-3-trimmed.tif, inside Control-Dex-3-trimmed.tif.zip: a binary file,
+# so these values are cited by tag, not by line. Bio-Formats (the script's lines 41-54) reads them as the stack size
+# and as physical sizes in um (PhysicalSizeX = 1/XResolution for an ImageJ TIFF with unit=micron).
+- {id: stack_res_x, quantity: image_resolution, unit: 1/um, origin: reported, printed: "0.8316", citation: {none: "TIFF tag 282 (XResolution) of Control-Dex-3-trimmed.tif in matlab-scripts/test-3D-stack/Control-Dex-3-trimmed.tif.zip: 831600/1000000, with 'unit=micron' in the ImageJ description (tag 270); a binary file has no lines"}, conditions: {sample: "Control-Dex-3-trimmed.tif"}}
+- {id: stack_res_y, quantity: image_resolution, unit: 1/um, origin: reported, printed: "0.8316", citation: {none: "TIFF tag 283 (YResolution) of the same stack: 831600/1000000 pixels per micron"}, conditions: {sample: "Control-Dex-3-trimmed.tif"}}
+- {id: stack_spacing_z, quantity: slice_spacing, unit: um, origin: reported, printed: "5.6962", citation: {none: "ImageJ description (TIFF tag 270) of the same stack: 'spacing=5.6962', 'unit=micron'"}, conditions: {sample: "Control-Dex-3-trimmed.tif"}}
+- {id: stack_nx, quantity: image_size_pixels, unit: dimensionless, origin: reported, printed: "753", citation: {none: "TIFF tag 256 (ImageWidth) of the same stack: 753"}, conditions: {sample: "Control-Dex-3-trimmed.tif"}}
+- {id: stack_ny, quantity: image_size_pixels, unit: dimensionless, origin: reported, printed: "753", citation: {none: "TIFF tag 257 (ImageLength) of the same stack: 753"}, conditions: {sample: "Control-Dex-3-trimmed.tif"}}
+- {id: stack_nz, quantity: image_slice_count, unit: dimensionless, origin: reported, printed: "61", citation: {none: "ImageJ description (TIFF tag 270) of the same stack: 'images=61', 'slices=61'; 61 pages"}, conditions: {sample: "Control-Dex-3-trimmed.tif"}, note: "the slice labels read 'c:1/2 z:n/61 - Series009': one channel of a two-channel Leica series, as the script expects (one channel)"}
+
+# ---------------------------------------------------------------- MATLAB script: resampling and segmentation
+# matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m
+- id: nx_resample
+  quantity: image_width_pixels
+  unit: dimensionless
+  origin: reported
+  printed: "256"
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "64", quote: "nx=256;"}
+  from_source: pandian2025
+  from_datum: region_side_pixels
+  note: "the resampled in-plane size; ny and nz follow from it by the voxel aspect ratios (lines 65-66). pandian2025 prints 'pixel units 255 x 255 x h' (q_255_vs_256)"
+- {id: gauss_sigma_code, quantity: gaussian_sigma, unit: dimensionless, origin: reported, printed: "1", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "94", quote: "imgaussfilt3(fullStack,1,'FilterDomain','spatial')"}}
+- {id: smooth_passes_code, quantity: smoothing_passes, unit: dimensionless, origin: reported, printed: "2", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "109-110", quote: "for i=1:2 fullStack = smooth3(fullStack);"}, note: "after the median filter (line 89) and the Gaussian (line 94): three smoothings in all, none of them in the paper but the Gaussian"}
+- {id: threshold_code, quantity: initial_threshold, unit: dimensionless, origin: reported, printed: "0.4", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "613", quote: "thresh_ch1 = 0.4;"}, note: "a global threshold (imbinarize with a scalar, lines 614 and 722) that the user moves with a slider before DRLSE; the value used for the sample is not saved (q_threshold_interactive)"}
+- id: min_component_code
+  quantity: min_component_size
+  unit: dimensionless
+  origin: reported
+  printed: "500"
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "128", quote: "small_obj_list = find(vasc_net_numPixels < 500);"}
+- {id: perim_conn_code, quantity: perimeter_connectivity, unit: dimensionless, origin: reported, printed: "6", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "281", quote: "vasc_net_perim = bwperim(vasc_net,6);"}}
+- {id: dendrite_factor_code, quantity: dendrite_length_factor, unit: dimensionless, origin: reported, printed: "1", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "332", quote: "if linklengths(i) < (1 * linkradius(i)) || isnan(linkradius(i))"}, note: "links shorter than one radius, or without a radius, are removed before export; not in the paper (q_hidden_choices)"}
+- id: tortuosity_code
+  quantity: tortuosity_threshold
+  unit: dimensionless
+  origin: reported
+  printed: "1.15"
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "411", quote: "Tcheck = 1.15;"}
+- {id: subdivisions_code, quantity: subdivision_count, unit: dimensionless, origin: reported, printed: "5", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "441", quote: "for j = 1:5"}, note: "for a tortuous link of more than len_cutoff skeleton points"}
+- {id: subdivisions_short_code, quantity: subdivision_count, unit: dimensionless, origin: reported, printed: "2", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "457", quote: "for j = 1:2"}, note: "for a tortuous link of len_cutoff points or fewer; the paper says only five (q_two_pieces)"}
+- {id: len_cutoff_code, quantity: subdivision_length_cutoff, unit: dimensionless, origin: reported, printed: "12", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "424", quote: "len_cutoff = 12;"}}
+- {id: decimals_code, quantity: output_decimals, unit: dimensionless, origin: reported, printed: "2", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "539", quote: "NodeCon_Radii_Table = round(NodeCon_Radii_Table,2);"}}
+# DRLSE (lines 760-777), applied slice by slice in 2D
+- {id: drlse_dt_code, quantity: drlse_time_step, unit: dimensionless, origin: reported, printed: "1", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "760", quote: "timestep = 1;"}}
+- {id: drlse_mu_code, quantity: drlse_regularization_weight, unit: dimensionless, origin: reported, printed: "0.2", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "761", quote: "mu = 0.2 / timestep;"}, note: "0.2 / timestep, with timestep 1"}
+- {id: drlse_inner_code, quantity: drlse_iterations, unit: dimensionless, origin: reported, printed: "5", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "762", quote: "iter_inner = 5;"}}
+- {id: drlse_outer_code, quantity: drlse_iterations, unit: dimensionless, origin: reported, printed: "20", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "763", quote: "iter_outer = 20;"}}
+- {id: drlse_lambda_code, quantity: drlse_length_weight, unit: dimensionless, origin: reported, printed: "0", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "764", quote: "lambda = 0;"}, note: "with lambda = 0 and alfa = 0 the evolution has only the regularization term (q_drlse_null)"}
+- {id: drlse_alfa_code, quantity: drlse_area_weight, unit: dimensionless, origin: reported, printed: "0", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "765", quote: "alfa = 0;"}}
+- {id: drlse_eps_code, quantity: drlse_dirac_width, unit: dimensionless, origin: reported, printed: "1.5", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "766", quote: "epsilon = 1.5;"}}
+- {id: drlse_sigma_code, quantity: edge_smoothing_sigma, unit: dimensionless, origin: reported, printed: "0.8", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "769", quote: "sigma = .8;"}}
+- {id: drlse_c0_code, quantity: level_set_init_constant, unit: dimensionless, origin: reported, printed: "2", citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "777", quote: "c0 = 2;"}}
+
+# ---------------------------------------------------------------- COMSOL geometry (Java, as .rtf)
+# java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf (line numbers of the .rtf file)
+- id: block_width_code
+  quantity: model_region_width
+  unit: um
+  origin: reported
+  printed: "906"
+  citation: {file: java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf, lines: "158-162", quote: "{906, 906, 500}"}
+  from_source: pandian2025
+  from_datum: region_side_comsol
+  note: "the hydrogel block blk1 (and blk2, lines 784-788) is 906 x 906 x 500, centred at (453, 453, 250) (line 152), with the geometry's length unit um (line 48)"
+- {id: block_depth_code, quantity: model_region_depth, unit: um, origin: reported, printed: "500", citation: {file: java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf, lines: "158-162", quote: "{906, 906, 500}"}, note: "pandian2025 gives the depth as '(h*slice height) um' (p. 10), no number (q_block_depth)"}
+- {id: endo_thickness_code, quantity: endothelial_thickness, unit: um, origin: reported, printed: "10.0", citation: {file: java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf, lines: "845-848", quote: "Assuming endo thickness as 10 um"}, note: "the second block's capsules take radius D[k][6] + 10.0 (line 848); the layer is what lies between the two capsule unions (GUI steps, lines 1409-1427)"}
+- {id: radius_column_geometry, quantity: csv_column_index, unit: dimensionless, origin: reported, printed: "6", citation: {file: java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf, lines: "204", quote: "rad1 = Double.valueOf(D[k][6]);"}, note: "the seventh column, as the CSV holds it and as the header comment says (lines 33-36)"}
+# java-scripts-for-Comsol/Main-script/OutPut_Calculations_Wss_Velocity.rtf
+- {id: radius_column_wss, quantity: csv_column_index, unit: dimensionless, origin: reported, printed: "9", citation: {file: java-scripts-for-Comsol/Main-script/OutPut_Calculations_Wss_Velocity.rtf, lines: "361-362", quote: "R_cyl = Double.valueOf(D[k][9]);"}, note: "the tenth column, which the 7-column CSV does not have (q_wss_radius_column)"}
+- {id: wss_res_theta_code, quantity: surface_resolution, unit: dimensionless, origin: reported, printed: "180", citation: {file: java-scripts-for-Comsol/Main-script/OutPut_Calculations_Wss_Velocity.rtf, lines: "590", quote: 'set(\cf6 "res1"\cf3 , \cf6 "180"'}, note: "points around the cylinder (theta from 0 to 2 pi) on which fp.mu*fp.sr is exported as the wall shear stress (lines 698-703)"}
+- {id: wss_res_axial_code, quantity: surface_resolution, unit: dimensionless, origin: reported, printed: "50", citation: {file: java-scripts-for-Comsol/Main-script/OutPut_Calculations_Wss_Velocity.rtf, lines: "605", quote: 'set(\cf6 "res2"\cf3 , \cf6 "50"'}}
+
+# ---------------------------------------------------------------- values pandian2025 prints, to set beside the code
+- id: p_diameter_range
+  quantity: vessel_diameter
+  unit: um
+  origin: measured
+  printed: "20 to 40"
+  from_source: pandian2025
+  from_datum: diameter_range
+  citation: {none: "printed in pandian2025 p. 5: 'ranging between 20 and 40 um (Figure 3e)'; not in the code"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control, sample: "three control networks"}
+  note: "Fig. 3e, which the sentence cites, plots radius (pandian2025 q_diameter_radius)"
+- id: p_region_side
+  quantity: model_region_width
+  unit: um
+  origin: reported
+  printed: "906"
+  from_source: pandian2025
+  from_datum: region_side_comsol
+  citation: {none: "printed in pandian2025 p. 10: 'The model in COMSOL was 906 x 906 (h*slice height) um'"}
+- {id: p_tortuosity, quantity: tortuosity_threshold, unit: dimensionless, origin: reported, printed: "1.15", from_source: pandian2025, citation: {none: "printed in pandian2025 p. 10: 'Segments with tortuosity greater than 1.15 were subdivided into five smaller segments'; not a datum of pandian2025's record"}}
+- {id: p_subdivisions, quantity: subdivision_count, unit: dimensionless, origin: reported, printed: "5", from_source: pandian2025, citation: {none: "printed in pandian2025 p. 10 as the word 'five': 'subdivided into five smaller segments'"}}
+- {id: p_min_component, quantity: min_component_size, unit: dimensionless, origin: reported, printed: "500", from_source: pandian2025, citation: {none: "printed in pandian2025 p. 10: 'small disconnected components (<500 voxels) were removed'"}}
+- id: p_endo_thickness_s5
+  quantity: endothelial_thickness
+  unit: um
+  origin: reported
+  printed: "10"
+  from_source: pandian2025
+  citation: {none: "pandian2025 p. 17, Fig. S5a: the label 't = 10 um' in the drawing of the square grid model; the paper prints no thickness for the network models (pandian2025 q_endothelial_thickness)"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)"}

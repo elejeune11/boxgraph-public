@@ -297,24 +297,33 @@ Three more batches followed (v0.10):
   resistance in people with angina and non-obstructed coronary arteries,
   with its supplement). Their values are related to each other and to
   Kassab 1993, Schwarz 2020 and the coronary models.
+- **Batch 11, an engineered microvascular network:** Pandian 2025
+  (self-assembled human vessel networks in fibrin on a chip, segmented from
+  confocal stacks and simulated with porous-wall CFD, with its supplement)
+  and its released code (the MATLAB segmentation and COMSOL export, with one
+  control stack and the network it exported). The figure pass rebuilds the
+  paper's R2 values and permeability bars from its plotted points; the code's
+  sample network has a median diameter of 28 um, inside the printed 20-40 um,
+  and two of the code's choices differ from the paper's text. The printed
+  fibrin permeability does not follow from the paper's own formula.
 
-The corpus now has 52 sources and its ledger 499 passed jobs: 52 read,
-40 audit, 40 digitize, 184 relate and 183 validate. Recorded cost: $879.73
-(read $260.29, audit $61.03, digitize $277.23, relate $135.90, validate
-$145.28).
+The corpus now has 54 sources and its ledger 515 passed jobs: 54 read,
+41 audit, 41 digitize, 190 relate and 189 validate. Recorded cost: $907.31
+(read $268.46, audit $62.72, digitize $288.11, relate $138.62, validate
+$149.40).
 
 The build (`build/cardio/synthesis.json`):
 
 - 177 relations (116 verified, 21 not verified, 4 refuted, 2 ambiguous,
   34 unverifiable) and 23 families;
 - 264 cross-paper runs checked;
-- 2400 cited values, 705 of them with a verdict (657 reproduced, 4 close,
+- 2410 cited values, 709 of them with a verdict (660 reproduced, 5 close,
   24 not reproduced, 20 without a verdict);
-- 333 validations of one paper's models against another paper's
-  measurements: 310 tests (36 reproduced, 20 close, 253 not reproduced,
+- 335 validations of one paper's models against another paper's
+  measurements: 312 tests (38 reproduced, 20 close, 253 not reproduced,
   one without a verdict) and 23 fits (one reproduced). Most measured
   curves are judged point by point at the precision of a figure reading;
-- 848 findings: 660 not reproduced, 98 that depend on an added input,
+- 850 findings: 660 not reproduced, 100 that depend on an added input,
   52 family conflicts, 24 cited values, three refuted relations, 11 that
   belong to the numerics;
 - 17 corrected variants of misprinted models.

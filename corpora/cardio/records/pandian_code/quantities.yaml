@@ -1,0 +1,54 @@
+# conditions (in vitro: an engineered network in a device, not tissue)
+- {id: preparation, name: experimental preparation, dimension: dimensionless, description: "used as a condition: self-assembled human microvascular network (HUVEC + normal human lung fibroblasts) in fibrin in a two-channel device (in vitro), as in pandian2025; or the square grid CFD model of pandian2025 Fig. S5"}
+- {id: treatment, name: cytokine treatment of the network, dimension: dimensionless, description: "used as a condition: untreated control or IL-1beta"}
+- {id: sample, name: which image stack or network, dimension: dimensionless, description: "used as a condition: the released sample stack Control-Dex-3-trimmed.tif and the CSV exported from it (one trimmed control stack), or the three control networks of the paper"}
+
+# image stack and resampling (MATLAB script)
+- {id: image_resolution, name: pixels per unit length in the plane of the image stack, dimension: "1/[length]", description: "the TIFF XResolution / YResolution tag of an ImageJ stack, read by Bio-Formats as a pixel size of 1/resolution"}
+- {id: slice_spacing, name: distance between the optical slices of the stack, dimension: "[length]"}
+- {id: image_size_pixels, name: number of pixels along one in-plane axis of the stack, dimension: dimensionless}
+- {id: image_slice_count, name: number of optical slices of the stack, dimension: dimensionless}
+- {id: image_width_pixels, name: in-plane side of the segmented (resampled) image stack in pixels, dimension: dimensionless, description: "the script's nx (and ny for a square stack); pandian2025 prints 255"}
+- {id: resampled_slice_count, name: number of slices of the resampled isotropic volume, dimension: dimensionless, description: "the script's nz"}
+- {id: voxel_unit, name: edge of a voxel of the resampled volume, dimension: "[length]", description: "the script's voxelUnit, the mean of the three axes' physical extent divided by their resampled voxel counts; every exported coordinate and radius is a voxel index or distance times it"}
+- {id: model_region_width, name: in-plane side of the reconstructed region, dimension: "[length]"}
+- {id: model_region_depth, name: depth (z) of the reconstructed region, dimension: "[length]"}
+- {id: region_span, name: span of the exported segments' end points along one axis, dimension: "[length]"}
+
+# segmentation and graph settings (MATLAB script)
+- {id: gaussian_sigma, name: standard deviation of the 3D Gaussian smoothing of the resampled volume, dimension: dimensionless, description: "in voxels of the resampled volume"}
+- {id: smoothing_passes, name: number of smooth3 passes before segmentation, dimension: dimensionless}
+- {id: initial_threshold, name: initial global intensity threshold of the segmentation GUI (normalized intensity), dimension: dimensionless}
+- {id: min_component_size, name: smallest connected component kept in the vessel mask, dimension: dimensionless, description: "in voxels (pixels in the code's comment)"}
+- {id: dendrite_length_factor, name: links shorter than this multiple of their radius are removed, dimension: dimensionless}
+- {id: tortuosity_threshold, name: tortuosity above which a link is subdivided into straight pieces, dimension: dimensionless}
+- {id: subdivision_count, name: number of straight pieces a tortuous link is divided into, dimension: dimensionless}
+- {id: subdivision_length_cutoff, name: number of skeleton points above which a tortuous link gets five pieces instead of two, dimension: dimensionless}
+- {id: output_decimals, name: decimals the exported table is rounded to, dimension: dimensionless}
+- {id: perimeter_connectivity, name: voxel connectivity of the vessel perimeter used for the radius, dimension: dimensionless}
+- {id: drlse_time_step, name: time step of the DRLSE level-set evolution, dimension: dimensionless}
+- {id: drlse_regularization_weight, name: "distance-regularization weight mu of DRLSE", dimension: dimensionless}
+- {id: drlse_iterations, name: number of DRLSE iterations (inner or outer loop), dimension: dimensionless}
+- {id: drlse_length_weight, name: "weight lambda of the edge-length term of DRLSE", dimension: dimensionless}
+- {id: drlse_area_weight, name: "weight alfa of the weighted-area (balloon) term of DRLSE", dimension: dimensionless}
+- {id: drlse_dirac_width, name: "width epsilon of the smoothed Dirac function of DRLSE", dimension: dimensionless}
+- {id: edge_smoothing_sigma, name: standard deviation of the 2D Gaussian before the DRLSE edge indicator, dimension: dimensionless, description: "in pixels"}
+- {id: level_set_init_constant, name: "constant c0 of the binary step that initializes the level set", dimension: dimensionless}
+
+# COMSOL geometry and post-processing (Java)
+- {id: endothelial_thickness, name: thickness of the porous endothelial layer around each vessel, dimension: "[length]"}
+- {id: csv_column_index, name: zero-based column of the exported CSV read as the vessel radius, dimension: dimensionless}
+- {id: surface_resolution, name: number of points of a parametric evaluation surface along one parameter, dimension: dimensionless}
+
+# the sample network (from the exported CSV)
+- {id: segment_count, name: number of straight segments (rows) of the exported network, dimension: dimensionless}
+- {id: link_count, name: number of vessel links of the exported network, dimension: dimensionless, description: "links of the skeleton graph after dendrite removal, each exported as one segment or as 2 or 5 consecutive pieces with one radius"}
+- {id: total_vessel_length, name: total length of the exported segments, dimension: "[length]"}
+- {id: segment_length, name: length of one exported segment (end to end), dimension: "[length]"}
+- {id: piece_gap_length, name: summed distance between consecutive pieces of the subdivided links, dimension: "[length]"}
+- {id: vessel_radius, name: radius of a vessel (link) of the network, dimension: "[length]"}
+- {id: vessel_diameter, name: diameter of a vessel (link) of the network, dimension: "[length]"}
+- {id: vessel_volume, name: volume inside the vessel lumens of the network, dimension: "[length]**3"}
+- {id: vessel_length_density, name: vessel length per unit volume of the region, dimension: "1/[length]**2"}
+- {id: vessel_volume_fraction, name: fraction of the region's volume inside the vessel lumens, dimension: dimensionless}
+- {id: endothelial_volume_fraction, name: fraction of the region's volume in the endothelial layer, dimension: dimensionless}

@@ -1,0 +1,25 @@
+id: comsol_capsules
+name: the COMSOL network geometry as the Java builds it from the CSV (a cylinder and two end spheres per row, for the lumen and, 10 um wider, for the endothelium), voxelized to give lumen and endothelial-layer volume fractions of the block
+role: processing
+software: true
+stated: {file: java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf, lines: "376-382", quote: "create an ellipsoid/sphere at the end of the sweep"}
+equation: "lumen = union over rows of {x : dist(x, segment P1P2) <= r} (circle of radius r swept from P1 to P2, plus spheres of radius r at P1 and P2); endothelium = union with r + t minus lumen; both within the block [0, W] x [0, W] x [0, H]"
+built_from: [sample_network]
+inputs:
+  W: {quantity: model_region_width, unit: um}
+  H: {quantity: model_region_depth, unit: um}
+  t: {quantity: endothelial_thickness, unit: um}
+outputs:
+  lumen_fraction: {quantity: vessel_volume_fraction, unit: dimensionless}
+  endo_fraction: {quantity: endothelial_volume_fraction, unit: dimensionless}
+  V_lumen: {quantity: vessel_volume, unit: um^3}
+settings: {dx: 2.0}
+stochastic: false
+# Port of Code_building_geometry.rtf lines 142-162 (block blk1 906 x 906 x 500 um with base 'center' at
+# (453, 453, 250), i.e. [0, 906] x [0, 906] x [0, 500]), 168-760 (for each CSV row: a circle of radius D[k][6] in
+# the plane normal to the axis at P1, swept along the line P1-P2, and a sphere of the same radius at each end,
+# each subtracted from the block) and 768-1400 (the same with radius D[k][6] + 10 for blk2); lines 1409-1427 then
+# have the user subtract in the GUI to leave lumen, endothelial layer and interstitium. The union of the swept
+# circles and spheres is the set of points within r of the segment (a capsule). software: true only because the
+# port reads the release's sample CSV from $BOXGRAPH_SOURCE; the geometry code is ours. Voxelized on a grid of
+# spacing dx (cell centres), restricted to each capsule's bounding box; dx is ours (refined in refinements.yaml).

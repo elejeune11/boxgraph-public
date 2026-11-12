@@ -1,0 +1,31 @@
+# Cross-record validation, pandian_code with pandian2025 (2026-11-12). The released sample network, as the
+# script exported it, against the vessel diameters the paper measured with the same pipeline. The sample is one
+# trimmed control stack (Control-Dex-3-trimmed.tif / Result-With-C-Lecia-3-p003.csv), not the paper's three
+# control networks (q_sample_is_one_trimmed_stack); see q_validation_pandian2025.
+- id: val_D_median_vs_paper_range
+  model: sample_network
+  inputs: {voxel_unit: vu_sample}
+  output: D_median
+  against: pandian2025/diameter_range
+  purpose: validation
+  quantities: {pandian2025/vessel_diameter: vessel_diameter}
+  conditions_ok: >
+    Same preparation (HUVEC + fibroblast network in fibrin, two-channel device, in vitro, control, dextran-filled
+    lumen imaged by confocal) and the same segmentation code, but one trimmed sample stack (23 links) against the
+    paper's three control networks, and the paper does not say whether 20-40 um is a full range, an interquartile
+    range or a typical span; the median of the sample's link diameters is set against it as a typical value.
+  basis: >
+    The code is the one the paper says it used ('The Matlab scripts and Java codes in Comsol used in this manuscript
+    can be downloaded from', p. 14), released with a control stack and the CSV it exported; the paper's diameters
+    come from that segmentation ('ranging between 20 and 40 um (Figure 3e)', p. 5). Its sample's diameters should
+    therefore fall in the paper's range if the sample is like the paper's networks. Not fitted: the sample CSV was
+    not made to match the printed range.
+- id: val_D_mean_lw_vs_paper_range
+  model: sample_network
+  inputs: {voxel_unit: vu_sample}
+  output: D_mean_lw
+  against: pandian2025/diameter_range
+  purpose: validation
+  quantities: {pandian2025/vessel_diameter: vessel_diameter}
+  conditions_ok: as val_D_median_vs_paper_range, with the length-weighted mean link diameter the script itself computes (link_radius_all2, line 531)
+  basis: as val_D_median_vs_paper_range; the script's own summary diameter of a network is this length-weighted mean

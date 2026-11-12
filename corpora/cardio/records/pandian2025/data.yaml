@@ -1,0 +1,534 @@
+# Values as printed. In vitro throughout: an engineered network of HUVEC + lung fibroblasts in fibrin,
+# perfused with culture medium; nothing here is tissue or blood.
+
+# ---------------------------------------------------------------- device and image geometry
+- id: needle_network_device
+  quantity: channel_diameter
+  unit: um
+  origin: reported
+  printed: "250"
+  citation: {page: 9, printed_page: "9 of 13", quote: "puncture needles (250 μm diameter) (Hwato) were blocked in", where: "Sect. 4.3"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: the needles are removed to leave 250 um hollow parent channels, which are then seeded with HUVEC
+- id: needle_single_channel
+  quantity: channel_diameter
+  unit: um
+  origin: reported
+  printed: "160"
+  citation: {page: 9, printed_page: "9 of 13", quote: "puncture needles (160 μm diameter) (Hwato) were blocked in", where: "Sect. 4.2"}
+  conditions: {preparation: "single-channel device (in vitro)"}
+- id: grid_parent_channel_diameter
+  quantity: channel_diameter
+  unit: um
+  origin: reported
+  printed: "250"
+  citation: {page: 11, printed_page: "11 of 13", quote: "nels of 250 μm diameter and a network of 50 μm diameter vessels", where: "Sect. 4.11"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)"}
+- id: grid_vessel_diameter
+  quantity: vessel_diameter
+  unit: um
+  origin: reported
+  printed: "50"
+  citation: {page: 11, printed_page: "11 of 13", quote: "nels of 250 μm diameter and a network of 50 μm diameter vessels", where: "Sect. 4.11"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)"}
+  note: Fig. S5a labels the grid vessels R = 25 um, the parent channels R = 125 um and an endothelial thickness t = 10 um (labels in the drawing, p. 17).
+- id: region_side_comsol
+  quantity: model_region_width
+  unit: um
+  origin: reported
+  printed: "906"
+  citation: {page: 10, printed_page: "10 of 13", quote: "906 906 (h*slice height) μm. The MATLAB model was translated", where: "Sect. 4.10"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: the COMSOL model is 906 x 906 x (h * slice height) um
+- id: region_side_pixels
+  quantity: image_width_pixels
+  unit: dimensionless
+  origin: reported
+  printed: "255"
+  citation: {page: 10, printed_page: "10 of 13", quote: "sions in pixel units 255 255 h μm. The model in COMSOL was", where: "Sect. 4.10"}
+  note: printed "dimensions in pixel units 255 x 255 x h um"; see q_pixel_units
+- id: bead_diameter_methods
+  quantity: bead_diameter
+  unit: um
+  origin: reported
+  printed: "10"
+  citation: {page: 10, printed_page: "10 of 13", quote: "Polystyrene microspheres, 10 μm, blue fluorescent", where: "Sect. 4.7"}
+  note: page 5 prints "~10 um diameter"; the label inside Fig. 3b (p. 6) reads "15 um beads" (q_bead_size)
+- id: diameter_range
+  quantity: vessel_diameter
+  unit: um
+  origin: measured
+  printed: "20 to 40"
+  citation: {page: 5, printed_page: "5 of 13", quote: "ranging between 20 and 40 μm (Figure 3e)", where: text}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control}
+  note: three control networks, from the segmentation; Fig. 3e, which the sentence cites, plots radius (q_diameter_radius)
+- id: L_between_channels
+  quantity: characteristic_length
+  unit: mm
+  origin: assumed
+  printed: "1"
+  citation: {page: 11, printed_page: "11 of 13", quote: "length (1 mm, assumed as thickness between the parent channels)", where: "Sect. 4.11"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+- id: media_head
+  quantity: media_head_height
+  unit: mm
+  origin: reported
+  printed: "4"
+  citation: {page: 5, printed_page: "5 of 13", quote: "for the specified inlet pressure head (5 s after having a 4 mm media", where: text}
+  conditions: {preparation: "two-channel network device (in vitro)", perfusate: culture medium}
+
+# ---------------------------------------------------------------- fluid and porous media (CFD model, Sect. 4.11)
+- id: rho_media
+  quantity: fluid_density
+  unit: kg/m^3
+  origin: assumed
+  printed: "1000"
+  citation: {page: 11, printed_page: "11 of 13", quote: "where ρ is the fluid density (1000 kg m3 for media)", where: "Sect. 4.11"}
+  conditions: {perfusate: culture medium}
+- id: mu_media
+  quantity: fluid_viscosity
+  unit: Pa*s
+  origin: assumed
+  printed: "1.002 x 10^-3"
+  citation: {page: 11, printed_page: "11 of 13", quote: "cosity (1.002 103 Pa s). v is the velocity vector", where: "Sect. 4.11"}
+  conditions: {perfusate: culture medium}
+  note: the value of water at 20 degC; no temperature or source is given (q_media_viscosity)
+- id: eps_fibrin_endo
+  quantity: porosity
+  unit: dimensionless
+  origin: assumed
+  printed: "0.265"
+  citation: {page: 11, printed_page: "11 of 13", quote: "In this study, we have assumed εp to be 0.265 for both the fibrin", where: "Sect. 4.11"}
+  conditions: {compartment: "fibrin interstitium and endothelial layer"}
+- id: eps_kappa_formula
+  quantity: porosity
+  unit: dimensionless
+  origin: assumed
+  printed: "0.265"
+  citation: {page: 11, printed_page: "11 of 13", quote: "is the porosity (assumed to be 0.265 same as fibrin)", where: "Sect. 4.11"}
+  conditions: {compartment: endothelial layer}
+- id: kappa_fibrin_control
+  quantity: hydraulic_permeability
+  unit: m^2
+  origin: assumed
+  printed: "1.2 x 10^-7"
+  citation: {page: 11, printed_page: "11 of 13", quote: "is assumed to be 1.2e-731 for the fibrin gel region", where: "Sect. 4.11"}
+  conditions: {compartment: "fibrin interstitium and control endothelial layer"}
+  from_source: ref-31
+  note: printed "1.2e-7" followed by the reference mark 31; the same value is used for the fibrin and for the untreated endothelial layer (q_kappa_value)
+- id: pd_control_printed
+  quantity: diffusive_permeability_as_printed
+  unit: m^2/s
+  origin: measured
+  printed: "5 x 10^-8"
+  citation: {page: 11, printed_page: "11 of 13", quote: "ability of the endothelial monolayer (control—5e-8 m2/s and IL-1β", where: "Sect. 4.11"}
+  conditions: {treatment: control, compartment: endothelial layer, preparation: "single-channel device (in vitro)"}
+  note: with the printed unit, m2/s; the paper's own definition and the axis of Fig. 4a (10^-6 cm/s) give a velocity (q_pd_unit); 70 kDa dextran in EGM-2
+- id: pd_il1b_printed
+  quantity: diffusive_permeability_as_printed
+  unit: m^2/s
+  origin: measured
+  printed: "50 x 10^-8"
+  citation: {page: 11, printed_page: "11 of 13", quote: "50e-8 m2/s), μ dynamic viscosity of the endothelial monolayer", where: "Sect. 4.11"}
+  conditions: {treatment: IL-1beta, compartment: endothelial layer, preparation: "single-channel device (in vitro)"}
+  note: with the printed unit (q_pd_unit)
+- id: mu_endo_printed
+  quantity: endothelial_layer_viscosity_as_printed
+  unit: Pa
+  origin: assumed
+  printed: "3 x 10^-3"
+  citation: {page: 11, printed_page: "11 of 13", quote: "(assumed 3e-3 Pa, similar to that of whole blood32,33)", where: "Sect. 4.11"}
+  conditions: {compartment: endothelial layer}
+  from_source: ref-32
+  note: with the printed unit, Pa (q_mu_unit); cites refs 32 and 33 for whole blood
+
+# ---------------------------------------------------------------- boundary conditions of the network CFD
+- id: p_in_vessel_control
+  quantity: boundary_pressure
+  unit: Pa
+  origin: assumed
+  printed: "3.15"
+  citation: {page: 11, printed_page: "11 of 13", quote: "of the control was assumed to be 3.15 Pa and", where: "Sect. 4.11"}
+  conditions: {treatment: control, compartment: vessel lumen}
+  note: chosen from the grid CFD model of Fig. S5
+- id: p_in_gel_control
+  quantity: boundary_pressure
+  unit: Pa
+  origin: assumed
+  printed: "1.75"
+  citation: {page: 11, printed_page: "11 of 13", quote: "1.75 Pa, respectively. The pressure at the inlet of the vessels and the", where: "Sect. 4.11"}
+  conditions: {treatment: control, compartment: fibrin interstitium}
+- id: p_in_vessel_il1b
+  quantity: boundary_pressure
+  unit: Pa
+  origin: assumed
+  printed: "0.35"
+  citation: {page: 11, printed_page: "11 of 13", quote: "of the control was assumed to be 0.35 Pa and", where: "Sect. 4.11"}
+  conditions: {treatment: IL-1beta, compartment: vessel lumen}
+  note: the sentence says "of the control" again; read here as the IL-1beta case (q_il1b_pressures)
+- id: p_in_gel_il1b
+  quantity: boundary_pressure
+  unit: Pa
+  origin: assumed
+  printed: "0.075"
+  citation: {page: 11, printed_page: "11 of 13", quote: "0.075 Pa, respectively. The outlet boundary conditions are assumed", where: "Sect. 4.11"}
+  conditions: {treatment: IL-1beta, compartment: fibrin interstitium}
+  note: as p_in_vessel_il1b (q_il1b_pressures)
+- id: p_out
+  quantity: boundary_pressure
+  unit: Pa
+  origin: assumed
+  printed: "0"
+  citation: {page: 11, printed_page: "11 of 13", quote: "to be 0 Pa pressure boundary conditions", where: "Sect. 4.11"}
+
+# ---------------------------------------------------------------- results
+- id: v_avg_network
+  quantity: vessel_mean_velocity
+  unit: um/s
+  origin: measured
+  printed: "~100"
+  citation: {page: 5, printed_page: "5 of 13", quote: "bead perfusion experiment (Figure 3f) and averaged about 100 μm/s", where: text}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control, perfusate: culture medium, compartment: vessel lumen}
+  note: printed "about 100"; the sentence says both the bead velocities and the CFD velocities averaged about 100 um/s, 5 s after a 4 mm media pressure differential; three control networks
+- id: wss_avg_network
+  quantity: wall_shear_stress
+  unit: dyne/cm^2
+  origin: predicted
+  printed: "~0.1"
+  citation: {page: 7, printed_page: "7 of 13", quote: "wall shear stress in the networks was about 0.1 dynes", where: text}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control, perfusate: culture medium, compartment: vessel lumen}
+  note: printed "about 0.1"; from the network CFD of the three control networks
+- id: r2_wss_regression
+  quantity: goodness_of_fit
+  unit: dimensionless
+  origin: fitted
+  printed: "0.864"
+  citation: {page: 7, printed_page: "7 of 13", quote: "excellent goodness of fit (R = 0.864) between the predicted and", where: "text, Fig. 3j"}
+  conditions: {treatment: control}
+  note: multivariate linear regression of CFD wall shear stress on axial velocity, wall outflow and radius; coefficients not printed
+- id: r2_diam_inhouse
+  quantity: goodness_of_fit
+  unit: dimensionless
+  origin: fitted
+  printed: "0.967"
+  citation: {page: 4, printed_page: "4 of 13", quote: "resulting in a goodness of fit of R2 = 0.967", where: "text, Fig. 2a"}
+  note: computed vs manually measured vessel diameters, the paper's own algorithm
+- id: r2_diam_muves
+  quantity: goodness_of_fit
+  unit: dimensionless
+  origin: fitted
+  printed: "0.857"
+  citation: {page: 4, printed_page: "4 of 13", quote: "than the μVES3D algorithm (with a goodness of fit of R2 = 0.857)", where: "text, Fig. 2a"}
+- id: r2_diam_reaver
+  quantity: goodness_of_fit
+  unit: dimensionless
+  origin: fitted
+  printed: "0.589"
+  citation: {page: 4, printed_page: "4 of 13", quote: "REAVER (with a goodness of fit of R2 = 0.589)", where: "text, Fig. 2a"}
+- id: v_outlet_grid_a
+  quantity: grid_velocity
+  unit: mm/s
+  origin: predicted
+  printed: "72.4"
+  citation: {page: 7, printed_page: "7 of 13", quote: "charge (outlet velocity) is higher (72.4 mm/s and 24.1 mm/s for", where: text}
+  conditions: {preparation: "square grid CFD model (Fig. S5)"}
+  note: the first of the two outlet velocities printed "for an untreated control and treated device"; which is which is not clear (q_outlet_velocity)
+- id: v_outlet_grid_b
+  quantity: grid_velocity
+  unit: mm/s
+  origin: predicted
+  printed: "24.1"
+  citation: {page: 7, printed_page: "7 of 13", quote: "charge (outlet velocity) is higher (72.4 mm/s and 24.1 mm/s for", where: text}
+  conditions: {preparation: "square grid CFD model (Fig. S5)"}
+  note: the second of the two (q_outlet_velocity)
+- id: dp_grid_printed
+  quantity: device_pressure_drop
+  unit: Pa
+  origin: predicted
+  printed: "~18"
+  citation: {page: 7, printed_page: "7 of 13", quote: "18 Pa pressure drop) for the treated device (Figure S5)", where: text}
+  conditions: {preparation: "square grid CFD model (Fig. S5)"}
+  note: printed "~18 Pa pressure drop" (the OCR drops the tilde)
+
+# colour-bar end labels of Fig. S5 (numbers printed in the figure; read from the 110 dpi page image, q_s5_labels)
+- id: s5b_p_max
+  quantity: grid_model_pressure
+  unit: Pa
+  origin: predicted
+  printed: "28"
+  citation: {page: 17, quote: "pressure and velocity heat maps of control endothelium for the grid network", where: "Fig. S5b, pressure colour bar, upper end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: control}
+- id: s5b_p_min
+  quantity: grid_model_pressure
+  unit: Pa
+  origin: predicted
+  printed: "9.82"
+  citation: {page: 17, quote: "pressure and velocity heat maps of control endothelium for the grid network", where: "Fig. S5b, pressure colour bar, lower end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: control}
+- id: s5b_v_max
+  quantity: grid_velocity
+  unit: mm/s
+  origin: predicted
+  printed: "29.1"
+  citation: {page: 17, quote: "pressure and velocity heat maps of control endothelium for the grid network", where: "Fig. S5b, velocity colour bar, upper end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: control}
+- id: s5c_p_max
+  quantity: grid_model_pressure
+  unit: Pa
+  origin: predicted
+  printed: "28"
+  citation: {page: 17, quote: "endothelium for the grid network", where: "Fig. S5c, pressure colour bar, upper end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: IL-1beta}
+- id: s5c_p_min
+  quantity: grid_model_pressure
+  unit: Pa
+  origin: predicted
+  printed: "9.87"
+  citation: {page: 17, quote: "endothelium for the grid network", where: "Fig. S5c, pressure colour bar, lower end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: IL-1beta}
+- id: s5c_v_max
+  quantity: grid_velocity
+  unit: mm/s
+  origin: predicted
+  printed: "72.4"
+  citation: {page: 17, quote: "endothelium for the grid network", where: "Fig. S5c, velocity colour bar, upper end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: IL-1beta}
+  note: >
+    first read "22.4" from the 110 dpi page image; the figure pass rendered the label at 1200 dpi and it reads 72.4
+    (with "mm/s" above it), the value the text prints on p. 7; corrected as a transcription error (q_s5_labels_1200dpi).
+    The other S5 labels (28, 9.82, 29.1; 28, 9.87) are confirmed at 1200 dpi.
+
+# ---------------------------------------------------------------- figure readings (figure pass, 2026-11-12)
+# Calibrated readings in figures.yaml / figures/*.py. In vitro throughout. The captions do not say what the
+# central lines, whiskers, bars and error bars are (figures.md).
+
+# Fig. 2a (p. 5): diameters from three algorithms against manual diameters of the same vessels
+- id: fig2a_inhouse_d
+  quantity: vessel_diameter
+  unit: um
+  origin: measured
+  figure: fig2a_inhouse
+  citation: {page: 5, where: "Fig. 2(a)", quote: "Graph comparing the diameters of vessels from the network measured manually"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: the paper's own MATLAB algorithm (pink squares), against the manual diameter (x); 7 vessels
+- id: fig2a_muves_d
+  quantity: vessel_diameter
+  unit: um
+  origin: measured
+  figure: fig2a_muves
+  citation: {page: 5, where: "Fig. 2(a)", quote: "Graph comparing the diameters of vessels from the network measured manually"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: muVES3D (teal diamonds); 7 vessels, two overlapping near 21 um
+- id: fig2a_reaver_d
+  quantity: vessel_diameter
+  unit: um
+  origin: measured
+  figure: fig2a_reaver
+  citation: {page: 5, where: "Fig. 2(a)", quote: "Graph comparing the diameters of vessels from the network measured manually"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: REAVER (light blue open circles); 7 vessels
+
+# Fig. 2b (p. 5): % volume coverage against binarization threshold
+- id: fig2b_n1_cov
+  quantity: volume_coverage
+  unit: percent
+  origin: measured
+  figure: fig2b_n1
+  citation: {page: 5, where: "Fig. 2(b)", quote: "convergence of generated volumes with the volume of the raw images"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: Network-1 (light grey line)
+- id: fig2b_n2_cov
+  quantity: volume_coverage
+  unit: percent
+  origin: measured
+  figure: fig2b_n2
+  citation: {page: 5, where: "Fig. 2(b)", quote: "convergence of generated volumes with the volume of the raw images"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: Network-2 (mid grey line)
+- id: fig2b_n3_cov
+  quantity: volume_coverage
+  unit: percent
+  origin: measured
+  figure: fig2b_n3
+  citation: {page: 5, where: "Fig. 2(b)", quote: "convergence of generated volumes with the volume of the raw images"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: Network-3 (black line)
+
+# Fig. 3c (p. 6): mesh sensitivity of the network CFD
+- id: fig3c_vmax_mesh
+  quantity: cfd_max_velocity
+  unit: um/s
+  origin: predicted
+  figure: fig3c_vmax
+  citation: {page: 7, where: "Fig. 3(c)", quote: "sensitivity of the model mesh to the maximum velocity predicted"}
+  conditions: {preparation: "two-channel network device (in vitro)", perfusate: culture medium}
+  note: three meshes; the dotted line marks the one chosen (the middle). Caption on p. 7
+- id: fig3c_time_mesh
+  quantity: solver_time
+  unit: s
+  origin: run
+  figure: fig3c_time
+  citation: {page: 7, where: "Fig. 3(c)", quote: "and the time required for a converged solution"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: computing time of the COMSOL solution for each mesh (right axis)
+
+# Fig. 3e-i (p. 6): the three control networks (x = network 1, 2, 3)
+- id: fig3e_radius_central
+  quantity: vessel_radius
+  unit: um
+  origin: measured
+  figure: fig3e_radius
+  citation: {page: 7, where: "Fig. 3(e)", quote: "Graph showing radii distribution in the three networks analyzed in this study"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control}
+  note: central line of each network's vessel radii from the segmentation (median or mean, unstated); whiskers to the extremes
+- id: fig3f_expt_central
+  quantity: vessel_velocity
+  unit: um/s
+  origin: measured
+  figure: fig3f_expt
+  citation: {page: 7, where: "Fig. 3(f)", quote: "comparison of the velocities measured in the network from bead perfusion"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control, perfusate: culture medium, compartment: vessel lumen}
+  note: bead track mean speeds (Imaris), 5 s after a 4 mm media head; central line per network (unstated statistic); whiskers to the extremes
+- id: fig3f_cfd_central
+  quantity: vessel_velocity
+  unit: um/s
+  origin: predicted
+  figure: fig3f_cfd
+  citation: {page: 7, where: "Fig. 3(f)", quote: "comparison of the velocities measured in the network from bead perfusion"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control, perfusate: culture medium, compartment: vessel lumen}
+  note: CFD velocities in the vessels of each network's model (inlet 3.15 Pa vessel, 1.75 Pa gel); central line per network
+- id: fig3h_wss_central
+  quantity: wall_shear_stress
+  unit: dyne/cm^2
+  origin: predicted
+  figure: fig3h_wss
+  citation: {page: 7, where: "Fig. 3(h)", quote: "Graph showing the wall shear stresses in the network vessels"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control, perfusate: culture medium, compartment: vessel lumen}
+  note: dashed central line per network of the CFD wall shear stress (unstated statistic)
+- id: fig3i_interstitial_central
+  quantity: interstitial_velocity
+  unit: um/s
+  origin: predicted
+  figure: fig3i_interstitial
+  citation: {page: 7, where: "Fig. 3(i)", quote: "Graph showing the velocity distribution in the interstitial space of the device"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: control, perfusate: culture medium, compartment: fibrin interstitium}
+  note: central line per network of the CFD interstitial velocity (unstated statistic)
+
+# Fig. 4 (p. 8): control (x = 1) and IL-1beta (x = 2); per-network IL-1beta panels x = network 1, 2, 3
+- id: fig4a_pd_bars
+  quantity: diffusive_permeability
+  unit: nm/s
+  origin: measured
+  figure: fig4a_bars
+  citation: {page: 8, where: "Fig. 4(a)", quote: "significant difference of diffusive permeability of 70 kDa Dextran"}
+  conditions: {preparation: "single-channel device (in vitro)", compartment: endothelial layer}
+  note: bar heights (x = 1 control, 2 IL-1beta) with the upper error bars; axis label 'P_D 10^-6 cm/s', read in nm/s (10^-6 cm/s = 10 nm/s); bar and error bar statistic unstated
+- id: fig4a_pd_points
+  quantity: diffusive_permeability
+  unit: nm/s
+  origin: measured
+  figure: fig4a_points
+  citation: {page: 8, where: "Fig. 4(a)", quote: "significant difference of diffusive permeability of 70 kDa Dextran"}
+  conditions: {preparation: "single-channel device (in vitro)", compartment: endothelial layer}
+  note: every plotted measurement; 13 control dots (x = 1.01 ...) and 11 IL-1beta dots (x = 2.01 ...), top to bottom
+- id: fig4b_radius_median
+  quantity: vessel_radius
+  unit: um
+  origin: measured
+  figure: fig4b_median
+  citation: {page: 8, where: "Fig. 4(b)", quote: "differences in the distribution of radius in the three control"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: dashed line of each violin (x = 1 control, 2 IL-1beta), pooled over three networks
+- id: fig4b_radius_q3
+  quantity: vessel_radius
+  unit: um
+  origin: measured
+  figure: fig4b_q3
+  citation: {page: 8, where: "Fig. 4(b)", quote: "differences in the distribution of radius in the three control"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: upper dotted line of each violin (upper quartile, by GraphPad's convention)
+- id: fig4b_radius_q1
+  quantity: vessel_radius
+  unit: um
+  origin: measured
+  figure: fig4b_q1
+  citation: {page: 8, where: "Fig. 4(b)", quote: "differences in the distribution of radius in the three control"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: lower dotted line of each violin (lower quartile)
+- id: fig4b_radius_networks
+  quantity: vessel_radius
+  unit: um
+  origin: measured
+  figure: fig4b_networks
+  citation: {page: 8, where: "Fig. 4(b)", quote: "differences in the distribution of radius in the three control"}
+  conditions: {preparation: "two-channel network device (in vitro)"}
+  note: the three large dots per group, one per network (statistic unstated); x = 1.1-1.3 control, 2.1-2.3 IL-1beta
+- id: fig4c_velocity_median
+  quantity: vessel_velocity
+  unit: um/s
+  origin: measured
+  figure: fig4c_median
+  citation: {page: 8, where: "Fig. 4(c)", quote: "difference in the bead perfusion velocities in the three control"}
+  conditions: {preparation: "two-channel network device (in vitro)", perfusate: culture medium, compartment: vessel lumen}
+  note: dashed central line of the pooled bead velocities (x = 1 control, 2 IL-1beta)
+- id: fig4c_velocity_networks
+  quantity: vessel_velocity
+  unit: um/s
+  origin: measured
+  figure: fig4c_networks
+  citation: {page: 8, where: "Fig. 4(c)", quote: "difference in the bead perfusion velocities in the three control"}
+  conditions: {preparation: "two-channel network device (in vitro)", perfusate: culture medium, compartment: vessel lumen}
+  note: the three large dots per group, one per network; x = 1.1-1.3 control, 2.1-2.3 IL-1beta
+- id: fig4e_control_dp
+  quantity: device_pressure_drop
+  unit: Pa
+  origin: predicted
+  figure: fig4e_control
+  citation: {page: 8, where: "Fig. 4(e)", quote: "temporal distribution of pressure drop in the control and IL-1β treated devices"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: control}
+- id: fig4e_il1b_dp
+  quantity: device_pressure_drop
+  unit: Pa
+  origin: predicted
+  figure: fig4e_il1b
+  citation: {page: 8, where: "Fig. 4(e)", quote: "temporal distribution of pressure drop in the control and IL-1β treated devices"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: IL-1beta}
+  note: legend 'IL-1beta (0.01 ng/ml)' (q_il1b_dose); the point at t = 1 s is hidden behind the control's
+- id: fig4f_expt_central
+  quantity: vessel_velocity
+  unit: um/s
+  origin: measured
+  figure: fig4f_expt
+  citation: {page: 8, where: "Fig. 4(f)", quote: "from bead perfusion and the CFD analysis for the three IL-1β"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: IL-1beta, perfusate: culture medium, compartment: vessel lumen}
+- id: fig4f_cfd_central
+  quantity: vessel_velocity
+  unit: um/s
+  origin: predicted
+  figure: fig4f_cfd
+  citation: {page: 8, where: "Fig. 4(f)", quote: "from bead perfusion and the CFD analysis for the three IL-1β"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: IL-1beta, perfusate: culture medium, compartment: vessel lumen}
+  note: CFD with inlet 0.35 Pa vessel, 0.075 Pa gel (q_il1b_pressures)
+- id: fig4g_wss_central
+  quantity: wall_shear_stress
+  unit: dyne/cm^2
+  origin: predicted
+  figure: fig4g_wss
+  citation: {page: 8, where: "Fig. 4(g)", quote: "distribution of wall shear stresses in the vessel walls of the three"}
+  conditions: {preparation: "two-channel network device (in vitro)", treatment: IL-1beta, perfusate: culture medium, compartment: vessel lumen}
+
+# Fig. S5 colour-bar end labels read at 1200 dpi in the figure pass (printed numbers, not readings)
+- id: s5b_v_min
+  quantity: grid_velocity
+  unit: mm/s
+  origin: predicted
+  printed: "9.39 x 10^-6"
+  citation: {page: 17, quote: "pressure and velocity heat maps of control endothelium for the grid network", where: "Fig. S5b, velocity colour bar, lower end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: control}
+- id: s5c_v_min
+  quantity: grid_velocity
+  unit: mm/s
+  origin: predicted
+  printed: "6.75 x 10^-5"
+  citation: {page: 17, quote: "endothelium for the grid network", where: "Fig. S5c, velocity colour bar, lower end label"}
+  conditions: {preparation: "square grid CFD model (Fig. S5)", treatment: IL-1beta}

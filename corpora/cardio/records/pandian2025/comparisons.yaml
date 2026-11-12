@@ -1,0 +1,95 @@
+- id: cmp_kappa_control_formula
+  purpose: consistency
+  computed: kappa_control_formula
+  printed: kappa_fibrin_control
+  conditions_ok: >
+    Both are the hydraulic permeability of the untreated endothelial layer of the CFD model: the printed value
+    is the one assumed for it (and for the fibrin, from ref. 31), the computed one is the paper's own formula
+    for the IL-1beta layer applied to the control diffusive permeability. If the formula stands for the
+    layer's permeability, the two should be of one order.
+  note: see q_kappa_value, q_kappa_dimension and q_kappa_order
+- id: cmp_v_poiseuille
+  purpose: consistency
+  computed: v_poiseuille_control
+  printed: v_avg_network
+  conditions_ok: >
+    One straight rigid tube of radius 15 um and length 906 um (both added) under the control CFD vessel inlet
+    pressure (3.15 Pa) and 0 Pa outlet, set against the average velocity over three in vitro networks (beads
+    and CFD). A network with a leaky porous wall and interstitium is not one tube, so only the order is
+    tested; the printed 'about 100' gets no verdict.
+- id: cmp_tau_poiseuille
+  purpose: consistency
+  computed: tau_poiseuille_control
+  printed: wss_avg_network
+  conditions_ok: >
+    As cmp_v_poiseuille: the wall shear stress of one straight tube under the control inlet pressure, against
+    the CFD average over the vessel walls of three control networks ('about 0.1', no verdict).
+- id: cmp_tau_from_v
+  purpose: consistency
+  computed: tau_from_printed_v
+  printed: wss_avg_network
+  conditions_ok: >
+    The two printed averages (about 100 um/s, about 0.1 dyn/cm2) linked through Poiseuille flow in a tube of
+    the added 15 um radius; in the network the average of 4 mu v / r over vessels is not 4 mu <v> / <r>, and
+    the velocity average includes the bead tracks.
+- id: cmp_head_vs_grid_drop
+  purpose: consistency
+  computed: dp_head
+  printed: dp_grid_printed
+  conditions_ok: >
+    The 4 mm media head that drives the bead perfusion (p. 5), converted to a pressure, against the '~18 Pa
+    pressure drop' of the grid model (p. 7, Fig. S5); the paper does not say at which time of the draining
+    (Fig. 4e) the grid model's pressures were taken, so the head is an upper bound.
+- id: cmp_s5b_range_vs_text
+  purpose: consistency
+  computed: dp_s5b_range
+  printed: dp_grid_printed
+  conditions_ok: The span of the Fig. S5b (control) pressure colour bar against the text's '~18 Pa pressure drop', which cites Fig. S5 for both devices.
+- id: cmp_s5c_range_vs_text
+  purpose: consistency
+  computed: dp_s5c_range
+  printed: dp_grid_printed
+  conditions_ok: The span of the Fig. S5c (IL-1beta) pressure colour bar against the same '~18 Pa'.
+
+# ---- figure pass (2026-11-12)
+- id: cmp_r2_inhouse
+  purpose: reproduction
+  computed: r2_inhouse_fig2a
+  printed: r2_diam_inhouse
+  note: the R2 printed on p. 4 recomputed from the points of Fig. 2a as read (least-squares line; the paper does not say which line its R2 is for)
+- id: cmp_r2_muves
+  purpose: reproduction
+  computed: r2_muves_fig2a
+  printed: r2_diam_muves
+- id: cmp_r2_reaver
+  purpose: reproduction
+  computed: r2_reaver_fig2a
+  printed: r2_diam_reaver
+- id: cmp_pd_printed_vs_bars
+  purpose: consistency
+  computed: pd_printed_at_bars
+  printed: fig4a_pd_bars
+  conditions_ok: >
+    Both are the diffusive permeability of the single-channel device's endothelium to 70 kDa dextran, control and
+    IL-1beta: the values Sect. 4.11 prints for the CFD (5e-8 and 50e-8, unit printed m2/s, taken in m/s) against the
+    bars of Fig. 4a (axis 10^-6 cm/s). The bars' statistic is unstated (mean, by the dots: cmp_pd_mean_vs_bars). This
+    tests the reading of the printed unit (q_pd_unit).
+- id: cmp_pd_mean_vs_bars
+  purpose: consistency
+  computed: pd_mean_of_points
+  printed: fig4a_pd_bars
+  conditions_ok: The mean of each group's plotted dots against the bar drawn over them; tests that the bars are means.
+- id: cmp_fig3f_cfd_vs_beads
+  purpose: validation
+  computed: fig3f_cfd_central
+  printed: fig3f_expt_central
+  conditions_ok: >
+    Same control networks, same quantity (velocity in the vessels): the CFD central line against the bead-tracking
+    central line of each network (Fig. 3f), the paper's own validation. Not like for like in sampling: the CFD
+    values include vessels the beads did not perfuse (p. 7), and the bead speeds were taken 5 s after a 4 mm head
+    while the CFD uses fixed inlet pressures.
+- id: cmp_fig4f_cfd_vs_beads
+  purpose: validation
+  computed: fig4f_cfd_central
+  printed: fig4f_expt_central
+  conditions_ok: As cmp_fig3f_cfd_vs_beads, for the three IL-1beta networks (Fig. 4f).

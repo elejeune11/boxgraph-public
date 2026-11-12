@@ -1,0 +1,58 @@
+id: pandian2025
+kind: article
+title: Three-dimensional modeling of flow through microvascular beds and surrounding interstitial spaces
+authors: [Navaneeth Krishna Rajeeva Pandian, Alanna Farrell, Emily Davis, Subramanian Sundaram, Abraham Christoffel Ignatius van Steen, Jessica Li Chang Teo, Jeroen Eyckmans, Christopher S. Chen]
+year: 2025
+venue: Bioengineering & Translational Medicine 11(1), e70085 (issue dated 2026; accepted 9 October 2025; open access, CC BY; with its supporting information)
+doi: 10.1002/btm2.70085
+file: corpus/cardio/2025_Pandian.pdf
+page_range: [1, 17]
+pages: {1: "1 of 13", 2: "2 of 13", 3: "3 of 13", 4: "4 of 13", 5: "5 of 13", 6: "6 of 13", 7: "7 of 13", 8: "8 of 13",
+        9: "9 of 13", 10: "10 of 13", 11: "11 of 13", 12: "12 of 13", 13: "13 of 13"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-12"}
+notes: >
+  An in vitro paper: self-assembled human microvascular networks (HUVEC + normal human lung fibroblasts in
+  2.5 mg/mL fibrin) between two 250 um endothelialised parent channels, imaged by confocal microscopy after
+  2000 kDa dextran perfusion, segmented in MATLAB and rebuilt in COMSOL as vessels, a porous endothelial
+  layer and a porous fibrin interstitium, solved as steady Navier-Stokes / Brinkman-Forchheimer flow of culture
+  medium, and set against tracked 10 um beads; control and IL-1beta treated networks (three each). PDF pages
+  1-13 are the article (labels "n of 13"); pages 14-17 are its supplement (Figs. S1-S5 and the link to the
+  released code, record pandian_code). Every condition says in vitro / culture medium / device.
+  The paper's core model, the 3D CFD of each network, cannot be run here (geometries not published; the
+  endothelial thickness and the IL-1beta kappa are not printed): q_cfd_not_runnable. What is entered: the
+  printed formulas with printed inputs, P_D = 2 r / I dI/dt (pd_dextran; no inputs printed, never run),
+  kappa ~ Pd mu L / eps_p (kappa_from_pd) and C_f = 1.75 / sqrt(150 eps^3) (forchheimer_cf, about 1.05 at
+  eps 0.265; no printed value); and the reader's consistency checks: Poiseuille flow in one straight tube
+  under the control CFD inlet pressure (3.15 Pa over the 906 um region, radius 15 um added from the printed
+  20-40 um diameters) against the printed average velocity (about 100 um/s) and wall shear stress (about
+  0.1 dyn/cm2); 4 mu v / r linking those two averages; the 4 mm media head (39 Pa) and the span of the Fig. S5
+  pressure colour bars (18.2 and 18.1 Pa) against the text's "~18 Pa". All of these targets are printed as
+  approximate, so they get no verdict; the Poiseuille tube gives about 98 um/s and 0.26 dyn/cm2, the right
+  order. The one verdict-bearing check: the kappa formula applied to the control P_D gives about 5.7e-13 m2
+  against the 1.2e-7 m2 the paper assumes for the control layer (not reproduced, five orders), and for IL-1beta
+  5.7e-12 m2, which would make the treated layer less permeable than the control (q_kappa_order).
+  Printed units that do not work out are kept as printed with added interpretations: P_D printed in m2/s
+  (used in m/s, q_pd_unit), the layer viscosity printed in Pa (used in Pa s, q_mu_unit); the kappa formula is
+  dimensionally inconsistent (q_kappa_dimension); the fibrin kappa 1.2e-7 m2 (ref. 31, not in the corpus) is
+  implausibly large (q_kappa_value). Other questions: the IL-1beta inlet pressures printed as "of the control",
+  the text's 20-40 um "diameters" citing a radius figure, 10 vs 15 um beads, 0.1 vs 0.01 ng/mL IL-1beta, the
+  grid outlet velocities (72.4 and 24.1 mm/s) against the S5 colour bars, "eccentricity" 0.8 vs 1, pixel units.
+  No reproduction comparison is possible: the paper prints no result of a formula it states (the IL-1beta
+  kappa and C_f are not printed), and its other results are plotted.
+  Figures: page rendering was refused in this job, so no figure was read (figures.md lists what a later pass
+  should read: Figs. 2a-b, 2h, 3c, 3e-f, 3h-i, 4a-c, 4e-g). Left out as data: the cell and reagent
+  concentrations, imaging settings, tracking parameters (spot quality 20, 150 um, 3 frames, 125 um), the
+  tortuosity cut 1.15, the "97% within 25 um", the "3-5 dyn/cm2" physiological range (ref. 26), the
+  variance inflation factors and p-values; none feeds a model. The R2 values are recorded but cannot be
+  recomputed without the figures or the regression's coefficients (q_wss_regression).
+  Cross-record relations: none entered. The human capillary morphometry of the corpus (kaneko2011,
+  rakusan1992, campbell2011, mohammed2015) describes tissue capillaries of 5-8 um, not an engineered 20-40 um
+  network, and no like-with-like quantity is printed here (no capillary density or length density); the Pries
+  viscosity laws are for blood in glass tubes or in vivo and do not apply to culture medium, which this paper
+  treats as Newtonian with 1.002e-3 Pa s. The released sample network is read in the record pandian_code.
+  Figure pass (2026-11-12): the plotted results were read with calibrated code readings (figures.md), which
+  supersedes the remark above that no figure was read. The three diameter R2 of p. 4 are reproduced from the
+  points of Fig. 2a as R2 of a least-squares line. The Fig. 4a bars are the means of their dots, and the control
+  P_D printed in Sect. 4.11 matches its bar when taken in m/s. The CFD-vs-bead validations (Figs. 3f, 4f) pass only
+  within the whisker ranges. The Fig. S5c velocity label is 72.4 mm/s (s5c_v_max corrected from a 110 dpi
+  misreading). Figs. 2h and 3j and all renderings are left out.

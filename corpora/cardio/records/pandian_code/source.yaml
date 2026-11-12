@@ -1,0 +1,63 @@
+id: pandian_code
+kind: software
+title: "Released code of pandian2025: MATLAB network segmentation and node/radius export, a sample confocal stack and its exported CSV, and the COMSOL Java (as .rtf) that builds the geometry and extracts wall shear stress and velocity"
+authors: [Navaneeth Krishna Rajeeva Pandian, Subramanian Sundaram]
+year: 2025
+version: "sha256:eb51bd608407ba085990806553351c7eb60d26ef23d09a03e02b67462432a356"
+licence: MIT
+language: matlab
+file: corpus/cardio/code/pandian_code
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-12"}
+notes: >
+  What the code is. MIT licence (copyright 2025 N. K. Rajeeva Pandian); CITATION.cff names the paper (pandian2025)
+  and gives a placeholder repository URL, so no url is entered; CONTRIBUTING.md describes test and package folders
+  that the release does not contain. Files: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m
+  (written by S. Sundaram 2020, modified by N. K. Rajeeva Pandian 2023: reads a one-channel TIFF stack with
+  Bio-Formats, resamples it to isotropic voxels 256 wide, smooths it, segments it with an interactive global
+  threshold and slice-wise DRLSE, removes components under 500 voxels, skeletonizes (Skeleton3D, Skel2Graph3D),
+  measures link lengths, tortuosity and radii, removes links shorter than one radius, cuts links of tortuosity
+  above 1.15 into 5 (or 2) straight pieces and writes x1,y1,z1,x2,y2,z2,radius in um rounded to 2 decimals);
+  matlab-scripts/test-3D-stack/Control-Dex-3-trimmed.tif.zip (one control stack, 753 x 753 pixels of 1.2025 um,
+  61 slices 5.6962 um apart, read from its TIFF tags); matlab-scripts/Sample-Output-csv-from-test/Result-With-C-Lecia-3-p003.csv
+  (60 rows, no header); java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf (a 906 x 906 x 500 um
+  block minus a cylinder and two end spheres per CSV row, and a second set 10 um wider for the endothelial layer;
+  physics, materials, boundary conditions and mesh are left to the GUI) and OutPut_Calculations_Wss_Velocity.rtf
+  (line averages of velocity magnitude along each row's axis; fp.mu*fp.sr and radial velocity on a cylinder of
+  each row). Not run: MATLAB needs Bio-Formats and an interactive threshold, COMSOL is proprietary and the Java is
+  partly a template (q_not_run, q_java_as_written). Nothing of the code is copied here.
+
+  What is entered. The parameter values written in the code (data.yaml, cited by file and line; the stack's tags
+  by tag), set beside the paper's Methods (p. 10) and region (906 um). Two ports in our code: voxel_resample (the
+  script's lines 46-76: ny, nz and the voxel unit that scales every exported number) and comsol_capsules (the
+  Java's geometry, voxelized; refined in dx). The sample CSV, the script's own output, is read as data by
+  sample_network (software: true only to reach the file) and network_density (our arithmetic).
+
+  Units of the CSV: um, checked against the script (lines 533-536 multiply every column by voxelUnit, from
+  Bio-Formats sizes in um), against the Java ('assumes all dimensions to be in um') and against the sample itself
+  (every coordinate a multiple of the sample stack's 3.54 um voxel unit, within its 256 x 256 x 98 grid) (q_csv_units).
+
+  What the code reproduces. The paper's 906 um region: the script's resampling of the sample stack gives 256
+  voxels of 3.540 um, 906.2 um (cmp_grid_width_paper), equal also to the Java's block side. The paper's
+  tortuosity cut (1.15), five subdivisions, 500-voxel cut and radius method are in the code; the 10 um endothelium
+  of the Java equals the only thickness the paper shows (Fig. S5a, grid model). The sample network (one trimmed
+  control stack, in vitro): 60 segments in 23 links, 2048 um of exported chord length, link diameters 14.9-60.4 um
+  with median 27.7 um and length-weighted mean 32.8 um, both inside the paper's 20-40 um, while the smallest and
+  largest are outside it (cmp_D_min, cmp_D_max; q_diameter_reading, q_radius_resolution). The segments span
+  878 x 857 x 67 um; length density about 40 mm/mm3 in that box, 7.2 in the whole resampled stack, 5.0 in the
+  COMSOL block, and a lumen fraction of the block of about 0.6% as the Java builds it (q_length_density_region);
+  none of these is printed by the paper or the code.
+
+  Differences from the paper. 256 resampled voxels against the paper's '255 x 255' pixel units (q_255_vs_256,
+  also the cross-record check of nx_resample); a 500 um deep block against '(h*slice height)', 347 um for the
+  sample (q_block_depth, cmp_grid_depth_block); tortuous links of 12 points or fewer cut in two, not five
+  (q_two_pieces); a global, interactive threshold where the paper says adaptive (q_threshold_interactive); DRLSE
+  with its edge terms switched off (q_drlse_null); hidden choices listed in q_hidden_choices. The WSS script reads
+  the radius from a tenth column the exported CSV does not have (q_wss_radius_column), evaluates WSS on straight
+  cylinders that pass through junctions (q_wss_surface), and its 'average axial velocity' is a centreline line
+  average (q_velocity_centreline). The resampling scales by N v / n where the grid spacing is (N - 1) v / (n - 1),
+  a 0.2-0.5% length bias (q_voxel_unit_spacing). The paper's CFD results (velocities, WSS) cannot be reproduced:
+  the six geometries and the GUI settings are not released.
+
+  Relations with other sources: none. The human capillary morphometry of the corpus is not like with like for an
+  engineered 15-60 um network in a device, and the Pries laws (blood) do not apply to culture medium
+  (q_no_human_comparison). The paper's record (pandian2025) is unchanged.

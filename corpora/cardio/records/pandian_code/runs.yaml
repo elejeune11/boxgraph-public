@@ -1,0 +1,47 @@
+# The released sample: one trimmed control stack (Control-Dex-3-trimmed.tif) and the CSV exported from a stack of
+# that kind. Every output describes this one sample, not the paper's three or six networks.
+- id: run_voxel_sample
+  model: voxel_resample
+  inputs: {res_x: stack_res_x, res_y: stack_res_y, dz: stack_spacing_z, Nx: stack_nx, Ny: stack_ny, Nz: stack_nz, nx: nx_resample}
+  outputs: {voxel_unit: vu_sample, ny: ny_sample, nz: nz_sample, grid_width: grid_width_sample, grid_depth: grid_depth_sample}
+  note: the script's resampling applied to the sample stack's own TIFF tags
+- id: run_network_sample
+  model: sample_network
+  inputs: {voxel_unit: vu_sample}
+  outputs:
+    n_segments: nseg_sample
+    n_links: nlink_sample
+    L_total: Ltot_sample
+    L_seg_median: Lseg_median_sample
+    L_seg_min: Lseg_min_sample
+    L_seg_max: Lseg_max_sample
+    L_link_median: Llink_median_sample
+    gap_total: gap_sample
+    r_median: r_median_sample
+    D_median: D_median_sample
+    D_min: D_min_sample
+    D_max: D_max_sample
+    D_mean_lw: D_mean_lw_sample
+    span_x: span_x_sample
+    span_y: span_y_sample
+    span_z: span_z_sample
+    V_cyl: Vcyl_sample
+    length_density_box: Lv_box_sample
+    volume_fraction_box: Vv_box_sample
+  note: the released CSV, read as data; lengths are chords of the exported segments, the region is the box their end points span
+- id: run_density_stack
+  model: network_density
+  inputs: {L: Ltot_sample, V: Vcyl_sample, W: grid_width_sample, H: grid_depth_sample}
+  outputs: {length_density: Lv_stack_sample, volume_fraction: Vv_stack_sample}
+  note: the region is the whole resampled stack (the script's own volume for its vessel density, line 580)
+- id: run_density_block
+  model: network_density
+  inputs: {L: Ltot_sample, V: Vcyl_sample, W: block_width_code, H: block_depth_code}
+  outputs: {length_density: Lv_block_sample, volume_fraction: Vv_block_sample}
+  note: the region is the COMSOL block of the Java (906 x 906 x 500 um)
+- id: run_capsules_block
+  model: comsol_capsules
+  inputs: {W: block_width_code, H: block_depth_code, t: endo_thickness_code}
+  settings: {dx: 4.0}
+  outputs: {lumen_fraction: lumen_frac_block_sample, endo_fraction: endo_frac_block_sample, V_lumen: Vlumen_capsules_sample}
+  note: the lumen and endothelial layer the Java builds from the sample CSV, as fractions of its block

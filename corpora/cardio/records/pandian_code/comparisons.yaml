@@ -1,0 +1,64 @@
+# ---- does the code's resampling give the paper's region?
+- id: cmp_grid_width_paper
+  purpose: reproduction
+  computed: grid_width_sample
+  printed: p_region_side
+  conditions_ok: >
+    The in-plane side of the reconstructed region as the script scales it (nx = 256 voxels of voxelUnit, from the
+    sample stack's own pixel size, 753 pixels of 1.2025 um) against the 906 um the paper gives for its COMSOL
+    models; the sample is one trimmed control stack, the paper's networks were imaged the same way (10x, 753-pixel
+    fields are assumed alike).
+- id: cmp_grid_width_block
+  purpose: consistency
+  computed: grid_width_sample
+  printed: block_width_code
+  conditions_ok: the extent of the exported coordinates for the sample stack against the side of the hydrogel block the Java builds them into
+- id: cmp_grid_depth_block
+  purpose: consistency
+  computed: grid_depth_sample
+  printed: block_depth_code
+  conditions_ok: >
+    The depth of the resampled sample stack (nz voxels of voxelUnit, i.e. its 61 slices of 5.6962 um) against the
+    500 um depth of the Java's block; the paper says the COMSOL model is '(h*slice height) um' deep. Whether the
+    block should equal the stack is the question q_block_depth.
+
+# ---- the sample's diameters against the paper's 20-40 um
+- id: cmp_D_median
+  purpose: consistency
+  computed: D_median_sample
+  printed: p_diameter_range
+  conditions_ok: >
+    Twice the median link radius of the released sample network (one trimmed control stack, 23 links) against the
+    range the paper gives for its three control networks; same device, cells and dextran imaging (in vitro), but
+    one sample against three networks, and the paper's range is not said to be a full range or an interquartile one.
+- id: cmp_D_mean_lw
+  purpose: consistency
+  computed: D_mean_lw_sample
+  printed: p_diameter_range
+  conditions_ok: as cmp_D_median, with the length-weighted mean diameter the script computes (link_radius_all2, line 531)
+- id: cmp_D_min
+  purpose: consistency
+  computed: D_min_sample
+  printed: p_diameter_range
+  conditions_ok: >
+    The smallest link diameter of the sample against the paper's range, read as the range of diameters ('ranging
+    between 20 and 40 um'); one sample against three networks.
+- id: cmp_D_max
+  purpose: consistency
+  computed: D_max_sample
+  printed: p_diameter_range
+  conditions_ok: as cmp_D_min, for the largest link diameter
+
+# ---- the code's settings against the paper's Methods (p. 10)
+- {id: cmp_tortuosity, purpose: consistency, computed: tortuosity_code, printed: p_tortuosity}
+- {id: cmp_subdivisions, purpose: consistency, computed: subdivisions_code, printed: p_subdivisions}
+- {id: cmp_subdivisions_short, purpose: consistency, computed: subdivisions_short_code, printed: p_subdivisions, note: "the code's second branch: a tortuous link of 12 skeleton points or fewer is cut in two (q_two_pieces)"}
+- {id: cmp_min_component, purpose: consistency, computed: min_component_code, printed: p_min_component}
+- id: cmp_endo_thickness
+  purpose: consistency
+  computed: endo_thickness_code
+  printed: p_endo_thickness_s5
+  conditions_ok: >
+    The Java's endothelial thickness for the network geometry against the only thickness the paper shows, the
+    label of its square grid model (Fig. S5a); the paper says the layer is uniform over the network but prints no
+    thickness for it.

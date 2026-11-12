@@ -1,0 +1,27 @@
+id: voxel_resample
+name: the script's isotropic resampling of the stack (ny, nz) and its voxel unit, which scales every exported coordinate and radius to um
+role: processing
+stated: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "73-76", quote: "voxelUnit=mean([(voxelSizeX*stackSizeX)/nx,"}
+equation: "ny = round((vy/vx) Ny/Nx nx); nz = round((vz/vx) Nz/Nx nx); voxelUnit = mean(vx Nx/nx, vy Ny/ny, vz Nz/nz); v = 1/resolution (Bio-Formats)"
+inputs:
+  res_x: {quantity: image_resolution, unit: 1/um}
+  res_y: {quantity: image_resolution, unit: 1/um}
+  dz: {quantity: slice_spacing, unit: um}
+  Nx: {quantity: image_size_pixels, unit: dimensionless}
+  Ny: {quantity: image_size_pixels, unit: dimensionless}
+  Nz: {quantity: image_slice_count, unit: dimensionless}
+  nx: {quantity: image_width_pixels, unit: dimensionless}
+outputs:
+  voxel_unit: {quantity: voxel_unit, unit: um}
+  ny: {quantity: image_width_pixels, unit: dimensionless}
+  nz: {quantity: resampled_slice_count, unit: dimensionless}
+  grid_width: {quantity: model_region_width, unit: um, description: "nx x voxelUnit: the largest coordinate the export can hold (voxel index nx), the in-plane side of the region in the code's own scaling"}
+  grid_depth: {quantity: model_region_depth, unit: um, description: "nz x voxelUnit, the depth of the resampled stack"}
+settings: {}
+stochastic: false
+# Port, line by line, of VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m lines 46-55 (voxel sizes read
+# by Bio-Formats in um), 64-66 (nx, ny, nz) and 74-76 (voxelUnit); lines 515, 524-535 multiply lengths, radii and
+# the exported table by voxelUnit. MATLAB's round() rounds halves away from zero, as the port does. Bio-Formats
+# gives an ImageJ TIFF's physical pixel size as 1/XResolution in its unit (micron here); this is our reading of
+# the library, which the script calls but does not contain. grid_width and grid_depth are ours: the extent of the
+# resampled grid in the code's units, set beside the COMSOL block and the paper's 906 um.

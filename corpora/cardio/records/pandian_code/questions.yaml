@@ -1,0 +1,204 @@
+- id: q_csv_units
+  kind: reading
+  about: [run_network_sample, vu_sample, grid_width_sample]
+  text: >
+    The CSV states no units. The script multiplies every column of the exported table by voxelUnit (lines 533-536),
+    which it computes from Bio-Formats' physical voxel sizes in micrometres (lines 45-55, 73-76), so the CSV is in
+    um; the COMSOL Java says it 'assumes all dimensions to be in um' and sets the geometry unit to um. In the sample
+    every coordinate is an integer multiple of about 3.54 um, the voxel unit the script's resampling gives for the
+    sample stack (1.2025 um pixels, 5.6962 um slices), and the largest coordinate (899.13 um) is voxel 254 of 256.
+  citation: {file: java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf, lines: "30", quote: "This script assumes all dimensions to be in um"}
+- id: q_sample_is_one_trimmed_stack
+  kind: choice
+  about: [run_network_sample, cmp_D_median, cmp_D_mean_lw, cmp_D_min, cmp_D_max, Lv_box_sample, Lv_stack_sample, Lv_block_sample]
+  text: >
+    Everything computed from the release describes one trimmed control stack (Control-Dex-3-trimmed.tif, 753 x 753
+    pixels x 61 slices) and one CSV (Result-With-C-Lecia-3-p003.csv); the paper's numbers come from three control
+    and three IL-1beta networks. The two file names differ and the release does not say the CSV was exported from
+    this stack; its coordinates fit the stack's resampled grid (multiples of its voxel unit, within 256 x 256 x 98
+    voxels), but its segments occupy only z = 81 to 149 um of the stack's 347 um depth. The CSV holds 60 rows in 23
+    links, a small network, so its diameters, length density and volume fraction are a sample, not the paper's.
+- id: q_255_vs_256
+  kind: possible_error
+  about: [nx_resample, pandian2025/region_side_pixels]
+  text: >
+    The paper says the MATLAB model 'had dimensions in pixel units 255 x 255 x h'; the script resamples every stack
+    to nx = 256 columns (and ny = 256 rows for a square stack). 255 is the number of voxel steps between the first
+    and last of 256 voxels, which may be what the paper counts; the region the paper gives, 906 um, equals 256 (not
+    255) voxels of the sample's voxel unit (cmp_grid_width_paper).
+- id: q_voxel_unit_spacing
+  kind: possible_error
+  about: [voxel_resample, vu_sample]
+  text: >
+    The script resamples with ndgrid(linspace(1, N, n)) (line 69), which places n samples N - 1 pixels apart in
+    all, a spacing of (N - 1)/(n - 1) pixels, but it scales the result by voxelUnit = mean over axes of N v / n
+    (lines 74-76). For the sample the true in-plane spacing is (752/255) x 1.2025 um = 3.546 um and the slice spacing
+    (60/97) x 5.6962 um = 3.523 um, against one voxelUnit of 3.540 um: exported lengths are off by about -0.2% in
+    plane and +0.5% in depth. Small against the 2-decimal export and the voxel size, but systematic.
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "69", quote: "ndgrid(linspace(1,imht,ny),linspace(1,imwid,nx),linspace(1,num_img,nz))"}
+- id: q_block_depth
+  kind: choice
+  about: [block_depth_code, cmp_grid_depth_block, pandian2025/region_side_comsol]
+  text: >
+    The Java's hydrogel block is 906 x 906 x 500 um for any network, while the paper gives the COMSOL model's depth
+    as '(h*slice height) um', i.e. the stack's depth, which for the sample is 61 x 5.6962 = 347 um (98 resampled
+    voxels). The sample's vessels lie at z = 81-149 um, so the 500 um block adds some 350 um of gel above them
+    and 81 um below. The block depth sets the size of the interstitial (porous) domain and so the gel flow; the
+    paper's six geometries are not released to tell which depth they used.
+  citation: {file: java-scripts-for-Comsol/Main-script/Code_building_geometry.rtf, lines: "142", quote: "Build a block with dimensions similar to device hydrogel dimensions"}
+- id: q_wss_radius_column
+  kind: possible_error
+  about: [radius_column_wss, radius_column_geometry]
+  text: >
+    The script that builds the cylindrical surfaces on which wall shear stress (fp.mu*fp.sr, in Pa) and radial
+    velocity are exported reads the radius from column index 9 (the tenth column) of 'the same csv file used to
+    create the network'; the geometry script reads it from index 6, and the exported CSV has seven columns. Run on
+    the released CSV the WSS script would stop with an index error. The MATLAB comment at line 508 lists ten
+    columns, '[x1,y1,z1,x2,y2,z2,a,b,angle,radius]', so the WSS script appears written for an earlier export with
+    ellipse axes and angle; which table the paper's wall shear stresses (Figs. 3h, 4g) were computed from is not
+    known.
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "508", quote: "Columns: [x1,y1,z1,x2,y2,z2,a,b,angle,radius]"}
+- id: q_wss_surface
+  kind: choice
+  about: [radius_column_wss, wss_res_theta_code, wss_res_axial_code, pandian2025/wss_avg_network]
+  text: >
+    Wall shear stress is taken as fp.mu*fp.sr (viscosity times shear-rate magnitude) on a cylinder of the CSV radius
+    about the straight axis of each row, 180 points around by 50 along. The vessel wall is that cylinder only along
+    the middle of a segment: at the end spheres, at branch points (where segments stop one skeleton point short of
+    the node and overlap their neighbours) and where pieces of a subdivided link meet, the evaluation surface passes
+    through another lumen or through the endothelial layer. How the paper averaged these points into a vessel's or a
+    network's WSS ('about 0.1 dyn/cm2') is not in the code (the export's run is commented out, line 717).
+  citation: {file: java-scripts-for-Comsol/Main-script/OutPut_Calculations_Wss_Velocity.rtf, lines: "698", quote: "fp.mu*fp.sr"}
+- id: q_velocity_centreline
+  kind: choice
+  about: [pandian2025/v_avg_network]
+  text: >
+    The code's 'average axial velocity in each vessel' is the line average (AvLine) of the velocity magnitude fp.U
+    along the straight axis P1-P2 of each row, not a mean over the cross section. For Poiseuille flow the centreline
+    speed is twice the cross-sectional mean, so the CFD velocities set against the bead speeds (Figs. 3f, 4c, 4f of
+    the paper) are near-centreline values, which suits beads of 10 um carried in 20-40 um vessels; the paper does
+    not say this. A straight axis also leaves the lumen of a curved segment.
+  citation: {file: java-scripts-for-Comsol/Main-script/OutPut_Calculations_Wss_Velocity.rtf, lines: "13", quote: "extract average axial velocity in each vessel"}
+- id: q_java_as_written
+  kind: possible_error
+  about: [radius_column_wss]
+  text: >
+    The Java is released as rich text with typographic quotes, and parts of it are templates: the export file name
+    is a placeholder opened with a closing curly quote (line 714) or with no quote at all (line 801), and the radial
+    velocity export (u2, v2, w2 projected on the cylinder's radial direction) declares its unit as 'Pa' (line 790)
+    for a velocity. As written it does not compile; it documents the steps more than it runs them. The physics,
+    materials, boundary conditions, mesh and solver are set in the GUI and are not in the code (lines 1439-1442).
+  citation: {file: java-scripts-for-Comsol/Main-script/OutPut_Calculations_Wss_Velocity.rtf, lines: "788-790", quote: '"Pa"'}
+- id: q_hidden_choices
+  kind: choice
+  about: [gauss_sigma_code, smooth_passes_code, threshold_code, dendrite_factor_code, len_cutoff_code, decimals_code, nx_resample, perim_conn_code, block_depth_code, endo_thickness_code]
+  text: >
+    Choices in the code that the paper does not state: a 3D median filter (line 89), a Gaussian of sigma 1 voxel and
+    two smooth3 passes before segmentation; a global threshold starting at 0.4 that the user adjusts by slider (the
+    value used is not recorded); removal of links shorter than one radius or without a radius before export; a
+    tortuous link of 12 skeleton points or fewer cut in two rather than five; the 256-voxel resampling; the radius as
+    the mean distance from skeleton points to their nearest 6-connected perimeter voxels; rounding to 2 decimals; a
+    906 x 906 x 500 um block; a 10 um endothelial layer. The paper states the Gaussian, the 500-voxel cut, the 1.15
+    tortuosity, five subdivisions and the radius method (p. 10), which the code matches.
+- id: q_threshold_interactive
+  kind: unstated_input
+  about: [threshold_code]
+  text: >
+    The segmentation is interactive (a GUI threshold slider and a choice of contrast enhancement, lines 611-713), so
+    the exported network depends on choices the release does not record: even with MATLAB and Bio-Formats the sample
+    CSV cannot be regenerated from the sample stack without them. The paper says 'adaptive thresholding'; the code's
+    threshold is global (imbinarize with a scalar), with adaptive histogram equalization as one optional contrast
+    setting.
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "722", quote: "im1_mask = imbinarize(im1, es.Value);"}
+- id: q_drlse_null
+  kind: choice
+  about: [drlse_lambda_code, drlse_alfa_code, drlse_mu_code]
+  text: >
+    With lambda = 0 and alfa = 0 the DRLSE update (Li et al. 2010) keeps only its distance-regularization term: the
+    edge indicator g (Gaussian sigma 0.8) multiplies only the length and area terms, so it has no effect, and 100
+    iterations (20 x 5) only regularize the level set of the threshold mask. The paper's 'refined with DRLSE' then
+    means a smoothing of the thresholded mask, not an edge-driven refinement. This rests on the DRLSE library's
+    update as published, which the release does not include.
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "764-765", quote: "lambda = 0; alfa = 0;"}
+- id: q_two_pieces
+  kind: possible_error
+  about: [subdivisions_short_code, cmp_subdivisions_short]
+  text: >
+    The paper says segments with tortuosity above 1.15 'were subdivided into five smaller segments'; the code does so
+    only for links of more than 12 skeleton points and cuts shorter tortuous links in two. The sample has one such
+    two-piece link (rows 25-26, radius 10.43 um).
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "455-457", quote: "newlens = floor(length(link3(i).point)/2);"}
+- id: q_segments_short_of_nodes
+  kind: numerics
+  about: [gap_sample, Ltot_sample, run_capsules_block]
+  text: >
+    Each exported segment runs from the first to the last skeleton point of its link (or piece), not between the
+    node centres, and consecutive pieces of a subdivided link leave a one-point gap (gap_sample sums them). The
+    exported total length is therefore shorter than the script's own path lengths (linklengths3, lines 348-359),
+    and the COMSOL lumen stays connected only because each segment ends in a sphere of its radius (the gaps, at most
+    one voxel diagonal of 6.1 um, are smaller than the smallest radius, 7.47 um). Whether every branch point closes
+    the same way was not checked.
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "430-431", quote: "link3(i).point(1)"}
+- id: q_radius_resolution
+  kind: numerics
+  about: [D_median_sample, D_min_sample, D_max_sample]
+  text: >
+    The radius is the mean distance from skeleton voxels to perimeter voxels of the mask, which lie inside it, so it
+    sits about half a voxel (some 1.8 um) inside the mask's boundary, and the voxel unit (3.54 um) is a tenth of a
+    typical diameter: the diameters carry an uncertainty of several micrometres, enough to move the smallest and
+    largest across the edges of 20-40 um. Neither the code nor the paper corrects or states this.
+  citation: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "285-286", quote: "[D,idx] = bwdist(vasc_skel_for_search);"}
+- id: q_diameter_reading
+  kind: reading
+  about: [cmp_D_median, cmp_D_min, cmp_D_max, r_median_sample, pandian2025/diameter_range]
+  text: >
+    pandian2025 records a doubt whether its '20 to 40 um diameters' are diameters or radii (its Fig. 3e plots
+    radius). In the sample the median link diameter falls inside 20-40 um and the median radius does not, which
+    favours diameters for the text; but the sample's smallest and largest diameters lie outside the range, so 20-40
+    um reads as a typical span, not the full one. One trimmed stack cannot settle the figure's labels.
+- id: q_length_density_region
+  kind: choice
+  about: [Lv_box_sample, Lv_stack_sample, Lv_block_sample, Vv_box_sample, Vv_stack_sample, Vv_block_sample, lumen_frac_block_sample]
+  text: >
+    Neither the code nor the paper prints a vessel length per volume or a vessel volume fraction (the script prints a
+    '% Volume coverage' of its mask and 'links per mm^3' at run time; the paper plots coverage in Fig. 2b, not read).
+    Computed here, both depend on the region: the box the segments span (only 67 um deep), the whole resampled stack
+    (906 x 906 x 347 um) or the COMSOL block (906 x 906 x 500 um) give length densities that differ by a factor of 5 to 8.
+    The cylinder sum (pi r^2 L per row) counts overlaps twice and omits end caps; the capsule geometry the Java builds
+    (comsol_capsules) is the volume the CFD actually meshes.
+- id: q_no_human_comparison
+  kind: choice
+  about: [D_median_sample, Lv_stack_sample]
+  text: >
+    No comparison is made with the human capillary morphometry of the corpus (kaneko2011, rakusan1992, campbell2011,
+    mohammed2015): the sample is an engineered in vitro network of 15-60 um vessels in fibrin, not tissue capillaries
+    of 5-8 um, and a length density over an arbitrary region of a device is not like a capillary density of
+    myocardium. The Pries viscosity laws (blood in tubes) do not apply to the culture medium the CFD carries; the
+    code sets no fluid (that is done in the COMSOL GUI).
+- id: q_not_run
+  kind: choice
+  about: [voxel_resample, comsol_capsules]
+  text: >
+    Neither the MATLAB (it needs Bio-Formats, DRLSE, Skeleton3D, Skel2Graph3D and an interactive threshold) nor the
+    COMSOL Java (proprietary, partly templates, physics set in the GUI) is run here. Two parts are ported to Python:
+    the resampling and voxel unit (lines 46-76) and the geometry construction (cylinders and spheres from the CSV);
+    the sample CSV, the script's own output, is read as data.
+# ---- Cross-record validation job: pandian_code with pandian2025 (2026-11-12) ----
+- id: q_validation_pandian2025
+  kind: choice
+  about: [sample_network, r_median_sample, D_median_sample, pandian2025/diameter_range, pandian2025/fig3e_radius_central, pandian2025/fig4b_radius_median, pandian2025/fig4b_radius_networks]
+  text: >
+    (Cross-record validation, pandian_code with pandian2025.) Two validations were added: the sample network's median
+    and length-weighted mean link diameters (about 27.7 and 32.8 um) against the paper's 'diameters ranging between 20
+    and 40 um'; both fall inside it. Three choices stay open. (1) Diameter or radius: pandian2025 doubts whether the
+    20-40 um are diameters (its Figs. 3e and 4b plot radius, central lines about 22-35 um; pandian2025
+    q_fig_radius_text). Read as radii, the sample's median radius (about 13.9 um) lies below the range, and below every
+    central line of Figs. 3e and 4b; read as diameters, as here, the sample agrees. The sample therefore favours that the
+    figures' 'radius' axes carry diameters, or that the sample's vessels are thinner than the paper's. (2) Which network:
+    the stack is named Control-Dex-3, which may be control Network 3 of Fig. 3e (central line about 35 um), but the
+    release does not say so and the CSV's name differs (q_sample_is_one_trimmed_stack). (3) The radius curves of Figs.
+    3e and 4b (per network, per group) are not used as targets: the sample gives one value for one trimmed stack, not
+    a value at each network or group, and which x it belongs to is not stated. The pandian2025 models (Poiseuille checks,
+    permeability formulas, friction factor, figure processing) predict nothing this record measures: its only
+    measurement is p_diameter_range, a copy of pandian2025's own value.
+  citation: {none: "a finding of the validation job between pandian_code and pandian2025, not a statement of the code"}

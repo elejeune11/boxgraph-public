@@ -1,0 +1,50 @@
+# conditions (in vitro: an engineered network, not tissue)
+- {id: preparation, name: experimental preparation, dimension: dimensionless, description: "used as a condition: self-assembled human microvascular network (HUVEC + normal human lung fibroblasts) in a fibrin gel (2.5 mg/mL) between two 250 um endothelialised parent channels of a PDMS two-channel device (in vitro); or the single-channel device (160 um channel lined with HUVEC in fibrin); or the square grid CFD model of Fig. S5"}
+- {id: treatment, name: cytokine treatment of the network, dimension: dimensionless, description: "used as a condition: untreated control, or IL-1beta (0.1 ng/mL for 4 h, as the text says)"}
+- {id: perfusate, name: fluid perfused, dimension: dimensionless, description: "used as a condition: culture medium (EGM-2), with 10 um beads or 2000 kDa / 70 kDa dextran; not blood"}
+- {id: compartment, name: model compartment, dimension: dimensionless, description: "used as a condition: vessel lumen (free flow), endothelial layer (porous), or fibrin interstitium (porous)"}
+
+# fluid and porous media
+- {id: fluid_density, name: density of the perfusing culture medium, dimension: "[mass]/[length]**3"}
+- {id: fluid_viscosity, name: dynamic viscosity of the perfusing culture medium, dimension: "[pressure]*[time]"}
+- {id: endothelial_layer_viscosity, name: "dynamic viscosity 'of the endothelial monolayer' in the hydraulic permeability estimate", dimension: "[pressure]*[time]", description: "the mu of kappa ~ Pd mu L / eps_p (p. 11), said to be similar to that of whole blood"}
+- {id: endothelial_layer_viscosity_as_printed, name: "the same viscosity with the unit the paper prints (Pa)", dimension: "[pressure]", description: "kept only to hold the printed '3e-3 Pa' with its printed unit; see q_mu_unit"}
+- {id: porosity, name: porosity of a porous compartment, dimension: dimensionless}
+- {id: hydraulic_permeability, name: hydraulic (Darcy) permeability of a porous compartment, dimension: "[length]**2"}
+- {id: diffusive_permeability, name: diffusive permeability of the endothelium to 70 kDa dextran, dimension: "[length]/[time]", description: "P_D of J = P_D (C_vessel - C_gel), J a mass flux per unit area"}
+- {id: diffusive_permeability_as_printed, name: "the same permeability with the unit the paper prints (m2/s)", dimension: "[length]**2/[time]", description: "kept only to hold the printed values with their printed unit; see q_pd_unit"}
+- {id: forchheimer_friction_factor, name: dimensionless Forchheimer friction factor C_f of a porous compartment, dimension: dimensionless}
+- {id: characteristic_length, name: "characteristic length L of the hydraulic permeability estimate", dimension: "[length]", description: "assumed in the paper as the thickness between the parent channels"}
+- {id: dextran_intensity, name: fluorescence intensity of dextran in the images, dimension: dimensionless}
+- {id: dextran_intensity_rate, name: rate of change of the dextran intensity in the gel, dimension: "1/[time]"}
+
+# geometry
+- {id: vessel_radius, name: radius of a vessel (link) of the network, dimension: "[length]"}
+- {id: vessel_diameter, name: diameter of a vessel (link) of the network, dimension: "[length]"}
+- {id: time, name: time after the media pressure differential is applied, dimension: "[time]"}
+- {id: network_index, name: position of a network along a figure's x axis, dimension: dimensionless, description: "1, 2, 3 for Network-1, -2, -3 (control, Fig. 3) or IL1beta-1, -2, -3 (Fig. 4); what each index is is in the reading's `what`"}
+- {id: group_index, name: position of a treatment group along a figure's x axis, dimension: dimensionless, description: "Fig. 4a-c: 1 control, 2 IL-1beta; a per-network dot is at the group plus 0.1 x its order from the left"}
+- {id: vessel_velocity, name: flow velocity in a vessel of the network, dimension: "[length]/[time]", description: "one bead track's mean speed (Expt) or a CFD velocity in a vessel; a figure's central line summarizes the distribution over a network"}
+- {id: interstitial_velocity, name: flow velocity in the fibrin interstitium (CFD), dimension: "[length]/[time]"}
+- {id: mesh_element_count, name: number of elements of the CFD mesh, dimension: dimensionless}
+- {id: cfd_max_velocity, name: maximum flow velocity in a CFD solution of a network, dimension: "[length]/[time]"}
+- {id: solver_time, name: computing time required for a converged CFD solution, dimension: "[time]"}
+- {id: binarization_threshold, name: threshold used to binarize the image stack before segmentation, dimension: dimensionless, description: "Fig. 2b x axis (a fraction of the intensity range)"}
+- {id: volume_coverage, name: volume of the segmented network model as a share of the volume from the raw image stack, dimension: dimensionless, description: "Fig. 2b; 100 % is the volume occupied by pixels above a mean threshold in ImageJ"}
+- {id: manual_vessel_diameter, name: diameter of a vessel measured by hand on image cross-sections (ImageJ), dimension: "[length]", description: "the ground truth of Fig. 2a, against which the algorithms' diameters are set"}
+- {id: channel_diameter, name: diameter of a parent channel (needle) of a device, dimension: "[length]"}
+- {id: model_region_width, name: in-plane side of the reconstructed CFD region, dimension: "[length]"}
+- {id: image_width_pixels, name: in-plane side of the segmented image stack in pixels, dimension: dimensionless}
+- {id: flow_path_length, name: length of a straight vessel carrying the inlet-to-outlet pressure drop, dimension: "[length]", description: "the length of the one straight tube that stands for the network in a Poiseuille estimate (added by the reader)"}
+- {id: bead_diameter, name: diameter of the tracer microbeads, dimension: "[length]"}
+- {id: media_head_height, name: height difference of the media between the inlet and outlet ports, dimension: "[length]"}
+- {id: gravitational_acceleration, name: gravitational acceleration, dimension: "[length]/[time]**2"}
+
+# flow
+- {id: boundary_pressure, name: gauge pressure prescribed at a boundary of the CFD model, dimension: "[pressure]"}
+- {id: device_pressure_drop, name: pressure difference between the inlet and outlet media of a device, dimension: "[pressure]"}
+- {id: grid_model_pressure, name: a pressure in the square grid CFD model (Fig. S5), dimension: "[pressure]"}
+- {id: vessel_mean_velocity, name: mean flow velocity in the network vessels, dimension: "[length]/[time]", description: "bead track mean speeds or CFD velocities in the vessels, averaged over the network"}
+- {id: grid_velocity, name: a flow velocity in the square grid CFD model (outlet or colour bar maximum), dimension: "[length]/[time]"}
+- {id: wall_shear_stress, name: wall shear stress on the vessel walls, dimension: "[pressure]"}
+- {id: goodness_of_fit, name: coefficient of determination R2 of a fit, dimension: dimensionless}

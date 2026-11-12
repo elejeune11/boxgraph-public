@@ -1,0 +1,19 @@
+id: network_density
+name: vessel length per volume and vessel volume fraction of a network in a square region of given side and depth
+role: processing
+stated: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "580", quote: "v_volume = numel(vasc_net) * voxelUnit^3 * 1e-9;"}
+equation: "length density = L / (W^2 H); volume fraction = V / (W^2 H)"
+inputs:
+  L: {quantity: total_vessel_length, unit: um}
+  V: {quantity: vessel_volume, unit: um^3}
+  W: {quantity: model_region_width, unit: um}
+  H: {quantity: model_region_depth, unit: um}
+outputs:
+  length_density: {quantity: vessel_length_density, unit: 1/mm^2}
+  volume_fraction: {quantity: vessel_volume_fraction, unit: dimensionless}
+settings: {}
+stochastic: false
+# Our own arithmetic. The script divides by the volume of the whole resampled stack (line 580, numel(vasc_net)
+# voxels of voxelUnit^3) for its 'Density of vessels per unit volume' (links per mm^3, line 585); it prints no
+# length density. Run here on the resampled stack (nx voxelUnit square, nz voxelUnit deep) and on the COMSOL
+# block (906 x 906 x 500 um).

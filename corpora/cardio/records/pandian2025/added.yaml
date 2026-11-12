@@ -1,0 +1,59 @@
+# Inputs the paper does not state, or states with a unit that cannot be used as printed.
+
+- id: pd_control_mps
+  quantity: diffusive_permeability
+  unit: m/s
+  printed: "5 x 10^-8"
+  basis: >
+    The printed 5e-8 (p. 11) taken in m/s, not the printed m2/s: the paper defines P_D by J = P_D (C_vessel -
+    C_gel) and P_D = 2 r / I_vessel dI_gel/dt (p. 10), both a velocity, and Fig. 4a plots P_D in 10^-6 cm/s,
+    whose control bar is near 5 (10^-6 cm/s = 10^-8 m/s; by eye, figure not read). See q_pd_unit.
+  alternatives: ["5 x 10^-10"]
+  stands_for: "Pd (control) in kappa ~ Pd mu L / eps_p"
+  conditions: {treatment: control, compartment: endothelial layer, preparation: "single-channel device (in vitro)"}
+- id: pd_il1b_mps
+  quantity: diffusive_permeability
+  unit: m/s
+  printed: "50 x 10^-8"
+  basis: The printed 50e-8 (p. 11) taken in m/s, as pd_control_mps (q_pd_unit).
+  alternatives: ["50 x 10^-10"]
+  stands_for: "Pd (IL-1beta) in kappa ~ Pd mu L / eps_p"
+  conditions: {treatment: IL-1beta, compartment: endothelial layer, preparation: "single-channel device (in vitro)"}
+- id: mu_endo_pas
+  quantity: endothelial_layer_viscosity
+  unit: Pa*s
+  printed: "3 x 10^-3"
+  basis: >
+    The printed "3e-3 Pa" (p. 11) taken in Pa s: it is called a dynamic viscosity "similar to that of whole
+    blood", which is about 3e-3 Pa s (q_mu_unit).
+  alternatives: ["1.002 x 10^-3"]
+  stands_for: "mu in kappa ~ Pd mu L / eps_p"
+  conditions: {compartment: endothelial layer}
+- id: r_vessel_added
+  quantity: vessel_radius
+  unit: um
+  printed: "15"
+  basis: >
+    Reader's choice for a Poiseuille estimate: half the midpoint of the printed 20-40 um vessel diameters
+    (p. 5). Fig. 3e, which that sentence cites, plots radii whose medians look nearer 20-35 um (by eye; not
+    read), so the alternatives span both readings.
+  alternatives: ["10", "20", "35"]
+  stands_for: radius of the one straight vessel standing for the network
+  conditions: {treatment: control, preparation: "two-channel network device (in vitro)"}
+- id: L_path_added
+  quantity: flow_path_length
+  unit: um
+  printed: "906"
+  basis: >
+    Reader's choice for a Poiseuille estimate: the in-plane side of the reconstructed CFD region (906 um, p. 10),
+    across which the inlet pressures of p. 11 are applied with 0 Pa at the outlet; a straight path. Real paths
+    through the network are longer.
+  alternatives: ["1000", "1812"]
+  stands_for: length of the one straight vessel standing for the network (1000 um is the 1 mm between the parent channels, p. 11; 1812 um a path twice the straight distance)
+- id: g_added
+  quantity: gravitational_acceleration
+  unit: m/s^2
+  printed: "9.81"
+  basis: standard gravity; the paper converts no head to a pressure
+  alternatives: ["9.80665"]
+  stands_for: g in the hydrostatic pressure of the 4 mm media head

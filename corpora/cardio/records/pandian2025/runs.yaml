@@ -1,0 +1,67 @@
+# The paper's own printed formulas (kappa, C_f) on its printed inputs, and the reader's consistency checks
+# (Poiseuille, hydrostatic head, colour-bar span). The 3D COMSOL network model itself cannot be run here.
+
+- id: run_kappa_il1b
+  model: kappa_from_pd
+  inputs: {Pd: pd_il1b_mps, mu: mu_endo_pas, L: L_between_channels, eps: eps_kappa_formula}
+  outputs: {kappa: kappa_il1b_formula}
+  note: >
+    the one case the paper says it computed with this formula; the paper prints no result. The diffusive
+    permeability was measured in the single-channel device and is applied, as in the paper, to the layer of the
+    two-channel network device (L is the spacing of its parent channels): the conditions differ on purpose.
+- id: run_kappa_control
+  model: kappa_from_pd
+  inputs: {Pd: pd_control_mps, mu: mu_endo_pas, L: L_between_channels, eps: eps_kappa_formula}
+  outputs: {kappa: kappa_control_formula}
+  note: the formula applied to the control diffusive permeability, to set beside the control value the paper assumed (1.2e-7 m2); single-channel P_D on the network device, as run_kappa_il1b
+- id: run_cf
+  model: forchheimer_cf
+  inputs: {eps: eps_fibrin_endo}
+  outputs: {Cf: cf_fibrin_endo}
+  note: the friction factor the paper's Brinkman-Forchheimer equations use in both porous compartments; no value is printed
+- id: run_poiseuille_control
+  model: poiseuille_tube
+  inputs: {p_in: p_in_vessel_control, p_out: p_out, r: r_vessel_added, mu: mu_media, L: L_path_added}
+  outputs: {v_mean: v_poiseuille_control, tau_w: tau_poiseuille_control}
+- id: run_wss_from_v
+  model: wss_from_velocity
+  inputs: {v: v_avg_network, r: r_vessel_added, mu: mu_media}
+  outputs: {tau_w: tau_from_printed_v}
+- id: run_head
+  model: hydrostatic_head
+  inputs: {rho: rho_media, g: g_added, h: media_head}
+  outputs: {dp: dp_head}
+- id: run_s5b_range
+  model: pressure_range
+  inputs: {p_max: s5b_p_max, p_min: s5b_p_min}
+  outputs: {dp: dp_s5b_range}
+- id: run_s5c_range
+  model: pressure_range
+  inputs: {p_max: s5c_p_max, p_min: s5c_p_min}
+  outputs: {dp: dp_s5c_range}
+
+# ---- figure pass (2026-11-12): runs on the calibrated figure readings
+- id: run_r2_inhouse
+  model: r2_linear_fit
+  inputs: {P: fig2a_inhouse_d}
+  outputs: {R2: r2_inhouse_fig2a}
+  note: R2 of the least-squares line through the 7 pink squares of Fig. 2a as read
+- id: run_r2_muves
+  model: r2_linear_fit
+  inputs: {P: fig2a_muves_d}
+  outputs: {R2: r2_muves_fig2a}
+- id: run_r2_reaver
+  model: r2_linear_fit
+  inputs: {P: fig2a_reaver_d}
+  outputs: {R2: r2_reaver_fig2a}
+- id: run_pd_by_group
+  model: pd_by_group
+  inputs: {Pd_ctl: pd_control_mps, Pd_il1b: pd_il1b_mps}
+  sweep: {group: fig4a_pd_bars}
+  outputs: {Pd: pd_printed_at_bars}
+  note: the P_D values printed in Sect. 4.11 (taken in m/s, q_pd_unit) at the two bars of Fig. 4a
+- id: run_pd_group_mean
+  model: group_mean_points
+  inputs: {P: fig4a_pd_points}
+  outputs: {Pm: pd_mean_of_points}
+  note: mean of the plotted dots of each group of Fig. 4a

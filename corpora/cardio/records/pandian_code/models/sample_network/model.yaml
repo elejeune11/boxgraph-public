@@ -1,0 +1,39 @@
+id: sample_network
+name: "geometry of the released sample network (the exported CSV): segment and link counts, lengths, radii and diameters, the span of the segments, and length density and cylinder volume fraction in the box they span"
+role: processing
+software: true
+stated: {file: matlab-scripts/Main-script/VascAnalysis_singleChannel_NodeCoordinatesRadiusExport.m, lines: "509-511", quote: "NodeCon_Radii_Table(i,7) = linkradius4(i);"}
+equation: "L_i = |P2_i - P1_i|; links = runs of consecutive rows with one radius whose pieces join within a voxel diagonal; D = 2 r; length density = sum L_i / (span_x span_y span_z); volume fraction = sum pi r_i^2 L_i / (span_x span_y span_z)"
+inputs:
+  voxel_unit: {quantity: voxel_unit, unit: um, description: "used only to join the pieces of a subdivided link (one voxel diagonal)"}
+outputs:
+  n_segments: {quantity: segment_count, unit: dimensionless}
+  n_links: {quantity: link_count, unit: dimensionless}
+  L_total: {quantity: total_vessel_length, unit: um}
+  L_seg_median: {quantity: segment_length, unit: um}
+  L_seg_min: {quantity: segment_length, unit: um}
+  L_seg_max: {quantity: segment_length, unit: um}
+  L_link_median: {quantity: segment_length, unit: um, description: "median over links of the summed lengths of their pieces"}
+  gap_total: {quantity: piece_gap_length, unit: um}
+  r_median: {quantity: vessel_radius, unit: um, description: "median over links (each link once)"}
+  D_median: {quantity: vessel_diameter, unit: um, description: "twice the median link radius"}
+  D_min: {quantity: vessel_diameter, unit: um}
+  D_max: {quantity: vessel_diameter, unit: um}
+  D_mean_lw: {quantity: vessel_diameter, unit: um, description: "mean link diameter weighted by link length (chords), as the script's link_radius_all2 (line 531) with path lengths"}
+  span_x: {quantity: region_span, unit: um}
+  span_y: {quantity: region_span, unit: um}
+  span_z: {quantity: region_span, unit: um}
+  V_cyl: {quantity: vessel_volume, unit: um^3, description: "sum of pi r^2 L over the segments: no end caps, overlaps counted twice"}
+  length_density_box: {quantity: vessel_length_density, unit: 1/mm^2}
+  volume_fraction_box: {quantity: vessel_volume_fraction, unit: dimensionless}
+settings: {}
+stochastic: false
+# Reads the release's sample output (a data file of the code folder, not code); everything computed is ours.
+# The CSV's units: the script multiplies every column of the table by voxelUnit (lines 533-536), the edge of a
+# resampled voxel in um (lines 45-49, 73-76), and rounds to 2 decimals (line 539); the COMSOL Java says it
+# assumes um (Code_building_geometry.rtf line 30). Every coordinate in the sample is an integer multiple of
+# about 3.54 um, the voxel unit voxel_resample gives for the sample stack. Columns 1-6 are voxel indices of the
+# first and last skeleton point of a link (or of a piece of one), x and y swapped back (lines 503-505), not the
+# node centres: segments stop short of the branch points, and pieces of a subdivided link leave a one-point gap
+# (gap_total). The radius is the mean distance from skeleton points to their nearest perimeter voxels (lines
+# 281-318), one value per link. Lengths here are chords, shorter than the script's path lengths.

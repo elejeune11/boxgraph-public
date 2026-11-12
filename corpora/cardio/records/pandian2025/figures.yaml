@@ -1,0 +1,310 @@
+# Calibrated figure readings (figure pass, 2026-11-12). Every reading is made by the record's own code in
+# figures/, run on the page region rendered at `dpi`; crops are in pixels of the page at that dpi. See
+# figures.md for what each panel is and what was left out.
+
+# ---- Fig. 2a (p. 5): algorithm diameters against manual diameters of the same vessels (raster figure) ----
+- id: fig2a_inhouse
+  page: 5
+  where: "Fig. 2(a)"
+  what: "every pink filled square (In-house code): diameter from the paper's algorithm against the manual diameter"
+  dpi: 900
+  crop: [2220, 690, 4320, 3000]
+  x: {quantity: manual_vessel_diameter, unit: um}
+  y: {quantity: vessel_diameter, unit: um}
+  mode: code
+  code: figures/fig2a_inhouse.py
+  at: []
+- id: fig2a_muves
+  page: 5
+  where: "Fig. 2(a)"
+  what: "every teal filled diamond (mu-ves, i.e. muVES3D): diameter against the manual diameter"
+  dpi: 900
+  crop: [2220, 690, 4320, 3000]
+  x: {quantity: manual_vessel_diameter, unit: um}
+  y: {quantity: vessel_diameter, unit: um}
+  mode: code
+  code: figures/fig2a_muves.py
+  at: []
+- id: fig2a_reaver
+  page: 5
+  where: "Fig. 2(a)"
+  what: "every light blue open circle (Reaver): diameter against the manual diameter"
+  dpi: 900
+  crop: [2220, 690, 4320, 3000]
+  x: {quantity: manual_vessel_diameter, unit: um}
+  y: {quantity: vessel_diameter, unit: um}
+  mode: code
+  code: figures/fig2a_reaver.py
+  at: []
+
+# ---- Fig. 2b (p. 5): % volume coverage against binarization threshold, three networks (raster) ----
+- id: fig2b_n1
+  page: 5
+  where: "Fig. 2(b)"
+  what: "the light grey line (Network -1), at its vertices"
+  dpi: 900
+  crop: [4290, 1080, 6900, 2940]
+  x: {quantity: binarization_threshold, unit: dimensionless}
+  y: {quantity: volume_coverage, unit: percent}
+  mode: code
+  code: figures/fig2b_n1.py
+  at: ["0.1", "0.14", "0.2", "0.3", "0.4"]
+- id: fig2b_n2
+  page: 5
+  where: "Fig. 2(b)"
+  what: "the mid grey line (Network -2), at its vertices"
+  dpi: 900
+  crop: [4290, 1080, 6900, 2940]
+  x: {quantity: binarization_threshold, unit: dimensionless}
+  y: {quantity: volume_coverage, unit: percent}
+  mode: code
+  code: figures/fig2b_n2.py
+  at: ["0.05", "0.1", "0.2", "0.3", "0.4"]
+- id: fig2b_n3
+  page: 5
+  where: "Fig. 2(b)"
+  what: "the black line (Network -3), at its vertices from 0.02 on"
+  dpi: 900
+  crop: [4290, 1080, 6900, 2940]
+  x: {quantity: binarization_threshold, unit: dimensionless}
+  y: {quantity: volume_coverage, unit: percent}
+  mode: code
+  code: figures/fig2b_n3.py
+  at: ["0.02", "0.1", "0.2", "0.3", "0.4"]
+
+# ---- Fig. 3c (p. 6): mesh sensitivity (raster) ----
+- id: fig3c_vmax
+  page: 6
+  where: "Fig. 3(c)"
+  what: "the three black filled circles: maximum velocity in the simulation (left axis) against element count"
+  dpi: 1500
+  crop: [7400, 1500, 10200, 3950]
+  x: {quantity: mesh_element_count, unit: dimensionless}
+  y: {quantity: cfd_max_velocity, unit: um/s}
+  mode: code
+  code: figures/fig3c_vmax.py
+  at: []
+- id: fig3c_time
+  page: 6
+  where: "Fig. 3(c)"
+  what: "the three grey filled circles: time required for a converged solution (right axis) against element count"
+  dpi: 1500
+  crop: [7400, 1500, 10200, 3950]
+  x: {quantity: mesh_element_count, unit: dimensionless}
+  y: {quantity: solver_time, unit: s}
+  mode: code
+  code: figures/fig3c_time.py
+  at: []
+
+# ---- Column plots (raster), x = network or group index; the captions do not say what the central line and
+# ---- whiskers are (figures.md): whiskers reach the outermost dots
+- id: fig3e_radius
+  page: 6
+  where: "Fig. 3(e)"
+  what: "the black central line of each control network's radius distribution (x = 1, 2, 3: Network-1, -2, -3), with the grey whiskers"
+  dpi: 1500
+  crop: [2000, 8750, 4450, 11200]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: vessel_radius, unit: um}
+  mode: code
+  code: figures/fig3e_radius.py
+  at: ["1", "2", "3"]
+  error_bars: unstated
+  error_bars_citation: {none: "the caption of Fig. 3 (p. 7) does not say; the whiskers end at the outermost dots, as a range would"}
+- id: fig3f_expt
+  page: 6
+  where: "Fig. 3(f)"
+  what: "the black central line of the bead-tracking ('Expt') velocities of each control network (x = network 1, 2, 3; columns 1, 3, 5), with the grey whiskers"
+  dpi: 1200
+  crop: [3700, 6900, 6000, 9150]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: vessel_velocity, unit: um/s}
+  mode: code
+  code: figures/fig3f_expt.py
+  at: ["1", "2", "3"]
+  error_bars: unstated
+  error_bars_citation: {none: "the caption of Fig. 3 (p. 7) does not say; the whiskers end at the outermost dots"}
+- id: fig3f_cfd
+  page: 6
+  where: "Fig. 3(f)"
+  what: "the black central line of the CFD velocities of each control network (x = network 1, 2, 3; columns 2, 4, 6), with the grey whiskers"
+  dpi: 1200
+  crop: [3700, 6900, 6000, 9150]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: vessel_velocity, unit: um/s}
+  mode: code
+  code: figures/fig3f_cfd.py
+  at: ["1", "2", "3"]
+  error_bars: unstated
+  error_bars_citation: {none: "the caption of Fig. 3 (p. 7) does not say; the whiskers end at the outermost dots"}
+- id: fig3h_wss
+  page: 6
+  where: "Fig. 3(h)"
+  what: "the black dashed central line of each control network's wall shear stress distribution (x = 1, 2, 3)"
+  dpi: 1500
+  crop: [1950, 11300, 4250, 14350]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: wall_shear_stress, unit: dyne/cm^2}
+  mode: code
+  code: figures/fig3h_wss.py
+  at: ["1", "2", "3"]
+- id: fig3i_interstitial
+  page: 6
+  where: "Fig. 3(i)"
+  what: "the black central line of each control network's interstitial velocity distribution (x = 1, 2, 3)"
+  dpi: 1200
+  crop: [3450, 9400, 5650, 11700]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: interstitial_velocity, unit: um/s}
+  mode: code
+  code: figures/fig3i_interstitial.py
+  at: ["1", "2", "3"]
+- id: fig4a_bars
+  page: 8
+  where: "Fig. 4(a)"
+  what: "the two bars (x = 1 control, dark grey; 2 IL-1beta, light grey) with their black error bars"
+  dpi: 1500
+  crop: [1050, 1100, 5050, 4300]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: diffusive_permeability, unit: nm/s}
+  mode: code
+  code: figures/fig4a_bars.py
+  at: ["1", "2"]
+  error_bars: unstated
+  error_bars_citation: {none: "the caption of Fig. 4 (p. 8) does not say what the bars and error bars are"}
+- id: fig4a_points
+  page: 8
+  where: "Fig. 4(a)"
+  what: "every black dot (one per measured channel; x = group + 0.01 x order from the top; 1 control, 2 IL-1beta)"
+  dpi: 1500
+  crop: [1050, 1100, 5050, 4300]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: diffusive_permeability, unit: nm/s}
+  mode: code
+  code: figures/fig4a_points.py
+  at: []
+- id: fig4b_median
+  page: 8
+  where: "Fig. 4(b)"
+  what: "the thick black dashed line in each radius violin (x = 1 control, 2 IL-1beta)"
+  dpi: 1500
+  crop: [1050, 1100, 5050, 4300]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: vessel_radius, unit: um}
+  mode: code
+  code: figures/fig4b_median.py
+  at: ["1", "2"]
+- id: fig4b_q3
+  page: 8
+  where: "Fig. 4(b)"
+  what: "the dotted line just above the dashed one in each radius violin (upper quartile; x = 1 control, 2 IL-1beta)"
+  dpi: 1500
+  crop: [1050, 1100, 5050, 4300]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: vessel_radius, unit: um}
+  mode: code
+  code: figures/fig4b_q3.py
+  at: ["1", "2"]
+- id: fig4b_q1
+  page: 8
+  where: "Fig. 4(b)"
+  what: "the dotted line just below the dashed one in each radius violin (lower quartile; x = 1 control, 2 IL-1beta)"
+  dpi: 1500
+  crop: [1050, 1100, 5050, 4300]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: vessel_radius, unit: um}
+  mode: code
+  code: figures/fig4b_q1.py
+  at: ["1", "2"]
+- id: fig4b_networks
+  page: 8
+  where: "Fig. 4(b)"
+  what: "every large black dot (one per network; x = group + 0.1 x its order from the left; group 1 control, 2 IL-1beta)"
+  dpi: 1500
+  crop: [1050, 1100, 5050, 4300]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: vessel_radius, unit: um}
+  mode: code
+  code: figures/fig4b_networks.py
+  at: []
+- id: fig4c_median
+  page: 8
+  where: "Fig. 4(c)"
+  what: "the black dashed central line of each group's bead velocities (x = 1 control, 2 IL-1beta)"
+  dpi: 1500
+  crop: [5100, 1100, 7050, 4350]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: vessel_velocity, unit: um/s}
+  mode: code
+  code: figures/fig4c_median.py
+  at: ["1", "2"]
+- id: fig4c_networks
+  page: 8
+  where: "Fig. 4(c)"
+  what: "every large black dot (one per network; x = group + 0.1 x its order from the left; group 1 control, 2 IL-1beta)"
+  dpi: 1500
+  crop: [5100, 1100, 7050, 4350]
+  x: {quantity: group_index, unit: dimensionless}
+  y: {quantity: vessel_velocity, unit: um/s}
+  mode: code
+  code: figures/fig4c_networks.py
+  at: []
+- id: fig4e_control
+  page: 8
+  where: "Fig. 4(e)"
+  what: "the black filled circles (Control): grid-model pressure drop at t = 1 ... 7 s"
+  dpi: 900
+  crop: [700, 2950, 3050, 4950]
+  x: {quantity: time, unit: s}
+  y: {quantity: device_pressure_drop, unit: Pa}
+  mode: code
+  code: figures/fig4e_control.py
+  at: ["1", "2", "3", "4", "5", "6", "7"]
+- id: fig4e_il1b
+  page: 8
+  where: "Fig. 4(e)"
+  what: "the grey filled circles (IL-1beta (0.01 ng/ml)): grid-model pressure drop at t = 2 ... 7 s (the one at t = 1 s is hidden behind the black marker)"
+  dpi: 900
+  crop: [700, 2950, 3050, 4950]
+  x: {quantity: time, unit: s}
+  y: {quantity: device_pressure_drop, unit: Pa}
+  mode: code
+  code: figures/fig4e_il1b.py
+  at: ["2", "3", "4", "5", "6", "7"]
+- id: fig4f_expt
+  page: 8
+  where: "Fig. 4(f)"
+  what: "the black central line of the bead-tracking velocities of each IL-1beta network (x = network 1, 2, 3; columns IL1beta-1, -2, -3), with the grey whiskers"
+  dpi: 1200
+  crop: [4400, 4000, 6850, 6350]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: vessel_velocity, unit: um/s}
+  mode: code
+  code: figures/fig4f_expt.py
+  at: ["1", "2", "3"]
+  error_bars: unstated
+  error_bars_citation: {none: "the caption of Fig. 4 (p. 8) does not say; the whiskers end at the outermost dots"}
+- id: fig4f_cfd
+  page: 8
+  where: "Fig. 4(f)"
+  what: "the black central line of the CFD velocities of each IL-1beta network (x = network 1, 2, 3; columns IL1beta-n-CFD), with the grey whiskers"
+  dpi: 1200
+  crop: [4400, 4000, 6850, 6350]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: vessel_velocity, unit: um/s}
+  mode: code
+  code: figures/fig4f_cfd.py
+  at: ["1", "2", "3"]
+  error_bars: unstated
+  error_bars_citation: {none: "the caption of Fig. 4 (p. 8) does not say; the whiskers end at the outermost dots"}
+- id: fig4g_wss
+  page: 8
+  where: "Fig. 4(g)"
+  what: "the black dashed central line of each IL-1beta network's wall shear stress distribution (x = 1, 2, 3)"
+  dpi: 1200
+  crop: [7050, 3900, 9050, 6600]
+  x: {quantity: network_index, unit: dimensionless}
+  y: {quantity: wall_shear_stress, unit: dyne/cm^2}
+  mode: code
+  code: figures/fig4g_wss.py
+  at: ["1", "2", "3"]

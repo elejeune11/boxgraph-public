@@ -1,0 +1,418 @@
+- id: q_pd_unit
+  kind: possible_error
+  about: [pd_control_printed, pd_il1b_printed, pd_control_mps, pd_il1b_mps, pd_dextran]
+  text: >
+    The diffusive permeabilities are printed as 5e-8 and 50e-8 m2/s (p. 11). The paper's own definitions,
+    J = P_D (C_vessel - C_gel) and P_D = 2 r / I_vessel dI_gel/dt (p. 10), make P_D a velocity, and Fig. 4a
+    plots it in 10^-6 cm/s (control bar near 5, IL-1beta bar near 35, by eye; the figure was not read in this
+    job). 5e-8 m/s = 5 x 10^-6 cm/s agrees with the control bar, so the printed unit is probably meant as m/s;
+    the record keeps the printed values with the printed unit and uses them in m/s as added inputs. The
+    IL-1beta value 50e-8 is then about 1.4 times the IL-1beta bar of Fig. 4a (by eye), which should be
+    checked with a calibrated reading.
+  citation: {page: 11, quote: "ability of the endothelial monolayer (control—5e-8 m2/s and IL-1β"}
+- id: q_mu_unit
+  kind: possible_error
+  about: [mu_endo_printed, mu_endo_pas]
+  text: >
+    The viscosity in the hydraulic permeability formula is printed "3e-3 Pa" (p. 11), a pressure; a dynamic
+    viscosity "similar to that of whole blood" is 3e-3 Pa s. The record keeps the printed unit and uses
+    3e-3 Pa s as an added input. Why a viscosity of the endothelial monolayer (rather than of the medium,
+    1.002e-3 Pa s, which flows through it) is used is not said.
+  citation: {page: 11, quote: "(assumed 3e-3 Pa, similar to that of whole blood32,33)"}
+- id: q_kappa_dimension
+  kind: possible_error
+  about: [kappa_from_pd]
+  text: >
+    kappa ~ Pd mu L / eps_p is dimensionally inconsistent: with Pd in m/s, mu in Pa s and L in m the right
+    side is in Pa m2 (with the printed units, m2/s, Pa and m, it is Pa m3/s), not m2. Kedem-Katchalsky or
+    Starling relations link a hydraulic conductivity L_p (m/(Pa s)) to kappa = L_p mu L, not a diffusive
+    permeability. The model is entered as printed, its number taken in SI units.
+  citation: {page: 11, quote: "where κ (m2) is the hydraulic permeability, Pd is the diffusive perme"}
+- id: q_kappa_order
+  kind: possible_error
+  about: [kappa_il1b_formula, kappa_control_formula, kappa_fibrin_control, cmp_kappa_control_formula]
+  text: >
+    With the printed inputs the formula gives about 5.7e-12 m2 for the IL-1beta layer and 5.7e-13 m2 for the
+    control layer (with Pd in m/s), five to six orders of magnitude below the 1.2e-7 m2 assumed for the control
+    layer. Taken as printed, the IL-1beta treated endothelium would then be some 2 x 10^4 times less permeable
+    to flow than the untreated one in the CFD, the opposite of the leakage the paper reports for IL-1beta
+    (pp. 7-8). The paper does not print the kappa it used for IL-1beta, so which value entered the CFD cannot
+    be checked.
+  citation: {page: 11, quote: "devices it was calculated as below"}
+- id: q_kappa_value
+  kind: possible_error
+  about: [kappa_fibrin_control]
+  text: >
+    A hydraulic permeability of 1.2e-7 m2 for a 2.5 mg/mL fibrin gel is very large: sqrt(kappa) is about
+    350 um, larger than the vessels (20-40 um) and comparable to the parent channels, so the gel would offer
+    almost no resistance. Fibrin gels are usually reported in the range of about 1e-14 to 1e-12 m2; the value
+    is credited to ref. 31 (Wufsus et al. 2013), which is not in this corpus, so it is not compared here. A
+    unit slip (e.g. 1.2e-7 cm2 = 1.2e-11 m2, or um2) is possible.
+  citation: {page: 11, quote: "is assumed to be 1.2e-731 for the fibrin gel region"}
+- id: q_il1b_pressures
+  kind: reading
+  about: [p_in_vessel_il1b, p_in_gel_il1b]
+  text: >
+    The sentence giving 0.35 Pa and 0.075 Pa repeats "of the control" word for word from the sentence before
+    (3.15 and 1.75 Pa). The record reads the second pair as the IL-1beta inlet pressures, the only reading
+    under which the paper has four distinct inlet conditions.
+  citation: {page: 11, quote: "of the control was assumed to be 0.35 Pa and"}
+- id: q_inlet_pressure_origin
+  kind: unstated_input
+  about: [p_in_vessel_control, p_in_gel_control, p_in_vessel_il1b, p_in_gel_il1b, dp_head]
+  text: >
+    The CFD inlet pressures are said to be "chosen from" the grid model of Fig. S5, but not how: the grid
+    model spans about 18 Pa, the 4 mm head is about 39 Pa, and Fig. 4e shows the drop decaying from about
+    30 Pa over 7 s. How 3.15 Pa (vessel) and 1.75 Pa (gel) for a 906 um region follow from these, and at
+    which time of the decay, is not said; the outlet of the region is set to 0 Pa.
+  citation: {page: 11, quote: "were chosen from the CFD analysis of a chip with two parent chan"}
+- id: q_endothelial_thickness
+  kind: unstated_input
+  about: [p_in_vessel_control]
+  text: >
+    The network CFD models the endothelial monolayer as a porous layer of uniform thickness (p. 8), but its
+    thickness is not given for the network models; only the grid model's drawing (Fig. S5a) labels t = 10 um.
+  citation: {page: 8, quote: "endothelial monolayer thickness to be uniform all over the network"}
+- id: q_media_viscosity
+  kind: choice
+  about: [mu_media]
+  text: >
+    The medium viscosity 1.002e-3 Pa s is that of water at 20 degC; the experiments run at 37 degC, where
+    water is about 0.69e-3 Pa s, and culture medium with serum is somewhat more viscous. No source or
+    temperature is given. Velocities computed under fixed pressures scale inversely with it.
+  citation: {page: 11, quote: "cosity (1.002 103 Pa s). v is the velocity vector"}
+- id: q_diameter_radius
+  kind: reading
+  about: [diameter_range, r_vessel_added]
+  text: >
+    The text gives vessel "diameters ranging between 20 and 40 um (Figure 3e)", but Fig. 3e is titled "Radius
+    of the networks" with a radius axis (um), and by eye its medians lie near 20 um (network 1) and 35 um
+    (networks 2 and 3); Fig. 4b also plots radius with values of 20-40 um. The figures were not read in this
+    job. Either the text means radii, or the figures are labelled radius but show diameters; the Poiseuille
+    checks are run with radius 15 um and alternatives 10, 20 and 35 um for this reason.
+  citation: {page: 5, quote: "ranging between 20 and 40 μm (Figure 3e)"}
+- id: q_bead_size
+  kind: reading
+  about: [bead_diameter_methods]
+  text: >
+    The beads are 10 um in the Methods (p. 10), "~10 um" on p. 5 and in the caption of Fig. 3 (p. 7), but the
+    label inside Fig. 3b reads "15 um beads".
+  citation: {page: 10, quote: "Polystyrene microspheres, 10 μm, blue fluorescent"}
+- id: q_il1b_dose
+  kind: reading
+  about: [p_in_vessel_il1b]
+  text: >
+    The IL-1beta dose is 0.1 ng/mL for 4 h in the text (p. 7), but the legend of Fig. 4e reads "IL-1beta
+    (0.01 ng/ml)". The network devices' dose is not restated ("treated the network devices with IL-1beta for
+    4 h").
+  citation: {page: 7, quote: "with IL-1β (0.1 ng/mL for 4 h)"}
+- id: q_outlet_velocity
+  kind: unexplained_difference
+  about: [v_outlet_grid_a, v_outlet_grid_b, s5b_v_max, s5c_v_max]
+  text: >
+    "for a given pressure difference in an untreated control and treated device the outlet discharge (outlet
+    velocity) is higher (72.4 mm/s and 24.1 mm/s for ~18 Pa pressure drop) for the treated device": read in
+    order, the control outlet velocity (72.4) is the higher, contradicting the sentence; and 72.4 mm/s exceeds
+    the largest velocity on either colour bar of Fig. S5 (29.1 mm/s control, 22.4 mm/s IL-1beta), which the
+    sentence cites. Where the outlet velocity was taken and which value belongs to which device is unclear.
+  citation: {page: 7, quote: "charge (outlet velocity) is higher (72.4 mm/s and 24.1 mm/s for"}
+- id: q_s5_labels
+  kind: reading
+  about: [s5b_p_max, s5b_p_min, s5b_v_max, s5c_p_max, s5c_p_min, s5c_v_max]
+  text: >
+    The colour-bar end labels of Fig. S5 (28 and 9.82 Pa, 29.1 mm/s for the control; 28 and 9.87 Pa,
+    22.4 mm/s for IL-1beta) were read from the 110 dpi page image only, because page rendering was refused in
+    this job; the small digits should be checked at higher resolution.
+  citation: {page: 17, quote: "pressure and velocity heat maps of control endothelium for the grid network"}
+- id: q_pixel_units
+  kind: reading
+  about: [region_side_pixels, region_side_comsol]
+  text: >
+    The MATLAB model "had dimensions in pixel units 255 x 255 x h um" and the COMSOL model 906 x 906 x
+    (h*slice height) um: the first is in pixels, not um, which gives a pixel size of about 3.55 um in plane.
+    The pixel size and slice height of the confocal stacks are not printed.
+  citation: {page: 10, quote: "sions in pixel units 255 255 h μm. The model in COMSOL was"}
+- id: q_eccentricity
+  kind: possible_error
+  about: [r2_diam_reaver]
+  text: >
+    The text calls in vitro cross sections "eccentric (eccentricity 0.8) compared to circular in vivo vessels
+    (eccentricity 1)"; a circle has eccentricity 0. The numbers read as a ratio of minor to major axis (1 for a
+    circle), not an eccentricity.
+  citation: {page: 4, quote: "vessel cross sections (eccentricity 0.8) compared to circular in vivo"}
+- id: q_wss_regression
+  kind: unstated_model
+  about: [r2_wss_regression]
+  text: >
+    The multivariate linear regression of wall shear stress on axial velocity, wall outflow and radius (R2 =
+    0.864, Fig. 3j) is described but its coefficients are not printed, so it cannot be entered as a model or
+    checked. For Poiseuille flow tau_w = 4 mu v / r is linear in v at fixed r, consistent with velocity being
+    the main predictor, but not linear in r.
+  citation: {page: 11, quote: "Wall shear stress (WSS) was modeled using a multivariate linear"}
+- id: q_cfd_not_runnable
+  kind: unstated_model
+  about: [v_avg_network, wss_avg_network]
+  text: >
+    The paper's core model, the steady 3D Navier-Stokes / Brinkman-Forchheimer COMSOL model of each
+    reconstructed network, cannot be run in this record: the six network geometries are not published (the
+    released code, record pandian_code, carries one sample stack), and the COMSOL model needs the endothelial
+    thickness and the IL-1beta kappa, which are not printed. Its printed results are checked here only for
+    consistency with Poiseuille flow under the printed boundary conditions.
+- id: q_figures_not_read
+  kind: reading
+  about: [v_avg_network, wss_avg_network, diameter_range, pd_control_printed, pd_il1b_printed]
+  text: >
+    Page rendering was refused in this job, so no figure was read with a calibrated reading (figures.md lists
+    what should be read in a later pass): the radius distributions (Figs. 3e, 4b), bead and CFD velocities
+    (Figs. 3f, 4c, 4f), wall shear stresses (Figs. 3h, 4g), interstitial velocities (Fig. 3i), the P_D bars
+    (Fig. 4a), the pressure decay of the grid model (Fig. 4e), the mesh study (Fig. 3c) and the diameter and
+    volume validations (Figs. 2a, 2b, 2h). Most of the paper's results are only plotted.
+- id: q_poiseuille_order
+  kind: unexplained_difference
+  about: [cmp_v_poiseuille, cmp_tau_poiseuille, cmp_tau_from_v]
+  text: >
+    One straight 15 um radius tube of 906 um under 3.15 Pa gives about 98 um/s and 0.26 dyn/cm2, close to the
+    printed averages of about 100 um/s and 0.1 dyn/cm2 in order; through Poiseuille, 100 um/s in a 15 um radius
+    tube means 0.27 dyn/cm2, so the two printed averages are consistent only for a radius near 40 um or
+    if the average wall shear stress is taken over many slow vessels. These are order-of-magnitude checks with
+    no verdict (both printed values are approximate).
+# ---- added by the audit (second reading), 2026-11-12
+- id: q_ns_sign
+  kind: possible_error
+  about: [rho_media, mu_media, q_cfd_not_runnable]
+  text: >
+    The Navier-Stokes equation for the vessel lumen is printed (p. 11, checked on the page image) as
+    rho (v . grad) v = - div [ -p I + mu (grad v + (grad v)^T) ], with a minus sign in front of the divergence.
+    The usual steady form, and the Brinkman equation printed just below it, have + div [ -p I + ... ]. As printed,
+    the pressure gradient and the viscous term both have the wrong sign. This is probably a typesetting slip,
+    because COMSOL solves the standard form. The record has no runnable model of the CFD (q_cfd_not_runnable), so
+    nothing depends on it.
+  citation: {page: 11, quote: "where ρ is the fluid density (1000 kg m3 for media)", where: "Navier-Stokes equation"}
+- id: q_s5_vmax_digits
+  kind: reading
+  about: [s5b_v_max, s5c_v_max, v_outlet_grid_a, v_outlet_grid_b, q_outlet_velocity, q_s5_labels]
+  text: >
+    The audit enlarged the 110 dpi page image and disagrees with how certain the first reading is. The upper
+    label of the IL-1beta velocity colour bar (Fig. S5c), recorded as 22.4 mm/s, can also be read as 72.4: the
+    first digit is about 5 px tall, and the 2 and the 7 cannot be told apart. 72.4 mm/s is the outlet velocity
+    printed in the text (p. 7). The control label (Fig. S5b), recorded as 29.1, could also be 24.1, the text's
+    other value. If the bars read 24.1 (control) and 72.4 (IL-1beta), the text's two velocities are the
+    colour-bar maxima and the treated device has the higher one, as the sentence says. That would remove most of
+    q_outlet_velocity. The values are kept as first read. The figure pass should read these labels from the PDF
+    at high resolution. The pressure maxima (28) cannot be told from 26 or 29 at this resolution either; the bar
+    runs past its 25 tick, so they lie above 25.
+  citation: {page: 17, quote: "pressure and velocity heat maps of IL1 treated", where: "Fig. S5c, velocity colour bar"}
+- id: q_pd_factor
+  kind: possible_error
+  about: [pd_dextran, pd_control_printed, pd_il1b_printed]
+  text: >
+    The printed P_D = (2 r_vessel / I_vessel) dI_gel/dt (p. 10, checked on the page image) has the factor 2r.
+    For a cylindrical vessel, a mass balance of the dye leaving the lumen gives a geometric factor of the
+    volume-to-surface ratio, r/2 = d/4; the commonly used form, as in the microvessel protocol the paper cites for
+    its MATLAB code (ref. 26, not in the corpus), is P_D = (1/I) dI/dt d/4. With 2r the printed P_D would be 4
+    times the usual form. The paper cites ref. 24 for the formula, and the printed P_D values cannot be
+    recomputed (no intensities are printed), so whether the factor is a misprint or a different geometry cannot
+    be checked here.
+  citation: {page: 10, quote: "where r is the radius of the vessel (estimated from the image), and"}
+- id: q_pd_citation
+  kind: reading
+  about: [pd_dextran]
+  text: >
+    The derivation of P_D is credited to ref. 24 (superscript checked on the page image, p. 10). Ref. 24 is
+    Spangenberg et al. 2023, an automated 3D vasculature image-analysis paper (light-sheet), not a permeability
+    method. The permeability code is credited to ref. 26 (Polacheck et al. 2019) in the next sentence. The
+    citation may be meant as ref. 26. The record keeps described_from: ref-24 as printed.
+  citation: {page: 10, quote: "of dextran in the gel is negligible, the above equation"}
+# ---- added by the figure pass, 2026-11-12 (calibrated readings in figures.yaml; see figures.md)
+- id: q_figures_read
+  kind: reading
+  about: [q_figures_not_read]
+  text: >
+    The figure pass rendered the PDF and read Figs. 2a, 2b, 3c, 3e, 3f, 3h, 3i and 4a-c, 4e-g with calibrated
+    readings (figures.yaml, figures.md), so q_figures_not_read no longer holds. What each reading settles is in the
+    questions below. Fig. 2h and Fig. 3j were not read (figures.md).
+- id: q_s5_labels_1200dpi
+  kind: reading
+  about: [s5c_v_max, s5b_v_max, s5b_p_max, s5b_p_min, s5c_p_max, s5c_p_min, q_s5_labels, q_s5_vmax_digits, q_outlet_velocity]
+  text: >
+    Rendered at 1200 dpi, the Fig. S5 colour-bar labels read 28 and 9.82 Pa and 29.1 mm/s (control, S5b) and 28
+    and 9.87 Pa and 72.4 mm/s (IL-1beta, S5c); the lower velocity labels read 9.39 x 10^-6 and 6.75 x 10^-5 mm/s.
+    The IL-1beta velocity maximum is 72.4, not the 22.4 first read from the 110 dpi image, so s5c_v_max was corrected
+    (a transcription error, logged in audit.md). This settles q_s5_vmax_digits for S5c: the text's 72.4 mm/s is the
+    IL-1beta colour-bar maximum, and so belongs to the treated device, as the sentence on p. 7 says ('higher ... for
+    the treated device'). It does not settle the other value: the control bar reads 29.1, not 24.1, so the text's
+    24.1 mm/s appears on neither bar (q_outlet_velocity remains for it).
+  citation: {page: 17, quote: "pressure and velocity heat maps of IL1 treated", where: "Fig. S5c, velocity colour bar"}
+- id: q_fig_radius_text
+  kind: reading
+  about: [diameter_range, fig3e_radius_central, fig4b_radius_median, r_vessel_added, q_diameter_radius]
+  text: >
+    Read with calibration, the central lines of Fig. 3e (radius axis) are about 22, 35 and 35 um for Networks 1-3,
+    with whiskers from about 10-14 um to 40-88 um, and the dashed lines of Fig. 4b (radius axis) about 31 um
+    (control) and 27 um (IL-1beta). The text's 'diameters ranging between 20 and 40 um (Figure 3e)' matches the radius
+    central lines, not diameters (which would be 44-70 um). This makes it likely that the text means radii (or that
+    both figures are labelled radius but plot diameters); the figures alone cannot say which. The Poiseuille checks
+    keep r_vessel_added = 15 um with the alternatives 20 and 35 um, which bracket the plotted central lines.
+  citation: {page: 5, quote: "ranging between 20 and 40 μm (Figure 3e)"}
+- id: q_fig4a_pd_values
+  kind: reading
+  about: [pd_control_printed, pd_il1b_printed, pd_control_mps, pd_il1b_mps, fig4a_pd_bars, cmp_pd_printed_vs_bars, q_pd_unit]
+  text: >
+    The Fig. 4a bars read about 4.8 x 10^-6 cm/s (control) and 35.5 x 10^-6 cm/s (IL-1beta); each equals the mean of
+    the plotted dots (13 control, 11 IL-1beta; cmp_pd_mean_vs_bars), so the bars are means. The control value of
+    Sect. 4.11, 5e-8, agrees with its bar only if read in m/s (5 x 10^-6 cm/s); the alternative 5e-10 m/s is 100
+    times smaller than the bar and smaller than every plotted control dot. This supports the m/s reading of q_pd_unit. The IL-1beta value
+    50e-8 m/s (50 x 10^-6 cm/s) is well above the IL-1beta mean bar but inside its error bar and the dots' range
+    (about 16-58 x 10^-6 cm/s): the value used for the CFD is not the plotted mean, and the paper does not say how
+    it was chosen. The verdict 'reproduced' of cmp_pd_printed_vs_bars comes from the wide error bar (unstated
+    kind), not from agreement with the bar.
+  citation: {page: 11, quote: "ability of the endothelial monolayer (control—5e-8 m2/s and IL-1β"}
+- id: q_fig_cfd_vs_beads
+  kind: unexplained_difference
+  about: [cmp_fig3f_cfd_vs_beads, cmp_fig4f_cfd_vs_beads, v_avg_network]
+  text: >
+    The validation verdicts of the CFD against the beads (Figs. 3f and 4f) are 'reproduced' only because the
+    printed interval of each bead column is its whisker range (unstated kind; the whiskers reach the outermost dots).
+    The central lines differ by more than a factor of two for control Networks 1 and 2 (CFD about 86 and 67 um/s
+    against beads about 193 and 207 um/s) and agree for Network 3 (about 189 against 176); for IL-1beta, CFD
+    about 59, 29, 26 against beads about 80, 71, 36 um/s. The paper says the CFD values are lower because they include
+    vessels the beads did not perfuse (p. 7), and that both averaged about 100 um/s; the bead central lines of the
+    control networks are nearer 200 um/s. Whether the central lines are medians or means is not said.
+  citation: {page: 7, quote: "networks from the CFD was slightly lower than the corresponding"}
+- id: q_fig4e_pressures
+  kind: unstated_input
+  about: [fig4e_control_dp, fig4e_il1b_dp, dp_head, dp_grid_printed, q_inlet_pressure_origin]
+  text: >
+    Fig. 4e, read: the grid model's pressure drop starts at about 29.4 Pa at t = 1 s (control; the IL-1beta point there is hidden behind it) and falls to
+    about 14.4 Pa (control) and 10.0 Pa (IL-1beta) at t = 7 s; at t = 5 s, the time the bead velocities were taken
+    (p. 5), it is about 19.9 Pa (control) and 12.2 Pa (IL-1beta). The text's '~18 Pa pressure drop' (Fig. S5) is
+    close to the control value at 5 s, and the S5 colour bars span about 18 Pa for both devices. None of these is the
+    39 Pa of a 4 mm head, and the readings do not show how the CFD inlet pressures (3.15/1.75 Pa control, 0.35/0.075
+    Pa IL-1beta) for the 906 um region follow from them; q_inlet_pressure_origin stays open.
+  citation: {page: 8, quote: "temporal distribution of pressure drop in the control and IL-1β treated devices"}
+- id: q_fig_wss_medians
+  kind: reading
+  about: [wss_avg_network, fig3h_wss_central, fig4g_wss_central, cmp_tau_poiseuille, q_poiseuille_order]
+  text: >
+    The dashed lines of Fig. 3h read about 0.146, 0.090 and 0.126 dyn/cm2 (control Networks 1-3), consistent with
+    the text's 'about 0.1'; those of Fig. 4g about 0.019, 0.011 and 0.027 dyn/cm2 (IL-1beta), the reduction the text
+    reports. The one-tube Poiseuille estimate (cmp_tau_poiseuille) is above every control dashed line; the
+    readings do not settle q_poiseuille_order, since the statistic of the dashed line is not stated.
+  citation: {page: 7, quote: "wall shear stress in the networks was about 0.1 dynes"}
+- id: q_fig2a_r2_line
+  kind: reading
+  about: [r2_diam_inhouse, r2_diam_muves, r2_diam_reaver, r2_linear_fit]
+  text: >
+    The three R2 values of p. 4 are reproduced from the points of Fig. 2a (7 vessels per algorithm) as the R2 of a
+    least-squares line (r2_linear_fit), which the paper does not name; this shows the printed R2 is of the fitted
+    line, not of agreement with the identity y = x. The in-house R2 depends on locating three squares that sit on
+    their own fit line (figures.md).
+  citation: {page: 4, quote: "resulting in a goodness of fit of R2 = 0.967"}
+- id: q_no_validation_campbell2011
+  kind: unstated_model
+  about: [poiseuille_tube, wss_from_velocity, kappa_from_pd, pd_dextran, forchheimer_cf, hydrostatic_head]
+  text: >
+    (Cross-record validation, pandian2025 with campbell2011.) No validation was added in either
+    direction. Neither paper cites the other. This record's models (poiseuille_tube,
+    wss_from_velocity, hydrostatic_head, pressure_range, kappa_from_pd, pd_dextran, forchheimer_cf,
+    and the processing models r2_linear_fit, group_mean_points, pd_by_group of its own figures) give
+    vessel velocities, wall shear stress, pressure drops, permeabilities and fit statistics of an
+    in vitro network perfused with culture medium; campbell2011 measures none of these. Its
+    measurements (capillary length density, diffusion radius, cardiomyocyte width, arteriolar wall
+    area and counts, body size, haemodynamics such as cardiac output, plasma VEGF) are of human
+    myocardial biopsies, and no model here outputs them. Its diffusion radius is the radius of the
+    tissue cylinder served by a capillary, not a vessel radius, so it was not mapped to
+    vessel_radius; an engineered 20-40 um network is not expected to match human tissue
+    capillaries in any case.
+# ---- Cross-record validation job: pandian2025 with kaneko2011 (2026-11-12) ----
+- id: q_no_validation_kaneko2011
+  kind: unstated_model
+  about: [poiseuille_tube, wss_from_velocity, hydrostatic_head, pressure_range, kappa_from_pd, pd_dextran, forchheimer_cf, diameter_range]
+  text: >
+    (Cross-record validation, pandian2025 with kaneko2011.) No validation was added in either
+    direction. Neither paper cites the other. This record's models give vessel velocities, wall shear
+    stress, pressure drops, permeabilities and a friction factor of an in vitro network perfused with
+    culture medium; its processing models (r2_linear_fit, group_mean_points, pd_by_group) work on this
+    paper's own figures. kaneko2011 measures none of these. Its measurements are human post-mortem
+    capillary morphometry from serial sections: capillary densities, segment lengths and their
+    histogram, arteriolar-venular distance, capillary bundle and micronecrosis axes, sinus volumes and
+    sizes, and a terminal arteriole diameter. It measures no flow, velocity, pressure or permeability.
+    Its diameters (terminal arteriole 15 um, capillary sinuses 30-50 um) could only enter
+    poiseuille_tube as an input, and kaneko2011 measures no velocity or wall shear stress to set the
+    result against. In the other direction, kaneko2011's models take a capillary density, an
+    arteriolar-venular distance, a segment-length histogram or bundle axes, none of which this paper
+    prints. An engineered 20-40 um network is in any case not expected to match human tissue
+    capillaries. See kaneko2011/q_no_validation_pandian2025.
+# ---- Cross-record validation job: pandian2025 with pandian_code (2026-11-12) ----
+- id: q_no_validation_pandian_code
+  kind: unstated_model
+  about: [poiseuille_tube, wss_from_velocity, hydrostatic_head, pressure_range, kappa_from_pd, pd_dextran, forchheimer_cf, r2_linear_fit, group_mean_points, pd_by_group, diameter_range]
+  text: >
+    (Cross-record validation, pandian2025 with pandian_code, its released code.) No validation was added in this
+    record. Its models give velocities, wall shear stress, pressure drops, permeabilities, a friction factor and
+    statistics of its own figures; the code record measures none of these (its values are settings written in the
+    code, the sample stack's tags and the sample network's geometry, which its own models compute), and its one
+    measured datum is a copy of this record's diameter_range. The paper's CFD, which would predict the sample's flow,
+    is not runnable (q_cfd_not_runnable). In the other direction pandian_code/sample_network, run on the released
+    sample, is judged against diameter_range (pandian_code/val_D_median_vs_paper_range,
+    val_D_mean_lw_vs_paper_range; pandian_code/q_validation_pandian2025, which also bears on q_fig_radius_text).
+  citation: {none: "a finding of the validation job between pandian2025 and pandian_code, not a printed statement"}
+  citation: {none: "a finding of the validation job between pandian2025 and kaneko2011, not a printed statement"}
+# ---- Cross-record validation job: pandian2025 with pries1992 (2026-11-12) ----
+- id: q_no_validation_pries1992
+  kind: unstated_model
+  about: [poiseuille_tube, wss_from_velocity, hydrostatic_head, pressure_range, kappa_from_pd, pd_dextran, forchheimer_cf, r2_linear_fit, group_mean_points, pd_by_group, mu_media, mu_endo_printed]
+  text: >
+    (Cross-record validation, pandian2025 with pries1992.) No validation was added in either direction.
+    Neither paper cites the other (refs. 32 and 33, cited for the assumed 3e-3 'similar to that of whole
+    blood', are the authors' own vein papers). pries1992 measures only the relative apparent viscosity of
+    blood in glass tubes (Figs. 2, 3, 5 and the text values ~3.2 and ~1.25 at Hct_D 0.45) and the tube
+    diameter of that minimum; no model here outputs a relative apparent viscosity: poiseuille_tube and
+    wss_from_velocity take a viscosity as an input and give a velocity or a wall shear stress, which
+    pries1992 does not measure. In the other direction the pries1992 laws (Eqs. 2-10) give blood viscosity
+    and hematocrits as functions of hematocrit and tube diameter; this network is perfused with cell-free
+    culture medium, for which Eq. 7 reduces to eta_rel = 1 at Hct_D = 0 and predicts nothing measured here
+    (the paper measures no viscosity; mu_media and mu_endo_printed are assumed values, and the latter is an
+    endothelial-layer parameter, not a blood viscosity). Running Eq. 7 at the 20-40 um diameters with an
+    assumed hematocrit would set a law against an assumption, not against a measurement.
+  citation: {none: "a finding of the validation job between pandian2025 and pries1992, not a printed statement"}
+# ---- Cross-record validation job: pandian2025 with pries2005 (2026-11-12) ----
+- id: q_no_validation_pries2005
+  kind: unstated_model
+  about: [poiseuille_tube, wss_from_velocity, hydrostatic_head, pressure_range, kappa_from_pd, pd_dextran, forchheimer_cf, r2_linear_fit, group_mean_points, pd_by_group, diameter_range, fig3e_radius_central, fig4b_radius_median, fig3f_expt_central, fig4a_pd_bars]
+  text: >
+    (Cross-record validation, pandian2025 with pries2005.) No validation was added in either direction.
+    Neither paper cites the other, and this paper does not discuss an endothelial surface layer or blood
+    rheology. pries2005's one measurement is the rat-mesentery vessel-diameter distribution of its Fig. 2
+    (pries2005/diameter_percentiles_fig); no model here gives a diameter distribution (r2_linear_fit and
+    group_mean_points summarize this paper's own figures, the others give velocities, shear stress,
+    pressures, permeabilities or C_f). In the other direction the pries2005 laws output blood viscosities
+    (vitro_viscosity, vivo_viscosity), ESL thicknesses (esl_thickness and the Discussion arithmetic), HT/HD
+    ratios and diameters of viscosity or Weff extrema; this network is perfused with cell-free culture medium
+    (no hematocrit, no measured viscosity: mu_media is assumed), so the viscosity and Fahraeus laws predict
+    nothing measured here. The endothelial layer of this CFD model is a porous monolayer whose thickness is
+    not printed (q_cfd_not_runnable), not the in vivo glycocalyx Weff/Wph of pries2005, and nothing measures
+    it. The measured diameters (diameter_range, Figs. 2a, 3e, 4b) and bead velocities (Figs. 3f, 4c, 4f) and
+    the dextran P_D (Fig. 4a) are predicted by no pries2005 model, and an engineered 20-40 um network is not
+    expected to match rat mesentery.
+  citation: {none: "a finding of the validation job between pandian2025 and pries2005, not a printed statement"}
+# ---- Cross-record validation job: pandian2025 with rakusan1992 (2026-11-12) ----
+- id: q_no_validation_rakusan1992
+  kind: unstated_model
+  about: [poiseuille_tube, wss_from_velocity, hydrostatic_head, pressure_range, kappa_from_pd, pd_dextran, forchheimer_cf, r2_linear_fit, group_mean_points, pd_by_group, diameter_range, fig3e_radius_central, fig4b_radius_median]
+  text: >
+    (Cross-record validation, pandian2025 with rakusan1992.) No validation was added in either direction.
+    Neither paper cites the other. This record's models give vessel velocities, wall shear stress, pressure
+    drops, permeabilities, a Forchheimer friction factor and statistics of this paper's own figures, for an
+    in vitro HUVEC + fibroblast network in fibrin perfused with culture medium; rakusan1992 measures none of
+    these. Its measurements are human (and, in Table 1, rat) post-mortem left-ventricular morphometry in
+    transverse section: capillary density, myocyte density, myocyte/capillary ratio, capillary domain area
+    and radius, the log-SD of domain radii, myocyte area fraction, heart and body weight and body surface
+    area. No model here outputs any of them. Its capillary domain radius is the radius of the tissue
+    cylinder a capillary supplies, not a vessel radius, so it was not mapped to vessel_radius. In the other
+    direction rakusan1992's models take a capillary density, a domain area, a myocyte density or a heart
+    weight, none of which this paper prints (the vessel length per volume of the released sample is in
+    pandian_code, from one trimmed test stack of a 3D random network, not a count of oriented capillaries
+    per transverse section area). An engineered 20-40 um network is in any case not expected to match human
+    myocardial capillaries. See rakusan1992/q_no_validation_vs_pandian2025.
+  citation: {none: "a finding of the validation job between pandian2025 and rakusan1992, not a printed statement"}
