@@ -1,0 +1,19 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_diffusion_radius_krogh
+  kind: same_as
+  a: rakusan1992/krogh_radius
+  b: campbell2011/diffusion_radius
+  mapping: {Lv: "CD"}
+  output_map: {R: R}
+  regime: {CD: [500, 6000]}
+  provenance: proposed
+  reason: >
+    Both give the radius of the circle whose area is the tissue area per capillary, R = 1/sqrt(pi n),
+    in um from n in 1/mm^2: Rakusan from the capillary profile density CD counted in transverse
+    section (p. 3, "The average radius of the Krogh tissue cylinder was calculated from the capillary
+    density"), Campbell from the capillary length density Lv (Supplement p. 12, after its ref. S8).
+    Campbell cites Rakusan (ref. 23) only on the role of cardiomyocyte size in diffusion radius, not
+    for the formula. The relation joins the forms only: Lv and CD are different quantities, equal
+    only when all capillaries run perpendicular to the section (for isotropic capillaries Lv = 2 CD),
+    so the two papers' radii are not directly comparable. Regime covers the adult and infant
+    densities in Rakusan's Figs. 2-3 and Campbell's Table 2 length densities.

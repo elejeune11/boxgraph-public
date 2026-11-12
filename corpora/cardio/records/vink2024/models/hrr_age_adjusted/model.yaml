@@ -1,0 +1,14 @@
+id: hrr_age_adjusted
+name: heart rate reserve adjusted for age
+role: model
+stated: {page: 3, printed_page: "3", quote: "age using the formula (maximum heart rate-resting heart rate/age", where: "2.5 Dobutamine-induced stress"}
+equation: "(maximum heart rate-resting heart rate/age predicted maximum heart rate-resting heart rate) x100, read as 100 (HRmax - HRrest)/(HRpred - HRrest), with HRpred = f (220 - age)"
+inputs:
+  HRmax: {quantity: heart_rate, unit: 1/min}
+  HRrest: {quantity: heart_rate, unit: 1/min}
+  age: {quantity: age, unit: yr}
+  f: {quantity: max_heart_rate_factor, unit: dimensionless, description: "1 for the usual age-predicted maximum 220 - age; 0.85 for the supplement's 'maximal heart rate' endpoint ((220-age) x 0,85)"}
+outputs:
+  HRRadj: {quantity: heart_rate_reserve_age_adjusted, unit: percent}
+settings: {}
+stochastic: false

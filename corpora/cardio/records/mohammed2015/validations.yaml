@@ -1,0 +1,87 @@
+# Capillary profiles per mm2 of transverse section of the human LV, set beside other papers' values.
+# The schema requires purpose 'validation' here, but these are like-with-like consistency checks
+# between measurements made by different methods, not tests of a model: differences are findings
+# (see questions q_capd_methods and q_capd_vs_literature).
+
+- id: val_capd_c_rakusan_adult
+  model: same_density
+  inputs: {x: capd_c_med}
+  output: y
+  against: rakusan1992/cd_adu_c
+  purpose: validation
+  quantities: {rakusan1992/capillary_density: capillary_density}
+  conditions_ok: >
+    Both count capillary profiles per mm2 of LV cross section in human hearts without cardiac disease, but
+    rakusan1992's adults are 15-30 y (n = 8, mean +/- SEM, histological counts) and this paper's controls
+    are elderly autopsy subjects (age at death 74 (61-85) y, n = 104, median, automated CD31 detection of
+    profiles of 10-78.5 um2 in 4 um formalin-fixed paraffin sections, whatever the fibre orientation).
+  basis: the same quantity in normal adult human LV myocardium; a large gap measures the effect of method and age, not an error
+
+- id: val_capd_c_rakusan_mammals
+  model: same_density
+  inputs: {x: capd_c_med}
+  output: y
+  against: rakusan1992/cd_range_mammals
+  purpose: validation
+  quantities: {rakusan1992/capillary_density: capillary_density}
+  conditions_ok: >
+    rakusan1992's 2,000-4,000 capillary profiles per mm2 is the range it gives for all adult mammalian hearts
+    studied; this paper's value is the median of elderly human controls by automated CD31 detection.
+  basis: a normal adult capillary density should fall inside the range stated for adult mammalian hearts
+
+- id: val_capd_c_kaneko
+  model: same_density
+  inputs: {x: capd_c_med}
+  output: y
+  against: kaneko2011/density_mid
+  purpose: validation
+  quantities: {kaneko2011/capillary_density: capillary_density}
+  conditions_ok: >
+    kaneko2011 counts capillary profiles in transverse sections of one 3D-reconstructed human LV (upper
+    middle layer, midpoint of the arteriole-to-venule path, mean +/- SD over 3 positions, formalin-fixed
+    paraffin tissue); this paper's value is the median over 104 elderly autopsy controls, all wall layers.
+  basis: the same quantity in normal adult human LV myocardium
+
+- id: val_capd_h_rakusan_acquired_as
+  model: same_density
+  inputs: {x: capd_h_med}
+  output: y
+  against: rakusan1992/cd_acq
+  purpose: validation
+  quantities: {rakusan1992/capillary_density: capillary_density}
+  conditions_ok: >
+    Both are hypertrophied hearts of older adults: rakusan1992's acquired aortic stenosis (51-86 y, heart
+    weight 634 +/- 49 g, n = 13, mean +/- SEM) and this paper's HFpEF (age at death 78 (68-85) y, heart weight
+    538 (440-659) g, 169% of expected, n = 124, median); the causes of hypertrophy and the methods differ.
+  basis: the same quantity in hypertrophied elderly human LV myocardium; a density in hypertrophy is not a normal value
+
+# ---- Validation job kaneko2011+mohammed2015 (2026-11-11) ----
+# val_capd_c_kaneko above sets the control median beside kaneko2011's mid-path density only. kaneko2011 measures
+# the same quantity at two more positions of the same arteriole-to-venule path; which one (or none) stands for
+# a whole-wall section count is open (q_kaneko_path_position), so each is entered.
+- id: val_capd_c_kaneko_art
+  model: same_density
+  inputs: {x: capd_c_med}
+  output: y
+  against: kaneko2011/density_art
+  purpose: validation
+  quantities: {kaneko2011/capillary_density: capillary_density}
+  conditions_ok: >
+    kaneko2011 counts capillary profiles per mm2 in transverse sections of one 3D-reconstructed LV (a man of 60,
+    320 g heart, normal coronaries; upper middle layer, three counting points on the arteriolar side of one
+    arteriole-to-venule path; mean +/- SD; formalin-fixed paraffin tissue, no shrinkage correction). This paper's
+    value is the median over 104 elderly autopsy controls (74 (61-85) y) by automated CD31 detection of 10-78.5
+    um2 profiles in one transmural 4 um section, whatever the fibre orientation. Both are capillary profiles per
+    mm2 of section in hearts without cardiac disease; method, sampling and n differ.
+  basis: the same quantity in normal adult human LV myocardium (a consistency check through an identity, not a model test; neither paper cites the other)
+
+- id: val_capd_c_kaneko_ven
+  model: same_density
+  inputs: {x: capd_c_med}
+  output: y
+  against: kaneko2011/density_ven
+  purpose: validation
+  quantities: {kaneko2011/capillary_density: capillary_density}
+  conditions_ok: >
+    As val_capd_c_kaneko_art, but kaneko2011's three counting points on the venular side of the same path.
+  basis: the same quantity in normal adult human LV myocardium (a consistency check through an identity, not a model test; neither paper cites the other)

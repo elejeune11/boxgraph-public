@@ -1,0 +1,33 @@
+- id: run_area_art
+  model: capillary_tissue_area
+  inputs: {N: density_art}
+  outputs: {A: area_art_pred}
+- id: run_area_mid
+  model: capillary_tissue_area
+  inputs: {N: density_mid}
+  outputs: {A: area_mid_pred}
+- id: run_area_ven
+  model: capillary_tissue_area
+  inputs: {N: density_ven}
+  outputs: {A: area_ven_pred}
+- id: run_area_rat_batra
+  model: capillary_tissue_area
+  inputs: {N: density_rat_batra}
+  outputs: {A: area_rat_batra_pred}
+- id: run_twice_av
+  model: twice_av_distance
+  inputs: {d_av: av_distance}
+  outputs: {L_unit: unit_length_pred, L_necrosis: necrosis_length_pred}
+- id: run_necrosis_bundle
+  model: necrosis_equals_bundle
+  inputs: {a_major: bundle_major, a_minor: bundle_minor}
+  outputs: {n_major: necrosis_major_pred, n_minor: necrosis_minor_pred}
+- id: run_fig3_stats
+  model: histogram_stats
+  inputs: {H: seg_len_hist_fig3}
+  outputs: {n: seg_count_fig3_pred, mean: seg_len_mean_fig3_pred, sd: seg_len_sd_fig3_pred}
+  note: "count, mean and SD of the Fig. 3 bars, each segment placed at its bin midpoint"
+- id: run_stack
+  model: serial_section_stack
+  inputs: {n: n_sections, t: section_thickness_6um}
+  outputs: {T: block_thickness_pred}

@@ -1,0 +1,349 @@
+- id: q_mbv_not_runnable
+  kind: unstated_input
+  about: [mbv_from_plateau]
+  text: >-
+    MBV is computed per ROI as the plateau A of y = A (1 - e^(-beta t)) over the plateau of the adjacent LV cavity,
+    then averaged over all myocardial ROIs. No intensity curve, plateau or per-ROI MBV is printed, so none of the
+    printed MBV values can be recomputed; the model is recorded but cannot be run.
+  citation: {page: 3, printed_page: "3", quote: "MBV as the ratio of plateau signal intensity in the myocardium (A) to", where: "2.3"}
+
+- id: q_chest_discomfort_pct
+  kind: possible_error
+  about: [t2_chest_tot_n, t2_chest_tot_pct, cmp_t2_chest_tot_pct, cmp_t2_chest_sum]
+  text: >-
+    Table 2 prints chest discomfort as "23 (39.3)" for the 28 patients. 23/28 is 82.1%; 39.3% is 11/28. The count is
+    the one that fits the other columns (women 17 (77.3) + men 6 (100) = 23), so the percentage looks misprinted
+    (possibly copied from the microvascular spasm row, 11 (39.3)). Recorded as printed.
+  citation: {page: 4, printed_page: "4", quote: "Chest discomfort, % 23 (39.3) 17 (77.3) 6 (100)", where: "Table 2"}
+
+- id: q_roi_percentages
+  kind: unexplained_difference
+  about: [roi_total, roi_excl_a_pct, roi_excl_c_pct, cmp_roi_excl_a_pct, cmp_roi_excl_c_pct]
+  text: >-
+    "Out of 10.033 ROIs ..., 255 (4.65%) frames in ANOCA patients and 274 (4.94%) frames in healthy controls were
+    excluded". Over the 10033 ROIs these are 2.54% and 2.73%. The printed percentages imply per-group totals of
+    about 5484 and 5547 ROIs, which add up to about 11031, not 10033 (nor 10562 = 10033 + 255 + 274, if 10033 counted
+    only the ROIs kept). The per-group totals are not printed, and the sentence mixes "ROIs" and "frames", so the
+    denominators cannot be found.
+  citation: {page: 3, printed_page: "3", quote: "Out of 10.033 ROIs set on MCE frames, 255 (4.65%) frames in", where: "3.2"}
+
+- id: q_missing_denominator
+  kind: reading
+  about: [mbv_miss_base, mbv_miss_ins, mbv_miss_dob, missing_percent]
+  text: >-
+    The "missing" percentages of MBV values (1.8%, 3.7%, 7.7%) are the missing counts over the values obtained
+    (1/55, 2/54, 4/52), not over the 56 participants (1.8%, 3.6%, 7.1%). Both readings are run. The
+    over-56 comparisons pass for hyperinsulinemia and stress only because the build lets each printed count vary by
+    half a unit, which a count of participants cannot do; at the printed counts they miss (3.57 vs 3.7, 7.14 vs 7.7).
+    The over-obtained reading matches all three exactly.
+  citation: {page: 3, printed_page: "3", quote: "hyperinsulinemia MCE (missing 3.7%) and 52 during dobutamine", where: "3.2"}
+
+- id: q_platelet_total
+  kind: unexplained_difference
+  about: [t1_plt_tot_m, t1_plt_tot_s, cmp_t1_plt_m, cmp_t1_plt_s]
+  text: >-
+    Table 1's Total thrombocyte count, 232.3 ± 47.2, does not follow from its two columns (246.7 ± 53.4 and 220.2 ±
+    38.4, 28 each): pooled they give 233.45 ± 47.98. All the other Total means and SDs of Table 1 do follow. Missing
+    values in one group would explain it, but Table 1 states no n per row.
+  citation: {page: 4, printed_page: "4", quote: "Thrombocyte, x103 232.3 ± 246.7 ± 220.2 ±", where: "Table 1"}
+
+- id: q_ef_sd
+  kind: unexplained_difference
+  about: [t1_ef_a_s, t2_ef_tot_s, t2_ef_tot_m, cmp_t1t2_ef_s, cmp_t2_ef_m]
+  text: >-
+    The same 28 patients have an ejection fraction of 62.4 ± 5.6% in Table 1 and 62.4 ± 5.5% in Table 2. Pooling
+    Table 2's women (62.3 ± 5.9, n = 22) and men (62.5 ± 4.6, n = 6) gives 62.34 ± 5.57, which fits Table 1's SD
+    and is close to, not equal to, the printed mean. One of the two SDs is likely a rounding or transcription slip.
+    Likewise Table 2's resting heart rate (77.1) and CFR (2.87) are 0.07 and 0.008 above the pooled values (77.03,
+    2.862): they pass only through the input rounding the build allows.
+  citation: {page: 4, printed_page: "4", quote: "Ejection fraction, % 62.4 ± 5.5 62.3 ± 5.9 62.5 ± 4.6", where: "Table 2"}
+
+- id: q_total_cholesterol_median
+  kind: possible_error
+  about: [t1_tc_tot_med, t1_tc_tot_q1, t1_tc_a_med, t1_tc_c_med]
+  text: >-
+    Table 1's Total median total cholesterol is 4.1 mmol/L with IQR [4.6–5.8]: the median lies below its own first
+    quartile. It is also below both group medians (4.45 and 5.2), which the median of the union of two groups cannot
+    be. Not run as a model (the check is an inequality, not a computed value); recorded here.
+  citation: {page: 4, printed_page: "4", quote: "Total cholesterol, 4.1 4.45 5.2 0.011", where: "Table 1"}
+
+- id: q_cft_overlap
+  kind: unexplained_difference
+  about: [txt_dysfunction_n, txt_epi_n, txt_mvs_n, txt_cmd_n, txt_both_n, t2_mva_tot_n]
+  text: >-
+    3.3 says 16 of the 28 patients had coronary vasomotor dysfunction. From 3.1, epicardial spasm 3 + microvascular
+    spasm 11 + CMD 7 - 4 with both microvascular spasm and CMD = 17, unless one patient with epicardial spasm also
+    had CMD or microvascular spasm; the paper does not say. (Microvascular angina 14 = 11 + 7 - 4 does fit.) Also
+    16 + 9 inconclusive + 3 negative = 28 holds, which leaves no room for 17.
+  citation: {page: 4, printed_page: "4", quote: "As described above, 16 out of 28 ANOCA patients were diagnosed", where: "3.3"}
+
+- id: q_hrr_age_adjusted
+  kind: unexplained_difference
+  about: [hrr_age_adjusted, hrradj_a_med, cmp_hrradj_a_220, cmp_hrradj_a_085, hrmax_factor_added]
+  text: >-
+    The age-adjusted heart rate reserve is printed as a median of 100.0% [69.4–118.9] in patients. The formula of
+    2.5 on Table 2's means (max 132.2, rest 77.1, age 56.8) gives 64% with the usual age-predicted maximum 220 - age,
+    and 89% with the supplement's maximal heart rate 0.85 (220 - age). A median of 100% means half the patients
+    reached at least their predicted maximum, while the mean peak heart rate (132.2) is 31 beats below 220 - age.
+    A median of ratios need not equal the ratio of means, but not by this much. The formula as printed,
+    "(maximum heart rate-resting heart rate/age predicted maximum heart rate-resting heart rate) x100", has no
+    parentheses around the differences and does not say which age-predicted maximum was used.
+  citation: {page: 3, printed_page: "3", quote: "age using the formula (maximum heart rate-resting heart rate/age", where: "2.5"}
+
+- id: q_hrr_controls
+  kind: unstated_input
+  about: [hrradj_c_med, hrr_c_m]
+  text: >-
+    No heart rates or ages are printed for the controls' dobutamine test (Table 2 covers patients only), so neither
+    their heart rate reserve (67.1) nor their age-adjusted reserve (107.2) can be recomputed. For the patients the
+    difference of the mean heart rates, 55.1, is close to but not the printed 54.8: likely the patients who did not
+    complete the test enter one mean and not the other.
+  citation: {page: 5, printed_page: "5", quote: "(54.8 BPM ± 21.6 vs. 67.1 BPM ± 11.9, respectively p = 0.018)", where: "3.5"}
+
+- id: q_ratio_medians
+  kind: reading
+  about: [cmp_mvr_ins_a, cmp_mvr_ins_c, cmp_mvr_dob_a, cmp_mvr_dob_c, cmp_fold_ins_a, cmp_fold_ins_c, cmp_fold_dob_a, cmp_fold_dob_c]
+  text: >-
+    MVR and fold MBF are printed as medians of per-participant ratios; only group means of MBV and MBF are printed, so
+    the record compares the ratio of the means (an approximation). For MVR the two differ by 0.5-3% (e.g. 1.018 vs
+    0.992 for insulin in patients). For the controls' fold MBF they differ by about 10% (1.068 vs 0.972 with insulin,
+    1.194 vs 1.077 with dobutamine): the controls' MBF ratios must be strongly skewed, or the MBF means include
+    participants without a ratio. Not an error; the medians cannot be checked from what is printed.
+  citation: {page: 11, printed_page: "S3", quote: "MBF, ratio baseline-dobutamine, 0.867 [0.524-1.121] 1.077 [0.855-1.517] 0.030", where: "Supplemental Table 3"}
+
+- id: q_mbv_magnitude
+  kind: unexplained_difference
+  about: [cmp_mbv_from_content_ctrl, mbv_base_c_m, cbv_content, micro_share, myocardial_blood_volume, tissue_density_added]
+  text: >-
+    The paper defines MBV as "the total blood content within the microcirculation" and cites about 12 mL of blood
+    per 100 g of myocardium, about 90% of it in the microcirculation. With a density of 1.05 g/mL (added; 1.0-1.06
+    changes little) that is 0.11 mL/mL, while the MBV it reports is 0.39-0.48 mL/mL, four times more. The MCE MBV is
+    an intensity ratio A/A_LV, called "relative myocardial blood volume" in 4; the unit mL/mL treats the LV cavity
+    signal as 1 mL of blood per mL, which holds only if the intensity is linear in bubble concentration and the
+    myocardial and cavity signals are attenuated alike. The paper does not discuss the gap. The cited 12 mL/100 g
+    itself agrees with spaan1981's 10-15% (validations.yaml).
+  citation: {page: 6, printed_page: "6", quote: "The coronary circulation contains about 12 mL of blood per 100 g of", where: "4.1"}
+
+- id: q_mbf_formula
+  kind: unstated_model
+  about: [myocardial_blood_flow, s3_mbf_base_a_m, mbv_from_plateau]
+  text: >-
+    MBF is reported in mL/min/g (Supplemental Table 3; 3.4) but the paper gives no formula for it: 2.3 only says beta
+    "represents the myocardial blood flow velocity (s^-1)" and cites Vogel et al. (ref. 5), whose MBF is rBV x beta /
+    tissue density. The values (30-43 mL/min/g) are about thirty times usual human myocardial blood flow (about 1
+    mL/min/g at rest), so they cannot be absolute flows in mL/min/g; with MBV ~0.4 they would need beta near 1.4/s
+    and no conversion. Supplemental Fig. 5A labels the same quantity "MBF (dB/sec)", i.e. A x beta in acoustic units
+    (see q_mbf_unit).
+  citation: {page: 2, printed_page: "2", quote: "and β is the rate of signal intensity increase that represents the", where: "2.3"}
+
+- id: q_mbf_unit
+  kind: possible_error
+  about: [myocardial_blood_flow, s3_mbf_base_a_m, s3_mbf_dob_a_m, txt_mbf_dob_a_m]
+  text: >-
+    MBF is printed in "ml/min/g" in Supplemental Table 3 and "mL/min/g" in 3.4, while the axis of Supplemental Fig.
+    5A, which shows the same means (about 34, 36, 32, 39, 30, 43), reads "MBF (dB/sec)". The two units are not
+    convertible. The values are recorded in mL/min/g as printed in the table and text.
+  citation: {page: 11, printed_page: "S3", quote: "Myocardial Blood Flow (ml/min/g)", where: "Supplemental Table 3; Supplemental Fig. 5A"}
+
+- id: q_mvalue_unit
+  kind: possible_error
+  about: [mval_a_med, mval_c_med, disc_mval_a, disc_mval_c]
+  text: >-
+    The M-value is printed in "mol/kg/min" in 3.5 and 4.1, but in "μmol/kg/min" in 2.4 and on the axis of Fig. 3B.
+    A glucose uptake of 37-69 mol/kg/min is impossible; the μ was likely lost. Recorded in mol/kg/min as printed.
+    Fig. 3's caption also says its data are mean ± SD, while 3.5 gives the M-value as median [IQR].
+  citation: {page: 5, printed_page: "5", quote: "healthy controls (36.8 mol/kg/min [32.2–44.3] vs 69.1 mol/kg/min", where: "3.5"}
+
+- id: q_fig2b_legend
+  kind: possible_error
+  about: [txt_epi_n, t2_epi_tot_n]
+  text: >-
+    The legend of Fig. 2B reads "Epicardial spasm (n=11)", but 3 patients had epicardial spasm (Table 2; 3.1);
+    11 is the number with microvascular spasm. Supplemental Fig. 6 shows a single point for the epicardial spasm
+    group. Which patients the epicardial-spasm bars of Fig. 2B average is therefore unclear.
+  citation: {page: 5, printed_page: "5", quote: "B) Comparison among different ANOCA entities", where: "Fig. 2B"}
+
+- id: q_sfig6_p
+  kind: possible_error
+  about: [mval_a_med]
+  text: >-
+    3.5 gives p = 0.790 for the M-value among ANOCA entities; Supplemental Fig. 6, which it cites, prints P = 0.709.
+    The digits look transposed in one of the two.
+  citation: {page: 5, printed_page: "5", quote: "tween the ANOCA entities (p = 0.790)", where: "3.5; Supplemental Fig. 6"}
+
+- id: q_figure_labels
+  kind: reading
+  about: [s3_mbf_dob_a_m, mvr_ins_a_med, hrr_a_m]
+  text: >-
+    Small label slips, recorded for the reader: 4.2 cites "Supplemental Fig. 3A" and "3C" for MBF, which is in
+    Supplemental Fig. 5 (Supplemental Fig. 3 is MBV per territory); Fig. 3's caption calls its third panel "D)";
+    Supplemental Fig. 3's caption labels the circumflex panel "B)" (it is C); Supplemental Table 3's abbreviation
+    line expands MBF as "Myocardial Blood Volume"; the MVR interval for stress in patients lacks its closing bracket.
+  citation: {page: 6, printed_page: "6", quote: "induced stress between ANOCA patients and matched healthy controls", where: "4.2"}
+
+- id: q_no_corpus_mbv_model
+  kind: choice
+  about: [myocardial_blood_volume, mbv_base_c_m, mbv_base_a_m]
+  text: >-
+    (Batch 10.) No model in the corpus predicts this paper's MBV under matching conditions. spaan1981 computes a
+    capillary volume fraction (0.068, from 3500 capillaries/mm2 and 5 um diameter) and a capillary + small-artery
+    fraction (0.091) for the dog; kassab1993 and kaneko2011 give vessel volumes and capillary geometry; rakusan1992,
+    campbell2011 and mohammed2015 give human capillary densities, from which a capillary volume fraction could be
+    computed (density x pi d^2 / 4) but none of them states it. Against any of these the MCE MBV (0.39-0.48) is four
+    to six times larger (see q_mbv_magnitude): it is an acoustic ratio, end-systolic and relative to the LV cavity,
+    not a morphometric volume, so a validation would test the MCE calibration rather than a model. The only
+    cross-record check entered is the Discussion's cited 12 mL/100 g against spaan1981's dye-dilution 10-15%.
+    The paper gives no MBV, MBF or MVR by sex, so its sex breakdown (22 women, 6 men per group) cannot be used.
+
+- id: q_perfused_capillaries_mbv
+  kind: reading
+  about: [perfused_capillary_share, cbv_content, micro_share, mbv_base_c_m, q_mbv_magnitude, q_no_corpus_mbv_model]
+  text: >-
+    (Audit.) 4.1 also states, citing ref. 22 (a review), that at rest "around half of the capillaries in the myocardium
+    are simultaneously filled with blood", so the MCE MBV at rest would see roughly half the morphometric capillary
+    volume, and recruitment could at most double it. Both points widen rather than close the gap of q_mbv_magnitude:
+    a capillary volume fraction from rakusan1992, kaneko2011, campbell2011 or mohammed2015 (fixed tissue, all
+    capillaries counted) would have to be halved before it is set against MBV at rest (0.39-0.44 mL/mL), and the
+    printed MVR medians near 1 show no such recruitment. The statement is recorded (perfused_capillary_share) but
+    not run: it is given in words and from a review, and no corpus model predicts a perfused fraction.
+  citation: {page: 6, printed_page: "6", quote: "around half of the capillaries in the myocardium are", where: "4.1"}
+  citation: {page: 2, printed_page: "2", quote: "passing the total blood content within the microcirculation, determines", where: "1. Introduction"}
+
+# ---- figure pass (2026-11-11): calibrated readings, figures.yaml and figures.md ----
+- id: q_fig_vs_text_precision
+  kind: reading
+  about: [cmp_fig2a_a_means, cmp_fig2a_c_means, cmp_fig3c_c_mean, cmp_sfig5a_a_means, cmp_sfig5a_c_means, q_mbf_unit]
+  text: >-
+    The figure-vs-text checks judge a bar read from a figure against the printed mean at the printed precision (three
+    decimals), so they come out "close" (Fig. 2A, Fig. 3C controls) or "not reproduced" (Suppl. Fig. 5A) although every
+    printed mean lies inside the reading's own interval: Fig. 2A's six bars, Fig. 3C's two and Suppl. Fig. 5A's six bars
+    agree with 3.2, 3.5 and Supplemental Table 3. The SD error bars also span mean ± the printed SD. The verdicts are
+    the reading's precision, not a disagreement between figure and text. For q_mbf_unit, Suppl. Fig. 5A plots the
+    table's numbers under the axis label "dB/sec": the figure and table hold the same values, and the figure cannot
+    say which unit is meant.
+
+- id: q_fig2b_entities
+  kind: possible_error
+  about: [fig2b_epi_fig, fig2b_mva_fig, sfig6_epi_fig, q_fig2b_legend]
+  text: >-
+    Read from the image, the "Epicardial spasm (n=11)" bars of Fig. 2B carry two dots at baseline and stress and one
+    at insulin, which has no error bar; Suppl. Fig. 6 shows one dot. This matches the 3 patients with epicardial spasm
+    of Table 2 and 3.1, not 11, which supports q_fig2b_legend. Also, the epicardial-spasm and microvascular-angina bars
+    have the same height at baseline (both 0.373 read) and at stress (both 0.400 read), within 2 px, although their
+    dots and error bars differ. A two-for-two coincidence of group means is possible but unlikely, so a bar of one
+    group may have been plotted with the other's mean.
+  citation: {page: 5, printed_page: "5", quote: "Comparison among different ANOCA entities", where: "Fig. 2B"}
+
+- id: q_scatter_fused
+  kind: reading
+  about: [cmp_r_sfig7a, cmp_r_sfig7b, cmp_r_sfig8a, cmp_r_sfig8b, sfig7a_anoca, sfig7a_control, sfig7b_anoca, sfig7b_control, sfig8a_anoca, sfig8a_control, sfig8b_anoca, sfig8b_control]
+  text: >-
+    In Suppl. Figs. 7-8, red dots overlap one another and cover blue triangles. The reading counts fused markers from
+    their area and splits them, but dense chains are under-counted and covered triangles are lost: it finds 47 (7A),
+    51 (7B), 43 (8A) and 43 (8B) markers. Only about 54 MBV values per state exist, and fewer M-values or HRRs may be
+    plotted, so the true counts are unknown. The r of the read points differs from the printed r by 0.03-0.04 in each
+    panel (not reproduced). That is the size of error the missing markers can cause, so these four verdicts test the
+    reading, not the paper. Where markers stand apart (Suppl. Fig. 4, 21 markers; Suppl. Fig. 2, 54 rings), the printed
+    r and R2 are reproduced.
+  citation: {page: 3, printed_page: "3", quote: "Pearson’s correlation tested the", where: "2.6; Suppl. Figs. 7-8"}
+
+- id: q_sfig2_line
+  kind: overstated_claim
+  about: [cmp_sfig2_identity, cmp_sfig2_ols, sfig2_line_fig, identity_line, ols_line]
+  text: >-
+    The caption of Suppl. Fig. 2 says "The diagonal line indicates perfect agreement between the two observers". The
+    line drawn is not y = x: it passes about 0.27 at observer-2 MBV 0.20 and about 0.68 at 0.70, a slope of about 0.8
+    (cmp_sfig2_identity not reproduced). It is the least-squares line through the plotted rings (cmp_sfig2_ols
+    reproduced at both ends), the fit the legend's "R2 Linear = 0,690" labels. The scatter about the line therefore
+    shows the residual about the fit, not the disagreement between observers. Points with a slope below 1 mean
+    observer 1 reads high MBV lower than observer 2, which the caption does not mention.
+  citation: {page: 13, printed_page: "S5", quote: "The diagonal line indicates perfect", where: "Supplemental Fig. 2 caption"}
+
+- id: q_territory_weights
+  kind: choice
+  about: [territory_mean, cmp_terr_mean_a, cmp_terr_mean_c, sfig3a_anoca, sfig3c_control]
+  text: >-
+    MBV of the whole myocardium is the mean over all myocardial ROIs (2.3); the paper does not give how many ROIs fall
+    in each coronary territory (Suppl. Fig. 1 maps segments to territories). The record compares the whole-myocardium
+    means with an equal-weight mean of the three territory bars of Suppl. Fig. 3. For ANOCA the mean is about 0.004
+    below the printed means at all three states. For controls it matches at baseline and insulin within 0.007, but at
+    stress it is 0.504 against 0.476. With LAD segments weighted more, as on a 17-segment map, the stress value would
+    rise further. Missing territory values, which drop a participant from one territory's mean but not from the
+    overall mean, could explain the gap. The weights are a choice; the gap is a finding of the figure, not settled.
+  citation: {page: 3, printed_page: "3", quote: "myocardium by averaging all myocardial ROI’s, and for the individual", where: "2.3"}
+
+- id: q_fig3_means
+  kind: reading
+  about: [fig3a_anoca_fig, fig3a_control_fig, fig3b_anoca_fig, fig3b_control_fig, sfig5b_anoca_fig, sfig5b_control_fig, q_ratio_medians, q_mvalue_unit]
+  text: >-
+    Fig. 3A-B and Suppl. Fig. 5B plot means ± SD, as their captions say, while the text prints medians [IQR]. Read
+    means are 38.7 and 64.8 μmol/kg/min for the M-value, against medians of 36.8 and 69.1. The figures thus confirm
+    that caption and text report different statistics (q_mvalue_unit), not a misprint. The plotted mean MVRs (1.04,
+    1.04; 1.06, 1.14) exceed the ratios of the plotted mean MBVs (1.02, 1.02; 1.03, 1.09), as a mean of ratios
+    usually does. The approximation comparisons pass only because their interval is the SD bar. The text's medians
+    of per-person ratios (q_ratio_medians) can be neither recomputed nor contradicted from the bars.
+  citation: {page: 5, printed_page: "5", quote: "presented as mean ± SD. A) Insulin-induced and contraction-induced MVR", where: "Fig. 3 caption"}
+
+- id: q_no_validation_davies2006
+  kind: choice
+  about: [q_no_corpus_mbv_model, blood_volume_fraction, mvr_by_state, mbf_fold, heart_rate_reserve, pooled_table1]
+  text: >-
+    (Validation job davies2006+vink2024, 2026-11-11; davies2006 is in this record's relate_with.) No entry in
+    validations.yaml, in either direction. davies2006 measures intracoronary pressure, Doppler velocity and wave
+    intensity (six waves: peaks, cumulative intensities, shares) in the left main, LAD and circumflex of 20
+    people at rest, with blood pressure, septal thickness and age. This record's models are definitions on MCE
+    and clinical measurements: the coronary blood content as a volume fraction, MVR and fold MBF (ratios between
+    study states), heart rate reserve under dobutamine and its age adjustment, the pooled Total columns, counts
+    and Pearson r. None gives a pressure, velocity or wave intensity, and davies2006 has no blood volume, no
+    stimulated state and no peak heart rate, so no model here can be run on its conditions to give one of its
+    measurements. pooled_table1 run on davies2006's LVH and non-LVH blood pressures would only repeat that record's
+    own pooled_systolic and pooled_diastolic reproductions, not test a model. Resting coronary velocity in
+    davies2006 is not CFR or HMR (both need adenosine hyperemia). Neither paper cites the other. The reverse
+    direction is in davies2006's q_no_validation_vink2024.
+- id: q_no_validation_kim2010
+  kind: choice
+  about: [q_no_corpus_mbv_model, blood_volume_fraction, mvr_by_state, fold_by_state, mbf_fold, heart_rate_reserve, pooled_table1]
+  text: >-
+    (Validation job kim2010+vink2024, 2026-11-11; kim2010 is in this record's relate_with.) No entry in
+    validations.yaml, in either direction. kim2010's only measurements are Gould et al.'s canine coronary flows at
+    rest and in hyperemia against LAD diameter reduction, as plotted in its Fig. 6 (scaled to its axis in an
+    unstated way); everything else in kim2010 is output of a patient-specific 3D simulation of one healthy subject,
+    not a measurement. This record's models are definitions on MCE and clinical measurements (a blood volume
+    fraction from a blood content per mass, MVR and fold MBF as ratios between states, heart rate reserve, pooled
+    group statistics, correlation coefficients); none gives a coronary volume flow as a function of stenosis
+    severity, so none can be run on Gould's conditions. A ratio of Gould's hyperemic to resting flow would be
+    arithmetic on two measurements, not a model's prediction of one. In the other direction no kim2010 model gives
+    a blood volume, a flow per gram or a reserve ratio (see kim2010/q_no_validation_vs_vink2024). Neither paper
+    cites the other.
+- id: q_no_validation_svzerod_code
+  kind: choice
+  about: [q_no_corpus_mbv_model, blood_volume_fraction, mvr_by_state, fold_by_state, mbf_fold, heart_rate_reserve, pooled_table1]
+  text: >-
+    (Validation job svzerod_code+vink2024, 2026-11-11; svzerod_code is in this record's relate_with.) No entry in
+    validations.yaml, in either direction. svzerod_code measures nothing (its data are solver settings, test-case
+    values and stored runs, kim2010's and yong2025's printed parameters), so no model here can be judged against
+    it. Its blocks give coronary bed flows (cm^3/s) from given resistances, capacitances and pressures, a
+    microvascular resistance over the cycle, outlet pressures and an input impedance; none gives a blood volume
+    per volume of myocardium, a flow per gram, or a Doppler-velocity CFR or HMR, and neither source states
+    these patients' bed parameters or pressures, so no block can be run on this paper's conditions to give one
+    of its measurements. The paper does not mention lumped models or the code. Details in
+    svzerod_code/q_no_validation_vs_vink2024.
+- id: q_no_validation_mohammed2015
+  kind: choice
+  about: [q_no_corpus_mbv_model, blood_volume_fraction, mvr_by_state, fold_by_state, mbf_fold, heart_rate_reserve, pooled_table1, percent_of_group]
+  text: >-
+    (Validation job mohammed2015+vink2024, 2026-11-11; mohammed2015 is in this record's relate_with.) No entry in
+    validations.yaml, in either direction. mohammed2015 measures, at autopsy, microvascular and capillary profile
+    densities per mm2 of a fixed 4 um section, % area fibrosis, heart weight and its % of expected, the CAD sum
+    score and stenosis counts, with clinical counts and percentages of HFpEF patients and controls. This record's
+    models give a blood volume per volume of myocardium (blood_volume_fraction, from a blood content per mass),
+    ratios between MCE study states (MVR, fold MBF), heart rate reserve and its age adjustment, pooled group
+    statistics, percentages and Pearson r. None gives a profile density, a fibrosis area or a heart weight, and
+    mohammed2015 has no blood volume, no stimulated state and no heart rate, so no model here can be run on its
+    conditions to give one of its measurements. percent_of_group or pooled_table1 run on mohammed2015's counts
+    would only repeat that record's own percentage reproductions, not test a model. A capillary volume fraction
+    could be formed from mohammed2015's density and its 10-20 um cut-off diameters, but neither paper states it
+    (q_no_corpus_mbv_model), and it would not be MCE MBV. The parallel between the two papers (MVD 27% lower in
+    HFpEF, MBV lower in ANOCA, both read as rarefaction) is a trend in different diseases and different
+    quantities, which the task excludes. Neither paper cites the other. The reverse direction is in
+    mohammed2015/q_no_validation_vink2024.

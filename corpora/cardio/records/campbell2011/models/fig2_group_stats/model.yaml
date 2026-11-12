@@ -1,0 +1,38 @@
+id: fig2_group_stats
+name: group medians, quartiles, per-patient ratios and Spearman coefficients from the per-patient points of Fig. 2
+role: processing
+stated: {page: 5, printed_page: "190", quote: "Data are expressed as median (25th to 75th percentiles)", where: "Table 2 footnote; Fig. 2 legend"}
+equation: "median and 25th/75th percentiles of each panel's y over one group's points; median of per-patient y/x (A: width/BSA, B: radius/BSA, D: radius/width); Spearman rank correlation of y with x; number of points"
+from_words: true
+inputs:
+  W: {quantity: cardiomyocyte_width, unit: um, curve: {quantity: body_surface_area, unit: m^2}}
+  R: {quantity: diffusion_radius, unit: um, curve: {quantity: body_surface_area, unit: m^2}}
+  L: {quantity: capillary_length_density, unit: mm/mm^3, curve: {quantity: body_surface_area, unit: m^2}}
+  D: {quantity: diffusion_radius, unit: um, curve: {quantity: cardiomyocyte_width, unit: um}}
+outputs:
+  w_q25: {quantity: cardiomyocyte_width, unit: um}
+  w_med: {quantity: cardiomyocyte_width, unit: um}
+  w_q75: {quantity: cardiomyocyte_width, unit: um}
+  R_q25: {quantity: diffusion_radius, unit: um}
+  R_med: {quantity: diffusion_radius, unit: um}
+  R_q75: {quantity: diffusion_radius, unit: um}
+  RD_q25: {quantity: diffusion_radius, unit: um, description: "from the y values of panel D"}
+  RD_med: {quantity: diffusion_radius, unit: um, description: "from the y values of panel D"}
+  RD_q75: {quantity: diffusion_radius, unit: um, description: "from the y values of panel D"}
+  Lv_q25: {quantity: capillary_length_density, unit: mm/mm^3}
+  Lv_med: {quantity: capillary_length_density, unit: mm/mm^3}
+  Lv_q75: {quantity: capillary_length_density, unit: mm/mm^3}
+  bsa_med: {quantity: body_surface_area, unit: m^2, description: "median of the x positions of panel A"}
+  wB_med: {quantity: width_per_bsa, unit: um/m^2, description: "median of per-patient width/BSA, panel A"}
+  RB_med: {quantity: radius_per_bsa, unit: um/m^2, description: "median of per-patient radius/BSA, panel B"}
+  Rw_med: {quantity: radius_per_width, unit: dimensionless, description: "median of per-patient radius/width, panel D"}
+  rho_wB: {quantity: spearman_rho_width_bsa, unit: dimensionless}
+  rho_RB: {quantity: spearman_rho_radius_bsa, unit: dimensionless}
+  rho_LB: {quantity: spearman_rho_lv_bsa, unit: dimensionless}
+  rho_Rw: {quantity: spearman_rho_radius_width, unit: dimensionless}
+  n_W: {quantity: patient_count, unit: dimensionless}
+  n_R: {quantity: patient_count, unit: dimensionless}
+  n_L: {quantity: patient_count, unit: dimensionless}
+  n_D: {quantity: patient_count, unit: dimensionless}
+settings: {percentile_method: linear, bsa_tie_m2: 0.004, width_tie_um: 0.02}
+stochastic: false

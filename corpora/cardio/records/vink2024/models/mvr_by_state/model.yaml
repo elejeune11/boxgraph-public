@@ -1,0 +1,12 @@
+id: mvr_by_state
+name: microvascular recruitment of each stimulated state from a set of group-mean MBVs indexed by state
+role: model
+stated: {page: 3, printed_page: "3", quote: "calculated as MBVhyperinsulinemia/MBVbaseline", where: "2.4 (and 2.5: MBVstress/MBVbaseline)"}
+equation: "MVR(state) = MBV(state)/MBV(baseline), state = hyperinsulinemia (2) or dobutamine stress (3)"
+built_from: [mvr_ratio]
+inputs:
+  MBV: {quantity: myocardial_blood_volume, unit: mL/mL, curve: {quantity: study_state_index, unit: dimensionless}, description: "group mean MBV at states 1 (baseline), 2 and 3, e.g. the bars of Fig. 2A"}
+outputs:
+  MVR: {quantity: microvascular_recruitment, unit: dimensionless, curve: {quantity: study_state_index, unit: dimensionless}, description: "MVR at states 2 and 3: a ratio of group means, where Fig. 3A plots means of per-participant ratios"}
+settings: {}
+stochastic: false

@@ -1,0 +1,57 @@
+# ---- Cross-record validation job: kaneko2011 with rakusan1992 (2026-11-11) ----
+# This record's tissue area per capillary (A = 1/N, the reading the printed areas imply) run on
+# rakusan1992's measured capillary densities of its three normal age groups, against the domain areas
+# rakusan1992 measured separately, by drawing equidistant borders around each capillary in the same
+# sections. Nothing here was fitted to rakusan1992's data, so these are tests.
+
+- id: val_area_rakusan_adults
+  model: capillary_tissue_area
+  inputs: {N: 'rakusan1992/cd_adu_c'}
+  output: A
+  against: 'rakusan1992/da_adu_c'
+  purpose: validation
+  quantities: {'rakusan1992/capillary_density': capillary_density, 'rakusan1992/capillary_domain_area': tissue_area_per_capillary}
+  conditions_ok: >
+    The model is a geometric relation (the tissue of a transverse section shared out among its
+    capillaries), not tied to this paper's one heart, so it is run on rakusan1992's own density for the
+    same group the domain area is measured in: 8 normal adults aged 15-30 y, transverse sections of
+    immersion-fixed LV wall. The two values are means over hearts of per-heart values, so the mean of
+    1/N is not exactly 1/(mean N); with SEMs of about 4% the difference is well under 1%.
+  basis: >
+    This paper prints 'the theoretical tissue regions supplied by a single capillary' as the reciprocal
+    of its mean capillary densities (p. 2; see q_area_relation_unstated). rakusan1992 measures the same
+    thing directly: 'the polygonal region around each capillary was defined as the domain area' (its
+    p. 3), from equidistant border lines between capillaries in a transverse section. Domains that
+    tile the section have a mean area equal to the area per capillary, so the model predicts the
+    measured mean domain area from the measured density. kaneko2011 cites rakusan1992 (ref. 18) for
+    capillary density.
+
+- id: val_area_rakusan_children
+  model: capillary_tissue_area
+  inputs: {N: 'rakusan1992/cd_chi_c'}
+  output: A
+  against: 'rakusan1992/da_chi_c'
+  purpose: validation
+  quantities: {'rakusan1992/capillary_density': capillary_density, 'rakusan1992/capillary_domain_area': tissue_area_per_capillary}
+  conditions_ok: >
+    Normal children's hearts (n = 8, 178 g mean) rather than this paper's adult; the relation is
+    geometric and is run on the density of the same group the domain area is measured in.
+  basis: >
+    As for val_area_rakusan_adults: the mean domain area of polygons tiling a transverse section
+    (rakusan1992 p. 3, 'polygonal region around each capillary was defined as') is the area per
+    capillary, the quantity this paper prints as the reciprocal of density (p. 2).
+
+- id: val_area_rakusan_infants
+  model: capillary_tissue_area
+  inputs: {N: 'rakusan1992/cd_inf_c'}
+  output: A
+  against: 'rakusan1992/da_inf_c'
+  purpose: validation
+  quantities: {'rakusan1992/capillary_density': capillary_density, 'rakusan1992/capillary_domain_area': tissue_area_per_capillary}
+  conditions_ok: >
+    Normal infants' hearts (n = 8, 40 g mean) rather than this paper's adult; the relation is
+    geometric and is run on the density of the same group the domain area is measured in.
+  basis: >
+    As for val_area_rakusan_adults: the mean domain area of polygons tiling a transverse section
+    (rakusan1992 p. 3, 'polygonal region around each capillary was defined as') is the area per
+    capillary, the quantity this paper prints as the reciprocal of density (p. 2).

@@ -1,0 +1,68 @@
+# Diffusion radius from the printed capillary length densities (Table 2).
+# The formula is decreasing, so the 25th percentile of length density maps to the 75th of radius.
+- {id: run_R_m_med, model: diffusion_radius, inputs: {Lv: Lv_m_med}, outputs: {R: R_from_Lv_m_med}}
+- {id: run_R_m_q25, model: diffusion_radius, inputs: {Lv: Lv_m_q25}, outputs: {R: R_from_Lv_m_q25}}
+- {id: run_R_m_q75, model: diffusion_radius, inputs: {Lv: Lv_m_q75}, outputs: {R: R_from_Lv_m_q75}}
+- {id: run_R_f_med, model: diffusion_radius, inputs: {Lv: Lv_f_med}, outputs: {R: R_from_Lv_f_med}}
+- {id: run_R_f_q25, model: diffusion_radius, inputs: {Lv: Lv_f_q25}, outputs: {R: R_from_Lv_f_q25}}
+- {id: run_R_f_q75, model: diffusion_radius, inputs: {Lv: Lv_f_q75}, outputs: {R: R_from_Lv_f_q75}}
+
+# The counting grid
+- {id: run_grid, model: grid_geometry, inputs: {s: grid_spacing_printed, L: frame_side_printed}, outputs: {a: grid_point_area_pred, n: squares_per_frame_pred}}
+
+# Size-normalised ratios from group medians
+- id: run_ratios_m
+  model: size_ratios
+  inputs: {R: R_m_med, w: w_m_med, B: bsa_m_med, M: lbm_m_med}
+  outputs: {RB: RB_m_from_medians, RM: RL_m_from_medians, Rw: Rw_m_from_medians, wB: wB_m_from_medians, wM: wL_m_from_medians}
+- id: run_ratios_f
+  model: size_ratios
+  inputs: {R: R_f_med, w: w_f_med, B: bsa_f_med, M: lbm_f_med}
+  outputs: {RB: RB_f_from_medians, RM: RL_f_from_medians, Rw: Rw_f_from_medians, wB: wB_f_from_medians, wM: wL_f_from_medians}
+- {id: run_ci_m, model: cardiac_index, inputs: {CO: co_m_med, B: bsa_m_med}, outputs: {CI: ci_m_from_medians}}
+- {id: run_ci_f, model: cardiac_index, inputs: {CO: co_f_med, B: bsa_f_med}, outputs: {CI: ci_f_from_medians}}
+
+- {id: run_vratio_m, model: vegf_ratio, inputs: {R1: vegfr1_m_med, A: vegfa_m_med}, outputs: {ratio: vratio_m_from_medians}}
+- {id: run_vratio_f, model: vegf_ratio, inputs: {R1: vegfr1_f_med, A: vegfa_f_med}, outputs: {ratio: vratio_f_from_medians}}
+
+# Percentages women vs men stated in the text
+- id: run_pct
+  model: female_vs_male_percentages
+  inputs: {awc_m: awc_m_med, awc_f: awc_f_med, bsa_m: bsa_m_med, bsa_f: bsa_f_med, lbm_m: lbm_m_med, lbm_f: lbm_f_med,
+           vegfa_m: vegfa_m_med, vegfa_f: vegfa_f_med, vegfr1_m: vegfr1_m_med, vegfr1_f: vegfr1_f_med, vratio_m: vratio_m_med, vratio_f: vratio_f_med}
+  outputs: {awc_excess: awc_excess_pred, bsa_pct: bsa_pct_pred, lbm_pct: lbm_pct_pred, vegfa_excess: vegfa_excess_pred,
+            vegfr1_deficit: vegfr1_deficit_pred, vratio_deficit: vratio_deficit_pred}
+
+# Added by the audit: stroke work index (Table 1) and arteriolar density (Table 2) from group medians
+- {id: run_swi_m, model: stroke_work_index, inputs: {SW: sw_m_med, B: bsa_m_med}, outputs: {SWI: swi_m_from_medians}}
+- {id: run_swi_f, model: stroke_work_index, inputs: {SW: sw_f_med, B: bsa_f_med}, outputs: {SWI: swi_f_from_medians}}
+- {id: run_artd_m, model: arteriolar_density, inputs: {n: art_n_m_med, A: myoarea_m_med}, outputs: {d: art_d_m_from_medians}}
+- {id: run_artd_f, model: arteriolar_density, inputs: {n: art_n_f_med, A: myoarea_f_med}, outputs: {d: art_d_f_from_medians}}
+
+# Figure pass: Fig. 2 (p. 5), group statistics of the per-patient points (curve ports)
+- id: run_fig2_stats_m
+  model: fig2_group_stats
+  inputs: {W: fig2a_width_m, R: fig2b_radius_m, L: fig2c_lv_m, D: fig2d_radius_m}
+  settings: {percentile_method: linear, bsa_tie_m2: 0.004, width_tie_um: 0.02}
+  outputs: {w_q25: fig2_w_m_q25, w_med: fig2_w_m_med, w_q75: fig2_w_m_q75, R_q25: fig2_R_m_q25, R_med: fig2_R_m_med, R_q75: fig2_R_m_q75,
+            RD_q25: fig2_RD_m_q25, RD_med: fig2_RD_m_med, RD_q75: fig2_RD_m_q75, Lv_q25: fig2_Lv_m_q25, Lv_med: fig2_Lv_m_med, Lv_q75: fig2_Lv_m_q75, bsa_med: fig2_bsa_m_med,
+            wB_med: fig2_wB_m_med, RB_med: fig2_RB_m_med, Rw_med: fig2_Rw_m_med,
+            rho_wB: fig2_rho_wB_m, rho_RB: fig2_rho_RB_m, rho_LB: fig2_rho_LB_m, rho_Rw: fig2_rho_Rw_m,
+            n_W: fig2_nW_m, n_R: fig2_nR_m, n_L: fig2_nL_m, n_D: fig2_nD_m}
+  note: "added choices: linear percentiles (q_fig2_percentile_method); x values within 0.004 m2 or 0.02 um are tied patients (q_fig2_ties)"
+- id: run_fig2_stats_f
+  model: fig2_group_stats
+  inputs: {W: fig2a_width_f, R: fig2b_radius_f, L: fig2c_lv_f, D: fig2d_radius_f}
+  settings: {percentile_method: linear, bsa_tie_m2: 0.004, width_tie_um: 0.02}
+  outputs: {w_q25: fig2_w_f_q25, w_med: fig2_w_f_med, w_q75: fig2_w_f_q75, R_q25: fig2_R_f_q25, R_med: fig2_R_f_med, R_q75: fig2_R_f_q75,
+            RD_q25: fig2_RD_f_q25, RD_med: fig2_RD_f_med, RD_q75: fig2_RD_f_q75, Lv_q25: fig2_Lv_f_q25, Lv_med: fig2_Lv_f_med, Lv_q75: fig2_Lv_f_q75, bsa_med: fig2_bsa_f_med,
+            wB_med: fig2_wB_f_med, RB_med: fig2_RB_f_med, Rw_med: fig2_Rw_f_med,
+            rho_wB: fig2_rho_wB_f, rho_RB: fig2_rho_RB_f, rho_LB: fig2_rho_LB_f, rho_Rw: fig2_rho_Rw_f,
+            n_W: fig2_nW_f, n_R: fig2_nR_f, n_L: fig2_nL_f, n_D: fig2_nD_f}
+  note: "the women's Spearman coefficients are not printed (not significant, legend); they are produced but not compared"
+
+# Figure pass: each patient's diffusion radius from that patient's length density (Fig. 2 C -> B)
+- {id: run_fig2_R_per_patient_m, model: radius_per_patient, inputs: {L: fig2c_lv_m, R: fig2b_radius_m}, settings: {bsa_tie_m2: 0.004},
+   outputs: {R: fig2_R_from_Lv_m}, note: "patients with the same BSA paired by rank (q_fig2_pairing)"}
+- {id: run_fig2_R_per_patient_f, model: radius_per_patient, inputs: {L: fig2c_lv_f, R: fig2b_radius_f}, settings: {bsa_tie_m2: 0.004},
+   outputs: {R: fig2_R_from_Lv_f}, note: "patients with the same BSA paired by rank (q_fig2_pairing)"}

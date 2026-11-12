@@ -1,0 +1,13 @@
+id: fold_by_state
+name: fold MBF of each stimulated state from a set of group-mean MBFs indexed by state
+role: model
+from_words: true
+stated: {page: 16, printed_page: "S8", quote: "recruitment of MBF, calculated as fold MBF", where: "Supplemental Fig. 5; Supplemental Table 3"}
+equation: "fold MBF(state) = MBF(state)/MBF(baseline), state = hyperinsulinemia (2) or dobutamine stress (3)"
+built_from: [mbf_fold]
+inputs:
+  MBF: {quantity: myocardial_blood_flow, unit: mL/min/g, curve: {quantity: study_state_index, unit: dimensionless}, description: "group mean MBF at states 1 (baseline), 2 and 3, e.g. the bars of Suppl. Fig. 5A or Supplemental Table 3"}
+outputs:
+  fold: {quantity: mbf_fold_change, unit: dimensionless, curve: {quantity: study_state_index, unit: dimensionless}, description: "fold MBF at states 2 and 3: a ratio of group means, where Suppl. Fig. 5B plots means of per-participant ratios"}
+settings: {}
+stochastic: false

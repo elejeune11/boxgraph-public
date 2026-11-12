@@ -1,0 +1,16 @@
+# The Discussion's coronary blood content (about 12 mL per 100 g, cited to Kassab et al. 1994, pig) as a volume
+# fraction, against the total myocardial blood volume spaan1981 reports from Morgenstern (dye dilution, dog).
+- id: val_cbv_spaan1981
+  model: blood_volume_fraction
+  inputs: {c: cbv_content, s: micro_share, rho: tissue_density_added}
+  output: phi
+  against: spaan1981/total_blood_volume_morgenstern
+  purpose: validation
+  quantities:
+    spaan1981/myocardial_blood_volume_fraction: myocardial_blood_volume_fraction
+  conditions_ok: >-
+    Both are the blood in all coronary vessels per volume of wall; this paper's value is cited for the pig in diastole,
+    spaan1981's is measured by dye dilution in the beating dog heart.
+  basis: >-
+    The Discussion states the coronary circulation holds about 12 mL of blood per 100 g of myocardium; times a
+    myocardial density (added, 1.05 g/mL) that is a blood volume fraction, which spaan1981 records as 10-15%.

@@ -1,0 +1,14 @@
+id: histogram_stats
+name: number, mean and SD of capillary segment lengths from the Fig. 3 histogram (bin midpoints)
+role: processing
+from_words: true
+stated: {page: 4, printed_page: H757, quote: "Frequency histograms of capillary segmental length. The mean capillary", where: "Fig. 3 legend"}
+equation: "n = sum c_i; mean = sum c_i x_i / n; SD = sqrt(sum c_i (x_i - mean)^2 / (n - 1)), x_i the bin midpoints, c_i the bar heights rounded to whole segments (not printed; the legend prints the histogram beside its mean, SD and n)"
+inputs:
+  H: {quantity: capillary_segment_count, unit: dimensionless, curve: {quantity: capillary_segment_length, unit: um}}
+outputs:
+  n: {quantity: capillary_segment_count, unit: dimensionless}
+  mean: {quantity: capillary_segment_length, unit: um}
+  sd: {quantity: capillary_segment_length_sd, unit: um}
+settings: {}
+stochastic: false

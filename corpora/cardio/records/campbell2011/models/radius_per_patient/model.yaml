@@ -1,0 +1,14 @@
+id: radius_per_patient
+name: diffusion radius of each patient from that patient's capillary length density (Fig. 2 C to Fig. 2 B)
+role: processing
+stated: {page: 12, printed_page: "S4", quote: "Diffusion radius was determined according to the formula", where: "Supplement, Histological analysis; Fig. 2 B and C"}
+equation: "R_i = sqrt(1 / (pi x Lv_i)) for each patient i, the patient of a panel-B point found by its BSA in panel C"
+from_words: true
+built_from: [diffusion_radius]
+inputs:
+  L: {quantity: capillary_length_density, unit: mm/mm^3, curve: {quantity: body_surface_area, unit: m^2}}
+  R: {quantity: diffusion_radius, unit: um, curve: {quantity: body_surface_area, unit: m^2}}
+outputs:
+  R: {quantity: diffusion_radius, unit: um, curve: {quantity: body_surface_area, unit: m^2}}
+settings: {bsa_tie_m2: 0.004}
+stochastic: false

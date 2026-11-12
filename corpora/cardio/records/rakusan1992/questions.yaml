@@ -1,0 +1,218 @@
+- id: q_dapoly_coefficient
+  kind: possible_error
+  about: [da_poly2, da_poly_b2, cmp_dapoly_acq, cmp_dapoly_adu_c, cmp_dapoly_chi_c]
+  text: >
+    The Fig. 3 polynomial as printed, y = 274.17 + 0.878x - 0.001x^2, has its maximum at x = 439 g
+    (about 467 um^2) and falls to about 336 um^2 at 800 g, whereas the curve drawn in Fig. 3 rises
+    monotonically to roughly 650 um^2 near 800 g (by eye; no calibrated reading), and the acquired
+    stenosis group (mean heart mass 634 g) has a mean domain area of 611 um^2, against about 429 um^2
+    from the printed polynomial. The x^2 coefficient (or the linear one) is probably misprinted; the
+    page shows "-" at a line end followed by "0.001x2". No variant is written, since the correction
+    would change a printed number and the figure was not read.
+  citation: {page: 5, printed_page: "42", where: "Fig. 3 legend", quote: "as a second-order polynomial: y=274.17+0.878x-"}
+- id: q_56_percent
+  kind: possible_error
+  about: [hw_increase_chi_adu, cmp_hw_inc_chi_adu, run_bw_chi_adu]
+  text: >
+    The text twice says heart weight increased by 56% between children (9-14 y) and young adults. From
+    Table 3 the control heart weight goes from 178 g to 255 g, a 43% increase; the 56% matches the
+    body weight increase (37.5 to 58.5 kg, run_bw_chi_adu). The text may have taken the body weight
+    ratio for the heart weight ratio.
+  citation: {page: 4, printed_page: "41", where: text, quote: "the relative increase in heart weight was much less"}
+- id: q_hw_ratio_range
+  kind: overstated_claim
+  about: [hw_ratio_as_vs_c, cmp_hwratio_adu]
+  text: >
+    The text says total heart weight with congenital stenosis was 2.5-2.9 times that of age-matched
+    controls in all age groups. Table 3 gives 114/40 = 2.85 (infants), 457/178 = 2.57 (children) and
+    780/255 = 3.06 (adults): the adult ratio lies outside the printed range (the discussion's "almost
+    threefold" covers it).
+  citation: {page: 5, printed_page: "42", where: text, quote: "was 2.5-2.9 times greater in hearts with aortic"}
+- id: q_domain_radius_definition
+  kind: reading
+  about: [krogh_radius, domain_radius_equivalent, dr_inf_c, dr_acq]
+  text: >
+    The tables' "capillary domain radius" could be the Krogh radius computed from mean density (Methods,
+    "calculated from the capillary density") or the mean of the per-domain equivalent radii from the
+    image analyzer. The record checks both: R = 1/sqrt(pi CD) per group and sqrt(A/pi) of the mean domain
+    area. Whether the per-heart radius was averaged, or the group mean density converted, is not stated;
+    the comparisons use group means.
+  citation: {page: 3, printed_page: "40", where: "Methods", quote: "The average radius of the Krogh tissue cylinder was calculated from the capillary density"}
+- id: q_figures_not_read
+  kind: choice
+  about: [cd_poly3, da_poly2]
+  text: >
+    Figs. 2 and 3 plot capillary density and domain area against heart mass for each of the 63 hearts,
+    in four symbol types. They were not digitized: the commands that render the page for a calibrated
+    reading were refused in this session. Reading them would let the fits be checked against the points
+    they were fitted to (fit_quality on individual hearts, not group means) and the Fig. 3 coefficient
+    question be settled from the drawn curve.
+- id: q_fixation_correction
+  kind: choice
+  about: [rat_cap_decrease_immersion, cd_adu_c]
+  text: >
+    The paper applies no correction for immersion fixation: it finds a 4% nonsignificant decrease of
+    capillary density with immersion against perfusion fixation in rats and reports the human
+    (formalin-immersed) densities uncorrected. Whether shrinkage in paraffin embedding of the human
+    tissue (as against historesin for the rats) changes density is not tested. A comparison of these
+    densities with in vivo or perfusion-fixed values should keep the fixation in its conditions.
+  citation: {page: 3, printed_page: "40", where: text, quote: "There was no increase in the scatter of"}
+- id: q_children_age_text
+  kind: reading
+  about: [myo_chi_c]
+  text: >
+    The text compares myocyte area between "children 9-11 years old" and young adults, while the
+    children group is 9-14 years everywhere else; probably a misprint of the age range, recorded as read.
+  citation: {page: 4, printed_page: "41", where: text, quote: "children 9-11 years old and young adults"}
+- id: q_congenital_above_fit
+  kind: unexplained_difference
+  about: [run_cdpoly_inf_as, run_cdpoly_chi_as, run_cdpoly_adu_as, run_cdpoly_coa, run_dapoly_adu_as]
+  text: >
+    The paper claims congenital stenosis and coarctation lie above the density fit (and below the domain
+    fit). The runs at the group mean heart masses give the fit's expectation for each group for the
+    reader to set beside the tabulated means (the claim is an inequality, so it gets no verdict). The
+    domain claim depends on the Fig. 3 polynomial, which as printed falls at high heart mass (see
+    q_dapoly_coefficient), so the printed fit puts the congenital adults (482 um^2 at 780 g) above it.
+- id: q_audit_halfway_radius
+  kind: reading
+  about: [krogh_radius, dr_adu_c]
+  text: >
+    Audit (second reading). The Methods define the Krogh radius twice: "calculated from the capillary
+    density" and, in the next sentence, "calculated as the mean distance halfway between two capillaries in
+    cross section". The record models the first as R = 1/sqrt(pi CD) (the circle of area 1/CD). Half the
+    nearest-neighbour distance is a different quantity: for a regular hexagonal array it is
+    sqrt(1/(2 sqrt(3) CD)), about 5% smaller (11.3 um at 2,249/mm^2 against 11.9 um and the printed
+    12.0 ± 0.2 um). The tabulated radii agree with the circle-of-equal-area reading, not with a half
+    intercapillary distance; which one the paper computed is not certain, so this is left as a reading
+    question beside q_domain_radius_definition, and no model is changed.
+  citation: {page: 3, printed_page: "40", where: "Methods, Morphometric Analysis", quote: "calculated as the mean distance halfway be"}
+- id: q_audit_abstract_differences
+  kind: possible_error
+  about: [cd_chi_c, cd_inf_c, bw_coa, cd_coa]
+  text: >
+    Audit (second reading). The abstract differs from the body in two details: it gives the coarctation
+    group as "adults 15-39 years old", while Methods (p. 3) and Table 5 call it young adults 15-30 years;
+    and it marks the infant-to-children density decrease "p<0.05", while Table 3 marks it *p<0.01. Values
+    are recorded as in the tables; the age range of the coarctation group (and so its match to the 15-30 y
+    controls) is uncertain.
+  citation: {page: 1, printed_page: "38", where: abstract, quote: "congenital isolated coarctation of the aorta in adults 15-39 years old"}
+- id: q_audit_cross_record_density
+  kind: unexplained_difference
+  about: [cd_adu_c, cd_acq, cd_range_mammals]
+  text: >
+    Audit (cross-record, not testable here: a comparison can only use this record's data). Normal adult
+    human capillary density differs widely across the corpus: 2,249 ± 85/mm^2 here (mean ± SEM, n = 8,
+    15-30 y, silver-stained 1-um sections, formalin immersion, LV lateral wall mid- and endomyocardium);
+    2,301-3,157/mm^2 in kaneko2011 (one 60-year-old man, upper mid-wall, 3D reconstruction); a median of
+    1,044/mm^2 [911-1,188] in mohammed2015's controls (autopsy, median age 74 y, CD31 on 4-um paraffin
+    sections, automated counting of 10-78.5 um^2 profiles). campbell2011 reports a length density
+    (about 1,141-1,226 mm/mm^3, CD31, biopsies of CABG patients), not a transverse-section count, so it is
+    not the same quantity. Age, staining (silver basement membrane against CD31), section thickness,
+    counting method and disease all differ; mohammed2015's controls are older than even this paper's
+    acquired-stenosis group (1,671/mm^2, 51-86 y). The comparisons belong to the cross-record layer and
+    are findings about methods, not errors in either paper.
+  citation: {none: "a finding of the cross-record audit between rakusan1992, kaneko2011, campbell2011 and mohammed2015, not a printed statement"}
+- id: q_audit_no_blood_volume
+  kind: unstated_input
+  about: [cd_adu_c, myo_adu_c]
+  text: >
+    Audit. No model in the corpus is run on these densities to predict a capillary blood volume fraction
+    (for comparison with vink2024's myocardial blood volume): the paper states that capillary luminal
+    area was not measured (hearts not fixed at known pressure), so capillary diameter is not available
+    here, and a transverse density is not a length density without an orientation factor the paper does
+    not give.
+  citation: {page: 3, printed_page: "40", where: "Methods", quote: "immediately after death, capillary luminal area was"}
+- id: q_fig3_drawn_curve
+  kind: reading
+  about: [da_poly2, da_poly_b2, da_fig3_fit, cmp_dapoly_fig3_fit, q_dapoly_coefficient]
+  text: >
+    Figure reading (calibrated, fig3_fit). The thick line of Fig. 3 rises monotonically from about 356 um^2
+    at 100 g to a plateau of about 633 um^2 at 750-875 g; the printed polynomial y = 274.17 + 0.878x -
+    0.001x^2 instead peaks near 440 g and falls to about 277 um^2 at 875 g. The drawn line is matched by
+    the printed constant and linear coefficient with an x^2 coefficient of about -0.0005 to -0.00055,
+    which is inside the rounding range of the printed "-0.001" (three decimal places): cmp_dapoly_fig3_fit
+    is reproduced only through that rounding. This answers q_dapoly_coefficient: the coefficient is
+    most likely not a misprinted digit but printed with too few decimals to reproduce the drawn fit (or
+    the table means it was fitted to). Values computed from the legend as printed (cmp_dapoly_acq and
+    the other group-mean runs) are therefore unreliable above about 300 g. The same holds more mildly for
+    Fig. 2 ("0.013" for the x^2 coefficient), whose drawn line the printed cubic reproduces.
+  citation: {page: 5, printed_page: "42", where: "Fig. 3 and legend", quote: "as a second-order polynomial: y=274.17+0.878x-"}
+- id: q_figures_read
+  kind: reading
+  about: [q_figures_not_read, cd_fig2_acquired, da_fig3_acquired, cmp_fig2_acq_mean_cd, cmp_fig3_acq_mean_da, cmp_domain_per_heart_acq]
+  text: >
+    Figs. 2 and 3 have now been read with calibrated code (figures.yaml, figures.md), which supersedes
+    q_figures_not_read. All 13 acquired-stenosis hearts are told apart in both figures; their means
+    reproduce Table 4 (density, domain area and heart mass), and each heart's 1/density from Fig. 2
+    agrees with its domain area in Fig. 3 within about 1-2% (cmp_domain_per_heart_acq; the largest
+    differences, about 1%, are at 387 g and 845 g, about the size of the reading of the Fig. 2 marker,
+    whose uncertainty is not carried to the computed side). The other groups are pooled across ages in
+    the figures and some markers are hidden, so their table means are not checked from the figures.
+  citation: {page: 5, printed_page: "42", where: "Figs. 2 and 3", quote: "Graph showing changes in capillary density with"}
+- id: q_heart_count
+  kind: unexplained_difference
+  about: [cd_fig2_normal, cd_fig2_congenital, cd_fig2_acquired, cd_fig2_coarctation]
+  text: >
+    The Methods say morphometry was performed on 63 human hearts, but the group sizes of Tables 3-5 add to
+    62 (8 + 6 + 8 + 7 + 8 + 7 control and congenital stenosis, 13 acquired stenosis, 5 coarctation), and
+    the four marker kinds of Figs. 2 and 3 are those same groups. One heart is unaccounted for (excluded,
+    or a miscount); the figures cannot settle which, since overlapping markers are not all told apart.
+  citation: {page: 3, printed_page: "40", where: "Methods, Human Subject Material", quote: "Morphometric analysis was performed on 63 human"}
+- id: q_no_validation_vs_kassab1993
+  kind: choice
+  about: [krogh_radius, domain_area_reciprocal, domain_radius_equivalent, cd_poly3, da_poly2, myocyte_capillary_ratio]
+  text: >
+    Validation job kassab1993+rakusan1992 (2026-11-11). No model of this record is validated against
+    kassab1993's measurements. The models here take capillary density, myocyte density, domain area or
+    heart weight as inputs and give a Krogh or domain radius, a domain area, a myocyte-to-capillary ratio,
+    the fitted polynomials of density and domain area in heart weight, or relative changes between groups.
+    kassab1993 measures pig coronary arterial casts: mean diameters, lengths, segments per element, element
+    numbers and the connectivity matrix by Strahler order, and tree volumes. It prints no capillary
+    density, domain area or heart weight that these models could take or predict (its capillary
+    morphometry is in a separate paper, its ref. 17), so no measurement there is the output of a model
+    here. Neither paper cites the other. Comparing capillary supply between the two (pig casts against
+    human transverse sections) would need a relation from vessel numbers by order to capillaries per unit
+    tissue area, which neither paper states. For the other direction see
+    kassab1993/q_no_validation_vs_rakusan1992.
+  citation: {none: "a finding of the validation job between kassab1993 and rakusan1992, not a printed statement"}
+- id: q_mohammed_density_vs_fit
+  kind: unexplained_difference
+  about: [cd_poly3, cd_poly_a0, cd_poly_a1, cd_poly_a2, cd_poly_a3]
+  text: >
+    (Validation job with mohammed2015; validations.yaml val_cdpoly_mohammed_controls and
+    val_cdpoly_mohammed_hfpef.) The Fig. 2 cubic run at mohammed2015's median heart weights gives
+    about 1970/mm2 at 335 g (controls) and 1760/mm2 at 538 g (HFpEF), against the measured medians 1044 and
+    788/mm2: the measured densities are about half the fitted ones, and the HFpEF/control ratio (0.75) is
+    steeper than the cubic's (0.89). Neither paper explains the gap; mohammed2015 warns that absolute
+    densities are not comparable across methods (its p. 7). Candidate causes lie in mohammed2015's method:
+    the 10 um2 minimum profile area (its total vessel density in controls rises from 1368 to 2214/mm2
+    without it), automated CD31 thresholds in 4 um sections, profiles in non-transverse orientation, and
+    autopsy tissue of elderly subjects. Measurements considered and not used: mohammed2015's microvascular
+    density (10-314 um2, including precapillary arterioles) and its figure readings (MVD histograms and box
+    plots, including the HFrEF box, heart weight and fibrosis distributions) are not the capillary density
+    the cubic predicts; there is no HFrEF capillary density to set beside its heart weight. The domain-area
+    polynomial (da_poly2), the Krogh and domain radius models and the myocyte/capillary ratio give or need
+    a domain area, a radius or a myocyte density, none of which mohammed2015 measures.
+  citation: {none: "a finding of the validation job between mohammed2015 and rakusan1992, not a printed statement"}
+# ---- Cross-record validation job: rakusan1992 with kaneko2011 (2026-11-11) ----
+- id: q_kaneko_path_position_vs_fit
+  kind: choice
+  about: [cd_poly3, hw_kaneko_heart_added]
+  text: >
+    (Cross-record validation, rakusan1992 with kaneko2011.) The Fig. 2 cubic gives about 2,005/mm2 at the
+    320 g of kaneko2011's heart. kaneko2011 prints no whole-heart density, only three densities along one
+    arteriole-to-venule path (2,301, 3,130 and 3,157/mm2, mean ± SD over three points each), and which of
+    them a wall-averaged density like rakusan1992's should be set against is open, so all three are
+    entered. The verdicts are close (arteriolar side, middle) and not reproduced (venular side, whose SD
+    of 167 is narrow). The cubic lies below all three; the venular and middle values are about 55% above
+    it. Candidate causes, none tested: kaneko2011's counts are local to one capillary bundle of the
+    upper middle layer of one heart, with no stated counting area; its man of 60 lies in the age gap
+    between rakusan1992's normal (15-30 y) and acquired stenosis (51-86 y) groups; fixation and section
+    thickness differ. The heart weight is printed in kaneko2011 (p. 1) but not entered there as a datum,
+    so it is carried here as added; its alternatives (300 and 340 g) only show the sensitivity: the cubic
+    moves by under 100/mm2 over them, far less than the gap. Measurements of kaneko2011 considered and not
+    used: its tissue areas per capillary (434.6, 319.5, 316.7 um2) are derived from its own densities,
+    not measured, so the domain-area models (domain_area_reciprocal, da_poly2, krogh_radius) have no
+    measurement there to predict; segment lengths, arteriolar-venular distance, bundle and micronecrosis
+    sizes, sinus volumes and the Fig. 3 histogram have no counterpart among this record's models.
+  citation: {none: "a finding of the validation job between rakusan1992 and kaneko2011, not a printed statement"}

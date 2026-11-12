@@ -388,6 +388,15 @@ class Orchestrator:
                                   if d.get("tool_name") in ("Write", "Edit")})
                 all_refused.update(refused)
                 error = res.get("_why") or (res.get("subtype") if res.get("is_error") else None)
+                if res.get("is_error"):
+                    # the agent stopped on an error: whatever the gate says, the job was not done
+                    ok = False
+                    error = res.get("_why") or res.get("api_error") or res.get("result") or res.get("subtype")
+                    if res.get("api_error") == "usage_limit_reached" or res.get("api_error_status") == 429:
+                        error = f"the agent stopped: {res.get('result') or res.get('api_error')}"
+                        self._put(job.id, attempts=attempt, cost_usd=cost, turns=turns, session_id=session,
+                                  last_validation=out, error=error)
+                        break  # a usage limit is not fixed by trying again now
                 if ok:
                     error = None  # an earlier failure no longer applies; refused writes are kept as a record
                 if all_refused:
@@ -399,7 +408,7 @@ class Orchestrator:
                     if self.on_passed:
                         self.on_passed(self._get(job.id))
                     return
-                if res.get("_crashed"):
+                if res.get("_crashed") or res.get("is_error"):
                     if attempt < job.max_attempts:
                         await asyncio.sleep(self.crash_backoff_s * attempt)  # an outage: wait before trying again
                     prompt = ("You were interrupted before you finished. Continue the task where you left off; "

@@ -1,0 +1,84 @@
+# Krogh radius from the mean capillary density (Methods, p. 3), each group of Tables 3-5
+- {id: run_krogh_inf_c, model: krogh_radius, inputs: {CD: cd_inf_c}, outputs: {R: krogh_inf_c}}
+- {id: run_krogh_inf_as, model: krogh_radius, inputs: {CD: cd_inf_as}, outputs: {R: krogh_inf_as}}
+- {id: run_krogh_chi_c, model: krogh_radius, inputs: {CD: cd_chi_c}, outputs: {R: krogh_chi_c}}
+- {id: run_krogh_chi_as, model: krogh_radius, inputs: {CD: cd_chi_as}, outputs: {R: krogh_chi_as}}
+- {id: run_krogh_adu_c, model: krogh_radius, inputs: {CD: cd_adu_c}, outputs: {R: krogh_adu_c}}
+- {id: run_krogh_adu_as, model: krogh_radius, inputs: {CD: cd_adu_as}, outputs: {R: krogh_adu_as}}
+- {id: run_krogh_acq, model: krogh_radius, inputs: {CD: cd_acq}, outputs: {R: krogh_acq}}
+- {id: run_krogh_coa, model: krogh_radius, inputs: {CD: cd_coa}, outputs: {R: krogh_coa}}
+# mean domain area as 1/density
+- {id: run_area_inf_c, model: domain_area_reciprocal, inputs: {CD: cd_inf_c}, outputs: {A: area_recip_inf_c}}
+- {id: run_area_inf_as, model: domain_area_reciprocal, inputs: {CD: cd_inf_as}, outputs: {A: area_recip_inf_as}}
+- {id: run_area_chi_c, model: domain_area_reciprocal, inputs: {CD: cd_chi_c}, outputs: {A: area_recip_chi_c}}
+- {id: run_area_chi_as, model: domain_area_reciprocal, inputs: {CD: cd_chi_as}, outputs: {A: area_recip_chi_as}}
+- {id: run_area_adu_c, model: domain_area_reciprocal, inputs: {CD: cd_adu_c}, outputs: {A: area_recip_adu_c}}
+- {id: run_area_adu_as, model: domain_area_reciprocal, inputs: {CD: cd_adu_as}, outputs: {A: area_recip_adu_as}}
+- {id: run_area_acq, model: domain_area_reciprocal, inputs: {CD: cd_acq}, outputs: {A: area_recip_acq}}
+- {id: run_area_coa, model: domain_area_reciprocal, inputs: {CD: cd_coa}, outputs: {A: area_recip_coa}}
+# equivalent radius of the mean domain area
+- {id: run_eqr_inf_c, model: domain_radius_equivalent, inputs: {A: da_inf_c}, outputs: {r: eqr_inf_c}}
+- {id: run_eqr_inf_as, model: domain_radius_equivalent, inputs: {A: da_inf_as}, outputs: {r: eqr_inf_as}}
+- {id: run_eqr_chi_c, model: domain_radius_equivalent, inputs: {A: da_chi_c}, outputs: {r: eqr_chi_c}}
+- {id: run_eqr_chi_as, model: domain_radius_equivalent, inputs: {A: da_chi_as}, outputs: {r: eqr_chi_as}}
+- {id: run_eqr_adu_c, model: domain_radius_equivalent, inputs: {A: da_adu_c}, outputs: {r: eqr_adu_c}}
+- {id: run_eqr_adu_as, model: domain_radius_equivalent, inputs: {A: da_adu_as}, outputs: {r: eqr_adu_as}}
+- {id: run_eqr_acq, model: domain_radius_equivalent, inputs: {A: da_acq}, outputs: {r: eqr_acq}}
+- {id: run_eqr_coa, model: domain_radius_equivalent, inputs: {A: da_coa}, outputs: {r: eqr_coa}}
+# Fig. 2 polynomial at group mean heart masses: fitted groups (controls, acquired AS) and congenital groups
+- {id: run_cdpoly_inf_c, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_inf_c}, outputs: {y: cdpoly_inf_c}}
+- {id: run_cdpoly_chi_c, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_chi_c}, outputs: {y: cdpoly_chi_c}}
+- {id: run_cdpoly_adu_c, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_adu_c}, outputs: {y: cdpoly_adu_c}}
+- {id: run_cdpoly_acq, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_acq}, outputs: {y: cdpoly_acq}}
+- {id: run_cdpoly_inf_as, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_inf_as}, outputs: {y: cdpoly_inf_as}, note: "the density the fit expects at this heart mass; the paper says congenital groups lie above it (no comparison: the claim is an inequality)"}
+- {id: run_cdpoly_chi_as, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_chi_as}, outputs: {y: cdpoly_chi_as}, note: "the paper says congenital groups lie above the fit (no comparison: the claim is an inequality)"}
+- {id: run_cdpoly_adu_as, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_adu_as}, outputs: {y: cdpoly_adu_as}, note: "the paper says congenital groups lie above the fit (no comparison: the claim is an inequality)"}
+- {id: run_cdpoly_coa, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_coa}, outputs: {y: cdpoly_coa}, note: "the paper says coarctation lies above the fit (no comparison: the claim is an inequality)"}
+# Fig. 3 polynomial at group mean heart masses
+- {id: run_dapoly_inf_c, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_inf_c}, outputs: {y: dapoly_inf_c}}
+- {id: run_dapoly_chi_c, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_chi_c}, outputs: {y: dapoly_chi_c}}
+- {id: run_dapoly_adu_c, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_adu_c}, outputs: {y: dapoly_adu_c}}
+- {id: run_dapoly_acq, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_acq}, outputs: {y: dapoly_acq}}
+- {id: run_dapoly_inf_as, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_inf_as}, outputs: {y: dapoly_inf_as}, note: "the paper says congenital groups lie below the fit (no comparison: the claim is an inequality)"}
+- {id: run_dapoly_chi_as, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_chi_as}, outputs: {y: dapoly_chi_as}, note: "the paper says congenital groups lie below the fit (no comparison: the claim is an inequality)"}
+- {id: run_dapoly_adu_as, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_adu_as}, outputs: {y: dapoly_adu_as}, note: "the paper says congenital groups lie below the fit (no comparison: the claim is an inequality)"}
+- {id: run_dapoly_coa, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2, x: hw_coa}, outputs: {y: dapoly_coa}, note: "the paper says coarctation lies below the fit (no comparison: the claim is an inequality)"}
+# Table 1: differences from group 1 (glutaraldehyde perfusion)
+- {id: run_rat_bw_g2, model: rel_change_body_mass, inputs: {ref: rat_bw_g1, val: rat_bw_g2}, outputs: {diff: rat_bw_diff_g2_pred, decrease: rat_bw_dec_g2_pred}}
+- {id: run_rat_bw_g3, model: rel_change_body_mass, inputs: {ref: rat_bw_g1, val: rat_bw_g3}, outputs: {diff: rat_bw_diff_g3_pred, decrease: rat_bw_dec_g3_pred}}
+- {id: run_rat_hw_g2, model: rel_change_heart_mass, inputs: {ref: rat_hw_g1, val: rat_hw_g2}, outputs: {diff: rat_hw_diff_g2_pred, decrease: rat_hw_dec_g2_pred}}
+- {id: run_rat_hw_g3, model: rel_change_heart_mass, inputs: {ref: rat_hw_g1, val: rat_hw_g3}, outputs: {diff: rat_hw_diff_g3_pred, decrease: rat_hw_dec_g3_pred}}
+- {id: run_rat_myo_g2, model: rel_change_myocyte_density, inputs: {ref: rat_myo_g1, val: rat_myo_g2}, outputs: {diff: rat_myo_diff_g2_pred, decrease: rat_myo_dec_g2_pred}}
+- {id: run_rat_myo_g3, model: rel_change_myocyte_density, inputs: {ref: rat_myo_g1, val: rat_myo_g3}, outputs: {diff: rat_myo_diff_g3_pred, decrease: rat_myo_dec_g3_pred}}
+- {id: run_rat_cap_g2, model: rel_change_capillary_density, inputs: {ref: rat_cap_g1, val: rat_cap_g2}, outputs: {diff: rat_cap_diff_g2_pred, decrease: rat_cap_dec_g2_pred}}
+- {id: run_rat_cap_g3, model: rel_change_capillary_density, inputs: {ref: rat_cap_g1, val: rat_cap_g3}, outputs: {diff: rat_cap_diff_g3_pred, decrease: rat_cap_dec_g3_pred}}
+- {id: run_rat_ratio_g2, model: rel_change_myocyte_capillary_ratio, inputs: {ref: rat_ratio_g1, val: rat_ratio_g2}, outputs: {diff: rat_ratio_diff_g2_pred, decrease: rat_ratio_dec_g2_pred}}
+- {id: run_rat_ratio_g3, model: rel_change_myocyte_capillary_ratio, inputs: {ref: rat_ratio_g1, val: rat_ratio_g3}, outputs: {diff: rat_ratio_diff_g3_pred, decrease: rat_ratio_dec_g3_pred}}
+# Table 1: myocytes per capillary from the two density means
+- {id: run_mcr_g1, model: myocyte_capillary_ratio, inputs: {Nm: rat_myo_g1, Nc: rat_cap_g1}, outputs: {ratio: mcr_g1_pred}}
+- {id: run_mcr_g2, model: myocyte_capillary_ratio, inputs: {Nm: rat_myo_g2, Nc: rat_cap_g2}, outputs: {ratio: mcr_g2_pred}}
+- {id: run_mcr_g3, model: myocyte_capillary_ratio, inputs: {Nm: rat_myo_g3, Nc: rat_cap_g3}, outputs: {ratio: mcr_g3_pred}}
+# Text, p. 4: normal growth
+- {id: run_cd_inf_chi, model: rel_change_capillary_density, inputs: {ref: cd_inf_c, val: cd_chi_c}, outputs: {diff: cd_diff_inf_chi_pred, decrease: cd_dec_inf_chi_pred}}
+- {id: run_cd_chi_adu, model: rel_change_capillary_density, inputs: {ref: cd_chi_c, val: cd_adu_c}, outputs: {diff: cd_diff_chi_adu_pred, decrease: cd_dec_chi_adu_pred}}
+- {id: run_hw_chi_adu, model: rel_change_heart_mass, inputs: {ref: hw_chi_c, val: hw_adu_c}, outputs: {diff: hw_diff_chi_adu_pred, decrease: hw_dec_chi_adu_pred}}
+- {id: run_bw_chi_adu, model: rel_change_body_mass, inputs: {ref: bw_chi_c, val: bw_adu_c}, outputs: {diff: bw_diff_chi_adu_pred, decrease: bw_dec_chi_adu_pred}, note: "not compared: the body weight increase, to set beside the printed 56% heart weight increase (see question q_56_percent)"}
+- {id: run_hwratio_inf_chi, model: heart_mass_ratio, inputs: {ref: hw_inf_c, val: hw_chi_c}, outputs: {ratio: hwratio_inf_chi_pred}}
+# Text, pp. 4-5: heart weight with congenital stenosis over controls
+- {id: run_hwratio_inf, model: heart_mass_ratio, inputs: {ref: hw_inf_c, val: hw_inf_as}, outputs: {ratio: hwratio_inf_pred}}
+- {id: run_hwratio_chi, model: heart_mass_ratio, inputs: {ref: hw_chi_c, val: hw_chi_as}, outputs: {ratio: hwratio_chi_pred}}
+- {id: run_hwratio_adu, model: heart_mass_ratio, inputs: {ref: hw_adu_c, val: hw_adu_as}, outputs: {ratio: hwratio_adu_pred}}
+# Figs. 2 and 3, calibrated readings: the printed polynomials against the drawn lines and the markers
+- {id: run_cdpoly_fig2_fit, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3}, sweep: {x: cd_fig2_fit}, outputs: {y: cdpoly_fig2_fit_pred}}
+- {id: run_dapoly_fig3_fit, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2}, sweep: {x: da_fig3_fit}, outputs: {y: dapoly_fig3_fit_pred}}
+- {id: run_cdpoly_fig2_normal, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3}, sweep: {x: cd_fig2_normal}, outputs: {y: cdpoly_fig2_normal_pred}}
+- {id: run_cdpoly_fig2_acquired, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3}, sweep: {x: cd_fig2_acquired}, outputs: {y: cdpoly_fig2_acquired_pred}}
+- {id: run_dapoly_fig3_normal, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2}, sweep: {x: da_fig3_normal}, outputs: {y: dapoly_fig3_normal_pred}}
+- {id: run_dapoly_fig3_acquired, model: da_poly2, inputs: {b0: da_poly_b0, b1: da_poly_b1, b2: da_poly_b2}, sweep: {x: da_fig3_acquired}, outputs: {y: dapoly_fig3_acquired_pred}}
+- {id: run_cdpoly_fig2_congenital, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3}, sweep: {x: cd_fig2_congenital}, outputs: {y: cdpoly_fig2_congenital_pred}, note: "the fit's density at each congenital heart's mass, to set beside the markers the paper says lie above it (an inequality: no comparison)"}
+- {id: run_cdpoly_fig2_coarctation, model: cd_poly3, inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3}, sweep: {x: cd_fig2_coarctation}, outputs: {y: cdpoly_fig2_coarctation_pred}, note: "the paper says coarctation lies above the fit (an inequality: no comparison)"}
+# group means over the per-heart markers (acquired stenosis: all 13 hearts read in both figures)
+- {id: run_mean_fig2_acquired, model: scatter_mean_density, inputs: {P: cd_fig2_acquired}, outputs: {y_mean: cd_acq_fig2_mean, x_mean: hw_acq_fig2_mean}}
+- {id: run_mean_fig3_acquired, model: scatter_mean_domain, inputs: {P: da_fig3_acquired}, outputs: {y_mean: da_acq_fig3_mean, x_mean: hw_acq_fig3_mean}}
+# each acquired-stenosis heart's domain area as 1/density, Fig. 2 against Fig. 3
+- {id: run_domain_per_heart_acq, model: domain_per_heart, inputs: {CD: cd_fig2_acquired, A: da_fig3_acquired}, outputs: {A_pred: da_acq_from_fig2}}

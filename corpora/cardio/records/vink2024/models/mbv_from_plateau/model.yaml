@@ -1,0 +1,17 @@
+id: mbv_from_plateau
+name: MBV by MCE, the replenishment plateau in the myocardium over that in the adjacent LV cavity
+role: processing
+stated: {page: 2, printed_page: "2", quote: "segment were fitted to a mono-exponential function", where: "2.3 Quantification of myocardial perfusion"}
+equation: "y = A (1 - e^(-beta t)); MBV = A / A_LV, averaged over all myocardial ROIs (Vogel et al.)"
+described_from: ref-5
+inputs:
+  A: {quantity: myocardial_blood_volume, unit: dimensionless, description: "plateau acoustic intensity in a myocardial ROI (the paper calls A itself MBV, unitless)"}
+  A_LV: {quantity: myocardial_blood_volume, unit: dimensionless, description: "plateau intensity in the adjacent LV cavity ROI"}
+outputs:
+  MBV: {quantity: myocardial_blood_volume, unit: mL/mL}
+settings: {}
+stochastic: false
+runnable: false
+not_runnable_reason: >-
+  No time-intensity curve, plateau A or A_LV of any ROI is printed, so the model has no inputs; it is recorded as
+  the method behind every printed MBV. The paper also gives no formula for MBF (see q_mbf_formula).

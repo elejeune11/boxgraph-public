@@ -1,0 +1,108 @@
+# Size classes: areas of circular profiles at the printed diameters (p. 3)
+- {id: run_area_d10, model: circle_area, inputs: {d: d_cap_max}, outputs: {A: area_from_d10}}
+- {id: run_area_d20, model: circle_area, inputs: {d: d_art_max}, outputs: {A: area_from_d20}}
+
+# 27% reduction in median MVD (Table 2 medians)
+- {id: run_mvd_reduction, model: relative_reduction, inputs: {a: mvd_c_med, b: mvd_h_med}, outputs: {r: mvd_reduction_pred}}
+
+# 50% higher percentage of expected heart weight (Table 2 medians)
+- {id: run_pehw_increase, model: relative_increase, inputs: {a: pehw_c_med, b: pehw_h_med}, outputs: {r: pehw_increase_pred}}
+
+# Share of microvessels among all vessels >= 10 um2 (ratio of group medians)
+- {id: run_share_c, model: vessel_share, inputs: {mvd: mvd_c_med, total: tvd_c_med_min10}, outputs: {s: share_c_pred}}
+- {id: run_share_h, model: vessel_share, inputs: {mvd: mvd_h_med, total: tvd_h_med_min10}, outputs: {s: share_h_pred}}
+
+# Table 3: R2 of the Group (HFpEF) rows from coefficient and SE, R2 = t^2 / (t^2 + n - 2) (added in audit)
+- {id: run_r2_mvd, model: r2_group_mvd, inputs: {b: b_mvd_group, se: se_mvd_group, n: n_regression_added}, outputs: {r2: r2_mvd_pred}}
+- {id: run_r2_pehw, model: r2_group_pehw, inputs: {b: b_pehw_group, se: se_pehw_group, n: n_regression_added}, outputs: {r2: r2_pehw_pred}}
+- {id: run_r2_cad, model: r2_group_cad, inputs: {b: b_cad_group, se: se_cad_group, n: n_regression_added}, outputs: {r2: r2_cad_pred}}
+- {id: run_r2_fib, model: r2_group_fib, inputs: {b: b_fib_group, se: se_fib_group, n: n_regression_added}, outputs: {r2: r2_fib_pred}}
+
+# Coronary artery disease at autopsy (p. 4)
+- {id: run_pct_h_sten, model: percentage, inputs: {k: n_h_sten, n: n_h_sections}, outputs: {p: pct_h_sten_pred}}
+- {id: run_pct_h_noclin_sten, model: percentage, inputs: {k: n_h_noclin_sten, n: n_h_noclin}, outputs: {p: pct_h_noclin_sten_pred}}
+- {id: run_pct_h_clin_sten, model: percentage, inputs: {k: n_h_clin_sten, n: n_h_clin}, outputs: {p: pct_h_clin_sten_pred}}
+- {id: run_sum_sections, model: count_sum, inputs: {a: n_h_noclin, b: n_h_clin}, outputs: {n: n_h_sections_pred}}
+- {id: run_sum_sten, model: count_sum, inputs: {a: n_h_noclin_sten, b: n_h_clin_sten}, outputs: {n: n_h_sten_pred}}
+- {id: run_h_nosten, model: count_difference, inputs: {n: n_h_sections, k: n_h_sten}, outputs: {m: n_h_nosten_pred}}
+- {id: run_c_sten, model: count_difference, inputs: {n: n_c, k: n_c_nosten_mvd}, outputs: {m: n_c_sten_pred}}
+- {id: run_pct_c_sten, model: percentage, inputs: {k: n_c_sten_pred, n: n_c}, outputs: {p: pct_c_sten_pred}}
+
+# Gross hypertrophy in HFpEF (p. 3) and Table 2's LVH and RVH percentages
+- {id: run_pct_nohyp, model: percentage, inputs: {k: n_h_nohyp, n: n_h}, outputs: {p: pct_h_nohyp_pred}}
+- {id: run_pct_lvonly, model: percentage, inputs: {k: n_h_lvonly, n: n_h}, outputs: {p: pct_h_lvonly_pred}}
+- {id: run_pct_rvonly, model: percentage, inputs: {k: n_h_rvonly, n: n_h}, outputs: {p: pct_h_rvonly_pred}}
+- {id: run_pct_both, model: percentage, inputs: {k: n_h_both, n: n_h}, outputs: {p: pct_h_both_pred}}
+- {id: run_sum_hyp_a, model: count_sum, inputs: {a: n_h_nohyp, b: n_h_lvonly}, outputs: {n: n_hyp_partial_a}}
+- {id: run_sum_hyp_b, model: count_sum, inputs: {a: n_h_rvonly, b: n_h_both}, outputs: {n: n_hyp_partial_b}}
+- {id: run_sum_hyp, model: count_sum, inputs: {a: n_hyp_partial_a, b: n_hyp_partial_b}, outputs: {n: n_h_hyp_total_pred}}
+- {id: run_lvh, model: count_sum, inputs: {a: n_h_lvonly, b: n_h_both}, outputs: {n: n_h_lvh_pred}}
+- {id: run_rvh, model: count_sum, inputs: {a: n_h_rvonly, b: n_h_both}, outputs: {n: n_h_rvh_pred}}
+- {id: run_pct_lvh, model: percentage, inputs: {k: n_h_lvh_pred, n: n_h}, outputs: {p: pct_h_lvh_pred}}
+- {id: run_pct_rvh, model: percentage, inputs: {k: n_h_rvh_pred, n: n_h}, outputs: {p: pct_h_rvh_pred}}
+
+# Creatinine availability (p. S1)
+- {id: run_pct_creat_all, model: percentage, inputs: {k: n_creat_all, n: n_all_supp}, outputs: {p: pct_creat_all_pred}}
+- {id: run_pct_creat_c, model: percentage, inputs: {k: n_creat_c, n: n_c}, outputs: {p: pct_creat_c_pred}}
+- {id: run_pct_creat_h, model: percentage, inputs: {k: n_creat_h, n: n_h}, outputs: {p: pct_creat_h_pred}}
+- {id: run_sum_creat, model: count_sum, inputs: {a: n_creat_c, b: n_creat_h}, outputs: {n: n_creat_all_pred}}
+- {id: run_sum_all, model: count_sum, inputs: {a: n_c, b: n_h}, outputs: {n: n_all_pred}}
+
+# Table S1
+- {id: run_h_ef50, model: count_difference, inputs: {n: n_h, k: n_h_ef40_49}, outputs: {m: n_h_ef50_pred}}
+- {id: run_s1_comm_men, model: percentage, inputs: {k: n_s1_comm_men, n: n_comm}, outputs: {p: pct_s1_comm_men_pred}}
+- {id: run_s1_h_men, model: percentage, inputs: {k: n_s1_h_men, n: n_h}, outputs: {p: pct_s1_h_men_pred}}
+- {id: run_s1_h50_men, model: percentage, inputs: {k: n_s1_h50_men, n: n_h_ef50}, outputs: {p: pct_s1_h50_men_pred}}
+- {id: run_s1_comm_htn, model: percentage, inputs: {k: n_s1_comm_htn, n: n_comm}, outputs: {p: pct_s1_comm_htn_pred}}
+- {id: run_s1_h_htn, model: percentage, inputs: {k: n_s1_h_htn, n: n_h}, outputs: {p: pct_s1_h_htn_pred}}
+- {id: run_s1_h50_htn, model: percentage, inputs: {k: n_s1_h50_htn, n: n_h_ef50}, outputs: {p: pct_s1_h50_htn_pred}}
+- {id: run_s1_comm_dm, model: percentage, inputs: {k: n_s1_comm_dm, n: n_comm}, outputs: {p: pct_s1_comm_dm_pred}}
+- {id: run_s1_h_dm, model: percentage, inputs: {k: n_s1_h_dm, n: n_h}, outputs: {p: pct_s1_h_dm_pred}}
+- {id: run_s1_h50_dm, model: percentage, inputs: {k: n_s1_h50_dm, n: n_h_ef50}, outputs: {p: pct_s1_h50_dm_pred}}
+- {id: run_s1_comm_cad, model: percentage, inputs: {k: n_s1_comm_cad, n: n_comm}, outputs: {p: pct_s1_comm_cad_pred}}
+- {id: run_s1_h_cad, model: percentage, inputs: {k: n_s1_h_cad, n: n_h}, outputs: {p: pct_s1_h_cad_pred}}
+- {id: run_s1_h50_cad, model: percentage, inputs: {k: n_s1_h50_cad, n: n_h_ef50}, outputs: {p: pct_s1_h50_cad_pred}}
+
+# Table S2
+- {id: run_s2_c_hf, model: percentage, inputs: {k: n_s2_c_hf, n: n_c}, outputs: {p: pct_s2_c_hf_pred}}
+- {id: run_s2_h_hf, model: percentage, inputs: {k: n_s2_h_hf, n: n_h}, outputs: {p: pct_s2_h_hf_pred}}
+- {id: run_s2_c_cv, model: percentage, inputs: {k: n_s2_c_cv, n: n_c}, outputs: {p: pct_s2_c_cv_pred}}
+- {id: run_s2_h_cv, model: percentage, inputs: {k: n_s2_h_cv, n: n_h}, outputs: {p: pct_s2_h_cv_pred}}
+- {id: run_s2_c_ncv, model: percentage, inputs: {k: n_s2_c_ncv, n: n_c}, outputs: {p: pct_s2_c_ncv_pred}}
+- {id: run_s2_h_ncv, model: percentage, inputs: {k: n_s2_h_ncv, n: n_h}, outputs: {p: pct_s2_h_ncv_pred}}
+- {id: run_s2_c_sum_a, model: count_sum, inputs: {a: n_s2_c_hf, b: n_s2_c_cv}, outputs: {n: n_s2_c_partial}}
+- {id: run_s2_c_sum, model: count_sum, inputs: {a: n_s2_c_partial, b: n_s2_c_ncv}, outputs: {n: n_s2_c_total_pred}}
+- {id: run_s2_h_sum_a, model: count_sum, inputs: {a: n_s2_h_hf, b: n_s2_h_cv}, outputs: {n: n_s2_h_partial}}
+- {id: run_s2_h_sum, model: count_sum, inputs: {a: n_s2_h_partial, b: n_s2_h_ncv}, outputs: {n: n_s2_h_total_pred}}
+
+# Table S3 (of the 124 HFpEF)
+- {id: run_s3_lvd_mvd, model: percentage, inputs: {k: n_s3_lvd_mvd, n: n_h}, outputs: {p: pct_s3_lvd_mvd_pred}}
+- {id: run_s3_lvd_fib, model: percentage, inputs: {k: n_s3_lvd_fib, n: n_h}, outputs: {p: pct_s3_lvd_fib_pred}}
+- {id: run_s3_lvm_mvd, model: percentage, inputs: {k: n_s3_lvm_mvd, n: n_h}, outputs: {p: pct_s3_lvm_mvd_pred}}
+- {id: run_s3_lvm_fib, model: percentage, inputs: {k: n_s3_lvm_fib, n: n_h}, outputs: {p: pct_s3_lvm_fib_pred}}
+- {id: run_s3_ee_mvd, model: percentage, inputs: {k: n_s3_ee_mvd, n: n_h}, outputs: {p: pct_s3_ee_mvd_pred}}
+- {id: run_s3_ee_fib, model: percentage, inputs: {k: n_s3_ee_fib, n: n_h}, outputs: {p: pct_s3_ee_fib_pred}}
+
+# Table S4 and Fig. S5
+- {id: run_s4_r_men, model: percentage, inputs: {k: n_s4_r_men, n: n_r}, outputs: {p: pct_s4_r_men_pred}}
+- {id: run_s5_c_sum, model: count_sum, inputs: {a: n_s5_c_nohtn, b: n_s5_c_htn}, outputs: {n: n_s5_c_total_pred}}
+- {id: run_s5_h_sum, model: count_sum, inputs: {a: n_s5_h_nohtn, b: n_s5_h_htn}, outputs: {n: n_s5_h_total_pred}}
+- {id: run_s5_c_htn_pct, model: percentage, inputs: {k: n_s5_c_htn, n: n_c}, outputs: {p: pct_s5_c_htn_pred}}
+- {id: run_s5_h_htn_pct, model: percentage, inputs: {k: n_s5_h_htn, n: n_h}, outputs: {p: pct_s5_h_htn_pred}}
+
+# Figure pass (2026-11-11): medians of the plotted frequency distributions, the Fig. 1D share with
+# stenosis, and the correlation of the Fig. S6 markers
+- {id: run_fig1a_control_median, model: hist_median_hw, inputs: {P: fig1a_control_fig, f: bin_label_pos_added}, outputs: {m: fig1a_control_med_pred}}
+- {id: run_fig1a_hfpef_median, model: hist_median_hw, inputs: {P: fig1a_hfpef_fig, f: bin_label_pos_added}, outputs: {m: fig1a_hfpef_med_pred}}
+- {id: run_fig1b_control_median, model: hist_median_pehw, inputs: {P: fig1b_control_fig, f: bin_label_pos_added}, outputs: {m: fig1b_control_med_pred}}
+- {id: run_fig1b_hfpef_median, model: hist_median_pehw, inputs: {P: fig1b_hfpef_fig, f: bin_label_pos_added}, outputs: {m: fig1b_hfpef_med_pred}}
+- {id: run_fig1c_control_median, model: hist_median_cad, inputs: {P: fig1c_control_fig, f: bin_label_pos_added}, outputs: {m: fig1c_control_med_pred}}
+- {id: run_fig1c_hfpef_median, model: hist_median_cad, inputs: {P: fig1c_hfpef_fig, f: bin_label_pos_added}, outputs: {m: fig1c_hfpef_med_pred}}
+- {id: run_fig2a_control_median, model: hist_median_mvd, inputs: {P: fig2a_control_fig, f: bin_label_pos_added}, outputs: {m: fig2a_control_med_pred}}
+- {id: run_fig2a_hfpef_median, model: hist_median_mvd, inputs: {P: fig2a_hfpef_fig, f: bin_label_pos_added}, outputs: {m: fig2a_hfpef_med_pred}}
+- {id: run_fig3a_control_median, model: hist_median_fib, inputs: {P: fig3a_control_fig, f: bin_label_pos_added}, outputs: {m: fig3a_control_med_pred}}
+- {id: run_fig3a_hfpef_median, model: hist_median_fib, inputs: {P: fig3a_hfpef_fig, f: bin_label_pos_added}, outputs: {m: fig3a_hfpef_med_pred}}
+- {id: run_fig1d_control_share, model: share_any_stenosis, inputs: {P: fig1d_control_fig}, outputs: {s: fig1d_control_share_pred}}
+- {id: run_fig1d_hfpef_share, model: share_any_stenosis, inputs: {P: fig1d_hfpef_fig}, outputs: {s: fig1d_hfpef_share_pred}}
+- {id: run_figs6_lvm_r, model: pearson_r_lvm, inputs: {pts: figs6_lvm_fig}, outputs: {r: figs6_lvm_r_pred}}
+- {id: run_figs6_ee_r, model: pearson_r_ee, inputs: {pts: figs6_ee_fig}, outputs: {r: figs6_ee_r_pred}}

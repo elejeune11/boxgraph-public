@@ -1,0 +1,16 @@
+"""Fig. 2 D (PDF p. 5): diffusion radius (um) against cardiomyocyte width (um), per patient; the men (open circles).
+The axis labels below are the printed tick labels, lowest first. See _fig2.py for the method.
+"""
+import importlib.util
+from pathlib import Path
+
+_spec = importlib.util.spec_from_file_location("campbell_fig2", Path(__file__).with_name("_fig2.py"))
+F = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(F)
+
+Y_LABELS = [12, 14, 16, 18, 20, 22]
+X_LABELS = [16, 20, 24, 28, 32, 36]
+
+
+def read(image, at):
+    return F.read_group(image, Y_LABELS, X_LABELS, "open")

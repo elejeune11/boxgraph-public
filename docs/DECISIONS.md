@@ -471,6 +471,15 @@ Each can be revisited; the tests in `docs/TESTS.md` pin the current choice.
   commands after two hours, a single model run near that length is better
   built on a machine without that limit.
 
+## An agent that stops on an error (v0.10)
+
+- **A job whose agent ends on an error never passes**, even if the gate
+  does: records left untouched still validate, so the gate alone cannot
+  tell a finished job from one that never started. An agent that stops on
+  a usage limit is parked at once with the agent's message (trying again
+  before the limit resets would only fail again); any other error is
+  retried with a request to continue where the agent stopped.
+
 ## Rounded inputs in verdicts (v0.9)
 
 - **Why.** In the cardiovascular corpus most results that missed were off by

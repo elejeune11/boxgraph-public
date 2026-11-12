@@ -1,0 +1,109 @@
+# The Fig. 2 cubic of capillary density in heart mass, fitted to rakusan1992's own normal hearts (infancy
+# to young adulthood) and adult hearts with acquired aortic stenosis, run at the median heart weights of
+# mohammed2015's autopsy groups and compared with their median capillary densities. The fit was not made
+# to mohammed2015's data, so these are tests. See q_mohammed_density_vs_fit.
+
+- id: val_cdpoly_mohammed_controls
+  model: cd_poly3
+  inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: 'mohammed2015/hw_c_med'}
+  output: y
+  against: 'mohammed2015/capd_c_med'
+  purpose: validation
+  quantities: {'mohammed2015/heart_weight': heart_mass, 'mohammed2015/capillary_density': capillary_density}
+  conditions_ok: >
+    Both are human LV capillary profiles per mm2 of section against whole heart weight at autopsy, and
+    335 g lies inside the range of hearts the cubic was fitted to (normal hearts of 40-255 g group means and
+    acquired stenosis hearts of 634 +/- 49 g). What differs: mohammed2015's controls are elderly (age at
+    death 74 (61-85) y, n = 104, noncardiac death) and the value is a median by automated CD31 detection of
+    10-78.5 um2 profiles in one 4 um formalin-fixed paraffin section, in whatever fibre orientation; the
+    cubic is a least-squares line through individual hearts aged 0-30 y (controls) and 51-86 y (acquired
+    stenosis), counted by hand in transverse 1 um silver-stained sections of immersion-fixed lateral wall.
+    The cubic at the median heart weight stands for the median density only if density falls monotonically
+    with heart weight over the group's range, which the cubic does between 200 and 800 g.
+  basis: >
+    rakusan1992 presents the cubic as the relation of capillary density to heart weight in human hearts
+    without congenital disease, from growth through acquired pressure-overload hypertrophy (p. 5, Fig. 2:
+    "are best approximated (r=0.93B) as a third-order polynomial"); mohammed2015 cites rakusan1992 (its
+    ref. 30) and prints the heart weight and capillary density of its controls, so the cubic predicts the
+    measured density at the measured heart weight.
+
+- id: val_cdpoly_mohammed_hfpef
+  model: cd_poly3
+  inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: 'mohammed2015/hw_h_med'}
+  output: y
+  against: 'mohammed2015/capd_h_med'
+  purpose: validation
+  quantities: {'mohammed2015/heart_weight': heart_mass, 'mohammed2015/capillary_density': capillary_density}
+  conditions_ok: >
+    mohammed2015's HFpEF hearts (538 (440-659) g, 169% of expected, age at death 78 (68-85) y, n = 124) are
+    hypertrophied hearts of elderly adults, as are the acquired aortic stenosis hearts the cubic was partly
+    fitted to (51-86 y, 634 +/- 49 g); the causes of hypertrophy differ (HFpEF with hypertension and other
+    comorbidities against valvular pressure overload). The measurement methods differ as for the controls
+    (automated CD31 counts of 10-78.5 um2 profiles in 4 um paraffin autopsy sections, median, against manual
+    counts in transverse 1 um sections). Whether the printed HFpEF capillary density is for all 124
+    patients or the 97 with EF >= 50% is not said (mohammed2015/q_capd_subset); the heart weight used is
+    Table 2's, for all 124.
+  basis: >
+    The cubic was fitted to normal hearts together with adult hearts with acquired pressure-overload
+    hypertrophy (p. 5, Fig. 2 legend), and the paper reads it as the density expected at a given heart weight
+    when capillary growth does not keep up with acquired hypertrophy; the HFpEF hearts are acquired
+    hypertrophy in elderly adults, so the cubic predicts their density at their heart weight.
+
+# ---- Cross-record validation job: rakusan1992 with kaneko2011 (2026-11-11) ----
+# The Fig. 2 cubic run at the weight of kaneko2011's one heart (320 g, printed there; added here as
+# hw_kaneko_heart_added) against the three capillary densities kaneko2011 counted along one
+# arteriole-to-venule path of that heart. The cubic was fitted to rakusan1992's own hearts, not to
+# kaneko2011's, so these are tests. Which of the three densities stands for the heart is open
+# (q_kaneko_path_position_vs_fit).
+
+- id: val_cdpoly_kaneko_art
+  model: cd_poly3
+  inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_kaneko_heart_added}
+  output: y
+  against: 'kaneko2011/density_art'
+  purpose: validation
+  quantities: {'kaneko2011/capillary_density': capillary_density}
+  conditions_ok: >
+    Both are capillary profiles per mm2 of transverse section of the human left ventricle, and 320 g lies
+    inside the range of heart weights the cubic was fitted to (between the adult controls, 255 g, and the
+    acquired stenosis hearts, 634 g). What differs: kaneko2011 is one normal heart of a man of 60, older
+    than rakusan1992's normal adults (15-30 y) and younger than most of its acquired stenosis group
+    (51-86 y); its densities are counted at three points on the arteriolar side of one
+    arteriole-to-venule path in the upper middle layer of the anterior wall, in formalin-fixed,
+    paraffin-embedded sections with no stated counting area, against rakusan1992's means over the
+    lateral wall of each heart in 1 um sections. Neither paper corrects for shrinkage.
+  basis: >
+    rakusan1992 presents the cubic as the capillary density expected at a given heart weight in human
+    hearts without congenital disease (p. 5, Fig. 2: 'are best approximated (r=0.93B) as a third-order
+    polynomial'); kaneko2011 cites rakusan1992 (its ref. 18) for capillary density and prints both the
+    weight of its heart and its densities, so the cubic predicts the measured density at that weight.
+
+- id: val_cdpoly_kaneko_mid
+  model: cd_poly3
+  inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_kaneko_heart_added}
+  output: y
+  against: 'kaneko2011/density_mid'
+  purpose: validation
+  quantities: {'kaneko2011/capillary_density': capillary_density}
+  conditions_ok: >
+    As for val_cdpoly_kaneko_art (one normal heart of a man of 60, 320 g, inside the fitted range;
+    upper middle layer of the anterior wall, fixed paraffin sections), but the density is counted at
+    the three middle points of the arteriole-to-venule path.
+  basis: >
+    As for val_cdpoly_kaneko_art: the Fig. 2 cubic (rakusan1992 p. 5, 'are best approximated (r=0.93B)
+    as a third-order polynomial') gives the density expected at kaneko2011's printed heart weight.
+
+- id: val_cdpoly_kaneko_ven
+  model: cd_poly3
+  inputs: {a0: cd_poly_a0, a1: cd_poly_a1, a2: cd_poly_a2, a3: cd_poly_a3, x: hw_kaneko_heart_added}
+  output: y
+  against: 'kaneko2011/density_ven'
+  purpose: validation
+  quantities: {'kaneko2011/capillary_density': capillary_density}
+  conditions_ok: >
+    As for val_cdpoly_kaneko_art (one normal heart of a man of 60, 320 g, inside the fitted range;
+    upper middle layer of the anterior wall, fixed paraffin sections), but the density is counted at
+    the three points on the venular side of the arteriole-to-venule path.
+  basis: >
+    As for val_cdpoly_kaneko_art: the Fig. 2 cubic (rakusan1992 p. 5, 'are best approximated (r=0.93B)
+    as a third-order polynomial') gives the density expected at kaneko2011's printed heart weight.

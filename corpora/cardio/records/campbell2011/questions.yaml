@@ -1,0 +1,263 @@
+- id: q_radius_precedence
+  kind: reading
+  about: [diffusion_radius]
+  text: >
+    The formula is printed "Diffusion radius=√(1 ÷ π x length density)". Read left to right,
+    (1/π) x length density has dimension 1/area and its root 1/length, which cannot be a radius.
+    The record reads π x length density as the divisor, sqrt(1/(π Lv)), the usual definition
+    (radius of the tissue cylinder whose cross-section 1/Lv is served by one capillary).
+  citation: {page: 12, quote: "Diffusion radius was determined according to the formula", where: "Supplement"}
+- id: q_lv_precedence
+  kind: reading
+  about: [capillary_length_density]
+  text: >
+    The length density equation is printed "Length density = 2 · ∑C ÷ ∑Pt · 0.0016mm2". Read left
+    to right it is (2 ∑C/∑Pt) x 0.0016 mm2, an area, not a length per volume. The intended form is
+    presumably 2 ∑C / (∑Pt x 0.0016 mm2), as in the cited stereological methods (refs S8, S9).
+    The model cannot be run either way: no counts are printed.
+  citation: {page: 12, quote: "Capillary length density was calculated using the equation", where: "Supplement"}
+- id: q_lv_counts
+  kind: unstated_input
+  about: [capillary_length_density]
+  text: >
+    No capillary profile counts or grid point counts are printed, so the length densities of
+    Table 2 cannot be recomputed from their stated equation; only the diffusion radius derived
+    from them can be checked.
+- id: q_lv_orientation
+  kind: reading
+  about: [Lv_m_med, Lv_f_med]
+  text: >
+    The length density uses the isotropic-uniform-random relation Lv = 2 QA (profiles per area),
+    but the supplement says each patient had one section of unknown orientation, and the group
+    value "represents the mean of estimates from sections with capillaries in different
+    orientations". A single section that is not isotropic biases Lv per patient (transverse
+    sections overestimate it, longitudinal underestimate it), which widens the spread; the
+    printed group value is a median, not the mean the supplement names. Comparisons with
+    densities counted in transverse section elsewhere (capillaries per mm2) must allow for
+    the factor 2 and for tortuosity.
+  citation: {page: 12, quote: "the mean capillary length density for each patient group represents the mean of estimates", where: "Supplement"}
+- id: q_lv_shrinkage
+  kind: reading
+  about: [Lv_m_med, Lv_f_med, R_m_med, R_f_med]
+  text: >
+    The biopsies were immersion fixed in 4% paraformaldehyde and paraffin embedded; no shrinkage
+    correction is mentioned. Paraffin shrinkage raises length density and lowers diffusion radius
+    and cardiomyocyte width against in vivo values, so these are fixed-tissue values.
+  citation: {page: 10, quote: "immersion fixed in 4% paraformaldehyde and embedded in paraffin", where: "Supplement"}
+- id: q_ratio_of_medians
+  kind: unstated_model
+  about: [size_ratios, cardiac_index, RB_f_med, Rw_m_med, Rw_f_med]
+  text: >
+    The size-normalised ratios of Table 2 (and cardiac index in Table 1) are medians of
+    per-patient ratios; the record can only form the ratio of the group medians, which need not
+    equal them. The comparisons are therefore approximations. The largest differences are the
+    women's diffusion radius/BSA (17/1.8 = 9.4 against the printed 9.0) and diffusion
+    radius/cardiomyocyte width (16/23 = 0.70 and 17/21 = 0.81 against 0.67 and 0.78), consistent
+    with per-patient pairing; they are not evidence of an error.
+- id: q_pct_basis
+  kind: unstated_model
+  about: [female_vs_male_percentages]
+  text: >
+    The text's percentages (47% greater wall area/circumference ratio, BSA 90% and lean body mass
+    72% of men's, 28% lower VEGFR-1, 74% higher VEGF-A, 48% lower VEGFR-1/VEGF-A ratio) do not
+    say what they are computed from; the record assumes the ratio of the printed group medians.
+- id: q_lbm_inputs
+  kind: unstated_input
+  about: [lbm_m_med, lbm_f_med]
+  text: >
+    Lean body mass was calculated by the Boer formula (ref. 48) from height and weight, which the
+    paper does not print per group, so the printed lean body masses cannot be recomputed.
+- id: q_n45
+  kind: reading
+  about: [Lv_m_med, R_m_med, RB_m_med]
+  text: >
+    Table 2 is headed "Males (n=46)" but its footnote says capillary length density and diffusion
+    radius were measured for 45 men, while Fig. 2's legend gives n=46 for males in all panels,
+    including panels C and D of length density and diffusion radius.
+  citation: {page: 5, quote: "Capillary length density and diffusion radius were measured for 45 men", where: "Table 2 footnote"}
+- id: q_arteriolar_density_ratio
+  kind: unexplained_difference
+  about: [art_d_m_med, art_d_f_med, arteriolar_density]
+  text: >
+    (Audit.) Arterioles per section divided by myocardium area per section gives 4/3.4 = 1.18 and
+    4/3.6 = 1.11 per mm2 from the group medians, against the printed medians 1.0 for both sexes.
+    With section areas skewed (men 2.9-5.6 mm2) and small integer counts, a median of per-patient
+    ratios can differ this much from the ratio of medians; the printed values are not shown to be
+    in error. The same holds, to a lesser degree, for the women's stroke work index (69/1.8 = 38
+    against 40).
+- id: q_capillary_density_other_papers
+  kind: unexplained_difference
+  about: [Lv_m_med, Lv_f_med, R_m_med, R_f_med]
+  text: >
+    (Audit, batch 10.) This paper's capillary supply of the adult human LV is markedly lower than
+    in the other human records of the corpus. Its median diffusion radius, 16 um (men) and 17 um
+    (women), compares with the capillary domain radius 12.0 ± 0.2 um of rakusan1992's adult
+    controls (cd_adu_c 2249 ± 85 /mm2 in transverse section, formalin immersion fixed) under the
+    same definition (sqrt of area per capillary over pi): (16/12)^2 = 1.8 times the area per
+    capillary. The length density 1226 mm/mm3 corresponds, for capillaries parallel to the fibres
+    counted in exact cross section, to at most about 1226 profiles per mm2 (fewer with tortuosity),
+    against 2249 (rakusan1992 adults), 2301-3157 (kaneko2011, one heart, upper mid-wall) and the
+    2000-4000 range rakusan1992 quotes for adult mammals. What differs: CD31 staining of single
+    4 um sections of unknown orientation with Lv = 2 QA (isotropy assumed, see q_lv_orientation),
+    biopsies near the base of the lateral wall in older patients (median 64-67 years) with
+    extensive coronary artery disease, many hypertensive or diabetic; rakusan1992 counted
+    transverse sections of young (15-30 y) accident victims. Disease and method are each plausible
+    explanations; the difference is a finding, not an error of either paper. No model in the
+    record links length density to transverse density, so no verdict is formed.
+  citation: {page: 12, quote: "the mean capillary length density for each patient group represents the mean of estimates", where: "Supplement"}
+
+# ---- Added by the figure pass (Fig. 2, p. 5) ----
+- id: q_fig2_settles_ratio_of_medians
+  kind: reading
+  about: [Rw_m_med, Rw_f_med, RB_m_med, RB_f_med, wB_m_med, wB_f_med, fig2_group_stats]
+  text: >
+    Fig. 2 settles q_ratio_of_medians. The per-patient points give medians of per-patient ratios
+    directly: radius/width from panel D 0.665 (men) and 0.778 (women) against the printed 0.67 and
+    0.78; radius/BSA from panel B 7.93 and 8.94 against 8.0 and 9.0; width/BSA from panel A 11.15
+    and 11.97 against 11 and 12. So the printed ratios are medians of per-patient ratios, and the
+    gaps of the ratio-of-medians approximations (cmp_Rw_*, cmp_RB_*, cmp_wB_*), e.g. 0.70 and 0.81
+    against 0.67 and 0.78, come from that pairing, not from an error.
+  citation: {page: 5, quote: "Data are expressed as median (25th to 75th percentiles)", where: "Table 2 footnote; Fig. 2"}
+- id: q_fig2_percentile_method
+  kind: choice
+  about: [fig2_group_stats, Lv_m_q75, Lv_f_q75]
+  text: >
+    The paper does not say how its 25th and 75th percentiles were computed. The record uses linear
+    interpolation between order statistics (numpy's default). This matters only for the length
+    density's upper quartile: from the read points the men's 75th percentile is 1546 (linear),
+    1548 (Hazen), 1549 (median-unbiased) or 1550 (Weibull, (n+1)p) against the printed 1555, and the
+    women's is 1470, 1484, 1489 or 1499 against the printed 1484 (Hazen reproduces it exactly).
+    Every other quartile of width, radius and length density agrees at the printed precision with
+    any of these definitions.
+  citation: {page: 5, quote: "Data are expressed as median (25th to 75th percentiles)", where: "Table 2 footnote"}
+- id: q_fig2_lv_men_median
+  kind: unexplained_difference
+  about: [Lv_m_med, Lv_m_q75, fig2c_lv_m]
+  text: >
+    The men's median length density from the 45 points of Fig. 2 C is the 23rd point, an isolated
+    one (its neighbours read 1180 and 1313 mm/mm3), read at 1222 +/- 5 mm/mm3 against the printed
+    median 1226; the upper quartile is 1546 to 1550 by any usual definition against 1555. Both are
+    under 1% and near the reading interval (about 5 mm/mm3 per point, from the 2.7 px calibration
+    misfit), and the women's values and the men's lower quartile agree, so a plotting or rounding
+    difference is as likely as anything else. The table median and the plotted points agree on the
+    median radius (16 um) either way.
+  citation: {page: 5, quote: "Capillary length density, mm/mm3 1226 (1021–1555)", where: "Table 2; Fig. 2(C)"}
+- id: q_fig2_radius_offset
+  kind: unexplained_difference
+  about: [fig2b_radius_m, fig2c_lv_m, radius_per_patient, diffusion_radius]
+  text: >
+    For every one of the 45 men, the diffusion radius plotted in Fig. 2 B is smaller than
+    sqrt(1/(pi Lv)) of the same patient's length density plotted in Fig. 2 C, by 0.03 to 0.16 um
+    (mean 0.08 um, about 0.5%); for the 11 women the difference is -0.01 to +0.06 um (mean 0.02 um).
+    The sign is the same for every man whatever the pairing of patients with equal BSA, since the
+    sorted radii differ the same way. A 0.5% radius offset needs a 1% length density offset, about
+    13 px on panel C, far beyond its 2.7 px calibration misfit; the panels' axes are read
+    independently and panel D's radii agree with panel B's to 0.03 um. The radii may have been
+    computed from unrounded or differently processed length densities (e.g. a pi or unit
+    approximation of about 1%), but the paper does not say. The group medians (16 and 17 um) are
+    unaffected at their printed precision.
+  citation: {page: 12, quote: "Diffusion radius was determined according to the formula", where: "Supplement; Fig. 2(B, C)"}
+- id: q_fig2_pairing
+  kind: choice
+  about: [radius_per_patient]
+  text: >
+    Panels B and C plot the same patients against the same BSA, so a point of B is paired with the
+    point of C at the same BSA (within 0.004 m2; read x positions of one patient differ by under
+    0.002 m2, distinct BSA values by about 0.01 m2). Several men share a BSA (up to three); within
+    such a group the panels do not say who is who, and the record pairs the highest length density
+    with the smallest radius, the order the decreasing formula requires. This choice can only make
+    the per-patient check look better within those groups; outside them the pairing is unique.
+- id: q_fig2_ties
+  kind: choice
+  about: [fig2_group_stats, rho_RB_m_printed]
+  text: >
+    Read x positions of patients with the same BSA (or width) differ by a fraction of a pixel; the
+    record treats x values within 0.004 m2 (0.02 um for width) as tied and gives them their average
+    rank, as Spearman's coefficient does for equal values. Without this, the men's radius-BSA
+    coefficient is 0.378 (0.38 at the printed precision) instead of 0.375 against the printed 0.37;
+    the other three coefficients agree either way (0.303 / 0.302, -0.378 / -0.371, 0.392 / 0.387
+    against 0.30, -0.37, 0.39).
+- id: q_fig2_legend_n
+  kind: reading
+  about: [n_m_fig2_legend, n_m_lv_table2, fig2b_radius_m, fig2c_lv_m, fig2d_radius_m]
+  text: >
+    The legend of Fig. 2 gives n=46 for men in all four panels, but panels B, C and D each show 45
+    open circles and panel A 46, which agrees with the Table 2 footnote (length density and
+    diffusion radius measured for 45 men). The legend's n applies to panel A only.
+  citation: {page: 5, quote: "Capillary length density and diffusion radius were measured for 45 men", where: "Table 2 footnote; Fig. 2 legend"}
+
+# ---- Cross-record validation job: campbell2011 with kaneko2011 ----
+- id: q_no_validation_kaneko2011
+  kind: unstated_model
+  about: [diffusion_radius, capillary_length_density, Lv_m_med, Lv_f_med, R_m_med, R_f_med]
+  text: >
+    (Cross-record validation, campbell2011 with kaneko2011.) No validation was added in either
+    direction. Neither paper cites the other or says its model explains the other's measurements.
+    This record's only runnable capillary model, diffusion_radius (R = sqrt(1/(pi Lv))), takes a
+    capillary length density per tissue volume; kaneko2011 measures capillary profiles per mm2 of
+    transverse section (kaneko2011/density_art, density_mid, density_ven), a different quantity
+    that equals the length density only for straight capillaries exactly parallel to the fibres
+    and cut exactly transversely, and no paper in the pair states that relation or a tortuosity or
+    orientation factor (see q_lv_orientation). kaneko2011 measures no length density and no
+    diffusion radius against which the model's output could be set. Mapping the two densities as
+    one quantity would cross quantities that only share a dimension, so it was not done.
+    In the other direction, kaneko2011's models (tissue area per capillary as 1/density, segment
+    length histogram statistics, micronecrosis size and length from the microcirculatory unit,
+    serial section stack) take transverse density, segment counts, bundle axes or
+    arteriolar-venular distances, none of which this record measures; nothing measured here
+    (length density, cardiomyocyte width, arteriolar wall area, arteriolar counts, body size,
+    haemodynamics, plasma VEGF) is an output of a kaneko2011 model. The quantitative gap between
+    the two papers' capillary supply is already recorded as a finding in
+    q_capillary_density_other_papers.
+  citation: {page: 12, quote: "Diffusion radius was determined according to the formula", where: "Supplement, Histological analysis"}
+
+# ---- Cross-record validation job: campbell2011 with mohammed2015 ----
+- id: q_no_validation_mohammed2015
+  kind: unstated_model
+  about: [diffusion_radius, capillary_length_density, arteriolar_density, Lv_m_med, Lv_f_med, R_m_med, R_f_med]
+  text: >
+    (Cross-record validation, campbell2011 with mohammed2015.) No validation was added in either
+    direction. Neither paper cites the other. The models here take this paper's own counts and
+    medians: diffusion_radius and radius_per_patient need a capillary length density per tissue
+    volume, capillary_length_density needs summed profile and grid-point counts, arteriolar_density
+    needs arterioles per section and myocardium area, and the rest are ratios of body size,
+    haemodynamic and plasma VEGF values. mohammed2015 measures none of these inputs: its capillary
+    density and microvascular density are CD31 profile counts per mm2 of section (10-78.5 and 10-314
+    um2), not a length density (no orientation or tortuosity factor is stated by either paper; see
+    q_lv_orientation), and they mix capillaries with precapillary arterioles of 10-20 um, unlike the
+    arterioles of 12-151 um counted here. It measures no diffusion radius, cardiomyocyte width,
+    arteriolar count or body-size ratio that a model here could be set against. In the other direction
+    mohammed2015's models are descriptive statistics of its own data (percentages, counts, relative
+    changes, histogram medians, R2, correlations, circle areas, a carried-over density); none gives a
+    length density, diffusion radius, cardiomyocyte width or arteriolar density. Mapping the two
+    papers' densities as one quantity would cross quantities that only share a dimension, so it was
+    not done. The two papers also differ in subjects (living CABG patients' biopsies here, elderly
+    autopsy controls and HFpEF there).
+  citation: {page: 12, quote: "Diffusion radius was determined according to the formula", where: "Supplement, Histological analysis"}
+
+# ---- Cross-record validation job: campbell2011 with rakusan1992 ----
+- id: q_no_validation_rakusan1992
+  kind: unstated_model
+  about: [diffusion_radius, radius_per_patient, size_ratios, Lv_m_med, Lv_f_med, R_m_med, R_f_med, w_m_med, w_f_med]
+  text: >
+    (Cross-record validation, campbell2011 with rakusan1992.) No validation was added in either
+    direction. This paper cites rakusan1992 (ref-23) only for trends: the increased diffusion radius of
+    LV hypertrophy and the limited potential for angiogenesis in the adult heart (p. 4); it says no
+    model of its own explains a value measured there, nor the reverse. Model by model:
+    diffusion_radius and radius_per_patient (R = sqrt(1/(pi Lv))) take a capillary length density per
+    tissue volume; rakusan1992 measures capillary profiles per mm2 of transverse section (cd_*), a
+    different quantity equal to the length density only for straight capillaries cut exactly
+    transversely, a relation neither paper states (q_lv_orientation), and its Krogh/domain radius is
+    derived from that density, not measured. size_ratios needs a diffusion radius, cardiomyocyte width
+    and lean body mass, which rakusan1992 does not measure, and a radius/BSA ratio is not one of its
+    measurements; the other models here process this paper's own counts, haemodynamics and plasma
+    values. In the other direction rakusan1992's cd_poly3 and da_poly2 need a heart weight, which this
+    paper does not print (biopsies of living patients), and give a transverse density or domain area,
+    which this paper does not measure; krogh_radius and domain_area_reciprocal need a transverse
+    capillary density; myocyte_capillary_ratio needs a myocyte density; the relative-change and
+    scatter-mean models process rakusan1992's own groups. Nothing measured here (length density,
+    cardiomyocyte width, arteriolar wall area and counts, body size, haemodynamics, plasma VEGF) is an
+    output of a rakusan1992 model. Mapping capillary_length_density to rakusan1992/capillary_density
+    would cross two quantities that only share a dimension, so it was not done; the gap between the
+    two papers' capillary supply is recorded as a finding in q_capillary_density_other_papers.
+  citation: {page: 4, printed_page: "189", quote: "associated increased diffusion radius,17,23 and the greater", where: Discussion}

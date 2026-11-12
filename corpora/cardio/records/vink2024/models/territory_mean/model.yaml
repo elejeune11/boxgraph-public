@@ -1,0 +1,14 @@
+id: territory_mean
+name: MBV of the whole myocardium as the equally weighted mean of the LAD, RCA and CX territory MBVs, state by state
+role: model
+from_words: true
+stated: {page: 3, printed_page: "3", quote: "myocardium by averaging all myocardial ROI’s, and for the individual", where: "2.3 (MBV of the whole myocardium and of each coronary territory); Suppl. Figs. 1 and 3"}
+equation: "MBV(state) = (MBV_LAD(state) + MBV_RCA(state) + MBV_CX(state)) / 3"
+inputs:
+  LAD: {quantity: myocardial_blood_volume, unit: mL/mL, curve: {quantity: study_state_index, unit: dimensionless}, description: "group mean MBV of the LAD territory by state (Suppl. Fig. 3A)"}
+  RCA: {quantity: myocardial_blood_volume, unit: mL/mL, curve: {quantity: study_state_index, unit: dimensionless}, description: "group mean MBV of the RCA territory by state (Suppl. Fig. 3B)"}
+  CX: {quantity: myocardial_blood_volume, unit: mL/mL, curve: {quantity: study_state_index, unit: dimensionless}, description: "group mean MBV of the CX territory by state (Suppl. Fig. 3C)"}
+outputs:
+  MBV: {quantity: myocardial_blood_volume, unit: mL/mL, curve: {quantity: study_state_index, unit: dimensionless}}
+settings: {}
+stochastic: false

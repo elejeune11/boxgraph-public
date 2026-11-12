@@ -64,6 +64,11 @@ FAKE = textwrap.dedent('''\
         open(os.path.join(os.path.dirname(target), "page5.png"), "w").write("x")
     if "HUGE" in prompt:
         print(json.dumps({"type": "user", "blob": "x" * 300000}))
+    if "LIMIT" in prompt:
+        print(json.dumps({"type": "result", "subtype": "success", "session_id": sid, "total_cost_usd": 0,
+                          "num_turns": 1, "is_error": True, "api_error_status": 429, "api_error": "usage_limit_reached",
+                          "result": "You've hit your 5-hour limit"}))
+        sys.exit(1)
     denials = [{"tool_name": "Edit", "tool_input": {"file_path": "x.yaml"}}] if "DENYEDIT" in prompt else []
     print(json.dumps({"type": "result", "subtype": "success", "session_id": sid, "total_cost_usd": 0.5,
                       "num_turns": 3, "result": "done", "is_error": False, "permission_denials": denials}))
@@ -444,6 +449,19 @@ def test_an_agent_that_dies_without_a_result_is_reported_with_its_error(env):
     j.max_attempts, j.validate = 1, ["false"]
     res = asyncio.run(o.run([j]))
     assert res["dies"]["status"] == "parked" and "overloaded" in res["dies"]["error"]
+
+
+def test_an_agent_that_stops_on_an_error_never_passes_even_if_the_gate_does(env):
+    """An agent that ends on an error (a usage limit, an API error) did not do the job: it is parked with the
+    error, not passed because the untouched records still validate, and a usage limit is not retried."""
+    tmp, fake, val, log = env
+    o = Orchestrator(tmp / "state.db", agent_bin=str(fake), concurrency=1, logs=tmp / "logs")
+    j = make_job(tmp, val, "limited", "LIMIT")
+    j.validate = ["true"]
+    res = asyncio.run(o.run([j]))
+    assert res["limited"]["status"] == "parked"
+    assert "limit" in res["limited"]["error"]
+    assert len(calls(log)) == 1
 
 
 def test_each_passed_job_is_reported_as_it_passes(env):

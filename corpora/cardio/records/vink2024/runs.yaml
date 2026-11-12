@@ -1,0 +1,238 @@
+# Table 1 Total column from the ANOCA and control columns (mean, SD)
+- id: run_pool_t1
+  model: pooled_table1
+  inputs: {n1: t1_n_anoca, n2: t1_n_ctrl,
+           age_m1: t1_age_a_m, age_s1: t1_age_a_s, age_m2: t1_age_c_m, age_s2: t1_age_c_s,
+           bmi_m1: t1_bmi_a_m, bmi_s1: t1_bmi_a_s, bmi_m2: t1_bmi_c_m, bmi_s2: t1_bmi_c_s,
+           ef_m1: t1_ef_a_m, ef_s1: t1_ef_a_s, ef_m2: t1_ef_c_m, ef_s2: t1_ef_c_s,
+           hb_m1: t1_hb_a_m, hb_s1: t1_hb_a_s, hb_m2: t1_hb_c_m, hb_s2: t1_hb_c_s,
+           creat_m1: t1_creat_a_m, creat_s1: t1_creat_a_s, creat_m2: t1_creat_c_m, creat_s2: t1_creat_c_s,
+           plt_m1: t1_plt_a_m, plt_s1: t1_plt_a_s, plt_m2: t1_plt_c_m, plt_s2: t1_plt_c_s,
+           ldl_m1: t1_ldl_a_m, ldl_s1: t1_ldl_a_s, ldl_m2: t1_ldl_c_m, ldl_s2: t1_ldl_c_s}
+  outputs: {age_m: t1_age_tot_m_pred, age_s: t1_age_tot_s_pred, bmi_m: t1_bmi_tot_m_pred, bmi_s: t1_bmi_tot_s_pred,
+            ef_m: t1_ef_tot_m_pred, ef_s: t1_ef_tot_s_pred, hb_m: t1_hb_tot_m_pred, hb_s: t1_hb_tot_s_pred,
+            creat_m: t1_creat_tot_m_pred, creat_s: t1_creat_tot_s_pred, plt_m: t1_plt_tot_m_pred, plt_s: t1_plt_tot_s_pred,
+            ldl_m: t1_ldl_tot_m_pred, ldl_s: t1_ldl_tot_s_pred}
+# Table 2 Total column from the women and men columns (mean, SD)
+- id: run_pool_t2
+  model: pooled_table2
+  inputs: {n1: t2_n_women, n2: t2_n_men,
+           age_m1: t2_age_w_m, age_s1: t2_age_w_s, age_m2: t2_age_m_m, age_s2: t2_age_m_s,
+           bmi_m1: t2_bmi_w_m, bmi_s1: t2_bmi_w_s, bmi_m2: t2_bmi_m_m, bmi_s2: t2_bmi_m_s,
+           ef_m1: t2_ef_w_m, ef_s1: t2_ef_w_s, ef_m2: t2_ef_m_m, ef_s2: t2_ef_m_s,
+           cfr_m1: t2_cfr_w_m, cfr_s1: t2_cfr_w_s, cfr_m2: t2_cfr_m_m, cfr_s2: t2_cfr_m_s,
+           hr0_m1: t2_hr0_w_m, hr0_s1: t2_hr0_w_s, hr0_m2: t2_hr0_m_m, hr0_s2: t2_hr0_m_s,
+           hrmax_m1: t2_hrmax_w_m, hrmax_s1: t2_hrmax_w_s, hrmax_m2: t2_hrmax_m_m, hrmax_s2: t2_hrmax_m_s}
+  outputs: {age_m: t2_age_tot_m_pred, age_s: t2_age_tot_s_pred, bmi_m: t2_bmi_tot_m_pred, bmi_s: t2_bmi_tot_s_pred,
+            ef_m: t2_ef_tot_m_pred, ef_s: t2_ef_tot_s_pred, cfr_m: t2_cfr_tot_m_pred, cfr_s: t2_cfr_tot_s_pred,
+            hr0_m: t2_hr0_tot_m_pred, hr0_s: t2_hr0_tot_s_pred, hrmax_m: t2_hrmax_tot_m_pred, hrmax_s: t2_hrmax_tot_s_pred}
+
+# Percentages in the text (3.1) and the abstract, from the text's counts and the 28 patients
+- {id: run_txt_men_pct, model: percent_of_group, inputs: {k: txt_men_n, n: t1_n_anoca}, outputs: {pct: txt_men_pct_pred}}
+- {id: run_txt_epi_pct, model: percent_of_group, inputs: {k: txt_epi_n, n: t1_n_anoca}, outputs: {pct: txt_epi_pct_pred}}
+- {id: run_txt_mvs_pct, model: percent_of_group, inputs: {k: txt_mvs_n, n: t1_n_anoca}, outputs: {pct: txt_mvs_pct_pred}}
+- {id: run_txt_incon_pct, model: percent_of_group, inputs: {k: txt_incon_n, n: t1_n_anoca}, outputs: {pct: txt_incon_pct_pred}}
+- {id: run_txt_cmd_pct, model: percent_of_group, inputs: {k: txt_cmd_n, n: t1_n_anoca}, outputs: {pct: txt_cmd_pct_pred}}
+- {id: run_txt_neg_pct, model: percent_of_group, inputs: {k: txt_neg_n, n: t1_n_anoca}, outputs: {pct: txt_neg_pct_pred}}
+- {id: run_txt_both_pct, model: percent_of_group, inputs: {k: txt_both_n, n: t1_n_anoca}, outputs: {pct: txt_both_pct_pred}}
+# CFT categories of 3.3 add up to the 28 patients
+- {id: run_cft_sum, model: count_sum3, inputs: {a: txt_dysfunction_n, b: txt_equivocal_n, c: txt_normal_n}, outputs: {total: cft_sum_pred}}
+
+# MCE data yield (3.2)
+- {id: run_roi_excl_a_pct, model: percent_of_group, inputs: {k: roi_excl_a_n, n: roi_total}, outputs: {pct: roi_excl_a_pct_pred}, note: "the only ROI total printed is the 10.033 of both groups"}
+- {id: run_roi_excl_c_pct, model: percent_of_group, inputs: {k: roi_excl_c_n, n: roi_total}, outputs: {pct: roi_excl_c_pct_pred}, note: "the only ROI total printed is the 10.033 of both groups"}
+- {id: run_mbv_count_sum, model: count_sum3, inputs: {a: mbv_n_base, b: mbv_n_ins, c: mbv_n_dob}, outputs: {total: mbv_n_total_pred}}
+- {id: run_miss_base, model: missing_percent, inputs: {N: t1_n_tot, n: mbv_n_base}, outputs: {of_total: miss_base_of_total, of_obtained: miss_base_of_obtained}}
+- {id: run_miss_ins, model: missing_percent, inputs: {N: t1_n_tot, n: mbv_n_ins}, outputs: {of_total: miss_ins_of_total, of_obtained: miss_ins_of_obtained}}
+- {id: run_miss_dob, model: missing_percent, inputs: {N: t1_n_tot, n: mbv_n_dob}, outputs: {of_total: miss_dob_of_total, of_obtained: miss_dob_of_obtained}}
+
+# Microvascular recruitment from the group mean MBVs (2.4, 2.5)
+- {id: run_mvr_ins_a, model: mvr_ratio, inputs: {MBVx: mbv_ins_a_m, MBV0: mbv_base_a_m}, outputs: {MVR: mvr_ins_a_from_means}}
+- {id: run_mvr_ins_c, model: mvr_ratio, inputs: {MBVx: mbv_ins_c_m, MBV0: mbv_base_c_m}, outputs: {MVR: mvr_ins_c_from_means}}
+- {id: run_mvr_dob_a, model: mvr_ratio, inputs: {MBVx: mbv_dob_a_m, MBV0: mbv_base_a_m}, outputs: {MVR: mvr_dob_a_from_means}}
+- {id: run_mvr_dob_c, model: mvr_ratio, inputs: {MBVx: mbv_dob_c_m, MBV0: mbv_base_c_m}, outputs: {MVR: mvr_dob_c_from_means}}
+# Fold MBF from the group mean MBFs (Supplemental Table 3)
+- {id: run_fold_ins_a, model: mbf_fold, inputs: {MBFx: s3_mbf_ins_a_m, MBF0: s3_mbf_base_a_m}, outputs: {fold: fold_ins_a_from_means}}
+- {id: run_fold_ins_c, model: mbf_fold, inputs: {MBFx: s3_mbf_ins_c_m, MBF0: s3_mbf_base_c_m}, outputs: {fold: fold_ins_c_from_means}}
+- {id: run_fold_dob_a, model: mbf_fold, inputs: {MBFx: s3_mbf_dob_a_m, MBF0: s3_mbf_base_a_m}, outputs: {fold: fold_dob_a_from_means}}
+- {id: run_fold_dob_c, model: mbf_fold, inputs: {MBFx: s3_mbf_dob_c_m, MBF0: s3_mbf_base_c_m}, outputs: {fold: fold_dob_c_from_means}}
+
+# Heart rate reserve from the Table 2 heart rates (ANOCA; no heart rates of the controls are printed)
+- {id: run_hrr_a, model: heart_rate_reserve, inputs: {HRmax: t2_hrmax_tot_m, HRrest: t2_hr0_tot_m}, outputs: {HRR: hrr_a_from_means}}
+- {id: run_hrradj_a_220, model: hrr_age_adjusted, inputs: {HRmax: t2_hrmax_tot_m, HRrest: t2_hr0_tot_m, age: t2_age_tot_m, f: hrmax_factor_added}, outputs: {HRRadj: hrradj_a_220_from_means}}
+- {id: run_hrradj_a_085, model: hrr_age_adjusted, inputs: {HRmax: t2_hrmax_tot_m, HRrest: t2_hr0_tot_m, age: t2_age_tot_m, f: target_hr_factor}, outputs: {HRRadj: hrradj_a_085_from_means}}
+
+# Microvascular blood volume per myocardial volume implied by the Discussion's 12 mL/100 g and 90 %
+- {id: run_cbv, model: blood_volume_fraction, inputs: {c: cbv_content, s: micro_share, rho: tissue_density_added}, outputs: {phi: cbv_fraction_pred, phi_micro: mbv_from_content_pred}}
+
+# Table 1 (p. 4): each percentage from its count and group size
+- {id: run_t1_women_tot_pct, model: percent_of_group, inputs: {k: t1_women_tot_n, n: t1_n_tot}, outputs: {pct: t1_women_tot_pct_pred}}
+- {id: run_t1_women_a_pct, model: percent_of_group, inputs: {k: t1_women_a_n, n: t1_n_anoca}, outputs: {pct: t1_women_a_pct_pred}}
+- {id: run_t1_women_c_pct, model: percent_of_group, inputs: {k: t1_women_c_n, n: t1_n_ctrl}, outputs: {pct: t1_women_c_pct_pred}}
+- {id: run_t1_women_sum, model: count_sum, inputs: {a: t1_women_a_n, b: t1_women_c_n}, outputs: {total: t1_women_tot_n_pred}}
+- {id: run_t1_htn_tot_pct, model: percent_of_group, inputs: {k: t1_htn_tot_n, n: t1_n_tot}, outputs: {pct: t1_htn_tot_pct_pred}}
+- {id: run_t1_htn_a_pct, model: percent_of_group, inputs: {k: t1_htn_a_n, n: t1_n_anoca}, outputs: {pct: t1_htn_a_pct_pred}}
+- {id: run_t1_htn_c_pct, model: percent_of_group, inputs: {k: t1_htn_c_n, n: t1_n_ctrl}, outputs: {pct: t1_htn_c_pct_pred}}
+- {id: run_t1_htn_sum, model: count_sum, inputs: {a: t1_htn_a_n, b: t1_htn_c_n}, outputs: {total: t1_htn_tot_n_pred}}
+- {id: run_t1_hlp_tot_pct, model: percent_of_group, inputs: {k: t1_hlp_tot_n, n: t1_n_tot}, outputs: {pct: t1_hlp_tot_pct_pred}}
+- {id: run_t1_hlp_a_pct, model: percent_of_group, inputs: {k: t1_hlp_a_n, n: t1_n_anoca}, outputs: {pct: t1_hlp_a_pct_pred}}
+- {id: run_t1_hlp_c_pct, model: percent_of_group, inputs: {k: t1_hlp_c_n, n: t1_n_ctrl}, outputs: {pct: t1_hlp_c_pct_pred}}
+- {id: run_t1_hlp_sum, model: count_sum, inputs: {a: t1_hlp_a_n, b: t1_hlp_c_n}, outputs: {total: t1_hlp_tot_n_pred}}
+- {id: run_t1_fam_tot_pct, model: percent_of_group, inputs: {k: t1_fam_tot_n, n: t1_n_tot}, outputs: {pct: t1_fam_tot_pct_pred}}
+- {id: run_t1_fam_a_pct, model: percent_of_group, inputs: {k: t1_fam_a_n, n: t1_n_anoca}, outputs: {pct: t1_fam_a_pct_pred}}
+- {id: run_t1_fam_c_pct, model: percent_of_group, inputs: {k: t1_fam_c_n, n: t1_n_ctrl}, outputs: {pct: t1_fam_c_pct_pred}}
+- {id: run_t1_fam_sum, model: count_sum, inputs: {a: t1_fam_a_n, b: t1_fam_c_n}, outputs: {total: t1_fam_tot_n_pred}}
+- {id: run_t1_smoke_tot_pct, model: percent_of_group, inputs: {k: t1_smoke_tot_n, n: t1_n_tot}, outputs: {pct: t1_smoke_tot_pct_pred}}
+- {id: run_t1_smoke_a_pct, model: percent_of_group, inputs: {k: t1_smoke_a_n, n: t1_n_anoca}, outputs: {pct: t1_smoke_a_pct_pred}}
+- {id: run_t1_smoke_c_pct, model: percent_of_group, inputs: {k: t1_smoke_c_n, n: t1_n_ctrl}, outputs: {pct: t1_smoke_c_pct_pred}}
+- {id: run_t1_smoke_sum, model: count_sum, inputs: {a: t1_smoke_a_n, b: t1_smoke_c_n}, outputs: {total: t1_smoke_tot_n_pred}}
+- {id: run_t1_former_tot_pct, model: percent_of_group, inputs: {k: t1_former_tot_n, n: t1_n_tot}, outputs: {pct: t1_former_tot_pct_pred}}
+- {id: run_t1_former_a_pct, model: percent_of_group, inputs: {k: t1_former_a_n, n: t1_n_anoca}, outputs: {pct: t1_former_a_pct_pred}}
+- {id: run_t1_former_c_pct, model: percent_of_group, inputs: {k: t1_former_c_n, n: t1_n_ctrl}, outputs: {pct: t1_former_c_pct_pred}}
+- {id: run_t1_former_sum, model: count_sum, inputs: {a: t1_former_a_n, b: t1_former_c_n}, outputs: {total: t1_former_tot_n_pred}}
+- {id: run_t1_dm_tot_pct, model: percent_of_group, inputs: {k: t1_dm_tot_n, n: t1_n_tot}, outputs: {pct: t1_dm_tot_pct_pred}}
+- {id: run_t1_dm_a_pct, model: percent_of_group, inputs: {k: t1_dm_a_n, n: t1_n_anoca}, outputs: {pct: t1_dm_a_pct_pred}}
+- {id: run_t1_dm_c_pct, model: percent_of_group, inputs: {k: t1_dm_c_n, n: t1_n_ctrl}, outputs: {pct: t1_dm_c_pct_pred}}
+- {id: run_t1_dm_sum, model: count_sum, inputs: {a: t1_dm_a_n, b: t1_dm_c_n}, outputs: {total: t1_dm_tot_n_pred}}
+# Table 2 (p. 4): each percentage from its count and denominator
+- {id: run_t2_chest_tot_pct, model: percent_of_group, inputs: {k: t2_chest_tot_n, n: t2_n_tot}, outputs: {pct: t2_chest_tot_pct_pred}}
+- {id: run_t2_chest_w_pct, model: percent_of_group, inputs: {k: t2_chest_w_n, n: t2_n_women}, outputs: {pct: t2_chest_w_pct_pred}}
+- {id: run_t2_chest_m_pct, model: percent_of_group, inputs: {k: t2_chest_m_n, n: t2_n_men}, outputs: {pct: t2_chest_m_pct_pred}}
+- {id: run_t2_chest_sum, model: count_sum, inputs: {a: t2_chest_w_n, b: t2_chest_m_n}, outputs: {total: t2_chest_tot_n_pred}}
+- {id: run_t2_sob_tot_pct, model: percent_of_group, inputs: {k: t2_sob_tot_n, n: t2_n_tot}, outputs: {pct: t2_sob_tot_pct_pred}}
+- {id: run_t2_sob_w_pct, model: percent_of_group, inputs: {k: t2_sob_w_n, n: t2_n_women}, outputs: {pct: t2_sob_w_pct_pred}}
+- {id: run_t2_sob_m_pct, model: percent_of_group, inputs: {k: t2_sob_m_n, n: t2_n_men}, outputs: {pct: t2_sob_m_pct_pred}}
+- {id: run_t2_sob_sum, model: count_sum, inputs: {a: t2_sob_w_n, b: t2_sob_m_n}, outputs: {total: t2_sob_tot_n_pred}}
+- {id: run_t2_fatigue_tot_pct, model: percent_of_group, inputs: {k: t2_fatigue_tot_n, n: t2_n_tot}, outputs: {pct: t2_fatigue_tot_pct_pred}}
+- {id: run_t2_fatigue_w_pct, model: percent_of_group, inputs: {k: t2_fatigue_w_n, n: t2_n_women}, outputs: {pct: t2_fatigue_w_pct_pred}}
+- {id: run_t2_fatigue_m_pct, model: percent_of_group, inputs: {k: t2_fatigue_m_n, n: t2_n_men}, outputs: {pct: t2_fatigue_m_pct_pred}}
+- {id: run_t2_fatigue_sum, model: count_sum, inputs: {a: t2_fatigue_w_n, b: t2_fatigue_m_n}, outputs: {total: t2_fatigue_tot_n_pred}}
+- {id: run_t2_other_tot_pct, model: percent_of_group, inputs: {k: t2_other_tot_n, n: t2_n_tot}, outputs: {pct: t2_other_tot_pct_pred}}
+- {id: run_t2_other_w_pct, model: percent_of_group, inputs: {k: t2_other_w_n, n: t2_n_women}, outputs: {pct: t2_other_w_pct_pred}}
+- {id: run_t2_other_m_pct, model: percent_of_group, inputs: {k: t2_other_m_n, n: t2_n_men}, outputs: {pct: t2_other_m_pct_pred}}
+- {id: run_t2_other_sum, model: count_sum, inputs: {a: t2_other_w_n, b: t2_other_m_n}, outputs: {total: t2_other_tot_n_pred}}
+- {id: run_t2_typical_tot_pct, model: percent_of_group, inputs: {k: t2_typical_tot_n, n: t2_n_tot}, outputs: {pct: t2_typical_tot_pct_pred}}
+- {id: run_t2_typical_w_pct, model: percent_of_group, inputs: {k: t2_typical_w_n, n: t2_n_women}, outputs: {pct: t2_typical_w_pct_pred}}
+- {id: run_t2_typical_m_pct, model: percent_of_group, inputs: {k: t2_typical_m_n, n: t2_n_men}, outputs: {pct: t2_typical_m_pct_pred}}
+- {id: run_t2_typical_sum, model: count_sum, inputs: {a: t2_typical_w_n, b: t2_typical_m_n}, outputs: {total: t2_typical_tot_n_pred}}
+- {id: run_t2_atypical_tot_pct, model: percent_of_group, inputs: {k: t2_atypical_tot_n, n: t2_n_tot}, outputs: {pct: t2_atypical_tot_pct_pred}}
+- {id: run_t2_atypical_w_pct, model: percent_of_group, inputs: {k: t2_atypical_w_n, n: t2_n_women}, outputs: {pct: t2_atypical_w_pct_pred}}
+- {id: run_t2_atypical_m_pct, model: percent_of_group, inputs: {k: t2_atypical_m_n, n: t2_n_men}, outputs: {pct: t2_atypical_m_pct_pred}}
+- {id: run_t2_atypical_sum, model: count_sum, inputs: {a: t2_atypical_w_n, b: t2_atypical_m_n}, outputs: {total: t2_atypical_tot_n_pred}}
+- {id: run_t2_aspecific_tot_pct, model: percent_of_group, inputs: {k: t2_aspecific_tot_n, n: t2_n_tot}, outputs: {pct: t2_aspecific_tot_pct_pred}}
+- {id: run_t2_aspecific_w_pct, model: percent_of_group, inputs: {k: t2_aspecific_w_n, n: t2_n_women}, outputs: {pct: t2_aspecific_w_pct_pred}}
+- {id: run_t2_aspecific_m_pct, model: percent_of_group, inputs: {k: t2_aspecific_m_n, n: t2_n_men}, outputs: {pct: t2_aspecific_m_pct_pred}}
+- {id: run_t2_aspecific_sum, model: count_sum, inputs: {a: t2_aspecific_w_n, b: t2_aspecific_m_n}, outputs: {total: t2_aspecific_tot_n_pred}}
+- {id: run_t2_nyha1_tot_pct, model: percent_of_group, inputs: {k: t2_nyha1_tot_n, n: t2_n_tot}, outputs: {pct: t2_nyha1_tot_pct_pred}}
+- {id: run_t2_nyha1_w_pct, model: percent_of_group, inputs: {k: t2_nyha1_w_n, n: t2_n_women}, outputs: {pct: t2_nyha1_w_pct_pred}}
+- {id: run_t2_nyha1_m_pct, model: percent_of_group, inputs: {k: t2_nyha1_m_n, n: t2_n_men}, outputs: {pct: t2_nyha1_m_pct_pred}}
+- {id: run_t2_nyha1_sum, model: count_sum, inputs: {a: t2_nyha1_w_n, b: t2_nyha1_m_n}, outputs: {total: t2_nyha1_tot_n_pred}}
+- {id: run_t2_nyha2_tot_pct, model: percent_of_group, inputs: {k: t2_nyha2_tot_n, n: t2_n_tot}, outputs: {pct: t2_nyha2_tot_pct_pred}}
+- {id: run_t2_nyha2_w_pct, model: percent_of_group, inputs: {k: t2_nyha2_w_n, n: t2_n_women}, outputs: {pct: t2_nyha2_w_pct_pred}}
+- {id: run_t2_nyha2_m_pct, model: percent_of_group, inputs: {k: t2_nyha2_m_n, n: t2_n_men}, outputs: {pct: t2_nyha2_m_pct_pred}}
+- {id: run_t2_nyha2_sum, model: count_sum, inputs: {a: t2_nyha2_w_n, b: t2_nyha2_m_n}, outputs: {total: t2_nyha2_tot_n_pred}}
+- {id: run_t2_nyha3_tot_pct, model: percent_of_group, inputs: {k: t2_nyha3_tot_n, n: t2_n_tot}, outputs: {pct: t2_nyha3_tot_pct_pred}}
+- {id: run_t2_nyha3_w_pct, model: percent_of_group, inputs: {k: t2_nyha3_w_n, n: t2_n_women}, outputs: {pct: t2_nyha3_w_pct_pred}}
+- {id: run_t2_nyha3_m_pct, model: percent_of_group, inputs: {k: t2_nyha3_m_n, n: t2_n_men}, outputs: {pct: t2_nyha3_m_pct_pred}}
+- {id: run_t2_nyha3_sum, model: count_sum, inputs: {a: t2_nyha3_w_n, b: t2_nyha3_m_n}, outputs: {total: t2_nyha3_tot_n_pred}}
+- {id: run_t2_nyha4_tot_pct, model: percent_of_group, inputs: {k: t2_nyha4_tot_n, n: t2_n_tot}, outputs: {pct: t2_nyha4_tot_pct_pred}}
+- {id: run_t2_nyha4_w_pct, model: percent_of_group, inputs: {k: t2_nyha4_w_n, n: t2_n_women}, outputs: {pct: t2_nyha4_w_pct_pred}}
+- {id: run_t2_nyha4_m_pct, model: percent_of_group, inputs: {k: t2_nyha4_m_n, n: t2_n_men}, outputs: {pct: t2_nyha4_m_pct_pred}}
+- {id: run_t2_nyha4_sum, model: count_sum, inputs: {a: t2_nyha4_w_n, b: t2_nyha4_m_n}, outputs: {total: t2_nyha4_tot_n_pred}}
+- {id: run_t2_dflow_tot_pct, model: percent_of_group, inputs: {k: t2_dflow_tot_n, n: t2_n_tot}, outputs: {pct: t2_dflow_tot_pct_pred}}
+- {id: run_t2_dflow_w_pct, model: percent_of_group, inputs: {k: t2_dflow_w_n, n: t2_n_women}, outputs: {pct: t2_dflow_w_pct_pred}}
+- {id: run_t2_dflow_m_pct, model: percent_of_group, inputs: {k: t2_dflow_m_n, n: t2_n_men}, outputs: {pct: t2_dflow_m_pct_pred}}
+- {id: run_t2_dflow_sum, model: count_sum, inputs: {a: t2_dflow_w_n, b: t2_dflow_m_n}, outputs: {total: t2_dflow_tot_n_pred}}
+- {id: run_t2_dfmid_tot_pct, model: percent_of_group, inputs: {k: t2_dfmid_tot_n, n: t2_n_tot}, outputs: {pct: t2_dfmid_tot_pct_pred}}
+- {id: run_t2_dfmid_w_pct, model: percent_of_group, inputs: {k: t2_dfmid_w_n, n: t2_n_women}, outputs: {pct: t2_dfmid_w_pct_pred}}
+- {id: run_t2_dfmid_m_pct, model: percent_of_group, inputs: {k: t2_dfmid_m_n, n: t2_n_men}, outputs: {pct: t2_dfmid_m_pct_pred}}
+- {id: run_t2_dfmid_sum, model: count_sum, inputs: {a: t2_dfmid_w_n, b: t2_dfmid_m_n}, outputs: {total: t2_dfmid_tot_n_pred}}
+- {id: run_t2_ace_tot_pct, model: percent_of_group, inputs: {k: t2_ace_tot_n, n: n_med_tot_added}, outputs: {pct: t2_ace_tot_pct_pred}}
+- {id: run_t2_ace_w_pct, model: percent_of_group, inputs: {k: t2_ace_w_n, n: n_med_women_added}, outputs: {pct: t2_ace_w_pct_pred}}
+- {id: run_t2_ace_m_pct, model: percent_of_group, inputs: {k: t2_ace_m_n, n: t2_n_men}, outputs: {pct: t2_ace_m_pct_pred}}
+- {id: run_t2_ace_sum, model: count_sum, inputs: {a: t2_ace_w_n, b: t2_ace_m_n}, outputs: {total: t2_ace_tot_n_pred}}
+- {id: run_t2_anticoag_tot_pct, model: percent_of_group, inputs: {k: t2_anticoag_tot_n, n: n_med_tot_added}, outputs: {pct: t2_anticoag_tot_pct_pred}}
+- {id: run_t2_anticoag_w_pct, model: percent_of_group, inputs: {k: t2_anticoag_w_n, n: n_med_women_added}, outputs: {pct: t2_anticoag_w_pct_pred}}
+- {id: run_t2_anticoag_m_pct, model: percent_of_group, inputs: {k: t2_anticoag_m_n, n: t2_n_men}, outputs: {pct: t2_anticoag_m_pct_pred}}
+- {id: run_t2_anticoag_sum, model: count_sum, inputs: {a: t2_anticoag_w_n, b: t2_anticoag_m_n}, outputs: {total: t2_anticoag_tot_n_pred}}
+- {id: run_t2_beta_tot_pct, model: percent_of_group, inputs: {k: t2_beta_tot_n, n: n_med_tot_added}, outputs: {pct: t2_beta_tot_pct_pred}}
+- {id: run_t2_beta_w_pct, model: percent_of_group, inputs: {k: t2_beta_w_n, n: n_med_women_added}, outputs: {pct: t2_beta_w_pct_pred}}
+- {id: run_t2_beta_m_pct, model: percent_of_group, inputs: {k: t2_beta_m_n, n: t2_n_men}, outputs: {pct: t2_beta_m_pct_pred}}
+- {id: run_t2_beta_sum, model: count_sum, inputs: {a: t2_beta_w_n, b: t2_beta_m_n}, outputs: {total: t2_beta_tot_n_pred}}
+- {id: run_t2_cca_tot_pct, model: percent_of_group, inputs: {k: t2_cca_tot_n, n: n_med_tot_added}, outputs: {pct: t2_cca_tot_pct_pred}}
+- {id: run_t2_cca_w_pct, model: percent_of_group, inputs: {k: t2_cca_w_n, n: n_med_women_added}, outputs: {pct: t2_cca_w_pct_pred}}
+- {id: run_t2_cca_m_pct, model: percent_of_group, inputs: {k: t2_cca_m_n, n: t2_n_men}, outputs: {pct: t2_cca_m_pct_pred}}
+- {id: run_t2_cca_sum, model: count_sum, inputs: {a: t2_cca_w_n, b: t2_cca_m_n}, outputs: {total: t2_cca_tot_n_pred}}
+- {id: run_t2_nitr_tot_pct, model: percent_of_group, inputs: {k: t2_nitr_tot_n, n: n_med_tot_added}, outputs: {pct: t2_nitr_tot_pct_pred}}
+- {id: run_t2_nitr_w_pct, model: percent_of_group, inputs: {k: t2_nitr_w_n, n: n_med_women_added}, outputs: {pct: t2_nitr_w_pct_pred}}
+- {id: run_t2_nitr_m_pct, model: percent_of_group, inputs: {k: t2_nitr_m_n, n: t2_n_men}, outputs: {pct: t2_nitr_m_pct_pred}}
+- {id: run_t2_nitr_sum, model: count_sum, inputs: {a: t2_nitr_w_n, b: t2_nitr_m_n}, outputs: {total: t2_nitr_tot_n_pred}}
+- {id: run_t2_lanitr_tot_pct, model: percent_of_group, inputs: {k: t2_lanitr_tot_n, n: t2_nitr_tot_n}, outputs: {pct: t2_lanitr_tot_pct_pred}}
+- {id: run_t2_lanitr_w_pct, model: percent_of_group, inputs: {k: t2_lanitr_w_n, n: t2_nitr_w_n}, outputs: {pct: t2_lanitr_w_pct_pred}}
+- {id: run_t2_lanitr_m_pct, model: percent_of_group, inputs: {k: t2_lanitr_m_n, n: t2_nitr_m_n}, outputs: {pct: t2_lanitr_m_pct_pred}}
+- {id: run_t2_lanitr_sum, model: count_sum, inputs: {a: t2_lanitr_w_n, b: t2_lanitr_m_n}, outputs: {total: t2_lanitr_tot_n_pred}}
+- {id: run_t2_sanitr_tot_pct, model: percent_of_group, inputs: {k: t2_sanitr_tot_n, n: t2_nitr_tot_n}, outputs: {pct: t2_sanitr_tot_pct_pred}}
+- {id: run_t2_sanitr_w_pct, model: percent_of_group, inputs: {k: t2_sanitr_w_n, n: t2_nitr_w_n}, outputs: {pct: t2_sanitr_w_pct_pred}}
+- {id: run_t2_sanitr_m_pct, model: percent_of_group, inputs: {k: t2_sanitr_m_n, n: t2_nitr_m_n}, outputs: {pct: t2_sanitr_m_pct_pred}}
+- {id: run_t2_sanitr_sum, model: count_sum, inputs: {a: t2_sanitr_w_n, b: t2_sanitr_m_n}, outputs: {total: t2_sanitr_tot_n_pred}}
+- {id: run_t2_statin_tot_pct, model: percent_of_group, inputs: {k: t2_statin_tot_n, n: n_med_tot_added}, outputs: {pct: t2_statin_tot_pct_pred}}
+- {id: run_t2_statin_w_pct, model: percent_of_group, inputs: {k: t2_statin_w_n, n: n_med_women_added}, outputs: {pct: t2_statin_w_pct_pred}}
+- {id: run_t2_statin_m_pct, model: percent_of_group, inputs: {k: t2_statin_m_n, n: t2_n_men}, outputs: {pct: t2_statin_m_pct_pred}}
+- {id: run_t2_statin_sum, model: count_sum, inputs: {a: t2_statin_w_n, b: t2_statin_m_n}, outputs: {total: t2_statin_tot_n_pred}}
+- {id: run_t2_nonins_tot_pct, model: percent_of_group, inputs: {k: t2_nonins_tot_n, n: t2_n_tot}, outputs: {pct: t2_nonins_tot_pct_pred}}
+- {id: run_t2_nonins_w_pct, model: percent_of_group, inputs: {k: t2_nonins_w_n, n: t2_n_women}, outputs: {pct: t2_nonins_w_pct_pred}}
+- {id: run_t2_nonins_m_pct, model: percent_of_group, inputs: {k: t2_nonins_m_n, n: t2_n_men}, outputs: {pct: t2_nonins_m_pct_pred}}
+- {id: run_t2_nonins_sum, model: count_sum, inputs: {a: t2_nonins_w_n, b: t2_nonins_m_n}, outputs: {total: t2_nonins_tot_n_pred}}
+- {id: run_t2_epi_tot_pct, model: percent_of_group, inputs: {k: t2_epi_tot_n, n: t2_n_tot}, outputs: {pct: t2_epi_tot_pct_pred}}
+- {id: run_t2_epi_w_pct, model: percent_of_group, inputs: {k: t2_epi_w_n, n: t2_n_women}, outputs: {pct: t2_epi_w_pct_pred}}
+- {id: run_t2_epi_m_pct, model: percent_of_group, inputs: {k: t2_epi_m_n, n: t2_n_men}, outputs: {pct: t2_epi_m_pct_pred}}
+- {id: run_t2_epi_sum, model: count_sum, inputs: {a: t2_epi_w_n, b: t2_epi_m_n}, outputs: {total: t2_epi_tot_n_pred}}
+- {id: run_t2_mvs_tot_pct, model: percent_of_group, inputs: {k: t2_mvs_tot_n, n: t2_n_tot}, outputs: {pct: t2_mvs_tot_pct_pred}}
+- {id: run_t2_mvs_w_pct, model: percent_of_group, inputs: {k: t2_mvs_w_n, n: t2_n_women}, outputs: {pct: t2_mvs_w_pct_pred}}
+- {id: run_t2_mvs_m_pct, model: percent_of_group, inputs: {k: t2_mvs_m_n, n: t2_n_men}, outputs: {pct: t2_mvs_m_pct_pred}}
+- {id: run_t2_mvs_sum, model: count_sum, inputs: {a: t2_mvs_w_n, b: t2_mvs_m_n}, outputs: {total: t2_mvs_tot_n_pred}}
+- {id: run_t2_incon_tot_pct, model: percent_of_group, inputs: {k: t2_incon_tot_n, n: t2_n_tot}, outputs: {pct: t2_incon_tot_pct_pred}}
+- {id: run_t2_incon_w_pct, model: percent_of_group, inputs: {k: t2_incon_w_n, n: t2_n_women}, outputs: {pct: t2_incon_w_pct_pred}}
+- {id: run_t2_incon_m_pct, model: percent_of_group, inputs: {k: t2_incon_m_n, n: t2_n_men}, outputs: {pct: t2_incon_m_pct_pred}}
+- {id: run_t2_incon_sum, model: count_sum, inputs: {a: t2_incon_w_n, b: t2_incon_m_n}, outputs: {total: t2_incon_tot_n_pred}}
+- {id: run_t2_redcfr_tot_pct, model: percent_of_group, inputs: {k: t2_redcfr_tot_n, n: t2_n_tot}, outputs: {pct: t2_redcfr_tot_pct_pred}}
+- {id: run_t2_redcfr_w_pct, model: percent_of_group, inputs: {k: t2_redcfr_w_n, n: t2_n_women}, outputs: {pct: t2_redcfr_w_pct_pred}}
+- {id: run_t2_redcfr_m_pct, model: percent_of_group, inputs: {k: t2_redcfr_m_n, n: t2_n_men}, outputs: {pct: t2_redcfr_m_pct_pred}}
+- {id: run_t2_redcfr_sum, model: count_sum, inputs: {a: t2_redcfr_w_n, b: t2_redcfr_m_n}, outputs: {total: t2_redcfr_tot_n_pred}}
+- {id: run_t2_inchmr_tot_pct, model: percent_of_group, inputs: {k: t2_inchmr_tot_n, n: n_hmr_tot_added}, outputs: {pct: t2_inchmr_tot_pct_pred}}
+- {id: run_t2_inchmr_w_pct, model: percent_of_group, inputs: {k: t2_inchmr_w_n, n: n_hmr_women_added}, outputs: {pct: t2_inchmr_w_pct_pred}}
+- {id: run_t2_inchmr_m_pct, model: percent_of_group, inputs: {k: t2_inchmr_m_n, n: n_hmr_men_added}, outputs: {pct: t2_inchmr_m_pct_pred}}
+- {id: run_t2_inchmr_sum, model: count_sum, inputs: {a: t2_inchmr_w_n, b: t2_inchmr_m_n}, outputs: {total: t2_inchmr_tot_n_pred}}
+- {id: run_t2_negcft_tot_pct, model: percent_of_group, inputs: {k: t2_negcft_tot_n, n: t2_n_tot}, outputs: {pct: t2_negcft_tot_pct_pred}}
+- {id: run_t2_negcft_w_pct, model: percent_of_group, inputs: {k: t2_negcft_w_n, n: t2_n_women}, outputs: {pct: t2_negcft_w_pct_pred}}
+- {id: run_t2_negcft_m_pct, model: percent_of_group, inputs: {k: t2_negcft_m_n, n: t2_n_men}, outputs: {pct: t2_negcft_m_pct_pred}}
+- {id: run_t2_negcft_sum, model: count_sum, inputs: {a: t2_negcft_w_n, b: t2_negcft_m_n}, outputs: {total: t2_negcft_tot_n_pred}}
+- {id: run_t2_mva_tot_pct, model: percent_of_group, inputs: {k: t2_mva_tot_n, n: t2_n_tot}, outputs: {pct: t2_mva_tot_pct_pred}}
+- {id: run_t2_mva_w_pct, model: percent_of_group, inputs: {k: t2_mva_w_n, n: t2_n_women}, outputs: {pct: t2_mva_w_pct_pred}}
+- {id: run_t2_mva_m_pct, model: percent_of_group, inputs: {k: t2_mva_m_n, n: t2_n_men}, outputs: {pct: t2_mva_m_pct_pred}}
+- {id: run_t2_mva_sum, model: count_sum, inputs: {a: t2_mva_w_n, b: t2_mva_m_n}, outputs: {total: t2_mva_tot_n_pred}}
+# Added in the audit
+- {id: run_txt_men_c_pct, model: percent_of_group, inputs: {k: txt_men_c_n, n: t1_n_ctrl}, outputs: {pct: txt_men_c_pct_pred}}
+# Figure pass (2026-11-11): MVR and fold MBF as ratios of the group means read from the bars (and from the
+# printed means), to compare with the plotted mean ratios of Fig. 3A and Suppl. Fig. 5B
+- {id: run_mvr_fig2a_a, model: mvr_by_state, inputs: {MBV: fig2a_anoca_fig}, outputs: {MVR: mvr_fig2a_a_pred}}
+- {id: run_mvr_fig2a_c, model: mvr_by_state, inputs: {MBV: fig2a_control_fig}, outputs: {MVR: mvr_fig2a_c_pred}}
+- {id: run_mvr_means_a, model: mvr_by_state, inputs: {MBV: mbv_means_a_tab}, outputs: {MVR: mvr_means_a_pred}}
+- {id: run_mvr_means_c, model: mvr_by_state, inputs: {MBV: mbv_means_c_tab}, outputs: {MVR: mvr_means_c_pred}}
+- {id: run_fold_sfig5a_a, model: fold_by_state, inputs: {MBF: sfig5a_anoca_fig}, outputs: {fold: fold_sfig5a_a_pred}}
+- {id: run_fold_sfig5a_c, model: fold_by_state, inputs: {MBF: sfig5a_control_fig}, outputs: {fold: fold_sfig5a_c_pred}}
+- {id: run_fold_means_a, model: fold_by_state, inputs: {MBF: mbf_means_a_tab}, outputs: {fold: fold_means_a_pred}}
+- {id: run_fold_means_c, model: fold_by_state, inputs: {MBF: mbf_means_c_tab}, outputs: {fold: fold_means_c_pred}}
+# The whole-myocardium MBV as the equal-weight mean of the three territories of Suppl. Fig. 3
+- {id: run_terr_mean_a, model: territory_mean, inputs: {LAD: sfig3a_anoca_fig, RCA: sfig3b_anoca_fig, CX: sfig3c_anoca_fig}, outputs: {MBV: mbv_terr_mean_a_pred}}
+- {id: run_terr_mean_c, model: territory_mean, inputs: {LAD: sfig3a_control_fig, RCA: sfig3b_control_fig, CX: sfig3c_control_fig}, outputs: {MBV: mbv_terr_mean_c_pred}}
+
+# ---- per-participant scatter plots (figure pass, 2026-11-11) ----
+- {id: run_r_sfig4, model: r_hmr_mbv, inputs: {A: sfig4_anoca_fig}, outputs: {r: r_sfig4_pred}}
+- {id: run_r_sfig7a, model: r_mvalue_mvr, inputs: {A: sfig7a_anoca_fig, B: sfig7a_control_fig}, outputs: {r: r_sfig7a_pred}}
+- {id: run_r_sfig7b, model: r_mvalue_fold, inputs: {A: sfig7b_anoca_fig, B: sfig7b_control_fig}, outputs: {r: r_sfig7b_pred}}
+- {id: run_r_sfig8a, model: r_hrr_mvr, inputs: {A: sfig8a_anoca_fig, B: sfig8a_control_fig}, outputs: {r: r_sfig8a_pred}}
+- {id: run_r_sfig8b, model: r_hrr_fold, inputs: {A: sfig8b_anoca_fig, B: sfig8b_control_fig}, outputs: {r: r_sfig8b_pred}}
+- {id: run_r2_sfig2, model: r2_interobserver, inputs: {A: sfig2_patients_fig, B: sfig2_controls_fig}, outputs: {R2: r2_sfig2_pred}}
+- {id: run_sfig2_identity, model: identity_line, inputs: {}, sweep: {x: sfig2_line_fig}, outputs: {y: sfig2_identity_pred}}
+- {id: run_sfig2_ols, model: ols_line, inputs: {A: sfig2_patients_fig, B: sfig2_controls_fig, L: sfig2_line_fig}, outputs: {y: sfig2_ols_pred}}

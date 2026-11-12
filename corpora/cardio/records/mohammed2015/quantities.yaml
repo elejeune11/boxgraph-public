@@ -1,0 +1,46 @@
+# conditions
+- {id: species, name: species, dimension: dimensionless, description: "used as a condition"}
+- {id: subject_group, name: group of subjects, dimension: dimensionless, description: "used as a condition: control (noncardiac death, no HF diagnosis), HFpEF (EF >= 40% at HF diagnosis), HFrEF (EF < 40%), or a subset of these"}
+- {id: statistic, name: summary statistic of a group, dimension: dimensionless, description: "used as a condition: median, 25th percentile, 75th percentile or mean over the subjects of a group"}
+- {id: analysis_subset, name: subset of subjects analysed, dimension: dimensionless, description: "used as a condition: e.g. all subjects, HFpEF with EF >= 50% only, subjects without an epicardial stenosis > 50%"}
+- {id: minimum_stain_area, name: minimum CD31 stain area counted as a vessel, dimension: "[length]**2", description: "used as a condition: stain areas below it were excluded as nonspecific binding and fragments (10 um2), or no minimum"}
+
+# histology
+- {id: microvascular_density, name: microvessel profiles per unit area of LV tissue section, dimension: "1/[length]**2", description: "automated count of CD31-stained vessel profiles of 10 to 314 um2 (capillaries and precapillary arterioles) per mm2 of tissue in one transmural, formalin-fixed, paraffin-embedded 4 um autopsy section of the mid-ventricular LV wall; profiles counted in whatever orientation the fibres have, longitudinal profiles above 314 um2 excluded; no shrinkage correction"}
+- {id: capillary_density, name: capillary profiles per unit area of LV tissue section, dimension: "1/[length]**2", description: "as microvascular_density but only profiles of 10 to 78.5 um2 (luminal diameter <= 10 um assuming a circular profile)"}
+- {id: total_vessel_density, name: all CD31-stained vessel profiles per unit area of LV tissue section, dimension: "1/[length]**2", description: "all detected vessel profiles of any size (97% below 314 um2), with or without the 10 um2 minimum stain area"}
+- {id: vessel_profile_area, name: area of a vessel profile in the section, dimension: "[length]**2", description: "used for the size classes: capillary 10-78.5 um2, precapillary arteriole 78.5-314 um2"}
+- {id: vessel_luminal_diameter, name: average luminal diameter of a vessel, dimension: "[length]", description: "capillary <= 10 um, small precapillary arteriole 10-20 um"}
+- {id: vessel_share, name: share of the detected vessel profiles that are microvessels (below 314 um2), dimension: dimensionless}
+- {id: fibrosis_area_fraction, name: collagen-stained area as a fraction of total tissue area, dimension: dimensionless, description: "automated detection of van Gieson red in Sulfated Alcian blue / van Gieson stained 4 um sections"}
+- {id: tissue_area_analyzed, name: tissue area analysed per subject, dimension: "[length]**2"}
+- {id: stain_intensity_threshold, name: CD31 stain intensity threshold for vessel detection, dimension: dimensionless}
+
+# heart weight
+- {id: heart_weight, name: absolute heart weight at autopsy, dimension: "[mass]"}
+- {id: percent_expected_heart_weight, name: "heart weight as a percentage of that expected for age, sex, body weight and height", dimension: dimensionless, description: "from the Mayo age nomograms (ref 21)"}
+
+# derived summaries
+- {id: relative_reduction, name: relative reduction of a group value against controls, dimension: dimensionless, description: "(control - group) / control"}
+- {id: relative_increase, name: relative increase of a group value over controls, dimension: dimensionless, description: "group / control - 1"}
+- {id: variance_explained, name: share of the variability explained by a regression model (R2), dimension: dimensionless}
+- {id: mvd_group_coefficient, name: least-squares coefficient of group (HFpEF) on microvascular density, dimension: "1/[length]**2", description: "Table 3 regression coefficient or its standard error, in vessels/mm2 (added in audit)"}
+- {id: pehw_group_coefficient, name: least-squares coefficient of group (HFpEF) on percent expected heart weight, dimension: dimensionless, description: "Table 3 regression coefficient or its standard error, in percentage points as printed (the text says log % expected HW was analysed) (added in audit)"}
+- {id: cad_score_group_coefficient, name: least-squares coefficient of group (HFpEF) on the CAD sum score, dimension: dimensionless, description: "Table 3 regression coefficient or its standard error (added in audit)"}
+- {id: log_fibrosis_group_coefficient, name: least-squares coefficient of group (HFpEF) on log % area fibrosis, dimension: dimensionless, description: "Table 3 regression coefficient or its standard error; base of the log not stated (added in audit)"}
+- {id: age_at_death, name: age at death, dimension: "[time]", description: "added in audit"}
+
+# figure pass (2026-11-11)
+- {id: cad_sum_score, name: coronary artery stenosis total (sum) score at autopsy, dimension: dimensionless, description: "sum over the epicardial coronary segments of the graded stenosis (Table 2 'Coronary artery stenosis total score', Fig. 1C)"}
+- {id: stenosed_vessel_count, name: number of epicardial coronary vessels with > 50% stenosis, dimension: dimensionless, description: "x axis of Fig. 1D"}
+- {id: box_group_index, name: position of a group's box in a box-plot panel, dimension: dimensionless, description: "1, 2, ... from the left, as the reading's `what` lists them (e.g. Fig. 4: 1 control, 2 HFpEF, 3 HFrEF)"}
+- {id: box_statistic_index, name: which statistic of a Tukey box, dimension: dimensionless, description: "1 lower whisker end, 2 25th percentile, 3 median, 4 75th percentile, 5 upper whisker end"}
+- {id: wall_region_index, name: region of the LV wall, dimension: dimensionless, description: "Fig. 2B: 1 subepicardium (Epi), 2 midmyocardium (Midwall), 3 subendocardium (Endo), 4 papillary muscle (Pap)"}
+- {id: bin_label_position, name: position of a histogram bin's label within its bin, dimension: dimensionless, description: "fraction of the bin width from its lower edge (0.5: bins centred on their labels)"}
+- {id: lv_mass, name: echocardiographic left ventricular mass, dimension: "[mass]"}
+- {id: mitral_e_e_ratio, name: "ratio of mitral early inflow velocity to early diastolic mitral annular velocity (E/e')", dimension: dimensionless}
+- {id: correlation_coefficient, name: correlation coefficient between two measured variables over patients, dimension: dimensionless}
+
+# counts
+- {id: patient_count, name: number of subjects, dimension: dimensionless}
+- {id: patient_percentage, name: share of the subjects of a group, dimension: dimensionless, description: "a count as a percentage of the group or subgroup it is taken from"}

@@ -287,29 +287,40 @@ Three more batches followed (v0.10):
   wave intensity analysis is rebuilt from its own plotted pressure and
   velocity traces and compared with its plotted wave intensities.
 
-The corpus now has 47 sources and its ledger 454 passed jobs: 47 read,
-35 audit, 35 digitize, 169 relate and 168 validate. Recorded cost: $798.93
-(read $238.92, audit $52.62, digitize $242.94, relate $129.97, validate
-$134.48).
+- **Batch 10, human capillaries:** Kaneko 2011 (one human capillary bed
+  rebuilt in 3D from serial sections), Rakusan 1992 (capillary density and
+  domain radius from infancy to adulthood, with and without pressure
+  overload), Campbell 2011 (capillary length density and diffusion radius
+  in men and women with coronary artery disease), Mohammed 2015 (capillary
+  density in heart failure with preserved ejection fraction, from autopsy)
+  and Vink 2024 (myocardial blood volume, CFR and hyperemic microvascular
+  resistance in people with angina and non-obstructed coronary arteries,
+  with its supplement). Their values are related to each other and to
+  Kassab 1993, Schwarz 2020 and the coronary models.
+
+The corpus now has 52 sources and its ledger 499 passed jobs: 52 read,
+40 audit, 40 digitize, 184 relate and 183 validate. Recorded cost: $879.73
+(read $260.29, audit $61.03, digitize $277.23, relate $135.90, validate
+$145.28).
 
 The build (`build/cardio/synthesis.json`):
 
-- 174 relations (113 verified, 21 not verified, 4 refuted, 2 ambiguous,
-  34 unverifiable) and 21 families;
-- 244 cross-paper runs checked;
-- 2377 cited values, 703 of them with a verdict (655 reproduced, 4 close,
+- 177 relations (116 verified, 21 not verified, 4 refuted, 2 ambiguous,
+  34 unverifiable) and 23 families;
+- 264 cross-paper runs checked;
+- 2400 cited values, 705 of them with a verdict (657 reproduced, 4 close,
   24 not reproduced, 20 without a verdict);
-- 318 validations of one paper's models against another paper's
-  measurements: 295 tests (32 reproduced, 17 close, 245 not reproduced,
+- 333 validations of one paper's models against another paper's
+  measurements: 310 tests (36 reproduced, 20 close, 253 not reproduced,
   one without a verdict) and 23 fits (one reproduced). Most measured
   curves are judged point by point at the precision of a figure reading;
-- 831 findings: 650 not reproduced, 91 that depend on an added input,
+- 848 findings: 660 not reproduced, 98 that depend on an added input,
   52 family conflicts, 24 cited values, three refuted relations, 11 that
   belong to the numerics;
 - 17 corrected variants of misprinted models.
 
-Reproduction across the corpus: 2045 comparisons reproduced, 89 close,
-788 not reproduced, 76 without a verdict, with the rounding of printed inputs
+Reproduction across the corpus: 2265 comparisons reproduced, 94 close,
+798 not reproduced, 77 without a verdict, with the rounding of printed inputs
 taken into account (DECISIONS, Rounded inputs in verdicts).
 
 Corrected variants: Korakianitis and Shi 2006 as printed reproduces 2 of 117
