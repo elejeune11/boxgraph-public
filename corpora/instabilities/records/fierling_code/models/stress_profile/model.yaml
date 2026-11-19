@@ -1,0 +1,16 @@
+id: stress_profile
+name: simulated stresses and pre-stress in an angular band of the mid cross-section (released StressEquatEulerStrains file)
+role: processing
+software: true
+stated: {file: stress_profile.plot, lines: "43-56", quote: "w vectors nohead ls LS_Sim_DV tit \"stress σ_{DV}\""}
+equation: "in the band of angular width pi/nbbins/2 centred on phi_Eul (column 3) that holds theta: sigma_AP = column 6, sigma_DV = column 7, sigma_a = chi (1 - x)/x with x = column 1 (settings.plot lines 6, 9-11)"
+inputs:
+  theta: {quantity: angle_from_midline, unit: rad}
+  chi: {quantity: compression_modulus_nd, unit: dimensionless}
+outputs:
+  sigma_ap: {quantity: stress_ap_nd, unit: dimensionless}
+  sigma_dv: {quantity: stress_dv_nd, unit: dimensionless}
+  sigma_a: {quantity: prestress_nd, unit: dimensionless}
+  ratio: {quantity: stress_anisotropy_ratio, unit: dimensionless}
+settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step013.dmp.gdat", nbbins: 20}
+stochastic: false

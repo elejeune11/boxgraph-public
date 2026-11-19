@@ -1,0 +1,18 @@
+id: shh_diffusion_reaction
+name: steady diffusion-reaction of Shh below a curved endoderm (Fig. S3)
+role: model
+stated: {page: 17, quote: "Basic diffusion-reaction partial differential equation in 1-D (upper) and 3-D (bottom) form", where: "Fig. S3E"}
+equation: "dc/dt = D grad^2 c - k c (steady state); constant unit secretion flux at the endodermal surface, c = 0 at the bottom, no flux elsewhere"
+inputs:
+  D: {quantity: morphogen_diffusion_coefficient, unit: um^2/s}
+  k: {quantity: morphogen_degradation_rate, unit: 1/s}
+  J: {quantity: secretion_flux, unit: dimensionless}
+outputs:
+  c: {quantity: morphogen_concentration, unit: dimensionless}
+settings: {}
+stochastic: false
+runnable: false
+not_runnable_reason: >
+  Solved by finite elements (CUBIT meshes, deal.II) on 3-D shapes whose dimensions are not printed (only that
+  they follow aspect ratios measured on images of E13 and E14 guts); the results are colour maps in
+  arbitrary units with no printed value to compare with.

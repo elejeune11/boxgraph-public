@@ -1,0 +1,28 @@
+id: multilayer_wavelength
+name: wrinkle wavelength of a gold film on a modified PDMS surface layer (Fig. 3), composite-plate reconstruction
+role: model
+stated: {page: 3, printed_page: "148", quote: "This modification creates a multilayered film with an effective bending", where: "text and Fig. 3"}
+reconstructed: >
+  The paper gives no equation or method for the multilayer wavelength behind Fig. 3 and the "factor of 7";
+  it says only that the modified layer gives "a multilayered film with an effective bending stiffness larger
+  than that of the thin metal film". The reader's stand-in: the gold film and the modified layer are one
+  composite plate (plane-strain moduli E/(1 - nu^2), bending stiffness D about its neutral axis), wrinkling on
+  the PDMS half-space with Eq. 3 written as L = 2 pi (4 D / E_p_bar)^(1/3), which reduces to Eq. 3 for a single
+  film (4.36 = 2 pi / 3^(1/3)).
+from_words: true
+equation: "L = 2 pi (4 D / E_p_bar)^(1/3), D = sum_i E_i_bar [t_i^3/12 + t_i (z_i - z_n)^2]; factor = L / L(t_1 = 0)"
+built_from: [wavelength_eq3]
+inputs:
+  Em: {quantity: film_youngs_modulus, unit: Pa}
+  nu_m: {quantity: film_poisson_ratio, unit: dimensionless}
+  t: {quantity: film_thickness, unit: nm}
+  E1: {quantity: modified_layer_youngs_modulus, unit: Pa}
+  nu_1: {quantity: modified_layer_poisson_ratio, unit: dimensionless}
+  t1: {quantity: modified_layer_thickness, unit: nm}
+  Ep: {quantity: substrate_youngs_modulus, unit: Pa}
+  nu_p: {quantity: substrate_poisson_ratio, unit: dimensionless}
+outputs:
+  L: {quantity: wrinkle_wavelength, unit: um}
+  factor: {quantity: wavelength_increase_factor, unit: dimensionless}
+settings: {}
+stochastic: false

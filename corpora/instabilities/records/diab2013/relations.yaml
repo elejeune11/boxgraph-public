@@ -1,0 +1,82 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+- id: rel_biot1963_critical_stretch
+  kind: same_as
+  a: biot1963/crit_stretch_plane
+  b: diab2013/biot_stretch_eq28
+  mapping: {}
+  regime: {zeta: [0.839286755, 0.839286765]}
+  provenance: stated
+  citation: {page: 2, quote: "Biot [7] showed, in his linear bifurcation analysis, that the flat surface", where: text}
+  reason: >
+    The paper attributes its eps_B = 0.456 (the divergence of Eq. 2.8, nominal strain eps = 1 - lambda) to Biot [7]
+    (biot1963). Biot's critical stretch is Eq. 4.2 evaluated at the root of the cubic Eq. 2.9, zeta = 0.8392868;
+    the regime is pinned at that root because crit_stretch_plane takes zeta as an input and the relation holds
+    only there. The helper biot_stretch_eq28 gives Diab's point as a stretch (1 - eps_B), since Biot prints a
+    stretch; the two critical conditions (zeta^3 + 2 zeta^2 - 2 = 0 with zeta = (1 - lambda^4)/(1 + lambda^4), and
+    lambda^3 + lambda^2 + lambda - 1 = 0) have the same positive root lambda = 0.54369.
+# Against cao2012 (job cao2012+diab2013). diab2013's ref-10 is Cao & Hutchinson 2012, Proc. R. Soc. A 468, 94-115
+# ("From wrinkles to creases in elastomers"), not the J. Appl. Mech. bilayer paper that is the cao2012 record, so
+# diab2013 states no relation to cao2012's models and no value is linked in cited.yaml. Both papers give Biot's
+# plane-strain critical strain 0.456 (diab2013 p. 2; cao2012 p. 2 and Eq. 7 with lambda_3 = 1), so that one link is
+# proposed. cao2012's bilayer and simple-formula models have no counterpart in diab2013 (a homogeneous half-space).
+- id: rel_cao_eq7_plane_to_diab_biot_strain
+  kind: reduces_to
+  a: cao2012/biot_surface_eq7
+  b: diab2013/biot_strain_eq28
+  mapping: {}
+  limit: {lam3: "1"}
+  regime: {c: [0.54368901, 0.54368902], lam3: [1, 1.5]}
+  provenance: proposed
+  reason: >
+    cao2012's Eq. 7, eW = 1 - c/sqrt(lambda_3), in plane strain (lambda_3 = 1) gives eW = 1 - c, the strain at
+    Biot's critical stretch c. diab2013's eps_B is the same nominal compressive strain (eps = 1 - lambda) at which
+    kbar of Eq. 2.8 diverges, the root of lambda^3 + lambda^2 + lambda - 1 = 0, lambda = 0.5436890. Both papers
+    print it as 0.456 and attribute it to Biot. The regime pins c at that root, since cao2012 takes it as the
+    printed constant 0.5437 and the relation holds only there.
+  assumptions:
+    - "both strains are nominal compressive strains, 1 - lambda_1 (cao2012 Eq. 4; diab2013 p. 5)"
+    - "plane strain is lambda_3 = 1 in cao2012's Eq. 7"
+    - "cao2012's constant c is the root of diab2013's divergence condition (both are Biot's plane-strain critical stretch); cao2012 prints it rounded as 0.5437"
+# Against hong2009 (job diab2013+hong2009). diab2013 cites Hong et al. [9] (pp. 2, 11) only for the crease strain
+# 0.35, which in both papers comes from finite-element energies (hong2009 Fig. 3; diab2013's lower bound of the
+# crease strain, figure 2a, eps_H), neither of which is a runnable model here. That value is linked in cited.yaml.
+# No relation is entered between models: diab2013's Eq. 2.8 and M-point models have no counterpart in hong2009,
+# whose models only convert a plane-strain critical strain into stretches and swelling ratios (Eqs. 3-6). Feeding
+# diab2013's eps_B into hong2009's plane_strain_stretch would give biot_stretch_eq28 by construction
+# (lambda = 1 - eps in both) and test nothing; hong2009 takes its epsilon_biot from biot1963, not from diab2013.
+# Against trujillo2008 (job diab2013+trujillo2008). diab2013 does not cite Trujillo, Kim & Hayward (2008), and the
+# earlier paper cannot cite diab2013: no relation is stated and no value is linked in cited.yaml. No relation is
+# proposed either. The two papers share only Biot's threshold, and in different loadings: diab2013's
+# biot_strain_eq28 / biot_stretch_eq28 are Biot's plane-strain point (eps_B = 0.456, no inputs), while
+# trujillo2008's biot_equibiaxial is the equibiaxial case (e_c = 1 - (lambda1^2 lambda3)^(1/3) = 0.334) and its
+# stretch_product returns lambda1^2 lambda3, a different quantity from diab2013's stretch or strain. No mapping of
+# existing models joins them without a helper, which no paper's statement calls for. Both already meet at
+# biot1963 (diab2013/biot_stretch_eq28 same_as biot1963/crit_stretch_plane; trujillo2008/stretch_product same_as
+# biot1963/k_plane_eq411 with lambda3 = 1): at lambda1 = lambda_B = 0.5437, lambda3 = 1, the product is 0.2956,
+# Trujillo's 0.296. trujillo2008's measured equibiaxial crease strain (e_c ~ 0.33) is data, not a model, and is
+# for comparing with plane-strain crease thresholds (diab2013's 0.35 from finite elements) in the synthesis.
+# Against cao2011 (job cao2011+diab2013). diab2013's ref-10 (Cao & Hutchinson 2012, Proc. R. Soc. A 468, 94-115) is
+# the cao2011 record. diab2013 cites it twice (p. 2: imperfection sensitivity of wrinkling and the FE observation that
+# creasing sets off at the Biot strain locally; p. 12: the plane-strain crease-tip strain is "believed to be" eps_B).
+# Neither is a stated relation between models: diab2013's crease-tip strain (crease_tip_strain_fem, 0.456) is an
+# ABAQUS result with no model here, and diab2013 takes no value from ref-10 (no datum has from_source ref-10), so
+# nothing is linked in cited.yaml. diab2013 attributes eps_B to Biot [7], not to Cao, so the one link between the
+# two papers' models, Biot's plane-strain wrinkling strain, is proposed.
+- id: rel_cao2011_biot_plane_to_diab_biot_strain
+  kind: reduces_to
+  a: cao2011/biot_eq28
+  b: diab2013/biot_strain_eq28
+  mapping: {}
+  output_map: {eps_B: eps_W}
+  limit: {lam3: "1"}
+  regime: {lam3: [1, 1.5]}
+  provenance: proposed
+  reason: >
+    cao2011's Eqs. 1.1 and 2.8 give the wrinkling strain eps_W = 1 - (r lambda_3)^(-1/2), with r the real root of
+    r^3 - 3r^2 - r - 1 = 0; in plane strain (lambda_3 = 1) this is 1 - r^(-1/2) = 0.456 (cao2011 p. 16, "eW = 0.456").
+    diab2013's eps_B is the nominal strain at which kbar of its Eq. 2.8 diverges, the root of
+    lambda^3 + lambda^2 + lambda - 1 = 0, also printed 0.456. The two cubics have the same critical stretch,
+    lambda = 0.5436890 (r = 1/lambda^2 = 3.383).
+  assumptions:
+    - "both strains are nominal compressive strains, 1 - lambda_1 (cao2011 Eq. 1.1; diab2013 p. 5)"
+    - "diab2013's isoperiodic plane-strain compression is cao2011's case lambda_3 = 1"

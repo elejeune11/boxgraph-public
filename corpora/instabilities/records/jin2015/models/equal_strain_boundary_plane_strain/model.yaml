@@ -1,0 +1,14 @@
+id: equal_strain_boundary_plane_strain
+name: boundary of equal critical strain for wrinkles and creases, plane strain (Sec. 2, Fig. 3(a))
+role: model
+stated: {page: 3, printed_page: "061008-3", quote: "represents the conditions when the critical strain for the onset of creases coincides with that of wrinkles", where: "Sec. 2, Fig. 3(a)"}
+equation: "e_m^PE(Gf/Gs, Hs/Hf) = e_crease^PE (= 0.35), e_m^PE from Eqs. B7-B15 with lambda3 = 1; solved for Gf/Gs"
+inputs:
+  Hs_Hf: {quantity: thickness_ratio, unit: dimensionless}
+  e_crease: {quantity: crease_onset_strain_plane_strain, unit: dimensionless}
+outputs:
+  Gf_Gs: {quantity: shear_modulus_ratio, unit: dimensionless, description: "Gf/Gs on the boundary of equal critical strain"}
+settings: {g_lo: 1.0, g_hi: 20.0, g_tol: 0.0001, kh_min: 0.01, kh_max: 300.0, n_kh: 61, e_min: 0.0001, e_max: 0.75, n_e: 150, tol: 1.0e-7, n_golden: 30}
+built_from: [wrinkle_eigen_plane_strain]
+from_words: true
+stochastic: false

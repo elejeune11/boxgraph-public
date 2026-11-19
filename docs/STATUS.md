@@ -7,7 +7,7 @@
   the soundness validator.
 - **ModelAtlas**: relation tests for all five kinds, families.
 - **The Synthesis**: per-paper verdicts by purpose, cross-paper checks, cited-value
-  checks, models judged against other papers' measurements (v0.8), six kinds of finding, implications, references, a traced written review,
+  checks, models judged against other papers' measurements (v0.8), seven kinds of finding, implications, references, a traced written review,
   Markdown and HTML report.
 - **The reading pipeline** (`pipeline/`): ingest, reader guide, read / audit /
   digitize / relate / validate jobs run as parallel headless agent jobs, gated by the validator,
@@ -21,6 +21,12 @@
   error bars (SEM, SD, 95% CI, range, unstated) carry the outer bar as their
   interval. On eight real panels with known truth the agents' own code beat
   the shared digitizer (0.25% error, 98% coverage, against 0.46-0.60%).
+- **Scaling laws and reconstructed models** (v0.11): a model printed with "~" and no
+  prefactor (`prefactor: unknown`) is judged on its shape only, with the prefactor a single
+  measurement implies reported in place of a verdict; a model the reader builds for an analysis
+  the paper does not give (`reconstructed`), or an uncited model in a written source, is
+  tallied apart from the paper's own results, and its misses are reader_model_differs findings
+  (DECISIONS, Scaling laws and reconstructed models).
 - **Curve ports** (v0.10): a model input or output may take or give a whole
   curve, so a model can process a measured trace (average it, differentiate
   it, separate it into waves) rather than be run once per x value.
@@ -328,7 +334,7 @@ The build (`build/cardio/synthesis.json`):
   belong to the numerics;
 - 17 corrected variants of misprinted models.
 
-Reproduction across the corpus: 2265 comparisons reproduced, 94 close,
+Reproduction across the corpus: 2269 comparisons reproduced, 94 close,
 798 not reproduced, 77 without a verdict, with the rounding of printed inputs
 taken into account (DECISIONS, Rounded inputs in verdicts).
 
@@ -347,6 +353,118 @@ against the other papers, a grown tree against the human tree (Sexton 2025),
 the 1D solver against its paper (Wan 2002 and svOneDSolver), and Olufsen's
 asymmetry ratio across 1999, 2000 and 2012.
 These findings have not yet been reviewed by a person.
+
+## The instabilities corpus
+
+A third review, in `corpora/instabilities/`: geometric instabilities of solids (buckling, wrinkling,
+creasing, folding), from the classic surface instability of rubber to growth-driven folding of
+tissues. The first batch has three sources: Biot 1963 (surface instability of a compressed rubber
+half-space), Richman et al. 1975 (a layered buckling model of brain convolutions, compared with
+human anatomy and pathology) and Cerda & Mahadevan 2003 (scaling laws for wrinkling). All 15 jobs
+(read, audit and figure pass for each paper; a relation and a validation job for each pair) passed
+first time, for $15.67 recorded.
+
+The build: Biot's critical stretches (0.543 in plane strain, 0.444 in uniaxial compression), the
+root of his characteristic equation and his critical loads are reproduced by running his equations;
+two rows of his Table I are not. Richman's geometric checks are reproduced; its wavelength rests on
+an analysis cited as unpublished, so the reader's thin-plate stand-in is marked reconstructed and its
+comparisons with Fig. 4 are reported apart (two reader_model_differs findings). Cerda & Mahadevan's
+four "~" laws carry an unknown prefactor: their estimates get no verdict and report the prefactor each
+value implies (about 1.4 for the apple, 2.3 to 3.9 for Richman's brain measurements). Its equations
+are related to each other (verified) and its deep-substrate law to Richman's plate model (same
+exponents, verified). 5 findings, 7 relations.
+
+The second batch adds four papers on stiff films on soft substrates: Bowden et al. 1998 (wrinkles in
+metal films on PDMS), Stafford et al. 2004 (wrinkle wavelength as a measure of film modulus), Huang et
+al. 2005 (wrinkling on substrates of finite depth) and Cao & Hutchinson 2012 (wrinkling with
+prestretch). The third adds Tallinen & Biggins 2015 (folding of a growing layer bonded to a substrate
+of similar stiffness), the first source on growth rather than applied compression. All 55 jobs passed;
+two attempts stopped at the time limit and resumed. $56.70 recorded for the two batches, $72.37 for the
+corpus.
+
+The build: Huang's and Cao's closed forms and most of their figure curves are reproduced (40 and 27
+values); three of Cao's figure curves are a few percent off. Bowden's, Stafford's and Huang's
+stiff-film formula is related to Tallinen's stiff-layer asymptote and to Richman's plate model (the
+same law, verified), and to Tallinen's full first-mode solution within 6%. Applied to the brain
+measurements Richman quotes (8.5 and 7.5 mm), the stiff-film formula gives 9.4 to 16 mm, depending on
+the cortical thickness taken (not reproduced). Tallinen's Biot threshold (gb = 1.839, eta_b = 0.525)
+and its Fig. 1 curves are reproduced. Its printed width 7.54h at eta = 4 is reproduced only with the
+relaxed thickness h = gz a, not the printed h = a/gz; the Fig. 2(b) curves agree with the same
+correction. The thick curves of Fig. 4(d),(e) match neither reading of h. The finite-element results
+cannot be rerun (code not released). 21 findings, 42 relations, 7 cross-paper checks.
+
+The fourth batch adds growth-driven patterns outside tissue sheets: Moulton, Goriely & Chirat 2012 (ribs of
+seashells from the mantle edge growing as an elastic rod on an elastic foundation), Chirat, Moulton &
+Goriely 2013 (the same model for spines) and Radja et al. 2019 (pollen wall patterns as modulated phases on
+a sphere). All 31 jobs passed, for $30.02 ($102.39 for the corpus).
+
+The build: Moulton's rib curves in Fig. 5(b),(c) and its threshold line are reproduced; Fig. 5(a) is not
+(the printed feedback gain k_phi = 15 gives 20 ribs where the panel shows 23; a trial with 20 reproduces
+all 23, so "15" may be a misprint, q_kphi_fig5a), and the verdicts lean on two inputs the paper does not
+print. Chirat's energy curve of Fig. 4 is reproduced; its
+mode number comes from the reader's linearized rod (one close, one reproduced). Both rod models are the
+plate-on-foundation wavelength of huang2005 (same law, verified) and scale as Cerda & Mahadevan's
+lambda ~ (B/K)^(1/4) (verified once scales-as no longer needed the two outputs in one unit, DECISIONS).
+Radja's likelihood-ratio tests and family counts are reproduced; the average wavelength differences for
+spikes and holes (4.6% and 14%) do not follow from the Table 1 rows (10.5% and 18%), and Fig. 5 shows about
+195 families where the text says 205. Its physics is phase separation, not buckling: no relation to the
+elastic papers was found. 27 findings, 48 relations.
+
+The fifth batch adds creasing and the gut: Hong, Zhao & Suo 2009 (the energy criterion for crease onset),
+Trujillo, Kim & Hayward 2008 (creasing of swelling surface-attached gels), Diab et al. 2013 (ruga mechanics),
+Wang & Zhao 2014 and 2015 (phase diagrams of wrinkles, creases, folds and delamination) and Shyer et al. 2013
+and 2015 (chick and mouse gut villi). It ran seven jobs at a time: all 99 jobs passed on the first attempt in
+2.5 hours, for $130.98 ($233.37 for the corpus).
+
+The build: Hong's crease strain 0.35 and its curves are reproduced (8 values), and the relations tie Biot's
+threshold to Hong, Diab and Trujillo and the film/substrate laws to Wang & Zhao (30 new relations, most
+verified). Trujillo's thickness formula is Hong's gel threshold only within 26%, not the 5% stated (not
+verified). Diab's M-point strain 0.272 does not follow from its own Eq. 2.11 (0.456); a corrected Eq. 2.12b
+reproduces it. Wang & Zhao 2014's Eq. 5 as printed differs from the Cao & Hutchinson formula it cites by the
+constant factor 2^(2/3) (a likely misprint of Lambda = (1 + lambda_p^2)/2), and its wrinkle-crease boundaries
+fall with prestretch (1.54, 1.22, 1.14) where the linear analysis it follows gives 1.56 and then a higher
+value at lambda_p = 3; its Fig. 14(b) curves are not reproduced for lambda_p > 1 and the paper does not say
+how they were computed (q_boundary_prestretch). Shyer 2013's printed stress-free dimensions are consistent
+with most of its geometry, but its spot expansion cannot both double the spot diameter and keep the endoderm
+area constant, as the supplement says it does (q_area_conservation); its finite-element patterns cannot be
+rerun. 34 findings, 78 relations.
+
+The sixth batch adds shells and epithelial folding: Fierling et al. 2022 (Drosophila ventral furrow as buckling
+of an active elastic shell, with its released data and Surface Evolver script as fierling_code), Qiu, Hutchinson &
+Amir 2022 (Brazier bending instability of rod-shaped bacteria), Haas & Goldstein 2015 and 2021 (Volvox inversion
+as shell bending) and Trushko et al. 2020 (an epithelium buckling inside a spherical capsule). It hit a usage
+limit and a container restart and resumed after each; all jobs passed, for $92.27 priced (three interrupted
+calls never reported their cost; $325.64 for the corpus).
+
+The build: Qiu's critical curvature and torque formulas reproduce (26 values); its Fig. 2(b) crosses fit
+alpha = 0.0045, not the caption's 0.005, and the "about 40%" drop in second moment is 30-34% for the printed
+cross section. Haas & Goldstein 2021 reproduces (24 values), but its Eqs. 70a,b as printed are not the Eqs. 66
+they say they rewrite: the correction terms lack the C h eps^3 and C h^3 eps^3 prefactors (refuted; with them,
+the same law), and the Fig. 5 verdicts lean on an input the paper does not print. Three curves of Haas &
+Goldstein 2015's Fig. 3(g),(h) are not reproduced at the larger invagination widths. Fierling's SI prestress
+formula has the opposite sign to its released code and Figs. 2c and S1f, which the code reproduces (the
+released numbers are used as data, and the simulation itself, weeks of Surface Evolver, is not rerun).
+Trushko's capsule spring constant from Eq. S36 is about twice the measured one, its Eq. S18 fold amplitude lies
+four times below its own numerics, and its friction force differs tenfold between text and Section 8. 43
+findings, 99 relations (21 new: 18 verified, 2 refuted, 1 not verified).
+
+The seventh batch was chosen to test open questions: Cao & Hutchinson 2012 (Proc R Soc A, record cao2011:
+wrinkles to creases and imperfection sensitivity), Jin et al. 2015 (wrinkle and crease bifurcation diagrams
+of bilayers), Hohn et al. 2015 (measured Volvox inversion, the data of the Haas models) and Savin et al. 2011
+(gut looping). All 72 jobs passed, for $112.45 ($438.09 for the corpus).
+
+The build: the new papers tie into the film/substrate laws (38 new relations; 33 verified). Jin's
+wrinkle-crease boundary Gf/Gs = 1.65 does not follow from its own appendix equations, which give 1.54,
+the value wang2014 prints without prestretch (q_boundary_165); two papers with the same definition print
+different boundaries. Neither cao2011 nor jin2015 treats a prestretched substrate, so wang2014's falling
+boundary with prestretch (q_boundary_prestretch) remains open, and neither holds a measurement that tests
+wang2014. Jin's wavelengths do not scale as Stafford's and Cerda's stiff-film laws at moderate modulus ratios
+(4 scales-as relations not verified), as expected outside the stiff-film limit. Cao & Hutchinson's
+imperfection coefficient 17.84 does not follow from its Eq. 3.13 (9.7); a corrected form reproduces it.
+Savin's scaling laws hold against its measurements (37 consistency checks reproduced); two printed values
+(the tube bending stiffness 5e-11 and the upper end of a force range, 1) do not follow from its inputs.
+Hohn's shell model is not runnable (the minimization is not given), so its shapes do not yet test the
+Haas models. 59 findings, 137 relations.
 
 ## Known limits
 

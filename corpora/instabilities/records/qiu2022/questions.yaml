@@ -1,0 +1,116 @@
+- id: q_legend_equation_numbers
+  kind: possible_error
+  about: [fig2a_p0_eq8, fig2b_p0_02_eq8, fig2a_crosses, fig2b_crosses]
+  text: >
+    The legends of Fig. 2(a) and (b) label the dashed lines "Analytics [Equation (9)]" and the crosses
+    "Wrinkling Analytics [Equation (12)]", while the caption and the text say the dashed lines are Eq. (8)
+    and the crosses Eq. (11). The dashed curves agree with Eq. 8 (the torque), not Eq. 9 (the critical
+    curvature), and there is no Eq. 12; the legend numbers look one higher than the equations meant.
+  citation: {page: 4, where: "Fig. 2 legend and caption", quote: "by the formulas in Eq. (8), while the solid lines are based on"}
+- id: q_fig2b_alpha
+  kind: unexplained_difference
+  about: [fig2b_crosses, fig2b_dots, alpha_fig2, cmp_eq11_fig2b_crosses, cmp_wnum_fig2b_dots]
+  text: >
+    In Fig. 2(b) the crosses (Eq. 11) and the dots (numerics) sit about 0.001 in kappa-hat (7 px at 900 dpi)
+    to the left of where Eq. 11 and the numerical criterion put them with alpha = 0.005, at every pressure,
+    while the dashed curves of Eq. 8 (insensitive to alpha) are read correctly and the panel (a) crosses agree
+    with Eq. 11. Solving Eq. 11 for alpha at each read cross gives alpha = 0.0045 (0.00448 to 0.00456) for all
+    five pressures: panel (b) appears to have been drawn with alpha ≈ 0.0045, which the caption's "≈ 0.005"
+    may round. The unpressurized wrinkling curvature of 0.6% (p. 4) also implies alpha ≈ 0.0045
+    (q_unpressurized_alpha).
+- id: q_unpressurized_alpha
+  kind: unstated_input
+  about: [khat_w_unpressurized, cmp_khat_w_unpressurized, alpha_fig2]
+  text: >
+    The 0.6% (kappa_w R) for an unpressurized E. coli cell is kappa-bar_w alpha = 1.320 alpha by Eq. 11 at
+    p-hat = 0; the alpha used is not stated there. With the caption's alpha ≈ 0.005 it is 0.66%, which would
+    print as 0.7%; 0.6% needs alpha between 0.0042 and 0.0049, e.g. 0.0045 (see q_fig2b_alpha).
+  citation: {page: 4, quote: "would buckle at the remarkably small curvature of"}
+- id: q_second_moment
+  kind: unexplained_difference
+  about: [moment_reduction_brazier, cmp_moment_first, cmp_moment_exact]
+  text: >
+    At the torque maximum a2 = -1/3. The cross section phi = a2 sin(2 mu) is flattened in y by 2/9 = 22.2% in
+    the first-order Taylor expansion the paper uses (24.9% for the exact shape), matching "about 22%". Its
+    second moment about the centroidal axis is reduced by 30.2% (first order) or 34.4% (exact shape), not the
+    "about 40%" printed. 40% is what 1 - (1 - 2/9)^2 = 39.5% gives, i.e. a second moment scaling with the
+    square of the height; how the paper computed it is not said.
+  citation: {page: 3, quote: "and its second moment is reduced by about 40%"}
+- id: q_a2_one_third
+  kind: reading
+  about: [cross_section_brazier]
+  text: >
+    The printed a2 = -1/3 at the torque maximum is a fraction, which cannot be entered as a printed value. It is
+    an identity of Eqs. 7 and 9 (a2 = -kappa-bar_B^2 / 8(1 + p-bar/3) = -1/3 for every p-bar); it enters the
+    record inside the cross_section_brazier model, whose outputs (22%, 40%) are compared.
+- id: q_numerics_settings
+  kind: choice
+  about: [energy_numerics_balloon, energy_numerics_shell, wrinkling_numerics_balloon, wrinkling_numerics_shell]
+  text: >
+    The numerical minimization of Eq. 2 is described in Supplemental Material Sec. VII, which is not part of
+    this source: the number of Fourier modes N, the quadrature and the optimizer are not stated. This record
+    uses N = 12 sine modes, 256 grid points with spectral integration, SLSQP with the closure constraint, and
+    eliminates the axial strain change exactly (Eq. 2 is quadratic in it); refinements double N and the grid.
+- id: q_wrinkling_numerics_method
+  kind: unstated_model
+  about: [wrinkling_numerics_balloon, wrinkling_numerics_shell, fig2a_dots, fig2b_dots]
+  text: >
+    How the numerical wrinkling onsets (Fig. 2 dots) were computed is not given in the main text. The record
+    applies the words of p. 3 (axial membrane force at the most compressed point equals -sigma_c t of Eq. 10,
+    with rho the local circumferential radius of curvature) to the numerical energy minimum; the paper may
+    have used a different construction.
+- id: q_alpha_approximate
+  kind: reading
+  about: [alpha_fig2]
+  text: >
+    alpha enters every Fig. 2 run as "≈ 0.005", the only value printed for the figure; it comes from typical
+    E. coli properties in the Supplemental Material, which is not part of this source.
+- id: q_audit_alpha_text_statements
+  kind: reading
+  about: [run_khat_w_p0_4, run_khat_w_unpressurized, alpha_fig2, khat_w_p0_4, khat_w_unpressurized]
+  text: >
+    (Audit.) The two text statements "for p-hat = 0.4 ... kappa_w R ≈ 0.2" (p. 3) and "0.6%(1/R)" (p. 4)
+    print no alpha; the record feeds them the Fig. 2 caption's alpha ≈ 0.005 as a datum. That this alpha
+    applies to these sentences is a reading, not a printed fact; it could have been an added input with
+    alternatives (0.0045, which q_fig2b_alpha and q_unpressurized_alpha point to, and the printed range
+    0.001 to 0.01). For p-hat = 0.4 the paper may instead have used its balloon limit kappa-hat_w = p-hat/2,
+    which gives exactly 0.2 (the audit added wrinkling_balloon_limit, 0.205, and wrinkling_balloon_leading,
+    0.2; full Eq. 11 with alpha = 0.005 gives 0.215). None of these changes a verdict, since 0.2 is printed
+    approximately.
+  citation: {page: 3, quote: "for p̂ ¼ 0.4 the critical wrinkling curvature is"}
+- id: q_audit_second_moment_definition
+  kind: reading
+  about: [moment_reduction_brazier, cross_section_brazier]
+  text: >
+    (Audit.) An independent check of the first-order shape at a2 = -1/3 confirms the record: height
+    2 + 4 a2/3 (22.2% flattening) and second moment pi [(1 + a2/2)^2 + a2^2/36] R^3 t, a 30.2% reduction,
+    which is also the classical Brazier ovalization result I = I0 (1 - 3 zeta/2 + 5 zeta^2/8) at zeta = 2/9.
+    The printed "about 40%" therefore does not follow from either the paper's ansatz or Brazier's
+    expansion; it would follow if the second moment were taken to scale with the square of the height
+    (q_second_moment).
+- id: q_no_validation_chirat2013
+  kind: choice
+  about: [brazier_shell_eq9, cross_section_brazier, torque_shell_eq8, torque_balloon_eq8, wrinkling_eq11, wrinkling_eq11_shell, alpha_fig2, alpha_range_ecoli, chirat2013/clamped_rod_buckling, chirat2013/infinite_rod_foundation, chirat2013/E_mantle, chirat2013/L0_mantle]
+  text: >-
+    No validation between this record and chirat2013 is entered, in either direction (cross-validation job
+    2026-11-19). Neither paper cites the other, and neither record holds a measured datum. This record's
+    values are the curve-label pressures of Fig. 2, alpha for E. coli from ref. 5, and model results.
+    Fig. 2 plots only model curves, and the osmotic-shock buckling experiments (ref. 20) are not plotted.
+    chirat2013's values are mantle properties taken from other works (E, width, thickness), chosen values
+    (L0, Kf) and model results (mode number, Fig. 4 readings). A pressurized tube bent to its Brazier or
+    wrinkling curvature has no counterpart among chirat2013's quantities, and no model there gives a
+    curvature, moment or flattening of a thin-walled tube. So no model predicts any of the other's
+    measurements.
+- id: q_no_validation_moulton2012
+  kind: choice
+  about: [brazier_shell_eq9, cross_section_brazier, torque_shell_eq8, torque_balloon_eq8, wrinkling_eq11, wrinkling_eq11_shell, alpha_fig2, alpha_range_ecoli, moulton2012/ribs_linear_eq4, moulton2012/winkler_rod_wavelength, moulton2012/EI_fig9, moulton2012/ks_fig9]
+  text: >-
+    No validation between this record and moulton2012 is entered, in either direction (cross-validation job
+    2026-11-19). Neither paper cites the other, and neither record holds a measured datum. This record's
+    values are the curve-label pressures of Fig. 2, alpha for E. coli from ref. 5, and model results; Fig. 2
+    plots only model curves, and the osmotic-shock experiments (ref. 20) are not plotted. moulton2012's
+    values are nondimensional model parameters (k_phi, k_g, EA, k_s, EI) and readings of its own computed
+    Fig. 5; it reports no measurement of real shells. A pressurized tube's Brazier or wrinkling curvature,
+    torque or flattening has no counterpart among moulton2012's quantities (rib times, shell radius, the
+    unstressed mantle radius, a rod-on-foundation wavelength), and no model there gives a curvature or
+    moment of a thin-walled tube. So no model predicts any of the other's measurements.

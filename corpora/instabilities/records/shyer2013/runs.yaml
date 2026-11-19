@@ -1,0 +1,92 @@
+- id: run_factor_E12
+  model: inverse_ratio
+  inputs: {ratio: culture_length_ratio_E12}
+  outputs: {factor: factor_E12_computed}
+- id: run_factor_E15
+  model: inverse_ratio
+  inputs: {ratio: culture_length_ratio_E15}
+  outputs: {factor: factor_E15_computed}
+- id: run_nominal_endoderm
+  model: nominal_compression
+  inputs: {g_w: we_over_W, g_l: le_over_L}
+  outputs: {r_w: ratio_e_circ_computed, r_l: ratio_e_long_computed}
+- id: run_nominal_mesenchyme
+  model: nominal_compression
+  inputs: {g_w: wm_over_W, g_l: lm_over_L}
+  outputs: {r_w: ratio_m_circ_computed, r_l: ratio_m_long_computed}
+- id: run_spots_linear
+  model: spot_growth
+  inputs: {t: t_end, n_spots: n_spots_added, we_over_W: we_over_W, le_over_L: le_over_L, W_over_hsum: zigzag_spacing_sm, hm_over_he: hm_over_he_zigzag}
+  settings: {expansion: linear}
+  outputs: {diameter: spot_diameter_computed, growth: spot_growth_linear_computed, area_change: area_change_linear_computed}
+  note: "Reading of 'relative expansion' as an in-plane stretch of lengths."
+- id: run_spots_areal
+  model: spot_growth
+  inputs: {t: t_end, n_spots: n_spots_added, we_over_W: we_over_W, le_over_L: le_over_L, W_over_hsum: zigzag_spacing_sm, hm_over_he: hm_over_he_zigzag}
+  settings: {expansion: areal}
+  outputs: {diameter: spot_diameter_areal_computed, growth: spot_growth_areal_computed, area_change: area_change_areal_computed}
+  note: "Reading of 'relative expansion' as a factor on the area element."
+- id: run_chick_E7
+  model: stressfree_chick
+  inputs: {day: day_start_chick, day_start: day_start_chick, day_end: day_end_chick}
+  outputs: {thickness_ratio: chick_thickness_ratio_E7, r_circ_m: chick_r_circ_m_E7, r_long_m: chick_r_long_m_E7, r_circ_e: chick_r_circ_e_E7, r_long_e: chick_r_long_e_E7}
+- id: run_chick_E13
+  model: stressfree_chick
+  inputs: {day: day_13_chick, day_start: day_start_chick, day_end: day_end_chick}
+  outputs: {thickness_ratio: chick_thickness_ratio_E13, r_circ_m: chick_r_circ_m_E13, r_long_m: chick_r_long_m_E13, r_circ_e: chick_r_circ_e_E13, r_long_e: chick_r_long_e_E13}
+- id: run_chick_E14
+  model: stressfree_chick
+  inputs: {day: day_end_chick, day_start: day_start_chick, day_end: day_end_chick}
+  outputs: {thickness_ratio: chick_thickness_ratio_E14, r_circ_m: chick_r_circ_m_E14, r_long_m: chick_r_long_m_E14, r_circ_e: chick_r_circ_e_E14, r_long_e: chick_r_long_e_E14}
+- id: run_mouse_E12_5
+  model: stressfree_mouse
+  inputs: {day: day_start_mouse, day_start: day_start_mouse, day_end: day_end_mouse}
+  outputs: {thickness_ratio: mouse_thickness_ratio_E12_5, r_circ_m: mouse_r_circ_m_E12_5, r_long_m: mouse_r_long_m_E12_5, r_circ_e: mouse_r_circ_e_E12_5, r_long_e: mouse_r_long_e_E12_5}
+# ---- figure pass ----
+- id: run_chick_stressfree_fig4b
+  model: stressfree_chick
+  inputs: {day_start: day_start_chick, day_end: day_end_chick}
+  sweep: {day: stressfree_fig4b}
+  outputs: {thickness_ratio: chick_thickness_ratio_fig4b_days}
+  note: "The printed stress-free schedule at the x positions read on the dotted line of Fig. 4B (top right)."
+- id: run_mouse_stressfree_fig6c
+  model: stressfree_mouse
+  inputs: {day_start: day_start_mouse, day_end: day_end_mouse}
+  sweep: {day: stressfree_fig6c}
+  outputs: {thickness_ratio: mouse_thickness_ratio_fig6c_days}
+  note: "The printed stress-free schedule at the x positions read on the dotted line of Fig. 6C (middle); t taken linear in day (q_t_to_day)."
+- id: run_mean_fig2b
+  model: mean_circ_ratio
+  inputs: {r: circ_ratio_fig2b}
+  outputs: {r_mean: circ_ratio_mean_fig2b}
+- id: run_mean_fig4b
+  model: mean_circ_ratio
+  inputs: {r: circ_ratio_fig4b}
+  outputs: {r_mean: circ_ratio_mean_fig4b}
+- id: run_mean_fig2d
+  model: mean_culture_circ
+  inputs: {r: culture_circ_ratio_fig2d}
+  settings: {control_x: 1}
+  outputs: {r_mean: culture_circ_ratio_mean_fig2d}
+- id: run_mean_fig3c
+  model: mean_culture_length
+  inputs: {r: culture_length_ratio_fig3c}
+  settings: {control_x: 1}
+  outputs: {r_mean: culture_length_ratio_mean_fig3c}
+- id: run_mean_fig3d
+  model: mean_culture_length
+  inputs: {r: culture_length_ratio_fig3d}
+  settings: {control_x: 1}
+  outputs: {r_mean: culture_length_ratio_mean_fig3d}
+- id: run_mu_ratio_fig4b
+  model: modulus_ratio_curve
+  inputs: {mu_e: mu_endo_fig4b, mu_m: mu_mes_fig4b}
+  outputs: {ratio: mu_ratio_from_moduli_fig4b}
+- id: run_mu_ratio_fig6c
+  model: modulus_ratio_curve
+  inputs: {mu_e: mu_endo_fig6c, mu_m: mu_mes_fig6c}
+  outputs: {ratio: mu_ratio_from_moduli_fig6c}
+- id: run_mouse_E15_5
+  model: stressfree_mouse
+  inputs: {day: day_end_mouse, day_start: day_start_mouse, day_end: day_end_mouse}
+  outputs: {thickness_ratio: mouse_thickness_ratio_E15_5, r_circ_m: mouse_r_circ_m_E15_5, r_long_m: mouse_r_long_m_E15_5, r_circ_e: mouse_r_circ_e_E15_5, r_long_e: mouse_r_long_e_E15_5}

@@ -1,0 +1,512 @@
+# Against biot1963: no relation is entered.
+# tallinen2015 does not cite biot1963. Its "zero-wavelength Biot instability [22] at g = gb = 1.839" (p. 2) cites
+# Biot's 1965 book (ref-22), not this paper, though the book's half-space surface instability is the same analysis.
+# The link between the two records is one number, not a model: for uniaxial growth G = diag(g, 1, 1/g) the layer is
+# in plane-strain compression with stretch lambda = 1/g (the conversion the paper states for sulcification,
+# gs = 1/lambda_s, p. 2), so tallinen2015's Biot root gb (biot_polynomial, biot_closed_form, Eq. B23) should be
+# 1/lambda, where lambda is biot1963's plane-strain critical stretch (crit_stretch_plane on the root zeta of char_cubic,
+# Eqs. 2.9, 4.2). It is: the polynomial g^6 - 3g^4 - g^2 - 1 factors as (g^3 - g^2 - g - 1)(g^3 + g^2 - g + 1), and
+# g^3 - g^2 - g - 1 = 0 with g = 1 + zeta is Biot's cubic zeta^3 + 2 zeta^2 - 2 = 0, so gb = 1 + zeta = 1/lambda.
+# The relation tests cannot express this. Both sides are zero-input constants, or chains through a model input (zeta)
+# that is another model's output. Their outputs are reciprocal quantities (a growth and a stretch), which an output_map
+# cannot convert. Any model pair with a shared input (gs_from_stretch with crit_stretch_plane) only checks the
+# reciprocal itself. No paper states the link in a form that would justify a helper model, and tallinen2015 takes no
+# value from biot1963 (no datum has a from_source pointing to it), so no cited.yaml line is added either.
+#
+# Against cao2012 (ref-26): no relation is entered. tallinen2015 cites cao2012 once, with refs 27-28, for studies that
+# "considered post-bifurcation behavior when approaching this transition from the stiff-layer smooth wrinkling side"
+# (p. 1); it states no relation between its models and cao2012's, and takes no value from it (no datum has a
+# from_source pointing to ref-26), so no cited.yaml line is added. Nothing is proposed either:
+# - Kinematics differ. cao2012's bilayer (Eqs. A1-A10) compresses film and substrate together, lambda_1s =
+#   lambda0_1s lambda_1f; tallinen2015's substrate is unstrained while the layer is at stretch 1/g. The two problems
+#   coincide only for lambda0_1s = 1/lambda_1f = g, a prestretch fixed by the strain at bifurcation, not a model
+#   input. With lambda0_1s = 1 cao2012 is the jointly compressed system that tallinen2015 itself contrasts with its
+#   own (refs 37, 38, p. 2), whose wavelength "scales with the total depth" at eta = 1. The two agree only in the
+#   stiff limit, where the threshold strain goes to zero.
+# - Outputs are different quantities. In that stiff limit cao2012's Eq. 5 without prestretch, e0 = (1/4)(3 mu_s/mu_f)^(2/3),
+#   is tallinen2015's stiff_threshold_asymptote g - 1 = (3/(8 eta))^(2/3), since (3/8)^(2/3) = 3^(2/3)/4, with
+#   eta = mu_f/mu_s. But cao2012 gives a strain and tallinen2015 the growth g = 1/(1 - eW), which an output_map cannot
+#   convert, and a scales_as on g against e0 would fail because g tends to 1. cao2012's wavenumber k0 h and
+#   tallinen2015's l/a are reciprocal (l/a = 2 pi/(k0 h) as the strain vanishes): (3/eta)^(1/3) against
+#   2 pi (eta/3)^(1/3). Likewise cao2012's Biot constant 0.5437 (a stretch) is 1/gb for tallinen2015's
+#   gb = 1.839 (biot_closed_form). Each link is a reciprocal or an offset. No paper states any of them in a form
+#   that would justify a helper model.
+#
+# Against bowden1998: tallinen2015 does not cite bowden1998 (its stiff-layer citations are refs 15-20, 26-28), and
+# bowden1998 predates it, so every relation below is proposed. Neither record takes a value from the other.
+# The stiff-layer threshold is not related: bowden1998's Eq. 2 gives a critical stress (MPa), tallinen2015's
+# stiff_threshold_asymptote a growth ratio. With incompressible layers they agree (sigma_crit/E_m_bar =
+# 0.52 (E_p/E_m)^(2/3) = (1/4)(3/eta)^(2/3) = (3/(8 eta))^(2/3) = g - 1), but the link needs the stress divided by the
+# film's plane-strain modulus, which an output_map cannot do, and no paper states it in a form that would justify a
+# helper model.
+# mapping: b's input symbol -> expression in a's input symbols. eta is tallinen2015's layer/substrate shear-modulus
+# ratio; for incompressible neo-Hookean layers (nu = 1/2, as tallinen2015 takes them) it equals E_m/E_p, which is
+# also bowden1998's plane-strain ratio E_m (1 - nu_p^2)/(E_p (1 - nu_m^2)) at nu_m = nu_p = 1/2.
+- id: rel_bowden_eq3_to_stiff_wavelength_asymptote
+  kind: approximated_by
+  a: bowden1998/wavelength_eq3
+  b: tallinen2015/stiff_wavelength_asymptote
+  mapping: {eta: "Em*(1 - nu_p**2)/(Ep*(1 - nu_m**2))"}
+  output_map: {l_over_a: L_over_t}
+  regime: {Em: [1.0e+7, 1.0e+11], Ep: [1.0e+5, 1.0e+7], nu_m: [0.5, 0.5], nu_p: [0.5, 0.5], t: [1, 1000]}
+  tolerance: 0.0012
+  provenance: proposed
+  reason: >
+    tallinen2015's stiff-layer asymptote l/a = (8 pi^3 eta/3)^(1/3) is 2 pi (eta/3)^(1/3) = 4.3566 eta^(1/3), the
+    classic stiff-film wavelength that bowden1998 prints as Eq. 3 with prefactor 4.36 (2 pi/3^(1/3) to three
+    figures). In the stiff limit the growth strain at threshold goes to zero, so the deformed thickness a is the
+    film thickness t. The tolerance 0.0012 is the printed precision of 4.36 (0.005/4.36 relative).
+  assumptions:
+    - "both layers incompressible (nu_m = nu_p = 1/2), as tallinen2015's neo-Hookean model takes them, so eta = E_m/E_p"
+    - "a (tallinen2015's deformed layer thickness) is t, since the threshold strain vanishes as eta grows"
+- id: rel_bowden_eq3_simplified_to_stiff_wavelength_asymptote
+  kind: approximated_by
+  a: bowden1998/wavelength_eq3_simplified
+  b: tallinen2015/stiff_wavelength_asymptote
+  mapping: {eta: "Em/Ep"}
+  output_map: {l_over_a: L_over_t}
+  regime: {Em: [1.0e+7, 1.0e+11], Ep: [1.0e+5, 1.0e+7], t: [1, 1000]}
+  tolerance: 0.012
+  provenance: proposed
+  reason: >
+    As the relation to Eq. 3's first form: with equal Poisson ratios the factors cancel, and bowden1998's
+    L = 4.4 t (E_m/E_p)^(1/3) is tallinen2015's 2 pi (eta/3)^(1/3) with the prefactor printed to two figures; the
+    tolerance 0.012 is that precision (0.05/4.4 relative).
+  assumptions:
+    - "both layers incompressible, so eta = E_m/E_p and the Poisson factors of Eq. 3 cancel"
+    - "a (tallinen2015's deformed layer thickness) is t, since the threshold strain vanishes as eta grows"
+- id: rel_bowden_eq3_to_first_unstable_mode
+  kind: approximated_by
+  a: bowden1998/wavelength_eq3
+  b: tallinen2015/first_unstable_mode
+  mapping: {eta: "Em*(1 - nu_p**2)/(Ep*(1 - nu_m**2))"}
+  output_map: {l_over_a: L_over_t}
+  regime: {Em: [1.0e+7, 4.0e+7], Ep: [1.0e+6, 1.0e+6], nu_m: [0.5, 0.5], nu_p: [0.5, 0.5], t: [1, 1000]}
+  tolerance: 0.07
+  provenance: proposed
+  reason: >
+    tallinen2015's full finite-strain linear analysis (Eq. 1 minimized over wavelength) should approach the
+    small-strain stiff-film wavelength of bowden1998's Eq. 3 as the layer stiffens (the brief's "should approach
+    the stiff-film result"). The regime is eta = 10 to 40: below it the finite threshold strain (g - 1 about 0.12 at
+    eta = 10) separates the two, and above it the wavelength 2 pi (eta/3)^(1/3) leaves the model's search range
+    (la_max = 15). Over this range the reader's direct runs differ by about 6 % at eta = 10 falling to 2.4 % at
+    eta = 40, so the tolerance 0.07 says only that the two agree to the size of the finite-strain correction; the
+    measured error is the result.
+  assumptions:
+    - "both layers incompressible (nu_m = nu_p = 1/2), so eta = E_m/E_p"
+    - "bowden1998's t is compared with tallinen2015's deformed thickness a at threshold, the thickness in which the wavelength is measured"
+#
+# Against cerda2003: tallinen2015 does not cite cerda2003 (no reference to Cerda & Mahadevan), and neither record
+# takes a value from the other, so no cited.yaml line is added. The one relation is proposed: cerda2003's
+# deep-substrate law lambda ~ t (E/Es)^(1/3) (prefactor unknown) has the shape of tallinen2015's stiff-layer
+# asymptote. Cerda's t is set to 1 mm because only the dimensionless ratio lambda/t is compared.
+- id: rel_stiff_wavelength_asymptote_scales_as_cerda_deep_substrate
+  kind: scales_as
+  a: tallinen2015/stiff_wavelength_asymptote
+  b: cerda2003/deep_substrate_wavelength
+  mapping: {t: "1", E_over_Es: "eta"}
+  output_map: {lam_over_t: l_over_a}
+  regime: {eta: [10.0, 1.0e+4]}
+  provenance: proposed
+  reason: >
+    tallinen2015's stiff-layer asymptote l/a = (8 pi^3 eta/3)^(1/3) = 2 pi (eta/3)^(1/3) is a stiff layer on a deep
+    soft substrate, the case cerda2003 treats as its deep-substrate limit (t << lambda << Hs) with
+    lambda/t ~ (E/Es)^(1/3). Both are the same one-third power of the modulus ratio; cerda2003 prints no prefactor,
+    so the relation is scales_as.
+  assumptions:
+    - "layer and substrate incompressible (as tallinen2015's neo-Hookean model takes them), so cerda2003's Young's-modulus ratio E/Es equals tallinen2015's shear-modulus ratio eta"
+    - "tallinen2015's deformed thickness a is cerda2003's sheet thickness t, since the threshold strain vanishes in the stiff limit"
+    - "the substrate is deep (tallinen2015's substrate is a half-space), as cerda2003's limit requires"
+#
+# Against huang2005 (ref-17). tallinen2015 cites huang2005 only inside two ranges on p. 1: "[14-29]" for growth-induced
+# buckling, and "[15-20]" for stiff layers that "buckle supercritically into smooth wrinkled patterns [15-20] with
+# wavelength l ~ h eta^(1/3)". The second is the one statement that links a model to huang2005: the stiff-layer
+# wavelength scales as eta^(1/3), which tallinen2015's stiff_wavelength_asymptote gives and huang2005's Eq. 17 (thick
+# substrate, as tallinen2015's half-space) prints with its coefficient. No tallinen2015 datum takes a value from
+# ref-17, so no cited.yaml line is added.
+# Not related: huang2005's Eq. 17 threshold N_c/(h E_bar) = (1/4)(3 Es_bar/E_bar)^(2/3) is, for uniaxial plane strain,
+# the critical strain, and tallinen2015's stiff_threshold_asymptote g = 1 + (3/(8 eta))^(2/3) has g - 1 equal to it
+# ((3/8)^(2/3) = 3^(2/3)/4). The link is an offset (g - 1 against a strain), which an output_map cannot express and a
+# scales_as would refute since g tends to 1; no paper states it in a form that would justify a helper model.
+# huang2005's finite and thin substrates (Eqs. 10, 13, 18, 19) have no counterpart: tallinen2015's substrate is infinite.
+# mapping: eta is tallinen2015's layer/substrate shear-modulus ratio; both solids are incompressible neo-Hookean, so it
+# equals huang2005's plane-strain ratio E_bar/Es_bar (nu = nu_s = 1/2 cancel).
+- id: rel_huang_eq17_scales_as_stiff_wavelength_asymptote
+  kind: scales_as
+  a: huang2005/thick_substrate_eq17
+  b: tallinen2015/stiff_wavelength_asymptote
+  mapping: {eta: "Ebar_over_Esbar"}
+  output_map: {l_over_a: lam_over_h}
+  regime: {Ebar_over_Esbar: [10.0, 1.0e+5]}
+  provenance: stated
+  citation: {page: 1, printed_page: "022720-1", quote: "buckles supercritically into smooth wrinkled patterns", where: "Sec. I, citing refs 15-20 (ref-17 is huang2005)"}
+  assumptions:
+    - "the sentence attributes the stiff-layer wrinkling with l ~ h eta^(1/3) to refs 15-20, which include huang2005 (ref-17); it is read as stating that the stiff-layer wavelength follows huang2005's thick-substrate scaling"
+    - "both solids incompressible, so eta = E_bar/Es_bar"
+    - "tallinen2015's deformed thickness a is huang2005's film thickness h, since the threshold strain vanishes in the stiff limit"
+- id: rel_huang_eq17_same_as_stiff_wavelength_asymptote
+  kind: same_as
+  a: huang2005/thick_substrate_eq17
+  b: tallinen2015/stiff_wavelength_asymptote
+  mapping: {eta: "Ebar_over_Esbar"}
+  output_map: {l_over_a: lam_over_h}
+  regime: {Ebar_over_Esbar: [10.0, 1.0e+5]}
+  provenance: proposed
+  reason: >
+    tallinen2015's stiff-layer asymptote l/a = (8 pi^3 eta/3)^(1/3) is 2 pi (eta/3)^(1/3), which is huang2005's Eq. 17
+    wavelength lambda_eq/h = 2 pi (E_bar/(3 Es_bar))^(1/3) with E_bar/Es_bar = eta for incompressible solids: not only
+    the same power, as the paper states, but the same coefficient.
+  assumptions:
+    - "both solids incompressible, so eta = E_bar/Es_bar"
+    - "tallinen2015's deformed thickness a is huang2005's film thickness h in the stiff limit, where the threshold strain vanishes"
+- id: rel_huang_eq17_approximated_by_first_unstable_mode
+  kind: approximated_by
+  a: huang2005/thick_substrate_eq17
+  b: tallinen2015/first_unstable_mode
+  mapping: {eta: "Ebar_over_Esbar"}
+  output_map: {l_over_a: lam_over_h}
+  regime: {Ebar_over_Esbar: [10.0, 40.0]}
+  tolerance: 0.07
+  provenance: proposed
+  reason: >
+    tallinen2015's finite-strain linear analysis (Eq. 1 minimized over wavelength) should approach the small-strain
+    thick-substrate wavelength of huang2005's Eq. 17 as the layer stiffens. As in the relation of the same model to
+    bowden1998's Eq. 3 (the same formula with a rounded coefficient), the regime is eta = 10 to 40: below it the
+    finite threshold strain separates the two, above it 2 pi (eta/3)^(1/3) leaves the model's wavelength search range
+    (la_max = 15). The tolerance 0.07 is the size of the finite-strain correction at eta = 10; the measured error is
+    the result.
+  assumptions:
+    - "both solids incompressible, so eta = E_bar/Es_bar"
+    - "huang2005's h is compared with tallinen2015's deformed thickness a at threshold, the thickness in which the wavelength is measured"
+#
+# Against richman1975 (ref-4). tallinen2015 cites richman1975 once, inside "mechanical descriptions of brain folding
+# [4-8]" (p. 1); it states no relation between its models and richman1975's and takes no value from it (no datum has a
+# from_source pointing to ref-4), so no cited.yaml line is added. The relations below are proposed.
+# richman1975's plate_on_foundation (the reader's reconstructed stand-in for the unpublished analysis of its ref. 20:
+# bonded incompressible thin plates under equibiaxial compression on an incompressible half-space core) reduces, for
+# equal strata (E2/E1 = 1), to one plate of thickness t = t1 + t2 with D = t^3/9 (in units of E1) on a foundation
+# p = (2/3) Ecore k w, whose minimizing wavenumber gives l/t = 2 pi (E1/(3 Ecore))^(1/3): tallinen2015's stiff-layer
+# asymptote with eta = E1/Ecore. Equibiaxial loading does not change the wavelength, since the critical load depends
+# only on |k| for both. Its critical stress, sigma1/E1 = (3 Ecore/E1)^(2/3)/3, is the plane-strain strain
+# (1/4)(3/eta)^(2/3) = g - 1 of stiff_threshold_asymptote times the plate modulus 4/3; that link is an offset and a
+# modulus factor, which an output_map cannot express, so it is not entered.
+# mapping: eta is tallinen2015's layer/substrate shear-modulus ratio; for incompressible solids it equals the
+# Young's-modulus ratio E1/Ecore, i.e. 1/Ecore_over_E1. stress_ratio does not enter l_over_t and is held at 1.
+- id: rel_richman_plate_same_as_stiff_wavelength_asymptote
+  kind: same_as
+  a: richman1975/plate_on_foundation
+  b: tallinen2015/stiff_wavelength_asymptote
+  mapping: {eta: "1/Ecore_over_E1"}
+  output_map: {l_over_a: l_over_t}
+  regime: {t1: [0.2, 2.0], t2: [0.2, 2.0], E2_over_E1: [1, 1], Ecore_over_E1: [1.0e-4, 0.1], stress_ratio: [1, 1]}
+  provenance: proposed
+  reason: >
+    With the two cortical strata equally stiff, richman1975's plate-on-core model is a single incompressible stiff
+    plate on an incompressible half-space, whose buckling wavelength over the plate thickness is
+    2 pi (E1/(3 Ecore))^(1/3); tallinen2015's stiff-layer asymptote l/a = (8 pi^3 eta/3)^(1/3) is the same expression
+    with eta = E1/Ecore.
+  assumptions:
+    - "the strata are equally stiff (E2/E1 = 1), so the two plates act as one of thickness t1 + t2"
+    - "all solids incompressible (richman1975's stand-in takes nu = 1/2, tallinen2015 neo-Hookean), so the Young's-modulus ratio E1/Ecore is tallinen2015's shear-modulus ratio eta"
+    - "tallinen2015's deformed thickness a is richman1975's cortical thickness t1 + t2, since the threshold strain vanishes in the stiff limit"
+- id: rel_richman_plate_approximated_by_first_unstable_mode
+  kind: approximated_by
+  a: richman1975/plate_on_foundation
+  b: tallinen2015/first_unstable_mode
+  mapping: {eta: "1/Ecore_over_E1"}
+  output_map: {l_over_a: l_over_t}
+  regime: {t1: [0.2, 2.0], t2: [0.2, 2.0], E2_over_E1: [1, 1], Ecore_over_E1: [0.025, 0.1], stress_ratio: [1, 1]}
+  tolerance: 0.07
+  provenance: proposed
+  reason: >
+    tallinen2015's finite-strain linear analysis (Eq. 1 minimized over wavelength) should approach the small-strain
+    plate-on-foundation wavelength of richman1975's stand-in as the layer stiffens. As in the relations of the same
+    model to bowden1998's Eq. 3 and huang2005's Eq. 17 (the same formula), the regime is eta = 10 to 40: below it the
+    finite threshold strain separates the two, above it the wavelength leaves the model's search range (la_max = 15).
+    The tolerance 0.07 is the size of the finite-strain correction at eta = 10; the measured error is the result.
+  assumptions:
+    - "the strata are equally stiff (E2/E1 = 1), so the two plates act as one of thickness t1 + t2"
+    - "all solids incompressible, so eta = E1/Ecore"
+    - "richman1975's t1 + t2 is compared with tallinen2015's deformed thickness a at threshold"
+#
+# Against stafford2004: no relation is entered. tallinen2015 does not cite stafford2004 (its stiff-layer citations are
+# refs 15-20, 26-28), stafford2004 predates it, and neither record takes a value from the other (no datum has a
+# from_source pointing to the other paper), so no cited.yaml line is added. The physical link is the one already entered
+# against bowden1998 and huang2005: stafford2004's Eq. 1 (wavelength_eq1), d = 2 pi h [(1 - nu_s^2) Ef/(3 (1 - nu_f^2) Es)]^(1/3),
+# divided by h and with incompressible solids (eta = Ef/Es), is tallinen2015's stiff_wavelength_asymptote
+# l/a = 2 pi (eta/3)^(1/3) (and the eta -> oo limit of first_unstable_mode). It cannot be tested as a relation:
+# wavelength_eq1's only output is the dimensional wavelength d (um), while both tallinen2015 models give the
+# dimensionless l/a, and an output_map cannot divide by an input. No paper states the link in a form that would
+# justify a helper model. stafford2004's modulus_eq2 (Ef from the measured wavelength) inverts the same formula and has
+# no tallinen2015 counterpart (tallinen2015 never solves for a modulus); its porosity and plasticizer models are
+# outside tallinen2015's scope.
+#
+# Against moulton2012: no relation is entered. moulton2012 (2012) cannot cite tallinen2015, and tallinen2015 does not
+# cite moulton2012: its only Moulton reference is ref-12, Moulton & Goriely 2011 on a growing cylindrical tube (J. Mech.
+# Phys. Solids 59, 525), a different paper, cited among growth-induced buckling studies (p. 1). Neither states a relation
+# and neither takes a value from the other (tallinen2015's from_source data point to ref-2 and ref-32; moulton2012 has
+# none), so no cited.yaml line is added. Nothing is proposed either:
+# - The one wavelength model in moulton2012, winkler_rod_wavelength (a reconstructed stand-in, lambda = 2 pi (EI/ks)^(1/4)),
+#   is a rod on a local spring foundation; tallinen2015's layer sits on a neo-Hookean half-space, whose restoring
+#   stiffness grows with wavenumber, giving l/a ~ eta^(1/3) (stiff_wavelength_asymptote). The exponents differ (1/4 against
+#   1/3), so no scales_as holds, and a half-space has no fixed spring constant ks to map onto: a mapping would have to
+#   evaluate ks at the very wavelength being predicted. The Winkler link is already entered, where it is exact, against
+#   huang2005's thin-substrate limit (moulton2012/relations.yaml).
+# - Growth enters both papers as a ratio of grown to constrained length (moulton2012's mantle growth ratio gamma, the
+#   unstressed mantle radius gamma a0 against the shell aperture; tallinen2015's tangential growth g), and both are
+#   equivalent to a compressive stretch 1/gamma or 1/g. But no moulton2012 model gives a threshold gamma: its rib models
+#   (ribs_linear_eq4, ribs_tension_eq5, ribs_decreasing_eq6) are an ODE feedback on the deposition angle with outputs in
+#   time and shell radius, with no counterpart in tallinen2015's models, and mantle_unstressed_radius is the growth law
+#   gamma = gamma0 + gamma_rate t itself. There is no model pair whose outputs measure the same quantity.
+#
+# Against chirat2013: no relation is entered. chirat2013 (2013) does not cite tallinen2015, and tallinen2015 does not
+# cite chirat2013 (no Chirat reference; its only Moulton/Goriely reference is ref-12, a different 2011 paper). Neither
+# states a relation and neither takes a value from the other (chirat2013's from_source data point to its SI refs,
+# tallinen2015's to ref-2 and ref-32), so no cited.yaml line is added. Nothing is proposed, for the reasons given for
+# moulton2012 above, which chirat2013's mantle-edge model shares:
+# - chirat2013's wavelength models (infinite_rod_foundation, lambda/L0 = 2 pi kf^(-1/4), and clamped_rod_buckling, a
+#   mode number between clamped ends) are a rod on a local (Winkler) adhesion foundation; tallinen2015's layer is on a
+#   neo-Hookean half-space, with l/a ~ eta^(1/3) in the stiff limit. The exponents differ (1/4 against 1/3), so no
+#   scales_as holds, and a half-space has no fixed spring constant to map onto kf. The Winkler link is entered, where
+#   it is exact, against huang2005 (chirat2013/relations.yaml).
+# - chirat2013's critical load P = 2 sqrt(kf) is a compressive force in units of EI/L0^2 on an inextensible rod, while
+#   tallinen2015's thresholds are a growth ratio g of an extensible layer; growth in chirat2013 (gamma, the mantle
+#   length ratio) enters only its non-runnable simulation (spine_growth_simulation), so no output pair measures the
+#   same quantity.
+#
+# Against hong2009: no relation is entered. hong2009 (2009) cannot cite tallinen2015, and tallinen2015 does not cite
+# hong2009 (its reference list has no Hong, Zhao & Suo, Appl. Phys. Lett. 95, 111901). tallinen2015's crease
+# (sulcification) stretch lambda_s = 0.647 is taken from ref-32, Hohlfeld & Mahadevan 2011, not from hong2009, so no
+# cited.yaml line is added; hong2009 takes no value from tallinen2015 either. The two papers do describe the same
+# threshold: hong2009's crease strain epsilon_c = 0.35 is the plane-strain stretch lambda_1 = 1 - epsilon_c = 0.65
+# (plane_strain_stretch), and tallinen2015's uniaxial growth puts the layer in plane-strain compression at stretch 1/g,
+# so its gs = 1/lambda_s (gs_from_stretch, sulcification_line) is 1/(1 - epsilon_c) in hong2009's terms. Likewise
+# hong2009's generalized-plane-strain rule (gps_critical_ratio, lambda_3/lambda_1 = 1/lambda_1'^2) applied to a layer
+# grown equibiaxially by g on its substrate (lambda_1 = lambda_2 = 1/g, lambda_3 = g^2, ratio g^3) gives
+# g^3 = gs^2, i.e. tallinen2015's identification g^(3/2) = gs (gs_equibiaxial). Nothing is proposed, because no model
+# pair measures the same quantity: hong2009's outputs are a plane-strain strain or stretch, a stretch ratio
+# lambda_3/lambda_1 and a gel swelling ratio; tallinen2015's are growth ratios (uniaxial and equibiaxial), modulus
+# ratios and wavelengths. Each link is a reciprocal (g = 1/lambda) or a power (ratio = g^3), which an output_map cannot
+# convert, and a relation through a shared input would only check that reciprocal itself. Neither paper states the
+# link in a form that would justify a helper model.
+#
+# Against shyer2015 (ref-40): no relation is entered. tallinen2015 cites shyer2015 twice, both qualitatively: the
+# sawtooth folds "seen during gut development, due to a relatively stiff epithelium that folds on a softer mesenchyme
+# [3,40]" (p. 2), and the micrographs of previllous folds in the chick gut in Fig. 2(e) (p. 3, "credits: A. E. Shyer").
+# Neither is a statement about a model. shyer2015 makes no mechanical model: its models are k_range_span (the number of
+# decades spanned by its range of Shh degradation rates) and shh_diffusion_reaction (a steady diffusion-reaction of a
+# morphogen, not runnable), and no tallinen2015 model measures a morphogen quantity. tallinen2015's "optimal wavelength
+# settles to about four times the undeformed layer thickness ... This agrees with the folding patterns in the brain and
+# the gut [3,8]" cites shyer2013 (ref-3), not shyer2015. Neither record takes a value from the other (tallinen2015's
+# from_source data point to ref-2 and ref-32, shyer2015's to Saha 2006), so no cited.yaml line is added.
+#
+# Against trujillo2008 (ref-31): no relation is entered. tallinen2015 cites trujillo2008 once, with refs 24 and 30, for
+# experiments: "Patterns of linelike sulci and triple-junction sulci have been produced experimentally in soft layers
+# adhered to rigid substrates [24,30,31]" (p. 5). That is a statement about observed patterns, not about a model, and
+# tallinen2015 takes no value from it (its from_source data point to ref-2 and ref-32), so no cited.yaml line is added;
+# trujillo2008 (2008) cannot cite tallinen2015. Nothing is proposed, because no model pair measures the same quantity:
+# - trujillo2008's biot_equibiaxial (and biot_vs_thickness, biot_vs_crosslinker) gives Biot's equibiaxial critical
+#   strain e_c = 1 - 0.296^(1/3) = 0.3336. tallinen2015's equibiaxial identification (g^(3/2) = uniaxial value) applied to
+#   its Biot root gb = 1.839 (biot_closed_form) gives g = 1.501, i.e. a layer stretch 1/g and strain 1 - 1/g = 0.3338: the
+#   same threshold to the printed digits. But tallinen2015 outputs a growth ratio g, trujillo2008 a strain 1 - 1/g, an
+#   offset reciprocal that an output_map (a renaming only, boxgraph/atlas.py) cannot convert; tallinen2015 has no
+#   model whose output is that equibiaxial Biot growth (threshold_equibiaxial takes eta, not a stretch product), and no
+#   paper states the link in a form that would justify a helper model.
+# - tallinen2015's equibiaxial sulcification threshold (gs_equibiaxial, g^(3/2) = gs = 1.55, g = 1.34, strain 0.25) is
+#   the crease threshold that trujillo2008 measures (e_c from swelling, ec_from_swelling, mean_ec_vs_*), but again as a
+#   growth ratio against a strain, and trujillo2008's measured values are compared with Biot's in its own record.
+# - trujillo2008's modulus, thickness and swelling models (modulus_crosslinker, onset_thickness_ratio,
+#   thickness_from_strain) have no counterpart in tallinen2015, whose layer is on a deformable substrate of modulus
+#   ratio eta, while trujillo2008's gels are on a rigid substrate (eta -> 0, outside the regimes of tallinen2015's
+#   models).
+#
+# Against wang2014 (ref-23). tallinen2015 cites wang2014 only inside two ranges on p. 1: "[14-29]" for layers whose
+# growth "induces compression, ultimately causing it to buckle", and "[22-29]" for "a growing soft tissue on a comparably
+# soft substrate - a mechanically intriguing regime". Neither sentence is about a model, so the relation below is
+# proposed. wang2014 (2014) cites Tallinen et al. 2013 (its ref-64), not this paper. Neither record takes a value from
+# the other (tallinen2015's from_source data point to ref-2 and ref-32; wang2014's to hong2009 and cao2012), so no
+# cited.yaml line is added.
+# The kinematics differ in general. wang2014 compresses the film and a substrate prestretched by lambda_p together (film
+# stretch 1 - e, substrate stretch lambda_p (1 - e)); tallinen2015 compresses only the layer (stretch 1/g) on an
+# unstrained substrate. The two problems coincide when lambda_p (1 - e) = 1, a prestretch fixed by the critical strain.
+# In general that strain is an output, but on wang2014's wrinkle-crease boundary it is the crease strain, an input.
+# So wang2014's boundary at lambda_p = 1/(1 - eps_crease) is the modulus ratio at which the wrinkling threshold of an
+# unstrained substrate meets the crease threshold. That is tallinen2015's eta_s, where the first-unstable-mode growth
+# meets gs = 1/lambda_s, with eps_crease = 1 - 1/gs.
+# Other pairs are not related. wang2014's eq5 stiff-film strain and tallinen2015's stiff_threshold_asymptote agree only
+# as g - 1 against a strain, which an output_map cannot convert, as noted above against cao2012 and huang2005. Its
+# wavenumber kh is the reciprocal of tallinen2015's l/a. Its wrinkle_linear_stability matches tallinen2015's
+# first_unstable_mode only at a prestretch equal to an output.
+- id: rel_eta_s_uniaxial_same_as_wang_wrinkle_crease_boundary
+  kind: same_as
+  a: tallinen2015/eta_s_uniaxial
+  b: wang2014/wrinkle_crease_boundary
+  mapping: {eps_crease: "1 - 1/gs", lam_p: "gs"}
+  output_map: {mu_boundary: eta_s}
+  regime: {gs: [1.40, 1.55]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    Both papers model incompressible neo-Hookean layers in plane strain on a deep neo-Hookean substrate. Each finds the
+    modulus ratio (mu_f/mu_s = eta) at which the linear wrinkling threshold equals a fixed crease threshold:
+    tallinen2015's eta_s (g_c(eta_s) = gs), and wang2014's wrinkle-crease boundary (e_c wrinkle = e_c crease). With
+    eps_crease = 1 - 1/gs and lambda_p = gs, wang2014's substrate stretch at onset on the boundary is
+    lambda_p (1 - eps_crease) = 1, the unstrained substrate of tallinen2015, and its film stretch 1 - eps_crease = 1/gs
+    is tallinen2015's layer stretch. The two then solve the same bifurcation problem by independent codes. In a direct
+    check at gs = 1.5456 (1/0.647) they gave 1.144582 and 1.144583. The tolerance 0.001 (added) covers the root-finding
+    precision of wang2014's model (xtol 1e-4 on log mu) and of its scans in strain and wavenumber.
+  assumptions:
+    - "wang2014's film strain e is a nominal plane-strain compression of a stress-free film, so its film stretch 1 - e is tallinen2015's layer stretch 1/g under uniaxial growth G = diag(g, 1, 1/g)"
+    - "the regime gs 1.40-1.55 keeps the boundary inside both models' brackets (mu 1 to 3 in wang2014, eta 0.6 to 5 in tallinen2015)"
+#
+# Against wang2015. Neither paper cites the other: tallinen2015's reference list has Wang & Zhao 2014 (ref-23, wang2014)
+# but not their 2015 Sci. Rep. paper, and wang2015's Tallinen references are Tallinen et al. 2013 (its ref-13) and 2014
+# (its ref-58), not this paper. No relation is stated, and neither record takes a value from the other (tallinen2015's
+# from_source data point to ref-2 and ref-32; none of wang2015's points to a reference whose source is tallinen2015), so
+# no cited.yaml line is added. tallinen2015 is the later paper, so the proposed relation is entered here.
+# Not related:
+# - wang2015's Eq. 4 upper branch 0.50 (mu_f/mu_s)^-0.66 (a fit to its finite-element boundary) and tallinen2015's
+#   stiff_threshold_asymptote g = 1 + (3/(8 eta))^(2/3): wang2015's eM is a film strain, with film stretch 1 - eM = 1/g,
+#   so the two compare only through eM = 1 - 1/g, an offset reciprocal that an output_map cannot convert; no paper
+#   states the link in a form that would justify a helper model. The same holds for Eq. 4's lower branch against
+#   first_unstable_mode, and for wang2015's crease threshold eC = 0.35 (Eq. 3, a printed datum of the non-runnable
+#   finite-element model) against gs_from_stretch (gs = 1/lambda_s, i.e. eC = 1 - 1/gs).
+# - wang2015's triple point mu_f/mu_s = 1.3 corresponds to tallinen2015's eta_s_uniaxial (wrinkling meets the crease
+#   threshold on an unstrained substrate), but wang2015 has it only as a datum of fe_phase_diagram (not runnable), so it
+#   is a value for the comparisons, not a relation between models.
+# - wang2015's Eq. 7 (crease wavelength 3.5 (1 - eM) H_f, from its ref. 48), the accordion Eqs. 9-12, the amplitude
+#   Eq. 13 and the adhesion and modulus-ratio helpers have no counterpart in tallinen2015's models.
+# - wang2015's Eq. 8 against first_unstable_mode: Eq. 8 is stated for mu_f/mu_s > 10^3, where 2 pi (eta/3)^(1/3) > 43
+#   lies outside first_unstable_mode's wavelength search range (la_max = 15); the finite-strain approach to the stiff
+#   limit is already tested against huang2005's identical Eq. 17 (eta 10 to 40).
+# mapping: eta is tallinen2015's layer/substrate shear-modulus ratio mu1/mu2, which is wang2015's mu_f/mu_s.
+- id: rel_wang2015_eq8_same_as_stiff_wavelength_asymptote
+  kind: same_as
+  a: wang2015/eq8_initial_wrinkle_wavelength
+  b: tallinen2015/stiff_wavelength_asymptote
+  mapping: {eta: "mu_ratio"}
+  output_map: {l_over_a: lamC_over_H}
+  regime: {mu_ratio: [1000.0, 1.0e+5]}
+  provenance: proposed
+  reason: >
+    tallinen2015's stiff-layer asymptote l/a = (8 pi^3 eta/3)^(1/3) is 2 pi (eta/3)^(1/3), and wang2015's Eq. 8 (taken
+    from its ref. 50) is lambda^C_wrinkle/H_f = 2 pi (mu_f/(3 mu_s))^(1/3), stated for mu_f/mu_s > 10^3: the same
+    expression with eta = mu_f/mu_s. Both papers model incompressible neo-Hookean layers in plane strain on a deep
+    neo-Hookean substrate (wang2015's substrate more than 20 times thicker than the film; tallinen2015's a half-space).
+  assumptions:
+    - "eta (mu1/mu2) is wang2015's mu_f/mu_s; both are shear-modulus ratios of the layer to the substrate"
+    - "tallinen2015's deformed thickness a is wang2015's film thickness H_f, since the threshold strain vanishes in the stiff limit (eM about 0.005 at mu_f/mu_s = 10^3 by Eq. 4)"
+#
+# Against shyer2013 (ref-3): no relation is entered. shyer2013 (2013, with Tallinen as an author) cannot cite this paper.
+# tallinen2015 cites it five times (pp. 1, 2, 4, 5), each time about observations: growth-driven folding "in the gut
+# [3,9]" (p. 1); the optimal wavelength of about four undeformed layer thicknesses "agrees with the folding patterns in
+# the brain and the gut [3,8]" (p. 2); sawtooth folds "due to a relatively stiff epithelium that folds on a softer
+# mesenchyme [3,40]" and the smooth muscle that "contributes to folding at early stages [3]" (p. 2); the chick-gut zigzags
+# of Fig. 4(f) (p. 4); and gut epithelium zigzags set by modulus ratio and anisotropy (p. 5). None of these statements is
+# about a model of shyer2013. No tallinen2015 datum takes a value from ref-3 (its from_source data point to ref-2 and
+# ref-32), and shyer2013 takes none from tallinen2015, so no cited.yaml line is added. Nothing is proposed, because no
+# runnable pair of models measures the same quantity:
+# - shyer2013's runnable models are processing of its own measurements (inverse_ratio, mean_circ_ratio,
+#   mean_culture_circ, mean_culture_length, modulus_ratio_curve), the printed stress-free schedules of its simulations
+#   (stressfree_chick, stressfree_mouse, nominal_compression) and the spot expansion field (spot_growth). None gives a
+#   threshold or a wavelength. tallinen2015's models give growth thresholds g, modulus ratios at transitions (eta_s,
+#   eta_b) and wavelengths l/a, all from eta (and gs) of a layer on an unconfined half-space.
+# - The two papers' wavelength results come from finite-element codes that neither record can run (shyer2013's
+#   fe_luminal_patterns, tallinen2015's fe_folding). They are not the same problem: shyer2013's layers are a tube with the
+#   endoderm and mesenchyme both grown and confined by smooth muscle; tallinen2015's layer grows on an unstrained
+#   half-space. Their printed spacings are also normalized differently: shyer2013's zigzag period W = 2.0 (he + hm) is
+#   per composite thickness, and tallinen2015's "about four times the undeformed layer thickness" is per layer thickness.
+#   Testing the "agrees with ... the gut [3]" claim is a comparison of values (shyer2013's measured spacings and moduli
+#   against tallinen2015's predictions), which is synthesis work, not a model relation.
+# - shyer2013's modulus_ratio (endoderm over mesenchyme, about 10 in chick and 1.5 in mouse, 12 and 1.5 in its
+#   simulations) is in the same sense as tallinen2015's eta (layer over substrate), so the chick gut is on the
+#   smooth-wrinkling side (eta > eta_s = 1.14), as tallinen2015's p. 2 says. That is a placement of data on a model's
+#   input, not a relation between models.
+#
+# Against diab2013 (ref-37): no relation is entered. tallinen2015 cites diab2013 once (p. 2): "Analogous subcritical
+# instabilities were recently identified in two-dimensional elastic systems with jointly compressed layer and substrate
+# [37,38]. These systems differ from ours particularly strongly in the region of subcriticality". That is an analogy of
+# behaviour that the paper itself contrasts with its own system, not a statement that one model is, reduces to or is
+# derived from the other. diab2013 (2013) cannot cite tallinen2015. Neither record takes a value from the other
+# (tallinen2015's from_source data point to ref-2 and ref-32; diab2013's to its refs 1, 8 and 9), so no cited.yaml line
+# is added. Nothing is proposed, because no model pair measures the same quantity:
+# - The problems differ. diab2013's Eq. 2.8 (bifurcation_wavenumber_eq28, bifurcation_strain_eq28) and its M-point
+#   (m_point_eq211) are for a neo-Hookean half-space whose modulus decays exponentially with depth (rate a, kbar = k/a),
+#   compressed homogeneously; tallinen2015's layer grows on an unstrained half-space with a step in modulus (eta). No
+#   choice of eta or a maps one onto the other: diab2013's half-space has no layer thickness, and tallinen2015's has no
+#   graded modulus.
+# - The one shared number is Biot's half-space threshold, reached by both as a wavelength-independent limit:
+#   diab2013's eps_B (biot_strain_eq28, the divergence of kbar, root of lambda^3 + lambda^2 + lambda - 1 = 0) and
+#   tallinen2015's gb (biot_polynomial, biot_closed_form). Under uniaxial growth the layer stretch is 1/g, so
+#   gb = 1/(1 - eps_B) = 1.839; indeed g^6 - 3 g^4 - g^2 - 1 = (g^3 - g^2 - g - 1)(g^3 + g^2 - g + 1), and
+#   g^3 - g^2 - g - 1 = 0 with g = 1/lambda is lambda^3 + lambda^2 + lambda - 1 = 0. But both sides are zero-input
+#   constants with outputs a growth ratio and a strain, an offset reciprocal that an output_map (a renaming) cannot
+#   convert, and diab2013's stretch helper biot_stretch_eq28 gives lambda_B = 1/gb, again a reciprocal. Neither paper
+#   states the link in a form that would justify a helper model, and the same link is already entered for diab2013
+#   against biot1963 (diab2013/relations.yaml), to which tallinen2015's gb is noted above as equal.
+#
+# Against jin2015 (ref-38). tallinen2015 cites jin2015 once, with diab2013, on p. 2: "Analogous subcritical instabilities
+# were recently identified in two-dimensional elastic systems with jointly compressed layer and substrate [37,38]. These
+# systems differ from ours particularly strongly in the region of subcriticality: indeed, at eta = 1 the distinction
+# between layer and substrate vanishes in the jointly compressed system, so the wavelength scales with the total depth of
+# the system, whereas in our system the layer is distinguished by its growth even at eta = 1". That is an analogy of
+# behaviour and a stated contrast, not a statement that one model is, reduces to or is derived from the other, so no
+# stated relation is entered. jin2015 does not cite tallinen2015, and neither record takes a value from the other
+# (tallinen2015's from_source data point to ref-2 and ref-32; jin2015 has none pointing to tallinen2015), so no cited.yaml
+# line is added.
+# Not related:
+# - The thresholds. jin2015 compresses film and substrate together (both at stretch lambda1); tallinen2015 grows only
+#   the layer (stretch 1/g) on an unstrained substrate. The two problems coincide only as the onset strain vanishes. At
+#   finite strain they are different problems (the contrast the paper draws), so jin2015's em against
+#   first_unstable_mode, and jin2015's wrinkle-crease boundary (equal_strain_boundary_plane_strain) against eta_s_uniaxial,
+#   are not proposed: the substrate strain at onset differs by the onset strain itself (0.35 on the boundary). In the
+#   stiff limit em -> (1/4)(3/eta)^(2/3) is g - 1 of stiff_threshold_asymptote, but that is an offset (a strain against
+#   a growth ratio) which an output_map cannot convert, as noted above against cao2012 and huang2005.
+# - The stated contrast at eta = 1: jin2015's wrinkle_eigen_* at Gf/Gs = 1 is one homogeneous slab whose minimum is the
+#   Biot strain at vanishing wavelength (its Lm is not defined there), so "the wavelength scales with the total depth"
+#   has no runnable counterpart in jin2015's models to test against tallinen2015's finite wavelength.
+# The one relation proposed is the stiff limit, where both problems become the small-strain stiff plate on a deep
+# substrate and the joint compression of the substrate no longer matters.
+- id: rel_jin_plane_strain_Lm_approx_stiff_wavelength_asymptote
+  kind: approximated_by
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: tallinen2015/stiff_wavelength_asymptote
+  mapping: {eta: "Gf_Gs"}
+  output_map: {l_over_a: Lm}
+  regime: {Gf_Gs: [100, 10000], Hs_Hf: [300, 3000]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    jin2015's plane-strain eigenvalue problem (Eqs. B7-B15, incompressible neo-Hookean film and substrate, jointly
+    compressed) and tallinen2015's (Eq. 1, an incompressible neo-Hookean layer grown on an unstrained neo-Hookean
+    half-space) differ by the strain of the substrate at onset, which vanishes as the layer stiffens. For a stiff film
+    (Gf/Gs >> 1) on a substrate many wavelengths deep, jin2015's wavelength then tends to tallinen2015's stiff-layer
+    asymptote l/a = (8 pi^3 eta/3)^(1/3) = 2 pi (eta/3)^(1/3), with eta = Gf/Gs. The two also differ in what the
+    wavelength is measured against (jin2015's nominal Lm/Hf, tallinen2015's deformed l/a), by terms of the order of the
+    onset strain (e_m about 0.024 at Gf/Gs = 100). The tolerance 0.05 is ours, about twice that strain, as for the same
+    jin2015 model against bowden1998's Eq. 3 (jin2015/relations.yaml). Hs/Hf >= 300 keeps the substrate at least three
+    wavelengths deep, and Gf/Gs <= 1e4 keeps e_m above jin2015's strain search floor (e_min = 1e-4).
+  assumptions:
+    - "eta (tallinen2015's layer/substrate shear-modulus ratio mu1/mu2) is jin2015's Gf/Gs"
+    - "a substrate of Hs/Hf >= 300 acts as tallinen2015's half-space for wrinkles with Lm/Hf below 100"
+    - "in the stiff limit the onset strain vanishes, so jointly compressing the substrate (jin2015) or leaving it unstrained (tallinen2015) gives the same wavelength, and jin2015's nominal Lm/Hf compares with tallinen2015's deformed l/a"
+#
+# Against cao2011 (Cao & Hutchinson, Proc. R. Soc. A 468, 94 (2012)): no relation is entered. tallinen2015 does not cite
+# this paper. Its ref-26 is the companion J. Appl. Mech. 79, 031019 (2012), recorded as cao2012 (see above). Its only
+# Proc. R. Soc. A reference is ref-37, which is diab2013. Neither record takes a value from the other: tallinen2015's
+# from_source data point to ref-2 and ref-32, and cao2011's point to biot1963 and hong2009. So nothing is stated and no
+# cited.yaml line is added. Nothing is proposed either: the two papers share two thresholds, but each link changes the
+# quantity, and an output_map (a renaming) cannot do that.
+# - The Biot threshold. cao2011's biot_eq28 solves r^3 - 3 r^2 - r - 1 = 0 for r = lambda_2/lambda_1. tallinen2015's
+#   biot_polynomial is g^6 - 3 g^4 - g^2 - 1 = 0, the same cubic in r = g^2. Under uniaxial growth the layer is in
+#   plane-strain compression at stretch 1/g, and with lambda_3 = 1 cao2011's r = 1/lambda_1^2 = g^2. So gb = 1.839 is
+#   sqrt(r) = 1/coef = 1/(1 - eps_W). Each of these is a power or a reciprocal of cao2011's outputs, and tallinen2015's side
+#   is a zero-input constant. The same number is already linked through biot1963 (cao2011/relations.yaml,
+#   rel_biot_plane_stretch; the note on biot1963 at the top of this file).
+# - The crease threshold. cao2011's crease_eq12 gives eps_C = 1 - 0.65/sqrt(lambda_3), taken from Hong et al. (hong2009).
+#   tallinen2015's gs = 1/lambda_s takes lambda_s = 0.647 from ref-32 (Hohlfeld & Mahadevan), not from cao2011. In plane
+#   strain gs = 1/(1 - eps_C). That is again a reciprocal: crease_eq12's input is the stretch ratio lambda_1/lambda_2 and
+#   its outputs are sqrt(ratio) and the strain, while gs_from_stretch maps a stretch to its reciprocal.
+# - cao2011's post-bifurcation, imperfection and N-mode models (Eqs. 3.7-4.10, Table 1) concern a homogeneous
+#   half-space. tallinen2015 has no post-bifurcation analysis of a half-space and no imperfection amplitude, and its
+#   finite-element folding (fe_folding) cannot be run.

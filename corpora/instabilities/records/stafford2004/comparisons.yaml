@@ -1,0 +1,80 @@
+- id: cmp_eq1_fig1b_caption
+  purpose: consistency
+  computed: d_eq1_fig1b
+  printed: d_fig1b_caption
+  conditions_ok: >-
+    The modulus input is the PS value the paper measures for films from 30 nm up (E_PS_30nm), which covers
+    the ≈100 nm film of Fig. 1b; the paper presents that film as a PS film of the same system.
+- id: cmp_eq1_fig1b_text
+  purpose: consistency
+  computed: d_eq1_fig1b
+  printed: d_fig1b_text
+  conditions_ok: As cmp_eq1_fig1b_caption; the text's "approximately 8 µm" for the same micrograph.
+- id: cmp_eq2_fig1b
+  purpose: consistency
+  computed: Ef_eq2_fig1b
+  printed: E_PS_30nm
+  conditions_ok: >-
+    The paper says the PS modulus "remains 3.4 ± 0.1 GPa" on films as thin as 30 nm and is constant over
+    150-240 nm, so the ≈100 nm PS film of Fig. 1b is inside the range where the paper claims this value.
+- id: cmp_eq2_fig1b_gradient
+  purpose: consistency
+  computed: Ef_eq2_fig1b
+  printed: E_PS_gradient
+  conditions_ok: >-
+    E_PS_gradient is the modulus of the 150-240 nm gradient film; the paper says the PS modulus is
+    constant over that range and unchanged down to 30 nm, so the same value is claimed for the ≈100 nm
+    film of Fig. 1b.
+- id: cmp_eq4_Pmax
+  purpose: fit_quality
+  computed: Ef_eq4_Pmax
+  printed: E_osg_Pmax
+  conditions_ok: >-
+    The run takes the highest porosity as the fraction 0.51 (P_max_added); the datum's condition is the
+    printed "0.51 percent", the same number in the unit the paper prints (q_porosity_percent).
+- id: cmp_allen_PS
+  purpose: reproduction
+  computed: allen_shortfall_PS
+  printed: allen_shortfall_printed
+
+# Figure pass
+- id: cmp_eq2_fig2b_points
+  purpose: reproduction
+  computed: Ef_eq2_fig2b_points
+  printed: E_fig2b
+  note: >-
+    The core of SIEBIMM: Eq. 2 on the plotted wavelengths should give the plotted moduli. The per-sample Es is
+    not printed (Es_added = 1.75 MPa, the middle of the printed range); every computed modulus scales with Es.
+- id: cmp_eq1_fig2b
+  purpose: consistency
+  computed: d_eq1_fig2b
+  printed: d_fig2b
+  conditions_ok: >-
+    The modulus input is the paper's 3.4 ± 0.1 GPa for this same gradient film (E_PS_gradient, conditioned on
+    150-240 nm), and the thicknesses are those of the plotted points (151-245 nm), so the conditions agree up to
+    the few nm the plotted range exceeds the printed one.
+- id: cmp_mean_fig2b
+  purpose: consistency
+  computed: E_fig2b_mean
+  printed: E_PS_gradient
+  conditions_ok: The plotted points are the film whose constant modulus the caption gives (151-245 nm against the printed 150-240 nm).
+- id: cmp_eq4_fig4
+  purpose: fit_quality
+  computed: Ef_eq4_fig4
+  printed: E_fig4_siebimm
+  note: E0 is not printed; E0_added = 9 GPa (q_E0_unstated). The fit is to these SIEBIMM points (p. 5).
+- id: cmp_siebimm_indentation_fig3
+  purpose: validation
+  computed: E_fig3_siebimm_at_indentation
+  printed: E_fig3_indentation
+  conditions_ok: >-
+    The paper compares the two series as equivalent films; they differ in thickness (110-130 nm for SIEBIMM,
+    about 200-500 nm indented, q_fig3_thickness_mismatch), and the paper attributes the disagreement above 20 %
+    plasticizer to plasticizer diffusion into the PDMS.
+- id: cmp_siebimm_indentation_fig4
+  purpose: validation
+  computed: E_fig4_siebimm_at_indentation
+  printed: E_fig4_indentation
+  conditions_ok: >-
+    The indented films are the parallel set spun on silicon from the same solutions (Methods, p. 5); the
+    paper presents the two series as measurements of the same films' modulus.

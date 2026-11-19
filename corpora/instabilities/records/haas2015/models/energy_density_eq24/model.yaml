@@ -1,0 +1,23 @@
+id: energy_density_eq24
+name: Hookean shell energy density, the integrand of Eq. 2.4 per area element 2 pi r ds, with its stretching and bending parts
+stated: {page: 3, quote: "shell minimizes an energy of the Hookean form", where: Eq. 2.4}
+equation: >
+  E = pi E h/(1 - nu^2) int r (Es^2 + Ephi^2 + 2 nu Es Ephi) ds + pi E h^3/(12(1 - nu^2)) int r (Ks^2 + Kphi^2 + 2 nu Ks Kphi) ds,
+  written as E = 2 pi int e r ds with e = e_stretch + e_bend
+inputs:
+  Em: {quantity: elastic_modulus_scaled, unit: dimensionless, description: "the elastic modulus E of Eq. 2.4, in a reference unit of stress"}
+  h: {quantity: thickness_to_radius, unit: dimensionless, description: "h/R"}
+  nu: {quantity: poisson_ratio, unit: dimensionless}
+  Es: {quantity: shell_strain, unit: dimensionless, description: "Es = f_s - f_s^0 (Eq. 2.2)"}
+  Ephi: {quantity: shell_strain, unit: dimensionless, description: "Ephi = f_phi - f_phi^0 (Eq. 2.2)"}
+  Ks: {quantity: curvature_strain_times_radius, unit: dimensionless, description: "Ks R, Ks = f_s kappa_s - f_s^0 kappa_s^0 (Eq. 2.3)"}
+  Kphi: {quantity: curvature_strain_times_radius, unit: dimensionless, description: "Kphi R, Kphi = f_phi kappa_phi - f_phi^0 kappa_phi^0 (Eq. 2.3)"}
+outputs:
+  e_stretch: {quantity: shell_energy_density_scaled, unit: dimensionless, description: "E h/(2(1 - nu^2)) (Es^2 + Ephi^2 + 2 nu Es Ephi), in the stress unit times R"}
+  e_bend: {quantity: shell_energy_density_scaled, unit: dimensionless, description: "E h^3/(24(1 - nu^2)) (Ks^2 + Kphi^2 + 2 nu Ks Kphi)"}
+  e: {quantity: shell_energy_density_scaled, unit: dimensionless}
+settings: {}
+stochastic: false
+# A helper for ModelAtlas: Eq. 2.4 is the energy of shell_bifurcation, which cannot be run. haas2021 (p. 11)
+# states that its classical energy density (Eq. 67) has the same structure as the energies of the earlier
+# models [7, 8, ...], and is that of a thin Hookean shell with nu = 1/2 and E = 3C; this model lets that be tested.

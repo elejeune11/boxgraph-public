@@ -1,0 +1,22 @@
+id: prestress_si_sign
+name: pre-stress from the Gram-matrix pre-strain factor (SI), sign corrected
+role: model
+stated: {page: 21, quote: "Area pre-strain is thus equivalent to an isotropic pre-stress", where: "SI, Pre-strain and pre-stress"}
+equation: "sigma_a = chi_2D (1 - gamma)/gamma"
+variant_of: prestress_si
+corrections:
+  - equation: "SI p. 21, sigma_a = chi_2D (gamma - 1)/gamma"
+    change: "(1 - gamma)/gamma instead of the printed (gamma - 1)/gamma"
+    evidence: >
+      With gamma < 1 (p. 20) the printed form gives a negative pre-stress, while the main text (p. 4)
+      gives sigma_a = chi_2D (A_i - A_0)/A_0 > 0 and Fig. 2c and Supp. Fig. 1f plot the pre-stress as
+      positive; the same derivation's stress line, chi_2D/gamma [Tr E - (gamma - 1)], has a positive
+      contribution +chi_2D (1 - gamma)/gamma for an unstrained facet, of the sign of a contractile tension.
+inputs:
+  chi: {quantity: compression_modulus_nd, unit: dimensionless}
+  eps: {quantity: area_prestrain, unit: dimensionless, description: "gamma = 1/(1 + epsilon_a), as in prestress_si"}
+  theta: {quantity: angle_from_midline, unit: rad, description: "position inside the midline band; does not enter"}
+outputs:
+  sigma_a: {quantity: prestress_nd, unit: dimensionless}
+settings: {}
+stochastic: false

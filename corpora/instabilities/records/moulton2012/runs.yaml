@@ -1,0 +1,37 @@
+- id: run_ribs_fig5a
+  model: ribs_linear_eq4
+  inputs: {kphi: kphi_fig5a, rs0: rs0_fig5a, phi0: phi0_fig5, theta: theta_added, kg: kg_fig5, gamma0: gamma0_fig5, gamma_rate: gamma_rate_fig5, a0: a0_added, EA: EA_fig5, ks: ks_fig5}
+  settings: {t_max: 30.0, rtol: 1.0e-9}
+  sweep: {n: t_ribs_fig5a}
+  outputs: {t_rib: t_ribs_fig5a_pred, r_rib: r_ribs_fig5a_pred}
+- id: run_ribs_fig5b
+  model: ribs_tension_eq5
+  inputs: {kphi: kphi_fig5b, K: K_fig5b, rs0: rs0_fig5bc, phi0: phi0_fig5, theta: theta_added, kg: kg_fig5, gamma0: gamma0_fig5, gamma_rate: gamma_rate_fig5, a0: a0_added, EA: EA_fig5, ks: ks_fig5}
+  settings: {t_max: 30.0, rtol: 1.0e-9}
+  sweep: {n: t_ribs_fig5b}
+  outputs: {t_rib: t_ribs_fig5b_pred, r_rib: r_ribs_fig5b_pred}
+- id: run_ribs_fig5c
+  model: ribs_decreasing_eq6
+  inputs: {kphi: kphi_fig5c, K: K_fig5c, rs0: rs0_fig5bc, phi0: phi0_fig5, theta: theta_added, kg: kg_fig5, gamma0: gamma0_fig5, gamma_rate: gamma_rate_fig5, a0: a0_added, EA: EA_fig5, ks: ks_fig5}
+  settings: {t_max: 30.0, rtol: 1.0e-9}
+  sweep: {n: t_ribs_fig5c}
+  outputs: {t_rib: t_ribs_fig5c_pred, r_rib: r_ribs_fig5c_pred}
+- id: run_dashed_fig5a
+  model: mantle_unstressed_radius
+  inputs: {gamma0: gamma0_fig5, gamma_rate: gamma_rate_fig5, a0: a0_added}
+  sweep: {t: R_dashed_fig5a}
+  outputs: {R: R_dashed_fig5a_pred}
+- id: run_dashed_fig5b
+  model: mantle_unstressed_radius
+  inputs: {gamma0: gamma0_fig5, gamma_rate: gamma_rate_fig5, a0: a0_added}
+  sweep: {t: R_dashed_fig5b}
+  outputs: {R: R_dashed_fig5b_pred}
+- id: run_dashed_fig5c
+  model: mantle_unstressed_radius
+  inputs: {gamma0: gamma0_fig5, gamma_rate: gamma_rate_fig5, a0: a0_added}
+  sweep: {t: R_dashed_fig5c}
+  outputs: {R: R_dashed_fig5c_pred}
+- id: run_winkler_fig9
+  model: winkler_rod_wavelength
+  inputs: {EI: EI_fig9, ks: ks_fig9}
+  outputs: {lam: lambda_winkler_fig9}

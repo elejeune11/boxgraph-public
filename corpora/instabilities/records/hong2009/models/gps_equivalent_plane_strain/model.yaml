@@ -1,0 +1,16 @@
+id: gps_equivalent_plane_strain
+name: plane-strain critical strain equivalent to a generalized plane-strain state (Eq. 3, as lambda_1 sqrt(lambda_2) = 1 - epsilon)
+role: model
+stated: {page: 3, printed_page: "111901-3", quote: "this condition corresponding to", where: "text after Eq. 4, from Eq. 3"}
+equation: "lambda_1' = lambda_1 sqrt(lambda_2), epsilon = 1 - lambda_1'  (critical when lambda_1 sqrt(lambda_2) = 0.65)"
+from_words: true
+inputs:
+  lam1: {quantity: critical_stretch_gps, unit: dimensionless, description: "lambda_1, the stretch along the more compressed direction"}
+  lam2: {quantity: transverse_inplane_stretch, unit: dimensionless, description: "lambda_2, the prescribed constant in-plane stretch"}
+outputs:
+  eps: {quantity: critical_strain_plane, unit: dimensionless, description: "the strain 1 - lambda_1' of the equivalent plane-strain problem"}
+built_from: [plane_strain_stretch]
+# A helper for the relation to jin2015 (jin2015/relations.yaml): jin2015 says the crease condition under different
+# loadings satisfies its Eq. 1, citing this paper. The paper writes its condition in this form on p. 3
+# ("this condition corresponding to lambda_1 sqrt(lambda_2) = 0.65"), from Eq. 3 (lambda_1 = lambda_1'/sqrt(lambda_2))
+# and lambda_1' = 1 - epsilon_c.

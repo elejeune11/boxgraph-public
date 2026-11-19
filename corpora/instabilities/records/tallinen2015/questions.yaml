@@ -1,0 +1,524 @@
+- id: q_h_relation
+  kind: possible_error
+  about: [mode_wavelength_h, mode_wavelength_h_gza, width_eta4_printed]
+  text: >
+    The relaxed layer thickness is printed as h = a/gz (p. 1). G = diag(gx, gy, gz) is the deformation that
+    relaxes the bonded layer (thickness a), so the relaxed thickness should be gz a; for uniaxial growth
+    (gz = 1/g) the printed form makes the grown layer thicker than the bonded one. With the printed relation
+    the wavelength of linear instability at eta = 4 is about 5.0h, not the 7.54h printed on p. 6; with
+    h = gz a it is 7.54h. The figures in units of h (Figs. 2(b), 4(d), 4(e)) appear to use h = gz a.
+  citation: {page: 1, quote: "becoming a flat slab with thickness"}
+- id: q_ellipsis_values
+  kind: reading
+  about: [gb_main_printed, gb_appendix_printed, eta_b_main_printed, eta_b_b28_printed]
+  text: >
+    gb and eta_b are printed with a trailing ellipsis ('1.839 . . .', '0.525 . . .'), meaning further digits
+    are dropped. They are recorded as the digits printed, so a verdict uses half a unit in the last printed
+    digit; a truncated value strictly allows [1.839, 1.840).
+- id: q_fe_results
+  kind: unstated_model
+  about: [fe_folding, width_eta1_fe_printed, fold_spacing_large_g_printed]
+  text: >
+    The beyond-threshold results (cusp thresholds, the energy-minimizing wavelengths converging to about four
+    layer thicknesses, 4.71h for eta = 1 at gs, the hysteresis loops, the 3D pattern phase diagram) come from
+    an explicit finite-element code that is described only in outline and not released; they cannot be rerun
+    in the record.
+- id: q_biot_search_range
+  kind: choice
+  about: [first_unstable_mode, run_first_mode_eta05, l_over_a_short_added]
+  text: >
+    The paper does not say how the minimum over wavelength was found. The record searches l/a in
+    [0.05, 15] (log grid, then a bounded minimization). Below eta_b the minimum is the l/a -> 0 limit, which the
+    search represents by l/a = 0.05; the threshold there exceeds gb by much less than the printed precision.
+- id: q_log_transition
+  kind: unstated_model
+  about: [first_unstable_mode]
+  text: >
+    The paper states that above eta_b the unstable wavelength vanishes 'as lambda ~ 1/log(eta - eta_b)' after
+    'further analysis' that is not shown; since log(eta - eta_b) is negative near eta_b the sign is implied by
+    the '~'. No printed value tests it, and lambda also denotes the stretch elsewhere in the paper.
+  citation: {page: 7, quote: "logarithmic, in the sense that the unstable wavelength vanishes"}
+- id: q_brain_eta
+  kind: reading
+  about: [eta_brain_printed]
+  text: >
+    The biological comparison rests on a cortex-to-sublayer modulus ratio eta ≈ 1 taken from ref. 2; the gut
+    is described only as a 'relatively stiff epithelium' on a softer mesenchyme, with no number. The claimed
+    agreement of fold width (about four layer thicknesses) with brain and gut [3,8] is stated without numbers.
+- id: q_b27_sign
+  kind: possible_error
+  about: [eta_b_crossover, eta_b_b28]
+  text: >
+    (Audit.) Eq. B26 reads (6gb^5 - 12gb^3 - 2gb) eps A e^(ak + ak/gb^2) + B e^(ak - ak/gb^2) = 0, whose solution
+    is eps = -B e^(-2ak/gb^2) / [(6gb^5 - 12gb^3 - 2gb) A]. Eq. B27 is printed without the minus sign. At g = gb
+    the factor 6gb^5 - 12gb^3 - 2gb is positive (about 48) and A (Eq. B24) is negative for every eta >= 0 (its
+    eta^2 term is eta^2 (gb^6 - 3gb^4 - gb^2 - 1) = 0 and the remaining terms are negative), so B26 gives eps the
+    sign of B, as the text after B27 states, while the printed B27 gives it the opposite sign. B27 appears to have
+    lost a minus sign; no printed number depends on it (eta_b comes from B = 0).
+  citation: {page: 7, quote: "which is solved by", where: Eq. B27}
+- id: q_fig4_panel_reference
+  kind: possible_error
+  about: [fe_folding]
+  text: >
+    (Audit.) Appendix A says the large rectangular simulation domains (width 30 times the layer thickness) are
+    shown in Fig. 4(f); the caption of Fig. 4 (p. 4) gives 4(f) as zigzags in the chick gut epithelium and 4(g) as
+    the simulated layer in a large domain. The reference appears to mean Fig. 4(g).
+  citation: {page: 6, quote: "the domain has a width 30 times the layer thickness"}
+- id: q_growth_strain_vs_applied_strain
+  kind: reading
+  about: [gs_from_stretch, lambda_s_printed, gs_uniaxial_printed]
+  text: >
+    (Audit, for relating this record to the applied-strain papers.) The paper maps growth to an applied stretch by
+    g = 1/lambda (p. 2), so the equivalent applied compressive strain is 1 - lambda = 1 - 1/g, while the 'growth
+    strain' it uses in Sec. II C and Fig. 4 is eps = g - 1 (p. 5). The two differ beyond first order: at the
+    sulcification threshold gs ≈ 1.55 the growth strain is 0.55 and the equivalent compressive strain 0.353; at
+    gb = 1.839 they are 0.839 and 0.456 (the Biot stretch 0.544). Thresholds compared across papers should use
+    lambda = 1/g, not eps.
+  citation: {page: 5, quote: "where gc is the growth"}
+- id: q_fig2b_h_relation
+  kind: reading
+  about: [mode_wavelength_h, mode_wavelength_h_gza, fig2b_linear_fig, fig2b_linear_dotted_fig, wavelength_at_threshold, wavelength_at_threshold_gza]
+  text: >
+    (Figure pass.) The blue curve of Fig. 2(b), the wavelength of linear instability in units of h against its
+    threshold g, settles q_h_relation from the paper's own figure: the readings follow wavelength_at_threshold_gza
+    (h = gz a) at every g read and lie far from wavelength_at_threshold (the printed h = a/gz), whose values are
+    smaller by a factor g^2. Together with the printed width 7.54h (p. 6), the figures in units of h use h = gz a.
+  citation: {page: 3, quote: "The blue curve is the wavelength of linear instability", where: "Fig. 2(b)"}
+- id: q_fig4_black_curve
+  kind: unexplained_difference
+  about: [fig4d_linear_fig, fig4e_linear_fig, wavelength_at_threshold_biax, wavelength_at_threshold_biax_gza]
+  text: >
+    (Figure pass.) The thick black curves of Figs. 4(d) and 4(e), captioned as the wavelength of linear
+    instability and drawn on an axis labelled l/h, are reproduced by neither reading of h: with g = gx = gy the
+    relaxed thickness is a/g^2 (h = gz a) or a g^2 (printed h = a/gz), and both models miss the curves by far.
+    Evaluated outside the record, the curves coincide at every g read with l_c/a, the wavelength of the mapped
+    plane-strain mode (g^(3/2) = g_c(eta'), wavelength_at_threshold.mode_at) over the deformed thickness a, and
+    they end at g = gb^(2/3) as that mode does. So the curves appear to be plotted against the deformed thickness
+    (or the axis label and caption do not say what is plotted). The finite-element points in the same panels are
+    half-wavelengths (legends l_y/2, l_x/2, l_h/2), which a full wavelength over a would not match in kind either.
+  citation: {page: 4, quote: "Thick black curves indicate the wavelength of linear instability", where: "Fig. 4(d),(e)"}
+- id: q_line_models
+  kind: choice
+  about: [threshold_line, sulcification_line, sulcification_line_biax]
+  text: >
+    (Figure pass.) A threshold drawn as a straight line across a plot (the vertical dashed lines of Fig. 3, the flat
+    part of the blue curve in Fig. 4(b)) is compared by reading it at one or more positions along the line and
+    running a model that takes that position as an input it does not use. The input only lets the reading, which
+    is indexed by the plot's other axis, be compared point by point; the result is g_c(eta) or gs, as the text gives.
+- id: q_fig_points_hidden
+  kind: reading
+  about: [fig2b_eta2_fig, fig2b_eta1_fig, fig4d_eta086_ly_fig, fig4d_eta086_lx_fig]
+  text: >
+    (Figure pass.) Some finite-element points are hidden behind circles of another colour and are not read: the
+    cyan eta = 2 circles at g >= 1.7 and the red eta = 1 circles at g >= 2.0 of Fig. 2(b), and the circles cut by the
+    frame at g = 2.4. In Fig. 4(d) the two series of one colour (l_y/2 solid, l_x/2 dashed) are told apart by
+    height; for eta = 0.86 the dashed line ends above the solid one at g = 2.0 and the single point at g = 1.67 is
+    kept in both series. Fig. 4(c) is not read because its two series per colour overlap within a marker.
+- id: q_fig2a_curve_low
+  kind: unexplained_difference
+  about: [fig2a_linear_fig, fig2a_linear_dotted_fig, fig1c_threshold_fig, first_unstable_mode]
+  text: >
+    (Figure pass.) The linear-instability curve of Fig. 2(a) lies slightly below the first-unstable-mode threshold
+    of Eq. 1 between eta_b and about eta = 2 (its dotted part and the start of its solid part), while the same
+    threshold drawn in Fig. 1(c) is reproduced there and Fig. 2(a) agrees with it at larger eta. The curve of
+    Fig. 2(a) is drawn as a polyline through a few points (kinks are visible at 1200 dpi); the paper does not
+    say how it was computed or drawn, so whether the gap is plotting or calculation is open.
+  citation: {page: 3, quote: "The diagram includes the linear instability curve", where: "Fig. 2(a)"}
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [biot_polynomial, biot_closed_form, first_unstable_mode, sulcification_line, eta_b_crossover, lambda_s_printed, eta_brain_printed, biot1963/crit_stretch_plane, biot1963/char_cubic]
+  text: >-
+    No validation between this record and biot1963 is entered, in either direction (cross-validation
+    job 2026-11-14). Neither record holds a measurement: every datum here is the paper's own analytic or
+    finite-element result (origin predicted), a value it computes from them (derived), or an input it
+    takes or chooses (reported: lambda_s = 0.647 from its ref. 32, a computed crease stretch; the brain's
+    eta ≈ 1 from its ref. 2; the modulus ratios of the simulations). Its figure readings are all model
+    output (Figs. 1-4 plot Eq. 1 and finite-element results; the ferret brain and chick gut panels are
+    images without values), and its own text says few experiments exist in this regime (p. 5). biot1963 is
+    a theory paper with no figures, whose Table I is computed from its own equations. The one link between
+    the two, tallinen2015's Biot root gb = 1.839 against biot1963's plane-strain critical stretch
+    (gb = 1/lambda), is model against model, the relation jobs' work (see relations.yaml), not a
+    validation.
+  citation: {page: 5, quote: "very few experiments have explored", where: text}
+- id: q_no_validation_bowden1998
+  kind: choice
+  about: [stiff_wavelength_asymptote, first_unstable_mode, mode_wavelength_h, wavelength_at_threshold, wavelength_at_threshold_gza, fe_folding, bowden1998/L_measured, bowden1998/depth_unheated, bowden1998/depth_300C]
+  text: >-
+    No validation between this record and bowden1998 is entered, in either direction (cross-validation
+    job 2026-11-14). Neither paper cites the other. This record holds no measurement (see
+    q_no_validation_biot1963), so no bowden1998 model has anything here to predict. bowden1998's
+    measurements are the wrinkle periods of gold on PDMS, "between 20 and 50" um over all samples
+    (L_measured), and the crest-to-trough depths of 1.5 and 3.9 um (depth_unheated, depth_300C). No model
+    here gives either quantity: every wavelength model returns a ratio, l/a or l/h, and bowden1998 prints no
+    measured wavelength-to-thickness ratio, only a length. To make one, a measured length would have to be
+    divided by a thickness in this job, a derived number the record may not hold. The fold wavelengths and
+    amplitudes after folding (l/h, A/h) come from finite-element runs, which are not runnable here
+    (fe_folding), and are ratios too. Beyond the quantity,
+    bowden1998 itself says the measured 20-50 um is not the bare-film wavelength: its Eq. 3 gives about
+    3.4 um and it puts the difference on a stiffer surface layer of the PDMS (its Fig. 3). That is a
+    trilayer, which no model here describes. The gold/PDMS modulus ratio, about 10^3 in Young's modulus, is
+    also far above the range eta <= 20 that the numerical models here scan. The stiff-film limits
+    (stiff_wavelength_asymptote against bowden1998's Eq. 3) are model against model, the relation jobs'
+    work (relations.yaml), not a validation.
+  citation: {none: "a choice of this cross-validation job; bowden1998 p. 2 prints the measured periods"}
+- id: q_no_validation_cao2012
+  kind: choice
+  about: [first_unstable_mode, stiff_threshold_asymptote, stiff_wavelength_asymptote, wavelength_at_threshold, eta_b_crossover, fe_folding, cao2012/bilayer_plane_strain, cao2012/fe_postbifurcation]
+  text: >-
+    No validation between this record and cao2012 is entered, in either direction (cross-validation
+    job 2026-11-14), although this paper cites cao2012 as ref. 26. Neither record holds a measurement:
+    every datum here is predicted, derived or reported (see q_no_validation_biot1963), and every datum of
+    cao2012 is predicted or reported (its figures.md: "The paper has no measurements"; the Fig. 8, 11 and
+    13 markers are finite element predictions of period doubling, folding and mountain ridges). The one
+    place this paper uses ref. 26 (p. 1) says it "considered post-bifurcation behavior when approaching
+    this transition from the stiff-layer smooth wrinkling side [26-28]": a statement about another
+    theory, with no data compared. Setting this record's Eq. 1 threshold (uniaxial growth g = 1/lambda of
+    the layer on an unstrained substrate) against cao2012's exact bilayer analysis (the whole bilayer
+    compressed, or a prestretched substrate) is model against model, the relation jobs' work, not a
+    validation; and the finite element onsets (cusp formation here, eF/ePD/eMR there) are predictions of
+    non-runnable models on both sides.
+  citation: {page: 1, quote: "post-bifurcation behavior when approaching this transition from the stiff-layer", where: text}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [stiff_wavelength_asymptote, first_unstable_mode, mode_wavelength_h, wavelength_at_threshold, fe_folding, cerda2003/two_Hs_hand, cerda2003/t_fig1, cerda2003/gamma_fig1, cerda2003/lam_hand, cerda2003/lam_apple]
+  text: >-
+    No validation between this record and cerda2003 is entered, in either direction (cross-validation
+    job 2026-11-14). Neither paper cites the other. This record holds no measurement (see
+    q_no_validation_biot1963), so no cerda2003 model has anything here to predict. cerda2003's
+    measurements are the dimensions and tensile strain of its stretched polyethylene sheet (Fig. 1
+    caption: L ≈ 25 cm, W ≈ 10 cm, t ≈ 0.01 cm, strain ≈ 0.10) and the pinched skin fold 2Hs ≈ 5 mm on the
+    back of a hand (its p. 3). These are inputs to its models, not outputs of any model here: a sheet under
+    tension wrinkles without growth or a substrate, and the fold thickness is a substrate depth, whereas
+    the models here give growth thresholds, modulus ratios and wavelength-to-thickness ratios for a layer on
+    a half-space. cerda2003 measures no wavelength (its apple and hand wavelengths, lambda ~ 3t and
+    lambda ≈ 2.5 mm, are its own predictions) and its figures are photographs without scale. The link
+    between the stiff-layer asymptote here and cerda2003's deep-substrate law is model against model,
+    entered as a relation (relations.yaml), not a validation.
+  citation: {page: 5, quote: "very few experiments have explored", where: text}
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [stiff_threshold_asymptote, stiff_wavelength_asymptote, first_unstable_mode, eq1_threshold, fe_folding, huang2005/thick_substrate_eq17, huang2005/thick_substrate_wavelength]
+  text: >-
+    No validation between this record and huang2005 is entered, in either direction (cross-validation
+    job 2026-11-14), although this paper cites huang2005 as ref. 17. The citation appears only inside
+    reference ranges on p. 1 ("ultimately causing it to buckle [14-29]", "buckles supercritically into
+    smooth wrinkled patterns [15-20]"): background on stiff-film wrinkling, with no huang2005 value used
+    and no data compared. Neither record holds a measurement: every datum here is predicted, derived or
+    reported (see q_no_validation_biot1963; the Figs. 2-4 points are finite-element results), and
+    huang2005's data are reported inputs and predictions of its own analysis and simulations (its
+    questions q_no_validation_cao2012, q_no_validation_biot1963). The stiff-layer asymptotes here and
+    huang2005's thick-substrate limit (Eq. 17) are model against model, the relation jobs' work.
+  citation: {page: 1, quote: "buckles supercritically into smooth wrinkled patterns", where: text}
+- id: q_no_validation_richman1975
+  kind: choice
+  about: [first_unstable_mode, stiff_wavelength_asymptote, mode_wavelength_h, wavelength_at_threshold, wavelength_at_threshold_gza, fe_folding, fold_spacing_large_g_printed, eta_brain_printed, richman1975/l_measured_27wk, richman1975/l_measured_sidman, richman1975/t_27wk]
+  text: >-
+    No validation between this record and richman1975 is entered, in either direction (cross-validation
+    job 2026-11-14), although this paper cites richman1975 as ref. 4. The citation is only inside
+    "mechanical descriptions of brain folding [4-8]" (p. 1); the paper compares no model with richman1975's
+    data, and the brain agreement it does claim ("about four times the undeformed layer thickness ... agrees
+    with the folding patterns in the brain and the gut") cites refs. 3 and 8, not ref. 4. This record holds no
+    measurement (see q_no_validation_biot1963), so no richman1975 model has anything here to predict.
+    richman1975's measurements are the incipient intersulcal distances 8.5 mm (its 27-week specimen) and
+    7.5 mm (Sidman and Rakic's specimen), the cortical thickness of about 1.7 mm and radius 84 mm of the
+    27-week specimen, and the Table 1 layer areas. No model here gives a length or an area: every wavelength
+    model returns a ratio (l/a or l/h), and richman1975 prints no measured wavelength-to-thickness ratio
+    (its l/t = 8 and l/t ≈ 1 are predictions of its own analysis). Making one (8.5/1.7) would be a number
+    computed in this job, which a record may not hold. Beyond the quantity, the conditions do not fit the
+    runnable models: at the brain's eta ≈ 1 (from ref. 2) this paper puts folding below eta_s ≈ 1.14, in the
+    subcritical regime where sulcification precedes the linear instability, so the linear-threshold
+    wavelength of first_unstable_mode is not its prediction there; its prediction for the folded wavelength
+    (about 4 h at large g, 4.71 h at g = gs for eta = 1) comes from the finite-element model, which is not
+    runnable (fe_folding); and richman1975's own analysis takes Ecore/E1 = 1/10 (eta = 10 here), not eta ≈ 1,
+    an open choice between the two papers that neither resolves. The link between this record's stiff-layer
+    wavelength and richman1975's plate_on_foundation stand-in is model against model (relations.yaml).
+  citation: {page: 2, quote: "to about four times the undeformed layer thickness over a wide", where: text}
+- id: q_no_validation_stafford2004
+  kind: choice
+  about: [stiff_wavelength_asymptote, mode_wavelength_h, first_unstable_mode, wavelength_at_threshold, stafford2004/d_fig2b, stafford2004/d_fig1b_caption, stafford2004/wavelength_eq1]
+  text: >-
+    No validation between this record and stafford2004 is entered, in either direction (cross-validation
+    job 2026-11-14). The paper does not cite stafford2004 and compares no model with its data. This record
+    holds no measurement (see q_no_validation_biot1963), so stafford2004's models (Eqs. 1, 2, 4 and the
+    reconstructed Allen shortfall) have nothing here to predict. stafford2004's measurements are the
+    dimensional wrinkle wavelengths of PS and organosilicate films (Figs. 1b, 2b; d in um against h in nm)
+    and nanoindentation moduli (Figs. 3, 4). No model here gives a length or a modulus: every wavelength
+    model returns l/a or l/h, and stafford2004 prints no measured wavelength-to-thickness ratio; forming
+    one from its points would be a number computed in this job. Its films are also compressible glassy
+    polymers (nu_f = 0.33, 0.26) wrinkled by an applied strain at Ef/Es of order 1000, outside this paper's
+    incompressible neo-Hookean growth setting. The stiff-layer asymptote here and stafford2004's Eq. 1 are
+    the same formula in the incompressible limit, a model-against-model link (relations.yaml).
+  citation: {page: 1, quote: "buckles supercritically into smooth wrinkled patterns", where: text}
+- id: q_no_validation_radja2019
+  kind: choice
+  about: [first_unstable_mode, mode_wavelength_h, stiff_wavelength_asymptote, wavelength_at_threshold, radja2019/pctdiff_spikes, radja2019/pctdiff_holes, radja2019/pctdiff_stripes]
+  text: >-
+    No validation between this record and radja2019 is entered, in either direction (cross-validation
+    job 2026-11-14). Neither paper cites the other. This record holds no measurement (see
+    q_no_validation_biot1963). radja2019's measured data are percent differences between SEM and
+    simulated pollen pattern wavelengths indexed by spherical-harmonic mode number (Table 1), family
+    counts, phylogenetic character states (Fig. 5) and GC chromatogram peaks (Figs. S1, S2). The
+    wavelength models here give l/a or l/h from a layer/substrate modulus ratio and a growth strain;
+    radja2019 prints no primexine thickness, modulus ratio, growth strain, or absolute wavelength with
+    its radius, so none of its measurements can be predicted from these models on its own conditions,
+    and the percent differences measure the match of radja2019's own phase-field simulations, not a
+    quantity any model here gives. radja2019's physics is phase separation, not elastic buckling.
+  citation: {page: 1, quote: "buckles supercritically into smooth wrinkled patterns", where: text}
+- id: q_no_validation_moulton2012
+  kind: choice
+  about: [eq1_threshold, first_unstable_mode, mode_wavelength_h, wavelength_at_threshold, threshold_equibiaxial, fe_folding]
+  text: >-
+    No validation between this record and moulton2012 is entered, in either direction (cross-validation
+    job 2026-11-14). This record holds no measurement (see q_no_validation_biot1963; the finite-element
+    points of Figs. 2-4 are computed). moulton2012 holds no measurement either: its data are printed
+    nondimensional parameters of its mantle-ring model and the maxima and dashed lines read from its own
+    computed Fig. 5, and its shell photographs carry no rib count, spacing or scale. Neither paper cites the
+    other (ref. 12 here is Moulton and Goriely's growing-tube paper, not moulton2012). Its models are a
+    one-dimensional rod on a spring foundation with no layer/substrate modulus ratio or thickness, so even
+    model against model the mapping (growth ratio gamma a0/r_s to g, EI and k_s to eta and h) is for the
+    relation jobs.
+- id: q_no_validation_chirat2013
+  kind: choice
+  about: [first_unstable_mode, wavelength_at_threshold, threshold_line, fe_folding, eta_brain_printed, chirat2013/clamped_rod_buckling, chirat2013/infinite_rod_foundation, chirat2013/spine_growth_simulation, chirat2013/L0_mantle, chirat2013/mode3_si]
+  text: >-
+    No validation between this record and chirat2013 is entered, in either direction (cross-validation job
+    2026-11-14, asked for by the corpus list). Neither paper cites the other. This record holds no
+    measurement (see q_no_validation_biot1963), so no chirat2013 model has anything here to predict.
+    chirat2013 holds none either: its mantle modulus and dimensions are inputs taken from other works, its
+    L0 = 1 cm is an order-of-magnitude choice from the "~1 cm" spine spacing of a mature mollusk, its
+    adhesion stiffness was tuned to give mode 3, and its shell photographs (Fig. 1) carry no spine count or
+    size compared with a model. Its models are a one-dimensional growing rod on a spring foundation, with no
+    layer thickness or layer/substrate modulus ratio, and every model here returns a ratio (l/a, l/h, g)
+    for a layer on a half-space; relating chirat2013's growth ratio and kf to g and eta is model against
+    model, for the relation jobs.
+  citation: {page: 5, quote: "very few experiments have explored three-dimensional folding patterns", where: text}
+- id: q_no_validation_hong2009
+  kind: choice
+  about: [gs_from_stretch, gs_equibiaxial, sulcification_line, biot_polynomial, biot_closed_form, lambda_s_printed, hong2009/eps_exp_printed, hong2009/eta_exp_printed]
+  text: >-
+    No validation between this record and hong2009 is entered, in either direction (cross-validation job
+    2026-11-18, asked for by the corpus list). Neither paper cites the other: this paper takes its crease
+    (sulcification) stretch lambda_s = 0.647 from Hohlfeld and Mahadevan (ref. 32), not from hong2009. This
+    record holds no measurement (see q_no_validation_biot1963), so no hong2009 model has anything here to
+    predict. The two hong2009 measurements are the plane-strain critical strain 0.35 of bent elastomer
+    blocks (its Refs. 1, 2) and the range 2.0-3.7 of the critical swelling ratio of bonded gels (its Refs.
+    4-6). No model here returns either quantity: the crease threshold enters this record only as the input
+    lambda_s (gs_from_stretch, sulcification_line, gs_equibiaxial return a growth ratio from it, so running
+    them on a crease stretch is not a prediction of it), and the Biot models (biot_polynomial,
+    biot_closed_form) return the threshold growth ratio gb, not a nominal strain or a swelling ratio.
+    Converting gb = 1.839 to a strain (1 - 1/gb = 0.456) or the equibiaxial growth threshold to a swelling
+    ratio (eta = gs^2 for a gel bonded to a rigid base) would map a growth ratio onto a different quantity;
+    that the Biot threshold lies above the measured 0.35 and the crease threshold near it is model against
+    model, for the relation jobs.
+  citation: {page: 2, quote: "0.647 [32], corresponding to gs", where: text}
+- id: q_no_validation_shyer2015
+  kind: choice
+  about: [first_unstable_mode, wavelength_at_threshold_gza, threshold_equibiaxial, fe_folding, shyer2015/shh_diffusion_reaction, shyer2015/lgr5_length_base_fig2a, shyer2015/edu_control_fig4c, shyer2015/shh_profile_e15_fig5d]
+  text: >-
+    No validation between this record and shyer2015 is entered, in either direction (cross-validation job
+    2026-11-18), although this paper cites shyer2015 as ref. 40. The citation is only for the images of
+    Fig. 2(e), cross sections of previllous folds in the chick gut on days 13 and 14, which carry no value and
+    are not read (figures.md); the agreement of fold width with "the brain and the gut" is cited to refs. 3
+    and 8 and stated without numbers (q_brain_eta). shyer2015's measurements are Lgr5 mRNA counts, percent
+    EdU-positive cells and Shh staining intensities; no model here returns any of them, and shyer2015 prints
+    no modulus ratio, layer thickness, growth ratio, wavelength or curvature of its folds (its
+    q_no_mechanics) on which a model here could be run. This record holds no measurement (see
+    q_no_validation_biot1963), so shyer2015's models (a non-runnable Shh diffusion-reaction simulation and
+    the arithmetic of its degradation-rate range) have nothing here to predict. The gut geometry that would
+    test these models is in shyer2013 (ref. 3), another job's pair.
+  citation: {page: 3, quote: "Cross sections of previllous folds in intestinal epithelium of a chick embryo", where: "Fig. 2(e)"}
+- id: q_no_validation_trujillo2008
+  kind: choice
+  about: [gs_equibiaxial, sulcification_line_biax, threshold_equibiaxial, biot_closed_form, lambda_s_printed, trujillo2008/ec_mean_modulus_series, trujillo2008/ec_mean_thickness_series, trujillo2008/fig3a_ec_points, trujillo2008/fig3b_ec_points, trujillo2008/hh0_onset_measured, trujillo2008/fig2b_l_bis04]
+  text: >-
+    No validation between this record and trujillo2008 is entered, in either direction (cross-validation
+    job 2026-11-18). This paper cites trujillo2008 (ref. 31) once, with refs. 24 and 30, for observed
+    patterns: "Patterns of linelike sulci and triple-junction sulci have been produced experimentally in
+    soft layers adhered to rigid substrates" (p. 5). It compares no model with trujillo2008's values.
+    trujillo2008 measures the critical effective strain for creasing e_c = 1 - l0/l of gels swollen on a
+    rigid substrate (0.33 +/- 0.02, 0.33 +/- 0.01, and the points of its Figs. 3(a), 3(b)), the thickness
+    ratio h/h0 = 2.0 +/- 0.1 at onset, and the free swelling ratios l/l0 of its Fig. 2(b). The closest model
+    here is the equibiaxial sulcification threshold (gs_equibiaxial, sulcification_line_biax: g^(3/2) =
+    1/lambda_s, g about 1.34), which applies to a layer on a rigid substrate (eta < eta_s). But it returns
+    the in-plane growth ratio g, not a compressive strain. The conversion e = 1 - 1/g would map a growth
+    ratio onto a different quantity, and a validation entry cannot transform an output (as decided in
+    q_no_validation_hong2009). Read through that conversion, g = 1.34 is a strain of about 0.25 against the
+    measured 0.33. That gap is model against measurement only after the conversion, and the growth here is
+    isochoric while swelling is not. It is left for the relation jobs. The growth ratio itself
+    corresponds to trujillo2008's l/l0 at crease onset, but no such value is recorded there. Fig. 2(b)
+    gives l/l0 against charge content for flat and creased gels alike, and e_c was interpolated from it,
+    so there is no measured onset l/l0 to test. No model here gives h/h0 for a swollen gel: the layer's
+    thickness here follows from isochoric growth, not swelling with a Poisson's ratio. The Biot root gb =
+    1.839 (biot_closed_form) is a uniaxial growth ratio, and the equibiaxial threshold_equibiaxial needs a
+    modulus ratio eta and has no rigid-substrate value. In the other direction, this record holds no
+    measurement (see q_no_validation_biot1963), so trujillo2008's models have nothing here to predict.
+  citation: {page: 5, printed_page: "022720-5", quote: "Patterns of linelike sulci and triple-junction sulci have", where: text}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [eta_s_uniaxial, eta_s_uniaxial_printed, first_unstable_mode, threshold_line, sulcification_line, wang2014/exp_wrinkling_fig7a, wang2014/exp_creasing_fig7a, wang2014/exp_delamination_fig7a, wang2014/mu_b_lp1, wang2014/mu_b_lp2]
+  text: >-
+    No validation between this record and wang2014 is entered, in either direction (cross-validation job
+    2026-11-18, asked for by the corpus list). This paper cites wang2014 (ref. 23) only inside the
+    citation groups [14-29] and [22-29] for the regime of comparable layer and substrate stiffness (p. 1);
+    it does not say that any of its models explains or is compared with wang2014's experiments. wang2014's
+    measurements are the substrate and film shear moduli and film thicknesses (inputs, not outputs of any
+    model here), the peel-test adhesion energies of its Fig. 3 (no model here involves adhesion), the
+    uniaxial nominal stress-stretch curves of its Fig. 13 (no model here returns a uniaxial tension
+    stress), and the observed initial modes (wrinkling, creasing, delaminated buckling) of its Fig. 7(a)
+    experiments at lambda_p = 2, each placed at a (Gamma/(mu_s H_f), mu_f/mu_s). The last are the only
+    measurements close to this paper's subject: the crossover eta_s (eta_s_uniaxial, about 1.14, between
+    sulcification first and linear wrinkling first) is the same kind of boundary as wang2014's
+    wrinkling/creasing modulus ratio, and wang2014's experiments place theirs between about 1.84 and 3.8
+    (wang2014/q_fig7a_experiments_read). But the measured datum is each experiment's modulus ratio with
+    its observed mode, not a measured boundary; no model here, run at a point's modulus ratio, returns
+    that point's modulus ratio, and no model here returns a mode label, so there is no measured quantity
+    for a validation entry to compare. The conditions also differ: here the substrate is unstrained when
+    the growing layer becomes unstable and the layer is perfectly bonded, while in wang2014 the substrate
+    is prestretched (lambda_p = 2) and partly relaxed at onset, and adhesion is finite; wang2014's own
+    calculated boundary moves from 1.54 (lambda_p = 1) to 1.22 (lambda_p = 2). That this paper's 1.14 lies
+    below the experimental bracket is a model-against-model and model-against-trend observation for the
+    relation jobs, not a verdict. In the other direction, this record holds no measurement (see
+    q_no_validation_biot1963), so wang2014's models have nothing here to predict.
+  citation: {page: 8, printed_page: "022720-8", quote: "Q. Wang and X. Zhao, Phase diagrams of instabilities in", where: "References, [23]"}
+- id: q_no_validation_wang2015
+  kind: choice
+  about: [sulcification_line, gs_from_stretch, first_unstable_mode, threshold_line, eta_s_uniaxial, fe_folding, lambda_s_printed, eta_s_uniaxial_printed, wang2015/crease_onset_measured, wang2015/fold_onset_measured, wang2015/pd_onset_measured, wang2015/ridge_onset_measured, wang2015/wrinkle_wavelength_fig5a, wang2015/fold_wavelength_fig5a, wang2015/amplitude_fig5b_r3p6]
+  text: >-
+    No validation between this record and wang2015 is entered, in either direction (cross-validation job
+    2026-11-18, asked for by the corpus list). Neither paper cites the other (wang2015 cites only the
+    earlier Tallinen papers, its refs. 13 and 58), and neither compares a model with the other's values.
+    (1) This record's models against wang2015's measurements. wang2015 measures the shear moduli of
+    substrate and films (inputs here, not outputs), the observed onset mismatch strains of creases (~0.36,
+    mu_f/mu_s = 0.3 and 0.64), folds (~0.33), period-doubles (≈ 0.32) and ridges (≈ 0.33), and in Fig. 5
+    the post-buckling wavelengths and amplitudes over the initial wrinkle wavelength against
+    (1 - eM)/(1 - eC). The closest model here is the sulcification threshold (sulcification_line,
+    gs_from_stretch: g = 1/lambda_s ≈ 1.55), which applies at both crease ratios (below eta_s ≈ 1.14).
+    wang2015's mismatch strain is eM = (Lf - Ls)/Lf, so the layer's growth ratio relative to the substrate
+    is Lf/Ls = 1/(1 - eM). But the model returns that growth ratio, not the strain, and a validation entry
+    cannot transform an output (q_no_validation_hong2009, q_no_validation_trujillo2008). Read through the
+    conversion, gs ≈ 1.55 is eM ≈ 0.353 against the observed ~0.36. The printed onset is approximate in any
+    case, so it would get no verdict; the agreement is left for the relation jobs. The fold onset at
+    mu_f/mu_s = 1.86-9.79 is the transition from wrinkles to folds, which here comes only from the
+    finite-element cusp thresholds (fe_folding, not runnable). The linear threshold (first_unstable_mode)
+    gives wrinkle onset, which wang2015 does not measure, and again as a growth ratio. No model here
+    gives period-doubles, ridges, or any post-threshold wavelength or amplitude. The threshold wavelengths
+    here are over the layer thickness, while Fig. 5 divides by the initial wrinkle wavelength. The
+    modulus ratio of wang2015's flat-crease-wrinkle triple point (1.3, finite elements) against eta_s ≈
+    1.14 here is model against model, for the relation jobs. (2) In the other direction, this record holds
+    no measurement (see q_no_validation_biot1963), so wang2015's models have nothing here to predict.
+  citation: {page: 2, printed_page: "022720-2", quote: "0.647 [32], corresponding to gs = 1/λs ≈ 1.55", where: text}
+- id: q_no_validation_shyer2013
+  kind: choice
+  about: [first_unstable_mode, mode_wavelength_h, mode_wavelength_h_gza, wavelength_at_threshold_biax, fe_folding, shyer2013/spacing_fig4b, shyer2013/spacing_fig6c, shyer2013/mu_ratio_fig4b, shyer2013/mu_ratio_fig6c]
+  text: >-
+    No validation between this record and shyer2013 is entered, in either direction (cross-validation job
+    2026-11-18; this paper cites Shyer 2013 as ref. 3). The paper compares itself with the gut only in words:
+    the far-from-threshold fold width "about four times the undeformed layer thickness" (a finite-element
+    outcome, fe_folding, not runnable) "agrees with the folding patterns in the brain and the gut [3,8]",
+    and the gut's "narrower folds with a sawtooth profile" come from "a relatively stiff epithelium" (p. 2).
+    It quantifies neither against a gut measurement, and it notes that the chick gut is confined by smooth
+    muscle, which "contributes to folding at early stages [3]" (p. 2), a constraint its models leave out.
+    (1) This record's models against shyer2013's measurements. The nearest measurement is the fold spacing
+    over endoderm thickness (shyer2013 Figs. 4B, 6C: about 6.6-10 in chick, 3.0-6.5 in mouse). It is not
+    the quantity the models return: shyer2013 measures the spacing along the folded endoderm over the
+    deformed endoderm thickness of folds far past onset, in a mesenchyme a few endoderm thicknesses thick
+    and bounded by muscle; first_unstable_mode returns the wavelength at linear onset over the bonded
+    thickness a (and mode_wavelength_h over the relaxed thickness h) of a layer on a half-space. The
+    spacings are curves against embryonic age, which no model here takes, and the modulus ratio is
+    measured only at chick E8 and E10 and mouse E14.5. For the relation jobs only (no verdict): at the
+    measured ratios 10.6, 13.1 and 1.55, first_unstable_mode gives l/a of about 9.0, 9.8 and 3.9, the same
+    order as the measured spacings. (2) In the other direction, this record holds no measurement (see
+    q_no_validation_biot1963), so shyer2013's models have nothing here to predict. See
+    shyer2013/q_no_validation_tallinen2015.
+  citation: {page: 2, printed_page: "022720-2", quote: "patterns in the brain and the gut [3,8], and it is a hallmark of", where: text}
+- id: q_no_validation_diab2013
+  kind: choice
+  about: [gs_from_stretch, sulcification_line, eq1_threshold, first_unstable_mode, threshold_line, lambda_s_printed, diab2013/gent_cho_crease_strain]
+  text: >-
+    (Cross-validation against diab2013, ref. 37; job 2026-11-18.) No validation is entered in either
+    direction. diab2013 measures nothing: it is a perturbation and finite-element analysis, and its only
+    experimental value is Gent & Cho's crease strain 0.28-0.42 of rubber strips compressed by bending,
+    which it cites (diab2013/gent_cho_crease_strain). No model here predicts that value: the models give the
+    growth ratio g (or gs) and wavelengths of a growing layer on an unstrained substrate, not a nominal
+    strain of a bent homogeneous block, and the sulcification threshold gs = 1/lambda_s takes the crease
+    stretch 0.647 (lambda_s_printed, from ref. 32) as an input, so setting it against a measured crease
+    strain would test ref. 32's value, not a model of this paper. This paper cites diab2013 only as an
+    analogous subcritical system that differs "particularly strongly in the region of subcriticality"
+    (p. 2), not as data it explains. In the other direction, this record holds no measurement (see
+    q_no_validation_biot1963), so diab2013's models have nothing here to predict. See
+    diab2013/q_no_validation_tallinen2015.
+  citation: {page: 2, printed_page: "022720-2", quote: "These systems differ from ours", where: text}
+- id: q_no_validation_trushko2020
+  kind: choice
+  about: [first_unstable_mode, mode_wavelength_h, wavelength_at_threshold, threshold_line, eq1_threshold, trushko2020/fig5f_exp_data, trushko2020/E_capsule, trushko2020/h_capsule, trushko2020/R_capsule]
+  text: >-
+    (Cross-validation against trushko2020; job 2026-11-19.) No validation is entered in either direction.
+    Neither paper cites the other (trushko2020 cites Tallinen et al. 2014 on gyrification, not this
+    paper). The candidate was this paper's first unstable mode (threshold growth g and wavelength in units
+    of h for modulus ratio eta) set against trushko2020's measured fold count (Fig. 5F), with eta from the
+    capsule modulus 19.5 kPa and a literature monolayer modulus. The mapping is not a real one: the models
+    here are a growing layer bonded to an elastic half-space with a free outer surface, whose wrinkles
+    are set by the layer thickness; trushko2020's monolayer lines a thin capsule (wall 19.9 um against a
+    radius 97 um, so not a half-space), detaches from it on folding and folds into a fluid lumen, and its
+    1-3 folds per ring are set by the ring's circumference and the capsule's elastic response (its own
+    Eqs. S21-S30), not by a wavelength of a few layer thicknesses (which would give tens of folds
+    around 2 pi R). The monolayer's own modulus and thickness are not measured there either, and the
+    threshold growth g has no measured counterpart (trushko2020's excess strain at buckling is a model
+    quantity). In the other direction this record holds no measurement (see q_no_validation_biot1963),
+    so trushko2020's models have nothing here to predict. See trushko2020/q_no_validation_tallinen2015.
+  citation: {page: 1, printed_page: "022720-1", quote: "mechanical descriptions of brain folding", where: text}
+- id: q_no_validation_fierling2022
+  kind: choice
+  about: [first_unstable_mode, mode_wavelength_h, wavelength_at_threshold, eq1_threshold, threshold_line, fierling2022/curv_ap_muvi_fig4f, fierling2022/curv_dv_muvi_fig4f, fierling2022/furrow_z_p0_sf3d, fierling2022/area_rows_muvi]
+  text: >-
+    (Cross-validation against fierling2022; job 2026-11-19.) No validation is entered in either direction.
+    Neither paper cites the other. fierling2022's measurements are apical area, AP and DV cell size by row,
+    tissue curvature along AP and DV, furrow apex position and depth against time, pole displacement and
+    laser-ablation recoil velocities of the Drosophila ventral furrow. The models here give the threshold
+    growth ratio g and the wavelength (in units of the layer thickness h) of the first unstable mode of a
+    growing incompressible neo-Hookean layer bonded to a neo-Hookean half-space with modulus ratio eta.
+    The mapping is not a real one: the embryo's epithelium is a single active shell that contracts
+    apically (a pre-strain imposed on a ventral band, not growth) over a fluid yolk, confined by the
+    vitelline membrane, with no bonded elastic substrate and so no eta; it forms one furrow along the
+    midline whose position is set by the contracting region and the embryo's geometry, not a periodic
+    pattern with a wavelength of a few layer thicknesses. No measured quantity there is a growth ratio, a
+    modulus ratio or a wavelength, and no measured modulus or layer thickness would supply the models'
+    inputs. In the other direction this record holds no measurement (see q_no_validation_biot1963), so
+    fierling2022's models have nothing here to predict. See fierling2022/q_no_validation_tallinen2015.
+  citation: {page: 1, printed_page: "022720-1", quote: "mechanical descriptions of brain folding", where: text}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [first_unstable_mode, threshold_line, sulcification_line, gs_from_stretch, eta_s_uniaxial, jin2015/exp_crease_15to1_text, jin2015/exp_crease_10to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_wrinkle_7p5to1_text]
+  text: >-
+    (Cross-validation against jin2015, cited here as ref. 38; job 2026-11-19.) No validation is entered in
+    either direction. This paper cites jin2015 only to say that jointly compressed bilayers "differ from
+    ours particularly strongly in the region of subcriticality" (p. 2); it takes no number from it and fits
+    nothing to it. jin2015's measurements are the applied compressive film strains at which creases or
+    wrinkles first appear (0.37/0.36 for a 15:1 film, 0.28/0.29 creases and 0.22-0.28 wrinkles for a 10:1
+    film, 0.18-0.21 wrinkles for a 7.5:1 film, all 18-20 um films on a 30:1 PDMS substrate about 550 um
+    thick). The models here give the threshold growth g of a layer growing on an unstrained, infinitely
+    deep substrate; under joint uniaxial compression the substrate is strained as well and is of finite
+    depth (Hs/Hf near 30), so the measured film strain is not the 1 - 1/g of these models. Even with that
+    mapping the models need the modulus ratio eta, which jin2015 does not give for its samples (only
+    base:crosslinker compositions; jin2015/q_exp_moduli), so eta would be an added input chosen to place
+    each sample and the verdict would test that choice. The sulcification line gs = 1/lambda_s is the
+    homogeneous half-space crease value of ref. 32, not a bilayer prediction; its comparison with crease
+    measurements belongs to the hong2009 relation. In the other direction this record holds no measurement
+    (see q_no_validation_biot1963), so jin2015's models have nothing here to predict. See
+    jin2015/q_no_validation_tallinen2015.
+  citation: {page: 2, printed_page: "022720-2", quote: "These systems differ from ours", where: text}
+- id: q_no_validation_cao2011
+  kind: choice
+  about: [first_unstable_mode, threshold_line, sulcification_line, gs_from_stretch, eta_s_uniaxial, cao2011/biot_eq28, cao2011/crease_eq12]
+  text: >-
+    (Cross-validation against cao2011; job 2026-11-19, pair from the corpus list, cao2011 relate_with.) No
+    validation is entered in either direction. The pair was proposed because this paper cites "Cao 2012"
+    (ref. 26), but ref. 26 is the companion paper on film/substrate bilayers (J. Appl. Mech. 79, 031019,
+    record cao2012), not cao2011 (Proc. R. Soc. A, the neo-Hookean half-space and its imperfection
+    sensitivity); this paper does not cite cao2011. Neither record holds a measurement: cao2011's data are
+    reported inputs and predictions of its analysis and finite element model (its figures.md: "There are no
+    measurements in this paper"), so no model here has anything there to predict; and this record holds
+    none (see q_no_validation_biot1963), so cao2011's models have nothing here to predict. Comparing this
+    paper's sulcification threshold or its Biot limit eta_b with cao2011's crease and wrinkling strains
+    compares model with model, which is the relation jobs' work.
+  citation: {page: 8, quote: "Y. Cao and J. W. Hutchinson, Wrinkling phenomena in neo-", where: "ref. 26"}

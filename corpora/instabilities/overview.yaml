@@ -1,0 +1,155 @@
+# The instabilities overview's text: what the page says that the build cannot. Every number on the
+# page comes from the build; this file holds the words around them. Used by
+#   make build CORPUS=instabilities
+title: "Geometric instabilities: buckling, wrinkling, creasing, folding"
+notice:
+  title: "Work in progress:"
+  text: results are produced by agent jobs and not yet reviewed by people;
+  link: check a record before citing it
+  href: https://github.com/elejeune11/boxgraph-public
+intro:
+  - All models are wrong, but some are useful (George E. P. Box). This page is a literature review of growth- and compression-driven instabilities in soft solids and tissues, from Biot's surface instability and the wrinkling of stiff films on soft substrates to creases, phase diagrams of surface patterns, and the folding of brains, guts, seashells, embryos and cell sheets. Each paper's models are taken as stated and put to work, to see where each one holds.
+  - Every value is traced to the page it was printed on. Every model is rebuilt and run on the paper's own inputs and compared with what the paper reports, at the precision it was printed with. Relations between the models of different papers are tested rather than assumed, released code and data are checked against the paper they belong to, and a model of one paper is judged against what another paper measured.
+  - Nothing is corrected or overwritten. Where an equation is evidently misprinted, the model is kept as printed and a corrected variant is added beside it, with the evidence; the paper's tally counts only the model as printed. Every result is rebuilt each time a source is added, so the review changes as the literature does. A disagreement is recorded as a result, with the open question it raises.
+links:
+  - {text: "All reviews", href: "../"}
+  - {text: "The design and the code (GitHub)", href: "https://github.com/elejeune11/boxgraph-public"}
+  - {text: "Cell adhesion and the motor-clutch model", href: "../motor_clutch/"}
+  - {text: "0D and 1D cardiovascular models", href: "../cardio/"}
+case_studies:
+  - id: law
+    teaches: Papers against each other, and against measurement
+    title: One wrinkling law in many papers, and the brain
+    summary: >-
+      A stiff layer on a soft foundation wrinkles with a wavelength set by its thickness and the
+      cube root of the stiffness ratio. Papers on metal films, polymer metrology, brains, seashells
+      and phase diagrams each derive it in their own symbols. ModelAtlas tests the pairs instead of
+      taking the citations on trust, then runs the law on the brain measurements one of them quotes.
+    steps:
+      - text: >-
+          Huang, Hong and Suo (2005) give the wavelength of a stiff film on a thick substrate (their
+          Eq. 17). Richman et al.'s plate model of the cortex (1975), Tallinen and Biggins's stiff-layer
+          limit (2015) and Wang and Zhao's initial wrinkle wavelength (2015) are the same law under a
+          mapping of their inputs, so they form one family.
+        show: "family: huang2005/thick_substrate_eq17"
+      - text: >-
+          Stafford et al. (2004), who use the law to measure the moduli of thin polymer films, state
+          that their wavelength is this one. The test maps one model's inputs onto the other's and
+          evaluates both across the range the papers use.
+        show: "relation: huang2005/rel_stafford_eq1_same_as_thick_substrate_wavelength"
+      - text: >-
+          Some relations are stated by neither paper. Richman's 1975 plate model of the fetal cortex is
+          the same law as Tallinen's stiff-layer asymptote, forty years later.
+        show: "relation: tallinen2015/rel_richman_plate_same_as_stiff_wavelength_asymptote"
+      - text: >-
+          On a thin, compressible foundation the law changes form (Huang's Eq. 18), and that second law
+          is the one Moulton, Goriely and Chirat (2012) use for the ribs of seashells, written for a
+          growing rod.
+        show: "relation: moulton2012/rel_huang_eq18_same_as_winkler_rod"
+      - text: >-
+          Both scale as Cerda and Mahadevan's (2003) wrinkling law, which gives only the exponents.
+        show: "relation: tallinen2015/rel_stiff_wavelength_asymptote_scales_as_cerda_deep_substrate"
+      - text: >-
+          Richman et al. quote measured spacings of the folds of the human cortex (7.5 mm, and 8.5 mm at
+          27 weeks). With the cortical thickness of the normal brain, the law gives 9.4 mm.
+        show: "validation: huang2005/val_thick_wavelength_sidman"
+      - text: >-
+          With the thickness measured at 27 weeks it gives 16 mm, nearly twice the measured spacing.
+          The law the papers agree on overpredicts the folds of the brain it was first written for.
+        show: "validation: huang2005/val_thick_wavelength_27wk"
+      - text: >-
+          Richman et al. report a wavelength of about eight thicknesses; their plate model, rebuilt from
+          the paper, gives 9.4. How they reached eight is not stated, so the comparison uses a model the
+          reader reconstructed.
+        show: "comparison: richman1975/cmp_plate_l_over_t_caption"
+
+  - id: boundary
+    teaches: Papers against each other
+    title: Where wrinkles give way to creases
+    summary: >-
+      A compressed soft solid creases at a smaller strain than the one at which it wrinkles. A stiff
+      film on top raises the crease strain less than it lowers the wrinkling strain, so above some
+      ratio of moduli the film wrinkles first. Two papers locate that ratio the same way and print
+      different values.
+    steps:
+      - text: >-
+          Hong, Zhao and Suo (2009) find that a neo-Hookean solid in plane strain creases at a strain of
+          0.35, well below Biot's 0.456 for wrinkling. Rebuilt from its energy curve, the value is
+          reproduced.
+        show: "comparison: hong2009/cmp_epsc_fig3"
+      - text: >-
+          Wang and Zhao (2014) and Jin et al. (2015) both take the boundary as the modulus ratio at which
+          the film's wrinkling strain falls to Hong's 0.35. Jin's finite-substrate analysis, rebuilt from
+          its appendix, reduces to Wang's deep-substrate boundary as the substrate thickens.
+        show: "relation: jin2015/rel_jin_equal_strain_boundary_to_wang_boundary"
+      - text: >-
+          Tallinen and Biggins (2015) give the same boundary in their own terms; it is the same model.
+        show: "relation: tallinen2015/rel_eta_s_uniaxial_same_as_wang_wrinkle_crease_boundary"
+      - text: >-
+          Wang and Zhao print 1.54 for the boundary without prestretch. The rebuilt model gives 1.56,
+          just outside the precision of the printed value.
+        show: "comparison: wang2014/cmp_boundary_lp1"
+      - text: >-
+          Jin et al. print 1.65. Their own equations, which reproduce Biot's limit and the stiff-film
+          limit, give the same 1.56.
+        show: "comparison: jin2015/cmp_boundary_plane_strain"
+      - text: >-
+          The paper does not say how its contour was located, so the difference is kept as an open
+          question rather than resolved.
+        show: "question: jin2015/q_boundary_165"
+      - text: >-
+          Wang and Zhao also report that the boundary falls with the prestretch of the substrate (1.54,
+          1.22, 1.14). The linear analysis they say they follow agrees at a prestretch of 2 but gives
+          1.71 at a prestretch of 3.
+        show: "comparison: wang2014/cmp_boundary_lp3"
+      - text: >-
+          Neither Jin et al. nor Cao and Hutchinson, added to test it, treats a prestretched substrate,
+          so this question is still open.
+        show: "question: wang2014/q_boundary_prestretch"
+
+  - id: misprints
+    teaches: A paper against itself
+    title: Printed equations that the papers' own results contradict
+    summary: >-
+      A reader who rebuilds a model from the printed text needs the equations to be the ones that
+      were used. In several papers here they are not. Each printed model is kept and run as printed,
+      and a corrected variant is added beside it with the evidence; the paper's tally counts only the
+      model as printed.
+    steps:
+      - text: >-
+          Tallinen and Biggins (2015) print the relaxed thickness of the grown layer as h = a/gz. With it,
+          the wavelength at eta = 4 is about 5.0h, not the 7.54h the paper reports.
+        show: "comparison: tallinen2015/cmp_width_eta4"
+      - text: >-
+          With h = gz a, which is what relaxing the layer gives, the printed 7.54h is reproduced, and the
+          figures in units of h agree with the same correction.
+        show: "comparison: tallinen2015/cmp_width_eta4_gza"
+      - text: >-
+          Diab et al. (2013) give the strain at which creasing takes over from Biot's instability as 0.272.
+          Their Eq. 2.12b as printed gives 0.456, Biot's own value.
+        show: "comparison: diab2013/cmp_eps_M_printed_form"
+      - text: With a corrected Eq. 2.12b the printed 0.272 is reproduced.
+        show: "comparison: diab2013/cmp_eps_M_corrected"
+      - text: >-
+          Wang and Zhao's (2014) stiff-film strain, Eq. 5, cites Cao and Hutchinson's formula but differs
+          from it by the constant factor 2^(2/3) everywhere: a missing factor of one half inside a cube
+          root.
+        show: "relation: wang2014/rel_eq5_printed_same_as_cao_eq5"
+      - text: >-
+          Cao and Hutchinson's (2012) imperfection coefficient, printed as 17.84, does not follow from
+          their Eq. 3.13 (9.70); a corrected form reproduces it.
+        show: "comparison: cao2011/cmp_K_printed_eq"
+      - text: >-
+          Haas and Goldstein (2021) say their Eqs. 70 rewrite Eqs. 66. As printed, the correction terms
+          lack their prefactors and the two disagree everywhere; with the prefactors they are the same.
+          The conclusions drawn from Eq. 70 do not depend on the prefactor.
+        show: "relation: haas2021/rel_eq70a_same_as_eq66a"
+      - text: >-
+          Fierling et al. (2022) give the pre-stress in the supplement with the opposite sign to the main
+          text. The released Surface Evolver script settles it: it agrees with the main text and the
+          figures.
+        show: "relation: fierling_code/rel_code_prestress_main"
+      - text: >-
+          A printed parameter can be wrong too. Moulton et al.'s (2012) Fig. 5(a), with the printed
+          feedback gain of 15, gives 20 ribs where the panel shows 23; a gain of 20 reproduces all 23.
+        show: "question: moulton2012/q_kphi_fig5a"

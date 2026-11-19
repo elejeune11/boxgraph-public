@@ -1,0 +1,17 @@
+id: modulus_eq2_points
+name: Eq. 2 applied point by point to the measured wavelengths of Fig. 2b, at the thicknesses of the plotted moduli
+role: model
+stated: {page: 4, printed_page: "548", quote: "is calculated from equation (2), using a Poisson's ratio of the PS film of", where: text}
+equation: "E_f / (1 - nu_f^2) = 3 E_s / (1 - nu_s^2) (d / (2 pi h))^3, for each (h, d) point"
+built_from: [modulus_eq2]
+inputs:
+  d:      {quantity: wrinkle_wavelength, unit: um, curve: {quantity: film_thickness, unit: nm}}
+  Ef_at:  {quantity: film_modulus, unit: GPa, curve: {quantity: film_thickness, unit: nm}}
+  nu_f:   {quantity: film_poisson_ratio, unit: dimensionless}
+  Es:     {quantity: substrate_modulus, unit: MPa}
+  nu_s:   {quantity: substrate_poisson_ratio, unit: dimensionless}
+outputs:
+  Ef:     {quantity: film_modulus, unit: GPa, curve: {quantity: film_thickness, unit: nm}}
+settings:
+  max_dh: 2.0   # nm: a wavelength point and a modulus point closer than this in thickness are the same measurement
+stochastic: false

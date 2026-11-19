@@ -1,0 +1,55 @@
+- id: run_eq2_gold_pdms
+  model: critical_stress_eq2
+  inputs: {Em: Em_gold, Ep: Ep_pdms, nu_m: nu_m_gold, nu_p: nu_p_pdms}
+  outputs: {sigma_crit: sigma_crit_eq2_pred}
+  note: "the paper prints no value of sigma_crit; run for the record (and for relations with the other wrinkling records)"
+- id: run_eq3_gold_pdms
+  model: wavelength_eq3
+  inputs: {Em: Em_gold, Ep: Ep_pdms, nu_m: nu_m_gold, nu_p: nu_p_pdms, t: t_film_added}
+  outputs: {L: L_eq3_pred, L_over_t: L_over_t_eq3_pred}
+- id: run_eq3_simplified_gold_pdms
+  model: wavelength_eq3_simplified
+  inputs: {Em: Em_gold, Ep: Ep_pdms, t: t_film_added}
+  outputs: {L: L_eq3s_pred, L_over_t: L_over_t_eq3s_pred}
+- id: run_eq5_gold_pdms
+  model: transition_length_eq5
+  inputs: {Em: Em_gold, Ep: Ep_pdms, nu_m: nu_m_gold, nu_p: nu_p_pdms, t: t_film_added}
+  outputs: {l: l_eq5_pred, l_over_t: l_over_t_eq5_pred}
+- id: run_eq5_simplified_gold_pdms
+  model: transition_length_eq5_simplified
+  inputs: {Em: Em_gold, Ep: Ep_pdms, t: t_film_added}
+  outputs: {l: l_eq5s_pred, l_over_t: l_over_t_eq5s_pred}
+- id: run_ratio_gold_pdms
+  model: transition_to_wavelength_ratio
+  inputs: {Em: Em_gold, Ep: Ep_pdms, nu_m: nu_m_gold, nu_p: nu_p_pdms}
+  outputs: {l_over_L: l_over_L_pred}
+- id: run_ratio_simplified_gold_pdms
+  model: transition_to_wavelength_ratio_simplified
+  inputs: {Em: Em_gold, Ep: Ep_pdms}
+  outputs: {l_over_L: l_over_L_s_pred}
+- id: run_multilayer_modified_pdms
+  model: multilayer_wavelength
+  inputs: {Em: Em_gold, nu_m: nu_m_gold, t: t_film_added, E1: E1_modified, nu_1: nu1_added, t1: t1_modified, Ep: Ep_pdms, nu_p: nu_p_pdms}
+  outputs: {L: L_multilayer_pred, factor: factor_multilayer_pred}
+- id: run_multilayer_fig3_E1Ep4
+  model: multilayer_wavelength_ratio
+  inputs: {Em: Em_gold, nu_m: nu_m_gold, t: t_film_added, E1_over_Ep: E1_over_Ep_4_fig3, nu_1: nu1_added, Ep: Ep_pdms, nu_p: nu_p_pdms}
+  sweep: {t1_over_t: L_fig3_E1Ep4}
+  outputs: {L: L_multilayer_fig3_E1Ep4_pred}
+- id: run_multilayer_fig3_E1Ep2
+  model: multilayer_wavelength_ratio
+  inputs: {Em: Em_gold, nu_m: nu_m_gold, t: t_film_added, E1_over_Ep: E1_over_Ep_2_fig3, nu_1: nu1_added, Ep: Ep_pdms, nu_p: nu_p_pdms}
+  sweep: {t1_over_t: L_fig3_E1Ep2}
+  outputs: {L: L_multilayer_fig3_E1Ep2_pred}
+- id: run_eq4_fig4a_sx
+  model: step_stress_eq4
+  inputs: {l: l_eq5_pred, nu_m: nu_m_gold}
+  sweep: {x: sx_fig4a}
+  outputs: {sx: sx_eq4_pred}
+  note: "l from the first form of Eq. 5 for 50 nm of gold on PDMS (run_eq5_gold_pdms); the paper does not say which l Fig. 4a is drawn with (q_fig4a_l)"
+- id: run_eq4_fig4a_sy
+  model: step_stress_eq4
+  inputs: {l: l_eq5_pred, nu_m: nu_m_gold}
+  sweep: {x: sy_fig4a}
+  outputs: {sy: sy_eq4_pred}
+  note: "as run_eq4_fig4a_sx"

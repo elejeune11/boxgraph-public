@@ -1,0 +1,87 @@
+# Across papers. Neither paper cites the other; this relation is proposed.
+# Chirat's unbounded-rod limit is in units of L0 (lambda/L0, kf = Kf L0^4/EI); Cerda's Eq. 6 law is in SI.
+# Taking L0 = 1 m, Cerda's B/K (m^4) is EI/Kf = 1/kf, so B = 1 N*m and K = kf N/m^3.
+# Delta and W enter only Cerda's amplitude, not its wavelength; they are set to 1.
+- id: rel_rod_foundation_scales_as_cerda_eq6
+  kind: scales_as
+  a: chirat2013/infinite_rod_foundation
+  b: cerda2003/wrinkle_eq6_scaling
+  mapping: {B: "1", K: "kf", Delta: "1", W: "1"}
+  output_map: {lam: lam}
+  regime: {kf: [1.0, 1.0e+4]}
+  provenance: proposed
+  reason: >
+    Chirat's mantle edge is an elastic rod (bending stiffness EI) on a linear adhesion foundation
+    (stiffness Kf), the same balance of bending against a Winkler foundation as Cerda's sheet on an
+    effective foundation K. The unbounded rod buckles at lambda = 2 pi (EI/Kf)^(1/4), i.e.
+    lambda/L0 = 2 pi kf^(-1/4), which is Cerda's lambda ~ (B/K)^(1/4) with B -> EI and K -> Kf and
+    the prefactor 2 pi that Cerda does not print.
+  assumptions:
+    - "Cerda's bending stiffness B and foundation stiffness K read as the rod's EI and Kf (per unit length rather than per unit width and area; B/K has dimension length^4 in both)"
+    - "lengths measured in units of Chirat's L0, taken as 1 m, so Chirat's dimensionless lambda/L0 equals Cerda's lambda in m"
+    - "the infinite_rod_foundation model is the reader's unbounded-domain limit of Chirat's Eq. 4, not the clamped rod the paper solves"
+# Against huang2005. Neither paper cites the other; this relation is proposed. Huang's Eq. 18 (thin compressible
+# substrate, the Winkler limit) is a plane-strain plate of bending stiffness D = E_bar h^3/12 on a Winkler
+# foundation of stiffness K = Es_bar (1 - nu_s)^2 / ((1 - 2 nu_s) H): lambda/h = 2 pi (D/(K h^4))^(1/4).
+# Chirat's unbounded rod is lambda/L0 = 2 pi kf^(-1/4) with kf = Kf L0^4/EI. Taking L0 = h, EI -> D and Kf -> K,
+# kf = K h^4/D = 12 (1 - nu_s)^2 / (H_over_h Ebar_over_Esbar (1 - 2 nu_s)).
+- id: rel_huang_eq18_same_as_rod_foundation
+  kind: same_as
+  a: huang2005/thin_compressible_eq18
+  b: chirat2013/infinite_rod_foundation
+  mapping: {kf: "12*(1 - nu_s)**2/(H_over_h*Ebar_over_Esbar*(1 - 2*nu_s))"}
+  output_map: {lam: lam_over_h}
+  regime: {Ebar_over_Esbar: [10, 100000], H_over_h: [0.1, 10], nu_s: [0.0, 0.45]}
+  provenance: proposed
+  reason: >
+    Both are an elastic beam under axial compression on a linear (Winkler) foundation, unbounded, with the
+    wavelength that minimizes the critical load. Huang's thin compressible substrate acts as a Winkler
+    foundation of stiffness Es_bar (1 - nu_s)^2 / ((1 - 2 nu_s) H) under a plate of stiffness E_bar h^3/12
+    (Eq. 18, via the Winkler limit of Eq. 10 the paper states on p. 7); Chirat's mantle edge is a rod of
+    stiffness EI on adhesion springs Kf. With lengths in units of the film thickness (L0 = h), Chirat's
+    lambda/L0 = 2 pi kf^(-1/4) is Huang's lambda_eq/h. The critical loads correspond too (Chirat's
+    P = P L0^2/EI = 2 sqrt(kf) equals 12 N_c/(h E_bar) of Eq. 18), but that needs a factor of 12 between
+    the outputs, which an output map cannot carry, so only the wavelength is related.
+  assumptions:
+    - "Chirat's rod (EI, Kf per unit length) read as Huang's plate per unit width (D = E_bar h^3/12, K per unit area); B/K has dimension length^4 in both"
+    - "Chirat's length scale L0 taken equal to Huang's film thickness h, so lambda/L0 compares with lambda_eq/h"
+    - "the infinite_rod_foundation model is the reader's unbounded-domain limit of Chirat's Eq. 4, not the clamped rod the paper solves; Chirat's own shells (kf about 5000, mode 3 between clamped ends) are not in the thin-substrate regime Huang means"
+# Against moulton2012 (ref-21), which chirat2013 cites and builds on, and which cites chirat2013 back.
+# Both records carry the same reader's stand-in for their rod-on-foundation energy: the unbounded straight-rod
+# wavelength. moulton2012's model is nondimensional (EI, k_s in its Appendix F units); chirat2013's is in units of
+# its length L0 with kf = Kf L0^4/EI. Taking Chirat's L0 as Moulton's unit of length, kf = k_s/EI and
+# Chirat's lambda/L0 is Moulton's lambda. Neither paper prints this wavelength law.
+- id: rel_moulton_framework_derived_chirat_rod
+  kind: derived_from
+  a: moulton2012/winkler_rod_wavelength
+  b: chirat2013/infinite_rod_foundation
+  mapping: {kf: "ks/EI"}
+  output_map: {lam: lam}
+  steps:
+    - "following the general framework of Moulton et al. (21): the mantle edge as an elastic rod whose bending energy is balanced against an elastic attachment to the shell edge as a foundation"
+    - "add accretionary growth at a fixed rate g with the foundation updated to the deformed mantle (Eqs. 5-6), and restrict to a single spine between clamped ends (in words; not applicable symbolically)"
+  regime: {EI: [0.01, 10], ks: [1, 10000]}
+  provenance: stated
+  citation: {page: 2, printed_page: "6016", quote: "following the general framework of Moulton et al. (21), we"}
+  assumptions:
+    - "Chirat's model is entered here through the reader's unbounded-rod limit of its Eq. 4 and Moulton's through the reader's straight-rod limit of its Eqs. 7-8; the paper states the derivation for the full models, not for these limits"
+    - "moulton2012 states the converse (p. 6): spines 'can emerge as a consequence of the same basic growth-induced buckling instability', explored in Chirat et al."
+- id: rel_winkler_rod_same_as_infinite_rod
+  kind: same_as
+  a: moulton2012/winkler_rod_wavelength
+  b: chirat2013/infinite_rod_foundation
+  mapping: {kf: "ks/EI"}
+  output_map: {lam: lam}
+  regime: {EI: [0.01, 10], ks: [1, 10000]}
+  provenance: proposed
+  reason: >
+    chirat2013 says it follows the general framework of Moulton et al. (ref. 21): in both, the mantle edge is
+    an inextensible elastic rod of bending stiffness EI attached to the shell edge by linear springs (Moulton's
+    k_s, Chirat's Kf). The unbounded straight-rod wavelength of that energy, 2 pi (EI/k_s)^(1/4) in Moulton's
+    nondimensional units, is Chirat's lambda/L0 = 2 pi kf^(-1/4) with kf = Kf L0^4/EI = k_s/EI when L0 is
+    Moulton's unit of length. Both models are the readers' stand-ins (neither paper prints the law), so this
+    relates the two reconstructions; Chirat's clamped, growing rod and Moulton's curved aperture are not
+    thereby the same. Only the wavelength is related: Moulton's stand-in gives no critical load.
+  assumptions:
+    - "Chirat's length scale L0 taken as Moulton's nondimensional unit of length"
+    - "Moulton's k_s and Chirat's Kf are both spring stiffness per unit length of rod; the mapping relates forms, not the two papers' parameter values"

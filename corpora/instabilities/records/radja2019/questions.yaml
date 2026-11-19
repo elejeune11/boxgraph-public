@@ -1,0 +1,160 @@
+- id: q_mean_spikes_holes
+  kind: unexplained_difference
+  about: [avg_pctdiff_spikes, avg_pctdiff_holes, pctdiff_spikes, pctdiff_holes]
+  text: >
+    The text gives average wavelength differences of 4.6% for spikes and 14% for holes, but the
+    arithmetic means of the Table 1 rows with u = 1 and u = -1 are 10.5% and 18%; only the stripes
+    average (30%) follows from the table. The paper does not say how the averages were formed
+    (a weighting, a different set of species, or a median would give other numbers).
+  citation: {page: 8, quote: "with an average wavelength difference of 4.6%"}
+- id: q_state_categories
+  kind: possible_error
+  about: [nll_3state, nll_coarse, nll_null3]
+  text: >
+    The STAR Methods number the categories (1) at equilibrium, lambda > 3 um; (2) not at equilibrium,
+    lambda < 1 um; (3) 1-3 um; (4) not at equilibrium, lambda > 3 um, but then say state C (lambda > 3 um)
+    includes categories (1) and (2), and state E (lambda < 1 um) is category (4). By the categories'
+    own definitions C should be (1) and (4) and E should be (2). Which assignment was used for the
+    3-state wavelength model of Table 2 cannot be told from the paper.
+  citation: {page: 21, quote: "State C included categories (1) and (2) for all patterns"}
+- id: q_lr_definition
+  kind: reading
+  about: [lr_2state, likelihood_ratio]
+  text: >
+    The paper calls 5.21 the "log-likelihood ratio" and prints -ln L in Table 2 without the formula.
+    The record takes the usual statistic, twice the difference of -ln L, which reproduces all three
+    printed values; half of it (the plain log-likelihood ratio) would not.
+  citation: {page: 8, quote: "log-likelihood ratio of the two-state equilibrium model compared"}
+- id: q_l0_counting
+  kind: reading
+  about: [pctdiff_spikes, pctdiff_holes, pctdiff_stripes, mode_number_wavelength]
+  text: >
+    l0 of an SEM image is said to be the number of pattern units on a diameter of the hemisphere
+    multiplied by two, which gives even integers for whole counts, yet Table 1 lists half-integers
+    (9.5, 6.5, 19.5, ...) among the matched l0. The l0 in Table 1 are the
+    parameters of the matched simulation; how they follow from the counted units (fractional
+    counts, or a choice among neighbouring l0) is not stated.
+  citation: {page: 20, quote: "this value was multiplied by two to get l0"}
+- id: q_eq6_not_runnable
+  kind: unstated_model
+  about: [free_energy_eq6]
+  text: >
+    The equilibrium model (Eq. 6) yields pattern geometries, not printed numbers; the coupling of the
+    concentration field to membrane curvature that produces l0 is deferred to Lavrentovich et al.
+    (2016), and the annealing stopping rule is qualitative. Its results (Fig. 4, the (l0, u) of
+    Table 1) can only be checked against the authors' released code
+    (github.com/asjaradja/PollenPhaseTransitionPaper), which could be read as its own software record.
+  citation: {page: 19, quote: "until the observed pattern no longer changed appreciably with further"}
+- id: q_eq7_not_runnable
+  kind: unstated_input
+  about: [conserved_dynamics_eq7]
+  text: >
+    The conserved-dynamics simulations (Eq. 7, Fig. 2) state D, K, u3, u4, tau, q0, R, the initial
+    variance and the final time, but not the sphere mesh, the time step or the random seed, and report
+    the foams only as images, so no printed foam wavelength can be compared. The caption's statement
+    that the average wavelength increases from row to row up to about 15 um maps simulation units to
+    micrometres by a scale the paper does not give.
+  citation: {page: 4, quote: "The average wavelength of the images and simulations increases from top"}
+- id: q_elastic_link
+  kind: choice
+  about: [mode_number_wavelength, conserved_dynamics_eq7]
+  text: >
+    The paper's wavelength is set by the wavelength-selection term K (l - l0)^2, whose constants it
+    says depend on membrane bending rigidity, surface tension and elasticity (p. 18), with l0 from
+    an order-of-magnitude estimate in Lavrentovich et al. (2016); it prints no formula linking l0 to
+    a layer thickness or a stiffness ratio, so no mapping to the elastic film/substrate wavelength
+    laws (huang2005, cerda2003) is stated or recorded here.
+  citation: {page: 18, quote: "Order-of-magnitude estimates of the relevant physical parameters yield values"}
+- id: q_fig2_wavelength_order
+  kind: reading
+  about: [conserved_dynamics_eq7]
+  text: >
+    (Audit.) The Fig. 2 caption says the average wavelength increases from the top row to the bottom,
+    but the simulations use q0 = 1.5, 2 and 0.5 for rows 1, 2 and 3; with q0 = 2 pi / lambda (p. 19)
+    the characteristic wavelength of row 2 (pi) is shorter than that of row 1 (about 4.2). Row 1 also
+    has tau = +20 rather than -20, so its smooth surface may not show q0 at all; the paper does not say
+    whether the ordering refers to q0, to the observed foam size, or only to the SEM images.
+  citation: {page: 4, quote: "The average wavelength of the images and simulations increases from top"}
+- id: q_rate_ratio_approx
+  kind: reading
+  about: [rate_ratio_AB_BA]
+  text: >
+    (Audit.) The rate ratio is printed "~20-fold", an approximate value that gets no verdict; the record
+    first entered it as an exact "20". qAB / qBA from Table 2 is 94.0 / 4.48, about 21, consistent with
+    the approximate statement.
+  citation: {page: 8, quote: "patterns is 20-fold greater than the reverse rate"}
+- id: q_fig5_tip_count
+  kind: unexplained_difference
+  about: [fig5_n_tips, families_total, fig5_n_noneq, families_noneq]
+  text: >
+    (Figure pass.) The caption and text give 205 families at the tips of the tree, but the coloured
+    state dots of Fig. 5 sit at 195 distinct angular positions (the grouping is the same for any
+    tolerance from 0.3 to 1.1 degrees), and a scratch count of the tree's branch ends on a circle just
+    inside the dots also finds about 196. The figure therefore seems to show about ten fewer terminal
+    taxa than stated (or ten families drawn without any dot), so families without an equilibrium
+    state come to 168 on the figure against the printed 178. The dots that carry the equilibrium
+    state agree with the text: 27 families with an orange dot, 7 with only an orange dot, 20 mixed.
+  citation: {page: 9, quote: "Phylogenetic tree of spermatophytes with 205 families at terminal taxa"}
+- id: q_fig4_boundary_extent
+  kind: reading
+  about: [fig4_boundary_printed, fig4_boundary_a_l0]
+  text: >
+    (Figure pass.) The Fig. 4 caption places the example boundary "between l0 = 3.5 and l0 = 3.6 from
+    u = 0.1 to u = 1.0", with an unexplained wide space before the second 1.0 (and before "1.0" in
+    "for u = 1.0" later in the caption) where a minus sign may have been lost in typesetting; the page
+    image shows no minus either. The line drawn at l0 = 3.548 runs unbroken from u = 1.08 to u = -1.04
+    on the figure (the boundary near l0 = 4.45 is broken at u = 0), so "from u = 0.1 to u = 1.0" as
+    printed describes only its upper part; "-0.1 to -1.0" or "1.0 to -1.0" would fit the drawing
+    differently. The l0 position itself agrees with the caption.
+  citation: {page: 6, quote: "between l0 = 3:5 and l0 = 3:6 from u = 0:1 to u ="}
+- id: q_state_categories_fig5
+  kind: reading
+  about: [nll_3state, nll_coarse, nll_null3]
+  text: >
+    (Figure pass, bearing on q_state_categories.) The legend panel of Fig. 5 draws the 3-state
+    wavelength model's states from the dot colours: state C (lambda > 3 um) gathers the orange
+    (at equilibrium, > 3 um) and pink (not at equilibrium, > 3 um) dots, state D the green (1-3 um) and
+    state E the blue (< 1 um). This matches the categories' own definitions and not the STAR Methods'
+    "categories (1) and (2)" for C and "(4)" for E, which supports reading those numbers as the
+    misprint.
+  citation: {page: 9, quote: "State C: λ > 3μm"}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [mode_number_wavelength, free_energy_eq6, conserved_dynamics_eq7]
+  text: >-
+    No validation of this record's models against tallinen2015 is entered (cross-validation job
+    2026-11-14): tallinen2015 holds no measurement (all its data are predicted, derived or reported
+    values of its own analysis and finite-element simulations), and neither paper cites the other.
+    This paper's only link to mechanics is that the effective constants K and tau depend on membrane
+    bending rigidity, tension and elasticity, which yields no printed quantity tallinen2015 holds.
+    The converse (tallinen2015's models against the measurements here) is answered in that record's
+    q_no_validation_radja2019.
+  citation: {page: 18, quote: "These parameters may also incorporate features of the callose wall"}
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [mode_number_wavelength, free_energy_eq6, conserved_dynamics_eq7, pctdiff_spikes, pctdiff_holes, pctdiff_stripes]
+  text: >-
+    No validation between this record and huang2005 is entered, in either direction (cross-validation
+    job 2026-11-14). Neither paper cites the other. huang2005 prints no measurements, so no model here
+    has anything there to predict. The measurements here are the Table 1 percent differences between
+    SEM and simulated wavelengths (not wavelengths), the family counts, the Fig. 5 state dots and the
+    GC peak abundances; none is a wrinkle wavelength or a critical strain, and the paper prints no
+    primexine or callose-wall thickness, modulus or strain on which huang2005's film/substrate
+    wavelength laws could be run. The only mechanical link stated is that K and tau depend on membrane
+    bending rigidity, tension and elasticity and on "membrane buckling" (p. 18), which yields no
+    quantity huang2005's models give.
+  citation: {page: 18, quote: "if the mechanical details of the wall influence the membrane buckling"}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [mode_number_wavelength, free_energy_eq6, conserved_dynamics_eq7, pctdiff_spikes, pctdiff_holes, pctdiff_stripes]
+  text: >-
+    No validation between this record and cerda2003 is entered, in either direction (cross-validation job
+    2026-11-14). This paper cites Katifori, Alben, Cerda et al. (2010) on pollen folding but not cerda2003,
+    and makes no comparison with a wrinkling law. This record's only runnable physical model,
+    l0 = 2 pi R / lambda, needs a sphere radius and gives a mode number; cerda2003 measures neither (its
+    measurements are a polyethylene sheet's length, width, thickness and strain and a pinched skin fold
+    2Hs ≈ 5 mm), and Eqs. 6 and 7 are not runnable. In the other direction cerda2003's wrinkling laws need a
+    sheet thickness, a modulus ratio or a tension, none printed here, and the measurements here (Table 1
+    percent differences between SEM and simulated wavelengths, family counts, Fig. 5 state dots, GC peak
+    abundances) are not quantities those laws give.
+  citation: {page: 18, quote: "Order-of-magnitude estimates of the relevant physical parameters yield values"}

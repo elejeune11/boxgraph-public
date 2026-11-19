@@ -1,0 +1,385 @@
+- id: q_numerical_scheme
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial]
+  text: >
+    The paper says only that the eigenvalue problem |E| = 0 "is carried out numerically" and that the
+    eigenvalue "must be minimized over all values of kh". The scan in strain (log-spaced from 1e-4 to
+    0.7), the bisection, the kh grid (1e-3 to 30, log-spaced) and the golden-section refinement of the
+    minimum are the reader's choices, set in the models' settings and checked by refinements.
+  citation: {page: 8, quote: "The solution to the eigenvalue problem is carried out numerically", where: text}
+- id: q_detE_poles
+  kind: numerics
+  about: [bilayer_plane_strain, bilayer_uniaxial]
+  text: >
+    As printed, A (Eq. A3) contains the inverse of a matrix whose determinant is proportional to
+    4 r^3 - (r^2 + 1)^2, which vanishes at Biot's surface-wrinkling value of r (r = 3.383, eW = 0.456 in
+    plane strain). B and C, and so |E|, then have poles there, and |E| also has poles where C is
+    singular. The models therefore locate the zeros of |E| times |C| times that determinant, which has
+    the zeros of |E| and no poles. Without this, a sign-change search reports a spurious root at eW =
+    0.456 for every modulus ratio and misses the genuine homogeneous-limit root.
+- id: q_eW_ratio30_ratio5
+  kind: unexplained_difference
+  about: [eW_ratio30, eW_ratio5, cmp_exact_ratio30, cmp_exact_ratio5]
+  text: >
+    The exact analysis as printed in the Appendix gives eW ≈ 0.052 for mu_f/mu_s = 30 and ≈ 0.165 for
+    mu_f/mu_s = 5 (plane strain, no prestretch), about 6% below the values printed in the captions of
+    Figs. 9 and 10 (≈ 0.055 and ≈ 0.175). Those values are printed with "≈" and may come from the finite
+    element "buckle" analysis or from reading Fig. 2 rather than from the exact analysis; the paper does
+    not say. The same analysis reproduces the homogeneous limits (0.456, 0.556) and approaches Eq. 5 at
+    large modulus ratio, so the reading of Eqs. A1-A10 is not obviously at fault. The plotted curve of
+    Fig. 2 would settle which value the paper's own analysis gives.
+- id: q_fe_not_runnable
+  kind: unstated_model
+  about: [fe_postbifurcation, ePD_ratio30, ePD_ratio186_pre1p3, eMR_ratio836_pre2]
+  text: >
+    The post-bifurcation strains (period doubling at e ≈ 0.2 for mu_f/mu_s = 30 and 0.314 for
+    mu_f/mu_s = 186 with prestretch 1.3; first mountain ridge at e = 0.0367 for mu_f/mu_s = 836 with
+    prestretch 2) come from ABAQUS simulations whose mesh, width, increments and onset criterion are not
+    given. They are recorded but cannot be reproduced here. The captions give snapshot strains, so the
+    onset values are bounded only to within the spacing of the snapshots.
+- id: q_scaling_prestretch
+  kind: reading
+  about: [simple_formula_plane, simple_formula_uniaxial]
+  text: >
+    The statements that eW scales with lambda0_1s^(4/3) and kh with lambda0_1s^(2/3) at large prestretch
+    (pp. 3-4) are read as properties of Eqs. 5 and 6 (Lambda ~ lambda0_1s^2/2 in plane strain); they are
+    not entered as separate scaling-law models. Whether the exact analysis follows them is plotted only
+    (Figs. 3, 6, 7).
+- id: q_audit_ridge_twice_eW
+  kind: overstated_claim
+  about: [eMR_ratio836_pre2, eW_ratio836_pre2]
+  text: >
+    (Audit.) The Fig. 13 caption says that when mu_f/mu_S is large "mountain ridges form at compressive
+    strains that are small and roughly twice eW". For the stiffest case shown in detail, Fig. 14
+    (mu_f/mu_S = 836, prestretch 2), the printed values are eW ≈ 0.01 and a first ridge at e = 0.0367,
+    a ratio of about 3.7, not about 2. The plotted points of Fig. 13 at large mu_f/mu_S would show
+    whether "roughly twice" holds anywhere in the range.
+  citation: {page: 6, quote: "ridges form at compressive strains that are small and roughly", where: Fig. 13 caption}
+- id: q_audit_fig9_snapshot
+  kind: reading
+  about: [eW_ratio30, eW_ratio5, q_eW_ratio30_ratio5]
+  text: >
+    (Audit, bearing on q_eW_ratio30_ratio5.) The first snapshot of Fig. 9 is labelled e = 0.055, the same
+    as the caption's bifurcation strain "e ≈ 0.055", and Sec. 4.1 says the finite element "buckle"
+    analysis computes eW directly and is "in good agreement with the result of Sec. 3.1". This supports
+    the reading that the caption values ≈ 0.055 and ≈ 0.175 come from the finite element model, not from
+    the exact analysis that the record compares them with; Fig. 10's first snapshot (e = 0.182) does not
+    show the same coincidence. Fig. 8 also plots the theoretical eW curve over 3 <= mu_f/mu_s <= 80 and
+    is a second place to read the exact values at mu_f/mu_s = 5 and 30.
+  citation: {page: 5, quote: "allows direct computation of", where: Sec. 4.1}
+- id: q_fig_eW_ratio30_ratio5_settled
+  kind: reading
+  about: [q_eW_ratio30_ratio5, eW_ratio30, eW_ratio5, fig8_eW_read, fig2_eW_read, cmp_fig8_eW, cmp_fig2_eW]
+  text: >
+    (Figure pass, bearing on q_eW_ratio30_ratio5.) The paper's own plotted eW curves settle which value its
+    exact analysis gives. Read by calibrated code, Fig. 8 gives eW = 0.1666 [0.1657, 0.1674] at
+    mu_f/mu_s = 5 and 0.0522 [0.0511, 0.0533] at 30; Fig. 2 gives 0.1641 [0.1595, 0.1699] and 0.0533
+    [0.0505, 0.0560]. Both agree with the record's analysis (0.165, 0.052), and Fig. 8 excludes the caption
+    values ≈ 0.175 and ≈ 0.055. The whole plotted curves of Figs. 2, 8, 11 and 13 reproduce (Fig. 11
+    close). So the record's reading of the Appendix matches the analysis the paper plotted; the caption
+    values of Figs. 9 and 10 do not come from that analysis.
+  citation: {page: 5, quote: "is the theoretical result", where: Fig. 8 caption}
+- id: q_fig4_pre1p5_pre2_swapped
+  kind: unexplained_difference
+  about: [fig4_eW_pre1p5_read, fig4_eW_pre2_read, cmp_fig4_eW_pre1p5, cmp_fig4_eW_pre2]
+  text: >
+    (Figure pass.) In Fig. 4, for 1.5 <= mu_f/mu_s <= 2.25, the record's exact analysis gives the line for
+    lambda0_1s = 1.5 below the line for 2 (at mu_f/mu_s = 2: 0.2697 and 0.2846). The plotted lines are the
+    other way round: the line the '1.5' leader points to reads 0.2846 and the lowest line, which the '2'
+    leader meets at about (2.46, 0.243), reads 0.2706. Each computed value lies on the other label's line.
+    The lines for 1 and 3 reproduce, and so do all four lines of Fig. 3 for mu_f/mu_s >= 10 and the
+    lambda0_1s dependence at mu_f/mu_s = 1 (Fig. 5). Either the two labels' leaders are interchanged in
+    Fig. 4, or the paper's analysis differs from the record's for these two prestretches at small modulus
+    ratio; the paper does not say which. The comparison for lambda0_1s = 2 shows "reproduced" only because
+    the printed label "2" carries a wide rounding band.
+  citation: {page: 3, quote: "in which the ratio of the ﬁlm to substrate modulus is not large", where: Fig. 4}
+- id: q_fig6b_kh_offset
+  kind: unexplained_difference
+  about: [fig6b_kh_pre1p5_read, fig6b_kh_pre3_read, cmp_fig6b_kh_pre1p5, cmp_fig6b_kh_pre3, bilayer_plane_strain]
+  text: >
+    (Figure pass.) For 1.5 <= mu_f/mu_s <= 4.5 (Fig. 6, right) the kh of the record's analysis lies 0.02 to
+    0.045 above the plotted lines for every prestretch (not reproduced for lambda0_1s = 1.5 and 3; the
+    lines for 1 and 2 pass only through the rounding band of their labels). At large modulus ratio
+    (Fig. 6, left) all four kh lines reproduce. In this range the minimum of eW over kh is very flat:
+    the paper's own lines zigzag by about +-0.02 between neighbouring points, and the record's kh comes from
+    a golden-section search on eW to a tolerance of 1e-6. The offset may be the numerical conditioning of
+    kh at a flat minimum in either computation rather than a difference in the analysis; eW itself
+    reproduces in this range (Fig. 4, lambda0_1s = 1 and 3).
+  citation: {page: 4, quote: "Dimensionless wave number of the wrinkling mode as a function", where: Fig. 6}
+- id: q_fig13_ridge_ratio
+  kind: overstated_claim
+  about: [q_audit_ridge_twice_eW, fig13_eMR_read, fig13_eW_read]
+  text: >
+    (Figure pass, bearing on q_audit_ridge_twice_eW.) Read by calibrated code from Fig. 13, eMR/eW is about
+    1.5 at mu_f/mu_s = 100 (0.062 against 0.040), about 1.9 at 200 (0.048 against 0.026), about 2.7 near
+    500 (0.039 against 0.015) and about 3.8 near 1000 (0.036 against 0.0095). "Roughly twice eW" holds only
+    near mu_f/mu_s = 150-300; at the largest ratios plotted the ridges form at a nearly constant strain of
+    about 0.036, three to four times eW.
+  citation: {page: 6, quote: "ridges form at compressive strains that are small and roughly", where: Fig. 13 caption}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, fe_postbifurcation, cerda2003/L_fig1, cerda2003/W_fig1, cerda2003/t_fig1, cerda2003/gamma_fig1, cerda2003/two_Hs_hand]
+  text: >-
+    No validation of this record's models against cerda2003's measurements is entered (cross-validation
+    job 2026-11-14). cerda2003's only measured values are the size and strain of the stretched
+    polyethylene sheet of its Fig. 1 (L ≈ 25 cm, W ≈ 10 cm, t ≈ 0.01 cm, tensile strain ≈ 0.10) and the
+    pinched fold thickness 2Hs ≈ 5 mm on the back of a hand. These are imposed geometry and loading, or a
+    hand measurement used as an input; none is an outcome of film/substrate wrinkling. This record's
+    models give the wrinkling strain eW (or e0), the critical wave number kh and the post-bifurcation
+    strains of a compressed neo-Hookean bilayer; cerda2003 measures none of these (its wavelengths for the
+    apple, the hand and the vesicle are its own predictions or derived values, not measurements, and the
+    Fig. 1 sheet wrinkles under tension, not on a substrate). Its figures are photographs with no scale,
+    so no wavelength was read from them. cao2012 does not cite cerda2003 (its ref. 6 is Holfeld and
+    Mahadevan, on the sulcus). The other direction has no measurement to test: cao2012 has none.
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, fe_postbifurcation]
+  text: >-
+    No validation between this record and huang2005 is entered, in either direction (cross-validation
+    job 2026-11-14). Neither record holds a measurement: every datum of cao2012 is reported or predicted
+    (its figures.md: "The paper has no measurements"; the Fig. 8, 11 and 13 markers are finite element
+    predictions), and every datum of huang2005 is reported or predicted (an analysis with simulated
+    patterns, no experiment of its own). Neither paper cites the other (cao2012's references do not
+    include huang2005, and huang2005 predates cao2012). The two papers' wrinkling strains and
+    wavelengths can be set against each other, but that compares model with model (the classic
+    small-strain limit against the neo-Hookean bilayer), which is the relation jobs' work, not a
+    validation.
+- id: q_no_validation_richman1975
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, fe_postbifurcation, richman1975/l_measured_27wk, richman1975/l_measured_sidman, richman1975/t_27wk, richman1975/R_27wk]
+  text: >-
+    No validation between this record and richman1975 is entered, in either direction (cross-validation
+    job 2026-11-14). richman1975's models have nothing to test here: cao2012 holds no measurement (its
+    figures.md: "The paper has no measurements"). richman1975's measurements are the Table 1 layer areas,
+    the 27-week specimen's hemisphere radius (84 mm) and cortical thickness (≈ 1.7 mm), the incipient
+    intersulcal distances 8.5 mm and 7.5 mm (p. 3), and cited adult white-matter test loads. No model of
+    this record gives any of these. The nearest, the intersulcal distance, is a wavelength in mm, while
+    this record's models give only the dimensionless k h (and eW); turning k h into a wavelength needs
+    l = 2 pi h / (k h), which no model here states, and a film thickness and modulus ratio for that
+    specimen. Neither is measured: the cortical thickness of the specimen is printed only as "≈", and
+    the cortex/core modulus ratio exists only as richman1975's assumed relation Ecore/E1 = 1/10 (its
+    added.yaml), not as a measurement; richman1975's cortex is also two strata under unequal growth
+    stresses, not a uniformly compressed film. Neither paper cites the other (richman1975's analysis is
+    ref. 20, Hutchinson, unpublished). Setting the bilayer's k h against richman1975's predicted l/t
+    compares model with model, which is the relation jobs' work (relations.yaml already proposes
+    rel_cao_simple_plane_scales_richman_plate).
+- id: q_no_validation_stafford2004
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, fe_postbifurcation, stafford2004/d_fig2b, stafford2004/d_fig1b_caption, stafford2004/d_osg, stafford2004/E_fig3_indentation, stafford2004/E_fig4_indentation]
+  text: >-
+    No model of this record is validated against stafford2004's measurements (cross-validation job
+    2026-11-14). stafford2004 measures wrinkle wavelengths in um (Fig. 1b's 8 um, the ten Fig. 2b points,
+    the organosilicate "of the order of 30 um"), film thicknesses, the PDMS modulus range 1.5-2.0 MPa and
+    nanoindentation moduli (Figs. 3, 4). This record's models give only the film wrinkling strain eW and
+    the dimensionless k h at onset. stafford2004 measures no critical strain, and a wavelength is not the
+    same quantity as k h: turning one into the other needs d = 2 pi h / (k h), which no model here states.
+    Mapping wrinkle_wavelength to wrinkle_wavenumber_dimensionless would cross two quantities that do not
+    even share a dimension. The modulus ratio such a run needs is also not measured for the Fig. 2b films
+    independently of their wavelengths: their moduli are SIEBIMM values (Eq. 2 on those wavelengths), so at
+    best it would be a fit check. The nanoindentation moduli (Figs. 3, 4) are for films whose wavelengths
+    are not printed. Neither paper cites the other (stafford2004 predates cao2012). In the other direction
+    there is nothing to test: this record holds no measurement (figures.md: "The paper has no
+    measurements"). At stafford2004's modulus ratios (about 10^3) the exact analysis tends to Eq. 5 with
+    Lambda = 1, i.e. the classic result in stafford2004's Eq. 1. That is a model-to-model statement for
+    the relation jobs.
+- id: q_no_validation_bowden1998
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, fe_postbifurcation, bowden1998/L_measured, bowden1998/depth_unheated, bowden1998/depth_300C]
+  text: >-
+    No validation between this record and bowden1998 is entered, in either direction (cross-validation
+    job 2026-11-14). bowden1998's measurements are the wrinkle wavelength range "between 20 and 50" um
+    over all samples and the crest-to-trough depths 1.5 um (no external heating) and 3.9 um (300 degC).
+    This record's models give only the film wrinkling strain eW (or e0), the dimensionless k h at onset
+    and post-bifurcation onset strains. bowden1998 measures no critical strain: its thermal mismatch
+    strain cannot even be computed, since the expansion coefficients are given only as a ratio and the
+    deposition temperature is not stated (bowden1998 q_eq1_inputs). A wavelength in um is not k h, and
+    turning one into the other needs l = 2 pi h / (k h), which no model here states; mapping
+    wrinkle_wavelength to wrinkle_wavenumber_dimensionless would cross quantities that do not share a
+    dimension. The 20-50 um range also covers samples whose wavelength the paper attributes to a stiffened
+    PDMS surface layer (about nine times the bare-film estimate of ~3.4 um, p. 3), which is not a
+    two-layer neo-Hookean bilayer. No model here gives an amplitude, so the depths are not predicted either.
+    Neither paper cites the other (bowden1998 predates cao2012, and cao2012's references do not include
+    it). In the other direction there is nothing to test: this record holds no measurement (figures.md:
+    "The paper has no measurements"). At bowden1998's modulus ratio (gold on PDMS, about 4 x 10^3) the
+    exact bilayer analysis tends to the classic small-strain result of bowden1998's Eq. 3; that is a
+    model-to-model statement for the relation jobs.
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, biot_surface_eq7_stretch, biot_surface_eq7_uniaxial, biot_surface_eq7_uniaxial_stretch, fe_postbifurcation]
+  text: >-
+    No validation between this record and biot1963 is entered, in either direction (cross-validation
+    job 2026-11-14), although cao2012 cites biot1963 as ref. 3. Neither record holds a measurement:
+    every datum of cao2012 is reported or predicted (figures.md: "The paper has no measurements"; the
+    Fig. 8, 11 and 13 markers are finite element predictions), and every datum of biot1963 is predicted
+    (its Table I is computed from Eqs. 3.25 and 4.10; it has no figures). Every use cao2012 makes of
+    Biot [3] is model against model: the homogeneous-limit wrinkling strain eW = 0.456 in plane strain
+    (0.556 uniaxial) that its bilayer analysis recovers at mu_f/mu_s = 1, and the Biot mode becoming
+    critical again at small modulus ratio (pp. 1-4). biot1963's one mention of experiment (p. 6, "Further
+    experimental confirmation was recently obtained by Cifferi and Flory") concerns the neo-Hookean
+    strain energy, gives no value and is not in either record. Setting cao2012's homogeneous limit
+    against Biot's critical stretch 0.543 (strain 0.457) is the relation jobs' work.
+  citation: {page: 1, quote: "wrinkling of a compressed homogeneous substrate which Biot", where: text}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, biot_surface_eq7, fe_postbifurcation, tallinen2015/first_unstable_mode, tallinen2015/fe_folding]
+  text: >-
+    No validation between this record and tallinen2015 is entered, in either direction
+    (cross-validation job 2026-11-14), although tallinen2015 cites this paper as its ref. 26. Neither
+    record holds a measurement: every datum here is reported or predicted (figures.md: "The paper has no
+    measurements"), and every datum of tallinen2015 is predicted, derived or reported (its Eq. 1
+    thresholds, its finite-element cusp, fold-width and loop results, and the brain modulus ratio
+    eta ≈ 1 it takes from its ref. 2; its brain and gut panels are images without values). tallinen2015
+    cites this paper only for the post-bifurcation behaviour on the stiff-film side (its p. 1), with no
+    value compared. Relating this record's exact bilayer analysis to tallinen2015's growth-driven Eq. 1
+    (g = 1/lambda) is model against model, the relation jobs' work.
+  citation: {page: 1, quote: "An exact bifurcation analysis reveals the critical strain in the film", where: text}
+- id: q_no_validation_diab2013
+  kind: choice
+  about: [bilayer_plane_strain, biot_surface_eq7, fe_postbifurcation, diab2013/bifurcation_strain_eq28, diab2013/biot_strain_eq28, diab2013/m_point_eq211]
+  text: >-
+    No validation between this record and diab2013 is entered, in either direction (cross-validation job
+    2026-11-18). The pair was chosen because diab2013 cites "Cao & Hutchinson [10]", but that ref. 10 is
+    another paper of the same authors and year (Proc. R. Soc. A 468, 94-115, "From wrinkles to creases in
+    elastomers"), not this J. Appl. Mech. paper; neither paper cites the other. Neither record holds a
+    measurement: every datum here is reported or predicted (figures.md: "The paper has no measurements"),
+    and diab2013's are perturbation and finite-element results, plus a cited crease strain under bending
+    (Gent & Cho) that no model here gives. The shared values (the half-space limit 0.456 of this record's
+    bilayer at mu_f/mu_s = 1 and Eq. 7 against diab2013's eps_B; the crease strain 0.35 both quote) are
+    model against model, for the relation jobs.
+  citation: {page: 1, quote: "An exact bifurcation analysis reveals the critical strain in the film", where: text}
+- id: q_validation_hong2009
+  kind: choice
+  about: [biot_surface_eq7, bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, fe_postbifurcation, hong2009/eps_exp_printed, hong2009/eta_exp_printed]
+  text: >-
+    (Cross-validation against hong2009, ref. 7; job 2026-11-18.) One validation is entered:
+    Eq. 7 in plane strain (lambda_3 = 1), Biot's surface threshold 0.456, against hong2009's measured crease
+    strain of bent elastomer blocks, epsilon_exp = 0.35. hong2009 makes this comparison itself, as the
+    disagreement that motivates its crease criterion, so the expected result is a miss: the measured onset is
+    a crease, a different mode from Biot's wrinkle. Choices: (1) Eq. 7 is used rather than bilayer_plane_strain
+    at mu_f/mu_s = 1, lambda0_1s = 1. That limit gives the same 0.456 (eW_homog_plane), but its wavenumber
+    is arbitrary there and it repeats the same prediction, so it is not entered a second time. (2) The
+    measured value is one number for two cited experiments (hong2009/q_eps_exp_two_sources), and both
+    are bending tests. Not used: hong2009's eta_exp = 2.0-3.7, the swelling ratio of gels bonded to a rigid
+    substrate. No model here outputs a swelling ratio. Eq. 7 with lambda_3 = lambda_1 would give one
+    (eta = 0.5437^-2, about 3.4), but only through a model this record does not hold. bilayer_uniaxial's
+    homogeneous limit (0.556) is for uniaxial stressing, which no hong2009 measurement is. In the other
+    direction, this record has no measurement (figures.md), so hong2009's models have nothing here to
+    predict. cao2012's own crease threshold 0.35 is quoted from refs. 6-7, not measured.
+  citation: {page: 2, quote: "strain compression [6,7]", where: text}
+- id: q_validation_trujillo2008
+  kind: choice
+  about: [biot_surface_eq7, lam3_equibiaxial_trujillo_added, bilayer_plane_strain, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, trujillo2008/ec_mean_modulus_series, trujillo2008/ec_mean_thickness_series, trujillo2008/fig3a_ec_points, trujillo2008/fig3b_ec_points, trujillo2008/hh0_onset_measured]
+  text: >-
+    (Cross-validation against trujillo2008; job 2026-11-18.) Neither paper cites the other. Two validations
+    are entered: Eq. 7 against trujillo2008's measured average crease strains, 0.33 +/- 0.02 (cross-linker
+    series) and 0.33 +/- 0.01 (thickness series). Choices: (1) The gels are compressed equibiaxially, so
+    Eq. 7 is run with lambda_3 = lambda_1 at the measured onset, lambda_3 = 1 - 0.33 = 0.67 (added,
+    lam3_equibiaxial_trujillo_added). That takes the transverse stretch from the measurement itself, so the
+    test is whether the measured equibiaxial state lies on Eq. 7's threshold (eW = 1 - lambda_3). Its fixed
+    point lambda_3 = 0.5437^(2/3) = 0.666 is the alternative that gives Biot's equibiaxial value 0.334
+    exactly. Eq. 7 is Biot's linear wrinkling threshold of an incompressible half-space. The gels are
+    compressible and crease. trujillo2008 calls their agreement with Biot "surprising" for that reason
+    (its p. 4). (2) The point-by-point readings of Figs. 3(a) and 3(b) are not used. Their x axes are
+    cross-linker content and film thickness, which are not inputs of Eq. 7, and each point has its own
+    e_c, so it has its own lambda_3. trujillo2008's own biot_vs_crosslinker and biot_vs_thickness already
+    compare Biot's value with them. (3) Not used: trujillo2008's h/h0 = 2.0 +/- 0.1 at onset (and the Fig. 4
+    readings), because no model here gives a thickness ratio of a compressible gel. The free swelling ratios
+    of Fig. 2(b) are not used either, because no model here gives a swelling ratio. The film/substrate models
+    (the exact bilayer analysis and Eqs. 5-6) are not used, because the gels sit on a rigid base, not a
+    compliant substrate. The homogeneous limits of those models are plane-strain or uniaxial, not equibiaxial.
+    The 0.349 +/- 0.013 for swollen rubber is the authors' estimate from another work (origin estimated),
+    not their measurement. In the other direction, this record has no measurement, so trujillo2008's models
+    have nothing here to predict.
+  citation: {page: 4, printed_page: "031019-4", quote: "result for surface wrinkling bifurcation of a homogene-", where: Eq. 7}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_plane_strain_wavelength, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, fe_postbifurcation, wang2014/exp_wrinkling_fig7a, wang2014/exp_creasing_fig7a, wang2014/exp_delamination_fig7a, wang2014/adhesion_fig3_lp1, wang2014/adhesion_fig3_lp2, wang2014/adhesion_fig3_lp3, wang2014/tension_fig13a, wang2014/tension_fig13b, wang2014/tension_fig13c, wang2014/tension_fig13d, wang2014/mu_s_ecoflex, wang2014/mu_f_sylgard_range, wang2014/H_f_range]
+  text: >-
+    (Cross-validation against wang2014, which cites this paper as ref. 29; job 2026-11-18.) No validation of
+    this record's models against wang2014's measurements is entered. wang2014 uses this paper's plane-strain
+    bifurcation analysis for its wrinkling curves ("Following Cao and Hutchinson [29], we perform linear
+    stability analysis", its p. 3) and its period-doubling threshold mu_f/mu_s >= 10 (its p. 8), but it sets
+    both against its own computed and finite-element results, never against its experiments. Its
+    measurements are: the shear moduli of Ecoflex and Sylgard and the film thickness range (inputs, not
+    outcomes); the peel-test adhesion energies of Fig. 3; the uniaxial tension curves of Fig. 13; and the
+    observed initial mode (wrinkling, creasing or delaminated buckling) of each lambda_p = 2 experiment,
+    placed at its (Gamma/(mu_s H_f), mu_f/mu_s) on Fig. 7(a). This record's models give the wrinkling onset
+    strain, the critical wave number or wavelength over film thickness, and post-bifurcation strains. None
+    of wang2014's measured quantities is one of these. No onset strain, wavelength or post-bifurcation
+    strain was measured or printed for any experiment. No model here gives an adhesion energy or a
+    stress-stretch curve. An observed mode at a point is not a wrinkling strain. Deciding the mode at a
+    point would also need the crease threshold 0.35 and the delamination energies, which belong to
+    wang2014's own wrinkle_crease_boundary and finite-element analyses, not to models of this record.
+    Crossing them would test wang2014's diagram, which that record already sets against these points (its
+    q_fig7a_experiments_read). The other direction has nothing to test, because this record holds no
+    measurement. See wang2014/q_no_validation_cao2012.
+  citation: {page: 8, printed_page: "031019-8", quote: "The eigenvalue problem governing bifurcation is", where: "Eqs. A1-A10"}
+- id: q_no_validation_wang2015
+  kind: choice
+  about: [bilayer_plane_strain, bilayer_plane_strain_wavelength, bilayer_uniaxial, simple_formula_plane, simple_formula_uniaxial, biot_surface_eq7, fe_postbifurcation, ePD_ratio30, ePD_ratio186_pre1p3, eMR_ratio836_pre2, fig8_eF_read, fig8_ePD_read, fig11_eF_read, fig11_ePD_read, fig13_eMR_read, wang2015/crease_onset_measured, wang2015/fold_onset_measured, wang2015/pd_onset_measured, wang2015/ridge_onset_measured, wang2015/wrinkle_wavelength_fig5a, wang2015/fold_wavelength_fig5a, wang2015/pd_half_wavelength_fig5a, wang2015/ridge_wavelength_fig5a, wang2015/amplitude_fig5b_r3p6, wang2015/amplitude_fig5b_r9p8, wang2015/amplitude_fig5b_r14p8, wang2015/amplitude_fig5b_r9110, wang2015/mu_s_ecoflex, wang2015/mu_f_sylgard_min, wang2015/mu_f_sylgard_max]
+  text: >-
+    (Cross-validation against wang2015, which cites this paper as ref. 49; job 2026-11-18.) No validation of
+    this record's models against wang2015's measurements is entered. wang2015 cites this paper once (its
+    p. 5): the wavelength of wrinkles at initiation "can be calculated by linear stability analysis" (ref. 49),
+    for mu_f/mu_s above 1.3. It sets that against its own Eq. 8, which is a relation between models (wang2015
+    relations.yaml), and against none of its experiments. wang2015's measurements are: (1) The moduli of
+    Ecoflex and Sylgard. These are inputs, not outcomes. (2) The observed crease onset, eM ~0.36 at
+    mu_f/mu_s = 0.3 and 0.64. wang2015 places those films below 1.3, where the flat film creases first
+    (its Eq. 3, the energy threshold of hong2009). This record's runnable models give Biot's linear wrinkling
+    bifurcation (Eq. 7 and the exact bilayer analysis, whose figures start at mu_f/mu_s = 1). That is a
+    different quantity, the onset of a mode the films never reach. Unlike hong2009 (q_validation_hong2009),
+    wang2015 does not set a Biot or bilayer wrinkling strain against its crease onset. hong2009's own crease
+    criterion is already validated against this measurement (hong2009/val_eps_c_wang2015_crease_onset).
+    The measurement is printed with "~" in any case, so it could get no verdict. (3) The observed fold,
+    period-double and ridge onsets (~0.33, ≈ 0.32, ≈ 0.33). These are the quantities of this record's
+    finite element post-bifurcation results (eF, ePD, eMR), but fe_postbifurcation is not runnable. Its
+    printed and read values are at other conditions: mu_f/mu_s = 30, 186 and 836, with prestretches of 1,
+    1.3 and 2. wang2015's experiments are at 1.86-9.79 (fold), 14.77-130.74 (period-double) and
+    1.59 x 10^3-7.94 x 10^4 (ridge), with the substrate prestretch Lf/Ls not printed per sample. Setting the
+    two sets of strains side by side compares predicted data with measured data at different conditions. It is
+    left to the relation jobs. (4) The Fig. 5 wavelengths and amplitudes. These are divided by the initial
+    wrinkle wavelength and plotted against (1 - eM)/(1 - eC_wrinkle). No model here gives a ratio of
+    post-onset to initial wavelength or any amplitude. bilayer_plane_strain_wavelength gives lambda/h at
+    onset, but wang2015 prints no measured absolute wavelength or film-thickness ratio, so it has nothing to
+    predict there. In the other direction there is nothing to test, because this record holds no
+    measurement (figures.md).
+  citation: {page: 8, printed_page: "031019-8", quote: "The eigenvalue problem governing bifurcation is", where: "Eqs. A1-A10"}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [bilayer_uniaxial, simple_formula_uniaxial, biot_surface_eq7_uniaxial, jin2015/exp_wrinkle_7p5to1_text, jin2015/exp_wrinkle_7p5to1_fig6, jin2015/exp_wrinkle_7p5to1_video, jin2015/exp_wrinkle_10to1_text, jin2015/exp_wrinkle_10to1_video, jin2015/exp_crease_15to1_text, jin2015/exp_crease_15to1_fig6, jin2015/exp_crease_15to1_video, jin2015/exp_crease_10to1_text, jin2015/exp_crease_10to1_fig6, jin2015/exp_crease_10to1_video, jin2015/substrate_H_exp, jin2015/film_H_exp]
+  text: >-
+    (Cross-validation against jin2015, which cites this paper as ref. 48; job 2026-11-19.) No validation is
+    entered, in either direction. jin2015 cites this paper twice: for the relation between uniaxial and plane
+    strain critical strains, its Eq. 1 (p. 3, "Eq. (1) was also pointed out in Refs. [39,48,49]"), and for
+    ridges as a further bifurcation of stiff films (p. 8). Neither sets a model here against jin2015's
+    experiments. jin2015's measurements are onset strains for uniaxially compressed PDMS bilayers
+    (18-20 um films of 15:1, 10:1 and 7.5:1 base:crosslinker on a 30:1 substrate about 550 um thick).
+    (1) The wrinkle onsets of the 7.5:1 film (0.18 to 0.21; 0.21 in Fig. 6(d); 0.18 in Video 3) and of the
+    10:1 film (0.22 to 0.28; 0.22 in Video 2) are the quantity bilayer_uniaxial and simple_formula_uniaxial
+    give, eW under uniaxial stressing. The substrate there is not prestretched (the prestretch is in the
+    mounting layer), so lam01 = 1 would be right, and Hs/Hf near 30 is close to this paper's half-space.
+    But the other input, mu_f/mu_s, is printed in neither paper (jin2015/q_exp_moduli): jin2015 gives only
+    the mixing ratios. In the range where these strains lie, eW changes steeply with mu_f/mu_s (this paper's
+    Fig. 3), so the prediction would be set by an added modulus ratio, taken from literature that neither
+    paper cites. The validation would test that assumption, not the model, so it is not entered. If a later
+    record supplies measured shear moduli for these Sylgard 184 compositions, bilayer_uniaxial can be run
+    at them. (2) The crease onsets (0.37, 0.36 for 15:1; 0.28, 0.29 for 10:1) are not a quantity of any
+    runnable model here. This paper quotes the crease threshold 0.35 (p. 2) but builds no model on it.
+    biot_surface_eq7_uniaxial gives the wrinkling strain of a homogeneous half-space, not the onset of
+    creases in a bilayer, and jin2015 attributes those strains to channeling at Maxwell strains from its own
+    finite element simulations. (3) The thicknesses are conditions, not outcomes. In the other direction
+    this record holds no measurement (figures.md), so no jin2015 model has anything here to predict.
+  citation: {page: 2, printed_page: "031019-2", quote: "The plot of eW as a function of", where: text}
+- id: q_no_validation_cao2011
+  kind: choice
+  about: [biot_surface_eq7, bilayer_plane_strain, fe_postbifurcation]
+  text: >-
+    (Cross-validation against cao2011, cited here as ref. 5; job 2026-11-19.) No validation is entered, in
+    either direction. Neither record holds a measurement. Every plotted value in this paper is a prediction,
+    from the exact bifurcation analysis or the finite element model (figures.md), and every marker in cao2011
+    is the authors' finite element result (cao2011 figures.md). Ref. 5 is cited for the imperfection
+    sensitivity of half-space wrinkling, which leaves eW = 0.456 unreached and favours creases above 0.35
+    (p. 2), and for the Lagrangian formulation (p. 7). Neither citation sets one paper's model against
+    measured data. The shared half-space threshold (Eq. 7 at lambda_3 = 1 here, eps_W in cao2011) is a
+    relation between models, not a validation. See cao2011/q_no_validation_cao2012.
+  citation: {page: 2, printed_page: "031019-2", quote: "surface wrinkling of a homogeneous half-space is highly", where: text}

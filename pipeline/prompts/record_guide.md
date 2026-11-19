@@ -178,6 +178,20 @@ def symbolic():   # optional but wanted for closed-form models: same names, same
   (`from_words: true`). If it cannot be made runnable, set `runnable: false`
   with `not_runnable_reason`, add an open question about it, and do not
   write model.py.
+- **A scaling law printed without a prefactor** ("~", "of order", "scales
+  as") is a model with `prefactor: unknown`; write its code with a prefactor
+  of 1 and never invent one. The build then judges its values on their shape
+  only: against one value it reports the prefactor the value implies, against
+  several it fits the one constant. Compare such a law with measurements as
+  usual; do not write a question explaining away a "not reproduced" from a
+  prefactor of 1, because there will be none.
+- **A model you build because the paper does not give its analysis** (cited
+  as unpublished or "to be published", solved numerically without the
+  method, or a simpler stand-in you substitute, such as one tube for a
+  network) is marked `reconstructed: <why the paper's own analysis cannot be
+  used>`. Its verdicts are reported apart from the paper's, so a miss is not
+  counted against the paper. A model the paper states in words is not
+  reconstructed: translate it with `from_words: true` as above.
 - Simulations: make every numerical choice a setting (dt, n_samples, seed,
   t_max) set to the paper's values, mark `stochastic: true` if random, use
   the seed so a run is deterministic, and keep one call under about a

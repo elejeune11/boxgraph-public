@@ -1,0 +1,177 @@
+- id: q_fe_not_rerun
+  kind: unstated_model
+  about: [fig3_energy_curve, eps_c_printed, crease_zero_fig3]
+  text: >
+    The energy difference f(epsilon) of Fig. 3 comes from ABAQUS 6.7.1 calculations whose mesh, element type,
+    contact treatment and the prescribed rotation of segment OA are not given in enough detail to rerun them.
+    The record checks only that the printed critical strain follows from the plotted curve, not the curve itself.
+  citation: {page: 1, quote: "We analyze the inhomogeneous deformation of the", where: text}
+- id: q_zero_extrapolation
+  kind: choice
+  about: [crease_zero_fig3, run_fig3_zero]
+  text: >
+    The curve of Fig. 3 stops near epsilon = 0.351 with f still about 0.02 above zero ('The curve on Fig. 3 stops at
+    the critical point'). The zero f(epsilon_c) = 0 is taken here by a straight line through the last two read
+    points (0.34 and 0.35); the paper does not say how it located the zero. A curve steepening towards the end
+    would put the zero slightly lower than a straight line does.
+- id: q_ratio_rounding
+  kind: reading
+  about: [ratio_crease_printed, ratio_biot_printed, eta_c_printed, eta_biot_printed]
+  text: >
+    Eqs. 5 and 6 follow from 1/(1 - epsilon)^2 with the rounded strains 0.35 and 0.46 (2.37 and 3.43), printed
+    to two digits as 2.4 and 3.4; the same digits carry over to eta_c and eta_biot because lambda_3/lambda_1 = eta
+    for a bonded gel. The printed 0.46 is Biot's plane-strain threshold rounded (biot1963 prints lambda = 0.543,
+    i.e. 1 - lambda = 0.457).
+- id: q_biot_strain_convention
+  kind: reading
+  about: [eps_biot_printed]
+  text: >
+    epsilon_biot = 0.46 is the nominal strain 1 - lambda_1 under plane strain, matching Biot's plane-strain critical
+    stretch about 0.544 (biot1963), not his uniaxial value 0.444. The relation to biot1963 is left to the
+    cross-paper relation job.
+- id: q_eta_exp_sources
+  kind: reading
+  about: [eta_exp_printed, cmp_eta_crease_exp, cmp_eta_biot_exp]
+  text: >
+    The measured range eta_exp = 2.0-3.7 pools Refs. 4-6 without giving the individual values, the gels or
+    whether eta is a thickness or a volume ratio in each. Both the crease threshold 2.4 and Biot's 3.4 lie inside
+    the range, so this range alone does not discriminate between the two criteria; the paper notes the variation
+    needs further study and that solvent migration is ignored.
+- id: q_eps_exp_two_sources
+  kind: reading
+  about: [eps_exp_printed]
+  text: >
+    The experimental 0.35 is attributed jointly to Refs. 1 and 2 (different materials); the record gives it one
+    source (ref-1) because a datum takes a single from_source.
+- id: q_eq1_lambda2_cubed
+  kind: possible_error
+  about: [fig3_energy_curve, eps_c_printed]
+  text: >
+    Eq. 1 is printed W = mu/2 (lambda_1^2 + lambda_2^3 + lambda_3^2 - 3), with the second stretch cubed. The
+    neo-Hookean energy (Ref. 13) has lambda_2^2, and the paper's own Eq. 4, obtained by substituting Eq. 3 into
+    Eq. 1, carries mu/2 (lambda_2^2 - 3), which follows only from lambda_2^2. The exponent 3 is most likely a
+    misprint; it enters no run here (the finite-element model is not rerun, and lambda_2 = 1 in plane strain),
+    so no corrected variant is written.
+  citation: {page: 1, where: "Eq. 1", quote: "Hookean model with the free-energy density"}
+- id: q_singh_pipkin_argument
+  kind: unstated_model
+  about: [eps_c_printed, cmp_epsc_exp]
+  text: >
+    The paper argues that the agreement of 0.35 with experiment "is not fortuitous", citing the folded state of
+    Singh and Pipkin (Ref. 14) with stretches 1/sqrt(2) radially and sqrt(2) circumferentially. It does not say
+    how these stretches relate to the critical strain 0.35 (1 - 1/sqrt(2) = 0.29 is not it), so the argument
+    supports only that the strains in a crease are moderate and is not a check on the number.
+  citation: {page: 2, where: text, quote: "The agreement is not fortuitous"}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [eps_exp_printed, eta_exp_printed, gel_critical_swelling, gps_critical_ratio, plane_strain_stretch, tallinen2015/lambda_s_printed]
+  text: >-
+    No validation between this record and tallinen2015 is entered, in either direction (cross-validation
+    job 2026-11-18, asked for by the corpus list). Neither paper cites the other. tallinen2015 holds no
+    measurement: its values are model results, finite-element points and inputs taken from other works
+    (lambda_s = 0.647 from Hohlfeld and Mahadevan, the brain modulus ratio from Xu et al.), so no model
+    here has anything there to predict. The measurements here (the critical strain 0.35 and the swelling
+    ratio range 2.0-3.7) are not predicted by any tallinen2015 model, whose outputs are growth ratios,
+    modulus ratios and wavelength ratios of a layer on a half-space (see tallinen2015/q_no_validation_hong2009).
+    How this paper's crease threshold 0.35 (lambda = 0.65) relates to tallinen2015's lambda_s = 0.647 is
+    model against model, for the relation jobs.
+  citation: {page: 1, quote: "exceeds the experimental value", where: text}
+- id: q_validation_trujillo2008
+  kind: unexplained_difference
+  about: [gel_critical_swelling, eta_c_printed, eta_biot_printed, eta_exp_printed, trujillo2008/hh0_onset_measured, trujillo2008/ec_mean_modulus_series, trujillo2008/fig3a_ec_points, trujillo2008/fig4_flat_points]
+  text: >-
+    (Cross-validation against trujillo2008, job 2026-11-18.) The bonded-gel criterion (Eqs. 5, 6 with
+    lambda_1 = lambda_2 = eta^(-1/3), lambda_3 = eta^(2/3)) is validated against trujillo2008's onset
+    thickness ratio h/h0 = 2.0 +/- 0.1 (1 mm gels, 0.4 mol% bis(acrylamide)); both the crease value (about
+    2.37) and Biot's (about 3.43) fall outside it, the crease value closer. The paper itself pools ref. 6 into
+    eta_exp = 2.0-3.7 and calls for study of "the consequence of solvent migration". A likely source is the
+    incompressibility the criterion assumes: it identifies eta with the cube of the free linear swelling, but
+    trujillo2008's gels are compressible (Poisson's ratio ~0.3). Its measured onset strain e_c = 0.33 from free
+    swelling would give (1/(1 - 0.33))^3, about 3.3, under this paper's kinematics, while its measured onset
+    h/h0 is 2.0 (see trujillo2008/q_thickness_reconstruction). Measurements not used: trujillo2008's e_c
+    values (the means 0.33, Fig. 3(a), (b)) are an equibiaxial effective strain 1 - l0/l from free swelling,
+    and no model here outputs that quantity (gps_uniaxial_stretch is for uniaxial compression,
+    plane_strain_stretch for plane strain); converting eta_c to it would need a new model, not a
+    validation. The Fig. 4 points (h/h0 of flat and creased gels against sodium acrylate content) and the
+    Fig. 2 swelling data are not onset values; the model predicts only the onset, which is entered.
+    trujillo2008's ec_southern_thomas and Table 1 moduli are its own estimates, not measurements.
+  citation: {page: 3, quote: "Several sets of experimen", where: text}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [crease_zero_fig3, gel_critical_swelling, gel_swelling_from_ratio, gps_critical_ratio, gps_uniaxial_stretch, plane_strain_stretch, wang2014/exp_wrinkling_fig7a, wang2014/exp_creasing_fig7a, wang2014/exp_delamination_fig7a, wang2014/adhesion_fig3_lp2, wang2014/tension_fig13a, wang2014/mu_s_ecoflex, wang2014/eps_crease]
+  text: >-
+    (Cross-validation against wang2014, which cites this paper as ref. 55; job 2026-11-18.) No validation
+    entered from this record's models to wang2014's measurements. This record's models give the plane-strain
+    crease strain from the Fig. 3 energy curve, the critical stretch and stretch ratio, the uniaxial critical
+    stretch and the bonded-gel swelling ratio. wang2014 measures none of these: its measured values are the
+    shear moduli of Ecoflex and Sylgard and a film thickness range (inputs), peel-test adhesion energies
+    (Fig. 3), uniaxial tension curves (Fig. 13) and the categorical initial modes of its film-substrate
+    experiments on the lambda_p = 2 phase diagram (Fig. 7(a)), whose datum is each experiment's modulus
+    ratio. It reports no measured onset strain of creasing; it takes this paper's 0.35 as a datum
+    (wang2014/eps_crease) into its own wrinkling/creasing boundary, which is model against model for the
+    relation jobs. Whether the creasing points of Fig. 7(a) fall below that boundary tests wang2014's
+    boundary, not a value this paper's models produce. For the other direction see
+    wang2014/q_no_validation_hong2009.
+  citation: {page: 3, printed_page: "111901-3", quote: "compressed by 35%. This critical strain is below that", where: text}
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [eps_exp_printed, eta_exp_printed, eps_biot_printed, crease_zero_fig3, gel_critical_swelling, biot1963/crit_stretch_plane]
+  text: >-
+    No validation between this record and biot1963 (ref. 7) is entered, in either direction
+    (cross-validation job 2026-11-18, asked for by the corpus list). biot1963 has no measurement (its
+    Table I is computed from its own equations), so this record's models have nothing there to predict.
+    In the other direction, the paper contrasts Biot's threshold with experiment ("exceeds the experimental
+    value, epsilon_exp = 0.35", p. 1), but biot1963's models output a critical stretch, not the nominal
+    strain measured here, and nothing there gives the bonded-gel swelling ratio eta_exp; see
+    biot1963/q_no_validation_hong2009. The paper's own comparison is already in this record through
+    eps_biot_printed (Biot's value as cited); how 0.46 relates to biot1963's printed lambda = 0.543 is model
+    against model, for the relation jobs (q_biot_strain_convention).
+  citation: {page: 1, quote: "exceeds the experimental value", where: text}
+- id: q_no_validation_cao2012
+  kind: choice
+  about: [crease_zero_fig3, gel_critical_swelling, gel_swelling_from_ratio, gps_critical_ratio, gps_uniaxial_stretch, plane_strain_stretch, eps_exp_printed, cao2012/fe_postbifurcation]
+  text: >-
+    (Cross-validation against cao2012, which cites this paper as ref. 7; job 2026-11-18.) No validation is
+    entered from this record's models. cao2012 holds no measurement: every datum is reported, or predicted by
+    its exact bifurcation analysis or its finite-element simulations (cao2012 figures.md: "The paper has no
+    measurements"). Its crease threshold e = 0.35 is this paper's value, quoted back. Its finite-element onsets
+    of period doubling, folds and ridges in film/substrate bilayers are predictions, and no model here gives
+    them. In the other direction, cao2012's Eq. 7 (Biot's plane-strain threshold, 0.456) is validated against
+    eps_exp_printed (cao2012/val_eq7_plane_hong2009_eps_exp). That is the comparison this paper makes on p. 1.
+  citation: {page: 1, quote: "exceeds the experimental value", where: text}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [crease_zero_fig3, gps_uniaxial_stretch, gps_critical_strain, gps_equivalent_plane_strain, gel_critical_swelling, eps_exp_printed, eta_exp_printed, jin2015/exp_crease_15to1_text, jin2015/exp_crease_15to1_fig6, jin2015/exp_crease_15to1_video, jin2015/exp_crease_10to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_wrinkle_7p5to1_text]
+  text: >-
+    (Cross-validation against jin2015, which cites this paper as ref. 39; job 2026-11-19.) No validation is
+    entered from this record's models. jin2015 measures the onset strains of creases (15:1 and 10:1 films)
+    and wrinkles (10:1 and 7.5:1 films) of PDMS bilayers on a 30:1 substrate under uniaxial compression, as
+    nominal strains 1 - lambda. (1) No model here outputs that quantity. crease_zero_fig3 gives the
+    plane-strain strain, a different loading (jin2015 itself gives 0.35 plane strain and 0.44 uniaxial for
+    the same criterion). gps_uniaxial_stretch gives the uniaxial critical stretch, not the strain, and a
+    validation cannot convert one into the other. gps_critical_strain needs the transverse stretch lambda_2 as
+    a fixed input. Under uniaxial stress that stretch depends on the critical strain itself. Setting it from
+    the measured strain would build the measurement into the input, and setting it from the model's own
+    critical stretch would mean writing a computed number. (2) The measurement is not what the criterion
+    predicts even in jin2015's own account. The 15:1 creases are subcritical creases channeling from defects
+    (0.37 in the text and Fig. 6(b), 0.36 for Video 1), which jin2015 places between a Maxwell strain and the
+    snapping-forward strain e_F = 0.44 (pp. 6-7). The 10:1 creases (0.28) form from wrinkles. Both differ from
+    the onset on a flat homogeneous surface that this paper computes, and the films' moduli are not printed
+    (jin2015/q_exp_moduli). The wrinkle onsets are bilayer wrinkling, which no model here describes. The
+    comparison of 0.44 with this paper's criterion is model against model, for the relation jobs
+    (jin2015/eq1_crease_uniaxial_to_plane, described_from this paper). For the other direction see
+    jin2015/q_no_validation_hong2009.
+  citation: {page: 3, printed_page: "111901-3", quote: "are valid under the generalized plane", where: text}
+- id: q_no_validation_cao2011
+  kind: choice
+  about: [crease_zero_fig3, gps_critical_ratio, gps_critical_strain, gel_critical_swelling, eps_exp_printed, cao2011/fig5_eps_star_fe, cao2011/fig8_lc00144]
+  text: >-
+    (Cross-validation against cao2011, which cites this paper for its crease threshold, Eq. 1.2 there; job
+    2026-11-19.) No validation is entered from this record's models: cao2011 holds no measurement. Its
+    plotted markers are the authors' ABAQUS results (cao2011 figures.md, origin predicted), and its only
+    reference to experiment, Cai et al. (submitted), gives no value. Its eps_C = 0.35 is this paper's
+    threshold quoted back, and the FE strains at which imperfect wrinkles collapse into creases are
+    predictions; comparing them with crease_zero_fig3 is model against model, for the relation jobs. In the
+    other direction, cao2011's crease_eq12 and biot_eq28 are validated against eps_exp_printed
+    (cao2011/val_eps_C_hong2009_exp, cao2011/val_eps_W_hong2009_exp; see cao2011/q_validation_hong2009).
+  citation: {page: 1, printed_page: "111901-1", quote: "exceeds the experimental value", where: text}

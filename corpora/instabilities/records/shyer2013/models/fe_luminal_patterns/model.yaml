@@ -1,0 +1,33 @@
+id: fe_luminal_patterns
+name: custom finite-element energy minimization of growing endoderm and mesenchyme constrained by muscle
+role: model
+stated: {page: 12, quote: "we construct a finite element model that", where: "SM, computational model of luminal patterns"}
+equation: "minimize the elastic energy with W = (mu/2)[Tr(F F^T) J^(-2/3) - 3] + K(J - log J - 1), K = 3 mu, F = A G^-1 (stress-free tetrahedron G grown as measured), self-contact penalty K a^2 [(h - d)/h]^2 for d < h = a/3; damped explicit dynamics v(t + dt) = v(t) + (f - gamma v) dt / m, x(t + dt) = x(t) + v(t + dt) dt"
+inputs:
+  mu_ratio: {quantity: modulus_ratio, unit: dimensionless}
+  hm_over_he: {quantity: thickness_ratio_mesenchyme_to_endoderm, unit: dimensionless}
+  g_w_e: {quantity: stressfree_over_constrained_circumferential, unit: dimensionless}
+  g_w_m: {quantity: stressfree_over_constrained_circumferential, unit: dimensionless}
+outputs:
+  spacing: {quantity: zigzag_spacing_over_composite_thickness, unit: dimensionless, description: "energy-minimizing zigzag period W = L over he + hm (planar zigzag simulation)"}
+settings:
+  K_over_mu: 3
+  dt: "0.1 a / sqrt(K)"
+  node_mass: "a^3"
+  damping_gamma: "10 m"
+  contact_range: "a/3"
+  tetrahedra_per_rectangle: 5
+  mesh_chick_tube: "400 x 160 x 24"
+  mesh_mouse_tube: "320 x 160 x 30"
+  mesh_zigzag_planar: "120 x 120 x 32"
+  tube_length: "1.25 D"
+  run_direction_tubes: "t from 1 to 0 (reverse of real time)"
+runnable: false
+not_runnable_reason: >
+  A custom three-dimensional explicit finite-element code with self-contact (SM pp. 11-13), not
+  published. The printed description (element, constitutive law, contact penalty, time step,
+  damping) leaves out the initial perturbations, the equilibration criterion, the growth rate per
+  step and how the domain size was optimized, and the paper's meshes (up to 400 x 160 x 24
+  rectangles, five tetrahedra each) are far beyond a run of about a minute. Its outputs (fold
+  spacings, compression ratios and circumferences of Figs. 4B and 6C, the zigzag period) are
+  therefore recorded without a run.

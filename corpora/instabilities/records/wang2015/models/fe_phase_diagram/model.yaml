@@ -1,0 +1,19 @@
+id: fe_phase_diagram
+name: plane strain finite element phase diagram by the Maxwell criterion (Eqs. 1, 2, 5, 6; ABAQUS)
+role: model
+stated: {page: 3, printed_page: "3", quote: "A plane-strain finite element model is developed to calculate", where: "Eqs. 1-2, 5-6 and Methods"}
+equation: "Pi = U_f + U_s + Gamma D (1); phase boundaries where Pi_i = Pi_j (2); delaminated-buckle from d(Pi_buckle/lambda)/dD = 0 (5) and d(Pi_buckle/lambda)/d lambda = 0 (6); incompressible neo-Hookean film and substrate, CPE6MH elements, substrate thicker than 20 film thicknesses, force perturbations and mesh defects as imperfections"
+inputs:
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless}
+  Gamma_norm: {quantity: normalized_adhesion_energy, unit: dimensionless}
+outputs:
+  eC_crease: {quantity: crease_onset_mismatch_strain, unit: dimensionless}
+  eC_wrinkle: {quantity: wrinkle_onset_mismatch_strain, unit: dimensionless}
+  e_fold: {quantity: fold_onset_mismatch_strain, unit: dimensionless}
+  e_pd: {quantity: period_double_onset_mismatch_strain, unit: dimensionless}
+  e_ridge: {quantity: ridge_onset_mismatch_strain, unit: dimensionless}
+  e_crease_fold: {quantity: crease_to_fold_mismatch_strain, unit: dimensionless}
+settings: {element: CPE6MH, substrate_to_film_thickness: "> 20", software: "ABAQUS 10.1"}
+runnable: false
+not_runnable_reason: "large-deformation finite element energies of each pattern in ABAQUS with imperfections, delaminated lengths and wavelengths prescribed and minimized; mesh, imperfection sizes, model width and the energy comparison procedure are in the Supplementary Information, which is not included, and a re-implementation is beyond a reading of this paper. Its printed boundaries are recorded as predicted data (Eq. 3, the triple point, and the boundaries on p. 5) and compared with the observed onsets and with Eq. 4"
+stochastic: false

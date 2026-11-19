@@ -1,0 +1,64 @@
+- id: run_cubic
+  model: char_cubic
+  inputs: {}
+  outputs: {zeta: zeta_cubic_pred}
+- id: run_k_from_zeta
+  model: decay_k_eq28
+  inputs: {zeta: zeta_crit_printed}
+  outputs: {k: k_eq28_pred}
+- id: run_lam_plane
+  model: crit_stretch_plane
+  inputs: {zeta: zeta_crit_printed}
+  outputs: {lam: lam_plane_pred}
+- id: run_P_plane_printed_lam
+  model: plane_compression
+  inputs: {lam: lambda_plane_printed}
+  outputs: {P: P_plane_pred}
+  note: "From the printed, rounded critical stretch 0.543."
+- id: run_P_plane_chain
+  model: plane_compression
+  inputs: {lam: lam_plane_pred}
+  outputs: {P: P_plane_chain_pred}
+  note: "From the critical stretch computed from zeta = 0.839 (unrounded)."
+- id: run_k_plane
+  model: k_plane_eq411
+  inputs: {lam: lambda_plane_printed}
+  outputs: {k: k_plane_pred}
+- id: run_lam_uni
+  model: crit_stretch_uniaxial
+  inputs: {zeta: zeta_crit_printed}
+  outputs: {lam: lam_uni_pred}
+- id: run_P_uni_printed_lam
+  model: uniaxial_compression
+  inputs: {lam: lambda_uni_printed}
+  outputs: {P: P_uni_pred}
+  note: "From the printed, rounded critical stretch 0.444."
+- id: run_P_uni_chain
+  model: uniaxial_compression
+  inputs: {lam: lam_uni_pred}
+  outputs: {P: P_uni_chain_pred}
+  note: "From the critical stretch computed from zeta = 0.839 (unrounded)."
+- id: run_k_uni
+  model: k_uniaxial
+  inputs: {lam: lambda_uni_printed}
+  outputs: {k: k_uni_pred}
+- id: run_table1_mu
+  model: incremental_modulus_plane
+  inputs: {}
+  sweep: {lam: table1_mu}
+  outputs: {mu: table1_mu_pred}
+- id: run_table1_rigidity
+  model: surface_rigidity_plane
+  inputs: {}
+  sweep: {lam: table1_rigidity}
+  outputs: {rigidity: table1_rigidity_pred}
+- id: run_phi_crit
+  model: phi_eq48
+  inputs: {zeta: zeta_crit_printed}
+  outputs: {phi: phi_crit_pred}
+  note: "Eq. 4.8 at the printed root 0.839 of the cubic."
+- id: run_phi_cubic
+  model: phi_eq48
+  inputs: {zeta: zeta_cubic_pred}
+  outputs: {phi: phi_cubic_pred}
+  note: "Eq. 4.8 at the root computed from Eq. 2.9: tests the stated equivalence of phi = 0 and the cubic."

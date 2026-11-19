@@ -1,0 +1,257 @@
+- id: q_eq313_prefactor
+  kind: possible_error
+  about: [imperfection_energy_eq313, imperfection_energy_eq313_r2m1, K_imperfection_printed]
+  text: >
+    Eq. 3.13 prints the prefactor -mu lambda_1 l (r - 1)^2. With the modes of Eq. 2.10 this gives Delta Phi
+    proportional to l^3 and a constant pi (r-1)^3/(r+1) = 9.70, not the 17.8405 of Eq. 4.4. The stress quoted
+    in the same sentence, tau0_11 = -mu (r^2 - 1), gives the prefactor -mu lambda_1 (r^2 - 1) and the
+    constant pi (r - 1)^2, which is what Eq. 4.4 uses (variant imperfection_energy_eq313_r2m1).
+  citation: {page: 9, quote: "the lowest order contribution of the imperfection to F̂ is", where: "Eq. 3.13"}
+- id: q_last_digits_A_K
+  kind: unexplained_difference
+  about: [A_printed, K_imperfection_printed, quadratic_coefficient_eq38, imperfection_energy_eq313_r2m1]
+  text: >
+    The integral of Eq. 3.8 with the modes of Eq. 2.9 gives A = 9.3437 with the printed r = 3.3830 (9.3436 with
+    the exact root of Eq. 2.8), against the printed 9.3438; pi (r - 1)^2 gives 17.8401 (17.8398 with the exact
+    root) against the printed 17.8405. The differences are in the fifth or sixth significant digit, a few
+    units in the last printed digit (within the build's tolerance, so both are counted reproduced); the
+    b_ijm agree to all printed digits. The paper does not say how the integrals were evaluated.
+- id: q_table1_N5_N6
+  kind: unexplained_difference
+  about: [cstar_table1_max_strain, nmode_cstar_eq46]
+  text: >
+    Solving Eq. 4.6 with the printed b_ijm and c for the minimum stretch on the path reproduces Table 1 row (i)
+    for N = 2, 3, 4 (1.7534, 2.0770, 2.2263) but gives 2.3098 for N = 5 and 2.3618 for N = 6 against the
+    printed 2.305 and 2.358, about 0.2% higher. The paper says only that 'a standard numerical iterative
+    algorithm' was used (p. 105).
+- id: q_local_criterion_unstated
+  kind: unstated_model
+  about: [nmode_cstar_local, cstar_table1_local_strain]
+  text: >
+    The calculation of Table 1 row (ii), the overall stretch at which the local strain at the deepest surface
+    point reaches eps_W, is not given (p. 111). The reconstruction takes the local stretch to lowest order as
+    lambda + U1,1(l/2, 0); it gives 2.1325, 2.2653, 2.3361, 2.3795, 2.4085 for N = 2-6 against the printed
+    2.133, 2.227, 2.336, 2.379, 2.408: all but N = 3 agree, so the reconstruction is probably close to the
+    authors' and the N = 3 entry may be a misprint or a different branch.
+- id: q_fig2_caption_lambdaC
+  kind: possible_error
+  about: [two_mode_cstar_eq49]
+  text: >
+    The caption of Fig. 2 gives the imperfection as lambda_C^2 xibar_1 = +-0.0005, while the abscissa of Fig. 4
+    and the scaling of Eqs. 4.6-4.9 use lambda_W^2 xibar_1. By eye the limit point lambda* in Fig. 2 lies near
+    lambda - lambda_W = 0.04, which Eq. 4.9 gives for lambda_W^2 xibar_1 = 0.0005 (0.039) but not for
+    lambda_C^2 xibar_1 = 0.0005 (0.033); the subscript C is probably meant to be W. Not read by code.
+  citation: {page: 11, quote: "for a half-space with slight initial surface undulation", where: "Fig. 2 caption"}
+- id: q_local_strain_definition
+  kind: unstated_input
+  about: [local_strain_at_instability]
+  text: >
+    The local strain eps_A = 1 - lambda_A at the deepest point of the finite element wrinkle is not defined
+    beyond 'local compressive strain parallel to the surface' (p. 109): whether lambda_A is measured from the
+    undeformed (imperfect) surface and how it is extracted from the elements is not stated.
+- id: q_fig2_reading_lambdaW
+  kind: possible_error
+  about: [q_fig2_caption_lambdaC, s_fig2_pos, s_fig2_neg, fig2a_imperfect_inner_pos_read, fig2a_imperfect_outer_pos_read, two_mode_imperfect_eq47]
+  text: >
+    The calibrated reading of Fig. 2 settles q_fig2_caption_lambdaC. With the printed b112 and c, Eq. 4.7 with
+    lambda_W^2 xibar_1 = 0.0005 gives the inner arm 0.0102, 0.0082, 0.0048 at lambda - lambda_W = 0.05, 0.06,
+    0.1 and the outer arm 0.0343, 0.0438, 0.0782; the figure reads 0.0096, 0.0078, 0.0051 and 0.0351, 0.0441,
+    0.0784. The caption read literally (lambda_C^2 xibar_1 = 0.0005, i.e. lambda_W^2 xibar_1 = 0.00035) gives
+    0.0069, 0.0056, 0.0033 and 0.0365, 0.0453, 0.0789, further from the reading. The curves were drawn for
+    lambda_W^2 xibar_1 = +-0.0005; the subscript C in the caption is probably a misprint for W.
+  citation: {page: 11, quote: "for a half-space with slight initial surface undulation", where: "Fig. 2 and caption"}
+- id: q_fig5_asymptotic_range
+  kind: overstated_claim
+  about: [fig5_eps_star_fe_read, nmode_asymptotic_strain, cmp_fig5_asymptotic_vs_fe]
+  text: >
+    The text says the numerical results 'confirm the accuracy of asymptotic result ... for reductions in overall
+    strains larger than 0.1' (p. 109). Read from Fig. 5, the FE eps* and the 6-mode asymptotic line agree to
+    within about 0.002 for xibar_1 <= 0.005 (reductions eps_W - eps* below about 0.09), but the FE values lie
+    above the line by about 0.008, 0.012, 0.016, 0.020 and 0.028 at xibar_1 = 0.008, 0.010, 0.015, 0.020 and
+    0.025 (reductions 0.11-0.18). The agreement holds for reductions up to about 0.1, not larger ones;
+    'larger' may be a slip for 'smaller' or 'up to'.
+  citation: {page: 16, quote: "for reductions in overall strains larger than 0.1", where: text}
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [biot_eq28, crease_eq12, nmode_asymptotic_strain, local_criterion_words]
+  text: >-
+    No validation between this record and biot1963 is entered, in either direction (cross-validation
+    job 2026-11-19). Neither paper holds a measurement: this paper's plotted markers are the authors'
+    finite element results (figures.md, origin predicted), and its only reference to experiment, Cai
+    et al. (submitted), gives no value; biot1963's Table I is computed from its own Eqs. 3.25 and 4.10.
+    The agreement of biot_eq28 (eps_W = 0.456) with Biot's critical stretch is model against model, for
+    the relation jobs.
+  citation: {page: 18, quote: "compared with experimental observations by Cai et al"}
+- id: q_no_validation_cao2012
+  kind: choice
+  about: [biot_eq28, crease_eq12, nmode_asymptotic_strain, local_criterion_words]
+  text: >-
+    No validation between this record and cao2012 (its companion, which cites this paper as ref. 5) is
+    entered, in either direction (cross-validation job 2026-11-19). Neither paper holds a measurement. This
+    paper's plotted markers are the authors' own finite element results (figures.md, origin predicted), and
+    its only reference to experiment, Cai et al. (submitted), gives no value. cao2012's plotted values are
+    likewise its own exact-analysis and finite element predictions (cao2012 figures.md), and it says that the
+    mountain ridge mode has no reported experimental observations (its p. 7). cao2012 cites this paper for
+    the imperfection sensitivity of half-space wrinkling and the crease threshold of 0.35 (its p. 2), and for
+    the Lagrangian formulation (its p. 7). Those are statements about models, not predictions of a
+    measurement. The agreement of eps_W = 0.456 here with cao2012's Eq. 7 in plane strain is model
+    against model, for the relation jobs. See cao2012/q_no_validation_cao2011.
+  citation: {page: 18, quote: "compared with experimental observations by Cai et al"}
+- id: q_no_validation_diab2013
+  kind: choice
+  about: [biot_eq28, crease_eq12, local_criterion_words, nmode_asymptotic_strain, diab2013/gent_cho_crease_strain, diab2013/crease_tip_strain_fem]
+  text: >-
+    No validation between this record and diab2013 (which cites this paper as its ref. 10) is entered, in
+    either direction (cross-validation job 2026-11-19; pair chosen from the citation). Neither record holds
+    a measurement of its own: this paper's plotted markers are the authors' finite element results
+    (figures.md, origin predicted), and diab2013's values are its Eq. 2.8 and FEM results. diab2013's one
+    experimental value, Gent & Cho's crease strain 0.28-0.42, is reported from its ref. 1 (origin reported),
+    measured on rubber strips compressed by bending, a strain-gradient loading that no model here (a
+    homogeneously compressed half-space) describes, and given as a range over specimens; setting crease_eq12
+    (0.35) beside it is the cited work's validation, for a record of Gent & Cho. diab2013 cites this paper
+    for the imperfection sensitivity of creasing (its p. 2) and for the FEM observation that the crease-tip
+    strain reaches the Biot strain (its p. 12): diab2013's crease_tip_strain_fem (0.456) against this
+    paper's eps_A = eps_W criterion and Fig. 5/9 FE eps_A is finite elements against finite elements, for
+    the relation jobs. See diab2013/q_no_validation_cao2011.
+  citation: {page: 18, quote: "compared with experimental observations by Cai et al"}
+- id: q_validation_hong2009
+  kind: choice
+  about: [crease_eq12, biot_eq28, hong2009/eps_exp_printed, hong2009/eta_exp_printed]
+  text: >-
+    (Cross-validation against hong2009, cited here for Eq. 1.2; job 2026-11-19.) Two validations are entered
+    against hong2009's measured crease onset in bent elastomer blocks, epsilon_exp = 0.35: crease_eq12
+    (eps_C in plane strain) and biot_eq28 (eps_W in plane strain), the two thresholds hong2009 itself sets
+    against that measurement (p. 1). This is a choice that differs from q_no_validation_diab2013, which
+    left Gent & Cho's range 0.28-0.42 (as diab2013 reports it) unused because bending is a strain-gradient
+    loading; here the measurement is held by hong2009, which makes the half-space comparison itself, so it
+    is entered with that difference stated in conditions_ok. The 0.42 in Eq. 1.2 comes from hong2009's
+    finite element energy comparison, not from a fit to the experiments, so the crease validation is a test,
+    not a fit. Mapping hong2009's critical_strain_plane to wrinkling_strain follows hong2009's definition of
+    that quantity (the onset of either instability) and cao2012/val_eq7_plane_hong2009_eps_exp; a reader
+    who holds that a crease onset can only be set against a crease criterion would drop
+    val_eps_W_hong2009_exp. Not used: hong2009's swelling ratio eta_exp = 2.0-3.7 of gels bonded to a
+    rigid substrate. No model here gives eta: crease_eq12 and biot_eq28 hold lambda_1 lambda_2 lambda_3 = 1
+    from an unswollen reference, and a swelling ratio needs hong2009's mapping from the dry state
+    (gel_critical_swelling), which this paper does not state. This paper has no measurements of its own
+    (figures.md), so no hong2009 model is validated against it (hong2009/q_no_validation_cao2011).
+  citation: {page: 2, printed_page: "95", quote: "a crease is energetically favourable for compression in the fundamental state exceeding", where: "Eq. 1.2"}
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [biot_eq28, crease_eq12, nmode_asymptotic_strain, local_criterion_words, huang2005/thick_substrate_eq17, huang2005/isotropic_critical_strain, huang2005/sinusoidal_finite_substrate]
+  text: >-
+    No validation between this record and huang2005 is entered, in either direction (cross-validation job
+    2026-11-19; pair from the corpus list, cao2011 relate_with). Neither paper cites the other, and neither
+    record holds a measurement: every datum here is a reported input or a prediction of the authors'
+    analysis or finite element model (the Fig. 5-9 markers are origin predicted, figures.md), and huang2005
+    is purely theoretical (its source notes, "no measured data"; its Figs. 3, 5, 7, 10, 11 are model and
+    simulation curves). Setting huang2005's film/substrate thresholds against this paper's neo-Hookean
+    half-space thresholds would compare model with model, and the two concern different systems (a von
+    Karman film on a linear elastic substrate against a homogeneous half-space with no film); that is for
+    the relation jobs. See huang2005/q_no_validation_cao2011.
+  citation: {page: 2, printed_page: "95", quote: "a crease is energetically favourable for compression in the fundamental state exceeding", where: "Eq. 1.2"}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [biot_eq28, crease_eq12, nmode_asymptotic_strain, local_criterion_words, jin2015/exp_crease_15to1_text, jin2015/exp_crease_10to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_wrinkle_7p5to1_text]
+  text: >-
+    (Cross-validation with jin2015; job 2026-11-19, pair from the corpus list, jin2015 relate_with.) No
+    validation is entered, in either direction. jin2015 does not cite this paper: its ref. 48 is the
+    companion cao2012 (JAM) and its ref. 3 is a review by Li, Cao, Feng and Gao. This record holds no
+    measurement (figures.md: the Fig. 5-9 markers are the authors' finite element results), so no jin2015
+    model has anything here to predict. jin2015's measurements are the uniaxial onset strains of wrinkles
+    (0.18-0.21 for the 7.5:1 film, 0.22-0.28 for 10:1) and of channeling creases (0.37 for 15:1, 0.28 for
+    10:1) in PDMS film/substrate bilayers (Hs/Hf near 30). Every model here is a homogeneous neo-Hookean
+    half-space with no film, so none gives the onset in a bilayer whose modulus ratio is not 1. The film and
+    substrate moduli are not printed (jin2015/q_exp_moduli), and jin2015 explains the crease strains by
+    channeling at Maxwell strains (jin2015/q_exp_vs_theory_uniaxial), not by an onset threshold like
+    crease_eq12. The loading also differs: these models fix lambda_3, while jin2015's experiments are
+    uniaxial, with lambda_3 set by the strain itself. Setting this paper's eps_W and eps_C (0.456, 0.35 in
+    plane strain) beside jin2015's 0.556 and 0.44 compares model with model. That is the relation jobs'
+    work, as is the wang2014 prestretch question. See jin2015/q_no_validation_cao2011.
+  citation: {page: 18, quote: "compared with experimental observations by Cai et al"}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [biot_eq28, crease_eq12, nmode_asymptotic_strain, local_criterion_words, tallinen2015/fold_spacing_large_g_printed, tallinen2015/eta_brain_printed]
+  text: >-
+    (Cross-validation with tallinen2015; job 2026-11-19, pair from the corpus list, cao2011 relate_with.)
+    No validation is entered, in either direction. tallinen2015 does not cite this paper: its ref. 26 is the
+    companion cao2012 (Cao & Hutchinson, J. Appl. Mech. 79, 031019), and nothing in its text sets a number
+    of this paper against its own. Neither record holds a measurement. Here every datum is a reported input
+    or a prediction of the authors' analysis or ABAQUS model (figures.md: "There are no measurements in
+    this paper"; the Fig. 5-9 markers are origin predicted). tallinen2015 is a model and simulation paper:
+    its data are predictions of Eq. 1 or of its finite element code (Figs. 1-4, origin predicted) and
+    reported inputs. Its one value about real tissue, the modulus ratio eta of about 1 for the brain, is
+    taken from its ref. 2 (origin reported, from_source ref-2), not measured, and no model here has an
+    eta. Its fold spacing of "about four" layer thicknesses is a finite element result, said to agree
+    with brain and gut folds [3,8], which are not in either record. Setting this paper's half-space eps_W
+    and eps_C (0.456, 0.35) beside tallinen2015's sulcification threshold gs = 1/lambda_s or its Biot limit
+    eta_b compares model with model. That is the relation jobs' work. See
+    tallinen2015/q_no_validation_cao2011.
+  citation: {page: 2, printed_page: "95", quote: "a crease is energetically favourable for compression in the fundamental state exceeding", where: "Eq. 1.2"}
+- id: q_trujillo2008_equibiaxial_lambda3
+  kind: choice
+  about: [lambda3_equibiaxial_W, lambda3_equibiaxial_C, biot_eq28, crease_eq12]
+  text: >
+    trujillo2008's gels are compressed equibiaxially by constrained swelling, so at onset lambda_3 = lambda_1.
+    Eqs. 1.1 and 1.2 hold "for any fixed l3"; the validations take lambda_3 at the self-consistent onset
+    (0.6662 for wrinkling, 0.7489 for creasing). Taking instead lambda_3 = 1 - e_c from the measured
+    e_c = 0.33 +- 0.02 changes eps_W by about 0.5 dlambda_3 (0.324 to 0.344) and eps_C by more (0.21 to 0.23
+    against 0.25). Whether Hong et al.'s crease ratio 0.42, found with lambda_3 held fixed in plane
+    deformation, applies to an equibiaxial state at all is not stated by either paper. The gels are also
+    swollen networks with an equilibrium Poisson's ratio near 0.3 (trujillo2008 p. 4), not the
+    incompressible neo-Hookean solid of Eqs. 1.1-1.2, and trujillo2008 measures the strain from the
+    unconstrained swelling of a separate gel. The measurements read against eps_W (0.334) and against eps_C
+    (0.25) test which threshold the creased gels follow, not only the numbers.
+  citation: {page: 2, printed_page: "95", quote: "have shown that for any fixed l3 a crease is energetically", where: text}
+- id: q_trujillo2008_curves_unused
+  kind: choice
+  about: [biot_eq28, crease_eq12]
+  text: >
+    trujillo2008's Fig. 3 points (e_c against cross-linker content and against film thickness) are not used
+    point by point: Eqs. 1.1-1.2 have no input for cross-linker content or thickness (the half-space has no
+    length scale and the modulus drops out), so they predict one value at every point; the validations use
+    the two printed means instead. hh0_onset_measured (h/h0 = 2.0 at onset) needs the gel's Poisson's ratio
+    and a swelling model that this record does not hold, and ec_southern_thomas is the authors' estimate from
+    another paper's data, not a measurement of theirs. cao2011 has no measurements, so trujillo2008's models
+    have nothing here to validate.
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [biot_eq28, crease_eq12, nmode_asymptotic_strain, local_criterion_words, wang2014/exp_wrinkling_fig7a, wang2014/exp_creasing_fig7a, wang2014/tension_fig13a]
+  text: >-
+    (Cross-validation against wang2014; job 2026-11-19.) No validation is entered, in either direction.
+    The pair was suggested because wang2014 cites "Cao 2012" (its ref. 29). That reference is the
+    companion JAM paper on film/substrate bilayers (cao2012), not this Proc. R. Soc. A paper, which wang2014
+    does not cite. (1) This record's models against wang2014's measurements: every model here is of a
+    homogeneous neo-Hookean half-space (Biot's wrinkling strain, Hong's crease strain, post-bifurcation and
+    imperfection-sensitivity results), returning onset strains, mode amplitudes and reduced critical strains.
+    wang2014 measures moduli and a film thickness range (inputs), peel-test adhesion energies (Fig. 3),
+    uniaxial tension curves (Fig. 13) and the observed initial mode of each Fig. 7(a) experiment, whose
+    datum is the experiment's modulus ratio mu_f/mu_s at lambda_p = 2, not a strain. None of these is an
+    output of a half-space model, which has no film, modulus ratio, adhesion or uniaxial tension law, and
+    wang2014 reports no measured onset strain. Its crease strain 0.35 is a datum taken from Hong et al.
+    (its ref. 55), not a measurement. (2) wang2014's models against this record: this paper has no
+    measurements (its markers are the authors' ABAQUS results, origin predicted). The agreement of
+    wang2014's wrinkling model at mu_f/mu_s = 1, lambda_p = 1 with eps_W = 0.456 here, and of its crease
+    constant with eps_C = 0.35, sets computed values against computed values. That is work for the relation
+    jobs, which also take up wang2014/q_boundary_prestretch. See wang2014/q_no_validation_cao2011.
+  citation: {page: 2, quote: "Hong et al. (2009) have shown that for any fixed l3 a crease is energetically", where: text}
+- id: q_validation_wang2015
+  kind: choice
+  about: [crease_eq12, biot_eq28, lambda3_wang2015_film, wang2015/crease_onset_measured, wang2015/fold_onset_measured, wang2015/pd_onset_measured, wang2015/ridge_onset_measured]
+  text: >-
+    (Cross-validation with wang2015; job 2026-11-19.) The pair was suggested because wang2015 "cites Cao 2012
+    (ref-29)"; its ref. 29 is the Li, Cao, Feng & Gao review (Soft Matter 2012), and its only Cao &
+    Hutchinson reference is ref. 49, the companion cao2012. wang2015 does not cite this paper. One validation
+    is entered: crease_eq12 (eps_C in plane strain, 0.35) against wang2015's measured crease onset ~0.36 for
+    mu_f/mu_s = 0.3 and 0.64, the films wang2015 itself sets against the half-space crease threshold (Eq. 3).
+    The measurement is printed with "~", so it may get no numerical verdict. Two choices are open. (1) The
+    film's transverse stretch: wang2015 does not state it; lambda_3 = 1 (plane strain, wang2015's own
+    analysis) is taken, and free substrate sides on release would give (1 - eM)^(-1/2) = 1.25 and
+    eps_C = 0.42 (lambda3_wang2015_film). (2) biot_eq28 is not set against the same measurement:
+    wang2015's quantity is the crease onset strain, not the onset of any surface instability, so mapping it
+    to wrinkling_strain would cross two quantities that only share a dimension (unlike hong2009's
+    critical_strain_plane in val_eps_W_hong2009_exp). Not used: wang2015's fold, period-double and ridge
+    onsets (~0.33, ≈0.32, ≈0.33) and its Fig. 5 wavelengths and amplitudes, all of film/substrate bilayers
+    with mu_f/mu_s of 1.86 and above, which no half-space model here can give; and its measured moduli,
+    which are inputs. This paper has no measurements (figures.md), so no wang2015 model is validated
+    against it (wang2015/q_no_validation_cao2011).
+  citation: {page: 2, quote: "Hong et al. (2009) have shown that for any fixed l3 a crease is energetically", where: text}

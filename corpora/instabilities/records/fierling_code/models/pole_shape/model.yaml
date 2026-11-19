@@ -1,0 +1,16 @@
+id: pole_shape
+name: bend of the initial ellipsoid at its poles, from the script's constraint
+role: model
+stated: {file: Surface_Evolver_script.txt, lines: "85-87", quote: "x^2/gaxe^2 + y^2 + (z+0.3/gaxe/rayon*x^2/2)^2 = rayon^2"}
+equation: "x^2/gaxe^2 + y^2 + (z + c/gaxe/rayon*x^2/2)^2 = rayon^2, c = 0.3; at the poles x = +-gaxe*rayon the cross-section centre is at z = -c*gaxe*rayon/2"
+inputs:
+  c: {quantity: bend_coefficient, unit: dimensionless}
+  gaxe: {quantity: axis_ratio, unit: dimensionless}
+outputs:
+  z_pole: {quantity: pole_height, unit: dimensionless, description: "z of the cross-section centre at the poles, in units of R_DV (rayon), signed as the script writes it"}
+  Zp: {quantity: bend_parameter, unit: dimensionless, description: "the same offset written in the paper's form (z/R_DV - Z_p (x/R_AP)^2), i.e. with the script's z axis reversed: Z_p = c*gaxe/2"}
+settings: {}
+stochastic: false
+# notes: port of the constraint 'ellipsoide' (script lines 85-87; identical in the saved states, e.g. Step013.dmp line 235).
+# With rayon = R_DV and gaxe = R_AP/R_DV, the script's x^2 coefficient c/(2 gaxe rayon) equals the paper's Z_p/R_AP^2 * R_DV
+# when Z_p = c*gaxe/2; the script's sign is opposite (its comment: 'flattened on the negative z's').

@@ -1,0 +1,79 @@
+# hong2009 cites trujillo2008 (ref-6) only for data (eta_exp = 2.0-3.7, with refs 4 and 5) and states
+# no relation between its models and Trujillo's. The relations below are proposed.
+#
+# Both papers turn a compressive strain into the thickness swelling ratio of a gel bonded to a rigid
+# substrate (h/h0 in trujillo2008, eta in hong2009), by the same two steps: free isotropic swelling, then
+# in-plane compression back to the original area. hong2009 (p. 3) does the second step exactly for an
+# incompressible gel (lambda_1 = lambda_2 = eta^(-1/3), lambda_3 = eta^(2/3)); trujillo2008's
+# thickness_from_strain (a reader's reconstruction of the paper's unstated step, p. 5) does it in linear
+# elasticity with Poisson's ratio nu. With nu = 1/2 the second is the first-order truncation of the first.
+#
+# Mapping: hong2009's plane-strain strain eps gives eta = 1/(1 - eps)^2; the in-plane equibiaxial strain of
+# the bonded gel at that eta, in trujillo2008's definition e = 1 - l0/l (in-plane stretch from the free
+# swollen state = eta^(-1/3)), is e = 1 - (1 - eps)^(2/3).
+- id: rel_trujillo_thickness_linearizes_hong_gel_small
+  kind: approximated_by
+  a: hong2009/gel_critical_swelling
+  b: trujillo2008/thickness_from_strain
+  mapping: {e: "1 - (1 - eps)**(2/3)", nu: "1/2"}
+  output_map: {h_ratio: eta}
+  regime: {eps: [0.0, 0.08]}
+  tolerance: 0.01
+  provenance: proposed
+  assumptions:
+    - "nu = 1/2: the gel deforms without solvent migration from the free swollen state to the bonded state, as hong2009 assumes (p. 3)"
+    - "trujillo2008's e = 1 - l0/l is the in-plane compressive strain from the free swollen state, the step hong2009 writes as lambda_1 = lambda_2 = eta^(-1/3)"
+  reason: >
+    Both papers relate a compressive strain to the thickness swelling ratio of a gel bonded to a rigid
+    substrate by free swelling followed by in-plane compression. For an incompressible gel the exact
+    relation (hong2009) is eta = 1/(1 - e)^3; trujillo2008's linear-elastic form with nu = 1/2 is
+    (1 + 2e)/(1 - e), whose relative difference is 3e^2 - 2e^3. At small strain the two agree within 1%.
+- id: rel_trujillo_thickness_linearizes_hong_gel_crease
+  kind: approximated_by
+  a: hong2009/gel_critical_swelling
+  b: trujillo2008/thickness_from_strain
+  mapping: {e: "1 - (1 - eps)**(2/3)", nu: "1/2"}
+  output_map: {h_ratio: eta}
+  regime: {eps: [0.30, 0.46]}
+  tolerance: 0.05
+  provenance: proposed
+  assumptions:
+    - "nu = 1/2: the gel deforms without solvent migration from the free swollen state to the bonded state, as hong2009 assumes (p. 3)"
+    - "trujillo2008's e = 1 - l0/l is the in-plane compressive strain from the free swollen state, the step hong2009 writes as lambda_1 = lambda_2 = eta^(-1/3)"
+    - "tolerance 5%: the precision of trujillo2008's printed h/h0 = 2.0 +/- 0.1 at onset"
+  reason: >
+    The same relation across the strains where both papers use it: from hong2009's crease threshold
+    (eps_c = 0.35, e = 0.25) to Biot's (eps = 0.46, e = 0.34, the e_c = 0.334 trujillo2008 prints for
+    Biot's equibiaxial condition). It tests whether trujillo2008's conversion of e_c ~ 0.33 to h/h0 ~ 2
+    can be set beside hong2009's eta_c = 2.4 and eta_biot = 3.4 at this size of strain.
+#
+# biot1963 (ref-7). hong2009 takes Biot's plane-strain threshold as the critical strain epsilon_biot = 0.46
+# (p. 1) and transforms it by Eqs. 3-6 into lambda_3/lambda_1 = 3.4, which it says holds under generalized
+# plane strain "for any arbitrary value of lambda_2" (p. 3). The statement that epsilon_biot is Biot's
+# plane-strain result (epsilon = 1 - lambda) is not entered as a relation: between biot1963/crit_stretch_plane
+# and hong2009/plane_strain_stretch it holds by construction of the mapping and tests nothing.
+# hong2009's crease threshold (crease_zero_fig3, epsilon_c = 0.35) is a different mode of instability from
+# Biot's, by the paper's own account; it has no relation to Biot's models and none is entered.
+#
+# What can be tested is the claim that Eq. 6 holds for any lambda_2: Biot treats a second case himself,
+# uniaxial compression with free lateral faces (lambda_2 = lambda_3 = lambda^-1/2, Eq. 4.13, lambda = 0.444).
+# hong2009/gps_uniaxial_stretch applies Eqs. 3 and 6 to that case (lambda_1 = (1 - epsilon)^(4/3)), from
+# Biot's plane-strain critical strain epsilon = 1 - lambda_plane, lambda_plane^4 = (1 - zeta)/(1 + zeta) (Eq. 4.2).
+- id: rel_hong_gps_condition_gives_biot_uniaxial
+  kind: same_as
+  a: biot1963/crit_stretch_uniaxial
+  b: hong2009/gps_uniaxial_stretch
+  mapping: {eps: "1 - ((1 - zeta)/(1 + zeta))**(1/4)"}
+  output_map: {lam1: lam}
+  regime: {zeta: [0.5, 0.95]}
+  provenance: proposed
+  assumptions:
+    - "hong2009's epsilon_biot is Biot's plane-strain critical stretch as a nominal strain, epsilon = 1 - lambda (Eq. 4.2 of biot1963), as hong2009 uses it on p. 3"
+    - "uniaxial compression with free lateral faces is generalized plane strain with lambda_2 = lambda_3 = lambda_1^(-1/2); direction 1 is the more compressed, as hong2009 requires (p. 2)"
+    - "zeta is sampled about Biot's root 0.839: both of Biot's thresholds come from the same root of the cubic (Eqs. 4.2, 4.13), so the identity is tested as a function of it"
+  reason: >
+    hong2009 states (p. 3) that Biot's critical strain, transformed by Eq. 3 into lambda_3/lambda_1 = 3.4
+    (Eq. 6), is valid under generalized plane strain for any lambda_2. Biot's own uniaxial result is such a
+    case, so the claim can be tested against it: applying Eq. 6 with lambda_2 = lambda_3 to Biot's plane-strain
+    threshold should give Biot's uniaxial threshold. Both reduce to lambda_3/lambda_1 = ((1 + zeta)/(1 - zeta))^(1/2),
+    which is Biot's remark that the decay factor k = lambda_1/lambda_3 is 0.295 in both cases (biot1963 p. 181).

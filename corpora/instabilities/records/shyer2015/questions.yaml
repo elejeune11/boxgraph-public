@@ -1,0 +1,103 @@
+- id: q_k_span
+  kind: possible_error
+  about: [k_range_span_printed, k_range_low, k_range_high]
+  text: >
+    The range of degradation rates is said to span "three orders of magnitude", but its printed ends,
+    2.0 x 10^-2 and 2.0 x 10^0, span two. Either the upper end is 2.0 x 10^1 (a misprinted exponent) or the
+    span is misstated.
+  citation: {page: 14, quote: "range of degradation coefficient parameters over three orders of magnitude"}
+- id: q_k_high_reading
+  kind: reading
+  about: [k_range_high]
+  text: >
+    The exponent of the upper end of k is a small raised circle on the page ("2.0x10°"), read here as a
+    superscript 0; the OCR drops it. A degree sign is meaningless here, so 10^0 is the most plausible
+    reading, but the glyph is small.
+  citation: {page: 14, quote: "over three orders of magnitude (k = 2.0x102 2.0x10"}
+- id: q_k_unit
+  kind: unstated_input
+  about: [k_range_low, k_range_high]
+  text: "No unit is printed with the range of k; 1/s is taken from the representative value k = 0.2/s printed in the same paragraph."
+- id: q_D_source
+  kind: unstated_input
+  about: [D_shh_cgs]
+  text: "D = 1.0 x 10^-7 cm^2/s is said to come 'directly from Sonic Hedgehog signaling literature' without naming the work."
+  citation: {page: 14, quote: "taken directly from Sonig Hedgehog signaling literature"}
+- id: q_simulation_geometry
+  kind: unstated_model
+  about: [shh_diffusion_reaction]
+  text: >
+    The simulation geometry (heights, widths, depth of the mesenchymal compartment) is not given, only that it
+    follows aspect ratios measured on images from Shyer et al. 2013, and the results are shown only as colour
+    maps in arbitrary units. The claim that every k in the range raises the concentration with curvature
+    cannot be checked from the paper.
+  citation: {page: 14, quote: "All parameters in this range showed increase of morphogen concentration by increase of curvature"}
+- id: q_no_mechanics
+  kind: unstated_model
+  about: []
+  text: >
+    The paper makes no mechanical calculation of its own: the buckling of the epithelium into ridges, zigzags
+    and villi is taken from Shyer et al. 2013, and no modulus, thickness, wavelength, curvature or villus
+    spacing is printed. Statements that the folding is mechanically driven rest on that earlier record.
+  citation: {page: 10, quote: "indicates that compressive mechanical forces induced"}
+- id: q_figures_unread
+  kind: reading
+  about: []
+  text: >
+    The plotted measurements (Fig. 2A, Fig. 4C, Fig. 4E, Fig. 5D, Fig. 6B) were not digitized: the page
+    rendering commands needed for a figure reading were refused in this session. They are expression and
+    proliferation counts that no model in the corpus predicts; a later job may read them.
+- id: q_fig4c_axes
+  kind: reading
+  about: [edu_cyclo_fig4c, edu_shh_fig4c, edu_noggin_fig4c, edu_bmp4_fig4c, edu_shh_noggin_fig4c]
+  text: >
+    Figure pass: in Fig. 4C only the first (Control) bar panel prints y labels (80, 60, 40, 20); the other
+    five panels draw six ticks at the same spacing without labels and are read as the same scale (100 to 0).
+    The statement "Data are represented as mean ± 1 SD" closes the Fig. 4 legend after panel (E) and is taken
+    to cover the EdU bars of (C) as well; the lower SD ends are hidden in the black bars and are mirrored.
+  citation: {page: 6, quote: "quantification of percent Edu-positive cells across the sub-regions of"}
+- id: q_k_span_inclusive
+  kind: reading
+  about: [k_range_span_printed, k_range_span]
+  text: >
+    Audit: "over three orders of magnitude" may count the decades the range touches (10^-2, 10^-1, 10^0:
+    three values) rather than log10(k_max/k_min) = 2. Under that loose reading the printed ends and the
+    words agree and there is no misprint; the model k_range_span takes the strict reading. Both readings are
+    left open beside q_k_span.
+  citation: {page: 14, quote: "range of degradation coefficient parameters over three orders of magnitude"}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [shh_diffusion_reaction, k_range_span, lgr5_length_base_fig2a, edu_control_fig4c, lgr5_area_control_fig4e, shh_profile_e15_fig5d, shh_box_e15_fig5d, edu_insideout_fig6b, edu_grid_fig6d, tallinen2015/first_unstable_mode, tallinen2015/wavelength_at_threshold_gza, tallinen2015/fe_folding]
+  text: >-
+    No validation between this record and tallinen2015 is entered, in either direction (cross-validation
+    job 2026-11-18). tallinen2015 cites this paper (its ref. 40) only for the micrographs of its Fig. 2(e),
+    "cross sections of previllous folds in intestinal epithelium of a chick embryo on days 13 and 14",
+    images without values, and compares none of its numbers with this paper; this paper does not cite
+    tallinen2015. tallinen2015 holds no measurement (its q_no_validation_biot1963: every datum is predicted,
+    derived or reported), so neither model here has anything there to predict, and shh_diffusion_reaction
+    is not runnable in any case. This paper's measurements are Lgr5 mRNA counts per length and area, percent
+    EdU-positive cells and Shh staining intensities (Figs. 2A, 4C, 4E, 5D, 6B, 6D). No tallinen2015 model
+    returns any of these: its models give growth thresholds, modulus ratios and wavelength-to-thickness
+    ratios of a growing layer on a substrate. This paper prints no modulus, thickness, growth ratio,
+    wavelength or curvature of the folds (q_no_mechanics), so even the fold geometry shown in its
+    micrographs cannot be set against those models on its own conditions.
+  citation: {page: 10, quote: "indicates that compressive mechanical forces induced"}
+- id: q_no_validation_shyer2013
+  kind: choice
+  about: [shh_diffusion_reaction, k_range_span, lgr5_length_base_fig2a, edu_control_fig4c, lgr5_area_control_fig4e, shh_profile_e15_fig5d, shh_box_e15_fig5d, edu_insideout_fig6b, edu_grid_fig6d, shyer2013/fe_luminal_patterns, shyer2013/stressfree_mouse, shyer2013/spacing_fig6c, shyer2013/mu_ratio_fig6c]
+  text: >-
+    (Cross-validation against shyer2013, job 2026-11-18.) No validation was entered in either direction.
+    This paper cites shyer2013 throughout (pp. 2-4, 6-8, 10, 14), but only for qualitative claims: that the
+    folds form by buckling under smooth-muscle compression, in mouse as in chick, and that the aspect ratios
+    of the simulated E14 folds of Fig. S3 were measured on its images. None of these citations sets a number
+    from this paper against shyer2013. The measurements here are Lgr5 mRNA counts per length and area,
+    percent EdU-positive cells and Shh staining intensities (Figs. 2A, 4C, 4E, 5D, 6B, 6D). No shyer2013
+    model returns any of these: its models give stress-free layer dimensions, compression ratios, modulus
+    ratios, fold spacings and averages of plotted ratios. In the other direction, this paper's models
+    cannot predict shyer2013's measurements (circumference and length ratios, circumferences, shear moduli,
+    fold spacings). k_range_span only counts the decades of a printed parameter range, and
+    shh_diffusion_reaction is not runnable and returns a morphogen concentration. This paper prints no
+    modulus, thickness, wavelength or curvature of its own (q_no_mechanics), so even shyer2013's mouse
+    models (stressfree_mouse, fe_luminal_patterns) have no measurement here to be tested against. See
+    shyer2013/q_no_validation_shyer2015.
+  citation: {page: 10, quote: "of villi in mice as in chick"}

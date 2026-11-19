@@ -1,0 +1,16 @@
+id: thick_substrate_wavelength
+name: thick-substrate wrinkle wavelength in length units (Eq. 17 times h)
+role: processing
+stated: {page: 7, printed_page: "2107", quote: "we reproduce the thick-substrate limits", where: Eq. 17}
+equation: "lambda_eq = 2 pi h (E_bar/(3 Es_bar))^(1/3)"
+# Helper for relating this paper to stafford2004, which states the same wavelength in length units: Eq. 17's
+# lambda_eq/(2 pi h) solved for lambda_eq. Huang links the two on p. 8 ("wrinkles in a thin film on a thick
+# substrate have been used to measure Young's modulus ... (Stafford et al., 2004)").
+inputs:
+  h: {quantity: film_thickness, unit: nm}
+  Ebar_over_Esbar: {quantity: plane_strain_modulus_ratio, unit: dimensionless}
+outputs:
+  lam: {quantity: wrinkle_wavelength, unit: um}
+built_from: [thick_substrate_eq17]
+settings: {}
+stochastic: false

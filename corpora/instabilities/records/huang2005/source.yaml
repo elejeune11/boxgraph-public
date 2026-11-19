@@ -1,0 +1,46 @@
+id: huang2005
+kind: article
+title: Nonlinear analyses of wrinkles in a film bonded to a compliant substrate
+authors: [Z.Y. Huang, W. Hong, Z. Suo]
+year: 2005
+venue: Journal of the Mechanics and Physics of Solids 53, 2101-2118
+doi: 10.1016/j.jmps.2005.03.007
+file: corpus/instabilities/2005_Huang.pdf
+page_range: [1, 18]
+pages: {1: "2101", 2: "2102", 3: "2103", 4: "2104", 5: "2105", 6: "2106", 7: "2107", 8: "2108", 9: "2109", 10: "2110", 11: "2111", 12: "2112", 13: "2113", 14: "2114", 15: "2115", 16: "2116", 17: "2117", 18: "2118"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-13"}
+notes: >
+  Purely theoretical; no measured data. Its quantitative core is Section 3: sinusoidal wrinkles of a
+  von Karman film on an elastic layer of thickness H bonded to a rigid support, with zero interface
+  shear. The substrate stiffness g(kH, nu_s) (Eq. 10) and f(kh) (Eq. 13) are entered as printed, and
+  the wave number that minimizes f gives N_c = h E_bar f_min, lambda_eq and, from Eq. 16, the amplitude
+  (model sinusoidal_finite_substrate, a numerical minimization in 60-digit arithmetic). The closed-form
+  limits are entered as their own models: thick substrate Eq. 17, thin compressible (Winkler) Eq. 18,
+  thin incompressible Eq. 19, and the two thin limits of g (pp. 7-8). The paper's statements that these
+  are limits of Eqs. 10 and 13 are recorded as stated reduces_to relations, which the build checks
+  numerically. The amplitude is carried as A_eq/(h sqrt(|N011|/N_c - 1)), the ordinate of Fig. 5.
+  The printed numbers all come from Eq. 17 with the plane-strain ratio E_bar/Es_bar = (E/Es)(1 -
+  nu_s^2)/(1 - nu^2) and, for the critical strain under isotropic biaxial strain, eps_c =
+  (N_c/(h E_bar))/(1 + nu) from the printed N011 = h E_bar (eps011 + nu eps022) (from_words): Section
+  4's E/Es = 3250 (lambda_eq = 62.83h, eps_c = 0.00192, also in the Fig. 6 caption) and Fig. 9's
+  E1/E2 = 325 (29.16h, 0.0089; q_E1_E2), all with nu = 0.3, nu_s = 0.4. The p. 8 statements for
+  E_bar/Es_bar = 10^5 ("about 10^-4", "some hundred times") are compared and correctly get no verdict.
+  No added inputs were needed.
+  Not run: the spectral simulation of Section 4 (Eqs. 20-29; spectral_patterns, runnable: false, with
+  the reasons in the model and a possible misprint in Eq. 25, q_eq25_dimension); its average wave
+  numbers 1.000-1.002 k_eq are recorded uncompared (q_kbar_not_rerun). The Appendix solution with
+  interface shear is not given in enough detail to run (q_appendix_shear_model). The RMS formula for
+  stripes (p. 14) is entered as rms_stripes, for Fig. 7.
+  Left out: Fig. 8's anisotropic strains (eps022 = -0.01 to -0.002) and Fig. 9's geometry (radius
+  19.34 lambda_eq, cell 55 lambda_eq, eps = -0.02 inside), which feed only the unrun simulation and
+  qualitative pattern descriptions; the viscosity z = 0.3 or 0.03 Es/h (in that model's reason); the
+  qualitative claim that at kH = 0.1 g grows by more than an order of magnitude from nu_s = 0.4 to 0.5
+  (Eq. 10 bears it out, but it is printed with no number to compare). All plotted results (Figs. 3, 5,
+  7, 10, 11) are left to the figure pass; figures.md says what each would test.
+  Figure pass (2026-11-13): 48 calibrated code readings (figures.yaml, figures/_common.py) of
+  Figs. 3, 5, 7, 10 and 11, each a datum d_<reading id>. Model curves are swept through g_eq10,
+  sinusoidal_finite_substrate, rms_stripes and the new postbuckling_eq16 (Eq. 16 against
+  |N011|/N_c, for Figs. 10-11) as reproductions; the Appendix symbols of Figs. 10-11 are compared
+  with the analytical model as approximations (q_fig11_shear_difference); Fig. 7's labyrinth squares
+  are recorded uncompared (simulation not run). The Fig. 5 labels read E_bar/Es_bar on the
+  rendered page (q_fig5_labels_settled).

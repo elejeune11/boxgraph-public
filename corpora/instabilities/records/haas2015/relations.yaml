@@ -1,0 +1,22 @@
+# mapping: b's input symbol -> expression in a's input symbols, each in its model's own port units
+- id: rel_shell_extends_hohn
+  kind: derived_from
+  a: hohn2015/shell_inversion
+  b: haas2015/shell_bifurcation
+  mapping:
+    h_over_R: "eps"
+    nu: "nu"
+    lambda_max: "pi/2"
+    r_p: "rp"
+    L: "pi*lam/sqrt(eps)"
+  regime: {nu: [0.3, 0.5], eps: [0.05, 0.2], kR: [5, 30], lam: [0.05, 0.2], rp: [0.7, 1]}
+  steps:
+    - "same Hookean shell energy with intrinsic stretches and curvatures (haas2015 Eq. 2.4 = hohn2015 Eq. 3)"
+    - "extend the set-up: the bend region kappa_s0 = -k lies at lambda_max - lambda < s < lambda_max for any lambda_max, instead of just below the equator (lambda_max = pi R/2)"
+    - "solve for the branches k(d) at fixed lambda_max and lambda, with continuation through folds, instead of shapes at given k and lambda"
+  assumptions:
+    - "s is arclength from the posterior pole in both papers (hohn2015 Eq. S1 extends the anterior for s >= pi R/2; haas2015 names lambda_max the end of the bend region from the posterior pole), so hohn2015's region 'just below the equator' ends at lambda_max = pi/2 in units of R"
+    - "hohn2015's lam is the width over pi R; haas2015's port L is declared as Lambda = lambda/delta with delta ~ (h/R)^(1/2) (a scaling only, p. 5); the mapping takes delta = (h/R)^(1/2) R exactly"
+    - "hohn2015's kR is an input (shapes at given k); in haas2015 kR is the output on a branch against d, so no output is mapped"
+  provenance: stated
+  citation: {page: 5, printed_page: "5", quote: "extend the set-up of Höhn et al. [19], motivated by direct", where: "Section 3.2; Fig. 4 caption 'Set-up for numerical calculations, following Höhn et al. [19]'"}

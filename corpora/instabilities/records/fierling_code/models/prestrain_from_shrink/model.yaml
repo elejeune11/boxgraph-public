@@ -1,0 +1,15 @@
+id: prestrain_from_shrink
+name: midline pre-strain and pre-stress from the shrink ratio, as the plotting scripts compute them
+role: model
+stated: {file: settings.plot, lines: "9", quote: "siga(x)=chi*(1-x)/x"}
+equation: "epsilon_a = 1/gamma - 1 (time_profile_stress.plot: (1/$2-1)*50 is the pre-stress); sigma_a = chi (1 - gamma)/gamma"
+inputs:
+  gamma: {quantity: shrink_ratio, unit: dimensionless}
+  chi: {quantity: compression_modulus_nd, unit: dimensionless}
+outputs:
+  eps: {quantity: area_prestrain, unit: dimensionless}
+  sigma_a: {quantity: prestress_nd, unit: dimensionless}
+settings: {}
+stochastic: false
+# notes: port of settings.plot line 9 and time_profile_stress.plot lines 20 and 27 (chi*(1/c-1), ((1/$2-1)*50)).
+# gamma multiplies the Gram matrix of the facet's reference state, so A_0 = gamma A_i and epsilon_a = (A_i - A_0)/A_0 = 1/gamma - 1.

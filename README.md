@@ -38,7 +38,7 @@ flags every result elsewhere that depends on it.
 
 ## The Synthesis so far
 
-Two reviews so far, each a corpus of its own in `corpora/<name>/`. Both are
+Three reviews so far, each a corpus of its own in `corpora/<name>/`. All are
 linked from [the landing page](https://elejeune11.github.io/boxgraph-public/).
 
 [![The overview: every source and model, joined by what was tested between them](docs/figures/overview.png)](https://elejeune11.github.io/boxgraph-public/motor_clutch/)
@@ -68,6 +68,21 @@ the paper's flows and settles a sign misprinted in its conductance law; a genera
 against the measured human tree; a 1D solver run against its paper and against 3D benchmark solutions;
 and a parameter carried through three papers that is consistent with the equations printed beside it
 in none of them. Its sources are listed in [`corpora/cardio/papers.yaml`](corpora/cardio/papers.yaml).
+
+### A third review: geometric instabilities
+
+[![The instabilities overview](docs/figures/overview-instabilities.png)](https://elejeune11.github.io/boxgraph-public/instabilities/)
+
+**[Open the instabilities overview →](https://elejeune11.github.io/boxgraph-public/instabilities/)** The
+method on a field of mechanics, kept in [`corpora/instabilities/`](corpora/instabilities/): buckling,
+wrinkling, creasing and folding, from Biot's surface instability of rubber (1963) and stiff films on soft
+substrates to phase diagrams of surface patterns and the folding of brains, guts, seashells, embryos and
+cell sheets (2022). Twenty-eight sources, among them the released data and Surface Evolver script of an
+embryo-folding study. Its case studies show one wrinkling law derived in many papers, the same law by the
+test of its relations, which then overpredicts the folds of the brain it was first written for; two
+papers that locate the boundary between wrinkles and creases the same way and print different values;
+and printed equations that the papers' own results contradict, each kept as printed beside a corrected
+variant. Its sources are listed in [`corpora/instabilities/papers.yaml`](corpora/instabilities/papers.yaml).
 
 ## Contents
 
@@ -328,6 +343,39 @@ quotes that locate a value, and our own code and numbers.
 
 ---
 
+### The instabilities review ([`corpora/instabilities/`](corpora/instabilities/papers.yaml))
+
+| Record | Source | Kind | In the Synthesis |
+|---|---|---|---|
+| [`biot1963`](corpora/instabilities/records/biot1963) | Biot, *Surface instability of rubber in compression*. Applied Scientific Research, Section A 12, 168-182 (1963) | article | yes |
+| [`richman1975`](corpora/instabilities/records/richman1975) | Richman et al., *Mechanical model of brain convolutional development*. Science 189, 18-21 (1975) | article | yes |
+| [`bowden1998`](corpora/instabilities/records/bowden1998) | Bowden et al., *Spontaneous formation of ordered structures in thin films of metals supported on an elastomeric polymer*. Nature 393, 146-149 (1998) | article | yes |
+| [`cerda2003`](corpora/instabilities/records/cerda2003) | Cerda and Mahadevan, *Geometry and Physics of Wrinkling*. Physical Review Letters 90, 074302 (2003) | article | yes |
+| [`stafford2004`](corpora/instabilities/records/stafford2004) | Stafford et al., *A buckling-based metrology for measuring the elastic moduli of polymeric thin films*. Nature Materials 3, 545-550 (2004) | article | yes |
+| [`huang2005`](corpora/instabilities/records/huang2005) | Huang et al., *Nonlinear analyses of wrinkles in a film bonded to a compliant substrate*. Journal of the Mechanics and Physics of Solids 53, 2101-2118 (2005) | article | yes |
+| [`trujillo2008`](corpora/instabilities/records/trujillo2008) | Trujillo et al., *Creasing instability of surface-attached hydrogels*. Soft Matter 4, 564-569 (2008) | article | yes |
+| [`hong2009`](corpora/instabilities/records/hong2009) | Hong et al., *Formation of creases on the surfaces of elastomers and gels*. Applied Physics Letters 95, 111901 (2009) | article | yes |
+| [`savin2011`](corpora/instabilities/records/savin2011) | Savin et al., *On the growth and form of the gut*. Nature 476, 57-62 (2011) | article | yes |
+| [`cao2011`](corpora/instabilities/records/cao2011) | Cao and Hutchinson, *From wrinkles to creases in elastomers: the instability and imperfection-sensitivity of wrinkling*. Proc. R. Soc. A 468, 94-115 (2012) | article | yes |
+| [`cao2012`](corpora/instabilities/records/cao2012) | Cao and Hutchinson, *Wrinkling Phenomena in Neo-Hookean Film/Substrate Bilayers*. Journal of Applied Mechanics 79, 031019 (2012) | article | yes |
+| [`moulton2012`](corpora/instabilities/records/moulton2012) | Moulton et al., *Mechanical growth and morphogenesis of seashells*. Journal of Theoretical Biology 311, 69-79 (2012) | article | yes |
+| [`chirat2013`](corpora/instabilities/records/chirat2013) | Chirat et al., *Mechanical basis of morphogenesis and convergent evolution of spiny seashells*. PNAS 110(15), 6015-6020 (2013) | article | yes |
+| [`diab2013`](corpora/instabilities/records/diab2013) | Diab et al., *Ruga mechanics of creasing: from instantaneous to setback creases*. Proc. R. Soc. A 469, 20120753 (2013) | article | yes |
+| [`shyer2013`](corpora/instabilities/records/shyer2013) | Shyer et al., *Villification: How the Gut Gets Its Villi*. Science 342, 212-218 (2013) | article | yes |
+| [`wang2014`](corpora/instabilities/records/wang2014) | Wang and Zhao, *Phase Diagrams of Instabilities in Compressed Film-Substrate Systems*. Journal of Applied Mechanics 81, 051004 (2014) | article | yes |
+| [`haas2015`](corpora/instabilities/records/haas2015) | Haas and Goldstein, *Elasticity and glocality: initiation of embryonic inversion in Volvox*. J. R. Soc. Interface 12, 20150671 (2015) | article | yes |
+| [`hohn2015`](corpora/instabilities/records/hohn2015) | Höhn et al., *Dynamics of a Volvox Embryo Turning Itself Inside Out*. Phys. Rev. Lett. 114, 178101 (2015) | article | yes |
+| [`jin2015`](corpora/instabilities/records/jin2015) | Jin et al., *Bifurcation Diagrams for the Formation of Wrinkles or Creases in Soft Bilayers*. Journal of Applied Mechanics 82, 061008 (2015) | article | yes |
+| [`shyer2015`](corpora/instabilities/records/shyer2015) | Shyer et al., *Bending Gradients: How the Intestinal Stem Cell Gets Its Home*. Cell 161, 569-580 (2015) | article | yes |
+| [`tallinen2015`](corpora/instabilities/records/tallinen2015) | Tallinen and Biggins, *Mechanics of invagination and folding: Hybridized instabilities when one soft tissue grows on another*. Physical Review E 92, 022720 (2015) | article | yes |
+| [`wang2015`](corpora/instabilities/records/wang2015) | Wang and Zhao, *A three-dimensional phase diagram of growth-induced surface instabilities*. Scientific Reports 5, 8887 (2015) | article | yes |
+| [`radja2019`](corpora/instabilities/records/radja2019) | Radja et al., *Pollen Cell Wall Patterns Form from Modulated Phases*. Cell 176, 856-868 (2019) | article | yes |
+| [`trushko2020`](corpora/instabilities/records/trushko2020) | Trushko et al., *Buckling of an Epithelium Growing under Spherical Confinement*. Developmental Cell 54, 655-668 (2020) | article | yes |
+| [`haas2021`](corpora/instabilities/records/haas2021) | Haas and Goldstein, *Morphoelasticity of large bending deformations of cell sheets during development*. Physical Review E 103, 022411 (2021) | article | yes |
+| [`fierling2022`](corpora/instabilities/records/fierling2022) | Fierling et al., *Embryo-scale epithelial buckling forms a propagating furrow that initiates gastrulation*. Nature Communications 13, 3348 (2022) | article | yes |
+| [`fierling_code`](corpora/instabilities/records/fierling_code) | Released data and Surface Evolver script of Fierling et al. 2022 (embryo-scale epithelial buckling) | software | yes |
+| [`qiu2022`](corpora/instabilities/records/qiu2022) | Qiu et al., *Bending Instability of Rod-Shaped Bacteria*. Physical Review Letters 128, 058101 (2022) | article | yes |
+
 ## Install
 
 New here? [`docs/TUTORIAL.md`](docs/TUTORIAL.md) goes from a fresh clone to your own papers in
@@ -405,7 +453,7 @@ pipeline/          the reading layer: replaceable, writes only records
   pairs.py         which records are related to which
   prompts/         the reader guide and the job prompts
   evals/ passes/   reader evaluations and one-off passes over records
-corpora/<name>/    one review each (motor_clutch, cardio)
+corpora/<name>/    one review each (motor_clutch, cardio, instabilities)
   papers.yaml      the corpus list
   completed.yaml   the ledger: jobs that passed, committed with the records
   overview.yaml    the overview's words and case studies

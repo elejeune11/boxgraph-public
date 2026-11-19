@@ -1,0 +1,52 @@
+- id: kH_thick_added
+  quantity: substrate_thickness_times_wavenumber
+  unit: dimensionless
+  printed: "1000"
+  basis: >-
+    The paper states the limit of Eq. 10 as kH -> infinity (p. 7) with no finite value. Eq. 10 approaches
+    its limit exponentially in kH, so any kH of a few tens stands for infinity to double precision.
+    Added by the audit to compare g(nu_s, infinity) = 1/2.
+  alternatives: ["20", "100"]
+  stands_for: kH -> infinity in g(nu_s, infinity) (p. 7)
+- id: Ebar_over_Esbar_brain_added
+  quantity: plane_strain_modulus_ratio
+  unit: dimensionless
+  printed: "10"
+  basis: >-
+    For the cross-validation against richman1975's intersulcal distances. richman1975 takes the cortex
+    (E1 = E2) on an elastic core with Ecore/E1 = 1/10 for its prediction (p. 3, "for Ecore/E1 = 1/10,
+    l/t ≈ 8"; Fig. 4 caption), and takes the material to be incompressible (p. 3, "taken to be
+    elastically incompressible"), so nu = nu_s = 1/2 and the plane-strain ratio equals E/Es = 10. That is
+    a modelling choice of richman1975, not a measured modulus of fetal brain tissue; neither paper
+    measures the moduli.
+  alternatives: ["100", "3"]
+  stands_for: E_bar/Es_bar in Eq. 17, for the fetal cortex on its core
+# Cross-validation against stafford2004 (job 2026-11-14): Eq. 17 for PS films on PDMS.
+- id: Ebar_over_Esbar_PS_added
+  quantity: plane_strain_modulus_ratio
+  unit: dimensionless
+  printed: "1635"
+  basis: >-
+    For the cross-validation against stafford2004's PS wavelengths. E_bar/Es_bar = (Ef/Es)(1 - nu_s^2)/(1 - nu_f^2)
+    from stafford2004's values: Ef = 3.4 GPa (its SIEBIMM modulus of PS, Fig. 2 caption p. 3, and "films as
+    thin as 30 nm" p. 4), nu_f = 0.33 (p. 4), and the two values stafford2004's record adds because the paper
+    does not print them for one sample: Es = 1.75 MPa (the middle of the printed 1.5-2.0 MPa) and nu_s = 0.5.
+    (3400/1.75)(0.75)/(1 - 0.33^2) = 1635. Neither paper prints this ratio.
+  alternatives: ["1907", "1431", "1690"]
+  stands_for: >-
+    E_bar/Es_bar in Eq. 17 for a PS film on PDMS; the alternatives take Es = 1.5 and 2.0 MPa (the ends of
+    the printed range) and nu_s = 0.48
+# Cross-validation against bowden1998 (job 2026-11-14): Eq. 17 for gold films on PDMS.
+- id: Ebar_over_Esbar_gold_added
+  quantity: plane_strain_modulus_ratio
+  unit: dimensionless
+  printed: "3541"
+  basis: >-
+    For the cross-validation against bowden1998's measured wavelengths. E_bar/Es_bar = (Ef/Es)(1 - nu_s^2)/(1 - nu_f^2)
+    from the values bowden1998 prints for gold and PDMS (p. 3, "Em = 82 GPa, Ep = 20 MPa, nm = 0.33 and
+    np = 0.48"): (82000/20)(1 - 0.48^2)/(1 - 0.33^2) = 3541. Neither paper prints this ratio; it is the
+    plane-strain ratio this record's model plane_strain_modulus_ratio gives for those inputs.
+  alternatives: ["3451", "4100"]
+  stands_for: >-
+    E_bar/Es_bar in Eq. 17 for bowden1998's Au film on PDMS; the alternatives take nu_s = 0.5
+    (incompressible PDMS) and plane-strain corrections ignored (E/Es = 4100)

@@ -55,6 +55,18 @@ def _load(root: Path) -> tuple[dict[str, LoadedRecord], dict[str, dict]]:
     return records, papers
 
 
+def _purpose_suffix(variant, cr) -> str:
+    """How a comparison is reported apart from the paper's own results (DECISIONS, Corrected variants; Scaling
+    laws and reconstructed models): computed by a corrected variant, through a scaling law printed without its
+    prefactor, or through a model the reader built."""
+    s = ", corrected" if variant else ""
+    if cr is not None and cr.prefactor_model:
+        s += ", prefactor unknown"
+    if cr is not None and cr.reader_model:
+        s += ", reader's model"
+    return s
+
+
 def _paper_summary(lr: LoadedRecord, b: RecordBuild, rep) -> dict:
     rec = lr.record
     verdicts = []
@@ -73,12 +85,14 @@ def _paper_summary(lr: LoadedRecord, b: RecordBuild, rep) -> dict:
             variant = {"model": vm.id, "of": vm.variant_of,
                        "corrections": [cx.model_dump() for cx in vm.corrections]}
         verdicts.append({
-            "comparison": c.id, "purpose": c.purpose.value + (", corrected" if variant else ""), "variant": variant,
+            "comparison": c.id, "purpose": c.purpose.value + _purpose_suffix(variant, cr), "variant": variant,
             "computed": c.computed, "printed": c.printed,
             "verdict": cr.verdict if cr and cr.ok else None, "error": None if cr is None or cr.ok else cr.error,
             "computed_value": cr.computed_value if cr else None, "printed_text": cr.printed_text if cr else None,
             "per_value": cr.per_value if cr else None, "computed_se": cr.computed_se if cr else None,
             "input_rounding": cr.input_rounding if cr else None,
+            "prefactor_model": cr.prefactor_model if cr else None, "implied_prefactor": cr.implied_prefactor if cr else None,
+            "prefactor_note": cr.prefactor_note if cr else None, "reader_model": cr.reader_model if cr else None,
             "page": pd.citation.page if pd else None, "quote": pd.citation.quote if pd else None,
         })
     compared = {c.printed for c in rec.comparisons}
@@ -520,6 +534,8 @@ def _validations(records, sound, evaluated, cache_dir=None, only: set[str] | Non
                 entry["status"] = f"cannot be checked: {e}"
                 entry["correspondences"] = sorted(set(notes))
                 continue
+            entry.update({"prefactor_model": cr.prefactor_model, "implied_prefactor": cr.implied_prefactor,
+                          "prefactor_note": cr.prefactor_note, "reader_model": cr.reader_model})
             entry.update({"status": "checked", "verdict": cr.verdict, "per_value": cr.per_value,
                           "computed_value": cr.computed_value, "computed_se": cr.computed_se,
                           "printed_text": cr.printed_text, "difference": cr.difference,
@@ -670,8 +686,15 @@ def build_synthesis(root: str | Path, cache_dir: Path | None = None, save_readin
                 detail = _not_reproduced_detail(cr, pd, b.values.get(c.printed))
                 if c.printed in rescued:
                     detail += "; " + "; ".join(sorted(rescued[c.printed]))
+                if cr.prefactor_note:
+                    detail += f"; {cr.prefactor_note}"
+                kind = "not_reproduced"
+                if cr.reader_model:  # the reader's stand-in missed, not (necessarily) the paper
+                    kind = "reader_model_differs"
+                    detail = (f"the reader's model {cr.reader_model}, not the paper's own analysis, misses the printed "
+                              f"result: {detail}")
                 findings.append({
-                    "kind": "not_reproduced", "subject": g(sid, c.printed), "source": sid,
+                    "kind": kind, "subject": g(sid, c.printed), "source": sid,
                     "detail": detail,
                     "page": pd.citation.page if pd else None, "quote": pd.citation.quote if pd else None,
                     "trace": sorted({g(sid, c.id), g(sid, c.computed), g(sid, c.printed)}),

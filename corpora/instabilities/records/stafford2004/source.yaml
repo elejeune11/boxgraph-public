@@ -1,0 +1,58 @@
+id: stafford2004
+kind: article
+title: A buckling-based metrology for measuring the elastic moduli of polymeric thin films
+authors: [Christopher M. Stafford, Christopher Harrison, Kathryn L. Beers, Alamgir Karim, Eric J. Amis, Mark R. VanLandingham, Ho-Cheol Kim, Willi Volksen, Robert D. Miller, Eva E. Simonyi]
+year: 2004
+venue: Nature Materials 3, 545-550
+doi: 10.1038/nmat1175
+file: corpus/instabilities/2004_Stafford.pdf
+page_range: [2, 6]
+pages: {2: "546", 3: "547", 4: "548", 5: "549", 6: "550"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-13"}
+notes: >
+  PDF page 1 is a download cover. The PDF holds journal pages 546-550 only: the article's first page
+  (545, with the title, authors, abstract and the start of the introduction) is not in the file, so the
+  title, author list and DOI are entered from the citation the task gives and the reader's knowledge of the
+  article, not from a page (q_missing_first_page).
+
+  In scope: the paper's three printed equations that produce numbers. Eq. 1 (wrinkle wavelength) and its
+  rearrangement Eq. 2 (film modulus from the wavelength, the basis of the SIEBIMM metrology) are run on
+  the one film for which a thickness and a wavelength are both printed, the PS film of Fig. 1b
+  (h ≈ 100 nm, d = 8 µm), against the paper's own PS modulus 3.4 ± 0.1 GPa. Eq. 4 (Phani-Niyogi porosity
+  law) is run with its printed fit constants a = 1, n = 3.45 at the highest porosity against the printed
+  0.6 GPa; its E0 is not printed and is added as the 9 GPa the caption gives at zero porosity. Allen's
+  plane-stress solution, which the paper says gives a modulus ≈10% lower than Eq. 2, is not printed; it is
+  reconstructed (allen_shortfall) and compared with that ≈10% (no verdict: the printed value is
+  approximate). The substrate Poisson's ratio and the per-sample PDMS modulus are not printed and are
+  added (nu_s = 0.5; Es = 1.75 MPa, the middle of the printed 1.5-2.0 MPa, with the ends as alternatives).
+
+  Left out: Eq. 3 (Bragg's law, q0 = 4 pi sin(theta)/lambda ≈ 2 pi/d) feeds no printed number (no
+  diffraction angle is printed; the HeNe wavelength 632.8 nm is its only input); the Fig. 1b amplitude
+  0.3 µm (no amplitude formula or applied strain is printed); the organosilicate example h ≈ 725 nm,
+  d "of the order of 30 µm" (no modulus is printed for that film); sample-preparation numbers (PS molar
+  mass, polydispersity, indentation frequencies and load rates, UV/ozone times, PDMS mixing ratio and sheet
+  size); the validity limits of Eq. 2 (strain << 10 %, Ef/Es >> 1); and the remarks that wrinkling has been
+  demonstrated down to 5 MPa and that low-k dielectrics should exceed 4 GPa. The statement that the
+  wavelength doubles with the thickness is the linearity of Eq. 1 in h and is left to the Fig. 2b reading.
+
+  Figures: the measured data of this paper are all plotted (Figs. 2b, 3 and 4, points with one-standard-
+  deviation error bars). This job could not render pages for digitizing, so no figure is read here; what
+  each figure would test is written in figures.md for the figure pass. Figure 2b is the main reproduction
+  target: Eq. 2 on its wavelength points (open circles) should give its modulus points (filled circles).
+
+  Findings so far: with the paper's own PS modulus, Eq. 1 puts the wavelength of a ≈100 nm PS film near
+  5 µm, not the printed 8 µm, and Eq. 2 on h ≈ 100 nm and d = 8 µm gives a modulus near 11-15 GPa, not
+  3.4 GPa (q_fig1b_inconsistent). Eq. 4 with E0 = 9 GPa and the printed a, n gives about 0.77 GPa at
+  P = 0.51 against the printed 0.6 GPa (q_eq4_endpoint). The reconstructed Allen solution gives a
+  shortfall of about 10% with nu_s = 0.5, as printed.
+
+  Figure pass (2026-11-13): every plotted series of Figs. 2b, 3 and 4 is read by calibrated code
+  (figures.yaml, figures.md): 53 points with their one-standard-deviation bars. Eq. 2 on the ten (h, d)
+  points of Fig. 2b reproduces the ten plotted moduli (about 2 % low with the added Es = 1.75 MPa), Eq. 1
+  with 3.4 GPa reproduces the ten wavelengths, and their mean is 3.43 GPa. Eq. 4 with E0 = 9 GPa lies
+  within every SIEBIMM bar of Fig. 4. SIEBIMM against nanoindentation: Fig. 3 disagrees at 30 % plasticizer,
+  as the paper says; Fig. 4 disagrees at zero porosity (9.0 against 6.6 GPa), which the caption's
+  "excellent agreement through the entire range" does not mention (q_fig4_zero_porosity). The figures also
+  bear on q_porosity_percent, q_eq4_endpoint and q_fig1b_inconsistent (new reading questions). The
+  wrapper models modulus_eq2_points, pair_plasticizer, pair_porosity and mean_modulus only pair or average
+  plotted points; the paper's equations are unchanged.

@@ -1,0 +1,305 @@
+- id: run_gs
+  model: gs_from_stretch
+  inputs: {lam_s: lambda_s_printed}
+  outputs: {gs: gs_computed}
+- id: run_gs_biax
+  model: gs_equibiaxial
+  inputs: {gs: gs_computed}
+  outputs: {gs_biax: gs_biax_computed}
+- id: run_eta_s_uniaxial
+  model: eta_s_uniaxial
+  inputs: {gs: gs_computed}
+  settings: {eta_lo: 0.6, eta_hi: 5.0, la_min: 0.05, la_max: 15.0, n_grid: 80, g_max: 4.0, n_scan: 200}
+  outputs: {eta_s: eta_s_uniaxial_computed}
+- id: run_eta_s_equibiaxial
+  model: eta_s_equibiaxial
+  inputs: {gs: gs_computed}
+  settings: {eta_lo: 0.6, eta_hi: 5.0, la_min: 0.05, la_max: 15.0, n_grid: 80, g_max: 4.0, n_scan: 200}
+  outputs: {eta_s: eta_s_equibiaxial_computed}
+- id: run_biot_polynomial
+  model: biot_polynomial
+  inputs: {}
+  outputs: {gb: gb_polynomial_computed}
+- id: run_biot_closed_form
+  model: biot_closed_form
+  inputs: {}
+  outputs: {gb: gb_closed_form_computed}
+- id: run_eta_b_b28
+  model: eta_b_b28
+  inputs: {gb: gb_polynomial_computed}
+  outputs: {eta_b: eta_b_b28_computed}
+- id: run_eta_b_crossover
+  model: eta_b_crossover
+  inputs: {gb: gb_polynomial_computed}
+  outputs: {eta_b: eta_b_crossover_computed}
+- id: run_first_mode_eta05
+  model: first_unstable_mode
+  inputs: {eta: eta_05}
+  settings: {la_min: 0.05, la_max: 15.0, n_grid: 80, g_max: 4.0, n_scan: 200}
+  outputs: {g: g_first_mode_eta05, l_over_a: la_first_mode_eta05}
+  note: "eta = 0.5 < eta_b: the minimum is at the shortest wavelength searched (la_min), i.e. the Biot limit."
+- id: run_eq1_short_eta05
+  model: eq1_threshold
+  inputs: {eta: eta_05, l_over_a: l_over_a_short_added}
+  settings: {g_max: 4.0, n_scan: 200}
+  outputs: {g: g_eq1_short_eta05}
+- id: run_first_mode_eta4
+  model: first_unstable_mode
+  inputs: {eta: eta_4}
+  settings: {la_min: 0.05, la_max: 15.0, n_grid: 80, g_max: 4.0, n_scan: 200}
+  outputs: {g: g_first_mode_eta4, l_over_a: la_first_mode_eta4}
+  note: "Threshold and wavelength of linear instability for eta = 4 (Fig. 3(c) marks this threshold; no number is printed)."
+- id: run_width_eta4
+  model: mode_wavelength_h
+  inputs: {eta: eta_4}
+  settings: {la_min: 0.05, la_max: 15.0, n_grid: 80, g_max: 4.0, n_scan: 200}
+  outputs: {l_over_h: width_eta4_computed}
+- id: run_width_eta4_gza
+  model: mode_wavelength_h_gza
+  inputs: {eta: eta_4}
+  settings: {la_min: 0.05, la_max: 15.0, n_grid: 80, g_max: 4.0, n_scan: 200}
+  outputs: {l_over_h: width_eta4_gza_computed}
+- id: run_stiff_wavelength_eta4
+  model: stiff_wavelength_asymptote
+  inputs: {eta: eta_4}
+  outputs: {l_over_a: la_stiff_eta4}
+  note: "The stiff-layer asymptote at eta = 4, beside run_first_mode_eta4; no printed number to compare."
+- id: run_stiff_threshold_eta4
+  model: stiff_threshold_asymptote
+  inputs: {eta: eta_4}
+  outputs: {g: g_stiff_eta4}
+  note: "The stiff-layer asymptote at eta = 4, beside run_first_mode_eta4; no printed number to compare."
+# Runs and comparisons on the calibrated figure readings (figure pass, 2026-11-14).
+- id: run_fig1a_eta2
+  model: eq1_threshold
+  inputs:
+    eta: eta_2_fig1a
+  settings:
+    g_max: 4.0
+    n_scan: 200
+  sweep:
+    l_over_a: fig1a_eta2_fig
+  outputs:
+    g: g_eq1_fig1a_eta2
+- id: run_fig1a_eta1
+  model: eq1_threshold
+  inputs:
+    eta: eta_1_fig1a
+  settings:
+    g_max: 4.0
+    n_scan: 200
+  sweep:
+    l_over_a: fig1a_eta1_fig
+  outputs:
+    g: g_eq1_fig1a_eta1
+- id: run_fig1a_eta06
+  model: eq1_threshold
+  inputs:
+    eta: eta_06_fig1a
+  settings:
+    g_max: 4.0
+    n_scan: 200
+  sweep:
+    l_over_a: fig1a_eta06_fig
+  outputs:
+    g: g_eq1_fig1a_eta06
+- id: run_fig1a_eta04
+  model: eq1_threshold
+  inputs:
+    eta: eta_04_fig1a
+  settings:
+    g_max: 4.0
+    n_scan: 200
+  sweep:
+    l_over_a: fig1a_eta04_fig
+  outputs:
+    g: g_eq1_fig1a_eta04
+- id: run_fig1b_mode
+  model: first_unstable_mode
+  inputs: {}
+  settings: &id001
+    la_min: 0.05
+    la_max: 15.0
+    n_grid: 80
+    g_max: 4.0
+    n_scan: 200
+  sweep:
+    eta: fig1b_mode_fig
+  outputs:
+    l_over_a: la_first_mode_fig1b
+- id: run_fig1b_asym
+  model: stiff_wavelength_asymptote
+  inputs: {}
+  sweep:
+    eta: fig1b_asym_fig
+  outputs:
+    l_over_a: la_asym_fig1b
+- id: run_fig1c_threshold
+  model: first_unstable_mode
+  inputs: {}
+  settings: *id001
+  sweep:
+    eta: fig1c_threshold_fig
+  outputs:
+    g: g_first_mode_fig1c
+  note: Below eta_b the minimum is the zero-wavelength (Biot) limit, represented by l/a = la_min (q_biot_search_range).
+- id: run_fig1c_asym
+  model: stiff_threshold_asymptote
+  inputs: {}
+  sweep:
+    eta: fig1c_asym_fig
+  outputs:
+    g: g_asym_fig1c
+- id: run_fig2a_linear
+  model: first_unstable_mode
+  inputs: {}
+  settings: *id001
+  sweep:
+    eta: fig2a_linear_fig
+  outputs:
+    g: g_first_mode_fig2a
+- id: run_fig2a_linear_dotted
+  model: first_unstable_mode
+  inputs: {}
+  settings: *id001
+  sweep:
+    eta: fig2a_linear_dotted_fig
+  outputs:
+    g: g_first_mode_fig2a_dotted
+- id: run_fig2b_linear
+  model: wavelength_at_threshold
+  inputs: {}
+  settings: &id002
+    eta_lo: 0.53
+    eta_hi: 20.0
+    la_min: 0.05
+    la_max: 15.0
+    n_grid: 80
+    g_max: 4.0
+    n_scan: 200
+  sweep:
+    g: fig2b_linear_fig
+  outputs:
+    l_over_h: lh_threshold_fig2b
+- id: run_fig2b_linear_dotted
+  model: wavelength_at_threshold
+  inputs: {}
+  settings: *id002
+  sweep:
+    g: fig2b_linear_dotted_fig
+  outputs:
+    l_over_h: lh_threshold_fig2b_dotted
+- id: run_fig2b_linear_gza
+  model: wavelength_at_threshold_gza
+  inputs: {}
+  settings: *id002
+  sweep:
+    g: fig2b_linear_fig
+  outputs:
+    l_over_h: lh_threshold_fig2b_gza
+- id: run_fig2b_linear_dotted_gza
+  model: wavelength_at_threshold_gza
+  inputs: {}
+  settings: *id002
+  sweep:
+    g: fig2b_linear_dotted_fig
+  outputs:
+    l_over_h: lh_threshold_fig2b_dotted_gza
+- id: run_fig3a_sulc
+  model: sulcification_line
+  inputs:
+    lam_s: lambda_s_printed
+  sweep:
+    A: fig3a_sulc_fig
+  outputs:
+    g: g_sulc_line_fig3a
+- id: run_fig3b_sulc
+  model: sulcification_line
+  inputs:
+    lam_s: lambda_s_printed
+  sweep:
+    A: fig3b_sulc_fig
+  outputs:
+    g: g_sulc_line_fig3b
+- id: run_fig3a_lin
+  model: threshold_line
+  inputs:
+    eta: eta_05
+  settings: *id001
+  sweep:
+    A: fig3a_lin_fig
+  outputs:
+    g: g_lin_line_fig3a
+- id: run_fig3b_lin
+  model: threshold_line
+  inputs:
+    eta: eta_1_fig3
+  settings: *id001
+  sweep:
+    A: fig3b_lin_fig
+  outputs:
+    g: g_lin_line_fig3b
+- id: run_fig3c_lin
+  model: threshold_line
+  inputs:
+    eta: eta_4
+  settings: *id001
+  sweep:
+    A: fig3c_lin_fig
+  outputs:
+    g: g_lin_line_fig3c
+- id: run_fig4b_threshold
+  model: threshold_equibiaxial
+  inputs: {}
+  settings:
+    g_lo: 1.0001
+    g_hi: 1.6
+    la_min: 0.05
+    la_max: 15.0
+    n_grid: 80
+    g_max: 4.0
+    n_scan: 200
+  sweep:
+    eta: fig4b_threshold_fig
+  outputs:
+    g: g_biax_threshold_fig4b
+- id: run_fig4b_sulc
+  model: sulcification_line_biax
+  inputs:
+    lam_s: lambda_s_printed
+  sweep:
+    eta: fig4b_sulc_fig
+  outputs:
+    g: g_biax_sulc_fig4b
+- id: run_fig4d_linear
+  model: wavelength_at_threshold_biax
+  inputs: {}
+  settings: *id002
+  sweep:
+    g: fig4d_linear_fig
+  outputs:
+    l_over_h: lh_biax_fig4d
+- id: run_fig4d_linear_gza
+  model: wavelength_at_threshold_biax_gza
+  inputs: {}
+  settings: *id002
+  sweep:
+    g: fig4d_linear_fig
+  outputs:
+    l_over_h: lh_biax_fig4d_gza
+- id: run_fig4e_linear
+  model: wavelength_at_threshold_biax
+  inputs: {}
+  settings: *id002
+  sweep:
+    g: fig4e_linear_fig
+  outputs:
+    l_over_h: lh_biax_fig4e
+- id: run_fig4e_linear_gza
+  model: wavelength_at_threshold_biax_gza
+  inputs: {}
+  settings: *id002
+  sweep:
+    g: fig4e_linear_fig
+  outputs:
+    l_over_h: lh_biax_fig4e_gza

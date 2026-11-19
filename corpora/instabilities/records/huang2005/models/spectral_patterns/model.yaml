@@ -1,0 +1,27 @@
+id: spectral_patterns
+name: spectral fixed-point simulation of two-dimensional wrinkle patterns on a thick substrate (Eqs. 20-29)
+role: model
+stated: {page: 10, printed_page: "2110", quote: "This procedure in essence is a fixed-point method in computational mathematics", where: "Eqs. 21-27"}
+equation: >-
+  T_i = D_ij u_j (Eqs. 21-22, half-space substrate in Fourier space); C_ab u_b = b_a (Eqs. 23-25);
+  w^(n+1) = [D33 + E_bar h^3 k^4/12 + z]^-1 {i k_b F[N_ab w,a] - D3a u_a + z w^n} (Eq. 27);
+  k_bar = sum(w_mn^2 k_mn)/sum(w_mn^2) (Eq. 28); RMS = sqrt(sum(w_mn^2)/N) (Eq. 29)
+inputs:
+  E_over_Es: {quantity: youngs_modulus_ratio, unit: dimensionless}
+  nu: {quantity: film_poisson_ratio, unit: dimensionless}
+  nu_s: {quantity: substrate_poisson_ratio, unit: dimensionless}
+  eps0: {quantity: imposed_membrane_strain, unit: dimensionless}
+outputs:
+  k_bar_ratio: {quantity: average_wavenumber_ratio, unit: dimensionless}
+  rms_over_h: {quantity: rms_deflection_over_film_thickness, unit: dimensionless}
+settings: {grid_points_per_side: 512, cell_size_over_wavelength: 20, initial_deflection_max_over_h: 0.001, seed: null}
+stochastic: true
+runnable: false
+not_runnable_reason: >-
+  The method is described but several of its choices are not: the stopping criterion is only "when the
+  total energy becomes stationary" (no tolerance), the viscosity z switches between 0.3 Es/h and 0.03 Es/h
+  at unstated "high" and "small" strain levels, the random initial field's distribution and seed are not
+  given, and the force vector Eq. 25 as printed carries E_bar h^3 where the dimensions of Eq. 24 call for
+  E_bar h (q_eq25_dimension). A 512 x 512 run of a coupled
+  nonlinear fixed-point iteration to a stationary labyrinth is far beyond the minute a run may take, and its
+  outputs (pattern-averaged wave number, RMS) depend on the random start.

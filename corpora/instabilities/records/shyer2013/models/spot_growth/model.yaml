@@ -1,0 +1,19 @@
+id: spot_growth
+name: expansion field of growing endoderm spots in the zigzag simulation
+role: model
+stated: {page: 15, quote: "the relative expansion of a spot is given by", where: "SM, zigzag simulation"}
+equation: "relative expansion 1 + (e^-eta - 0.2) t, eta = [r/(3 he)]^2, r the stress-free distance from the spot's origin along the endoderm; contributions of both spots superposed; endoderm stress-free we = 2W, le = 2L, W ≈ L = 2.0(he + hm), he = hm/2"
+from_words: true
+inputs:
+  t: {quantity: parameterized_time, unit: dimensionless}
+  n_spots: {quantity: number_of_spots, unit: dimensionless}
+  we_over_W: {quantity: stressfree_over_constrained_circumferential, unit: dimensionless}
+  le_over_L: {quantity: stressfree_over_constrained_longitudinal, unit: dimensionless}
+  W_over_hsum: {quantity: zigzag_spacing_over_composite_thickness, unit: dimensionless}
+  hm_over_he: {quantity: thickness_ratio_mesenchyme_to_endoderm, unit: dimensionless}
+outputs:
+  diameter: {quantity: spot_diameter_over_endoderm_thickness, unit: dimensionless, description: "2 x 3 he: the diameter where eta = 1 (the e-folding of the Gaussian), in units of he"}
+  growth: {quantity: spot_diameter_growth_ratio, unit: dimensionless, description: "stress-free diameter of that disc after growth over the diameter the same material takes outside the spots"}
+  area_change: {quantity: endoderm_area_change, unit: dimensionless, description: "relative change of the total stress-free endoderm area of one domain"}
+settings:
+  expansion: linear

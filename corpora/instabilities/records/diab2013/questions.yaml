@@ -1,0 +1,227 @@
+- id: q_eq212b_factor
+  kind: possible_error
+  about: [m_point_eq211, m_point_eq211_corrected, eps_M_printed]
+  text: >
+    Eq. 2.12b prints the pressure term of the second variation as -p(2)(u1,1(2)/lambda + lambda u2,2(2)) with factor 1.
+    Differentiating the functional (2.1c) twice in the direction (u(2), p(2)) gives that mixed term twice, as the
+    factor -2 in Eq. 2.12a does for the third variation. Taken as printed, the energy variation along the bifurcation
+    curve does not change sign and gives no M-point; with the factor 2 it changes sign at the printed eps_M. The
+    printed model and a variant with the factor 2 are both recorded.
+  citation: {page: 7, printed_page: "7", quote: "The terms on the right-hand side of equation (2.11) are determined for a neo-Hookean EDM solid as", where: Eq. 2.12b}
+- id: q_second_order_coefficients
+  kind: choice
+  about: [m_point_eq211, m_point_eq211_corrected]
+  text: >
+    The second-order coefficients B1, B2, F1, F2, F3 and the second-order pressure were obtained by solving the paper's
+    stated governing equations (equilibrium to second order with the stress of Eq. 2.3, traction-free surface Eq. A 10)
+    numerically by collocation in the paper's solution forms (Eqs. A 6, A 8, A 9a, 2.9c with the exponents of B 1),
+    not from the closed forms A 9b-d and B 2-B 4, which were not transcribed or checked. The first-order fields
+    (Eqs. 2.5, 2.6, A 11) are used as printed. Q0 = a = 1 is used; the sign of the energy variation does not depend on them.
+- id: q_fig2b_normalization
+  kind: reading
+  about: [m_point_eq211, eps_M_printed]
+  text: >
+    The ordinate of figure 2b is delta phi^b / zeta^4 times 4 x 10^-3 with no statement of the units or of how zeta and
+    the energy per period are normalized (Q0, a, k). The plotted curve grows without bound as eps -> 0 and returns to
+    zero at eps_B, which is not the shape of delta phi^b / zeta^4 per period with zeta the surface amplitude at
+    Q0 = a = 1; so only its zero (eps_M) is compared, and the curve is not read.
+  citation: {page: 6, printed_page: "6", quote: "Energy variation δϕ b normalized by ζ 4 up to the second-order perturbation mode", where: "Fig. 2b"}
+- id: q_A11b_k
+  kind: possible_error
+  about: [m_point_eq211]
+  text: >
+    Eq. A 11b prints C1 = -(1/k)(lambda^4 alpha2^2 + kbar^2)/(lambda^4(alpha2^2 - alpha1^2)) with k, not kbar; the unit
+    surface amplitude of u2(1) in Eq. 2.5b, -kbar(C1 + C2) = 1, needs 1/kbar. With a = 1 the two coincide, and the sign
+    of the energy variation does not depend on the amplitude.
+  citation: {page: 16, printed_page: "16", quote: "The second-order expansion of the first Piola–Kirchhoff stress is then given as", where: Eq. A 11b}
+- id: q_fem_not_runnable
+  kind: unstated_model
+  about: [eps_T_printed, kbar_T_printed, eps_R_printed, kbar_R_printed, crease_lower_bound_homogeneous, crease_tip_strain_fem, eps_w_fem]
+  text: >
+    The setback-crease curve C2c with its T-point, the folding curve C24 and R-point, the fold-crease curve C4c, the
+    lower bound of the crease strain (chain curve of figure 2a) and the crease-tip strain come from ABAQUS
+    finite-element simulations (CPE4RH, H = 5L, imperfection 0.0005 L, minimal mesh about L/2000, strain steps below
+    0.0005 or 0.0008, frictionless self-contact) that cannot be rerun here; these results are recorded without a model.
+- id: q_fold_strain_060
+  kind: unexplained_difference
+  about: [eps_R_printed]
+  text: >
+    The R-point is printed at eps = 0.593 (pp. 12, 13), but the next sentence says that a compressive strain of more
+    than 0.60 is required to fold the EDM solid, and p. 11 says folding (compression beyond the Biot limit) needs
+    kbar < 0.15 while the folding wavenumber is printed as 0.107. The rounding or the definitions behind these
+    statements are not given.
+  citation: {page: 12, printed_page: "12", quote: "This result shows that a compressive strain of more than 0.60 is required to fold a", where: text}
+- id: q_crease_threshold_definitions
+  kind: reading
+  about: [crease_lower_bound_homogeneous, hong_crease_strain, hohlfeld_crease_vanishing, gent_cho_crease_strain, eps_M_printed, eps_T_printed]
+  text: >
+    The paper has several crease thresholds that should not be merged: eps_B = 0.456 (linear bifurcation of the
+    homogeneous half-space), eps_M = 0.272 (lowest strain of an instantaneous crease in the graded solid), eps_T = 0.174
+    (lowest strain of a setback crease in the graded solid), and 0.35 (the homogeneous-limit lower bound on unloading,
+    which the paper equates with Hong et al.'s and Hohlfeld's thresholds). All are nominal plane-strain compressive
+    strains eps = 1 - lambda. Gent & Cho's 0.28-0.42 is a nominal surface strain in bending, a different loading.
+- id: q_hohlfeld_source
+  kind: reading
+  about: [hohlfeld_crease_vanishing, cmp_lower_bound_hohlfeld, crease_lower_bound_homogeneous]
+  text: >
+    (Audit.) On p. 11 the paper calls its homogeneous-limit lower bound 0.35 consistent with "Hohlfeld & Mahadevan
+    [18]" (Unfolding the sulcus, 2011), but the 0.35 it compares against is printed only on p. 2, attributed to
+    Hohlfeld [8] (PhD thesis, 2008). The datum hohlfeld_crease_vanishing keeps from_source ref-8 as printed on p. 2;
+    whether ref-18 states the same 0.35 is not shown in this paper.
+  citation: {page: 11, printed_page: "11", quote: "which is consistent with the findings of Hong et al", where: text}
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [bifurcation_strain_eq28, bifurcation_wavenumber_eq28, biot_strain_eq28, biot_stretch_eq28, m_point_eq211, m_point_eq211_corrected, gent_cho_crease_strain]
+  text: >-
+    No validation between this record and biot1963 is entered, in either direction (cross-validation job
+    2026-11-18), although this paper cites it (ref. 7). biot1963 holds no measurement: Table I and its
+    critical values are computed from its own equations, and its one mention of experiment (Ciferri and
+    Flory) gives no value. Its critical stretch 0.543 against this record's eps_B = 0.456 is model against
+    model, for the relation jobs. This record has no measurement of its own either (its data are perturbation
+    and finite-element results); the only experimental value it cites, Gent & Cho's nominal crease strain
+    0.28-0.42 for rubber strips compressed by bending (gent_cho_crease_strain, ref. 1), is a crease onset
+    under bending, which none of Biot's models gives: they give the bifurcation stretch of a half-space
+    under uniform compression, and this paper says the surface "creases at a strain lower than the Biot
+    critical strain".
+  citation: {page: 2, printed_page: "2", quote: "unstably creases at a strain lower than the Biot critical strain", where: text}
+- id: q_no_validation_cao2012
+  kind: choice
+  about: [bifurcation_strain_eq28, biot_strain_eq28, m_point_eq211, gent_cho_crease_strain, cao2012/bilayer_plane_strain, cao2012/biot_surface_eq7, cao2012/fe_postbifurcation]
+  text: >-
+    No validation between this record and cao2012 is entered, in either direction (cross-validation job
+    2026-11-18). The pair was chosen because this paper cites "Cao & Hutchinson [10]", but its ref. 10 is
+    another paper of the same authors and year ("From wrinkles to creases in elastomers: the instability
+    and imperfection-sensitivity of wrinkling", Proc. R. Soc. A 468, 94-115); cao2012 is "Wrinkling
+    Phenomena in Neo-Hookean Film/Substrate Bilayers" (J. Appl. Mech. 79, 031019), which this paper does
+    not cite, and which does not cite this one. Neither record holds a measurement: cao2012's data are
+    reported or predicted (its exact bifurcation analysis and finite-element markers), and this record's
+    are perturbation and finite-element results; the one experimental value it cites, Gent & Cho's crease
+    strain 0.28-0.42 under bending, is a crease onset under bending, which no model of cao2012 gives.
+    What the two share (the half-space limit 0.456: eps_B here, cao2012's bilayer at mu_f/mu_s = 1 and
+    its Eq. 7; and the crease strain 0.35 both quote) is model against model, for the relation jobs.
+  citation: {page: 17, printed_page: "17", quote: "From wrinkles to creases in elastomers: the instability and", where: "ref. 10"}
+- id: q_no_validation_hong2009
+  kind: choice
+  about: [biot_strain_eq28, biot_stretch_eq28, bifurcation_strain_eq28, bifurcation_wavenumber_eq28, m_point_eq211, m_point_eq211_corrected, hong2009/eps_exp_printed, hong2009/eta_exp_printed, gent_cho_crease_strain]
+  text: >-
+    (Cross-validation against hong2009, ref. 9; job 2026-11-18.) No validation from this record's models to
+    hong2009's measurements is entered. hong2009 measures nothing itself; it records two experimental values
+    from the literature: the crease strain epsilon_exp = 0.35 of bent elastomer blocks (Gent & Cho, Ghatak &
+    Das) and the swelling-ratio range eta_exp = 2.0-3.7 of gels swelling on a substrate. This record's
+    runnable models give the linear bifurcation curve of Eq. 2.8, the Biot strain eps_B = 0.456 at which
+    it diverges, and the M-point eps_M = 0.272 of the energy variation for the exponentially graded solid.
+    None gives the crease onset of a homogeneous solid: this paper says the Biot strain "can be hardly
+    reached experimentally because the flat surface unstably creases at a strain lower than" it (p. 2), so
+    eps_B is not its prediction of the measured crease strain; the M-point belongs to the graded solid and
+    a wrinkle wavenumber kbar, neither defined for a bent rubber block; and the homogeneous-limit crease
+    strain 0.35 (crease_lower_bound_homogeneous) comes from finite-element unloading that is not runnable
+    here (q_fem_not_runnable). Nothing here gives a swelling ratio. The other direction is entered:
+    hong2009/val_eps_c_diab2013_gent_cho sets hong2009's energy criterion against Gent & Cho's range as
+    this paper reports it (gent_cho_crease_strain). How eps_B = 0.456 relates to hong2009's
+    epsilon_biot = 0.46 and the 0.35 thresholds of the two papers is model against model, for the relation jobs.
+  citation: {page: 2, printed_page: "2", quote: "unstably creases at a strain lower than the Biot critical strain", where: text}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [biot_strain_eq28, biot_stretch_eq28, bifurcation_strain_eq28, bifurcation_wavenumber_eq28, m_point_eq211, m_point_eq211_corrected, gent_cho_crease_strain]
+  text: >-
+    (Cross-validation against tallinen2015, which cites this paper as its ref. 37; job 2026-11-18.) No
+    validation is entered in either direction. tallinen2015 is a theory and finite-element paper with no
+    measurement: every datum there is predicted, derived or a reported input (its sulcification stretch
+    0.647 from its ref. 32, the brain's modulus ratio of about 1 from its ref. 2), so this record's models
+    have nothing measured there to predict. This record holds no measurement of its own either; its one
+    experimental value, Gent & Cho's crease strain 0.28-0.42 under bending (gent_cho_crease_strain, cited),
+    is a nominal surface strain of a bent homogeneous rubber block, and no tallinen2015 model returns a
+    strain: they give growth ratios and wavelengths of a growing layer bonded to an unstrained substrate,
+    and the one that gives the sulcification threshold (gs_from_stretch, gs = 1/lambda_s) takes the
+    crease stretch as its input rather than predicting it. tallinen2015 mentions this paper only as an
+    analogue that "differ[s] from ours particularly strongly in the region of subcriticality" (its p. 2),
+    not as data it explains. What the two share (the half-space Biot limit, eps_B = 0.456 here and
+    gb = 1.839 there) is model against model, for the relation jobs (see tallinen2015/relations.yaml).
+    See tallinen2015/q_no_validation_diab2013.
+  citation: {page: 2, printed_page: "2", quote: "compressed by bending creased at a nominal strain in the range 0.28–0.42", where: text}
+- id: q_no_validation_trujillo2008
+  kind: choice
+  about: [biot_strain_eq28, biot_stretch_eq28, bifurcation_strain_eq28, bifurcation_wavenumber_eq28, m_point_eq211, m_point_eq211_corrected, gent_cho_crease_strain, trujillo2008/ec_mean_modulus_series, trujillo2008/ec_mean_thickness_series, trujillo2008/fig3a_ec_points, trujillo2008/fig3b_ec_points, trujillo2008/hh0_onset_measured]
+  text: >-
+    (Cross-validation against trujillo2008, job 2026-11-18; pair chosen from the corpus list, relate_with.)
+    No validation is entered in either direction. This paper does not cite trujillo2008, and trujillo2008
+    (2008) predates it. trujillo2008 measures the critical effective strain for creasing of surface-attached
+    gels that swell, e_c = 1 - l0/l, about 0.33 (Fig. 3, means 0.33 +/- 0.02 and 0.33 +/- 0.01), and the
+    thickness ratio h/h0 = 2.0 +/- 0.1 at onset (Fig. 4). The loading there is equibiaxial and the gels are
+    homogeneous through their thickness. The runnable models here are all plane strain. Eq. 2.8 and its
+    inversion give the linear bifurcation strain of a solid whose modulus decays exponentially with depth,
+    at a wavenumber kbar = k/a that has no value for a homogeneous gel. The Biot strain eps_B = 0.456 is a
+    plane-strain bifurcation, and this paper says the surface "creases at a strain lower than" it (p. 2), so
+    it is not its prediction of a crease onset. The M-point (Eqs. 2.10-2.12) belongs to the graded solid.
+    The homogeneous crease bound 0.35 comes from finite-element unloading that cannot be rerun
+    (q_fem_not_runnable). Running any of these at trujillo2008's onset would test them outside the loading
+    they state, and none gives h/h0. In the other direction, this record holds no measurement. Its one
+    experimental value, Gent & Cho's 0.28-0.42 (gent_cho_crease_strain, cited from ref. 1), is a nominal
+    surface strain of rubber compressed by bending. trujillo2008's models give Biot's equibiaxial threshold
+    (lambda1^2 lambda3 = 0.296), not a strain under bending; its other models process its own figures.
+    Setting the measured e_c 0.33 beside eps_B = 0.456 or the plane-strain crease threshold 0.35 is a
+    relation between thresholds of different loadings, for the relation jobs. See
+    trujillo2008/q_no_validation_diab2013.
+  citation: {page: 2, printed_page: "2", quote: "unstably creases at a strain lower than the Biot critical strain", where: text}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [biot_strain_eq28, biot_stretch_eq28, bifurcation_strain_eq28, bifurcation_wavenumber_eq28, m_point_eq211, m_point_eq211_corrected, gent_cho_crease_strain, wang2014/exp_wrinkling_fig7a, wang2014/exp_creasing_fig7a, wang2014/exp_delamination_fig7a, wang2014/adhesion_fig3_lp1, wang2014/tension_fig13a]
+  text: >-
+    (Cross-validation against wang2014, which cites this paper as its ref. 32; job 2026-11-18; pair chosen
+    from the citation and the corpus list.) No validation is entered, in either direction. wang2014 cites
+    this paper only in a group of works on instability modes (its p. 1, refs. 14, 24, 26, 28-33), and it
+    compares none of its measurements with this paper's analysis. Its measurements are the shear moduli of
+    Ecoflex and Sylgard and a film thickness range (inputs), peel-test adhesion energies (Fig. 3), uniaxial
+    tension curves (Fig. 13) and the observed initial modes of the Fig. 7(a) experiments, whose datum is
+    each experiment's modulus ratio. This record's runnable models (Eq. 2.8 and its inversion, the Biot
+    strain eps_B, the M-point of Eqs. 2.10-2.12) give bifurcation strains and the normalized wavenumber
+    kbar = k/a of a neo-Hookean half-space whose modulus decays exponentially with depth. None of these
+    quantities was measured in wang2014: it prints no onset strain or wavelength for its experiments. A film
+    bonded to a substrate of another modulus is a step in modulus, not the grading Q = Q0 exp(a X2), so
+    kbar has no value there. Placing eps_B = 0.456 or eps_M = 0.272 beside wang2014's wrinkling analysis
+    (0.456 at mu_f/mu_s = 1) or its crease strain 0.35 is model against model, for the relation jobs. In
+    the other direction, this record holds no measurement. Its one experimental value, Gent & Cho's
+    0.28-0.42 under bending, is a crease onset, which no wang2014 model outputs: wang2014's crease strain
+    0.35 is a datum from hong2009, and its wrinkling model gives Biot's wrinkling threshold, which this
+    paper says the surface creases below. See wang2014/q_no_validation_diab2013.
+  citation: {page: 2, printed_page: "2", quote: "unstably creases at a strain lower than the Biot critical strain", where: text}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [biot_strain_eq28, biot_stretch_eq28, bifurcation_strain_eq28, bifurcation_wavenumber_eq28, m_point_eq211, m_point_eq211_corrected, gent_cho_crease_strain, jin2015/exp_crease_15to1_text, jin2015/exp_crease_10to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_wrinkle_7p5to1_text, jin2015/film_H_exp, jin2015/substrate_H_exp]
+  text: >-
+    (Cross-validation against jin2015, which cites this paper as its ref. 44; job 2026-11-19; pair chosen from
+    the citation.) No validation is entered, in either direction. jin2015 cites this paper only in a group of
+    works saying that in layered materials the wrinkle onset can lie below or above the crease onset (its p. 1,
+    refs. 43-47); it compares none of its numbers with this paper. (1) This record's models against jin2015's
+    measurements: those are onset strains of wrinkles (0.18-0.21, 0.22-0.28) and creases (0.28, 0.37) in
+    PDMS films (15:1, 10:1, 7.5:1) on a 30:1 substrate under uniaxial compression, with film and substrate
+    thicknesses as inputs. This record's runnable models (Eq. 2.8 and its inversion, the Biot strain, the
+    M-point of Eqs. 2.10-2.12) give plane-strain bifurcation strains of a neo-Hookean half-space whose modulus
+    decays as Q0 exp(a X2). A film bonded to a substrate is a step in modulus, not that grading, so the
+    normalized wavenumber kbar = k/a has no value for these samples, and the moduli are not printed either
+    (jin2015/q_exp_moduli). The homogeneous limit eps_B = 0.456 (plane strain) is Biot wrinkling of one
+    material, which the bilayers are not; the crease measurements have no runnable crease model here (the
+    crease results are finite elements, q_fem_not_runnable). (2) jin2015's models against this record: this
+    record holds no measurement. Its one experimental value, Gent & Cho's 0.28-0.42 under bending (reported
+    from ref. 1), is a crease onset, which no jin2015 model outputs (jin2015's crease strains 0.35 and 0.44
+    are data from hong2009). Placing jin2015's Biot strain 0.556 (uniaxial) beside this record's 0.456 (plane
+    strain) through jin2015's Eq. 1 is model against model, for the relation jobs. See
+    jin2015/q_no_validation_diab2013.
+  citation: {page: 2, printed_page: "2", quote: "compressed by bending creased at a nominal strain in the range 0.28–0.42", where: text}
+- id: q_no_validation_cao2011
+  kind: choice
+  about: [biot_strain_eq28, biot_stretch_eq28, bifurcation_strain_eq28, bifurcation_wavenumber_eq28, m_point_eq211, m_point_eq211_corrected, gent_cho_crease_strain, crease_tip_strain_fem]
+  text: >-
+    (Cross-validation against cao2011, Cao & Hutchinson, this paper's ref. 10; job 2026-11-19; pair chosen
+    from the citation.) No validation is entered, in either direction. (1) This record's models against
+    cao2011's measurements: cao2011 holds none; its plotted markers (Figs. 5-9) are the authors' ABAQUS
+    results (cao2011 figures.md, origin predicted), and its one reference to experiment (Cai et al.,
+    submitted) gives no value. That this record's Biot strain 0.456 equals cao2011's eps_W, and that the
+    FEM crease-tip strain reaches it in both papers, is model against model, for the relation jobs.
+    (2) cao2011's models against this record: this record holds no measurement of its own. Gent & Cho's
+    0.28-0.42 (reported from ref. 1) is a range over rubber strips creased under bending, a strain gradient
+    that cao2011's homogeneously compressed half-space does not model; it belongs to a record of Gent & Cho,
+    not to this paper. This paper cites cao2011 only for its analysis (imperfection sensitivity, p. 2; FEM
+    crease-tip strain, p. 12) and compares none of its numbers with cao2011's. See
+    cao2011/q_no_validation_diab2013.
+  citation: {page: 2, printed_page: "2", quote: "studied the imperfection sensitivity of creasing by analysing multiple-mode", where: text}

@@ -1,0 +1,19 @@
+id: fe_modulus_fit
+name: shear moduli from ring compression fitted with an ABAQUS neo-Hookean model
+role: fit
+stated: {page: 11,quote: "The extraction of the shear modulus of the stiff layer from experimental data is", where: "SM, measurement of tissue shear moduli"}
+equation: "mu = c mu0, c from a least-squares fit of the simulated to the measured force-displacement curve (first few points); soft layer by repeated simulations and linear interpolation; residual eigenstrain tested by opening angle (Figs. S4-S6)"
+inputs:
+  alpha: {quantity: opening_angle, unit: degree}
+outputs:
+  increase: {quantity: relative_modulus_increase, unit: percent, description: "increase of the extracted shear modulus with eigenstrain"}
+settings:
+  mesh_stiff_layer: "50 x 20 x 40"
+  mesh_soft_layer: "50 x 30 x 40"
+  symmetry: "one eighth of the tube"
+  contact: "hard normal contact, frictionless sliding"
+runnable: false
+not_runnable_reason: >
+  Commercial finite-element runs (ABAQUS) of a ring compressed between two planes, fitted to measured
+  force-displacement curves that are only plotted (Fig. S3 H-J); the ring geometries ('mean values of
+  geometric parameters measured from experiments') are not printed, and the code is not published.

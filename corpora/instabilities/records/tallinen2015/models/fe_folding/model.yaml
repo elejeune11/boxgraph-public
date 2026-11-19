@@ -1,0 +1,25 @@
+id: fe_folding
+name: explicit finite-element simulation of a growing neo-Hookean layer on a substrate (Appendix A)
+role: model
+stated: {page: 5, printed_page: "022720-5", quote: "method with discretizations to constant strain triangle (2D)", where: "Appendix A"}
+equation: "minimize the energy of Eq. B1 (layer: (1/2) mu1 Tr(F G^-1 G^-T F^T); substrate: (1/2) mu2 Tr(F F^T)) with a quasi-incompressible nodal pressure formulation"
+inputs:
+  eta: {quantity: modulus_ratio, unit: dimensionless}
+  g: {quantity: growth_ratio, unit: dimensionless}
+outputs:
+  l_over_h: {quantity: wavelength_over_layer_thickness, unit: dimensionless, description: "energy-minimizing wavelength of the folds"}
+settings:
+  bulk_modulus_2D: "1e3 mu"
+  bulk_modulus_3D: "1e2 mu"
+  substrate_thickness: "10 h"
+  elements_through_layer_2D: 200
+  elements_through_layer_3D: 10
+  domain_2D: "half-fold with symmetric boundary conditions; width adjusted to find the energy-minimizing wavelength"
+  hysteresis_widths: "2.50h (eta = 0.5), 4.71h (eta = 1), 7.54h (eta = 4)"
+  large_3D_domain_width: "30 h"
+runnable: false
+not_runnable_reason: >
+  The paper's explicit finite-element code is not published, and the method is described only in outline
+  (element type, bulk modulus, mesh density, substrate depth, initiating forces, contact handling); the
+  time stepping, damping, loading rate and convergence criteria are not given. Re-implementing a 2D/3D
+  nonlinear finite-element solver with self-contact is outside what the record can run.

@@ -1,0 +1,13 @@
+id: wrinkle_stretch_linear_stability
+name: film stretch at the onset of wrinkling, 1 - e_c wrinkle (helper relating the linear stability analysis to Biot's critical stretch)
+role: processing
+stated: {page: 4, printed_page: "051004-4", quote: "is around 0.465 for lf =ls ¼ 1 and kp ¼ 1, consistent with Biot", where: "Sec. 4, Wrinkling"}
+equation: "lambda_c = 1 - e_c wrinkle, with e = DL/L the applied compressive strain in plane strain (p. 3), so that the film stretch along the compression is 1 - e"
+built_from: [wrinkle_linear_stability]
+inputs:
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless, description: "mu_f / mu_s"}
+  lam_p: {quantity: substrate_prestretch, unit: dimensionless}
+outputs:
+  lam_c: {quantity: wrinkling_onset_film_stretch, unit: dimensionless}
+settings: {kh_min: 0.001, kh_max: 30.0, n_kh: 41, e_min: 0.0001, e_max: 0.7, n_e: 120, tol: 1.0e-6, n_golden: 25}
+stochastic: false

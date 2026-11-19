@@ -1,0 +1,54 @@
+# Against tallinen2015: no relation is entered.
+# Neither paper cites the other. trushko2020 cites Tallinen et al. (2014), "Gyrification from constrained cortical
+# expansion" (PNAS, p. 15), only in words ("as previously shown for the gut and the brain gyration", p. 13); that is
+# not tallinen2015 (Tallinen & Biggins, PRE 92, 022720), and tallinen2015 predates trushko2020. No datum of either
+# record takes a value from the other, so no cited.yaml line is added.
+# No relation is proposed either, because no mapping between the models is a real one:
+# - tallinen2015's thresholds and wavelengths (eq1_threshold, stiff_threshold_asymptote, stiff_wavelength_asymptote,
+#   the eta_* and g_* models) are for a growing layer bonded to a soft elastic half-space, set by the modulus ratio
+#   eta and the growth ratio g, in an infinite flat geometry with no curvature.
+# - trushko2020's ring models (critical_strain_s21, pbuckling_eq1, pressure_compressed_ring, ring_pressure_s25_normalized,
+#   fold_*) are for a curved ring of bending rigidity K and compressional rigidity lambda pressed against a confining
+#   capsule and folding inward into a fluid lumen: there is no elastic substrate behind the folds, and the threshold
+#   is set by K/(lambda R^2), i.e. by the curvature 1/R, which has no counterpart in tallinen2015. Setting tallinen2015's
+#   substrate to nothing (eta -> oo) sends its threshold g -> 1 and its wavelength to infinity, not to the ring result,
+#   and the capsule is a one-sided constraint on the outer side, not a foundation under the layer.
+#
+# Against wang2014 (Wang & Zhao, J. Appl. Mech. 81, 051004): no relation is entered.
+# Neither paper cites the other. The reference that suggested the pair, ref-mandal2014, is Mandal, K., Wang, I.,
+# Vitiello, E., Orellana, L.A., and Balland, M. (2014), "Cell dipole behaviour revealed by ECM sub-cellular
+# geometry", Nat. Commun. (p. 14; cited pp. 4-5 for a cellular traction force): a different Wang and a different
+# work. trushko2020 never mentions film-substrate wrinkling or Wang and Zhao. No datum of either record takes a
+# value from the other, so no cited.yaml line is added.
+# No relation is proposed: wang2014's models (wrinkle_linear_stability, eq5_stiff_film*, wrinkle_crease_boundary,
+# fe_delaminated_buckling, neo_hookean_uniaxial) are for a flat neo-Hookean film bonded to a prestretched deep
+# neo-Hookean substrate, set by mu_f/mu_s and lambda_p, with no curvature. trushko2020's ring models
+# (critical_strain_s21, pbuckling_eq1, ...) have no elastic substrate behind the folds; their threshold is set by
+# K/(lambda R^2), i.e. by the curvature 1/R, which has no counterpart in wang2014, and the capsule is a one-sided
+# outer constraint rather than a bonded foundation. No substitution of inputs turns one into the other.
+#
+# Against cerda2003 (Cerda & Mahadevan, PRL 90, 074302): neither paper cites the other, and no datum of either
+# record takes a value from the other, so no cited.yaml line is added. One relation is proposed: both use the
+# thin-plate bending stiffness E t^3/[12(1 - nu^2)]. No other relation is proposed: cerda2003's wrinkling laws
+# (wrinkle_eq5, stretched_sheet, deep/shallow_substrate_wavelength, wrinkle_eq6_scaling) are for a flat sheet on a
+# tension or substrate foundation K, which pulls the sheet back on both sides of its mid-plane. trushko2020's ring
+# (critical_strain_s21, pbuckling_eq1, ...) is a curved ring under compression, held by a one-sided outer capsule,
+# folding into a fluid lumen with nothing behind the folds; its threshold is set by K/(lambda R^2), i.e. by the
+# curvature 1/R, which has no counterpart in cerda2003, and its fold count is not a wavelength selected by a
+# bending/foundation balance. Mapping the capsule to an effective foundation stiffness would be the reader's own
+# model, not a substitution of inputs.
+- id: rel_plate_bending_same_as_capsule_rigidity
+  kind: same_as
+  a: cerda2003/bending_stiffness
+  b: trushko2020/capsule_bending_rigidity
+  mapping: {E: "E*1e-3", h: "t*1e6", nu: "nu"}
+  output_map: {Kcap: B}
+  regime: {E: [1.0e+3, 1.0e+6], t: [1.0e-6, 1.0e-4], nu: [0.1, 0.49]}
+  provenance: proposed
+  reason: >
+    Both papers write the bending stiffness of a thin isotropic elastic plate as E t^3/[12(1 - nu^2)]
+    (cerda2003 p. 2 for the sheet, trushko2020 p. 37 for the alginate shell, Kcap = E h^3/(12(1 - nu^2))).
+    The capsule's thickness h is the sheet thickness t; Pa -> kPa is 1e-3, m -> um is 1e6, and Kcap in
+    uN*um is converted to N*m. The regime spans the alginate shells (kPa to MPa, um to 100 um).
+  assumptions:
+    - "the capsule wall is treated, as trushko2020 says, as a thin elastic plate; its curvature does not enter Kcap"

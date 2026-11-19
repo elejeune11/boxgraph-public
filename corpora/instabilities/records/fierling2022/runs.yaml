@@ -1,0 +1,74 @@
+- id: run_prestress_main_043
+  model: prestress_main
+  inputs: {chi: chi_nd, eps: eps_m_043}
+  sweep: {theta: prestress_fig2c}
+  outputs: {sigma_a: prestress_main_043}
+- id: run_prestress_main_525
+  model: prestress_main
+  inputs: {chi: chi_nd, eps: eps_m_525}
+  sweep: {theta: prestress_sf1f}
+  outputs: {sigma_a: prestress_main_525}
+- id: run_prestress_si_043
+  model: prestress_si
+  inputs: {chi: chi_nd, eps: eps_m_043}
+  sweep: {theta: prestress_fig2c}
+  outputs: {sigma_a: prestress_si_043}
+- id: run_prestress_si_525
+  model: prestress_si
+  inputs: {chi: chi_nd, eps: eps_m_525}
+  sweep: {theta: prestress_sf1f}
+  outputs: {sigma_a: prestress_si_525}
+- id: run_prestress_si_sign_043
+  model: prestress_si_sign
+  inputs: {chi: chi_nd, eps: eps_m_043}
+  sweep: {theta: prestress_fig2c}
+  outputs: {sigma_a: prestress_si_sign_043}
+- id: run_prestress_si_sign_525
+  model: prestress_si_sign
+  inputs: {chi: chi_nd, eps: eps_m_525}
+  sweep: {theta: prestress_sf1f}
+  outputs: {sigma_a: prestress_si_sign_525}
+- id: run_dimensions
+  model: embryo_dimensions
+  inputs: {R_DV: r_dv, ratio: axis_ratio_si}
+  outputs: {L: length_model, W: width_model}
+- id: run_gap
+  model: vitelline_gap
+  inputs: {c: gap_rel, R_DV: r_dv}
+  outputs: {d: gap_model}
+- id: run_compatibility
+  model: length_compatibility
+  inputs: {e: ventral_strain_example, n_ap: n_sagittal, n_dv: n_cross}
+  outputs: {s_ap: stretch_ap_model, s_dv: stretch_dv_model, ratio: stretch_ratio_model}
+- id: run_stress_ratio
+  model: midline_stress_ratio
+  inputs: {s_ap: sap_fig2c, s_dv: sdv_fig2c}
+  outputs: {ratio: stress_ratio_fig2c}
+- id: run_reduction_sim
+  model: area_reduction
+  inputs: {fold: area_sim_fig3a}
+  outputs: {reduction: reduction_sim}
+- id: run_reduction_muvi
+  model: area_reduction
+  inputs: {fold: area_muvi_fig3a}
+  outputs: {reduction: reduction_muvi}
+- id: run_ap_stress_prestress
+  model: ap_stress_prestress
+  inputs: {sigma_a: prestress_fig2c}
+  outputs: {sigma_AP: sap_from_prestress_fig2c}
+  note: added in audit (the stated result 'sigma_AP approximately equal to sigma_a', p. 6)
+- id: run_recoil
+  model: recoil_from_stress
+  inputs: {sigma: sap_fig5d}
+  outputs: {v: recoil_model}
+# ---- second figure pass (2026-11-19) ----
+- id: run_target_size_043
+  model: target_size
+  inputs: {eps: eps_m_043}
+  sweep: {theta: target_fig2a_mid}
+  outputs: {s: target_size_043}
+- id: run_target_size_525
+  model: target_size
+  inputs: {eps: eps_m_525}
+  sweep: {theta: target_sf1e_mid}
+  outputs: {s: target_size_525}

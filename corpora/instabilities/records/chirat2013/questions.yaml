@@ -1,0 +1,181 @@
+- id: q_mode_selection
+  kind: unexplained_difference
+  about: [mode3_si, Kf_adhesion, clamped_rod_buckling, run_mode_lowest, run_mode_symmetric]
+  text: >-
+    With the SI values (E = 0.8 MPa, w = h = 0.7 mm, L0 = 1 cm, Kf = 0.008 MPa) kf = Kf L0^4/EI is about 5000.
+    The reader's linearization of Eq. 4 with clamped ends gives as lowest critical load an antisymmetric
+    mode (one interior node, mode 2), with the symmetric mode 3 (one central bulge flanked by two dips)
+    about 4% higher; mode 3 is the lowest of all only for kf above about 6200 (and mode 2 for kf between
+    about 880 and 6200). The printed "mode 3" is reproduced if the analysis is restricted to modes symmetric
+    about the middle, as a search for one centred spine would be, but the paper does not say how its linear
+    buckling analysis (ref. 33) selects or numbers modes. Rounding of the one-figure Kf (0.0075-0.0085 MPa)
+    does not change this.
+  citation: {page: 7, quote: "a value that corresponds to an initial"}
+- id: q_clamped_x_bc
+  kind: possible_error
+  about: [spine_growth_simulation, clamped_rod_buckling]
+  text: >-
+    The clamped boundary conditions are printed as x = y = theta = 0 at s0 = 0 and s0 = 1. With x' = gamma cos(theta)
+    and gamma >= 1, x(1) = 0 is not possible for a near-flat rod; x(1) = 1 (ends a pregrown length apart)
+    is presumably meant, and is what the reconstructed linear analysis assumes.
+  citation: {page: 5, quote: "which requires x = y = θ = 0 at s0 = 0 and"}
+- id: q_sim_inputs
+  kind: unstated_input
+  about: [spine_growth_simulation, g_fig3_left, g_fig3_middle, g_fig3_right, eta_si]
+  text: >-
+    The growth simulations (Figs. 3, 5, 6) do not state their end growth time or final gamma, time step,
+    the b1 and b20 values used in Fig. 5 and Fig. 4, or the exact attachment map used when the foundation is
+    updated; Fig. 5 shows no axis values for g or b1. They cannot be rerun to match a printed result.
+  citation: {page: 3, quote: "Other parameters are provided"}
+- id: q_growth_units
+  kind: reading
+  about: [g_fig3_left, g_fig3_middle, g_fig3_right, eta_si]
+  text: >-
+    Growth time has no stated unit ("we do not provide a quantitative meaning"), so g and eta are recorded as
+    dimensionless rates per unit growth time; only their ratios and relative sizes carry meaning. The
+    equivalent compressive strain of the clamped section is (gamma - 1)/gamma at stretch gamma.
+  citation: {page: 7, quote: "we do not provide a quantitative meaning to"}
+- id: q_eq1_form
+  kind: reading
+  about: [spine_growth_simulation]
+  text: >-
+    Eq. 1 (and Eq. 6) is read from the page image as Eb(s0) = 1 - b1 exp(-((s0 - 0.5)/(2 b2))^2); the
+    factor 2 multiplies b2 in the denominator inside the square. The OCR text garbles the exponent.
+  citation: {page: 3, quote: "we assume", where: Eq. 1}
+- id: q_EI_stiffness_inputs
+  kind: choice
+  about: [E_mantle, w_mantle, h_mantle, L0_mantle]
+  text: >-
+    E is taken from squid mantle and w, h from Nautilus mantle, not from the spiny gastropods modelled, and
+    L0 is an order-of-magnitude length (~1 cm); kf scales as L0^4 h^-3 w^-1, so the mode selected is
+    sensitive to these choices (e.g. L0 = 1.06 cm already moves kf past the mode 2/3 boundary of the
+    reconstructed analysis). Kf was set to give mode 3 for these values.
+  citation: {page: 7, quote: "This measurement can of course vary signiﬁcantly"}
+- id: q_eq2_moment_balance
+  kind: possible_error
+  about: [spine_growth_simulation, clamped_rod_buckling]
+  text: >-
+    The dimensional moment balance of Eq. 2 is printed M' = NX X' - NY Y'. With Eq. 3 (X' = gamma cos(theta),
+    Y' = gamma sin(theta)) and the stated scalings it becomes m' = gamma (nx cos(theta) - ny sin(theta)), but the
+    nondimensional Eq. 4 prints m' = gamma (nx sin(theta) - ny cos(theta)), which is the standard planar
+    Kirchhoff balance M' = NX Y' - NY X'. The two printed forms disagree; Eq. 2 probably has X' and Y' swapped.
+    Linearized about the flat state, the Eq. 2 form gives no buckling eigenproblem (a constant term -P), so the
+    reconstructed buckling analysis follows Eq. 4 as printed.
+  citation: {page: 5, quote: "edge applies a linear spring force to the mantle", where: "Eqs. 2 and 4"}
+- id: q_fig4_readable
+  kind: reading
+  about: [spine_growth_simulation]
+  text: >-
+    figures.md says Fig. 4 shows b1 and b2 only as annotations. The left panel does have numbered axes
+    (Eb from 0.5 to 1.0 against s0 from 0.2 to 1.0), and its minimum near Eb of about 0.52 at s0 = 0.5 could be
+    read to give b1 (Eq. 1: Eb(0.5) = 1 - b1) and a width for b2. The Fig. 3 panels also have numbered s0 axes
+    (0 to 1). The paper does not say which b1 and b2 Fig. 4 uses or whether it is only illustrative, so a reading
+    would test the drawn profile against Eq. 1 rather than a simulation. This is left to the figure job.
+  citation: {page: 3, quote: "Form of bending stiffness. A decreased stiffness allows for higher curvature", where: Fig. 4}
+- id: q_fig4_b2_meaning
+  kind: reading
+  about: [stiffness_profile_eq1, Eb_profile_fig4, b2_fig4, q_fig4_readable, q_eq1_form]
+  text: >-
+    The calibrated reading of Fig. 4 (left) answers q_fig4_readable: the drawn profile has its minimum at
+    Eb = 0.5 (b1 = 0.5) and is a Gaussian of standard deviation 0.1 in s0 to within the reading's precision,
+    i.e. Eq. 1 as printed with b2 = 0.1/sqrt(2) = 0.0707, or a Gaussian written exp(-(s0 - 0.5)^2/(2 b2^2))
+    with b2 = 0.1. The arrow labelled b2 in the figure ends, by eye, near s0 = 0.62, about the half width at
+    half depth (0.118 for that curve), which is neither reading of b2. Which width b2 denotes, and so the
+    form of the exponent in Eq. 1, is not settled by the figure; the two forms differ by a factor sqrt(2) in b2.
+  citation: {page: 3, quote: "The parameter b2 controls the width of the Gaussian", where: "Fig. 4 and Eq. 1"}
+- id: q_fig5_axis_values
+  kind: reading
+  about: [b1_fig5_upper, b1_fig5_lower, g_fig5_left, g_fig5_right, q_sim_inputs, spine_growth_simulation]
+  text: >-
+    Fig. 5 does carry tick values (vector text not in the OCR): b1 = 0.85 for panels A and B, 0.25 for C and
+    D, and g = 0.5 for A and C, 2.5 for B and D. This settles the b1 and g of the Fig. 5 simulations that
+    q_sim_inputs lists as missing; b20, the end time and the time step remain unstated. The Fig. 5 growth
+    rates (0.5, 2.5) are not those of Fig. 3 (1, 4, 8).
+  citation: {page: 4, quote: "Amount of stiffness variation", where: Fig. 5}
+- id: q_fig4_shape_uncompared
+  kind: unstated_input
+  about: [shape_fig4, spine_growth_simulation]
+  text: >-
+    The deformed shape of Fig. 4 (right) is read with calibration but cannot be compared: it is an output of the
+    growth simulation, whose growth time, g, kf and b2 for this panel are not stated (see q_sim_inputs).
+  citation: {page: 3, quote: "A decreased stiffness allows for higher curvature at the tip of the spine", where: "Fig. 4 (right)"}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [clamped_rod_buckling, infinite_rod_foundation, kf_scaling, second_moment_si1, stiffness_profile_eq1, spine_growth_simulation, L0_mantle, cerda2003/L_fig1, cerda2003/W_fig1, cerda2003/t_fig1, cerda2003/gamma_fig1, cerda2003/two_Hs_hand]
+  text: >-
+    No validation between this record and cerda2003 is entered, in either direction (cross-validation job
+    2026-11-14). Neither paper cites the other. This record holds no measurement: its values are inputs taken
+    from other works (E from squid mantle, w and h from Nautilus mantle), chosen values (L0 = 1 cm from the
+    "~1 cm" spine spacing of a mature mollusk, which is an order of magnitude, not a measured count or spacing,
+    and Kf tuned to give mode 3), simulation settings, and model results (mode 3, the Fig. 4 readings), so no
+    cerda2003 model has a measurement here to predict. In the other direction cerda2003's measurements are the
+    Fig. 1 polyethylene sheet's length, width, thickness and tensile strain and the pinched skin fold
+    2Hs ≈ 5 mm: inputs, none of which a model here gives as an output (they give a mode number, a critical
+    load, a dimensionless wavelength, kf, I and Eb). cerda2003 measures no wavelength (its apple and hand
+    wavelengths are predictions). The rod-on-foundation wavelength 2 pi kf^(-1/4) L0 and cerda2003's
+    lambda ~ (B/K)^(1/4) are the same law with B -> EI, K -> Kf; that is a relation between models, for the
+    relation jobs, not a validation.
+  citation: {page: 7, quote: "a mature mollusk, it is ∼1 cm, so we take L0 = 1 cm"}
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [clamped_rod_buckling, infinite_rod_foundation, kf_scaling, second_moment_si1, stiffness_profile_eq1, spine_growth_simulation, L0_mantle, Kf_adhesion, mode3_si, huang2005/thin_compressible_eq18, huang2005/thick_substrate_wavelength, huang2005/g_winkler_thin]
+  text: >-
+    No validation between this record and huang2005 is entered, in either direction (cross-validation job
+    2026-11-14). Neither paper cites the other. This record holds no measurement: E and w, h are inputs taken
+    from other works (squid and Nautilus mantle), L0 = 1 cm is an order-of-magnitude choice, Kf was tuned to
+    give mode 3, and the rest are simulation settings and model results (mode 3, the Fig. 4 readings), so no
+    huang2005 model has a measurement here to predict. huang2005 is purely theoretical and prints no
+    measurements, so no model here has anything there to predict either. That this record's unbounded
+    rod-on-foundation wavelength is huang2005's thin compressible (Winkler) limit, Eq. 18, with L0 -> h,
+    EI -> E_bar h^3/12 and Kf -> the thin-layer foundation stiffness, is model against model and is already
+    entered as the proposed relation rel_huang_eq18_same_as_rod_foundation.
+  citation: {page: 7, quote: "a mature mollusk, it is ∼1 cm, so we take L0 = 1 cm"}
+- id: q_no_validation_moulton2012
+  kind: choice
+  about: [clamped_rod_buckling, infinite_rod_foundation, kf_scaling, second_moment_si1, stiffness_profile_eq1, spine_growth_simulation, E_mantle, w_mantle, h_mantle, L0_mantle, Kf_adhesion, mode3_si, moulton2012/winkler_rod_wavelength, moulton2012/ribs_linear_eq4, moulton2012/t_ribs_fig5a, moulton2012/EI_fig9, moulton2012/ks_fig9]
+  text: >-
+    No validation between this record and moulton2012 is entered, in either direction (cross-validation job
+    2026-11-14), although the two papers cite each other. This paper cites moulton2012 (ref. 21) only as the
+    general framework it follows and as the earlier model of antimarginal ridges (p. 2), not as a source of
+    measurements its model explains; moulton2012 points to this paper (Chirat et al.) only as the place where
+    spines are treated. Neither record holds a measurement: here E, w and h are inputs taken from other
+    works (squid and Nautilus mantle), L0 = 1 cm is an order-of-magnitude choice, Kf was tuned to give mode 3,
+    and the rest are simulation settings and model results (mode 3, the Fig. 4 readings); in moulton2012
+    every datum is a printed model parameter or a reading of its own computed Fig. 5, and its shell
+    photographs (Figs. 6, 9b) carry no count, spacing or scale. So no model of either record has a
+    measurement of the other to predict. That this record's rod on a foundation (Eq. 4, kf = Kf L0^4/EI) and
+    moulton2012's rod on a Winkler foundation (Eqs. 7-8, EI and k_s) are the same mechanics is model
+    against model, for the relation jobs.
+  citation: {page: 2, quote: "following the general framework of Moulton et al. (21)"}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [clamped_rod_buckling, infinite_rod_foundation, kf_scaling, second_moment_si1, stiffness_profile_eq1, spine_growth_simulation, L0_mantle, Kf_adhesion, mode3_si, tallinen2015/first_unstable_mode, tallinen2015/wavelength_at_threshold, tallinen2015/fe_folding, tallinen2015/eta_brain_printed]
+  text: >-
+    No validation between this record and tallinen2015 is entered, in either direction (cross-validation job
+    2026-11-14, asked for by the corpus list's relate_with). Neither paper cites the other: this paper's
+    references to growth-driven buckling are its own authors' works (refs. 21, 31, 33), and tallinen2015's
+    ref. 12 is Moulton and Goriely's growing tube, not this paper. Neither record holds a measurement. Here
+    E, w and h are inputs taken from other works (squid and Nautilus mantle), L0 = 1 cm is an
+    order-of-magnitude choice ("~1 cm" spine spacing, not a measured count or spacing), Kf was tuned to give
+    mode 3, and the rest are simulation settings and model results (mode 3, the Fig. 3-5 values and
+    readings); the shell photographs of Fig. 1 carry no count or size compared with a model. In tallinen2015
+    every datum is predicted, derived or reported (its Figs. 1-4 plot Eq. 1 and finite-element output; the
+    ferret brain and chick gut panels have no values; the brain's eta ≈ 1 is an input from its ref. 2), and
+    it says itself that very few experiments exist in its regime (p. 5). So no model of either record has a
+    measurement of the other to predict. Mapping this paper's growth ratio g (mantle length to shell edge
+    length) and rod-on-foundation stiffness kf to tallinen2015's layer growth g and modulus ratio eta is
+    model against model, for the relation jobs.
+  citation: {page: 7, quote: "a mature mollusk, it is ∼1 cm, so we take L0 = 1 cm"}
+- id: q_no_validation_qiu2022
+  kind: choice
+  about: [clamped_rod_buckling, infinite_rod_foundation, kf_scaling, second_moment_si1, stiffness_profile_eq1, spine_growth_simulation, E_mantle, w_mantle, h_mantle, L0_mantle, qiu2022/brazier_shell_eq9, qiu2022/wrinkling_eq11, qiu2022/alpha_fig2, qiu2022/alpha_range_ecoli]
+  text: >-
+    No validation between this record and qiu2022 is entered, in either direction (cross-validation job
+    2026-11-19). Neither paper cites the other. Neither record holds a measurement. Here, E, w and h are
+    values taken from other works for squid and Nautilus mantle, L0 and Kf are chosen, and mode 3 and the
+    Fig. 4 readings are model results. qiu2022's values are the dimensionless pressures that label its
+    Fig. 2 curves, alpha for E. coli taken from ref. 5, and model results (Brazier and wrinkling curvatures,
+    flattening, loss of second moment). qiu2022's Fig. 2 plots only model curves, and the osmotic-shock
+    experiments it mentions are not plotted. The two systems are also different: a growing rod on an
+    elastic foundation under axial compression, and a pressurized thin-walled tube under bending. No model
+    in either record gives a quantity that the other record measures.

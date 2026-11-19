@@ -1,0 +1,76 @@
+- id: cmp_biot_ec
+  purpose: reproduction
+  computed: ec_biot_pred
+  printed: ec_biot_printed
+  note: "1 - 0.296^(1/3) against the printed 0.334."
+- id: val_biot_modulus_series
+  purpose: validation
+  computed: ec_biot_pred
+  printed: ec_mean_modulus_series
+  conditions_ok: "Biot's threshold is stated to be independent of modulus and length-scale (p. 2), so it applies at any film thickness."
+  note: "The paper's central claim: the measured crease onset agrees with Biot's linear-instability threshold."
+- id: val_biot_thickness_series
+  purpose: validation
+  computed: ec_biot_pred
+  printed: ec_mean_thickness_series
+  conditions_ok: "Biot's threshold is stated to be independent of modulus and length-scale (p. 2)."
+- id: val_biot_southern_thomas
+  purpose: validation
+  computed: ec_biot_pred
+  printed: ec_southern_thomas
+  conditions_ok: "Biot's threshold is stated to be independent of modulus (p. 2); the paper compares the rubber value with it (p. 4)."
+- id: con_gel_vs_rubber
+  purpose: consistency
+  computed: ec_southern_thomas
+  printed: ec_mean_modulus_series
+  conditions_ok: "The paper compares the two directly as evidence that e_c is nearly universal for swollen networks (p. 4); the moduli differ by two orders of magnitude by design."
+- id: val_thickness_onset
+  purpose: validation
+  computed: hh0_onset_pred
+  printed: hh0_onset_measured
+  conditions_ok: "The reconstructed prediction takes e_c and nu of 0.4 mol% bis(acrylamide) gels, the composition of the Fig. 4 measurement; e_c was measured over 3 um-1 mm and is stated to be thickness-independent."
+- id: cmp_thickness_expected
+  purpose: reproduction
+  computed: hh0_onset_pred
+  printed: hh0_expected
+  conditions_ok: "The paper's expectation is for the same gels as the measurement (0.4 mol%, 1 mm), which the computed value uses."
+  note: "The printed value is approximate (no verdict); recorded to show what the reconstruction gives."
+- id: con_modulus_proportional
+  purpose: consistency
+  computed: modulus_prop_pred
+  printed: table1_modulus
+  note: "Whether the estimated moduli of Table 1 follow the stated proportionality to cross-linker content (shape only; the constant is fitted)."
+# ---- figure pass ----
+- id: val_biot_fig3a_points
+  purpose: validation
+  computed: ec_biot_fig3a
+  printed: fig3a_ec_points
+  conditions_ok: "Biot's threshold is stated to be independent of modulus and length-scale (p. 2); the paper draws it as the dashed line over these points."
+  note: "Point by point against Fig. 3(a), each point's interval the marker height (the caption's stated uncertainty)."
+- id: val_biot_fig3b_points
+  purpose: validation
+  computed: ec_biot_fig3b
+  printed: fig3b_ec_points
+  conditions_ok: "Biot's threshold is stated to be independent of modulus and length-scale (p. 2); the paper draws it as the dashed line over these points."
+  note: "Point by point against Fig. 3(b)."
+- id: rep_ec_interpolation
+  purpose: reproduction
+  computed: ec_interp_fig2
+  printed: fig3a_ec_fig2_points
+  conditions_ok: "Both are for 200 um gels (Fig. 2 caption, Fig. 3 caption); each computed value uses the l/l0 series of its own cross-linker content, so the mixed cross-linker condition of the inputs is expected."
+  note: "The paper's own procedure (p. 3) re-run on its own plotted Fig. 2 data, against the e_c it plots in Fig. 3(a). The three Fig. 3(a) points at 0.4 mol% all get the one interpolated value."
+- id: con_mean_fig3a
+  purpose: consistency
+  computed: ec_mean_fig3a
+  printed: ec_mean_modulus_series
+  note: "Mean of the 9 plotted points of Fig. 3(a) against the printed average 0.33 +/- 0.02."
+- id: con_mean_fig3b
+  purpose: consistency
+  computed: ec_mean_fig3b
+  printed: ec_mean_thickness_series
+  note: "Mean of the 10 plotted points of Fig. 3(b) against the printed average 0.33 +/- 0.01."
+- id: con_onset_fig4
+  purpose: consistency
+  computed: hh0_onset_fig4
+  printed: hh0_onset_measured
+  note: "Reconstructed mid-point rule on the Fig. 4 points against the printed 2.0 +/- 0.1."

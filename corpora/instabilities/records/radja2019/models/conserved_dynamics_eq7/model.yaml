@@ -1,0 +1,27 @@
+id: conserved_dynamics_eq7
+name: conserved (phase-field-crystal) dynamics of the primexine concentration on a sphere (Eq. 7)
+role: model
+stated: {page: 19, printed_page: "e5", where: "Eq. 7", quote: "This particular equation of motion is also called the phase-field crystal model"}
+equation: "d_t psi = D nabla^2 dH/dpsi = D nabla^2 [K (nabla^2 + q0^2)^2 psi + tau psi + (u3/2) psi^2 + (u4/6) psi^3]"
+inputs:
+  q0: {quantity: wavenumber_dimensionless, unit: dimensionless}
+outputs:
+  pattern_wavelength_foam: {quantity: pattern_wavelength, unit: um, description: "average foam wavelength; shown only as images (Fig. 2)"}
+settings:
+  seed: null              # not stated
+  D: 1
+  K: 1
+  u3: -40
+  u4: 120
+  R: 15
+  tau: [20, -20, -20]       # Fig. 2 rows 1, 2, 3
+  q0: [1.5, 2, 0.5]         # Fig. 2 rows 1, 2, 3
+  initial_variance: 0.04    # Gaussian random initial field centred on 0
+  t_final: 2
+  solver: "FiPy finite volumes on a discretized sphere (mesh and time step not stated)"
+runnable: false
+not_runnable_reason: >
+  The paper shows the results only as rendered surfaces (Fig. 2), with no printed number to compare,
+  and does not state the sphere mesh or the time step; one run takes about 10 minutes on the
+  paper's desktop with FiPy.
+stochastic: true

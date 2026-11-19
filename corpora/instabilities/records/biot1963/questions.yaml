@@ -1,0 +1,308 @@
+- id: q_strain_one_half
+  kind: reading
+  about: [lambda_plane_printed]
+  text: >
+    The paper calls the critical plane-strain state (lambda = 0.543) "a compressive strain slightly
+    greater than one half"; the engineering compressive strain 1 - lambda is 0.457, slightly less than
+    one half (the logarithmic strain is 0.61). Which strain measure is meant is not stated.
+  citation: {page: 11, quote: "Hence for a compressive strain slightly greater than one half"}
+- id: q_rounding_critical_values
+  kind: unexplained_difference
+  about: [cmp_lambda_plane, cmp_P_plane, cmp_P_plane_chain, cmp_k_eq28, cmp_k_uni, cmp_P_uni, cmp_P_uni_chain]
+  text: >
+    The critical values printed in section 4 behave as if truncated rather than rounded, or carried at
+    a different precision from step to step. From zeta = 0.839 the stated equations give lambda =
+    0.5440 (printed 0.543), k = 0.2959 from Eq. 2.8 and 0.2959 from lambda^(3/2) with 0.444 (printed
+    0.295 for both cases), and P/mu0 = 2.055 for the uniaxial case (printed 2.05). The plane-strain
+    P = 3.08 mu0 agrees with the unrounded stretch 0.5440 (3.084) but not with the printed 0.543
+    (3.097). The positive root of the cubic itself is 0.8393, consistent with 0.839.
+  citation: {page: 11, quote: "This equation is satisfied for"}
+- id: q_table1_mu_rows
+  kind: possible_error
+  about: [table1_mu, cmp_table1_mu]
+  text: >
+    In the mu/mu0 column of Table I, Eq. 3.25 gives 1.067 at lambda = 1.20 (printed 1.06) and 1.101
+    at lambda = 0.80 (printed 1.09); the entries at 2.00 (2.125, printed 2.12) are at the rounding
+    boundary. The other rows agree to the printed digits. Possible misprints or arithmetic slips in the
+    table; the printed values are kept as printed.
+  citation: {page: 13, quote: "Values of the relative rigidity modulus"}
+- id: q_table1_rigidity_rows
+  kind: unexplained_difference
+  about: [table1_rigidity, cmp_table1_rigidity]
+  text: >
+    In the mu phi/mu0 column of Table I, Eqs. 4.10, 4.8, 2.8 and 4.2 give 0.893 at lambda = 0.90
+    (printed .90) and 0.262 at lambda = 0.60 (printed .28). At lambda = .543 they give -0.004 rather
+    than 0, because the printed critical stretch 0.543 lies slightly below the root 0.5440 of Eq. 4.2;
+    the printed 0 is the value at the exact critical stretch. At 2.00 the formula gives 2.275 (printed
+    2.27), at the rounding boundary. The other rows agree to the printed digits.
+  citation: {page: 13, quote: "Numerical values of this factor as a function of"}
+- id: q_penetration_depth
+  kind: unstated_model
+  about: [k_crit_printed]
+  text: >
+    The claims that the disturbance "does not penetrate to a depth greater than approximately three
+    times the wavelengths" and that with one boundary restrained instability appears only for
+    wavelengths "smaller than about one third the thickness" rest on exp(-l k y) with k = 0.295, but
+    no attenuation threshold is stated (at y = 3 wavelengths the amplitude is exp(-2 pi 0.295 3),
+    about 0.004 of the surface value; the e-folding depth is about 0.54 wavelength). Not entered as a
+    model.
+  citation: {page: 14, quote: "does not penetrate to a depth greater than approximately three"}
+- id: q_k_uniaxial_exponent
+  kind: reading
+  about: [k_uniaxial]
+  text: >
+    The exponent in "k = lambda^(3/2)" for the uniaxial case is printed as a small superscript that
+    the scan renders poorly; it was read as 3/2, which follows from Eqs. 2.8 and 4.13
+    ((1 - zeta)/(1 + zeta) = lambda^3).
+  citation: {page: 14, quote: "The value of k is k"}
+- id: q_phi_unstressed_branch
+  kind: reading
+  about: [surface_rigidity_plane, table1_rigidity]
+  text: >
+    Audit: Eq. 4.8 is 0/0 at zeta = 0 (lambda = 1). The model surface_rigidity_plane returns phi = 1 there
+    by a hard-coded branch taken from the paper's statement (p. 179), so the lambda = 1.00 row of Table I
+    (mu phi/mu0 = 1.00) is reproduced by assertion, not by evaluating the formula. The limit of Eq. 4.8 as
+    zeta -> 0 is indeed 1 (k(1 + zeta)^2 = 1 + zeta + O(zeta^2)), so the printed value is consistent; the
+    branch is kept as the first reader wrote it.
+  citation: {page: 12, quote: "In the unstressed state, i.e. for P"}
+- id: q_phi_zero_weak_test
+  kind: reading
+  about: [cmp_phi_crit, cmp_phi_cubic]
+  text: >
+    Audit: the printed phi = 0 (p. 180) carries a rounding interval of +/- 0.5 under the digit rule, so
+    cmp_phi_crit and cmp_phi_cubic are weak tests. Eq. 4.8 gives phi = 7.8e-4 at the printed zeta = 0.839
+    and about 4e-11 at the computed root of Eq. 2.9; the stated equivalence of phi = 0 with the cubic
+    (2.9) holds exactly (k(1 + zeta)^2 = 1 squares to zeta^3 + 2 zeta^2 - 2 = 0 for zeta > 0).
+  citation: {page: 13, quote: "At this critical value we find"}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, k_plane_eq411, k_uniaxial, cerda2003/L_fig1, cerda2003/W_fig1, cerda2003/t_fig1, cerda2003/gamma_fig1, cerda2003/two_Hs_hand]
+  text: >-
+    No validation of this record's models against cerda2003's measurements is entered (cross-validation
+    job 2026-11-13). cerda2003's only measured values are the size and strain of the stretched
+    polyethylene sheet of its Fig. 1 (L ≈ 25 cm, W ≈ 10 cm, t ≈ 0.01 cm, tensile strain ≈ 0.10) and the
+    pinched fold thickness 2Hs ≈ 5 mm on the back of a hand. These are imposed geometry and loading or
+    a hand-made measurement used as an input, not outcomes of a compressed half-space: no model here
+    gives a sheet dimension, a tensile strain or a fold thickness. Biot's models give the critical
+    stretch, critical load and decay constant of the surface instability of a homogeneous
+    incompressible half-space, which cerda2003 does not measure (its wavelengths and amplitudes are
+    its own predictions, and wrinkling of a stiff sheet on a soft substrate is not Biot's homogeneous
+    case). Neither paper cites the other; all of these are approximate ("≈") values that get no verdict.
+- id: q_no_validation_richman1975
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, k_plane_eq411, surface_rigidity_plane, richman1975/l_measured_27wk, richman1975/l_measured_sidman, richman1975/t_27wk, richman1975/R_27wk, richman1975/area_II_normal, richman1975/load_white_matter_adult]
+  text: >-
+    No validation of this record's models against richman1975's measurements is entered
+    (cross-validation job 2026-11-13). richman1975 measures the Table 1 layer areas of a 27-week fetal
+    brain, the hemisphere radius (84 mm) and cortical thickness (≈ 1.7 mm) of that specimen, the
+    intersulcal distances 8.5 mm and 7.5 mm, and cites loads of 1 to 10 psi for adult white matter.
+    Biot's models give the critical stretch, critical load, incremental modulus, surface rigidity and
+    depth-decay factor of a homogeneous incompressible neo-Hookean half-space; the half-space has no
+    length scale, so no model here gives a wavelength, a thickness, an area or a radius, and richman1975
+    measures no stretch or compressive load at which the cortex buckles. A layered cortex on a softer
+    core is not Biot's homogeneous half-space. Neither paper cites the other. The other direction has no
+    measurement to test: biot1963 has none.
+- id: q_no_validation_bowden1998
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, k_plane_eq411, k_uniaxial, surface_rigidity_plane, bowden1998/L_measured, bowden1998/depth_unheated, bowden1998/depth_300C]
+  text: >-
+    No validation of this record's models against bowden1998's measurements is entered
+    (cross-validation job 2026-11-14). bowden1998 measures only the wrinkle wavelength of gold films on
+    PDMS (20 to 50 um over all samples) and the crest-to-trough depth (1.5 um without external heating,
+    3.9 um at 300 degC). Biot's models give the critical stretch, critical load, incremental modulus,
+    surface rigidity and depth-decay factor of a homogeneous incompressible neo-Hookean half-space; the
+    half-space has no length scale, so no model here gives a wavelength or a depth, and bowden1998 does
+    not measure the stretch or compressive stress at which its films wrinkle (its thermal mismatch
+    strain is small, far from Biot's critical stretch 0.543, and is not stated: bowden1998/q_eq1_inputs).
+    A stiff metal film on a soft substrate is not Biot's homogeneous half-space. Neither paper cites the
+    other. The other direction has no measurement to test: biot1963 has none, so bowden1998's models
+    get no validation here either.
+- id: q_no_validation_cao2012
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, k_plane_eq411, k_uniaxial, surface_rigidity_plane]
+  text: >-
+    No validation between this record and cao2012 is entered, in either direction (cross-validation
+    job 2026-11-14), although cao2012 cites this paper (its ref. 3). cao2012 is an analysis with finite
+    element simulations and holds no measurement (its figures.md: "The paper has no measurements"; its
+    plotted markers are finite element predictions), so Biot's models have nothing measured to be
+    tested against there. biot1963 holds no measurement either: Table I is computed from its own
+    equations, and its one mention of experiment (p. 6, Ciferri and Flory) gives no value. cao2012's
+    homogeneous-limit wrinkling strains (0.456 plane strain, 0.556 uniaxial) set against Biot's
+    critical stretches are model against model, which is the relation jobs' work.
+  citation: {page: 6, quote: "experimental confirmation was recently obtained by Cifferi and Flory"}
+- id: q_no_validation_stafford2004
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, k_plane_eq411, k_uniaxial, surface_rigidity_plane, incremental_modulus_plane, stafford2004/d_fig2b, stafford2004/d_fig1b_caption, stafford2004/E_fig3_indentation, stafford2004/E_fig4_indentation, stafford2004/Es_range]
+  text: >-
+    No validation of this record's models against stafford2004's measurements is entered
+    (cross-validation job 2026-11-14). stafford2004 measures wrinkle wavelengths of polymer and
+    organosilicate films on PDMS (Fig. 1b, Fig. 2b, the ~30 um of the organosilicate films), film
+    thicknesses, film moduli by nanoindentation (Figs. 3 and 4), porosities and the PDMS modulus
+    (1.5 to 2.0 MPa). Biot's models give the critical stretch, critical load, incremental modulus,
+    surface rigidity and depth-decay factor of a homogeneous incompressible neo-Hookean half-space,
+    which has no length scale: no model here gives a wavelength, a thickness or a film modulus.
+    stafford2004 prints no value of the strain applied to induce buckling (its p. 3 says only
+    "application of strain to induce buckling"), and no critical stretch or compressive stress; its stiff
+    film on a soft substrate wrinkles at small strain, which is not Biot's homogeneous surface
+    instability. Its ref. 9 is Biot's 1937 beam-on-foundation paper, not this one. The other direction
+    has no measurement to test: biot1963 has none.
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [crit_stretch_plane, char_cubic, plane_compression, tallinen2015/biot_polynomial, tallinen2015/lambda_s_printed]
+  text: >-
+    No validation between this record and tallinen2015 is entered, in either direction (cross-validation
+    job 2026-11-14). tallinen2015 holds no measurement: its data are its own analytic and finite-element
+    results, values derived from them, and inputs taken from other works (the crease stretch 0.647 of its
+    ref. 32, itself a computation; the brain's modulus ratio from its ref. 2); its brain and gut panels are
+    images without values. biot1963 has no measurement either. tallinen2015's zero-wavelength Biot root
+    gb = 1.839 is 1/lambda for this record's plane-strain critical stretch, but that is model against
+    model, for the relation jobs.
+  citation: {page: 6, quote: "experimental confirmation was recently obtained by Cifferi and Flory"}
+- id: q_no_validation_moulton2012
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, k_plane_eq411, surface_rigidity_plane]
+  text: >-
+    No validation between this record and moulton2012 is entered, in either direction (cross-validation
+    job 2026-11-14). moulton2012 holds no measurement: its data are printed model parameters and its own
+    computed r_s(t) curves of Fig. 5 (origin predicted), and its shell photographs give no rib count,
+    spacing or scale (its source notes: "The paper reports no measurements of real shells"). biot1963 has
+    none either: Table I is computed from its own equations, and its one mention of experiment (p. 6,
+    Ciferri and Flory) gives no value. Neither paper cites the other. Biot's half-space has no length
+    scale and moulton2012's mantle ring is a nondimensional rod on a spring foundation, so any link
+    between the two (a critical compression against a rod buckling threshold) is model against model,
+    for the relation jobs.
+  citation: {page: 6, quote: "experimental confirmation was recently obtained by Cifferi and Flory"}
+- id: q_no_validation_diab2013
+  kind: choice
+  about: [crit_stretch_plane, plane_compression, k_plane_eq411, char_cubic, diab2013/gent_cho_crease_strain, diab2013/hohlfeld_crease_vanishing, diab2013/hong_crease_strain]
+  text: >-
+    No validation of this record's models against diab2013's data is entered (cross-validation job
+    2026-11-18), although diab2013 cites this paper (its ref. 7). diab2013 has no measurement of its own:
+    its data are its perturbation and finite-element results (origin predicted). The one experimental value
+    it mentions is Gent & Cho's nominal strain at creasing, 0.28 to 0.42, for rubber strips compressed by
+    bending (diab2013/gent_cho_crease_strain, its p. 2, from its ref. 1); Hohlfeld's and Hong et al.'s 0.35
+    are finite-element results, not measurements. Biot's models give the plane-strain bifurcation stretch
+    0.544 (compressive strain 0.456) of a homogeneous neo-Hookean half-space under uniform compression. A
+    crease onset under bending is a different quantity under a different loading, and diab2013 says the
+    flat surface "unstably creases at a strain lower than the Biot critical strain" (its p. 2). Mapping one
+    onto the other would equate two quantities that only share a dimension, so no model here predicts that
+    measurement. The other direction has nothing to test: biot1963 has no measurement.
+  citation: {page: 6, quote: "experimental confirmation was recently obtained by Cifferi and Flory"}
+- id: q_no_validation_hong2009
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, char_cubic, hong2009/eps_exp_printed, hong2009/eta_exp_printed, hong2009/eps_biot_printed]
+  text: >-
+    No validation of this record's models against hong2009's measurements is entered (cross-validation
+    job 2026-11-18), although hong2009 cites this paper (its ref. 7) and sets Biot's threshold against
+    experiment: "a critical strain, epsilon_biot = 0.46. This theoretical value, however, exceeds the
+    experimental value, epsilon_exp = 0.35" (hong2009 p. 1). hong2009 holds two measured values, both
+    taken from cited work: the nominal plane-strain compressive strain at creasing 0.35 (Gent and Cho; Ghatak
+    and Das, elastomer blocks bent) and the pooled swelling-ratio range eta_exp = 2.0 to 3.7 of gels bonded
+    to a substrate (its refs. 4-6). No model here outputs either quantity. Biot's models give the critical
+    stretch lambda (stretch_compression_axis), the load parameter zeta, P/mu0, k, mu/mu0 and the surface
+    rigidity; the measured 0.35 is a nominal strain epsilon = 1 - lambda, which is a different quantity of the
+    same dimension and may not be mapped onto the stretch, and nothing here transforms a stretch into a gel
+    swelling ratio (that transformation, Eqs. 5-6, is hong2009's own model gel_critical_swelling). The
+    disagreement hong2009 states (0.46 against 0.35, with 1 - 0.544 = 0.456 from crit_stretch_plane) is
+    therefore not entered as a verdict here; it would need a strain output on Biot's side, i.e. a new
+    model, not a validation. The bending loading of the measurement against Biot's uniform compression is a
+    further difference (see q_no_validation_diab2013). The other direction has nothing to test: biot1963
+    has no measurement (figures.md).
+  citation: {page: 11, quote: "Hence for a compressive strain slightly greater than one half"}
+- id: q_no_validation_trujillo2008
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, k_plane_eq411, k_uniaxial, char_cubic, trujillo2008/fig3a_ec_points, trujillo2008/fig3b_ec_points, trujillo2008/ec_mean_modulus_series, trujillo2008/ec_mean_thickness_series, trujillo2008/hh0_onset_measured, trujillo2008/biot_equibiaxial]
+  text: >-
+    No validation of this record's models against trujillo2008's measurements is entered (cross-validation
+    job 2026-11-18), although trujillo2008 cites this paper (its ref. 21) and sets "the prediction of Biot"
+    (the dashed lines of its Fig. 3) against its measured critical strains. trujillo2008 measures the
+    effective equibiaxial compressive strain at creasing of swollen surface-attached gels, e_c = 1 - l0/l
+    (Figs. 3(a), 3(b); averages 0.33 +/- 0.02 and 0.33 +/- 0.01), the free swelling ratios l/l0 (Fig. 2(b)),
+    the compositions that creased (Fig. 2(a)) and the thickness ratio h/h0 at onset (2.0 +/- 0.1, Fig. 4).
+    The models here give the critical stretch lambda (stretch_compression_axis) for plane strain (Eq. 4.2)
+    or for uniaxial compression without lateral restraint (Eq. 4.13), the load parameter, P/mu0 and the
+    decay factor k. None treats equibiaxial compression, the loading of the gels, and none outputs a
+    compressive strain 1 - lambda, a swelling ratio or h/h0. Mapping trujillo2008's strain onto the stretch
+    here would equate two quantities that only share a dimension. The equibiaxial 0.334 that trujillo2008
+    compares with is its own form of Biot's condition (lambda1^2 lambda3 = 0.296 with lambda1 = lambda3,
+    trujillo2008/biot_equibiaxial), already compared with the measurements inside that record (its val_biot_*
+    comparisons); how it follows from this paper is open there (trujillo2008/q_biot_condition_source). The
+    other direction has nothing to test: biot1963 has no measurement (figures.md).
+  citation: {page: 6, quote: "experimental confirmation was recently obtained by Cifferi and Flory"}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, incremental_modulus_plane, k_plane_eq411, surface_rigidity_plane, wang2014/tension_fig13a, wang2014/tension_fig13b, wang2014/tension_fig13c, wang2014/tension_fig13d, wang2014/exp_wrinkling_fig7a, wang2014/exp_creasing_fig7a, wang2014/exp_delamination_fig7a, wang2014/adhesion_fig3_lp1, wang2014/mu_s_ecoflex, wang2014/ew_max_printed]
+  text: >-
+    No validation of this record's models against wang2014's measurements is entered (cross-validation
+    job 2026-11-18), although wang2014 cites this paper (its ref. 51). Its only use of Biot is that the
+    maximum wrinkling strain of its own linear stability analysis, "around 0.465 for mu_f/mu_s = 1 and
+    lambda_p = 1", is "consistent with Biot's [51]" (wang2014 p. 4): a computed value set against a computed
+    value, which is model against model (wang2014/rel_linear_stability_reduces_to_biot_plane), not a
+    measurement. wang2014 measures the Ecoflex and Sylgard shear moduli, film thicknesses and peel adhesion
+    energies (inputs; no model here gives them), the nominal-stress against stretch curves of uniaxial
+    tension tests (Fig. 13), and the initial mode observed in each film-substrate experiment at
+    lambda_p = 2, placed at its (Gamma/(mu_s H_f), mu_f/mu_s) (Fig. 7(a)). The tension curves are the
+    closest: Biot's Eq. 4.12, P = mu0 (1/lambda - lambda^2), describes neo-Hookean uniaxial stress for
+    lambda > 1 too (Table I has tensile rows). But its output is P/mu0, the compressive stress per unit
+    current area over the shear modulus, while wang2014 measures the nominal tensile stress in Pa (force
+    per undeformed area); mapping one onto the other would need a sign change, an area change and a
+    modulus, so they are not the same quantity. The only modulus for these films is the one wang2014
+    fitted to those same curves, so it would be a fit, already entered there as cmp_neo_fig13*
+    (fit_quality). The Fig. 7(a) points record which mode appeared, not a critical stretch or load. They
+    are bilayers with mu_f/mu_s from about 0.67 to 15 on a prestretched substrate, not Biot's homogeneous
+    half-space, and no model here chooses between wrinkling, creasing and delamination. wang2014 prints no
+    measured critical strain. The other direction has nothing to test: biot1963 has no measurement
+    (figures.md).
+  citation: {page: 14, quote: "While the compression P is obtained from", where: Eq. 4.12}
+- id: q_no_validation_wang2015
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, incremental_modulus_plane, char_cubic, wang2015/crease_onset_measured, wang2015/fold_onset_measured, wang2015/pd_onset_measured, wang2015/ridge_onset_measured, wang2015/mu_s_ecoflex, wang2015/mu_f_sylgard_min, wang2015/mu_f_sylgard_max, wang2015/wrinkle_wavelength_fig5a, wang2015/fold_wavelength_fig5a, wang2015/pd_half_wavelength_fig5a, wang2015/ridge_wavelength_fig5a, wang2015/amplitude_fig5b_r3p6, wang2015/amplitude_fig5b_r9p8, wang2015/amplitude_fig5b_r14p8, wang2015/amplitude_fig5b_r9110]
+  text: >-
+    No validation of this record's models against wang2015's measurements is entered (cross-validation
+    job 2026-11-18). wang2015 does not cite this paper and compares none of its measurements with Biot's
+    threshold. Its measured onsets are those of creases (~0.36 for mu_f/mu_s = 0.3 and 0.64, p. 6), folds
+    (~0.33), period-doubles (≈ 0.32) and ridges (≈ 0.33) in growing film-substrate bilayers.
+    crit_stretch_plane gives the stretch of Biot's linear surface instability of a homogeneous half-space
+    (0.544, eM = 0.456 in wang2015's plane strain mismatch strain). That is a different quantity from the
+    onset of a crease, a nonlinear instability that sets in below Biot's threshold (wang2015 takes its
+    crease boundary eM = 0.35, Eq. 3, from the energy criterion of its ref. 43, hong2009). The crease
+    measurements are also on bilayers with mu_f/mu_s = 0.3 and 0.64, not a homogeneous half-space, and
+    the fold, period-double and ridge onsets are advanced modes of a wrinkled stiffer film that no model
+    here describes. Entering the crease onset against crit_stretch_plane would test Biot against a
+    phenomenon his analysis does not predict; the gap between ~0.36 and 0.456 is the crease-Biot
+    difference, a relation between thresholds for the relation jobs, not a validation. Each measured onset
+    is in any case printed with "~" or "≈" and would get no verdict. The Ecoflex and Sylgard moduli are
+    inputs no model here produces, and the Fig. 5 wavelengths and amplitudes (over their values at wrinkle
+    initiation) concern wrinkled bilayers past onset, which Biot's half-space analysis does not give. The
+    other direction has nothing to test: biot1963 has no measurement (figures.md), so no wang2015 model is
+    entered against it.
+  citation: {page: 11, quote: "Introducing this value of P and expression (3.25) for", where: Eq. 4.2}
+- id: q_no_validation_cao2011
+  kind: choice
+  about: [crit_stretch_plane, crit_stretch_uniaxial, plane_compression, uniaxial_compression, k_plane_eq411, k_uniaxial, surface_rigidity_plane]
+  text: >-
+    No validation between this record and cao2011 is entered, in either direction (cross-validation
+    job 2026-11-19), although cao2011 cites this paper (ref-biot1963). cao2011 is an analysis with
+    ABAQUS finite element simulations and holds no measurement (its figures.md: "There are no
+    measurements in this paper"; every plotted marker is an FE prediction, origin predicted). Its one
+    mention of experiment (p. 18, Cai et al., submitted) gives no value. biot1963 holds no measurement
+    either: Table I is computed from its own equations, and its mention of experiment (p. 6, Ciferri
+    and Flory) gives no value. cao2011's wrinkling strain eps_W = 0.456 (its biot_eq28, Eq. 2.8) and
+    crease strain 0.35 set against Biot's critical stretch are model against model, the relation
+    jobs' work, not a validation.
+  citation: {page: 6, quote: "experimental confirmation was recently obtained by Cifferi and Flory"}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [crit_stretch_uniaxial, crit_stretch_plane, uniaxial_compression, char_cubic, jin2015/exp_crease_15to1_text, jin2015/exp_crease_10to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_wrinkle_7p5to1_text, jin2015/em_biot_uni]
+  text: >-
+    No validation of this record's models against jin2015's measurements is entered (cross-validation
+    job 2026-11-19), although jin2015 cites this paper (its ref. 26) for the uniaxial "Biot strain" 0.556
+    of a single layer (jin2015/em_biot_uni, a predicted value, not a measurement). jin2015 measures the
+    film strains at which wrinkles (0.18 to 0.28) and creases (0.28 to 0.37) appear in PDMS film/substrate
+    bilayers (15:1, 10:1, 7.5:1 films on a 30:1 substrate; film 18-20 um, substrate about 550 um), and
+    those thicknesses. Every sample is a stiffer film on a softer substrate whose moduli are not given
+    (jin2015/q_exp_moduli); Biot's models are for a homogeneous half-space and cannot be run on these
+    conditions. They output the critical stretch lambda (and zeta, P/mu0, k), not the nominal strain
+    1 - lambda measured there, and none predicts creases. The other direction has nothing to test:
+    biot1963 has no measurement (figures.md).
+  citation: {page: 6, quote: "experimental confirmation was recently obtained by Cifferi and Flory"}

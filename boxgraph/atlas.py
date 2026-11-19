@@ -152,7 +152,7 @@ def _samples(rel: Relation, a: _Side, n: int = N_SAMPLES) -> list[dict[str, floa
     return out
 
 
-def _eval(rel, a: _Side, b: _Side, points: list[dict[str, float]]) -> tuple[list[float], list[float]]:
+def _eval(rel, a: _Side, b: _Side, points: list[dict[str, float]], convert: bool = True) -> tuple[list[float], list[float]]:
     ao, bo = _output_pair(rel, a, b)
     _, funcs = _mapping(rel, a, b)
     order = list(a.model.inputs)
@@ -164,6 +164,10 @@ def _eval(rel, a: _Side, b: _Side, points: list[dict[str, float]]) -> tuple[list
         raise _Unverifiable(f"a model failed to run: {e}") from None
     ua, ub = a.model.outputs[ao], b.model.outputs[bo]
     ya = [r.get(ao) for r in ra]
+    if not convert:  # log-slopes: a change of unit is a constant factor and leaves them as they are
+        def lin(v, u):  # each side in its own unit, on a linear scale
+            return None if v is None else U.convert(v, u.unit, u.unit, u.scale, "linear")
+        return [lin(y, ua) for y in ya], [lin(r.get(bo), ub) for r in rb]
     yb = [None if r.get(bo) is None else U.convert(r[bo], ub.unit, ua.unit, ub.scale, ua.scale) for r in rb]
     return ya, yb
 
@@ -423,11 +427,11 @@ def _scales(rel, a, b, res):
     pts = _samples(rel, a, n=12)
     exprs, _ = _mapping(rel, a, b)
     shared = sorted({sym.name for e in exprs.values() for sym in e.free_symbols})
-    ya0, yb0 = _eval(rel, a, b, pts)
+    ya0, yb0 = _eval(rel, a, b, pts, convert=False)
     worst, compared = 0.0, 0
     for s in shared:
         up = [dict(p, **{s: p[s] * 1.001}) for p in pts]
-        ya1, yb1 = _eval(rel, a, b, up)
+        ya1, yb1 = _eval(rel, a, b, up, convert=False)
         for p, y0, y1, z0, z1 in zip(pts, ya0, ya1, yb0, yb1):
             vals = (y0, y1, z0, z1)
             if p[s] == 0 or any(v is None or not math.isfinite(v) or v == 0 for v in vals):

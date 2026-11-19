@@ -1,0 +1,13 @@
+id: bilayer_plane_strain
+name: exact wrinkling bifurcation of a neo-Hookean film on a deep neo-Hookean substrate, plane strain with plane strain substrate prestretch (Appendix, Eqs. A1-A10)
+role: model
+stated: {page: 8, printed_page: "031019-8", quote: "The eigenvalue problem governing bifurcation is", where: "Eqs. A1-A10"}
+equation: "|E| = 0 with E = B C^-1 - (1/lambda0_3s)(mu_s/mu_f) D (Eq. A10), B, C from Eqs. A3-A5 with r = r_f = lambda_2f/lambda_1f, D from Eq. A9 with r_s = lambda_2s/lambda_1s; minimized over kh. Plane strain: lambda_3 = 1, lambda_2 = 1/lambda_1, lambda_1s = lambda0_1s lambda_1f (Eqs. 1, 3); eW = 1 - lambda_1f (Eq. 4)"
+inputs:
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless, description: "mu_f / mu_s"}
+  lam01: {quantity: substrate_prestretch, unit: dimensionless, description: "lambda0_1s (plane strain prestretch, lambda0_3s = 1)"}
+outputs:
+  eW: {quantity: film_wrinkling_strain, unit: dimensionless}
+  kh: {quantity: wrinkle_wavenumber_dimensionless, unit: dimensionless, description: "k h at the critical mode, referenced to the undeformed film; arbitrary in the homogeneous limit mu_f/mu_s = 1, lambda0_1s = 1"}
+settings: {kh_min: 0.001, kh_max: 30.0, n_kh: 41, e_min: 0.0001, e_max: 0.7, n_e: 120, tol: 1.0e-6, n_golden: 25}
+stochastic: false

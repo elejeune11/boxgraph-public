@@ -1,0 +1,84 @@
+# Wrinkle analysis (Appendix B) for one homogeneous layer
+- id: run_biot_uniaxial
+  model: wrinkle_eigen_uniaxial
+  inputs: {Gf_Gs: Gf_Gs_one, Hs_Hf: Hs_Hf_homogeneous}
+  outputs: {em: em_biot_uni_pred, Lm: Lm_biot_uni_pred}
+  note: "homogeneous limit: e_c tends to the Biot value as K Hf grows, so Lm is the grid end and not meaningful"
+# Boundary of equal critical strain in the thin-film limit
+- id: run_boundary_plane_strain
+  model: equal_strain_boundary_plane_strain
+  inputs: {Hs_Hf: Hs_Hf_thin_film_limit, e_crease: e_crease_pe}
+  outputs: {Gf_Gs: boundary_pe_pred}
+- id: run_boundary_uniaxial
+  model: equal_strain_boundary_uniaxial
+  inputs: {Hs_Hf: Hs_Hf_thin_film_limit, e_crease: e_crease_uni}
+  outputs: {Gf_Gs: boundary_uni_pred}
+# e_m at the printed boundary point Gf/Gs = 1.65, thin-film limit (on the e_m^Uni = 0.44, e_m^PE = 0.35 contour)
+- id: run_em_pe_at_165
+  model: wrinkle_eigen_plane_strain
+  inputs: {Gf_Gs: boundary_Gf_Gs, Hs_Hf: Hs_Hf_thin_film_limit}
+  outputs: {em: em_pe_at_165, Lm: Lm_pe_at_165}
+- id: run_em_uni_at_165
+  model: wrinkle_eigen_uniaxial
+  inputs: {Gf_Gs: boundary_Gf_Gs, Hs_Hf: Hs_Hf_thin_film_limit}
+  outputs: {em: em_uni_at_165, Lm: Lm_uni_at_165}
+# Eq. 1 on the Fig. 3(a) contour labels
+- {id: run_eq1_001, model: eq1_wrinkle_uniaxial_to_plane, inputs: {e_uni: fig3a_uni_001}, outputs: {e_pe: eq1_pe_from_001}}
+- {id: run_eq1_002, model: eq1_wrinkle_uniaxial_to_plane, inputs: {e_uni: fig3a_uni_002}, outputs: {e_pe: eq1_pe_from_002}}
+- {id: run_eq1_005, model: eq1_wrinkle_uniaxial_to_plane, inputs: {e_uni: fig3a_uni_005}, outputs: {e_pe: eq1_pe_from_005}}
+- {id: run_eq1_013, model: eq1_wrinkle_uniaxial_to_plane, inputs: {e_uni: fig3a_uni_013}, outputs: {e_pe: eq1_pe_from_013}}
+- {id: run_eq1_025, model: eq1_wrinkle_uniaxial_to_plane, inputs: {e_uni: fig3a_uni_025}, outputs: {e_pe: eq1_pe_from_025}}
+- {id: run_eq1_044, model: eq1_wrinkle_uniaxial_to_plane, inputs: {e_uni: fig3a_uni_044}, outputs: {e_pe: eq1_pe_from_044}}
+# Eq. 1 on the crease thresholds
+- {id: run_eq1_crease, model: eq1_crease_uniaxial_to_plane, inputs: {e_uni: e_crease_uni}, outputs: {e_pe: eq1_crease_pe_pred}}
+# e_m^PE at points A-F of Fig. 5 (added by the audit): to compare with the diamonds of Figs. 5(a)-(f)
+# once a figure pass reads them; Sec. 4 is plane strain
+- {id: run_em_pe_pointA, model: wrinkle_eigen_plane_strain, inputs: {Gf_Gs: Gf_Gs_pointA, Hs_Hf: Hs_Hf_pointA}, outputs: {em: em_pe_pointA, Lm: Lm_pe_pointA}}
+- {id: run_em_pe_pointB, model: wrinkle_eigen_plane_strain, inputs: {Gf_Gs: Gf_Gs_pointB, Hs_Hf: Hs_Hf_pointB}, outputs: {em: em_pe_pointB, Lm: Lm_pe_pointB}}
+- {id: run_em_pe_pointC, model: wrinkle_eigen_plane_strain, inputs: {Gf_Gs: Gf_Gs_pointC, Hs_Hf: Hs_Hf_pointC}, outputs: {em: em_pe_pointC, Lm: Lm_pe_pointC}}
+- {id: run_em_pe_pointD, model: wrinkle_eigen_plane_strain, inputs: {Gf_Gs: Gf_Gs_pointD, Hs_Hf: Hs_Hf_pointD}, outputs: {em: em_pe_pointD, Lm: Lm_pe_pointD}}
+- {id: run_em_pe_pointE, model: wrinkle_eigen_plane_strain, inputs: {Gf_Gs: Gf_Gs_pointE, Hs_Hf: Hs_Hf_pointE}, outputs: {em: em_pe_pointE, Lm: Lm_pe_pointE}}
+- {id: run_em_pe_pointF, model: wrinkle_eigen_plane_strain, inputs: {Gf_Gs: Gf_Gs_pointF, Hs_Hf: Hs_Hf_pointF}, outputs: {em: em_pe_pointF, Lm: Lm_pe_pointF}}
+# --- Fig. 7 (figure pass): the uniaxial wrinkle analysis swept over the x positions read from each curve
+- {id: run_fig7a_Hs0p2, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_0p2}, sweep: {Gf_Gs: fig7a_Hs0p2_read}, outputs: {em: fig7a_Hs0p2_pred, Lm: fig7a_Hs0p2_pred_Lm}}
+- {id: run_fig7a_Hs1, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_1}, sweep: {Gf_Gs: fig7a_Hs1_read}, outputs: {em: fig7a_Hs1_pred, Lm: fig7a_Hs1_pred_Lm}}
+- {id: run_fig7a_Hs4, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_4}, sweep: {Gf_Gs: fig7a_Hs4_read}, outputs: {em: fig7a_Hs4_pred, Lm: fig7a_Hs4_pred_Lm}}
+- {id: run_fig7a_Hs1000, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_1000}, sweep: {Gf_Gs: fig7a_Hs1000_read}, outputs: {em: fig7a_Hs1000_pred, Lm: fig7a_Hs1000_pred_Lm}}
+- {id: run_fig7b_Hs0p2, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_0p2}, sweep: {Gf_Gs: fig7b_Hs0p2_read}, outputs: {Lm: fig7b_Hs0p2_pred, em: fig7b_Hs0p2_pred_em}}
+- {id: run_fig7b_Hs1, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_1}, sweep: {Gf_Gs: fig7b_Hs1_read}, outputs: {Lm: fig7b_Hs1_pred, em: fig7b_Hs1_pred_em}}
+- {id: run_fig7b_Hs4, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_4}, sweep: {Gf_Gs: fig7b_Hs4_read}, outputs: {Lm: fig7b_Hs4_pred, em: fig7b_Hs4_pred_em}}
+- {id: run_fig7b_Hs1000, model: wrinkle_eigen_uniaxial, inputs: {Hs_Hf: fig7_Hs_Hf_1000}, sweep: {Gf_Gs: fig7b_Hs1000_read}, outputs: {Lm: fig7b_Hs1000_pred, em: fig7b_Hs1000_pred_em}}
+- {id: run_fig7c_Gf5, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_5}, sweep: {Hs_Hf: fig7c_Gf5_read}, outputs: {em: fig7c_Gf5_pred, Lm: fig7c_Gf5_pred_Lm}}
+- {id: run_fig7c_Gf20, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_20}, sweep: {Hs_Hf: fig7c_Gf20_read}, outputs: {em: fig7c_Gf20_pred, Lm: fig7c_Gf20_pred_Lm}}
+- {id: run_fig7c_Gf200, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_200}, sweep: {Hs_Hf: fig7c_Gf200_read}, outputs: {em: fig7c_Gf200_pred, Lm: fig7c_Gf200_pred_Lm}}
+- {id: run_fig7c_Gf1000, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_1000}, sweep: {Hs_Hf: fig7c_Gf1000_read}, outputs: {em: fig7c_Gf1000_pred, Lm: fig7c_Gf1000_pred_Lm}}
+- {id: run_fig7d_Gf5, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_5}, sweep: {Hs_Hf: fig7d_Gf5_read}, outputs: {Lm: fig7d_Gf5_pred, em: fig7d_Gf5_pred_em}}
+- {id: run_fig7d_Gf20, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_20}, sweep: {Hs_Hf: fig7d_Gf20_read}, outputs: {Lm: fig7d_Gf20_pred, em: fig7d_Gf20_pred_em}}
+- {id: run_fig7d_Gf200, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_200}, sweep: {Hs_Hf: fig7d_Gf200_read}, outputs: {Lm: fig7d_Gf200_pred, em: fig7d_Gf200_pred_em}}
+- {id: run_fig7d_Gf1000, model: wrinkle_eigen_uniaxial, inputs: {Gf_Gs: fig7_Gf_Gs_1000}, sweep: {Hs_Hf: fig7d_Gf1000_read}, outputs: {Lm: fig7d_Gf1000_pred, em: fig7d_Gf1000_pred_em}}
+# --- Fig. 5 (figure pass): e_m^PE at points A-F, run at the G_f/G_s of each reading
+- {id: run_fig5a_em, model: wrinkle_eigen_plane_strain, inputs: {Hs_Hf: Hs_Hf_pointA}, sweep: {Gf_Gs: fig5a_em_read}, outputs: {em: fig5a_em_pred, Lm: fig5a_em_pred_Lm}}
+- {id: run_fig5b_em, model: wrinkle_eigen_plane_strain, inputs: {Hs_Hf: Hs_Hf_pointB}, sweep: {Gf_Gs: fig5b_em_read}, outputs: {em: fig5b_em_pred, Lm: fig5b_em_pred_Lm}}
+- {id: run_fig5c_em, model: wrinkle_eigen_plane_strain, inputs: {Hs_Hf: Hs_Hf_pointC}, sweep: {Gf_Gs: fig5c_em_read}, outputs: {em: fig5c_em_pred, Lm: fig5c_em_pred_Lm}}
+- {id: run_fig5d_em, model: wrinkle_eigen_plane_strain, inputs: {Hs_Hf: Hs_Hf_pointD}, sweep: {Gf_Gs: fig5d_em_read}, outputs: {em: fig5d_em_pred, Lm: fig5d_em_pred_Lm}}
+- {id: run_fig5e_em, model: wrinkle_eigen_plane_strain, inputs: {Hs_Hf: Hs_Hf_pointE}, sweep: {Gf_Gs: fig5e_em_read}, outputs: {em: fig5e_em_pred, Lm: fig5e_em_pred_Lm}}
+- {id: run_fig5f_em, model: wrinkle_eigen_plane_strain, inputs: {Hs_Hf: Hs_Hf_pointF}, sweep: {Gf_Gs: fig5f_em_read}, outputs: {em: fig5f_em_pred, Lm: fig5f_em_pred_Lm}}
+# --- Fig. 3 (figure pass): each contour solved for G_f/G_s at the H_s/H_f positions read
+- {id: run_fig3a_c001, model: em_contour_uniaxial, inputs: {em: fig3a_uni_001}, sweep: {Hs_Hf: fig3a_c001_read}, outputs: {Gf_Gs: fig3a_c001_pred}}
+- {id: run_fig3a_c002, model: em_contour_uniaxial, inputs: {em: fig3a_uni_002}, sweep: {Hs_Hf: fig3a_c002_read}, outputs: {Gf_Gs: fig3a_c002_pred}}
+- {id: run_fig3a_c005, model: em_contour_uniaxial, inputs: {em: fig3a_uni_005}, sweep: {Hs_Hf: fig3a_c005_read}, outputs: {Gf_Gs: fig3a_c005_pred}}
+- {id: run_fig3a_c013, model: em_contour_uniaxial, inputs: {em: fig3a_uni_013}, sweep: {Hs_Hf: fig3a_c013_read}, outputs: {Gf_Gs: fig3a_c013_pred}}
+- {id: run_fig3a_c025, model: em_contour_uniaxial, inputs: {em: fig3a_uni_025}, sweep: {Hs_Hf: fig3a_c025_read}, outputs: {Gf_Gs: fig3a_c025_pred}}
+- {id: run_fig3a_c044, model: em_contour_uniaxial, inputs: {em: fig3a_uni_044}, sweep: {Hs_Hf: fig3a_c044_read}, outputs: {Gf_Gs: fig3a_c044_pred}}
+- {id: run_fig3b_L5, model: Lm_contour, inputs: {Lm: fig3b_level_5}, sweep: {Hs_Hf: fig3b_L5_read}, outputs: {Gf_Gs: fig3b_L5_pred}}
+- {id: run_fig3b_L11, model: Lm_contour, inputs: {Lm: fig3b_level_11}, sweep: {Hs_Hf: fig3b_L11_read}, outputs: {Gf_Gs: fig3b_L11_pred}}
+- {id: run_fig3b_L16, model: Lm_contour, inputs: {Lm: fig3b_level_16}, sweep: {Hs_Hf: fig3b_L16_read}, outputs: {Gf_Gs: fig3b_L16_pred}}
+- {id: run_fig3b_L25, model: Lm_contour, inputs: {Lm: fig3b_level_25}, sweep: {Hs_Hf: fig3b_L25_read}, outputs: {Gf_Gs: fig3b_L25_pred}}
+- {id: run_fig3b_L40, model: Lm_contour, inputs: {Lm: fig3b_level_40}, sweep: {Hs_Hf: fig3b_L40_read}, outputs: {Gf_Gs: fig3b_L40_pred}}
+# --- Fig. 2, 4(a), 5(g) (figure pass)
+- {id: run_fig2_G2H10, model: wrinkle_ec_uniaxial, inputs: {Gf_Gs: fig2_Gf_Gs_2, Hs_Hf: fig2_Hs_Hf_10}, sweep: {L: fig2_G2H10_read}, outputs: {ec: fig2_G2H10_pred}}
+- {id: run_fig2_G50H1, model: wrinkle_ec_uniaxial, inputs: {Gf_Gs: fig2_Gf_Gs_50, Hs_Hf: fig2_Hs_Hf_1}, sweep: {L: fig2_G50H1_read}, outputs: {ec: fig2_G50H1_pred}}
+- {id: run_fig2_G50H100, model: wrinkle_ec_uniaxial, inputs: {Gf_Gs: fig2_Gf_Gs_50, Hs_Hf: fig2_Hs_Hf_100}, sweep: {L: fig2_G50H100_read}, outputs: {ec: fig2_G50H100_pred}}
+- {id: run_fig2_G1000H100, model: wrinkle_ec_uniaxial, inputs: {Gf_Gs: fig2_Gf_Gs_1000, Hs_Hf: fig2_Hs_Hf_100}, sweep: {L: fig2_G1000H100_read}, outputs: {ec: fig2_G1000H100_pred}}
+- {id: run_fig4a_boundary, model: em_contour_uniaxial, inputs: {em: fig3a_uni_044}, sweep: {Hs_Hf: fig4a_boundary_read}, outputs: {Gf_Gs: fig4a_boundary_pred}}
+- {id: run_fig5g_boundary, model: em_contour_uniaxial, inputs: {em: fig3a_uni_044}, sweep: {Hs_Hf: fig5g_boundary_read}, outputs: {Gf_Gs: fig5g_boundary_pred}}

@@ -1,0 +1,310 @@
+# Section 4, Figs. 6-8: E/Es = 3250, nu = 0.3, nu_s = 0.4, thick (half-space) substrate
+- id: run_Ebar_3250
+  model: plane_strain_modulus_ratio
+  inputs: {E_over_Es: E_over_Es_3250, nu: nu_film, nu_s: nu_s_04}
+  outputs: {Ebar_over_Esbar: Ebar_3250}
+- id: run_eq17_3250
+  model: thick_substrate_eq17
+  inputs: {Ebar_over_Esbar: Ebar_3250}
+  outputs: {lam_over_h: lam_3250_pred, Nc_over_hE: Nc_3250_pred}
+- id: run_epsc_3250
+  model: isotropic_critical_strain
+  inputs: {Nc_over_hE: Nc_3250_pred, nu: nu_film}
+  outputs: {eps_c: eps_c_3250_pred}
+# Fig. 9: E/Es = 325, same Poisson's ratios
+- id: run_Ebar_325
+  model: plane_strain_modulus_ratio
+  inputs: {E_over_Es: E_over_Es_325, nu: nu_film, nu_s: nu_s_04}
+  outputs: {Ebar_over_Esbar: Ebar_325}
+- id: run_eq17_325
+  model: thick_substrate_eq17
+  inputs: {Ebar_over_Esbar: Ebar_325}
+  outputs: {lam_over_h: lam_325_pred, Nc_over_hE: Nc_325_pred}
+- id: run_epsc_325
+  model: isotropic_critical_strain
+  inputs: {Nc_over_hE: Nc_325_pred, nu: nu_film}
+  outputs: {eps_c: eps_c_325_pred}
+# Figs. 10 and 11: the analytical lines (lambda_eq/h, and A/h through amp_coeff), for the figure pass
+- id: run_fig10_H1
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_04_fig10}
+  outputs: {lam_over_h: lam_fig10_H1_pred, Nc_over_hE: Nc_fig10_H1_pred, amp_coeff: amp_fig10_H1_pred}
+- id: run_fig10_H10
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_04_fig10}
+  outputs: {lam_over_h: lam_fig10_H10_pred, Nc_over_hE: Nc_fig10_H10_pred, amp_coeff: amp_fig10_H10_pred}
+- id: run_fig10_H100
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_04_fig10}
+  outputs: {lam_over_h: lam_fig10_H100_pred, Nc_over_hE: Nc_fig10_H100_pred, amp_coeff: amp_fig10_H100_pred}
+- id: run_fig11_H1
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_05_fig11}
+  outputs: {lam_over_h: lam_fig11_H1_pred, Nc_over_hE: Nc_fig11_H1_pred, amp_coeff: amp_fig11_H1_pred}
+- id: run_fig11_H10
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_05_fig11}
+  outputs: {lam_over_h: lam_fig11_H10_pred, Nc_over_hE: Nc_fig11_H10_pred, amp_coeff: amp_fig11_H10_pred}
+- id: run_fig11_H100
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_05_fig11}
+  outputs: {lam_over_h: lam_fig11_H100_pred, Nc_over_hE: Nc_fig11_H100_pred, amp_coeff: amp_fig11_H100_pred}
+# p. 8: g at kH = 0.1 for nu_s = 0.4 and 0.5 (the "more than an order of magnitude" example)
+- id: run_g_kH01_nu04
+  model: g_eq10
+  inputs: {kH: kH_01, nu_s: nu_s_04_p8}
+  outputs: {g: g_kH01_nu04_pred}
+- id: run_g_kH01_nu05
+  model: g_eq10
+  inputs: {kH: kH_01, nu_s: nu_s_05_p8}
+  outputs: {g: g_kH01_nu05_pred}
+# p. 8: thick substrate, E_bar/Es_bar = 10^5
+- id: run_eq17_1e5
+  model: thick_substrate_eq17
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1e5}
+  outputs: {lam_over_h: lam_1e5_pred, Nc_over_hE: Nc_1e5_pred}
+# p. 7: thick-substrate limit of g for two substrate Poisson's ratios (added by the audit)
+- id: run_g_thick_nu04
+  model: g_eq10
+  inputs: {kH: kH_thick_added, nu_s: nu_s_04_p8}
+  outputs: {g: g_thick_nu04_pred}
+- id: run_g_thick_nu05
+  model: g_eq10
+  inputs: {kH: kH_thick_added, nu_s: nu_s_05_p8}
+  outputs: {g: g_thick_nu05_pred}
+# ---- figure pass (2026-11-13)
+- id: run_fig3_nu0
+  model: g_eq10
+  inputs: {nu_s: nu_s_fig3_0}
+  sweep: {kH: d_fig3_nu0}
+  outputs: {g: d_fig3_nu0_pred}
+- id: run_fig3_nu04
+  model: g_eq10
+  inputs: {nu_s: nu_s_fig3_04}
+  sweep: {kH: d_fig3_nu04}
+  outputs: {g: d_fig3_nu04_pred}
+- id: run_fig3_nu049
+  model: g_eq10
+  inputs: {nu_s: nu_s_fig3_049}
+  sweep: {kH: d_fig3_nu049}
+  outputs: {g: d_fig3_nu049_pred}
+- id: run_fig3_nu05
+  model: g_eq10
+  inputs: {nu_s: nu_s_fig3_05}
+  sweep: {kH: d_fig3_nu05}
+  outputs: {g: d_fig3_nu05_pred}
+- id: run_fig5a_1e3
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e3, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5a_1e3}
+  outputs: {Nc_over_hE: d_fig5a_1e3_pred}
+- id: run_fig5a_1e4
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e4, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5a_1e4}
+  outputs: {Nc_over_hE: d_fig5a_1e4_pred}
+- id: run_fig5a_1e5
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e5, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5a_1e5}
+  outputs: {Nc_over_hE: d_fig5a_1e5_pred}
+- id: run_fig5b_1e3
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e3, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5b_1e3}
+  outputs: {Nc_over_hE: d_fig5b_1e3_pred}
+- id: run_fig5b_1e4
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e4, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5b_1e4}
+  outputs: {Nc_over_hE: d_fig5b_1e4_pred}
+- id: run_fig5b_1e5
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e5, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5b_1e5}
+  outputs: {Nc_over_hE: d_fig5b_1e5_pred}
+- id: run_fig5c_1e3
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e3, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5c_1e3}
+  outputs: {lam_over_h: d_fig5c_1e3_pred}
+- id: run_fig5c_1e4
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e4, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5c_1e4}
+  outputs: {lam_over_h: d_fig5c_1e4_pred}
+- id: run_fig5c_1e5
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e5, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5c_1e5}
+  outputs: {lam_over_h: d_fig5c_1e5_pred}
+- id: run_fig5d_1e3
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e3, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5d_1e3}
+  outputs: {lam_over_h: d_fig5d_1e3_pred}
+- id: run_fig5d_1e4
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e4, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5d_1e4}
+  outputs: {lam_over_h: d_fig5d_1e4_pred}
+- id: run_fig5d_1e5
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e5, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5d_1e5}
+  outputs: {lam_over_h: d_fig5d_1e5_pred}
+- id: run_fig5e_1e3
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e3, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5e_1e3}
+  outputs: {amp_coeff: d_fig5e_1e3_pred}
+- id: run_fig5e_1e4
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e4, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5e_1e4}
+  outputs: {amp_coeff: d_fig5e_1e4_pred}
+- id: run_fig5e_1e5
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e5, nu_s: nu_s_fig5_04}
+  sweep: {H_over_h: d_fig5e_1e5}
+  outputs: {amp_coeff: d_fig5e_1e5_pred}
+- id: run_fig5f_1e3
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e3, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5f_1e3}
+  outputs: {amp_coeff: d_fig5f_1e3_pred}
+- id: run_fig5f_1e4
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e4, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5f_1e4}
+  outputs: {amp_coeff: d_fig5f_1e4_pred}
+- id: run_fig5f_1e5
+  model: sinusoidal_finite_substrate
+  inputs: {Ebar_over_Esbar: Ebar_fig5_1e5, nu_s: nu_s_fig5_05}
+  sweep: {H_over_h: d_fig5f_1e5}
+  outputs: {amp_coeff: d_fig5f_1e5_pred}
+- id: run_fig7_stripes
+  model: rms_stripes
+  inputs: {}
+  sweep: {N_over_Nc: d_fig7_stripes}
+  outputs: {rms_over_h: d_fig7_stripes_pred}
+- id: run_fig10a_line_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10a_line_H100}
+  outputs: {A_over_h: d_fig10a_line_H100_pred}
+- id: run_fig10a_line_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10a_line_H10}
+  outputs: {A_over_h: d_fig10a_line_H10_pred}
+- id: run_fig10a_line_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10a_line_H1}
+  outputs: {A_over_h: d_fig10a_line_H1_pred}
+- id: run_fig10a_sym_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10a_sym_H100}
+  outputs: {A_over_h: d_fig10a_sym_H100_pred}
+- id: run_fig10a_sym_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10a_sym_H10}
+  outputs: {A_over_h: d_fig10a_sym_H10_pred}
+- id: run_fig10a_sym_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10a_sym_H1}
+  outputs: {A_over_h: d_fig10a_sym_H1_pred}
+- id: run_fig10b_line_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10b_line_H100}
+  outputs: {lam_over_h: d_fig10b_line_H100_pred}
+- id: run_fig10b_line_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10b_line_H10}
+  outputs: {lam_over_h: d_fig10b_line_H10_pred}
+- id: run_fig10b_line_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10b_line_H1}
+  outputs: {lam_over_h: d_fig10b_line_H1_pred}
+- id: run_fig10b_sym_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10b_sym_H100}
+  outputs: {lam_over_h: d_fig10b_sym_H100_pred}
+- id: run_fig10b_sym_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10b_sym_H10}
+  outputs: {lam_over_h: d_fig10b_sym_H10_pred}
+- id: run_fig10b_sym_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_04_fig10}
+  sweep: {N_over_Nc: d_fig10b_sym_H1}
+  outputs: {lam_over_h: d_fig10b_sym_H1_pred}
+- id: run_fig11a_line_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11a_line_H100}
+  outputs: {A_over_h: d_fig11a_line_H100_pred}
+- id: run_fig11a_line_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11a_line_H10}
+  outputs: {A_over_h: d_fig11a_line_H10_pred}
+- id: run_fig11a_line_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11a_line_H1}
+  outputs: {A_over_h: d_fig11a_line_H1_pred}
+- id: run_fig11a_sym_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11a_sym_H100}
+  outputs: {A_over_h: d_fig11a_sym_H100_pred}
+- id: run_fig11a_sym_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11a_sym_H10}
+  outputs: {A_over_h: d_fig11a_sym_H10_pred}
+- id: run_fig11a_sym_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11a_sym_H1}
+  outputs: {A_over_h: d_fig11a_sym_H1_pred}
+- id: run_fig11b_line_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11b_line_H100}
+  outputs: {lam_over_h: d_fig11b_line_H100_pred}
+- id: run_fig11b_line_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11b_line_H10}
+  outputs: {lam_over_h: d_fig11b_line_H10_pred}
+- id: run_fig11b_line_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11b_line_H1}
+  outputs: {lam_over_h: d_fig11b_line_H1_pred}
+- id: run_fig11b_sym_H100
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_100, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11b_sym_H100}
+  outputs: {lam_over_h: d_fig11b_sym_H100_pred}
+- id: run_fig11b_sym_H10
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_10, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11b_sym_H10}
+  outputs: {lam_over_h: d_fig11b_sym_H10_pred}
+- id: run_fig11b_sym_H1
+  model: postbuckling_eq16
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_1000, H_over_h: H_over_h_1, nu_s: nu_s_05_fig11}
+  sweep: {N_over_Nc: d_fig11b_sym_H1}
+  outputs: {lam_over_h: d_fig11b_sym_H1_pred}

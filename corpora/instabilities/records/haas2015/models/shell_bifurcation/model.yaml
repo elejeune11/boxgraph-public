@@ -1,0 +1,22 @@
+id: shell_bifurcation
+name: axisymmetric elastic shell with intrinsic stretches and curvatures, solved for the invagination branches and the critical point (Eq. 2.4, Appendix A)
+stated: {page: 3, quote: "shell minimizes an energy of the Hookean form", where: "Eq. 2.4; Eqs. A1-A7"}
+equation: "E = pi E h/(1 - nu^2) int rho (Es^2 + Ephi^2 + 2 nu Es Ephi) ds + pi E h^3/(12(1 - nu^2)) int rho (Ks^2 + Kphi^2 + 2 nu Ks Kphi) ds; kappa_s^0 = -k for lambda_max - lambda < s < lambda_max, posterior contraction through r_p < R (Fig. 4)"
+inputs:
+  h_over_R: {quantity: thickness_to_radius, unit: dimensionless}
+  nu: {quantity: poisson_ratio, unit: dimensionless}
+  lambda_max: {quantity: bend_region_end_scaled, unit: dimensionless}
+  r_p: {quantity: posterior_radius_scaled, unit: dimensionless}
+  L: {quantity: invagination_width_scaled, unit: dimensionless}
+outputs:
+  kR: {quantity: intrinsic_curvature_times_radius, unit: dimensionless, description: "k R on a solution branch, against the posterior displacement d/R (Figs. 5, 7c) and at the critical point (Fig. 8)"}
+settings: {}
+runnable: false
+not_runnable_reason: >
+  The bifurcation diagrams (Figs. 5, 7, 8) come from the paper's bvp4c solution of the full
+  nonlinear shell equations with continuation through folds; the numerical set-up (mesh, the
+  form of the intrinsic stretches and of kappa_phi^0 for posterior contraction beyond the sketch
+  of Fig. 4, the continuation, the treatment of the poles) is not given, the plotted branches
+  are not labelled with their values of lambda, and the paper prints no number they produce.
+  Reconstructing this solver is beyond the record; its inputs are recorded for the follow-up
+  paper (haas2021).

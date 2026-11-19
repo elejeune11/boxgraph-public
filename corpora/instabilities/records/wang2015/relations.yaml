@@ -1,0 +1,238 @@
+- id: rel_richman_plate_to_eq8
+  kind: reduces_to
+  a: richman1975/plate_on_foundation
+  b: wang2015/eq8_initial_wrinkle_wavelength
+  mapping: {mu_ratio: "1/Ecore_over_E1"}
+  output_map: {lamC_over_H: l_over_t}
+  limit: {E2_over_E1: "1"}
+  regime: {t1: [0.1, 2], t2: [0.1, 2], E2_over_E1: [0.5, 2], Ecore_over_E1: [0.0001, 0.1], stress_ratio: [0.1, 1]}
+  provenance: proposed
+  reason: >
+    With equal strata moduli the two bonded incompressible plates are one plate of thickness
+    t = t1 + t2 and bending stiffness (4E/3) t^3/12; minimizing N(k) = D k^2 + (2/3) Ecore/k gives
+    l/t = 2 pi (E1/(3 Ecore))^(1/3), and with incompressible solids (E = 3 mu) E1/Ecore = mu_f/mu_s,
+    which is Eq. 8 of wang2015 (lambda^C_wrinkle/H_f = 2 pi (mu_f/3 mu_s)^(1/3)). The stress ratio
+    sets only the critical stress, not the wavelength. richman1975/plate_on_foundation is the
+    reader's reconstruction of the setting of ref. 20 (unpublished), not Richman et al.'s own
+    analysis, so this relates wang2015's Eq. 8 to that stand-in. wang2015 cites richman1975 (ref. 14)
+    only as a growing tissue in Table 1 and states no relation between the models.
+- id: rel_eq8_scales_as_cerda_deep_substrate
+  kind: scales_as
+  a: wang2015/eq8_initial_wrinkle_wavelength
+  b: cerda2003/deep_substrate_wavelength
+  mapping: {t: "1", E_over_Es: "mu_ratio"}
+  output_map: {lam_over_t: lamC_over_H}
+  regime: {mu_ratio: [1000, 100000]}
+  provenance: proposed
+  reason: >
+    wang2015's Eq. 8, lambda^C_wrinkle/H_f = 2 pi (mu_f/(3 mu_s))^(1/3) for mu_f/mu_s > 10^3, is the
+    stiff film on a deep substrate (substrate more than 20 times thicker than the film, p. 8), which is
+    cerda2003's deep-substrate limit t << lambda << Hs, lambda ~ t (E/Es)^(1/3), printed without a
+    prefactor. Both papers take incompressible solids, so E/Es = mu_f/mu_s; the film thickness H_f is
+    Cerda's t (set to 1 mm, since only lambda/t is compared). wang2015 cites cerda2003 (ref. 3) only as
+    an example of wrinkled skins (p. 1) and in Table 1 (fruit, p. 8), and attributes Eq. 8 to ref. 50,
+    so it states no relation between the models.
+  assumptions:
+    - "Cerda's E/Es read as wang2015's mu_f/mu_s (incompressible film and substrate, E = 3 mu)"
+    - "lambda/t compared with lambda^C_wrinkle/H_f; Cerda's t set to 1 mm since lam_over_t does not depend on it"
+- id: rel_wang2014_energy_to_phase_diagram
+  kind: derived_from
+  a: wang2014/fe_delaminated_buckling
+  b: wang2015/fe_phase_diagram
+  mapping: {mu_ratio: "mu_ratio", Gamma_norm: "gamma"}
+  steps:
+    - "by the same construction: the potential energy per unit width Pi = U_f + U_s + Gamma D of wang2014 (Eq. 6 there), with U from a plane-strain neo-Hookean finite-element model"
+    - "the Maxwell criterion of wang2014 (equal potential energies of two patterns, Eq. 7 there) applied to every pair of patterns, not only flat and delaminated buckle"
+    - "the substrate prestretch lambda_p of wang2014 set by the mismatch strain, lambda_p = L_f/L_s = 1/(1 - eM), and the pattern read at full relaxation, e = eM"
+  provenance: stated
+  citation: {page: 3, printed_page: "3", quote: "the Maxwell stability criterion39–42. The potential energy per unit", where: "Eq. 1 and Eq. 2"}
+  reason: >
+    wang2015 takes its potential energy (Eq. 1, "can be expressed as39") and the Maxwell stability
+    criterion (Eq. 2, refs. 39, 43, 44) from wang2014 (ref. 39). Both are finite-element models
+    that cannot be rerun, so the relation is recorded but cannot be tested.
+- id: rel_wang2014_eq5_to_eq4
+  kind: approximated_by
+  a: wang2014/eq5_stiff_film_half
+  b: wang2015/eq4_wrinkle_onset
+  mapping: {mu_ratio: "mu_ratio"}
+  regime: {mu_ratio: [16, 10000], lam_p: [1, 1.09]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    wang2015's Eq. 4 upper branch, eC_wrinkle = 0.50 (mu_f/mu_s)^-0.66 for mu_f/mu_s > 16, is a fit to
+    its finite-element flat-wrinkle boundary; the stiff-film limit printed by wang2014 (Eq. 5, here
+    in its corrected variant with Lambda = (1 + lambda_p^2)/2) is (1/4)(3 Lambda mu_s/mu_f)^(2/3) =
+    0.52 Lambda^(2/3) (mu_f/mu_s)^-2/3. wang2015's mismatch strain is wang2014's applied strain with
+    the substrate prestretched by L_f/L_s = 1/(1 - eM) and stress-free at the critical state, so
+    lambda_p = 1/(1 - eC_wrinkle), which is between 1 and 1.09 where Eq. 4 gives eC <= 0.08
+    (mu_f/mu_s >= 16). The mapping cannot impose that self-consistency, so lambda_p is sampled
+    independently over that range; with the two-digit prefactor and exponent of Eq. 4 the
+    tolerance is 10%. Neither paper states this relation.
+- id: rel_wang2014_linear_stability_to_eq4
+  kind: approximated_by
+  a: wang2014/wrinkle_linear_stability
+  b: wang2015/eq4_wrinkle_onset
+  mapping: {mu_ratio: "mu_ratio"}
+  output_map: {eC: e_wrinkle}
+  regime: {mu_ratio: [16, 1000], lam_p: [1, 1.09]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    The flat-wrinkle boundary that wang2015's Eq. 4 approximates is the onset of wrinkling of a
+    neo-Hookean film on a neo-Hookean substrate in plane strain, which wang2014 computes by the
+    linear stability analysis of Cao and Hutchinson with a substrate prestretch lambda_p. With
+    wang2015's loading (substrate prestretched by 1/(1 - eM), stress-free at the critical state)
+    lambda_p = 1/(1 - eC_wrinkle), between 1 and 1.09 for mu_f/mu_s >= 16; lambda_p is sampled over
+    that range because the mapping cannot impose the self-consistency. Restricted to the upper
+    branch of Eq. 4, where the prestretch is small; below mu_f/mu_s = 16 the critical strain and
+    hence lambda_p are large and the two loadings differ. Neither paper states this relation.
+# Against hong2009 (ref. 43). wang2015 computes its flat-crease boundary (Eq. 3, eC_crease = 0.35 for
+# mu_f/mu_s < 1.3) "by setting Pi_flat = Pi_crease" (refs. 12, 43): hong2009's energy criterion, whose
+# zero of f(epsilon) gives epsilon_c = 0.35 for a homogeneous half-space in plane strain. That boundary is
+# an output of wang2015's finite-element model, which cannot be rerun, and hong2009's criterion is a
+# processing model on its Fig. 3 curve, so the relation is recorded with the paper's words and cannot be
+# tested. No other model pair is related: wang2015's Eqs. 4, 7, 8 and 13 concern wrinkles, crease
+# wavelengths and amplitudes that hong2009 does not treat, and hong2009's gel-swelling conversions have no
+# counterpart in wang2015.
+- id: rel_hong_energy_criterion_to_flat_crease_boundary
+  kind: derived_from
+  a: hong2009/crease_zero_fig3
+  b: wang2015/fe_phase_diagram
+  mapping: {mu_ratio: "1", Gamma_norm: "oo"}
+  output_map: {eC_crease: eps_c}
+  steps:
+    - "by the same criterion: the creased and flat states have equal energy (hong2009, Eq. 2, f(epsilon_c) = 0; wang2015, Eq. 2, Pi_flat = Pi_crease)"
+    - "hong2009's homogeneous neo-Hookean half-space is wang2015's film-substrate structure with mu_f/mu_s = 1 and the film fully bonded"
+    - "wang2015 finds the boundary independent of mu_f/mu_s below 1.3 (a vertical line, Eq. 3)"
+  provenance: stated
+  citation: {page: 4, printed_page: "4", quote: "between the flat and creased states, which is calculated by setting", where: "Eq. 3"}
+  assumptions:
+    - "both strains are nominal plane-strain compressive strains: hong2009's epsilon (lambda_1 = 1 - epsilon) and wang2015's mismatch strain eM (film stretch 1 - eM)"
+  reason: >
+    wang2015 states that its flat-crease boundary is calculated by setting Pi_flat = Pi_crease, citing
+    refs. 12 and 43 (hong2009), and gives eC_crease = 0.35, the value of hong2009's epsilon_c. The mapping
+    places hong2009's half-space at mu_f/mu_s = 1 with a perfectly bonded film. hong2009's criterion acts
+    on a finite-element curve and wang2015's model is a finite-element calculation that cannot be rerun,
+    so the relation is unverifiable; the two printed thresholds can be set side by side in a synthesis.
+# Against huang2005. wang2015 does not cite huang2005 (Eq. 8 is attributed to ref. 50, Chen &
+# Hutchinson 2004), so both relations are proposed.
+- id: rel_huang_eq17_same_as_eq8
+  kind: same_as
+  a: huang2005/thick_substrate_eq17
+  b: wang2015/eq8_initial_wrinkle_wavelength
+  mapping: {mu_ratio: "Ebar_over_Esbar"}
+  output_map: {lamC_over_H: lam_over_h}
+  regime: {Ebar_over_Esbar: [1000, 100000]}
+  provenance: proposed
+  reason: >
+    wang2015's Eq. 8, lambda^C_wrinkle/H_f = 2 pi (mu_f/(3 mu_s))^(1/3), stated for mu_f/mu_s > 10^3
+    with a substrate more than 20 times thicker than the film, is huang2005's thick-substrate
+    wavelength (Eq. 17), lambda_eq/h = 2 pi (E_bar/(3 Es_bar))^(1/3), with film thickness H_f = h.
+    wang2015's film and substrate are incompressible neo-Hookean solids, so E_bar = 4 mu_f and
+    Es_bar = 4 mu_s and E_bar/Es_bar = mu_f/mu_s. The regime is wang2015's stated range.
+  assumptions:
+    - "incompressible film and substrate (nu = 1/2), so E_bar/Es_bar = mu_f/mu_s"
+    - "wang2015's substrate (more than 20 times the film thickness) is huang2005's thick-substrate limit H/h -> oo"
+- id: rel_huang_eq17_Nc_to_eq4
+  kind: approximated_by
+  a: huang2005/thick_substrate_eq17
+  b: wang2015/eq4_wrinkle_onset
+  mapping: {mu_ratio: "Ebar_over_Esbar"}
+  output_map: {eC: Nc_over_hE}
+  regime: {Ebar_over_Esbar: [16, 10000]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    In plane strain the film's membrane force is N = h E_bar eps, so huang2005's Eq. 17 critical force
+    N_c/(h E_bar) = (1/4)(3 Es_bar/E_bar)^(2/3) = 0.52 (E_bar/Es_bar)^(-2/3) is the critical compressive
+    strain of a stiff film on a thick substrate. wang2015's Eq. 4 upper branch, eC_wrinkle =
+    0.50 (mu_f/mu_s)^-0.66 for mu_f/mu_s > 16, is a fit to its finite-element flat-wrinkle boundary
+    (nominal mismatch strain, neo-Hookean, plane strain) in the same limit. With incompressible solids
+    E_bar/Es_bar = mu_f/mu_s. Huang's analysis is small-strain while eC is a finite nominal strain,
+    but eC <= 0.08 on this branch; with the two-digit prefactor and exponent of Eq. 4 the tolerance
+    is 10%. Restricted to the upper branch: below mu_f/mu_s = 16 the critical strain is large and
+    Eq. 4 bends toward the crease threshold, outside Huang's linear plate theory.
+  assumptions:
+    - "incompressible film and substrate (nu = 1/2), so E_bar/Es_bar = mu_f/mu_s"
+    - "plane-strain uniaxial compression, N_c/(h E_bar) read as the critical film strain"
+    - "wang2015's mismatch strain at the onset equals the film's compressive strain (substrate relaxed)"
+# Against cao2012 (ref. 49). wang2015 cites Cao & Hutchinson once (p. 5): the wavelength of wrinkles at
+# initiation "can be calculated by linear stability analysis and expressed as a function of mf/ms (see SI and
+# Supplementary Fig. S2D)49. For large modulus ratios (i.e., mf/ms > 10^3)" it "can be approximated as50" Eq. 8.
+# That states that Eq. 8 approximates cao2012's linear stability analysis at large modulus ratios. cao2012 prints
+# the critical mode as the wavenumber kh, so the relation uses the helper cao2012/bilayer_plane_strain_wavelength
+# (the same solver, lambda/h = 2 pi/kh). The flat-wrinkle boundary (Eq. 4) is computed by wang2015 from
+# Pflat = Pwrinkle (p. 4) without citing cao2012, so its relations to cao2012's critical strains are proposed,
+# on the upper branch only (mu_f/mu_s > 16, eC <= 0.08), as for wang2014's Cao-Hutchinson analysis above: below
+# 16 the mismatch strain is large, the prestretch it implies (up to 1.54) is far from the range sampled, and the
+# lower branch ends at eC = 0.35 at mu_f/mu_s = 1.3, the crease threshold, not cao2012's homogeneous limit 0.456.
+# cao2012's simple-formula wavenumber k0h with Lambda = 1 is the reciprocal of Eq. 8 up to 2 pi; no paper states
+# it, so no second helper is added. No wang2015 datum takes a value from cao2012, so cited.yaml is not needed.
+- id: rel_cao_bilayer_wavelength_approx_eq8
+  kind: approximated_by
+  a: cao2012/bilayer_plane_strain_wavelength
+  b: wang2015/eq8_initial_wrinkle_wavelength
+  mapping: {mu_ratio: "mu_ratio"}
+  output_map: {lamC_over_H: lam_over_h}
+  regime: {mu_ratio: [1000, 100000], lam01: [1, 1]}
+  tolerance: 0.05
+  provenance: stated
+  citation: {page: 5, printed_page: "5", quote: "lated by linear stability analysis and expressed as a function of", where: "text before Eq. 8"}
+  reason: >
+    wang2015 says the wavelength of wrinkles at initiation is given by the linear stability analysis of
+    ref. 49 (cao2012) and, for mu_f/mu_s > 10^3, approximated by Eq. 8. cao2012's exact plane-strain
+    bifurcation of a neo-Hookean film on a deep neo-Hookean substrate is that analysis; with no prestretch
+    its critical mode is compared with Eq. 8 over wang2015's stated range. The tolerance (5%) is added.
+    The differences found (2-5%, not shrinking with the ratio) come mostly from locating the flat minimum
+    of eW over kh in cao2012's solver, whose strain tolerance is coarse against eW ~ 10^-4 at mu_f/mu_s = 10^5.
+  assumptions:
+    - "wang2015's mismatch strain at onset is small here (eC < 0.01), so the substrate prestretch it implies is taken as none (lam01 = 1)"
+    - "cao2012's lambda/h (undeformed film) is wang2015's lambda^C_wrinkle/H_f; at onset strains below 1% the reference makes no difference at the tolerance"
+    - "wang2015's substrate (more than 20 times the film thickness) is cao2012's infinitely deep substrate"
+    - "tolerance 0.05 is added"
+- id: rel_cao_bilayer_eW_approx_eq4
+  kind: approximated_by
+  a: cao2012/bilayer_plane_strain
+  b: wang2015/eq4_wrinkle_onset
+  mapping: {mu_ratio: "mu_ratio"}
+  output_map: {eC: eW}
+  regime: {mu_ratio: [16, 1000], lam01: [1, 1.09]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    wang2015's Eq. 4 upper branch, eC_wrinkle = 0.50 (mu_f/mu_s)^-0.66 for mu_f/mu_s > 16, is a fit to its
+    finite-element flat-wrinkle boundary of a neo-Hookean film on a neo-Hookean substrate in plane strain;
+    cao2012's exact bifurcation strain eW is the onset of the same mode. With wang2015's loading (substrate
+    prestretched by 1/(1 - eM) and stress-free at the critical state) lam01 = 1/(1 - eC), between 1 and 1.09
+    on this branch; it is sampled over that range because the mapping cannot impose the self-consistency.
+    With the two-digit prefactor and exponent of Eq. 4 the tolerance is 10%. Neither paper states this relation.
+  assumptions:
+    - "wang2015's mismatch strain at onset is cao2012's film compressive strain eW = 1 - lambda_1f"
+    - "wang2015's Maxwell boundary flat-wrinkle coincides with the bifurcation for a stiff film (supercritical wrinkling)"
+    - "tolerance 0.1 is added"
+- id: rel_cao_eq5_approx_eq4
+  kind: approximated_by
+  a: cao2012/simple_formula_plane
+  b: wang2015/eq4_wrinkle_onset
+  mapping: {mu_ratio: "mu_ratio"}
+  output_map: {eC: e0}
+  regime: {mu_ratio: [16, 10000], lam01: [1, 1.09]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    cao2012's Eq. 5, e0 = (1/4)(3 Lambda mu_s/mu_f)^(2/3) = 0.52 Lambda^(2/3) (mu_f/mu_s)^(-2/3), is the stiff-film
+    limit of the flat-wrinkle boundary that wang2015's Eq. 4 upper branch, 0.50 (mu_f/mu_s)^-0.66, fits. The
+    prestretch lam01 = 1/(1 - eC) is sampled between 1 and 1.09 as above. Tolerance 10%, from the two-digit
+    constants of Eq. 4. Neither paper states this relation.
+  assumptions:
+    - "wang2015's mismatch strain at onset is cao2012's film compressive strain"
+    - "tolerance 0.1 is added"
+# Against cao2011 (Cao & Hutchinson, Proc. R. Soc. A 468, 2012). wang2015 does not cite it: its ref. 29 is Li, Cao,
+# Feng & Gao (Soft Matter 2012, a review), and its only Cao & Hutchinson citation is ref. 49, the JAM bilayer paper
+# (cao2012, above). No relation is entered. cao2011 treats the homogeneous half-space only (Biot's eps_W = 0.456 and
+# Hong's eps_C = 0.35 with the out-of-plane stretch lambda_3, no film, no prestretch); wang2015's runnable models
+# (Eqs. 4, 7, 8, 13, modulus and adhesion ratios) concern film/substrate wrinkles, folds and creases with
+# mu_f/mu_s >= 1.3, so none maps onto a cao2011 model. wang2015's half-space limit (mu_f/mu_s = 1, flat-crease at 0.35)
+# is an output of its finite-element model, which cannot be rerun, and its tie to Hong's threshold is already recorded
+# against hong2009 above (cao2011/crease_eq12 is Hong's ratio restated, related to hong2009 in cao2011's file).
+# No wang2015 datum takes a value from cao2011, so cited.yaml is not needed.

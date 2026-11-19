@@ -1,0 +1,209 @@
+- id: q_buckling_analysis_unstated
+  kind: unstated_model
+  about: [plate_on_foundation, plate_stiffness_sensitivity, l_over_t_caption, l_over_t_text, wavelength_factor_printed]
+  text: >
+    The buckling analysis that produces Fig. 4 (l/t = 8 for sigma2/sigma1 > 0, the critical
+    sigma1/E1, and the factor of about 2 for a tenfold smaller Ecore/E1) is cited to "J. W.
+    Hutchinson, unpublished data" (ref. 20). The paper gives only the setting in words: two flat
+    incompressible plates bonded to an infinitely deep elastic foundation, E1 = E2, Ecore/E1 = 1/10.
+    The record's plate_on_foundation is one reading of those words (thin Kirchhoff plates, equibiaxial
+    membrane force, incompressible half-space). A thick-layer (exact elasticity) analysis would give
+    another l/t, and a thin-plate model cannot give the fall of l/t for sigma2/sigma1 < 0 shown in
+    Fig. 4A, since there the outer stratum buckles on a stretched inner one. Its verdicts test this
+    reading, not the paper's analysis.
+  citation: {page: 4, printed_page: "21", quote: "J. W. Hutchinson, unpublished data", where: "note 20"}
+- id: q_layer_ratio_rounding
+  kind: possible_error
+  about: [area_ratio_measured, area_II_normal, area_VI_normal]
+  text: >
+    Note 18 prints 77.9/67.5 = 1.16; the quotient of the two printed Table 1 areas rounds to a
+    different last digit, so the build finds it close rather than reproduced. The conclusion that
+    the observed ratio exceeds the concentric-sphere 1.04 is unaffected.
+  citation: {page: 4, printed_page: "21", quote: "mm/67.5 mm = 1.16. Hence the observed ratio is", where: "note 18"}
+- id: q_area_unit
+  kind: possible_error
+  about: [area_ratio_measured]
+  text: >
+    Note 18 writes the layer areas as "77.9 mm/67.5 mm", while Table 1 gives them in cm^2. The units
+    cancel in the ratio, so the record takes the Table 1 values as the inputs.
+  citation: {page: 4, printed_page: "21", quote: "The measured ratio AJ/A in our specimen is 77.9", where: "note 18"}
+- id: q_less_than_half
+  kind: overstated_claim
+  about: [area_V_microgyric, area_V_normal, area_IV_microgyric, area_IV_normal]
+  text: >
+    The text says the surface areas of the inner cellular layers (IV and V) of the microgyric
+    hemisphere are less than half of those in normal cortex. For layer IV (29.4 vs 72.2 cm^2) this
+    holds; for layer V Table 1 prints 35.8 against 70.3 cm^2, which is slightly more than half.
+  citation: {page: 2, printed_page: "19", quote: "less than half of those in normal cortex", where: text}
+- id: q_thickness_27wk
+  kind: unexplained_difference
+  about: [t_27wk, t_normal_fetus, l_measured_27wk, run_wavelength_27wk_thickness]
+  text: >
+    The predicted l ≈ 8t ≈ 8 mm uses t ≈ 1.0 mm for the normal fetus, and is compared with 8.5 mm
+    measured in the authors' 27-week specimen. Note 18 gives the cortical thickness of that same
+    27-week specimen as approximately 1.7 mm; with that t the same l = 8t is far from 8.5 mm
+    (cmp_wavelength_27wk_thickness). The paper does not say why the thickness of the specimen whose
+    wavelength it measured is not the t it uses, or whether 1.7 mm is measured at a later stage.
+  citation: {page: 4, printed_page: "21", quote: "and the cortical thickness, t, is approximately 1.7", where: "note 18"}
+- id: q_layer_choice_sphere
+  kind: reading
+  about: [sphere_area_ratio, t_27wk]
+  text: >
+    Note 18 compares layer II with layer VI, but uses the full cortical thickness t for the radial
+    distance between them; the distance between layers II and VI is somewhat less than t. The record
+    follows the printed formula with the printed t.
+- id: q_moduli_ratios_as_relations
+  kind: reading
+  about: [Ecore_over_E1_added, E2_over_E1_added, stress_ratio_added]
+  text: >
+    The paper states the inputs of Fig. 4 as relations (E1 = E2, Ecore/E1 = 1/10, sigma2/sigma1 > 0)
+    rather than as printed numbers; the record writes them as added values. Ecore/E1 = 1/10 is the
+    paper's value, entered as 0.1 only because the printed-value syntax has no fractions.
+- id: q_curvature_neglected
+  kind: choice
+  about: [R_model, plate_on_foundation]
+  text: >
+    The paper neglects the curvature of the R = 25 mm sphere because the buckling wavelengths are
+    "very short"; the predicted l ≈ 8 mm is about a third of R. The record follows the paper and runs
+    flat-plate models only; R_model feeds no model.
+  citation: {page: 2, printed_page: "19", quote: "the effect of the curvature of the spherical", where: text}
+- id: q_curvature_bound_1_100
+  kind: overstated_claim
+  about: [R_model, plate_on_foundation, wavelength_factor_printed, l_normal_predicted]
+  text: >
+    (Audit.) P. 2 says that for Ecore/E1 "not less than about 1/100" the buckling wavelengths are
+    very short and the curvature of the R = 25 mm sphere can be neglected. By the paper's own p. 3
+    statement that a tenfold decrease of Ecore/E1 increases l by about 2, at Ecore/E1 = 1/100 l would
+    be about 16 mm for t = 1.0 mm, i.e. two thirds of R (the record's plate model gives about 20 mm).
+    Whether curvature is still negligible at that bound is not shown.
+  citation: {page: 2, printed_page: "19", quote: "not less than about 1/100, the", where: text}
+- id: q_microgyric_l_over_t_not_modelled
+  kind: unstated_model
+  about: [l_over_t_microgyric, plate_on_foundation]
+  text: >
+    (Audit.) The printed l/t ≈ 1 for sufficiently negative sigma2/sigma1 (p. 3; the "equal to the
+    cortical thickness" of the Summary) comes from the unpublished analysis behind Fig. 4A. No model
+    in the record produces it: the thin-plate reading has no sigma2/sigma1 dependence of l. It is
+    recorded uncompared; the figure pass can read Fig. 4A near sigma2/sigma1 = -1.
+  citation: {page: 3, printed_page: "20", quote: "value of 02/0l, 1/ti 1. Hence, the model", where: text}
+- id: q_fig4a_plateau_below_8
+  kind: reading
+  about: [l_over_t_fig4a, l_over_t_caption, l_over_t_text, fig4a_l_over_t]
+  text: >
+    (Figure pass.) The plateau of Fig. 4A for sigma2/sigma1 > -0.3, read from the page by code
+    calibrated on the printed 2, 4, 6, 8 ticks, lies at l/t of about 7.8 (95% interval about 7.77 to
+    7.86 at every x read), visibly below the "8" tick, while the caption and text print l/t = 8. The
+    printed 8 is consistent with the curve to one significant figure; whether the analysis gave a
+    value near 7.8 that the text rounds, or the curve was drawn slightly low, is not said.
+  citation: {page: 3, printed_page: "20", quote: "Note that for 0'2/Ur", where: "Fig. 4 caption"}
+- id: q_fig4a_microgyric_l_over_t
+  kind: reading
+  about: [l_over_t_microgyric, l_over_t_fig4a, q_microgyric_l_over_t_not_modelled]
+  text: >
+    (Figure pass.) Fig. 4A read from the page gives the printed "l/t ≈ 1 at a sufficiently negative
+    sigma2/sigma1" a location: l/t is about 1.07 (95% interval 0.87 to 1.32) at sigma2/sigma1 = -0.9,
+    about 0.52 at -0.95 and about 0.29 at -1, and rises steeply to about 3.0 at -0.85. So the curve
+    supports l/t ≈ 1 only within a narrow band near sigma2/sigma1 ≈ -0.9; l/t ≈ 1 is a point on a
+    steep curve, not a plateau. Still no model in the record produces it.
+  citation: {page: 3, printed_page: "20", quote: "value of 02/0l, 1/ti 1. Hence, the model", where: text}
+- id: q_fig4_thin_plate_mismatch
+  kind: unexplained_difference
+  about: [plate_on_foundation, cmp_plate_fig4a, cmp_plate_fig4b, l_over_t_fig4a, sigma1_crit_fig4b]
+  text: >
+    (Figure pass.) Swept over the stress ratios read from Fig. 4, the record's thin-plate reading
+    gives a constant l/t of about 9.4 against the plateau of about 7.8 (and cannot give the fall for
+    sigma2/sigma1 < -0.3), and a critical sigma1/E1 that is about 0.80 of the curve of Fig. 4B for
+    sigma2/sigma1 >= 0 (e.g. about 0.30 against about 0.37 near 0, about 0.20 against about 0.25 at
+    0.5), with a different shape for negative ratios. This measures the distance between the record's
+    from-words reading and the unpublished analysis of ref. 20, not an error of the paper.
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [plate_on_foundation, wavelength_from_thickness, cerda2003/two_Hs_hand, cerda2003/L_fig1]
+  text: >-
+    No validation of this record's models against cerda2003 is entered (cross-validation job
+    2026-11-13). cerda2003's measurements are only the dimensions and strain of the stretched sheet of
+    its Fig. 1 (L, W, t, gamma) and the pinched skin fold 2Hs ≈ 5 mm on the back of a hand; it measures
+    no wavelength (its wavelengths for the apple, the hand and the Fig. 1 sheet are predictions, or are
+    not printed), so no model here, which gives a buckling wavelength or a critical stress, has a
+    measured output of cerda2003 to predict. The other direction (cerda2003's deep-substrate law against
+    this record's intersulcal distances 8.5 and 7.5 mm) is entered in cerda2003/validations.yaml.
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [plate_on_foundation, wavelength_from_thickness, plate_stiffness_sensitivity, sphere_area_ratio, biot1963/table1_mu, biot1963/table1_rigidity]
+  text: >-
+    No validation of this record's models against biot1963 is entered (cross-validation job
+    2026-11-13). biot1963 has no measurements: every datum in it (critical stretch 0.543, zeta = 0.839,
+    k = 0.295, P = 3.08 mu0 and 2.05 mu0, Table I of mu/mu0 and mu phi/mu0 against lambda) is a value
+    its own theory gives (origin predicted, derived or reported), so there is nothing measured for a
+    model here to predict. These would be model-to-model comparisons, which are not validations; and
+    the record's plate_on_foundation reading (two plates on a softer foundation) is not Biot's
+    homogeneous half-space. Neither paper cites the other. The other direction is entered as
+    biot1963/q_no_validation_richman1975.
+- id: q_no_validation_stafford2004
+  kind: choice
+  about: [plate_on_foundation, wavelength_from_thickness, stafford2004/d_fig2b, stafford2004/E_fig3_siebimm, stafford2004/E_fig4_siebimm]
+  text: >-
+    No validation of this record's models against stafford2004 is entered (cross-validation job
+    2026-11-14). stafford2004 measures wrinkle wavelengths against film thickness (Fig. 2b) and film
+    moduli (Figs. 3, 4); plate_on_foundation gives l/t and a critical stress ratio, neither measured
+    there, and is a reconstruction for two incompressible strata with Ecore/E1 near 1/10, not PS on PDMS
+    (Ef/Es about 2000); wavelength_from_thickness needs an l/t datum and the only one printed (8) is for
+    Ecore/E1 = 1/10. No model here gives a film modulus. The other direction (stafford2004's Eq. 1 against
+    the intersulcal distances 8.5 and 7.5 mm) is entered in stafford2004/validations.yaml. Neither paper
+    cites the other.
+- id: q_no_validation_bowden1998
+  kind: choice
+  about: [plate_on_foundation, wavelength_from_thickness, plate_stiffness_sensitivity, bowden1998/L_measured, bowden1998/depth_unheated, bowden1998/depth_300C]
+  text: >-
+    No validation of this record's models against bowden1998 is entered (cross-validation job 2026-11-14).
+    bowden1998 measures wrinkle wavelengths of 20-50 um and crest-to-trough depths of gold films on PDMS;
+    plate_on_foundation gives l/t and a critical stress ratio, neither measured there, and is a reconstruction
+    for two incompressible strata with Ecore/E1 near 1/10, not gold on PDMS (Em/Ep about 4000);
+    wavelength_from_thickness needs an l/t datum and the only one printed (8) is for Ecore/E1 = 1/10. No model
+    here gives a depth. The other direction (bowden1998's Eq. 3 against the intersulcal distances 8.5 and
+    7.5 mm) is entered in bowden1998/validations.yaml. Neither paper cites the other.
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [plate_on_foundation, wavelength_from_thickness, plate_stiffness_sensitivity, sphere_area_ratio, l_measured_27wk, l_measured_sidman, tallinen2015/fold_spacing_large_g_printed, tallinen2015/eta_brain_printed]
+  text: >-
+    No validation between this record and tallinen2015 is entered, in either direction (cross-validation job
+    2026-11-14). tallinen2015 has no measurements: every datum in it is its own analytic or finite-element result
+    (predicted or derived) or an input it takes or chooses (reported), and its figures plot Eq. 1 and
+    finite-element results or show images without values (its figures.md), so no model here has anything
+    measured there to predict. In the other direction, tallinen2015 cites this paper (its ref. 4) only among
+    "mechanical descriptions of brain folding [4-8]" and compares none of its models with the intersulcal
+    distances 8.5 and 7.5 mm; and all its wavelength models return ratios to the layer thickness, whereas this
+    record measures lengths only (its l/t values are predictions), so none gives the measured quantity. See
+    tallinen2015/q_no_validation_richman1975.
+- id: q_no_validation_wang2015
+  kind: choice
+  about: [plate_on_foundation, plate_stiffness_sensitivity, wavelength_from_thickness, wang2015/crease_onset_measured, wang2015/fold_onset_measured, wang2015/pd_onset_measured, wang2015/ridge_onset_measured, wang2015/wrinkle_wavelength_fig5a, wang2015/amplitude_fig5b_r9110]
+  text: >-
+    No validation of this record's models against wang2015 is entered (cross-validation job 2026-11-18).
+    wang2015 measures the onset mismatch strains of creases, folds, period-doubles and ridges (eM about
+    0.32-0.36), wavelengths normalized by the initial wrinkle wavelength against (1 - eM)/(1 - eC)
+    (Fig. 5A), wrinkle amplitudes over the initial wavelength (Fig. 5B), and the shear moduli of its
+    Ecoflex and Sylgard layers. plate_on_foundation gives l/t and a critical stress ratio sigma1_crit/E1
+    for two bonded strata on a core, and is a reconstruction of an unpublished analysis (ref. 20);
+    wavelength_from_thickness gives a length from l/t and t; plate_stiffness_sensitivity a ratio of
+    wavelengths at two core stiffnesses. None of these is a quantity wang2015 measures: a critical stress
+    over a modulus is not the mismatch strain of a growing film, and a wavelength over the thickness is not
+    one over the initial wrinkle wavelength. wang2015 cites this paper (its ref. 14) only as a source of the
+    tissue entry of its Table 1. The other direction is wang2015/q_no_validation_richman1975.
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [plate_on_foundation, plate_stiffness_sensitivity, wavelength_from_thickness, sphere_area_ratio, layer_area_ratio, jin2015/exp_wrinkle_7p5to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_crease_15to1_text, jin2015/exp_crease_10to1_text, jin2015/substrate_H_exp, jin2015/film_H_exp]
+  text: >-
+    No validation of this record's models against jin2015 is entered (cross-validation job 2026-11-19).
+    jin2015 (which cites this paper as its ref. 13, only as an example of brain folding) measures the
+    uniaxial onset strains of wrinkles (7.5:1 and 10:1 PDMS films, 0.18-0.28) and of creases (15:1 and 10:1
+    films, 0.28-0.37) on a 30:1 PDMS substrate, and the film and substrate thicknesses (18-20 um, about
+    550 um); it prints no measured wavelength (Fig. 6 shows micrographs only). plate_on_foundation gives
+    l/t and a critical stress ratio sigma1_crit/E1 for two bonded strata under equibiaxial compression on a
+    half-space, and is a reconstruction of an unpublished analysis (ref. 20); wavelength_from_thickness gives
+    a length from l/t and t; plate_stiffness_sensitivity a ratio of wavelengths; the area-ratio models are
+    sphere geometry. None of these is a quantity jin2015 measures: a critical stress over a modulus under
+    equibiaxial load is not the nominal uniaxial strain applied to film and substrate together, and turning
+    one into the other would need a constitutive step no model here makes. The thicknesses are measured
+    inputs, not predictions, and the film and substrate moduli are not printed (jin2015/q_exp_moduli). The
+    other direction is jin2015/q_no_validation_richman1975.

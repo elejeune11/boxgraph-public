@@ -1,0 +1,14 @@
+id: bilayer_uniaxial
+name: exact wrinkling bifurcation of the neo-Hookean bilayer under uniaxial compressive stressing after uniaxial substrate prestretch (Sec. 3.3, Appendix)
+role: model
+stated: {page: 4, printed_page: "031019-4", quote: "is assumed to undergo incremental uniaxial compressive", where: "Sec. 3.3, Eqs. A1-A10"}
+equation: "|E| = 0 (Eq. A10) with lambda0_2s = lambda0_3s = 1/sqrt(lambda0_1s), lambda_2s = lambda_3s = 1/sqrt(lambda_1s), film stretches from Eq. 1; eW = 1 - lambda_1f; minimized over kh"
+inputs:
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless, description: "mu_f / mu_s"}
+  lam01: {quantity: substrate_prestretch, unit: dimensionless, description: "lambda0_1s (uniaxial tension prestretch)"}
+outputs:
+  eW: {quantity: film_wrinkling_strain, unit: dimensionless}
+  kh: {quantity: wrinkle_wavenumber_dimensionless, unit: dimensionless}
+settings: {kh_min: 0.001, kh_max: 30.0, n_kh: 41, e_min: 0.0001, e_max: 0.7, n_e: 120, tol: 1.0e-6, n_golden: 25}
+built_from: [bilayer_plane_strain]
+stochastic: false

@@ -1,0 +1,81 @@
+# Exact bifurcation analysis (Appendix), plane strain
+- id: run_exact_homog_plane
+  model: bilayer_plane_strain
+  inputs: {mu_ratio: mu_ratio_1, lam01: prestretch_none}
+  outputs: {eW: eW_exact_homog_plane, kh: kh_exact_homog_plane}
+  note: "homogeneous limit: the mode exists at every kh, so kh is arbitrary"
+- id: run_exact_ratio5
+  model: bilayer_plane_strain
+  inputs: {mu_ratio: mu_ratio_5, lam01: prestretch_none}
+  outputs: {eW: eW_exact_ratio5, kh: kh_exact_ratio5}
+- id: run_exact_ratio30
+  model: bilayer_plane_strain
+  inputs: {mu_ratio: mu_ratio_30, lam01: prestretch_none}
+  outputs: {eW: eW_exact_ratio30, kh: kh_exact_ratio30}
+- id: run_exact_ratio186_pre1p3
+  model: bilayer_plane_strain
+  inputs: {mu_ratio: mu_ratio_186, lam01: prestretch_1p3}
+  outputs: {eW: eW_exact_ratio186_pre1p3, kh: kh_exact_ratio186_pre1p3}
+- id: run_exact_ratio836_pre2
+  model: bilayer_plane_strain
+  inputs: {mu_ratio: mu_ratio_836, lam01: prestretch_2}
+  outputs: {eW: eW_exact_ratio836_pre2, kh: kh_exact_ratio836_pre2}
+# Exact bifurcation analysis, uniaxial stressing
+- id: run_exact_homog_uniaxial
+  model: bilayer_uniaxial
+  inputs: {mu_ratio: mu_ratio_1, lam01: prestretch_none}
+  outputs: {eW: eW_exact_homog_uniaxial, kh: kh_exact_homog_uniaxial}
+  note: "homogeneous limit: the mode exists at every kh, so kh is arbitrary"
+# Eq. 7 (Biot's half-space result as quoted)
+- id: run_eq7_plane
+  model: biot_surface_eq7
+  inputs: {c: biot_coefficient, lam3: lambda3_plane_strain}
+  outputs: {eW: eW_eq7_plane}
+- id: run_eq7_uniaxial
+  model: biot_surface_eq7_uniaxial
+  inputs: {c: biot_coefficient}
+  outputs: {eW: eW_eq7_uniaxial}
+# Simple formula Eq. 5 at the same cases
+- id: run_eq5_ratio5
+  model: simple_formula_plane
+  inputs: {mu_ratio: mu_ratio_5, lam01: prestretch_none}
+  outputs: {e0: e0_eq5_ratio5, k0h: k0h_eq5_ratio5}
+- id: run_eq5_ratio30
+  model: simple_formula_plane
+  inputs: {mu_ratio: mu_ratio_30, lam01: prestretch_none}
+  outputs: {e0: e0_eq5_ratio30, k0h: k0h_eq5_ratio30}
+- id: run_eq5_ratio186_pre1p3
+  model: simple_formula_plane
+  inputs: {mu_ratio: mu_ratio_186, lam01: prestretch_1p3}
+  outputs: {e0: e0_eq5_ratio186_pre1p3, k0h: k0h_eq5_ratio186_pre1p3}
+- id: run_eq5_ratio836_pre2
+  model: simple_formula_plane
+  inputs: {mu_ratio: mu_ratio_836, lam01: prestretch_2}
+  outputs: {e0: e0_eq5_ratio836_pre2, k0h: k0h_eq5_ratio836_pre2}
+# Sweeps over the x positions of the figure readings (figure pass)
+- {id: run_fig2_eW, model: bilayer_plane_strain, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig2_eW_read}, outputs: {eW: fig2_eW_pred}}
+- {id: run_fig2_e0, model: simple_formula_plane, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig2_e0_read}, outputs: {e0: fig2_e0_pred}}
+- {id: run_fig3_eW_pre1, model: bilayer_plane_strain, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig3_eW_pre1_read}, outputs: {eW: fig3_eW_pre1_pred}}
+- {id: run_fig3_eW_pre1p5, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_1p5}, sweep: {mu_ratio: fig3_eW_pre1p5_read}, outputs: {eW: fig3_eW_pre1p5_pred}}
+- {id: run_fig3_eW_pre2, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_2}, sweep: {mu_ratio: fig3_eW_pre2_read}, outputs: {eW: fig3_eW_pre2_pred}}
+- {id: run_fig3_eW_pre3, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_3}, sweep: {mu_ratio: fig3_eW_pre3_read}, outputs: {eW: fig3_eW_pre3_pred}}
+- {id: run_fig4_eW_pre1, model: bilayer_plane_strain, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig4_eW_pre1_read}, outputs: {eW: fig4_eW_pre1_pred}}
+- {id: run_fig4_eW_pre1p5, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_1p5}, sweep: {mu_ratio: fig4_eW_pre1p5_read}, outputs: {eW: fig4_eW_pre1p5_pred}}
+- {id: run_fig4_eW_pre2, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_2}, sweep: {mu_ratio: fig4_eW_pre2_read}, outputs: {eW: fig4_eW_pre2_pred}}
+- {id: run_fig4_eW_pre3, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_3}, sweep: {mu_ratio: fig4_eW_pre3_read}, outputs: {eW: fig4_eW_pre3_pred}}
+- {id: run_fig5_eW, model: bilayer_plane_strain, inputs: {mu_ratio: mu_ratio_1}, sweep: {lam01: fig5_eW_read}, outputs: {eW: fig5_eW_pred}}
+- {id: run_fig6a_kh_pre1, model: bilayer_plane_strain, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig6a_kh_pre1_read}, outputs: {kh: fig6a_kh_pre1_pred}}
+- {id: run_fig6a_kh_pre1p5, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_1p5}, sweep: {mu_ratio: fig6a_kh_pre1p5_read}, outputs: {kh: fig6a_kh_pre1p5_pred}}
+- {id: run_fig6a_kh_pre2, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_2}, sweep: {mu_ratio: fig6a_kh_pre2_read}, outputs: {kh: fig6a_kh_pre2_pred}}
+- {id: run_fig6a_kh_pre3, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_3}, sweep: {mu_ratio: fig6a_kh_pre3_read}, outputs: {kh: fig6a_kh_pre3_pred}}
+- {id: run_fig6b_kh_pre1, model: bilayer_plane_strain, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig6b_kh_pre1_read}, outputs: {kh: fig6b_kh_pre1_pred}}
+- {id: run_fig6b_kh_pre1p5, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_1p5}, sweep: {mu_ratio: fig6b_kh_pre1p5_read}, outputs: {kh: fig6b_kh_pre1p5_pred}}
+- {id: run_fig6b_kh_pre2, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_2}, sweep: {mu_ratio: fig6b_kh_pre2_read}, outputs: {kh: fig6b_kh_pre2_pred}}
+- {id: run_fig6b_kh_pre3, model: bilayer_plane_strain, inputs: {lam01: prestretch_fig3_3}, sweep: {mu_ratio: fig6b_kh_pre3_read}, outputs: {kh: fig6b_kh_pre3_pred}}
+- {id: run_fig7_eW_pre1, model: bilayer_uniaxial, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig7_eW_pre1_read}, outputs: {eW: fig7_eW_pre1_pred}}
+- {id: run_fig7_eW_pre1p5, model: bilayer_uniaxial, inputs: {lam01: prestretch_fig7_1p5}, sweep: {mu_ratio: fig7_eW_pre1p5_read}, outputs: {eW: fig7_eW_pre1p5_pred}}
+- {id: run_fig7_eW_pre2, model: bilayer_uniaxial, inputs: {lam01: prestretch_fig7_2}, sweep: {mu_ratio: fig7_eW_pre2_read}, outputs: {eW: fig7_eW_pre2_pred}}
+- {id: run_fig7_eW_pre3, model: bilayer_uniaxial, inputs: {lam01: prestretch_fig7_3}, sweep: {mu_ratio: fig7_eW_pre3_read}, outputs: {eW: fig7_eW_pre3_pred}}
+- {id: run_fig8_eW, model: bilayer_plane_strain, inputs: {lam01: prestretch_none}, sweep: {mu_ratio: fig8_eW_read}, outputs: {eW: fig8_eW_pred}}
+- {id: run_fig11_eW, model: bilayer_plane_strain, inputs: {lam01: prestretch_1p3}, sweep: {mu_ratio: fig11_eW_read}, outputs: {eW: fig11_eW_pred}}
+- {id: run_fig13_eW, model: bilayer_plane_strain, inputs: {lam01: prestretch_2}, sweep: {mu_ratio: fig13_eW_read}, outputs: {eW: fig13_eW_pred}}

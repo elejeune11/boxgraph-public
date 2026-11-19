@@ -1,0 +1,26 @@
+id: wavelength_at_threshold_gza
+name: wavelength of linear instability against its threshold growth, in units of h = gz a
+role: model
+stated: {page: 3, printed_page: "022720-3", quote: "The blue curve is the wavelength of linear instability", where: "Fig. 2(b), caption; Eq. 1; h = a/gz (p. 1)"}
+equation: "g_c(eta) = g defines eta; l/h = (l_c(eta)/a)(a/h), h = gz a, gz = 1/g"
+inputs:
+  g: {quantity: growth_ratio, unit: dimensionless, description: "threshold growth of the first unstable mode"}
+outputs:
+  l_over_h: {quantity: wavelength_over_layer_thickness, unit: dimensionless}
+settings:
+  eta_lo: 0.53
+  eta_hi: 20.0
+  la_min: 0.05
+  la_max: 15.0
+  n_grid: 80
+  g_max: 4.0
+  n_scan: 200
+built_from: [wavelength_at_threshold]
+variant_of: wavelength_at_threshold
+corrections:
+  - equation: "h = a/gz (p. 1)"
+    change: "relaxed thickness h = gz a instead of the printed h = a/gz"
+    evidence: >
+      As for mode_wavelength_h_gza: G = diag(gx, gy, gz) relaxes the bonded layer of thickness a (p. 1),
+      so the relaxed thickness is gz a; the paper's printed width 7.54h for eta = 4, stated to be the
+      wavelength of linear instability (p. 6), follows from Eq. 1 only with h = gz a.

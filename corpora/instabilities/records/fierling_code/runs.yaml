@@ -1,0 +1,108 @@
+# ---- parameters of the script against the paper ---------------------------------------------------------
+- id: run_chi_script
+  model: compression_modulus
+  inputs: {Y: young2d_script, nu: poisson2d_script, kappa: kappa_script, R: rayon_script}
+  outputs: {chi: chi_script}
+- id: run_chi_plot
+  model: compression_modulus
+  inputs: {Y: y_plot, nu: nu_plot, kappa: kappa_plot, R: rayon_plot}
+  outputs: {chi: chi_settings}
+- id: run_thickness
+  model: shell_thickness
+  inputs: {Y: young2d_script, nu: poisson2d_script, kappa: kappa_script, R_DV: rdv_plot}
+  outputs: {h: thickness_code}
+- id: run_pole
+  model: pole_shape
+  inputs: {c: bend_coef_script, gaxe: gaxe_script}
+  outputs: {z_pole: z_pole_code, Zp: zp_code}
+
+# ---- pre-strain of the saved states ---------------------------------------------------------------------
+- id: run_eps_f13
+  model: prestrain_from_shrink
+  inputs: {gamma: ratio_f13, chi: chi_plot}
+  outputs: {eps: eps_f13, sigma_a: sigma_a_f13}
+- id: run_eps_f63
+  model: prestrain_from_shrink
+  inputs: {gamma: ratio_f63, chi: chi_plot}
+  outputs: {eps: eps_f63, sigma_a: sigma_a_f63}
+- id: run_eps_c1
+  model: prestrain_from_shrink
+  inputs: {gamma: c1_plot, chi: chi_plot}
+  outputs: {eps: eps_c1, sigma_a: sigma_a_c1}
+- id: run_eps_c2
+  model: prestrain_from_shrink
+  inputs: {gamma: c2_plot, chi: chi_plot}
+  outputs: {eps: eps_c2, sigma_a: sigma_a_c2}
+- id: run_shrink_dump_13
+  model: shrink_schedule
+  inputs: {q: shrink_step_dump, n: frame13}
+  outputs: {gamma: gamma_dump_13}
+- id: run_shrink_dump_63
+  model: shrink_schedule
+  inputs: {q: shrink_step_dump, n: frame63}
+  outputs: {gamma: gamma_dump_63}
+- id: run_shrink_script_13
+  model: shrink_schedule
+  inputs: {q: shrink_step_script, n: frame13}
+  outputs: {gamma: gamma_script_13}
+- id: run_shrink_script_63
+  model: shrink_schedule
+  inputs: {q: shrink_step_script, n: frame63}
+  outputs: {gamma: gamma_script_63}
+
+# ---- the myosin region -----------------------------------------------------------------------------------
+- id: run_region_min
+  model: mesoderm_halfwidth
+  inputs: {ey: extachey_script, delta: delta_min_script, R_DV: rdv_plot, w: row_width_plot}
+  outputs: {s: halfwidth_uniform, rows: rows_uniform}
+- id: run_region_max
+  model: mesoderm_halfwidth
+  inputs: {ey: extachey_script, delta: delta_max_script, R_DV: rdv_plot, w: row_width_plot}
+  outputs: {s: halfwidth_gradient, rows: rows_gradient}
+
+# ---- released simulation results against the paper's statements -----------------------------------------
+- id: run_stress_f13
+  model: stress_profile
+  inputs: {theta: theta_midline, chi: chi_plot}
+  settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step013.dmp.gdat", nbbins: 20}
+  outputs: {sigma_ap: sap_mid_f13, sigma_dv: sdv_mid_f13, sigma_a: sa_mid_f13, ratio: ratio_mid_f13}
+- id: run_area_sim
+  model: area_curve
+  inputs: {}
+  sweep: {t: area_reduction_paper}
+  settings: {file: "merged_with_ref_BW=15_Stats_CQJE_Gastrulation_ordi_Wild_Type_STITCHED_100_0.gdat", t_column: "t_rauzi",
+             y_column: "aire_Rauzi/aire_Rauzi_ini", need_column: "", need_value: 0}
+  outputs: {y: area_sim_code, reduction: reduction_sim_code}
+- id: run_area_muvi
+  model: area_curve
+  inputs: {}
+  sweep: {t: area_reduction_paper}
+  settings: {file: "sync_rauzi_area.gdat", t_column: "t_rauzi", y_column: "mean3(A_Rauzi0,A_Rauzi1,A_Rauzi2)",
+             need_column: "stat_n3(a0_0,a1_0,a2_0)", need_value: 3}
+  outputs: {y: area_muvi_code, reduction: reduction_muvi_code}
+- id: run_rows_sim_9
+  model: row_value
+  inputs: {}
+  sweep: {row: muvi_rows_tm1}
+  settings: {file: "sims_t=-1_area.gdat", name: "stripe_{i}_norm", offset: 0}
+  outputs: {y: rows_sim_9}
+- id: run_rows_sim_7
+  model: row_value
+  inputs: {}
+  sweep: {row: confocal_rows_tm1}
+  settings: {file: "sims_t=-1_area.gdat", name: "stripe_{i}_norm", offset: 0}
+  outputs: {y: rows_sim_7}
+
+# ---- times of the frames the figures show ------------------------------------------------------------------
+- id: run_t37
+  model: frame_time
+  inputs: {n: frame37}
+  outputs: {t: t_frame37}
+- id: run_t63
+  model: frame_time
+  inputs: {n: frame63}
+  outputs: {t: t_frame63}
+- id: run_t213
+  model: frame_time
+  inputs: {n: frame213}
+  outputs: {t: t_frame213}

@@ -1,0 +1,16 @@
+id: compression_modulus
+name: nondimensional 2D compression modulus from the code's Young modulus and Poisson ratio
+role: model
+stated: {file: settings.plot, lines: "7", quote: "chi=Y/2/(1-nu)"}
+equation: "chi = Y/2/(1-nu)  (in units kappa = 1, R_DV = 1; written here chi~ = Y R^2 / (2 (1 - nu) kappa))"
+inputs:
+  Y: {quantity: young_modulus_2d_nd, unit: dimensionless}
+  nu: {quantity: poisson_ratio_2d, unit: dimensionless}
+  kappa: {quantity: bending_modulus_nd, unit: dimensionless}
+  R: {quantity: radius_dv_nd, unit: dimensionless}
+outputs:
+  chi: {quantity: compression_modulus_nd, unit: dimensionless}
+settings: {}
+stochastic: false
+# notes: a port (our code) of the gnuplot line settings.plot:7, which is also the paper's chi_2D = Y_2D/(2(1 - nu_2D)) (SI p. 19)
+# made nondimensional by kappa/R_DV^2 as the paper does; the script's units have kappa = 1 and rayon = 1.

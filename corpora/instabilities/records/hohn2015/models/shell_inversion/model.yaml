@@ -1,0 +1,31 @@
+id: shell_inversion
+name: axisymmetric elastic shell with imposed intrinsic curvature and posterior contraction (Eqs. 1-3, Fig. 3)
+role: model
+stated: {page: 3, printed_page: "178101-3", quote: "the deformed shell minimizes the energy", where: "Eqs. 1-3"}
+equation: >
+  Es = fs - fs0, Ephi = fphi - fphi0 (1); Ks = fs kappa_s - fs0 kappa_s0, Kphi = fphi kappa_phi - fphi0 kappa_phi0 (2);
+  E = pi E h/(1 - nu^2) int_0^{pi R} r0 (Es^2 + Ephi^2 + 2 nu Es Ephi) ds
+    + pi E h^3/(12(1 - nu^2)) int_0^{pi R} r0 (Ks^2 + Kphi^2 + 2 nu Ks Kphi) ds (3);
+  kappa_s0 = -k in a region of width lambda just below the equator; posterior contraction to radius r_p < R
+  modifies fs0, fphi0, kappa_s0, kappa_phi0 (Fig. 3(d-f)); anterior extension of Eq. S1:
+  fs0 = 1 + a, fphi0 = 1 + a(2s/(pi R) - 1) for s >= pi R/2
+inputs:
+  nu: {quantity: poisson_ratio, unit: dimensionless}
+  eps: {quantity: thickness_to_radius, unit: dimensionless}
+  kR: {quantity: intrinsic_curvature_times_radius, unit: dimensionless}
+  lam: {quantity: bend_region_width_over_pi_radius, unit: dimensionless}
+  rp: {quantity: posterior_radius_scaled, unit: dimensionless}
+outputs:
+  fs: {quantity: meridional_stretch, unit: dimensionless, curve: {quantity: arclength_scaled, unit: dimensionless}}
+  kappa_s_R: {quantity: meridional_curvature_times_radius, unit: dimensionless, curve: {quantity: arclength_scaled, unit: dimensionless}}
+settings: {}
+stochastic: false
+runnable: false
+not_runnable_reason: >
+  The paper does not give how the energy (3) is minimized (no equilibrium equations, boundary conditions or
+  numerical method), and the intrinsic stretches and curvatures of the contracted posterior are shown only as
+  sketches (Fig. 3(d-f)) without formulas: how f_s0, f_phi0, kappa_phi0 vary with s across the bend region for
+  r_p < R is not stated. The parameters of the computed shapes are given only as approximate values or ranges
+  (lambda approx 0.1 pi R, kR approx 10-20 or 20, r_p/R approx 0.7), and the enlarged k, lambda of Fig. 4(c) and
+  the constant a of Eq. S1 are not given. Its results are shapes compared by eye with the measured average shapes
+  (Fig. 4(f-i)), whose axes carry no values.

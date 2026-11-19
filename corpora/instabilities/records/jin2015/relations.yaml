@@ -1,0 +1,555 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+# jin2015 works in ratios (Gf/Gs, Hs/Hf, L/Hf); bowden1998's Eq. 3 in Pa and nm. The substrate modulus is set
+# to 1e6 Pa and the film thickness to 100 nm: Eq. 3's L/t depends only on Em/Ep, so the choice does not matter.
+- id: rel_jin_bilayer_wavelength_to_bowden_eq3
+  kind: approximated_by
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: bowden1998/wavelength_eq3
+  mapping: {Em: "1e6*Gf_Gs", Ep: "1e6", nu_m: "0.5", nu_p: "0.5", t: "100"}
+  output_map: {L_over_t: Lm}
+  regime: {Gf_Gs: [100, 10000], Hs_Hf: [300, 3000]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    jin2015 cites bowden1998 (ref-33) only as an experiment in which wrinkles are observed (p. 1), and
+    bowden1998 has no finite-substrate or finite-strain model, so neither paper states a relation. The
+    proposal: jin2015's plane-strain eigenvalue problem (Eqs. B7-B15, incompressible neo-Hookean film and
+    substrate) for a stiff film (Gf/Gs >> 1) on a substrate many wavelengths thick (Hs/Hf >> L/Hf) is the
+    linear stiff-plate-on-half-space problem behind bowden1998's Eq. 3, whose prefactor 4.36 = 2 pi/3^(1/3).
+    With both materials incompressible, Em/Ep = Gf/Gs and the Poisson factors cancel, so
+    L/t = 4.36 (Gf/Gs)^(1/3). The two differ by finite-strain terms of the order of the onset strain
+    (jin2015's Lm is the nominal wavelength, and its film is neo-Hookean at strain e_m), which grow as the
+    substrate stiffens; the tolerance 0.05 allows about twice e_m at the stiff-substrate end of the regime
+    (e_m ≈ 0.024 at Gf/Gs = 100). The regime keeps Hs/Hf at least three wavelengths so the substrate acts as
+    a half-space, and Gf/Gs below 1e4 so e_m stays above jin2015's strain search floor (e_min = 1e-4).
+  assumptions:
+    - "film and substrate incompressible (nu = 1/2), as jin2015's neo-Hookean model takes them, so Em/Ep = Gf/Gs"
+    - "a substrate of Hs/Hf >= 300 is a half-space for wrinkles with L/Hf below 100"
+    - "jin2015's nominal wavelength Lm compares with Eq. 3's L/t, which makes no distinction between reference and current length"
+# Against cao2012 (ref-48). jin2015 states one relation: after Eq. 1, "A relation similar to Eq. (1) was also pointed
+# out in Refs. [39,48,49]" (p. 3). In cao2012 that relation is Eq. 7, Biot's surface wrinkling strain under general
+# uniform stretching, eW = 1 - 0.5437/sqrt(lambda_3), which is Eq. 1 for the homogeneous half-space, whose plane-strain
+# critical stretch is cao2012's c. jin2015's Eq. 1 holds "for an arbitrary constant lambda3" (p. 2), but the record's
+# Eq. 1 models fix lambda3 = 1/sqrt(lambda1) (uniaxial); the helper eq1_general is Eq. 1 with lambda3 as an input.
+# The two axis labels agree: in both papers 1 is the compression direction and 3 the in-plane transverse direction.
+- id: rel_jin_eq1_same_as_cao_eq7
+  kind: same_as
+  a: jin2015/eq1_general
+  b: cao2012/biot_surface_eq7
+  mapping: {c: "1 - e_pe", lam3: "lam3"}
+  output_map: {eW: e_c}
+  regime: {e_pe: [0.01, 0.7], lam3: [0.5, 2.0]}
+  provenance: stated
+  citation: {page: 3, printed_page: "061008-3", quote: "Eq. (1) was also pointed out in Refs.", where: "text after Eq. 1"}
+  assumptions:
+    - "cao2012's constant c (0.5437) is a plane-strain critical stretch, 1 - e^PE (cao2012 Eq. 4: eW = 1 - lambda_1)"
+    - "cao2012's lambda_3 is jin2015's lambda3: the stretch parallel to the surface and normal to the compression"
+    - "jin2015 states Eq. 1 for any bilayer; cao2012's Eq. 7 is the homogeneous half-space, so the mapping takes jin2015's e^PE as an input that cao2012 fixes at 1 - 0.5437"
+# Proposed: jin2015's eigenvalue problem (Appendix B, Eqs. B7-B15) is cao2012's (Appendix, Eqs. A1-A10) with a
+# substrate of finite thickness Hs, its bottom fixed vertically and free horizontally. Both take film and substrate
+# as incompressible neo-Hookean, both define the strain as e = 1 - lambda_1 of the film, and cao2012 without substrate
+# prestretch (lambda0_1s = 1) compresses film and substrate together as jin2015 does. As Hs/Hf -> oo the substrate
+# becomes cao2012's deep one. Only the strain is related: jin2015 prints the wavelength Lm/Hf, cao2012 the wavenumber
+# kh, which are reciprocal (Lm/Hf = 2 pi/kh) and not the same quantity.
+- id: rel_jin_plane_strain_to_cao_bilayer_plane_strain
+  kind: reduces_to
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: cao2012/bilayer_plane_strain
+  mapping: {mu_ratio: "Gf_Gs", lam01: "1"}
+  output_map: {eW: em}
+  limit: {Hs_Hf: "oo"}
+  regime: {Gf_Gs: [2, 1000], Hs_Hf: [10, 100]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    jin2015's plane-strain wrinkling of a bilayer with a finite substrate becomes, as Hs/Hf -> oo, cao2012's exact
+    plane-strain wrinkling of a neo-Hookean film on a deep neo-Hookean substrate without prestretch: the same
+    incompressible neo-Hookean materials, the same strain e = 1 - lambda_1 and the same minimum over wavenumber.
+    jin2015 cites cao2012 (ref-48) but does not say this. The tolerance 0.001 is ours: both papers' eigenproblems are
+    solved by the reader's root finders (tolerances 1e-6 and 1e-7 in strain), which agree to about 1e-5 relative.
+  assumptions:
+    - "cao2012 with lambda0_1s = 1: film and substrate compressed together from a common stress-free state, as in jin2015"
+    - "jin2015's Gf/Gs is cao2012's mu_f/mu_s"
+    - "a substrate of Hs/Hf -> oo is cao2012's infinitely deep substrate, whatever the condition at its bottom"
+- id: rel_jin_uniaxial_to_cao_bilayer_uniaxial
+  kind: reduces_to
+  a: jin2015/wrinkle_eigen_uniaxial
+  b: cao2012/bilayer_uniaxial
+  mapping: {mu_ratio: "Gf_Gs", lam01: "1"}
+  output_map: {eW: em}
+  limit: {Hs_Hf: "oo"}
+  regime: {Gf_Gs: [2, 1000], Hs_Hf: [10, 100]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    The uniaxial counterpart of rel_jin_plane_strain_to_cao_bilayer_plane_strain: jin2015's uniaxial compression
+    condition lambda3 = 1/sqrt(lambda1) is cao2012's uniaxial stressing (lambda_2 = lambda_3 = 1/sqrt(lambda_1)) of film
+    and substrate without prestretch, and jin2015's finite substrate becomes cao2012's deep one as Hs/Hf -> oo.
+    The tolerance 0.001 is ours, for the two numerical root finders.
+  assumptions:
+    - "cao2012 with lambda0_1s = 1 under uniaxial stressing: film and substrate both at lambda_3 = 1/sqrt(lambda_1), as jin2015's uniaxial compression condition"
+    - "jin2015's Gf/Gs is cao2012's mu_f/mu_s"
+    - "a substrate of Hs/Hf -> oo is cao2012's infinitely deep substrate"
+# Against cerda2003 (ref-34). jin2015 cites it twice: on p. 1 among experiments in which wrinkles are observed
+# ([1-3,33,34], no model), and on p. 10, discussing Fig. 7 (uniaxial compression), among the works whose "nonlinear
+# theory modeling both the film and substrate as linear elastic materials and the film as a von Karman plate can
+# predict the critical strain and wavelength of wrinkles reasonably well [27-29,34,58,59]" "when the film is much
+# stiffer and thinner than the substrate". cerda2003 prints no critical strain, only the wavelength laws, both with
+# "~" and no prefactor, so the stated relation is a scaling: the deep-substrate law lambda ~ t (E/Es)^(1/3).
+# jin2015 works in ratios: Hf is taken as 1 mm (Cerda's t), so Cerda's lam (mm) is jin2015's Lm/Hf.
+# Test note (relate job, 2026-11-19): both relations below come out not_verified. The test takes log-slopes over a
+# 0.1% step, and jin2015's Lm is the argmin of a flat minimum over KHf found by a golden search, so its local slope
+# is mostly noise (from -4.4 to +2.9). Over a 20% step the slopes are near Cerda's exponents: d ln Lm/d ln(Gf/Gs) =
+# 0.305, 0.332 and 0.329 at (Gf/Gs, Hs/Hf) = (100, 300), (1e3, 1e3) and (1e4, 3e3), against 1/3; in the shallow regime
+# 0.167 to 0.176 against 1/6 in Gf/Gs, and 0.46 to 0.49 against 1/2 in Hs/Hf. Even with a smooth solver the slope at
+# Gf/Gs = 100 would miss 1/3 by about 0.03, from the finite-strain terms (see rel_jin_bilayer_wavelength_to_bowden_eq3).
+# The status is left as the test gives it. Script: build/instabilities/relate-check/cerda2003+jin2015/slopes.py.
+- id: rel_jin_uniaxial_scales_as_cerda_deep_substrate
+  kind: scales_as
+  a: jin2015/wrinkle_eigen_uniaxial
+  b: cerda2003/deep_substrate_wavelength
+  mapping: {t: "1", E_over_Es: "Gf_Gs"}
+  output_map: {lam_over_t: Lm}
+  regime: {Gf_Gs: [100, 10000], Hs_Hf: [300, 3000]}
+  provenance: stated
+  citation: {page: 10, printed_page: "061008-10", quote: "Karman plate can predict the critical strain and wavelength of", where: "Appendix B text on Fig. 7, citing [27-29,34,58,59]"}
+  assumptions:
+    - "film and substrate incompressible, as jin2015's neo-Hookean model takes them, so Cerda's E/Es (Young's moduli) is Gf/Gs"
+    - "Cerda's sheet thickness t is jin2015's film thickness Hf, and lambda/t is the nominal wavelength Lm/Hf"
+    - "the regime is jin2015's 'film much stiffer and thinner than the substrate': Gf/Gs >= 100 and Hs/Hf >= 300, so the substrate is deep (t << lambda << Hs) as Cerda's law requires"
+# Proposed: cerda2003's shallow-substrate law (lambda >> Hs >> t, K ~ Es lambda^2/Hs^3 for an incompressible layer)
+# is the other end of jin2015's thickness ratio: Fig. 7(d) shows Lm/Hf falling as Hs/Hf falls, "since a thin
+# substrate strongly suppresses wrinkles with long wavelength" (p. 10). Hf = 1 mm as above, so 2Hs = 2 Hs/Hf mm.
+- id: rel_jin_uniaxial_scales_as_cerda_shallow_substrate
+  kind: scales_as
+  a: jin2015/wrinkle_eigen_uniaxial
+  b: cerda2003/shallow_substrate_wavelength
+  mapping: {two_Hs: "2*Hs_Hf", Hs_over_t: "Hs_Hf", E_over_Es: "Gf_Gs"}
+  output_map: {lam: Lm}
+  regime: {Gf_Gs: [10000, 1000000], Hs_Hf: [3, 10]}
+  provenance: proposed
+  reason: >
+    jin2015's bilayer with an incompressible substrate thin against the wavelength but thick against the film
+    (Hf << Hs << L) is Cerda's shallow-substrate case, where the substrate acts as a foundation of stiffness
+    K ~ Es lambda^2/Hs^3 and lambda ~ (t Hs)^(1/2) (E/Es)^(1/6). Neither paper says so; jin2015 cites cerda2003 only
+    for the plate theory generally. With Gf/Gs from 1e4 to 1e6 and Hs/Hf from 3 to 10, the plate estimate gives
+    lambda/Hs of a few to ten times the unknown prefactor and onset strains near 1e-3, above jin2015's strain
+    search floor (1e-4). jin2015's substrate bottom is fixed vertically and free horizontally; for a thin
+    incompressible layer that changes the prefactor of K, not its Hs^-3 scaling.
+  assumptions:
+    - "film and substrate incompressible, so Cerda's E/Es is Gf/Gs"
+    - "Cerda's t is Hf (1 mm) and Hs is jin2015's substrate thickness; Cerda's lambda in mm is Lm/Hf"
+    - "a slip bottom (jin2015) and a bonded one give the same K ~ Es lambda^2/Hs^3 scaling for a thin incompressible layer"
+# Against hong2009 (ref-39). jin2015 states that the crease condition obeys its Eq. 1, citing ref-39 (p. 3), and takes
+# the crease onset strains 0.35 (plane strain) and 0.44 (uniaxial) from it (p. 6). hong2009 writes the condition
+# under generalized plane strain as lambda_1 sqrt(lambda_2) = 1 - epsilon_c (p. 3, from its Eq. 3), with its
+# direction 2 the in-plane stretch normal to the compression: jin2015's direction 3 (jin2015's X2 is the depth).
+# The helper hong2009/gps_equivalent_plane_strain is that form. Uniaxial compression is lambda_2 = 1/sqrt(lambda_1)
+# in hong2009's labels, jin2015's lambda3 = 1/sqrt(lambda1); with e = 1 - lambda_1 it gives jin2015's crease model.
+# Not entered: hong2009/gps_uniaxial_stretch (lambda_1 = (1 - eps)^(4/3)) is the inverse of
+# jin2015/eq1_crease_uniaxial_to_plane, and a relation here compares outputs, so the two cannot be set side by side;
+# the derived_from below tests the same content. jin2015's "A relation similar to Eq. (1) was also pointed out in
+# Refs. [39,48,49]" for wrinkles is covered by the same form; jin2015/eq1_general gives the strain under general
+# lambda3 from the plane-strain one, the inverse direction of hong2009's form, so it is not entered either.
+- id: rel_jin_eq1_crease_from_hong_eq3
+  kind: derived_from
+  a: hong2009/gps_equivalent_plane_strain
+  b: jin2015/eq1_crease_uniaxial_to_plane
+  mapping: {e_uni: "1 - lam1"}
+  steps: ["subs: lam2 = 1/sqrt(lam1)"]
+  regime: {lam1: [0.4, 0.9], lam2: [0.8, 1.6]}
+  provenance: stated
+  citation: {page: 3, printed_page: "061008-3", quote: "satisfies the same relation as the critical condition of", where: "text on Fig. 3(a), citing [39]"}
+  assumptions:
+    - "hong2009's lambda_2 (in-plane, normal to the compression) is jin2015's lambda3; both papers take direction 1 along the compression"
+    - "uniaxial compression with free lateral faces is lambda_2 = lambda_1^(-1/2), jin2015's lambda3 = 1/sqrt(lambda1)"
+    - "both papers' strain is the nominal 1 - lambda_1 (hong2009 p. 3: lambda_1 = 1 - epsilon_c; jin2015 p. 2: e_c = 1 - lambda_c)"
+# Against diab2013 (ref-44). jin2015 cites it once, on p. 1, in "the critical strain for the onset of wrinkles can be
+# either smaller or larger than that for the onset of creases [43-47]", which is about layered materials in general;
+# it states no relation to diab2013's models and takes no value from it (its crease strains 0.35 and 0.44 come from
+# ref-39). diab2013's models are an exponentially-decaying-modulus (EDM) half-space (Eq. 2.8), which jin2015's
+# two-layer bilayer does not contain except where both become homogeneous; so only that one point is proposed.
+- id: rel_jin_plane_strain_to_diab_biot_strain
+  kind: reduces_to
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: diab2013/biot_strain_eq28
+  mapping: {}
+  output_map: {eps_B: em}
+  limit: {Gf_Gs: "1"}
+  regime: {Gf_Gs: [1, 2], Hs_Hf: [1, 20]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    With Gf/Gs -> 1 jin2015's bilayer is one homogeneous incompressible neo-Hookean layer, and its plane-strain
+    wrinkling strain e_m^PE (minimum over wavenumber) is Biot's plane-strain critical strain, as jin2015 says for
+    Gf/Gs = 1 ("one layer and em reaches the Biot strain", p. 10). diab2013's eps_B is the same nominal strain
+    eps = 1 - lambda at which its Eq. 2.8 wavenumber diverges, the root of lambda^3 + lambda^2 + lambda - 1 = 0
+    (0.456). Neither paper says this about the other. The tolerance 0.001 is ours: jin2015's slab has a finite
+    thickness Hf + Hs with a slip bottom, and its strain search is numerical; at Gf/Gs = 1.0001 the reader's solver
+    gives 0.45629 (Hs/Hf = 10) and 0.45631 (Hs/Hf = 1) against 0.45631.
+  assumptions:
+    - "both strains are nominal compressive strains 1 - lambda_1 under plane strain (jin2015 Appendix B; diab2013 p. 5)"
+# Against huang2005 (ref-58). jin2015 cites it on p. 10, discussing Fig. 7: "When the film is much stiffer and thinner
+# than the substrate, a nonlinear theory modeling both the film and substrate as linear elastic materials and the film
+# as a von Karman plate can predict the critical strain and wavelength of wrinkles reasonably well [27-29,34,58,59]",
+# and "The critical strains obtained by the nonlinear theory for Hs/Hf = 1000 are plotted with blue circles for
+# comparison [58]. When Gf/Gs is large, for instance Gf/Gs = 1000, ... em for the nonlinear theory overlaps with the
+# result for neo-Hookean material". huang2005's model of that theory is sinusoidal_finite_substrate (Eqs. 10, 13, 16:
+# a von Karman plate on a linear elastic layer of thickness H bonded to a rigid support). Its outputs are lambda_eq/h
+# and N_c/(h E_bar). For a plane-strain film the membrane strain at the critical force is N_c/(h E_bar), so the strain
+# is related through jin2015's plane-strain model; jin2015's Fig. 7 is uniaxial, where the linear critical strain is
+# N_c/(h E) = (4/3) N_c/(h E_bar) for an incompressible film, a factor no output_map can carry. The wavelength does not
+# depend on the transverse condition in the linear theory and is related through the uniaxial model of Fig. 7(b), (d).
+# Both materials incompressible: E_bar/Es_bar = 4Gf/(4Gs) = Gf/Gs and nu_s = 1/2.
+# Not linked in cited.yaml: jin2015's circles (fig7a-d_vk_read, from_source ref-58) are jin2015's own computation from
+# huang2005's theory at Hs/Hf = 1000 or Gf/Gs = 1000. huang2005 prints no value at those points: its Fig. 5 curves run
+# against H/h at E_bar/Es_bar = 10^3 to 10^5 and are read at other positions, so no datum of huang2005 is that value.
+- id: rel_jin_plane_strain_em_approx_huang_finite_substrate
+  kind: approximated_by
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: huang2005/sinusoidal_finite_substrate
+  mapping: {Ebar_over_Esbar: "Gf_Gs", H_over_h: "Hs_Hf", nu_s: "0.5"}
+  output_map: {Nc_over_hE: em}
+  regime: {Gf_Gs: [100, 10000], Hs_Hf: [300, 3000]}
+  tolerance: 0.05
+  provenance: stated
+  citation: {page: 10, printed_page: "061008-10", quote: "Karman plate can predict the critical strain and wavelength of", where: "Appendix B text on Fig. 7, citing [27-29,34,58,59]"}
+  assumptions:
+    - "film and substrate incompressible (jin2015's neo-Hookean model), so huang2005's E_bar/Es_bar is Gf/Gs and nu_s = 0.5"
+    - "under plane strain the film's membrane strain at the critical force is N_c/(h E_bar), compared with jin2015's nominal e_m^PE"
+    - "the regime is jin2015's 'film much stiffer and thinner than the substrate': Gf/Gs >= 100, Hs/Hf >= 300 (the paper's comparison is at Hs/Hf = 1000); there the substrate bottom (jin2015: slip; huang2005: bonded to a rigid support) does not matter"
+    - "the tolerance 0.05 is ours: the two differ by finite-strain terms of the order of the onset strain (e_m ≈ 0.024 at Gf/Gs = 100)"
+- id: rel_jin_uniaxial_Lm_approx_huang_finite_substrate
+  kind: approximated_by
+  a: jin2015/wrinkle_eigen_uniaxial
+  b: huang2005/sinusoidal_finite_substrate
+  mapping: {Ebar_over_Esbar: "Gf_Gs", H_over_h: "Hs_Hf", nu_s: "0.5"}
+  output_map: {lam_over_h: Lm}
+  regime: {Gf_Gs: [100, 10000], Hs_Hf: [300, 3000]}
+  tolerance: 0.05
+  provenance: stated
+  citation: {page: 10, printed_page: "061008-10", quote: "Karman plate can predict the critical strain and wavelength of", where: "Appendix B text on Fig. 7, citing [27-29,34,58,59]"}
+  assumptions:
+    - "film and substrate incompressible, so huang2005's E_bar/Es_bar is Gf/Gs and nu_s = 0.5"
+    - "jin2015's nominal wavelength Lm/Hf compares with huang2005's lambda_eq/h, which makes no distinction between reference and current length"
+    - "the regime is jin2015's stiff thin film on a thick substrate; the tolerance 0.05 is ours, for finite-strain terms of the order of e_m"
+    - "diab2013's EDM half-space at its Biot point is the homogeneous neo-Hookean half-space (diab2013 p. 5: 'the homogeneous neo-Hookean half-space unstably bifurcates at the Biot critical strain')"
+# Against richman1975 (ref-13). jin2015 cites it once, on p. 1, among "layered materials of dissimilar elastic moduli
+# [12,13,15,30-32]", with no model and no value taken from it; richman1975 takes nothing from jin2015 (it is earlier).
+# richman1975's analysis is unpublished (its ref. 20); the record's plate_on_foundation is a reconstructed stand-in:
+# two bonded incompressible thin plates under equibiaxial compression on an incompressible half-space core. With both
+# strata of the same modulus it is one plate of thickness t1 + t2 on a half-space, and its l/(t1 + t2) is
+# 2 pi (E1/(3 Ecore))^(1/3), the same law as bowden1998's Eq. 3 (see rel_jin_bilayer_wavelength_to_bowden_eq3).
+# Only the wavelength is related: the critical stress under equibiaxial load is not jin2015's plane-strain or
+# uniaxial strain, and the factor between them is not an output_map.
+- id: rel_jin_plane_strain_Lm_approx_richman_plate
+  kind: approximated_by
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: richman1975/plate_on_foundation
+  mapping: {t1: "0.5", t2: "0.5", E2_over_E1: "1", Ecore_over_E1: "1/Gf_Gs", stress_ratio: "1"}
+  output_map: {l_over_t: Lm}
+  regime: {Gf_Gs: [100, 10000], Hs_Hf: [300, 3000]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    jin2015 cites richman1975 only as an example of a layered material (p. 1); neither paper states a relation.
+    The proposal: richman1975's cortex on a soft core, with its two strata of equal modulus, is one stiff
+    incompressible plate on an incompressible half-space, which is jin2015's neo-Hookean bilayer with a stiff thin
+    film (Gf/Gs >> 1) on a substrate many wavelengths deep, linearized. In the linear plate theory the wavelength of
+    least critical load does not depend on whether the in-plane load is equibiaxial (richman1975) or uniaxial with
+    the transverse stretch fixed (jin2015's plane strain), so l/t compares with jin2015's Lm/Hf. They differ by
+    finite-strain terms of the order of the onset strain (e_m ≈ 0.024 at Gf/Gs = 100); the tolerance 0.05 is ours,
+    as in the bowden1998 relation. Hs/Hf >= 300 keeps the substrate at least three wavelengths deep.
+  assumptions:
+    - "film and substrate incompressible, so richman1975's Ecore/E1 (Young's moduli) is Gs/Gf"
+    - "two strata of equal modulus and equal stress (E2/E1 = 1, stress ratio 1) with t1 = t2 = 0.5 Hf are one film of thickness Hf"
+    - "the substrate of Hs/Hf >= 300 acts as richman1975's half-space core"
+    - "jin2015's nominal wavelength Lm/Hf compares with richman1975's l/t, which makes no distinction between reference and current length"
+# Against stafford2004 (ref-5). jin2015 cites it once, on p. 1, in "Elastic instability of various kinds has been used in
+# engineering to ... measure material properties [5]", with no model and no value taken from it (no datum of jin2015
+# has from_source ref-5), so nothing goes in cited.yaml. Both relations below are proposed. Stafford's Eq. 1 is the
+# stiff-plate-on-half-space wavelength, d = 2 pi h [(1 - nu_s^2) Ef/(3 (1 - nu_f^2) Es)]^(1/3); its Eq. 2 is the same
+# law solved for Ef (the metrology). With both materials incompressible it is d/h = 2 pi (Gf/(3 Gs))^(1/3), the law
+# rel_jin_bilayer_wavelength_to_bowden_eq3 tests as approximated_by (verified within 0.05). Here the kind is scales_as:
+# Stafford's outputs carry units (d in um, Ef in GPa) and jin2015's are ratios (Lm/Hf, Gf/Gs), so an approximated_by
+# test cannot convert one into the other (it stops with a UnitError), and no paper states a form that would justify a
+# helper model. Port units: Stafford h in nm, d in um, Ef in GPa, Es in MPa; h is held at 1000 nm and Es at 1000 MPa.
+# Test note (relate job, 2026-11-19): both come out not_verified (log-slopes differ by up to 1.1 and 4.1). As for the
+# cerda2003 deep-substrate relation, the test's 0.1% step resolves the noise of jin2015's numerical minimum (a golden
+# search on a flat minimum, and the contour's root find on it). Over a 20% step the slopes are near Stafford's
+# exponents: d ln Lm/d ln(Gf/Gs) = 0.305, 0.332, 0.329 at (Gf/Gs, Hs/Hf) = (100, 300), (1e3, 1e3), (1e4, 3e3)
+# against 1/3; d ln(Gf/Gs)/d ln Lm = 3.14, 3.06, 3.03 at (Lm/Hf, Hs/Hf) = (25, 300), (35, 1e3), (45, 3e3) against 3,
+# the misfit falling as the onset strain falls (finite-strain terms). The status is left as the test gives it.
+# Script: build/instabilities/relate-check/jin2015+stafford2004/slopes.py.
+- id: rel_jin_plane_strain_Lm_scales_as_stafford_eq1
+  kind: scales_as
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: stafford2004/wavelength_eq1
+  mapping: {h: "1000", Ef: "Gf_Gs", Es: "1000", nu_f: "0.5", nu_s: "0.5"}
+  output_map: {d: Lm}
+  regime: {Gf_Gs: [100, 10000], Hs_Hf: [300, 3000]}
+  provenance: proposed
+  reason: >
+    jin2015 cites stafford2004 only as an application of wrinkling (p. 1); neither paper states a relation. The
+    proposal: jin2015's plane-strain eigenvalue problem (Eqs. B7-B15, incompressible neo-Hookean film and substrate)
+    for a stiff film (Gf/Gs >> 1) on a substrate many wavelengths deep is, linearized, the stiff plate on a
+    half-space behind Stafford's Eq. 1, so its wavelength grows as the cube root of the modulus ratio
+    (Ef/Es = Gf/Gs, the Poisson factors cancelling). Hs/Hf >= 300 keeps the substrate at least three wavelengths
+    deep, and Gf/Gs <= 1e4 keeps e_m above jin2015's strain search floor (e_min = 1e-4).
+  assumptions:
+    - "film and substrate incompressible (nu = 1/2), as jin2015's neo-Hookean model takes them, so Stafford's Ef/Es (Young's moduli) is Gf/Gs"
+    - "a substrate of Hs/Hf >= 300 is Stafford's 'thick' substrate for wrinkles with L/Hf below 100"
+    - "jin2015's nominal wavelength Lm/Hf compares with Stafford's d/h, which makes no distinction between reference and current length"
+- id: rel_jin_Lm_contour_scales_as_stafford_eq2
+  kind: scales_as
+  a: jin2015/Lm_contour
+  b: stafford2004/modulus_eq2
+  mapping: {d: "Lm", h: "1000", Es: "1000", nu_f: "0.5", nu_s: "0.5"}
+  output_map: {Ef: Gf_Gs}
+  regime: {Hs_Hf: [300, 3000], Lm: [22, 50]}
+  provenance: proposed
+  reason: >
+    The inverse of rel_jin_plane_strain_Lm_scales_as_stafford_eq1, and the use Stafford makes of wrinkling: from a
+    measured wavelength, the modulus ratio. jin2015's contour of Lm/Hf in the (Hs/Hf, Gf/Gs) plane (Fig. 3(b))
+    gives Gf/Gs for a wavelength on a thick substrate; Stafford's Eq. 2 gives Ef/Es proportional to (d/h)^3. The
+    regime Lm/Hf from 22 to 50 is Gf/Gs from about 130 to 1500, within the contour model's search range
+    (g_hi = 2000), on substrates at least six wavelengths deep.
+  assumptions:
+    - "film and substrate incompressible, so Stafford's Ef/Es is Gf/Gs"
+    - "jin2015's nominal wavelength Lm/Hf is Stafford's d/h"
+    - "a substrate of Hs/Hf >= 300 is Stafford's thick substrate"
+# Against trujillo2008 (ref-38). jin2015 cites it once, on p. 1, among experiments in which "creases are observed"
+# in a homogeneous material ([25,35-42]); it states no relation and takes no value from it (no datum of jin2015 has
+# from_source ref-38), so nothing goes in cited.yaml. trujillo2008's biot_equibiaxial is Biot's condition
+# lambda1^2 lambda3 = 0.296 specialised to equibiaxial compression (lambda1 = lambda3), e_c = 1 - 0.296^(1/3).
+# Proposed: that is jin2015's Eq. 1 with the transverse stretch equal to the critical one. The condition lambda1^2
+# lambda3 = P gives the plane-strain stretch sqrt(P) (lambda3 = 1), so e^PE = 1 - sqrt(P), and at equibiaxial onset
+# lambda3 = lambda_c = P^(1/3); Eq. 1 then gives 1 - e_c = sqrt(P)/P^(1/6) = P^(1/3).
+- id: rel_trujillo_equibiaxial_same_as_jin_eq1
+  kind: same_as
+  a: trujillo2008/biot_equibiaxial
+  b: jin2015/eq1_general
+  mapping: {e_pe: "1 - sqrt(lam_prod)", lam3: "lam_prod**(1/3)"}
+  regime: {lam_prod: [0.1, 0.9]}
+  provenance: proposed
+  reason: >
+    jin2015's Eq. 1 says the critical stretch under any transverse stretch lambda3 is the plane-strain one divided by
+    sqrt(lambda3): the eigenvalue problem depends on lambda1 sqrt(lambda3) alone (p. 2). trujillo2008 (p. 2) states the
+    surface instability of a homogeneous gel as lambda1^2 lambda3 = 0.296 and specialises it to equibiaxial
+    compression. Both are the same invariant: with lambda3 = 1 trujillo2008's condition gives jin2015's plane-strain
+    stretch sqrt(lam_prod), and with lambda3 equal to the critical equibiaxial stretch lam_prod^(1/3) Eq. 1 gives
+    trujillo2008's e_c. Neither paper says so; jin2015 cites trujillo2008 only as an experiment on creases.
+  assumptions:
+    - "the onset condition depends only on the current stretches, not on the loading path, so Eq. 1 written for a constant lambda3 holds when lambda3 = lambda1 at onset (equibiaxial)"
+    - "trujillo2008's lambda1 (along the compression) and lambda3 (the other in-plane direction) are jin2015's lambda1 and lambda3; both strains are the nominal 1 - lambda1"
+    - "jin2015's Eq. 1 is stated for wrinkles of a bilayer; trujillo2008 applies Biot's condition to a homogeneous gel, the bilayer with Gf/Gs = 1"
+# Against wang2014 (ref-47). jin2015 cites it three times. (1) p. 3, on its boundary of equal critical strain (Fig. 3(a)):
+# "when Gf/Gs < 1.65, creases always form under a strain lower than wrinkles, no matter how large the thickness ratio
+# Hs/Hf is. This was also predicted in Ref. [47] when the authors studied instability in a bilayer with infinite
+# substrate": a stated relation between jin2015's boundary (finite substrate) and wang2014's wrinkle_crease_boundary
+# (deep substrate) in the limit Hs/Hf -> oo, both at the crease strain 0.35 and without prestretch (lambda_p = 1). Both
+# papers take that 0.35 from Hong et al. (jin2015's ref-39, wang2014's ref-55), and both define the boundary as the
+# modulus ratio where the minimal plane-strain wrinkling strain equals it. (2) p. 6: wang2014 "observed creases
+# experimentally under higher Gf/Gs than the value predicted by their theory, which only considers supercritical
+# creases": a remark on wang2014's data against its theory, not a relation between models. (3) p. 1 and p. 8: lists
+# (instabilities in layered materials; delamination). jin2015 takes no value from wang2014 (no datum has from_source
+# ref-47; its 1.65 is its own result, and wang2014 prints 1.54 at lambda_p = 1), so cited.yaml gains nothing; the
+# relation test below shows whether the two boundaries meet in the limit.
+# Test note (relate job, 2026-11-19): both relations below are verified (differences 6e-5 at Hs/Hf -> oo). So the two
+# papers' models give one boundary for a deep substrate at lambda_p = 1; the gap between the printed 1.65 (jin2015) and
+# 1.54 (wang2014) is in the printed values, not in the models as the records read them.
+- id: rel_jin_equal_strain_boundary_to_wang_boundary
+  kind: reduces_to
+  a: jin2015/equal_strain_boundary_plane_strain
+  b: wang2014/wrinkle_crease_boundary
+  mapping: {eps_crease: "e_crease", lam_p: "1"}
+  output_map: {mu_boundary: Gf_Gs}
+  limit: {Hs_Hf: "oo"}
+  regime: {Hs_Hf: [10, 100], e_crease: [0.35, 0.35]}
+  tolerance: 0.001
+  provenance: stated
+  citation: {page: 3, printed_page: "061008-3", quote: "was also predicted in Ref. [47] when the authors studied", where: "Sec. 2, text on Fig. 3(a)"}
+  assumptions:
+    - "wang2014 without prestretch (lambda_p = 1) is jin2015's bilayer: film and substrate compressed together from a common stress-free state"
+    - "both crease strains are hong2009's plane-strain 0.35 (jin2015 p. 6, wang2014 p. 4); the regime holds e_crease at that value, the one both papers use, because each test point of wang2014's boundary is a root find over a full linear stability solve"
+    - "jin2015's Gf/Gs is wang2014's mu_f/mu_s, and a substrate of Hs/Hf -> oo is wang2014's deep substrate, whatever the condition at its bottom"
+    - "the tolerance 0.001 is ours: both boundaries are root finds (xtol 1e-4 in mu for wang2014, g_tol 1e-4 for jin2015) over the reader's numerical eigenvalue solvers"
+# Proposed: the wrinkling strain under the two boundaries. jin2015's plane-strain eigenvalue problem (Eqs. B7-B15) with
+# Hs/Hf -> oo is the problem wang2014 solves "following Cao and Hutchinson" (p. 3) for a deep substrate, at lambda_p = 1.
+# Only the strain is related: jin2015 prints the wavelength Lm/Hf, wang2014's model the wavenumber kh.
+- id: rel_jin_plane_strain_to_wang_linear_stability
+  kind: reduces_to
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: wang2014/wrinkle_linear_stability
+  mapping: {mu_ratio: "Gf_Gs", lam_p: "1"}
+  output_map: {e_wrinkle: em}
+  limit: {Hs_Hf: "oo"}
+  regime: {Gf_Gs: [2, 1000], Hs_Hf: [10, 100]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    jin2015's statement that its boundary meets wang2014's for an infinite substrate (p. 3) rests on the two papers'
+    wrinkling strains meeting there: both take film and substrate as incompressible neo-Hookean in plane strain, both
+    define the strain as the film's nominal 1 - lambda_1, and both minimize over the wavenumber. Neither paper states
+    this of the wrinkling strain itself. With lambda_p = 1, wang2014's problem is jin2015's with a deep substrate.
+    The tolerance 0.001 is ours, for the two numerical root finders (1e-6 and 1e-7 in strain).
+  assumptions:
+    - "wang2014 with lambda_p = 1: film and substrate compressed together from a common stress-free state, as in jin2015"
+    - "jin2015's Gf/Gs is wang2014's mu_f/mu_s"
+    - "a substrate of Hs/Hf -> oo is wang2014's deep substrate, whatever the condition at its bottom"
+# Against wang2015 (Wang & Zhao, Sci. Rep. 5, 8887, March 2015). Neither paper cites the other (jin2015's references
+# include wang2014, not wang2015; wang2015's include no Jin paper), so both relations below are proposed, and they go
+# here because jin2015 (J. Appl. Mech., June 2015) is the later paper. No datum of either record takes a value from the
+# other, so cited.yaml gains nothing; both papers' crease strain 0.35 comes from hong2009, not from each other.
+# Loading conventions differ: jin2015 compresses film and substrate together from a common stress-free state
+# (e = 1 - lambda1, no prestretch); wang2015 grows the film on a substrate that is relaxed at the critical state, so
+# its mismatch strain eM is the film's compressive strain with the substrate prestretched by 1/(1 - eM). The two agree
+# only where the onset strain is small, so only wang2015's stiff-film forms are related: Eq. 4's upper branch
+# (mu_f/mu_s > 16, eC <= 0.08) and Eq. 8 (mu_f/mu_s > 10^3). Not related: Eq. 4's lower branch, which ends at the
+# crease threshold 0.35 at mu_f/mu_s = 1.3 from wang2015's energy (Maxwell) criterion with a large implied prestretch
+# (up to 1.54), against jin2015's boundary of equal bifurcation strains at Gf/Gs = 1.65 without prestretch: the two
+# boundaries are defined by different criteria and loadings, and wang2015's is the output of a finite element model
+# that cannot be rerun (fe_phase_diagram). wang2015's Eqs. 7 and 9-13 (crease, fold, ridge and period-double
+# wavelengths, amplitudes) have no counterpart in jin2015's models.
+- id: rel_jin_plane_strain_em_approx_wang2015_eq4
+  kind: approximated_by
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: wang2015/eq4_wrinkle_onset
+  mapping: {mu_ratio: "Gf_Gs"}
+  output_map: {eC: em}
+  regime: {Gf_Gs: [16, 1000], Hs_Hf: [300, 3000]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    wang2015's Eq. 4 upper branch, eC_wrinkle = 0.50 (mu_f/mu_s)^-0.66 for mu_f/mu_s > 16, is its fit to the plane-strain
+    flat-wrinkle boundary of an incompressible neo-Hookean film on an incompressible neo-Hookean substrate more than 20
+    film thicknesses deep. jin2015's plane-strain eigenvalue problem (Eqs. B7-B15) is the onset of wrinkling of the same
+    bilayer, minimized over the wavenumber. For a stiff film the wrinkling is supercritical, so the energy boundary and
+    the bifurcation coincide. The loadings differ by the substrate prestretch wang2015 implies, 1/(1 - eC) <= 1.09 on
+    this branch, which changes the stiff-film strain by a factor of about ((1 + lambda_p^2)/2)^(2/3), at most 6%; with
+    the two-digit prefactor and exponent of Eq. 4 the tolerance is 10% (ours). Hs/Hf >= 300 keeps jin2015's substrate
+    at least seven wavelengths deep at Gf/Gs = 1000 (L/Hf about 44).
+  assumptions:
+    - "film and substrate incompressible neo-Hookean in both papers, so jin2015's Gf/Gs is wang2015's mu_f/mu_s"
+    - "wang2015's mismatch strain at onset is the film's nominal compressive strain, jin2015's e = 1 - lambda1"
+    - "the substrate prestretch implied by wang2015's loading (at most 1.09 here) is within the tolerance"
+    - "jin2015's substrate of Hs/Hf >= 300 with a slip bottom is wang2015's deep substrate"
+- id: rel_jin_plane_strain_Lm_approx_wang2015_eq8
+  kind: approximated_by
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: wang2015/eq8_initial_wrinkle_wavelength
+  mapping: {mu_ratio: "Gf_Gs"}
+  output_map: {lamC_over_H: Lm}
+  regime: {Gf_Gs: [1000, 10000], Hs_Hf: [300, 3000]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    wang2015's Eq. 8, lambda^C_wrinkle/H_f = 2 pi (mu_f/(3 mu_s))^(1/3) for mu_f/mu_s > 10^3, is the wavelength at
+    initiation of wrinkles of a stiff film on a deep substrate, which wang2015 says is given by linear stability
+    analysis (its ref. 49, cao2012). jin2015's plane-strain eigenvalue problem is that analysis with a substrate of
+    finite thickness, and its Lm/Hf is the wavelength at the minimum over the wavenumber. At these ratios the onset
+    strain is below 0.01, so the prestretch implied by wang2015's loading is negligible. The tolerance 0.05 is ours,
+    as in rel_jin_bilayer_wavelength_to_bowden_eq3 (the same law): finite-strain terms of the order of e_m and the
+    flat minimum over the wavenumber. Gf/Gs <= 1e4 keeps e_m above jin2015's strain search floor (1e-4), and
+    Hs/Hf >= 300 keeps the substrate at least three wavelengths deep (L/Hf about 94 at Gf/Gs = 1e4).
+  assumptions:
+    - "film and substrate incompressible neo-Hookean in both papers, so jin2015's Gf/Gs is wang2015's mu_f/mu_s"
+    - "jin2015's nominal wavelength Lm/Hf compares with wang2015's lambda^C_wrinkle/H_f; at onset strains below 1% the reference length makes no difference at the tolerance"
+    - "jin2015's substrate of Hs/Hf >= 300 is wang2015's deep substrate (more than 20 film thicknesses)"
+# Against biot1963 (ref-26). jin2015 cites it twice. (1) p. 1: "To determine the critical strain for the onset of
+# wrinkles, a field of infinitesimal strain is superimposed upon the flat state [26-29]": the method, the same one its
+# Appendix B uses; no model relation beyond (2). (2) p. 10, on Fig. 7(a): "When Gf/Gs = 1, the bilayer becomes one layer
+# and em reaches the Biot strain under the uniaxial compression condition 0.556 [26]": a stated limit of jin2015's
+# uniaxial wrinkling model, Biot's Eq. 4.13 (uniaxial compression without lateral restraint, lambda2 = lambda3 =
+# lambda^(-1/2), lambda = 0.444). Biot prints a stretch, jin2015 a strain e = 1 - lambda1, so the helper
+# jin2015/wrinkle_stretch_uniaxial gives 1 - e_m^Uni. Biot's crit_stretch_uniaxial takes the root zeta of his cubic
+# (Eq. 2.9, zeta^3 + 2 zeta^2 - 2 = 0) as input; the mapping gives it in closed form (Cardano), 0.8392868.
+# Not linked in cited.yaml: jin2015's em_biot_uni (0.556, from_source ref-26) is a strain; Biot prints only the
+# stretch 0.444 (lambda_uni_printed), a different quantity, and no cited link can carry 1 - lambda.
+# Not entered: the plane-strain counterpart (jin2015/wrinkle_eigen_plane_strain at Gf/Gs -> 1 against
+# biot1963/crit_stretch_plane, 0.456) is not stated by jin2015 (it prints no plane-strain Biot strain); it is already
+# tested through diab2013 (rel_jin_plane_strain_to_diab_biot_strain, with diab2013's same_as to biot1963).
+- id: rel_jin_uniaxial_stretch_to_biot_eq413
+  kind: reduces_to
+  a: jin2015/wrinkle_stretch_uniaxial
+  b: biot1963/crit_stretch_uniaxial
+  mapping: {zeta: "((19 + sqrt(297))**(1/3) + (19 - sqrt(297))**(1/3))/3 - 2/3"}
+  output_map: {lam: lam_c}
+  limit: {Gf_Gs: "1"}
+  regime: {Gf_Gs: [1, 2], Hs_Hf: [1, 20]}
+  tolerance: 0.001
+  provenance: stated
+  citation: {page: 10, printed_page: "061008-10", quote: "one layer and em reaches the Biot strain under the uniaxial com", where: "Appendix B text on Fig. 7(a), citing [26]"}
+  assumptions:
+    - "jin2015's uniaxial compression condition lambda3 = 1/sqrt(lambda1) is Biot's uniaxial compression without lateral restraint (Sec. 4, Eq. 3.29: lambda2 = lambda3 = lambda^(-1/2))"
+    - "jin2015's strain is e = 1 - lambda1 (Appendix B), so Biot's critical stretch lambda is 1 - e_m^Uni"
+    - "with Gf/Gs = 1 jin2015's bilayer is one neo-Hookean slab of thickness Hf + Hs with a slip bottom; its minimum over wavenumber is at short wavelengths, where the slab acts as Biot's half-space (Biot p. 181: the mode does not penetrate deeper than about three wavelengths)"
+    - "Biot's zeta is the root of his cubic (Eq. 2.9), the same root for both his cases"
+    - "the tolerance 0.001 is ours, for jin2015's numerical eigenvalue search (tol 1e-7 in strain) and the finite slab"
+# Against cao2011 (Cao & Hutchinson, Proc. R. Soc. A 468, 94-115, 2012). jin2015 does not cite it: its ref-3 is Li, Cao,
+# Feng & Gao's review (Soft Matter 2012) and its ref-48 is the companion cao2012 (J. Appl. Mech.); no reference is the
+# Proc. R. Soc. A paper (p. 10-11). So no relation is stated and no datum of jin2015 takes a value from cao2011:
+# cited.yaml gains nothing (jin2015's crease strains 0.35 and 0.44 come from hong2009, its Biot strain from biot1963).
+# The relations below are proposed, here because jin2015 is the later paper. cao2011 treats only the homogeneous
+# half-space, so it meets jin2015's bilayer only at Gf/Gs = 1, and its thresholds at a fixed out-of-plane stretch,
+# eps_W = 1 - 0.5437/sqrt(lambda_3) (Eq. 1.1) and eps_C = 1 - 0.65/sqrt(lambda_3) (Eq. 1.2), are jin2015's Eq. 1.
+# Conventions: both papers' strain is the nominal 1 - lambda_1 along the compression, and cao2011's lambda_3 (held
+# out-of-plane stretch; its 2 is the surface normal) is jin2015's lambda3 (its X2 is the depth). Neither has prestretch.
+# Not entered: the uniaxial counterpart (jin2015/wrinkle_eigen_uniaxial at Gf/Gs -> 1 against cao2011's eps_W at
+# lambda_3 = (1 - eps)^(-1/2)) needs lambda_3 from cao2011's own output, which a mapping cannot carry; it is tested
+# through biot1963 (rel_jin_uniaxial_stretch_to_biot_eq413 here, rel_biot_k_ratio and rel_biot_plane_stretch in cao2011).
+# jin2015's equal-strain boundary and wavelength models have no counterpart in cao2011 (no film/substrate formula).
+- id: rel_cao2011_biot_same_as_jin_eq1
+  kind: same_as
+  a: cao2011/biot_eq28
+  b: jin2015/eq1_general
+  mapping: {e_pe: "1 - (1 + (2 + sqrt(44/27))**(1/3) + (2 - sqrt(44/27))**(1/3))**(-1/2)", lam3: "lam3"}
+  output_map: {e_c: eps_W}
+  regime: {lam3: [0.5, 2.0]}
+  provenance: proposed
+  reason: >
+    jin2015's Eq. 1 says the critical strain under a constant transverse stretch lambda3 follows from the plane-strain
+    one, 1 - e_c^PE = sqrt(lambda3) (1 - e_c), because the eigenvalue problem depends on lambda1 sqrt(lambda3) alone
+    (p. 2-3). cao2011's Eq. 1.1, from its Eq. 2.8, gives the half-space wrinkling stretch lambda_W = (r lambda_3)^(-1/2)
+    for any fixed lambda_3, r the real root of r^3 - 3r^2 - r - 1 = 0. With e_c^PE the plane-strain Biot strain
+    1 - r^(-1/2) (0.456), Eq. 1 is cao2011's eps_W for every lambda_3. The mapping gives r in closed form (Cardano,
+    r = 1 + y with y^3 - 4y - 4 = 0). Neither paper says so; jin2015 does not cite cao2011.
+  assumptions:
+    - "cao2011's lambda_3 (fixed stretch normal to the plane of deformation) is jin2015's lambda3; both strains are the nominal 1 - lambda_1"
+    - "jin2015's Eq. 1 is stated for wrinkles of a bilayer; for a homogeneous half-space (Gf/Gs = 1) its plane-strain strain is Biot's, 1 - r^(-1/2)"
+- id: rel_cao2011_crease_same_as_jin_eq1
+  kind: same_as
+  a: cao2011/crease_eq12
+  b: jin2015/eq1_general
+  mapping: {e_pe: "1 - sqrt(ratio)", lam3: "lam3"}
+  output_map: {e_c: eps_C}
+  regime: {ratio: [0.3, 0.6], lam3: [0.5, 2.0]}
+  provenance: proposed
+  reason: >
+    jin2015 says the critical strain for the onset of creases "satisfies the same relation" as Eq. 1 (p. 3, citing
+    hong2009). cao2011's Eq. 1.2 writes Hong et al.'s crease threshold for any fixed lambda_3 as lambda_1/lambda_2 = 0.42,
+    lambda_C = 0.65/sqrt(lambda_3): in plane strain (lambda_3 = 1) the crease strain is 1 - sqrt(ratio), and Eq. 1 then
+    gives cao2011's eps_C for every lambda_3. Neither paper says this of the other.
+  assumptions:
+    - "cao2011's lambda_3 is jin2015's lambda3; both strains are the nominal 1 - lambda_1"
+    - "with lambda_3 = 1 and incompressibility, lambda_1/lambda_2 = lambda_1^2, so jin2015's plane-strain crease strain is 1 - sqrt(ratio)"
+    - "the regime of ratio (0.3-0.6) spans the Biot (0.296) and Hong (0.42) ratios; jin2015's Eq. 1 applies to the form whatever the ratio"
+- id: rel_jin_plane_strain_to_cao2011_biot
+  kind: reduces_to
+  a: jin2015/wrinkle_eigen_plane_strain
+  b: cao2011/biot_eq28
+  mapping: {lam3: "1"}
+  output_map: {eps_W: em}
+  limit: {Gf_Gs: "1"}
+  regime: {Gf_Gs: [1, 2], Hs_Hf: [1, 20]}
+  tolerance: 0.001
+  provenance: proposed
+  reason: >
+    With Gf/Gs -> 1 jin2015's bilayer is one homogeneous incompressible neo-Hookean slab, and its plane-strain minimal
+    wrinkling strain is Biot's ("one layer and em reaches the Biot strain", p. 10, said of the uniaxial case). cao2011's
+    Eq. 2.8 with lambda_3 = 1 is that strain for the half-space, 0.456. The minimum over the wavenumber lies at short
+    wavelengths, where jin2015's finite slab with a slip bottom acts as a half-space. The tolerance 0.001 is ours, as in
+    rel_jin_plane_strain_to_diab_biot_strain: jin2015's strain search is numerical (tol 1e-7) on a finite slab.
+  assumptions:
+    - "both strains are the nominal 1 - lambda_1 under plane strain (lambda_3 = 1)"
+    - "cao2011's half-space is jin2015's slab of thickness Hf + Hs with Gf/Gs = 1, the wrinkling mode decaying within a few wavelengths of the surface"

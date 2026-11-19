@@ -1,0 +1,110 @@
+# Cross-validation against richman1975 (job 2026-11-14). Neither paper cites the other, and huang2005 has
+# no measurements of its own, so validations run one way only. richman1975 treats the fetal cortex as a
+# stiff layer bonded to "an infinitely deep elastic foundation" (p. 2), with a wavelength (about 8 mm)
+# much less than the hemisphere radius (84 mm in note 18), so kH = 2 pi H / lambda is several tens: the
+# thick-substrate limit of this paper (Eq. 17, p. 7). That limit, in length units, predicts the measured
+# incipient intersulcal distances.
+- id: val_thick_wavelength_27wk
+  model: thick_substrate_wavelength
+  inputs: {h: richman1975/t_27wk, Ebar_over_Esbar: Ebar_over_Esbar_brain_added}
+  output: lam
+  against: richman1975/l_measured_27wk
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: film_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  basis: >-
+    Eq. 17 (p. 7, "we reproduce the thick-substrate limits") gives the wrinkle wavelength of a stiff film
+    of thickness h on a thick compliant substrate; richman1975 models the fetal cortex as such a layer on
+    an elastic core (p. 2, "two flat plates, the cortical layers, bonded to an infinitely deep elastic
+    foundation") and identifies the buckling wavelength with the intersulcal distance (note 21). The
+    thickness is the one note 18 gives for the same 27-week specimen (t ≈ 1.7 mm); the modulus ratio is
+    added from richman1975's Ecore/E1 = 1/10 with incompressible material.
+- id: val_thick_wavelength_27wk_t_normal
+  model: thick_substrate_wavelength
+  inputs: {h: richman1975/t_normal_fetus, Ebar_over_Esbar: Ebar_over_Esbar_brain_added}
+  output: lam
+  against: richman1975/l_measured_27wk
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: film_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    t ≈ 1.0 mm is richman1975's estimate for "the normal fetus during convolutional development" (p. 3),
+    not a value for this specimen; it is the thickness richman1975 itself uses when it compares its
+    l ≈ 8 mm with this 8.5 mm measurement, so the comparison is made on the same footing.
+  basis: >-
+    As val_thick_wavelength_27wk, with the thickness richman1975 uses for its own prediction (p. 3,
+    "t ≈ 1.0 mm, and hence l ≈ 8t ≈ 8 mm"), which it calls in "reasonable agreement" with 8.5 mm.
+- id: val_thick_wavelength_sidman
+  model: thick_substrate_wavelength
+  inputs: {h: richman1975/t_normal_fetus, Ebar_over_Esbar: Ebar_over_Esbar_brain_added}
+  output: lam
+  against: richman1975/l_measured_sidman
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: film_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    No cortical thickness is printed for the Sidman and Rakic specimen; richman1975 compares its
+    prediction from t ≈ 1.0 mm (normal fetus, end of the seventh month) with this 7.5 mm measurement
+    (p. 3), so the same thickness is used here.
+  basis: >-
+    As val_thick_wavelength_27wk: a stiff cortical layer on a deep soft core is this paper's
+    thick-substrate limit; the measurement is the normal incipient intersulcal distance in the specimen
+    of Sidman and Rakic (richman1975 p. 3, "7.5 mm in a specimen illustrated in Sidman and Rakic").
+# Cross-validation against stafford2004 (job 2026-11-14). huang2005 cites stafford2004 (p. 8, "wrinkles in
+# a thin film on a thick substrate have been used to measure Young's modulus"), whose PS films (100-280 nm)
+# sit on PDMS sheets far thicker than the film: the thick-substrate limit, Eq. 17. huang2005 prints no
+# measurements, so validations run one way only. The modulus ratio is added (Ebar_over_Esbar_PS_added) from
+# stafford2004's PS modulus 3.4 GPa, which stafford2004 inferred from the Fig. 2b wavelengths themselves.
+- id: val_thick_wavelength_fig2b
+  model: thick_substrate_wavelength
+  inputs: {Ebar_over_Esbar: Ebar_over_Esbar_PS_added}
+  sweep: {h: 'stafford2004/d_fig2b'}
+  output: lam
+  against: 'stafford2004/d_fig2b'
+  purpose: fit_quality
+  quantities: {'stafford2004/film_thickness': film_thickness, 'stafford2004/wrinkle_wavelength': wrinkle_wavelength}
+  basis: >-
+    Eq. 17 (p. 7, "we reproduce the thick-substrate limits") gives the wavelength of a film on a thick
+    substrate, the setting of stafford2004 (p. 8, "wrinkles in a thin film on a thick substrate have been
+    used to measure Young's modulus ... (Stafford et al., 2004)"). Run at each plotted thickness of the PS
+    gradient film of Fig. 2b. Not an independent test: the PS modulus 3.4 GPa in the added ratio is
+    stafford2004's mean of its Eq. 2 applied to these same wavelengths (Fig. 2 caption, "remains largely
+    constant (3.4 ± 0.1 GPa) over this thickness range"), and Eq. 2 is Eq. 17 inverted, so this reports
+    how well one fitted modulus describes the ten wavelengths.
+- id: val_thick_wavelength_fig1b
+  model: thick_substrate_wavelength
+  inputs: {h: 'stafford2004/h_fig1b', Ebar_over_Esbar: Ebar_over_Esbar_PS_added}
+  output: lam
+  against: 'stafford2004/d_fig1b_caption'
+  purpose: validation
+  quantities: {'stafford2004/film_thickness': film_thickness, 'stafford2004/wrinkle_wavelength': wrinkle_wavelength}
+  conditions_ok: >-
+    The modulus 3.4 GPa comes from stafford2004's 150-240 nm gradient film, not from the ≈100 nm film of
+    Fig. 1b; stafford2004 says the PS modulus "remains 3.4 ± 0.1 GPa" on films as thin as 30 nm (p. 4), so
+    it claims the same modulus for this film. Its PDMS modulus is not printed (Es added as 1.75 MPa).
+  basis: >-
+    As val_thick_wavelength_fig2b, for the PS film whose micrograph is Fig. 1b (stafford2004 p. 2, "a PS
+    film (h ≈ 100 nm)"; caption, "wavelength 8 µm"). The modulus was not inferred from this wavelength, so
+    this tests Eq. 17 with the paper's PS modulus.
+# Cross-validation against bowden1998 (job 2026-11-14). huang2005 cites bowden1998 for the phenomenon
+# (p. 2) and takes no value from it; bowden1998's 50 nm gold films on PDMS (a sample far thicker than the
+# film) are this paper's thick-substrate limit, Eq. 17. huang2005 prints no measurements, so this runs one
+# way only. The modulus ratio is added (Ebar_over_Esbar_gold_added) from bowden1998's printed moduli.
+- id: val_thick_wavelength_bowden_gold
+  model: thick_substrate_wavelength
+  inputs: {h: 'bowden1998/t_gold', Ebar_over_Esbar: Ebar_over_Esbar_gold_added}
+  output: lam
+  against: 'bowden1998/L_measured'
+  purpose: validation
+  quantities: {'bowden1998/film_thickness': film_thickness, 'bowden1998/wrinkle_wavelength': wrinkle_wavelength}
+  conditions_ok: >-
+    The measured 20-50 um is a range over all samples (bowden1998 p. 2, "The waves had periodicities
+    between 20 and 50"), deposited with and without external heating of the PDMS; Eq. 17's wavelength does
+    not depend on the compressive strain, so the samples share one prediction. The film is 50 nm Au on a
+    5 nm Ti or Cr interlayer; the Au thickness is used (bowden1998 adds 55 nm as the alternative).
+  basis: >-
+    Eq. 17 (p. 7, "we reproduce the thick-substrate limits") gives the wrinkle wavelength of a stiff film
+    of thickness h on a thick compliant substrate, which is bowden1998's setting (a metal film on a thick
+    PDMS block; its Eq. 3 is the same formula with 4.36 for 2 pi/3^(1/3)). Run with bowden1998's film
+    thickness and moduli. bowden1998 itself finds "the observed value of L is approximately nine times
+    larger than this estimate" (p. 3, its Eq. 3 estimate ~3.4 um), concludes "this model is
+    oversimplified" and attributes the difference to a modified PDMS surface layer, which Eq. 17 does
+    not include; the test is whether the bilayer model, on the paper's printed inputs, gives the
+    measured wavelength.

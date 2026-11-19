@@ -1,0 +1,119 @@
+# Relations this paper states between its own models. SI units on both sides.
+#
+# The stretched-sheet forms follow from Eq. 5 with B = E t^3/[12(1 - nu^2)], T ~ E h gamma and
+# Delta ~ nu gamma W (p. 2), the "~" read as "=" and h as t. E cancels, so it is set to 1 Pa in the mapping.
+- id: rel_stretched_lambda_same_as_eq5
+  kind: same_as
+  a: cerda2003/stretched_sheet
+  b: cerda2003/wrinkle_eq5
+  mapping: {B: "t**3/(12*(1 - nu**2))", T: "t*gamma", L: "L", Delta: "nu*gamma", W: "1"}
+  output_map: {lam: lam}
+  regime: {L: [0.05, 1.0], t: [1.0e-5, 1.0e-3], nu: [0.1, 0.49], gamma: [0.01, 0.2]}
+  provenance: stated
+  citation: {page: 2, printed_page: "074302-2", quote: "For the stretched sheet, this yields", where: "text after Eq. 5"}
+  assumptions:
+    - "T(x) ~ E h gamma and Delta(x) ~ nu gamma W (p. 2) are taken as equalities, with h = t"
+    - "B = E t^3/[12(1 - nu^2)] (p. 2); E cancels and is set to 1 Pa, W to 1 m (only Delta/W enters)"
+- id: rel_stretched_amplitude_same_as_eq5
+  kind: same_as
+  a: cerda2003/stretched_sheet
+  b: cerda2003/wrinkle_eq5
+  mapping: {B: "t**3/(12*(1 - nu**2))", T: "t*gamma", L: "L", Delta: "nu*gamma", W: "1"}
+  output_map: {A: A}
+  regime: {L: [0.05, 1.0], t: [1.0e-5, 1.0e-3], nu: [0.1, 0.49], gamma: [0.01, 0.2]}
+  provenance: stated
+  citation: {page: 2, printed_page: "074302-2", quote: "For the stretched sheet, this yields", where: "text after Eq. 5"}
+  assumptions:
+    - "as for rel_stretched_lambda_same_as_eq5"
+# Eq. 5's wavelength is "obtained by minimizing U" (p. 2), U = B k^2 Delta L + pi^2 T Delta/(k^2 L).
+- id: rel_eq5_same_as_energy_minimum
+  kind: same_as
+  a: cerda2003/wrinkle_eq5
+  b: cerda2003/energy_minimum
+  mapping: {B: "B", T: "T", L: "L", Delta: "Delta"}
+  output_map: {lam: lam}
+  regime: {B: [1.0e-12, 1.0e-2], T: [1.0e-3, 1.0e+3], L: [0.01, 1.0], Delta: [1.0e-6, 1.0e-2], W: [0.01, 0.5]}
+  provenance: stated
+  citation: {page: 2, printed_page: "074302-2", quote: "and the amplitude A are obtained", where: "Eq. 5, 'by minimizing U and using (2)'"}
+  assumptions:
+    - "k in U is the wave number, lambda = 2 pi/k (p. 2)"
+# Eq. 5's amplitude is obtained "using (2)" (p. 2), i.e. from A_n^2 k_n^2 W/8 ≈ Delta at Eq. 5's wavelength.
+- id: rel_eq5_amplitude_same_as_inextensibility
+  kind: same_as
+  a: cerda2003/wrinkle_eq5
+  b: cerda2003/amplitude_inextensibility
+  mapping: {Delta: "Delta", W: "W", lam: "2*sqrt(pi)*(B/T)**(1/4)*sqrt(L)"}
+  output_map: {A: A}
+  regime: {B: [1.0e-12, 1.0e-2], T: [1.0e-3, 1.0e+3], L: [0.01, 1.0], Delta: [1.0e-6, 1.0e-2], W: [0.01, 0.5]}
+  provenance: stated
+  citation: {page: 2, printed_page: "074302-2", quote: "and the amplitude A are obtained", where: "Eq. 5, 'by minimizing U and using (2)'"}
+  assumptions:
+    - "the constraint A_n^2 k_n^2 W/8 ≈ Delta (p. 2) taken as an equality, with k = 2 pi/lambda"
+# Eq. 6 is Eq. 5 "rewritten" with the effective foundation stiffness K ~ T/L^2 (p. 2), without prefactors.
+- id: rel_eq5_lambda_scales_as_eq6
+  kind: scales_as
+  a: cerda2003/wrinkle_eq5
+  b: cerda2003/wrinkle_eq6_scaling
+  mapping: {B: "B", K: "T/L**2", Delta: "Delta", W: "W"}
+  output_map: {lam: lam}
+  regime: {B: [1.0e-12, 1.0e-2], T: [1.0e-3, 1.0e+3], L: [0.01, 1.0], Delta: [1.0e-6, 1.0e-2], W: [0.01, 0.5]}
+  provenance: stated
+  citation: {page: 2, printed_page: "074302-2", quote: "of an intermediate wavelength, as in (5) which", where: "Eq. 6"}
+  assumptions:
+    - "K ~ T/L^2 is the stiffness of the effective foundation of the stretched sheet (p. 2)"
+- id: rel_eq5_amplitude_scales_as_eq6
+  kind: scales_as
+  a: cerda2003/wrinkle_eq5
+  b: cerda2003/wrinkle_eq6_scaling
+  mapping: {B: "B", K: "T/L**2", Delta: "Delta", W: "W"}
+  output_map: {A: A}
+  regime: {B: [1.0e-12, 1.0e-2], T: [1.0e-3, 1.0e+3], L: [0.01, 1.0], Delta: [1.0e-6, 1.0e-2], W: [0.01, 0.5]}
+  provenance: stated
+  citation: {page: 2, printed_page: "074302-2", quote: "of an intermediate wavelength, as in (5) which", where: "Eq. 6"}
+  assumptions:
+    - "as for rel_eq5_lambda_scales_as_eq6"
+# Across papers. Neither paper cites the other; this relation is proposed.
+- id: rel_deep_substrate_scales_as_richman_plate
+  kind: scales_as
+  a: cerda2003/deep_substrate_wavelength
+  b: richman1975/plate_on_foundation
+  mapping: {t1: "t/2", t2: "t/2", E2_over_E1: "1", Ecore_over_E1: "1/E_over_Es", stress_ratio: "1"}
+  output_map: {l_over_t: lam_over_t}
+  regime: {t: [0.5, 5.0], E_over_Es: [3.0, 1000.0]}
+  provenance: proposed
+  reason: >
+    Richman's cortex-on-core model, with both strata of one material, is a single stiff plate of
+    thickness t = t1 + t2 bonded to an incompressible elastic half-space, which is Cerda's deep-substrate
+    case (t << lambda << Hs, K ~ Es/lambda). Minimizing N(k) = D k^2 + (2/3) Ecore/k gives
+    l/t = 2 pi (E1/(3 Ecore))^(1/3), the same (E/Es)^(1/3) law as Cerda's lambda ~ t (E/Es)^(1/3),
+    with a prefactor Cerda does not print.
+  assumptions:
+    - "Richman's strata given equal moduli (E2/E1 = 1) and equal thicknesses, so they act as one plate of thickness t"
+    - "Cerda's E/Es read as Richman's E1/Ecore; l/t compared with lambda/t (both dimensionless)"
+    - "stress_ratio = 1 affects only Richman's critical stress, not l/t"
+# Across papers: the deep-substrate law lambda ~ t (E/Es)^(1/3) is printed with a citation of
+# Bowden et al. 1998 [15] (p. 3), whose Eq. 3 is L ≈ 4.4 t (Em/Ep)^(1/3) (and its Poisson-corrected form).
+# Cerda prints no prefactor, so the relation is scales_as. t: nm (Bowden) -> mm (Cerda) is 1e-6;
+# L in um, lambda in mm.
+- id: rel_bowden_eq3_simplified_scales_as_deep_substrate
+  kind: scales_as
+  a: bowden1998/wavelength_eq3_simplified
+  b: cerda2003/deep_substrate_wavelength
+  mapping: {t: "t*1e-6", E_over_Es: "Em/Ep"}
+  output_map: {lam: L}
+  regime: {t: [5.0, 500.0], Em: [1.0e+9, 3.0e+11], Ep: [1.0e+5, 1.0e+7]}
+  provenance: stated
+  citation: {page: 3, printed_page: "074302-3", quote: "exponentially into the bulk. In this deep substrate limit", where: "text, right column, citing [15]"}
+  assumptions:
+    - "Cerda's sheet thickness t and modulus ratio E/Es read as Bowden's film thickness t and Em/Ep"
+- id: rel_bowden_eq3_scales_as_deep_substrate
+  kind: scales_as
+  a: bowden1998/wavelength_eq3
+  b: cerda2003/deep_substrate_wavelength
+  mapping: {t: "t*1e-6", E_over_Es: "Em*(1 - nu_p**2)/(Ep*(1 - nu_m**2))"}
+  output_map: {lam: L}
+  regime: {t: [5.0, 500.0], Em: [1.0e+9, 3.0e+11], Ep: [1.0e+5, 1.0e+7], nu_m: [0.2, 0.45], nu_p: [0.45, 0.5]}
+  provenance: stated
+  citation: {page: 3, printed_page: "074302-3", quote: "exponentially into the bulk. In this deep substrate limit", where: "text, right column, citing [15]"}
+  assumptions:
+    - "Cerda's E/Es read as the ratio of plane-strain moduli Em/(1 - nu_m^2) to Ep/(1 - nu_p^2)"

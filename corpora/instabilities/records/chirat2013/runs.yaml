@@ -1,0 +1,33 @@
+- id: run_I_si
+  model: second_moment_si1
+  inputs: {w: w_mantle, h: h_mantle}
+  outputs: {I: I_si_pred}
+- id: run_kf_si
+  model: kf_scaling
+  inputs: {Kf: Kf_adhesion, L0: L0_mantle, E: E_mantle, I: I_si_pred}
+  outputs: {kf: kf_si_pred}
+- id: run_mode_lowest
+  model: clamped_rod_buckling
+  inputs: {kf: kf_si_pred}
+  settings: {n_grid: 400, parity: any}
+  outputs: {mode: mode_lowest_pred, P: P_lowest_pred}
+  note: "Lowest buckling mode of all, at the SI parameter values. The grid size is the reader's choice (refined below)."
+- id: run_mode_symmetric
+  model: clamped_rod_buckling
+  inputs: {kf: kf_si_pred}
+  settings: {n_grid: 400, parity: symmetric}
+  outputs: {mode: mode_symmetric_pred, P: P_symmetric_pred}
+  note: "Lowest buckling mode symmetric about the middle (one centred spine), at the SI parameter values."
+- id: run_infinite_rod
+  model: infinite_rod_foundation
+  inputs: {kf: kf_si_pred}
+  outputs: {P: P_infinite_pred, lam: lam_infinite_pred}
+  note: >-
+    Unbounded-rod threshold and wavelength at the SI kf, for relating to the plate-on-foundation laws of other
+    records; the paper prints neither, so these outputs are not compared.
+- id: run_Eb_fig4
+  model: stiffness_profile_eq1
+  inputs: {b1: b1_fig4, b2: b2_fig4}
+  sweep: {s0: Eb_profile_fig4}
+  outputs: {Eb: Eb_fig4_pred}
+  note: "Eq. 1 at the s0 positions read from Fig. 4 (left), with b1 and b2 added from the figure itself."

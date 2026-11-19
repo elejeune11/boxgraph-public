@@ -1,0 +1,46 @@
+- id: run_biot_equibiaxial
+  model: biot_equibiaxial
+  inputs: {lam_prod: lam_prod_biot}
+  outputs: {e_c: ec_biot_pred}
+- id: run_thickness_at_onset
+  model: thickness_from_strain
+  inputs: {e: ec_mean_thickness_series, nu: poisson_ratio_gel}
+  outputs: {h_ratio: hh0_onset_pred}
+  note: "e_c measured at 0.4 mol% bis(acrylamide), the composition of the Fig. 4 gels."
+- id: run_modulus_table
+  model: modulus_crosslinker
+  inputs: {}
+  sweep: {x: table1_modulus}
+  outputs: {G: modulus_prop_pred}
+# ---- figure pass ----
+- id: run_biot_fig3a
+  model: biot_vs_crosslinker
+  inputs: {lam_prod: lam_prod_biot}
+  sweep: {c: fig3a_ec_points}
+  outputs: {e_c: ec_biot_fig3a}
+- id: run_biot_fig3b
+  model: biot_vs_thickness
+  inputs: {lam_prod: lam_prod_biot}
+  sweep: {h: fig3b_ec_points}
+  outputs: {e_c: ec_biot_fig3b}
+- id: run_ec_interpolation
+  model: ec_from_swelling
+  inputs: {L02: fig2b_l_bis02, L04: fig2b_l_bis04, L07: fig2b_l_bis07, L10: fig2b_l_bis10,
+           c02: legend_bis02, c04: legend_bis04, c07: legend_bis07, c10: legend_bis10,
+           flat: fig2a_flat_points, creased: fig2a_creased_points}
+  sweep: {c: fig3a_ec_fig2_points}
+  settings: {composition_tol: 0.25}
+  outputs: {e_c: ec_interp_fig2}
+  note: "The paper's interpolation re-run on the plotted Fig. 2 data, at the Fig. 3(a) points of the same compositions."
+- id: run_mean_fig3a
+  model: mean_ec_vs_crosslinker
+  inputs: {ec: fig3a_ec_points}
+  outputs: {ec_mean: ec_mean_fig3a}
+- id: run_mean_fig3b
+  model: mean_ec_vs_thickness
+  inputs: {ec: fig3b_ec_points}
+  outputs: {ec_mean: ec_mean_fig3b}
+- id: run_onset_fig4
+  model: onset_thickness_ratio
+  inputs: {flat: fig4_flat_points, creased: fig4_creased_points}
+  outputs: {h_ratio: hh0_onset_fig4}

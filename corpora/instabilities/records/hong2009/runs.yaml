@@ -1,0 +1,33 @@
+- id: run_fig3_zero
+  model: crease_zero_fig3
+  inputs: {f: fig3_energy_curve}
+  settings: {n_last: 2}
+  outputs: {eps_c: eps_c_fig3_pred}
+- id: run_lambda1_crease
+  model: plane_strain_stretch
+  inputs: {eps: eps_c_printed}
+  outputs: {lam1: lambda1_c_pred}
+- id: run_ratio_crease
+  model: gps_critical_ratio
+  inputs: {eps: eps_c_printed}
+  outputs: {ratio: ratio_crease_pred}
+- id: run_ratio_biot
+  model: gps_critical_ratio
+  inputs: {eps: eps_biot_printed}
+  outputs: {ratio: ratio_biot_pred}
+- id: run_eta_crease
+  model: gel_critical_swelling
+  inputs: {eps: eps_c_printed}
+  outputs: {eta: eta_c_pred}
+- id: run_eta_biot
+  model: gel_critical_swelling
+  inputs: {eps: eps_biot_printed}
+  outputs: {eta: eta_biot_pred}
+- id: run_eta_crease_from_ratio
+  model: gel_swelling_from_ratio
+  inputs: {ratio: ratio_crease_printed}
+  outputs: {eta: eta_c_from_ratio_pred}
+- id: run_eta_biot_from_ratio
+  model: gel_swelling_from_ratio
+  inputs: {ratio: ratio_biot_printed}
+  outputs: {eta: eta_biot_from_ratio_pred}

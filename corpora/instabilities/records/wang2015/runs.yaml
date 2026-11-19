@@ -1,0 +1,91 @@
+# Eq. 4 at the triple point's modulus ratio
+- id: run_eq4_triple_point
+  model: eq4_wrinkle_onset
+  inputs: {mu_ratio: triple_point_ratio}
+  outputs: {eC: eC_wrinkle_eq4_at_triple}
+# Modulus ratios of the experiments from the printed moduli
+- id: run_ratio_sylgard_min
+  model: modulus_ratio
+  inputs: {mu_f: mu_f_sylgard_min, mu_s: mu_s_ecoflex}
+  outputs: {ratio: ratio_sylgard_min_computed}
+- id: run_ratio_sylgard_max
+  model: modulus_ratio
+  inputs: {mu_f: mu_f_sylgard_max, mu_s: mu_s_ecoflex}
+  outputs: {ratio: ratio_sylgard_max_computed}
+- id: run_ratio_rubber
+  model: modulus_ratio
+  inputs: {mu_f: mu_f_rubber, mu_s: mu_s_ecoflex}
+  outputs: {ratio: ratio_rubber_computed}
+- id: run_ratio_ldpe
+  model: modulus_ratio
+  inputs: {mu_f: mu_f_ldpe, mu_s: mu_s_ecoflex}
+  outputs: {ratio: ratio_ldpe_computed}
+- id: run_ratio_kapton
+  model: modulus_ratio
+  inputs: {mu_f: mu_f_kapton, mu_s: mu_s_ecoflex}
+  outputs: {ratio: ratio_kapton_computed}
+# Normalized adhesion of the strongly bonded experiments at the printed lower bound Gamma = 10^3 J/m^2
+- id: run_adhesion_sylgard
+  model: normalized_adhesion
+  inputs: {Gamma: Gamma_strong, mu_s: mu_s_ecoflex, Hf: Hf_sylgard}
+  outputs: {G: Gamma_norm_sylgard_computed}
+- id: run_adhesion_kapton
+  model: normalized_adhesion
+  inputs: {Gamma: Gamma_strong, mu_s: mu_s_ecoflex, Hf: Hf_kapton}
+  outputs: {G: Gamma_norm_kapton_computed}
+# Figure readings (figures.yaml): each model swept over the x positions of a reading
+- id: run_eq4_fig3a
+  model: eq4_wrinkle_onset
+  inputs: {}
+  sweep: {mu_ratio: eq4_curve_fig3a}
+  outputs: {eC: eq4_at_fig3a_ratios}
+- id: run_accordion_fig5a_line
+  model: accordion_eqs9_12
+  inputs: {}
+  sweep: {s: accordion_line_fig5a}
+  outputs: {lam_wrinkle: accordion_at_fig5a_line}
+- id: run_accordion_fig5a_wrinkle
+  model: accordion_eqs9_12
+  inputs: {}
+  sweep: {s: wrinkle_wavelength_fig5a}
+  outputs: {lam_wrinkle: accordion_at_fig5a_wrinkle}
+- id: run_accordion_fig5a_fold
+  model: accordion_eqs9_12
+  inputs: {}
+  sweep: {s: fold_wavelength_fig5a}
+  outputs: {lam_fold: accordion_at_fig5a_fold}
+- id: run_accordion_fig5a_pd
+  model: accordion_eqs9_12
+  inputs: {}
+  sweep: {s: pd_half_wavelength_fig5a}
+  outputs: {half_lam_pd: accordion_at_fig5a_pd}
+- id: run_accordion_fig5a_ridge
+  model: accordion_eqs9_12
+  inputs: {}
+  sweep: {s: ridge_wavelength_fig5a}
+  outputs: {lam_ridge: accordion_at_fig5a_ridge}
+- id: run_eq13_fig5b_curve
+  model: eq13_wrinkle_amplitude
+  inputs: {}
+  sweep: {s: eq13_curve_fig5b}
+  outputs: {A: eq13_at_fig5b_curve}
+- id: run_eq13_fig5b_r3p6
+  model: eq13_wrinkle_amplitude
+  inputs: {}
+  sweep: {s: amplitude_fig5b_r3p6}
+  outputs: {A: eq13_at_fig5b_r3p6}
+- id: run_eq13_fig5b_r9p8
+  model: eq13_wrinkle_amplitude
+  inputs: {}
+  sweep: {s: amplitude_fig5b_r9p8}
+  outputs: {A: eq13_at_fig5b_r9p8}
+- id: run_eq13_fig5b_r14p8
+  model: eq13_wrinkle_amplitude
+  inputs: {}
+  sweep: {s: amplitude_fig5b_r14p8}
+  outputs: {A: eq13_at_fig5b_r14p8}
+- id: run_eq13_fig5b_r9110
+  model: eq13_wrinkle_amplitude
+  inputs: {}
+  sweep: {s: amplitude_fig5b_r9110}
+  outputs: {A: eq13_at_fig5b_r9110}

@@ -1,0 +1,16 @@
+id: fit_bending_rigidity
+name: tissue bending rigidity fitted to the measured (Phi, P_B R^3) of single folds (Fig. 4I)
+role: fit
+stated: {page: 9, quote: "Solid green line fits to the theoretical relation", where: "Fig. 4I legend"}
+equation: "K = argmin sum_i (alpha(P_B R^3_i / K) - Phi_i)^2"
+inputs:
+  Phi: {quantity: fold_opening_angle, unit: degree, curve: {quantity: pressure_times_radius_cubed, unit: uN*um}}
+outputs:
+  K: {quantity: tissue_bending_rigidity, unit: uN*um}
+settings: {step_deg: 0.5}
+built_from: [fold_elastica]
+from_words: true
+reconstructed: >-
+  The paper fits K to the points of Fig. 4I but does not say how (least squares in angle, or
+  otherwise); the curve it fits is from its numerical solution of Eqs. S28-S30, not given. This is
+  the reader's least-squares fit in angle with the reader's solver (fold_elastica).

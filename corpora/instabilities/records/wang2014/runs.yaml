@@ -1,0 +1,73 @@
+# Wrinkling-creasing boundary of the initial modes (Figs. 6, 7; p. 7)
+- id: run_boundary_lp1
+  model: wrinkle_crease_boundary
+  inputs: {eps_crease: eps_crease, lam_p: lam_p_1}
+  outputs: {mu_boundary: mu_boundary_lp1_pred}
+- id: run_boundary_lp2
+  model: wrinkle_crease_boundary
+  inputs: {eps_crease: eps_crease, lam_p: lam_p_2}
+  outputs: {mu_boundary: mu_boundary_lp2_pred}
+- id: run_boundary_lp3
+  model: wrinkle_crease_boundary
+  inputs: {eps_crease: eps_crease, lam_p: lam_p_3}
+  outputs: {mu_boundary: mu_boundary_lp3_pred}
+
+# Wrinkling strain curves read from Figs. 6(a) and 14(b) (figure pass)
+- id: run_wrinkle_fig6a
+  model: wrinkle_linear_stability
+  inputs: {lam_p: lam_p_1}
+  sweep: {mu_ratio: e_wrinkle_fig6a}
+  outputs: {e_wrinkle: e_wrinkle_fig6a_pred, kh: kh_fig6a_pred}
+- id: run_wrinkle_fig14b_lp1
+  model: wrinkle_linear_stability
+  inputs: {lam_p: lam_p_1}
+  sweep: {mu_ratio: e_wrinkle_fig14b_lp1}
+  outputs: {e_wrinkle: e_wrinkle_fig14b_lp1_pred, kh: kh_fig14b_lp1_pred}
+- id: run_wrinkle_fig14b_lp1p5
+  model: wrinkle_linear_stability
+  inputs: {lam_p: lam_p_1p5}
+  sweep: {mu_ratio: e_wrinkle_fig14b_lp1p5}
+  outputs: {e_wrinkle: e_wrinkle_fig14b_lp1p5_pred, kh: kh_fig14b_lp1p5_pred}
+- id: run_wrinkle_fig14b_lp3
+  model: wrinkle_linear_stability
+  inputs: {lam_p: lam_p_3}
+  sweep: {mu_ratio: e_wrinkle_fig14b_lp3}
+  outputs: {e_wrinkle: e_wrinkle_fig14b_lp3_pred, kh: kh_fig14b_lp3_pred}
+
+# Neo-Hookean fits of the uniaxial tension tests (Fig. 13), with the printed moduli
+- {id: run_neo_fig13a, model: neo_hookean_uniaxial, inputs: {mu: mu_f_sylgard_2pct}, sweep: {lam: tension_fig13a}, outputs: {S: S_neo_fig13a}}
+- {id: run_neo_fig13b, model: neo_hookean_uniaxial, inputs: {mu: mu_f_sylgard_3pct}, sweep: {lam: tension_fig13b}, outputs: {S: S_neo_fig13b}}
+- {id: run_neo_fig13c, model: neo_hookean_uniaxial, inputs: {mu: mu_f_sylgard_4pct}, sweep: {lam: tension_fig13c}, outputs: {S: S_neo_fig13c}}
+- {id: run_neo_fig13d, model: neo_hookean_uniaxial, inputs: {mu: mu_f_sylgard_5pct}, sweep: {lam: tension_fig13d}, outputs: {S: S_neo_fig13d}}
+
+# Largest wrinkling strain: homogeneous half-space (p. 4)
+- id: run_wrinkle_homog
+  model: wrinkle_linear_stability
+  inputs: {mu_ratio: mu_ratio_1, lam_p: lam_p_1}
+  outputs: {e_wrinkle: e_wrinkle_homog_pred, kh: kh_homog_pred}
+
+# Eq. 5 against the linear stability analysis in its stated range (mu_f/mu_s > 10)
+- id: run_exact_20_lp1
+  model: wrinkle_linear_stability
+  inputs: {mu_ratio: mu_ratio_20_added, lam_p: lam_p_1}
+  outputs: {e_wrinkle: e_exact_20_lp1, kh: kh_exact_20_lp1}
+- id: run_exact_100_lp1
+  model: wrinkle_linear_stability
+  inputs: {mu_ratio: mu_ratio_100_added, lam_p: lam_p_1}
+  outputs: {e_wrinkle: e_exact_100_lp1, kh: kh_exact_100_lp1}
+- id: run_exact_20_lp2
+  model: wrinkle_linear_stability
+  inputs: {mu_ratio: mu_ratio_20_added, lam_p: lam_p_2}
+  outputs: {e_wrinkle: e_exact_20_lp2, kh: kh_exact_20_lp2}
+- id: run_exact_100_lp2
+  model: wrinkle_linear_stability
+  inputs: {mu_ratio: mu_ratio_100_added, lam_p: lam_p_2}
+  outputs: {e_wrinkle: e_exact_100_lp2, kh: kh_exact_100_lp2}
+- {id: run_eq5_20_lp1, model: eq5_stiff_film, inputs: {mu_ratio: mu_ratio_20_added, lam_p: lam_p_1}, outputs: {e_wrinkle: e_eq5_20_lp1}}
+- {id: run_eq5_100_lp1, model: eq5_stiff_film, inputs: {mu_ratio: mu_ratio_100_added, lam_p: lam_p_1}, outputs: {e_wrinkle: e_eq5_100_lp1}}
+- {id: run_eq5_20_lp2, model: eq5_stiff_film, inputs: {mu_ratio: mu_ratio_20_added, lam_p: lam_p_2}, outputs: {e_wrinkle: e_eq5_20_lp2}}
+- {id: run_eq5_100_lp2, model: eq5_stiff_film, inputs: {mu_ratio: mu_ratio_100_added, lam_p: lam_p_2}, outputs: {e_wrinkle: e_eq5_100_lp2}}
+- {id: run_eq5h_20_lp1, model: eq5_stiff_film_half, inputs: {mu_ratio: mu_ratio_20_added, lam_p: lam_p_1}, outputs: {e_wrinkle: e_eq5h_20_lp1}}
+- {id: run_eq5h_100_lp1, model: eq5_stiff_film_half, inputs: {mu_ratio: mu_ratio_100_added, lam_p: lam_p_1}, outputs: {e_wrinkle: e_eq5h_100_lp1}}
+- {id: run_eq5h_20_lp2, model: eq5_stiff_film_half, inputs: {mu_ratio: mu_ratio_20_added, lam_p: lam_p_2}, outputs: {e_wrinkle: e_eq5h_20_lp2}}
+- {id: run_eq5h_100_lp2, model: eq5_stiff_film_half, inputs: {mu_ratio: mu_ratio_100_added, lam_p: lam_p_2}, outputs: {e_wrinkle: e_eq5h_100_lp2}}

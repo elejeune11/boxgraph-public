@@ -1,0 +1,27 @@
+id: volvox_invagination
+name: axisymmetric invagination of a Volvox embryo as a large-bending (or classical) morphoelastic shell (Sec. III, App. B)
+stated: {page: 12, printed_page: "022411-12", quote: "We solve the governing equations derived in Appendix B", where: "Sec. III B; Figs. 4(g), 4(h), 5"}
+equation: >
+  Minimize E = 2 pi integral of e r ds (Eq. 57a) with e from Eq. 63 (large bending) or Eq. 67 (classical),
+  over axisymmetric deformations of a spherical shell of radius 1 and thickness eps h = 0.15, with
+  piecewise-constant intrinsic curvature kappa_s0 (kappa_p, kappa_b, kappa_a) and intrinsic stretches
+  f_s0, f_phi0 (f_p, f_a) of Figs. 4(g), 4(h), regularized; governing equations of Appendix B solved
+  with bvp4c and continued in AUTO.
+inputs:
+  eps_h: {quantity: relative_thickness, unit: dimensionless}
+  kappa_p: {quantity: intrinsic_curvature, unit: dimensionless}
+  kappa_a: {quantity: intrinsic_curvature, unit: dimensionless}
+  kappa_b: {quantity: intrinsic_curvature, unit: dimensionless}
+  f_p: {quantity: intrinsic_stretch, unit: dimensionless}
+  f_a: {quantity: intrinsic_stretch, unit: dimensionless}
+  s0: {quantity: arclength_position, unit: dimensionless}
+  w: {quantity: bend_region_width, unit: dimensionless}
+outputs:
+  d: {quantity: posterior_displacement, unit: dimensionless}
+runnable: false
+not_runnable_reason: >
+  The shapes and the (k, d) bifurcation diagram of Fig. 5 come from a boundary value problem (Appendix B)
+  solved with MATLAB bvp4c and continued with AUTO. The paper does not give the regularization of the
+  step discontinuities in Figs. 4(g), 4(h), the boundary conditions at the poles in usable form for a
+  rerun, nor any printed number the solution produces; its results are given only as plotted curves.
+  Rebuilding and continuing this nonlinear BVP across folds is out of scope for this record.

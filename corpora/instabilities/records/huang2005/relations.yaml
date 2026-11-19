@@ -1,0 +1,166 @@
+# Limits the paper states for its own models (pp. 7-8).
+- id: rel_g_to_winkler
+  kind: reduces_to
+  a: huang2005/g_eq10
+  b: huang2005/g_winkler_thin
+  mapping: {kH: "kH", nu_s: "nu_s"}
+  limit: {kH: "0"}
+  regime: {kH: [0.01, 1], nu_s: [0.0, 0.45]}
+  provenance: stated
+  citation: {page: 7, printed_page: "2107", quote: "Winkler model is consistent with Eq. (10), which gives the limit", where: text}
+- id: rel_g_to_incompressible_thin
+  kind: reduces_to
+  a: huang2005/g_eq10
+  b: huang2005/g_incompressible_thin
+  mapping: {kH: "kH"}
+  limit: {kH: "0"}
+  regime: {kH: [0.01, 1], nu_s: [0.5, 0.5]}
+  provenance: stated
+  citation: {page: 8, printed_page: "2108", quote: "is still applicable when", where: text}
+- id: rel_finite_to_thick_lam
+  kind: reduces_to
+  a: huang2005/sinusoidal_finite_substrate
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "Ebar_over_Esbar"}
+  output_map: {lam_over_h: lam_over_h}
+  limit: {H_over_h: "oo"}
+  regime: {Ebar_over_Esbar: [10, 100000], H_over_h: [0.1, 1000], nu_s: [0.0, 0.5]}
+  provenance: stated
+  citation: {page: 7, printed_page: "2107", quote: "we reproduce the thick-substrate limits", where: Eq. 17}
+- id: rel_finite_to_thick_Nc
+  kind: reduces_to
+  a: huang2005/sinusoidal_finite_substrate
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "Ebar_over_Esbar"}
+  output_map: {Nc_over_hE: Nc_over_hE}
+  limit: {H_over_h: "oo"}
+  regime: {Ebar_over_Esbar: [10, 100000], H_over_h: [0.1, 1000], nu_s: [0.0, 0.5]}
+  provenance: stated
+  citation: {page: 7, printed_page: "2107", quote: "we reproduce the thick-substrate limits", where: Eq. 17}
+- id: rel_finite_to_winkler_lam
+  kind: reduces_to
+  a: huang2005/sinusoidal_finite_substrate
+  b: huang2005/thin_compressible_eq18
+  mapping: {Ebar_over_Esbar: "Ebar_over_Esbar", H_over_h: "H_over_h", nu_s: "nu_s"}
+  output_map: {lam_over_h: lam_over_h}
+  limit: {H_over_h: "0"}
+  regime: {Ebar_over_Esbar: [10, 100000], H_over_h: [0.1, 1000], nu_s: [0.0, 0.45]}
+  provenance: stated
+  citation: {page: 7, printed_page: "2107", quote: "For this thin-substrate limit, we obtain that", where: Eq. 18}
+- id: rel_finite_to_winkler_Nc
+  kind: reduces_to
+  a: huang2005/sinusoidal_finite_substrate
+  b: huang2005/thin_compressible_eq18
+  mapping: {Ebar_over_Esbar: "Ebar_over_Esbar", H_over_h: "H_over_h", nu_s: "nu_s"}
+  output_map: {Nc_over_hE: Nc_over_hE}
+  limit: {H_over_h: "0"}
+  regime: {Ebar_over_Esbar: [10, 100000], H_over_h: [0.1, 1000], nu_s: [0.0, 0.45]}
+  provenance: stated
+  citation: {page: 7, printed_page: "2107", quote: "For this thin-substrate limit, we obtain that", where: Eq. 18}
+- id: rel_finite_to_incompressible_lam
+  kind: reduces_to
+  a: huang2005/sinusoidal_finite_substrate
+  b: huang2005/thin_incompressible_eq19
+  mapping: {Ebar_over_Esbar: "Ebar_over_Esbar", H_over_h: "H_over_h"}
+  output_map: {lam_over_h: lam_over_h}
+  limit: {H_over_h: "0"}
+  regime: {Ebar_over_Esbar: [10, 100000], H_over_h: [0.1, 1000], nu_s: [0.5, 0.5]}
+  provenance: stated
+  citation: {page: 8, printed_page: "2108", quote: "incompressible, for the thin-substrate limit, we obtain that", where: Eq. 19}
+- id: rel_finite_to_incompressible_Nc
+  kind: reduces_to
+  a: huang2005/sinusoidal_finite_substrate
+  b: huang2005/thin_incompressible_eq19
+  mapping: {Ebar_over_Esbar: "Ebar_over_Esbar", H_over_h: "H_over_h"}
+  output_map: {Nc_over_hE: Nc_over_hE}
+  limit: {H_over_h: "0"}
+  regime: {Ebar_over_Esbar: [10, 100000], H_over_h: [0.1, 1000], nu_s: [0.5, 0.5]}
+  provenance: stated
+  citation: {page: 8, printed_page: "2108", quote: "incompressible, for the thin-substrate limit, we obtain that", where: Eq. 19}
+# Against stafford2004 (ref-stafford2004). Huang cites Stafford's wrinkling metrology as an application of
+# wrinkles on a thick substrate (p. 8); Stafford's Eq. 1 is then Huang's Eq. 17 wavelength in length units,
+# compared through the helper thick_substrate_wavelength (Eq. 17 times h). Unit factor: Ef in GPa over Es in
+# MPa is 1000 x the dimensionless ratio.
+- id: rel_stafford_eq1_same_as_thick_substrate_wavelength
+  kind: same_as
+  a: stafford2004/wavelength_eq1
+  b: huang2005/thick_substrate_wavelength
+  mapping: {h: "h", Ebar_over_Esbar: "1000*Ef*(1 - nu_s**2)/((1 - nu_f**2)*Es)"}
+  regime: {h: [10, 1000], Ef: [0.1, 10], nu_f: [0.25, 0.4], Es: [0.5, 5], nu_s: [0.4, 0.5]}
+  provenance: stated
+  citation: {page: 8, printed_page: "2108", quote: "on a thick substrate have been used to measure Young's modulus", where: text}
+  assumptions:
+    - "Huang's sentence names Stafford et al. as using thick-substrate wrinkles to measure a modulus; it is read as stating that Stafford's wavelength formula (their Eq. 1) is the thick-substrate limit of Eq. 17"
+    - "Huang says the substrate modulus is measured; stafford2004 measures the film modulus (its Eq. 2) with the substrate modulus known. The relation is between the wavelength formulas, which is unaffected"
+    - "E_bar = E/(1 - nu^2) and Es_bar = Es/(1 - nu_s^2) in both papers"
+# Against cerda2003 (ref-cerda2003). Huang states (p. 8) that "the power-law relations in Eqs. (17)-(19) have
+# been predicted by Cerda and Mahadevan (2003) using a scaling analysis" and that its calculation supplies the
+# coefficients: a scales_as relation. Cerda prints laws for the deep substrate (Eq. 17's case) and the shallow
+# incompressible substrate (Eq. 19's case) only; it prints none for a thin compressible (Winkler) substrate, so
+# Eq. 18 has no Cerda model to relate to. Cerda prints no critical force, and its amplitude A ~ (Delta/W)^(1/2)
+# lambda is in variables Huang's models do not take, so only the wavelengths are related.
+- id: rel_cerda_deep_wavelength_scales_as_eq17
+  kind: scales_as
+  a: cerda2003/deep_substrate_wavelength
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "E_over_Es"}
+  output_map: {lam_over_h: lam_over_t}
+  regime: {t: [0.001, 1.0], E_over_Es: [10, 100000]}
+  provenance: stated
+  citation: {page: 8, printed_page: "2108", quote: "have been predicted by Cerda and Mahadevan (2003) using a scaling analysis", where: "text after Eq. 19"}
+  assumptions:
+    - "Cerda's deep-substrate case (t << lambda << Hs) is Huang's thick-substrate limit (H/h -> oo)"
+    - "Cerda's E/Es is read as Huang's E_bar/Es_bar; the Poisson factors are constant and do not change the power law"
+    - "Cerda's t is Huang's film thickness h; lambda/t is compared with lambda_eq/h"
+- id: rel_cerda_shallow_wavelength_scales_as_eq19
+  kind: scales_as
+  a: cerda2003/shallow_substrate_wavelength
+  b: huang2005/thin_incompressible_wavelength
+  mapping: {h: "two_Hs/(2*Hs_over_t)", H_over_h: "Hs_over_t", Ebar_over_Esbar: "E_over_Es"}
+  output_map: {lam: lam}
+  regime: {two_Hs: [0.1, 10], Hs_over_t: [3, 1000], E_over_Es: [10, 100000]}
+  provenance: stated
+  citation: {page: 8, printed_page: "2108", quote: "have been predicted by Cerda and Mahadevan (2003) using a scaling analysis", where: "text after Eq. 19"}
+  assumptions:
+    - "Cerda's shallow substrate (lambda >> Hs >> t, K ~ Es lambda^2/Hs^3, an incompressible layer) is Huang's thin incompressible-substrate limit (Eq. 19)"
+    - "Cerda's t and Hs are Huang's h and H; Cerda's model takes Hs as half the pinched fold 2Hs and t as Hs/(Hs/t)"
+    - "Cerda's E/Es is read as Huang's E_bar/Es_bar"
+    - "compared through the helper thin_incompressible_wavelength (Eq. 19 times h), since Cerda's law is in length units"
+# Proposed against richman1975 (neither paper cites the other).
+- id: rel_richman_plate_single_stratum_lam
+  kind: reduces_to
+  a: richman1975/plate_on_foundation
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "1/Ecore_over_E1"}
+  output_map: {lam_over_h: l_over_t}
+  limit: {t2: "0"}
+  regime: {t1: [0.5, 3], t2: [0, 3], E2_over_E1: [0.1, 10], Ecore_over_E1: [0.0001, 0.1], stress_ratio: [0.1, 10]}
+  provenance: proposed
+  reason: >
+    With one stratum (t2 -> 0), richman1975's plate-on-foundation model is an incompressible thin plate
+    (plate modulus 4E1/3 = E_bar) on an incompressible half-space (stiffness (2/3) Ecore k), whose
+    minimizing wavenumber gives l/t = 2 pi (E1/(3 Ecore))^(1/3), Huang's Eq. 17 wavelength with
+    Ebar/Esbar = E1/Ecore since both materials have nu = 1/2. The richman1975 model is the reader's
+    reconstruction of an unpublished analysis (its ref. 20), so this relates that stand-in, not a model
+    Richman printed. Its critical stress also matches Eq. 17's N_c, but normalized by E1 rather than
+    E_bar (a factor 4/3), so only the wavelength is related here.
+# Proposed against bowden1998 (ref-bowden1998). Huang cites Bowden et al. only for the phenomenon (p. 2,
+# "form a pattern of wrinkles, and remain bonded to the substrate"), states no relation to its formulas and
+# takes no value from it.
+- id: rel_bowden_eq3_approximated_by_eq17
+  kind: approximated_by
+  a: bowden1998/wavelength_eq3
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "Em*(1 - nu_p**2)/(Ep*(1 - nu_m**2))"}
+  output_map: {lam_over_h: L_over_t}
+  regime: {Em: [1.0e+10, 3.0e+11], Ep: [1.0e+5, 1.0e+7], nu_m: [0.2, 0.45], nu_p: [0.3, 0.5], t: [10, 1000]}
+  tolerance: 0.002
+  provenance: proposed
+  reason: >
+    Bowden's Eq. 3 (first form), L = 4.36 t [E_m (1 - nu_p^2)/(E_p (1 - nu_m^2))]^(1/3), is Huang's Eq. 17
+    wavelength lambda_eq = 2 pi h (E_bar/(3 Es_bar))^(1/3) with film thickness t = h, film (metal) E_m, nu_m
+    and substrate (PDMS) E_p, nu_p, so E_bar/Es_bar = E_m (1 - nu_p^2)/(E_p (1 - nu_m^2)). The coefficient
+    2 pi / 3^(1/3) = 4.3566 is printed rounded to 4.36 by Bowden, a relative difference of 8e-4: hence
+    approximated_by with tolerance 0.002 rather than same_as. Bowden's critical stress (Eq. 2, 0.52 E_m_bar^(1/3)
+    E_p_bar^(2/3)) likewise matches Eq. 17's N_c/h = (3^(2/3)/4) E_bar^(1/3) Es_bar^(2/3) (3^(2/3)/4 = 0.520),
+    but Huang's model gives N_c/(h E_bar), which no mapping of inputs turns into a stress, so it is not entered.

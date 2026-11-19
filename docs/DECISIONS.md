@@ -649,3 +649,42 @@ cmake -S corpus/cardio/code/svoned_code -B corpus/cardio/envs/oned/build \
   -DsparseSolverType=csparse -DENABLE_UNIT_TEST=OFF -DCMAKE_BUILD_TYPE=Release
 cmake --build corpus/cardio/envs/oned/build -j8   # gives corpus/cardio/envs/oned/build/bin/OneDSolver
 ```
+
+## Scaling laws and reconstructed models (v0.11)
+
+- **Why.** In the instabilities corpus two kinds of comparison were judged as if the paper had made an exact
+  prediction when it had not. Cerda and Mahadevan (2003) print λ ~ t (E/Es)^(1/3) with no prefactor; a reader
+  must pick one to run it, and the build then judged the guess. Richman et al. (1975) take their wavelength
+  from an analysis cited as unpublished; the reader's thin-plate stand-in missed the paper's Fig. 4, and the
+  miss counted against the paper.
+- **Scaling laws.** A model printed with "~" and no prefactor carries `prefactor: unknown`; its code uses a
+  prefactor of 1. Every value computed by it carries the mark. Against one value the build gives no verdict
+  and reports the prefactor the value implies (printed over computed). Against two or more it fits the one
+  constant (least squares in the logarithm) and judges what is left: the shape. A value computed through
+  further models is not judged (the constant need not stay a constant), nor is one on a log scale. These
+  comparisons are tallied as "<purpose>, prefactor unknown", never in the paper's own tally, and the input
+  rounding band is not applied (it cancels against the fitted constant). A shape that fails is a
+  not_reproduced finding that names the fitted prefactor.
+- **Reconstructed models.** A model the reader builds because the paper does not give its analysis (cited
+  as unpublished, solved numerically without the method, or replaced by a simpler stand-in) carries
+  `reconstructed: <why>`. A model with no citation (`stated: none`) in a written source (an article, preprint,
+  thesis or book) is the reader's too. In released code or data an uncited model is the reader's processing
+  of the source's own files (a column summed, a table resampled), which is what such a record is for, and in
+  this_work every model is the author's own; neither is set apart unless marked `reconstructed`. Values computed through either carry the reader's mark; their comparisons
+  are tallied as "<purpose>, reader's model", and a miss is a reader_model_differs finding: the paper or the
+  reader's model may be at fault. `from_words` alone does not set a model apart: it is the paper's model,
+  translated from its words.
+- **Effect on the other corpora.** No verdict changes. In cardio, the comparisons through the reader's own
+  checks on pandian2025 (a straight tube for the network, a head of medium) move out of the paper's own
+  tally; motor-clutch has none.
+
+
+## Scales-as across units
+
+- A scales-as relation compares log-slopes, and a change of unit multiplies a value by a constant, which no
+  log-slope sees. So the two outputs need not share a dimension: a law written in units of an unstated length
+  (a rod model in units of its own length) can scale as the same law in metres. Each output is taken in its
+  own unit on a linear scale. Same-as and approximated-by still convert one output into the other's unit, and
+  a dimension that does not match leaves them unverifiable.
+- **Effect on the other corpora.** Motor-clutch: none. Cardio: one relation moves from unverifiable to
+  verified, Reymond's R1 (a resistance) scaling as Boileau's characteristic impedance written as a ratio.

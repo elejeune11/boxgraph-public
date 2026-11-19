@@ -1,0 +1,73 @@
+# Cross-validation against richman1975 (job 2026-11-14). Neither paper cites the other. richman1975
+# treats the fetal cortex as a stiff layer bonded "to an infinitely deep elastic foundation, the core"
+# (p. 2) and identifies the buckling wavelength with the incipient intersulcal distance (note 21);
+# that is the setting of Eq. 1 (a stiff film on a substrate much thicker than the film). The moduli are
+# added (no paper measures them): Ef/Es = 10 from richman1975's Ecore/E1 = 1/10, both incompressible.
+- id: val_eq1_richman_27wk
+  model: wavelength_eq1
+  inputs: {h: richman1975/t_27wk, Ef: Ef_brain_added, Es: Es_brain_added, nu_f: nu_brain_added, nu_s: nu_s_brain_added}
+  output: d
+  against: richman1975/l_measured_27wk
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: film_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    Eq. 1 is stated for low strain, Ef/Es >> 1 and a substrate much thicker than the film (p. 2); the
+    core is deep (hemisphere radius 84 mm against t ≈ 1.7 mm), but Ef/Es = 10 is only moderately large
+    and the compression comes from differential growth, not an applied strain. The wavelength of onset
+    does not depend on the strain in Eq. 1, so the comparison is still of the same quantity.
+  basis: >-
+    Eq. 1 (p. 2, "wavelength (d) can be expressed by") gives the critical wavelength of a stiff layer of
+    thickness h on a thick soft substrate; richman1975 models the cortex as such a layer (p. 2, "two flat
+    plates, the cortical layers, bonded to an infinitely deep elastic foundation"). The thickness is the
+    one note 18 gives for the same 27-week specimen (t ≈ 1.7 mm).
+- id: val_eq1_richman_27wk_t_normal
+  model: wavelength_eq1
+  inputs: {h: richman1975/t_normal_fetus, Ef: Ef_brain_added, Es: Es_brain_added, nu_f: nu_brain_added, nu_s: nu_s_brain_added}
+  output: d
+  against: richman1975/l_measured_27wk
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: film_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    t ≈ 1.0 mm is richman1975's estimate for "the normal fetus during convolutional development" (p. 3),
+    not a value for this specimen; it is the thickness richman1975 itself uses when it compares its
+    l ≈ 8 mm with this 8.5 mm (see q_richman_thickness_choice). Eq. 1's limits as in val_eq1_richman_27wk.
+  basis: >-
+    As val_eq1_richman_27wk, with the thickness richman1975 uses for its own prediction (p. 3,
+    "t ≈ 1.0 mm, and hence l ≈ 8t ≈ 8 mm").
+- id: val_eq1_richman_sidman
+  model: wavelength_eq1
+  inputs: {h: richman1975/t_normal_fetus, Ef: Ef_brain_added, Es: Es_brain_added, nu_f: nu_brain_added, nu_s: nu_s_brain_added}
+  output: d
+  against: richman1975/l_measured_sidman
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: film_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    No cortical thickness is printed for the Sidman and Rakic specimen; richman1975 compares its
+    prediction from t ≈ 1.0 mm (normal fetus, end of the seventh month) with this 7.5 mm (p. 3), so the
+    same thickness is used. Eq. 1's limits as in val_eq1_richman_27wk.
+  basis: >-
+    As val_eq1_richman_27wk: the measurement is the normal incipient intersulcal distance in the specimen
+    of Sidman and Rakic (richman1975 p. 3, "7.5 mm in a specimen illustrated in Sidman and Rakic").
+# Cross-validation against bowden1998 (job 2026-11-14). stafford2004 cites bowden1998 as ref. 7 (on the
+# article's first page, p. 545, which is not in the PDF). Eq. 1 is the same small-strain wavelength as
+# bowden1998's Eq. 3; bowden1998 prints every input for its gold films on PDMS.
+- id: val_eq1_bowden_gold
+  model: wavelength_eq1
+  inputs: {h: bowden1998/t_gold, Ef: bowden1998/Em_gold, nu_f: bowden1998/nu_m_gold, Es: bowden1998/Ep_pdms, nu_s: bowden1998/nu_p_pdms}
+  output: d
+  against: bowden1998/L_measured
+  purpose: validation
+  quantities: {bowden1998/film_thickness: film_thickness, bowden1998/film_youngs_modulus: film_modulus, bowden1998/film_poisson_ratio: film_poisson_ratio, bowden1998/substrate_youngs_modulus: substrate_modulus, bowden1998/substrate_poisson_ratio: substrate_poisson_ratio, bowden1998/wrinkle_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    Eq. 1 is stated for low strain, Ef/Es >> 1, a substrate much thicker than the film and small amplitude
+    (p. 2). Gold on PDMS (Ef/Es about 4000, a PDMS slab, depths of 1.5-3.9 um against wavelengths of
+    20-50 um) meets these; the compression comes from thermal contraction rather than an applied strain, and
+    the onset wavelength of Eq. 1 does not depend on how the strain is applied. The thickness is the 50 nm of
+    gold; bowden1998's 5 nm adhesion interlayer is left out, as in its own Eq. 3 estimate (bowden1998
+    q_t_which, alternative 55 nm in its t_film_added).
+  basis: >-
+    Eq. 1 (p. 2, "wavelength (d) can be expressed by") gives the critical wavelength of a stiff film of
+    thickness h on a thick soft substrate, the system of bowden1998 (cited as ref. 7), whose film and substrate
+    constants are printed there (bowden1998 p. 3, "The parameters for gold and PDMS are"). The same formula
+    is bowden1998's Eq. 3, which that paper itself finds about nine times short of the observed wavelengths
+    (cmp_L_eq3_vs_measured) and explains by a modified PDMS layer.

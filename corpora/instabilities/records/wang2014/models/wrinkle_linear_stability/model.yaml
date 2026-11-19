@@ -1,0 +1,14 @@
+id: wrinkle_linear_stability
+name: critical strain for wrinkling of a neo-Hookean film on a prestretched neo-Hookean substrate, plane strain (linear stability analysis following Cao and Hutchinson)
+role: model
+stated: {page: 3, printed_page: "051004-3", quote: "linear stability analysis on a film-substrate system with a", where: "Sec. 4, Wrinkling; Fig. 14(b)"}
+equation: "e_c wrinkle = critical strain of the linearized bifurcation problem (not printed in this paper; Cao and Hutchinson [29], Appendix Eqs. A1-A10), minimized over the wave number, with film stretch 1 - e and substrate stretch lambda_p (1 - e) in plane strain"
+described_from: ref-29
+inputs:
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless, description: "mu_f / mu_s"}
+  lam_p: {quantity: substrate_prestretch, unit: dimensionless}
+outputs:
+  e_wrinkle: {quantity: wrinkling_onset_strain, unit: dimensionless}
+  kh: {quantity: wrinkle_wavenumber_dimensionless, unit: dimensionless, description: "k H_f at the critical mode; arbitrary in the homogeneous limit mu_f/mu_s = 1, lambda_p = 1"}
+settings: {kh_min: 0.001, kh_max: 30.0, n_kh: 41, e_min: 0.0001, e_max: 0.7, n_e: 120, tol: 1.0e-6, n_golden: 25}
+stochastic: false

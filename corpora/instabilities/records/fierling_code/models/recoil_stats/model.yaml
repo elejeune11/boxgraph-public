@@ -1,0 +1,13 @@
+id: recoil_stats
+name: mean recoil velocity and error bar at a DV position, as the plotting script computes them (Fig. 5e)
+role: processing
+software: true
+stated: {file: laser_ablation_recoil.plot, lines: "41-46", quote: ":(sum[col=2:n+1] column(col)/n) \\"}
+equation: "mean = sum_{col=2}^{n+1} v_col / n ; bar = sqrt(sum (v_col - mean)^2)/(n - 1) ; the bar drawn from the mean to mean + bar"
+inputs:
+  d: {quantity: dv_distance, unit: um}
+outputs:
+  mean: {quantity: recoil_velocity, unit: um/s}
+  bar: {quantity: recoil_velocity, unit: um/s}
+settings: {n: 5}
+stochastic: false

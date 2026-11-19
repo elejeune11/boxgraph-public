@@ -1,0 +1,19 @@
+id: mesoderm_halfwidth
+name: DV half-width of the pre-strained (myosin) region at the mid cross-section
+role: model
+stated: {file: Surface_Evolver_script.txt, lines: "188", quote: "if bary_x^2/(gaxe/sqrt(extachex)+delta_min)^2 + bary_y^2/(1/sqrt(extachey)+delta_min)^2<rayon^2"}
+equation: "at x = 0 a facet is in the region if |y| < rayon (1/sqrt(extachey) + delta); arc length s = R_DV asin(y_b/rayon); rows = s / w"
+inputs:
+  ey: {quantity: region_shape_factor, unit: dimensionless}
+  delta: {quantity: region_offset, unit: dimensionless}
+  R_DV: {quantity: radius_dv, unit: um}
+  w: {quantity: row_width, unit: um}
+outputs:
+  s: {quantity: mesoderm_halfwidth, unit: um}
+  rows: {quantity: mesoderm_halfwidth_rows, unit: dimensionless}
+settings: {}
+stochastic: false
+# notes: port of set_zzero (script lines 188 and 196; same in the saved states) at x = 0, on the initial circular mid
+# cross-section of radius rayon = 1. delta = delta_min gives the edge of the uniform (red) region, delta = delta_max the outer
+# edge of the gradient (pink) region. The arc length and the row width w = 6.5 um (area_AP_DV_paper.plot line 147) are the
+# reader's conversion, to set against the paper's 'approximately seven AP rows' (p. 4).

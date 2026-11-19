@@ -32,6 +32,9 @@ DEFAULT_TIMEOUT = RUN_TIMEOUT
 
 ERROR_BARS = {"sem": "SEM", "sd": "SD", "ci95": "95% CI", "range": "range", "unstated": "unstated error"}
 
+WRITTEN = ("article", "preprint", "thesis", "book")  # sources whose models a reader translates from text
+
+
 class BuildError(RuntimeError):
     pass
 
@@ -60,6 +63,10 @@ class Value:
     run: str | None = None  # for outputs: which run made it
     se: float | None = None  # sampling error of a scalar from repeated runs of a model with randomness
     ses: list[float | None] | None = None  # the same, value by value, for a curve
+    # computed through a scaling law printed without its prefactor (that model's id); chained: through others too
+    prefactor_model: str | None = None
+    prefactor_chained: bool = False
+    reader_model: str | None = None  # computed through a model the reader built, not the paper (its id)
 
     @property
     def is_table(self) -> bool:
@@ -90,6 +97,11 @@ class Value:
             d["ses"] = self.ses
         if self.conditions:
             d["conditions"] = self.conditions
+        if self.prefactor_model:
+            d["prefactor_model"] = self.prefactor_model
+            d["prefactor_chained"] = self.prefactor_chained
+        if self.reader_model:
+            d["reader_model"] = self.reader_model
         return d
 
 
@@ -353,6 +365,10 @@ class ComparisonResult:
     conditions_note: str | None = None
     computed_se: Any = None  # sampling error of the computed side, in printed unit and scale
     input_rounding: dict | None = None  # the range the printed inputs' rounding allows, when it was tried
+    prefactor_model: str | None = None  # the scaling law without a prefactor the computed side rests on
+    implied_prefactor: float | None = None  # printed over computed: the one measurement's, or the fitted one
+    prefactor_note: str | None = None
+    reader_model: str | None = None  # the model the reader built that the computed side rests on
 
 
 @dataclass
@@ -796,6 +812,7 @@ class Builder:
         # inputs that disagree on a condition give a mixed one, which no single value agrees with
         cond = {k: " | ".join(sorted(cs)) for k, cs in sorted(seen_cond.items())}
         res.notes += [f"inputs disagree on {k}: {cond[k]}" for k in cond if len(seen_cond[k]) > 1]
+        marks = self._marks(model, [vals[vid] for vid in run.inputs.values()])
         new: dict[str, Value] = {}
         for sym, port in model.outputs.items():
             oid = run.outputs.get(sym, f"{run.id}.{sym}")
@@ -813,7 +830,7 @@ class Builder:
                 new[oid] = Value(id=oid, quantity=port.quantity, unit=port.unit, scale=port.scale, origin=origin,
                                  kind="output", index=[float(x) for x in c["x"]], index_quantity=port.curve.quantity,
                                  index_unit=port.curve.unit, values=[None if y is None else float(y) for y in c["y"]],
-                                 conditions=cond, run=run.id)
+                                 conditions=cond, run=run.id, **marks)
                 continue
             if any(isinstance(r.get(sym), list) for reps in results for r in reps):
                 res.error = f"output {sym} is a list; use a sweep to produce a curve"
@@ -824,13 +841,68 @@ class Builder:
                 new[oid] = Value(id=oid, quantity=port.quantity, unit=port.unit, scale=port.scale, origin=origin,
                                  kind="output", index=list(tv.index), index_quantity=tv.index_quantity,
                                  index_unit=tv.index_unit, values=[m for m, _ in stats], conditions=cond, run=run.id,
-                                 ses=[s for _, s in stats] if n_rep > 1 else None)
+                                 ses=[s for _, s in stats] if n_rep > 1 else None, **marks)
             else:
                 m, s = stats[0]
                 new[oid] = Value(id=oid, quantity=port.quantity, unit=port.unit, scale=port.scale, origin=origin,
-                                 kind="output", value=m, conditions=cond, run=run.id, se=s if n_rep > 1 else None)
+                                 kind="output", value=m, conditions=cond, run=run.id, se=s if n_rep > 1 else None,
+                                 **marks)
         res.ok = True
         return res, new
+
+    def _marks(self, model, inputs: list[Value]) -> dict:
+        """What a run's outputs carry from its model and its inputs (DECISIONS, Scaling laws and reconstructed
+        models): the scaling law without a prefactor they rest on, and the reader's model they rest on."""
+        up = next((v.prefactor_model for v in inputs if v.prefactor_model), None)
+        if model.prefactor == "unknown":
+            pf, chained = model.id, up is not None
+        else:
+            pf, chained = up, up is not None
+        # an uncited model is the reader's in a written source; in released code or data it is the reader's
+        # processing of the source's own files, and in this_work every model is the author's own
+        own = bool(model.reconstructed) or (model.stated.none is not None and self.rec.source.kind.value in WRITTEN)
+        reader = model.id if own else next((v.reader_model for v in inputs if v.reader_model), None)
+        return {"prefactor_model": pf, "prefactor_chained": chained, "reader_model": reader}
+
+    @staticmethod
+    def _judge_shape(r: ComparisonResult, cv: Value, pv: Value) -> None:
+        """A value computed by a scaling law printed without its prefactor is judged on its shape only.
+        Against one measurement: no verdict, and the prefactor the measurement implies. Against two or more:
+        the one constant is fitted (least squares in log) and what is left is judged."""
+        import math
+
+        r.prefactor_model = cv.prefactor_model
+        if cv.prefactor_chained:
+            r.prefactor_note = (f"rests on {cv.prefactor_model}, a scaling law printed without its prefactor, "
+                                "through other models: not judged")
+        elif pv.scale != "linear" or cv.scale != "linear":
+            r.prefactor_note = f"rests on {cv.prefactor_model}, printed without its prefactor, on a log scale: not judged"
+        else:
+            comp = r.computed_value if pv.is_table else [r.computed_value]
+            printed = pv.printed_values if pv.is_table else [pv.printed]
+            pairs = [(y, p.value) for y, p in zip(comp, printed)
+                     if y is not None and p is not None and y != 0 and p.value / y > 0]
+            if pairs:
+                r.implied_prefactor = math.exp(sum(math.log(p / y) for y, p in pairs) / len(pairs))
+            if len(pairs) < 2:
+                r.prefactor_note = (f"{cv.prefactor_model} is printed without its prefactor; one value fixes the "
+                                    "prefactor and leaves nothing to judge")
+            else:
+                C = r.implied_prefactor
+                scaled = [None if y is None else C * y for y in comp]
+                per = [P.Verdict.no_verdict if p is None or y is None else P.verdict(y, p)
+                       for y, p in zip(scaled, printed)]
+                r.computed_value = scaled
+                r.difference = [None if y is None or p is None else y - p.value for y, p in zip(scaled, printed)]
+                r.per_value = [v.value for v in per]
+                r.verdict = P.combine(per).value
+                r.prefactor_note = (f"{cv.prefactor_model} is printed without its prefactor; the prefactor is fitted "
+                                    f"to the {len(pairs)} values ({C:.4g}) and the shape is judged")
+                return
+        r.verdict = P.Verdict.no_verdict.value
+        r.difference = None
+        if pv.is_table:
+            r.per_value = [P.Verdict.no_verdict.value] * len(pv.values)
 
     def _compare(self, c, vals: dict[str, Value]) -> ComparisonResult:
         r = ComparisonResult(id=c.id, purpose=c.purpose.value, computed=c.computed, printed=c.printed, ok=False)
@@ -893,6 +965,9 @@ class Builder:
         except U.UnitError as e:
             r.error = str(e)
             return r
+        r.reader_model = cv.reader_model
+        if cv.prefactor_model:
+            self._judge_shape(r, cv, pv)
         r.ok = True
         return r
 
@@ -927,6 +1002,8 @@ class Builder:
         its printed range, one at a time, the changes added up. Alternatives of added inputs reuse the
         baseline's range, so they run nothing more."""
         if not r.ok or r.verdict not in (P.Verdict.not_reproduced.value, P.Verdict.close.value):
+            return
+        if r.prefactor_model:  # judged on its shape, with a fitted constant: the inputs' rounding cancels in it
             return
         cv, pv = vals[c.computed], vals[c.printed]
         run = next((x for x in self.rec.runs if x.id == cv.run), None) if cv.kind == "output" else None

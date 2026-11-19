@@ -1,0 +1,15 @@
+id: shrink_schedule
+name: shrink ratio of a saved frame under the step-by-step pre-strain loop
+role: model
+stated: {file: Young100dixPoisson000Step013.dmp, lines: "30895-30897", quote: "{ ratio_shrink := ratio_shrink/1.03;"}
+equation: "gamma_n = q^-(n - 1): ratio_shrink starts at 1 (ratio_shrink=1, script line 27), youp dumps one frame before the first step, and each pass of myosin divides ratio_shrink by q"
+inputs:
+  q: {quantity: shrink_step_factor, unit: dimensionless}
+  n: {quantity: frame_number, unit: dimensionless}
+outputs:
+  gamma: {quantity: shrink_ratio, unit: dimensionless}
+settings: {}
+stochastic: false
+# notes: port of the 'myosin' loop (Surface_Evolver_script.txt lines 282-305 divides by 1.1; the saved states' own copy,
+# Step013.dmp lines 30895-30897, divides by 1.03) with the frame counting of 'youp' (Step013.dmp lines 31046-31058:
+# oneframebis before myosin). The frame offset (n - 1) is the reader's reading of that order of calls (q_frame_offset).

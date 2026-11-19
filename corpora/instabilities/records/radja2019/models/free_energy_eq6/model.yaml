@@ -1,0 +1,25 @@
+id: free_energy_eq6
+name: equilibrium modulated-phase free energy on a sphere, single-mode approximation, minimized by simulated annealing and gradient descent (Eq. 6)
+role: model
+stated: {page: 18, printed_page: "e4", where: "Eq. 6", quote: "We choose our units of energy, concentration, and length to reduce the free energy"}
+equation: "H = 1/2 [(l - l0)^2 + R^2 tau / K] c_l^m c_l^m* + (u3 R / (3! sqrt(K u4))) Y c c c + (1/4!) Y Y c c c c ;  u = u3 R / sqrt(K u4)"
+inputs:
+  l0: {quantity: mode_number, unit: dimensionless}
+outputs:
+  lambda_eq: {quantity: pattern_wavelength, unit: um, description: "the pattern of the minimum-energy state; the paper reports it as a geometry, not as a number"}
+settings:
+  seed: null              # not stated
+  R2tau_over_K: -1          # "(R^2 tau/K) = -1" (p. 19, Fig. 1 caption)
+  u_values: [-1, 0, 1]      # Table 1; Fig. 4 sweeps u from -1 to 1
+  l0_range: [3, 6]          # Fig. 4 axis; Table 1 uses l0 up to 20.5
+  modes: "single l = l0, or the two integers l, l+1 bracketing l0"
+  annealing_T_start: 1      # "started with T = 1"
+  annealing_dT_start: 0.1   # "initial temperature step of DT = 0.1", divided by ten each time T reaches DT
+runnable: false
+not_runnable_reason: >
+  Its outputs are pattern geometries (polyhedral spikes, holes, chiral stripes; Figs. 1 and 4),
+  not printed numbers, and the only numbers tied to it (Table 1 percent differences) come from
+  measuring SEM images against rendered surfaces, which cannot be redone from the paper. The
+  annealing stopping rule ("until the observed pattern no longer changed appreciably") is not
+  quantified.
+stochastic: true

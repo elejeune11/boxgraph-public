@@ -1,0 +1,497 @@
+# ===== Surface_Evolver_script.txt: parameters of the released script ===================================
+- id: young2d_script
+  quantity: young_modulus_2d_nd
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {file: Surface_Evolver_script.txt, lines: "21", quote: "PARAMETER young2D = 100 // 2D Young modulus"}
+  note: not printed in the paper, which gives only chi~_2D = 50 and nu_2D = 0 (SI p. 19)
+- id: kappa_script
+  quantity: bending_modulus_nd
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Surface_Evolver_script.txt, lines: "22", quote: "PARAMETER kappa = 1"}
+- id: poisson2d_script
+  quantity: poisson_ratio_2d
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: Surface_Evolver_script.txt, lines: "23", quote: "PARAMETER poisson2D = 0 // 2D Poisson ratio"}
+  from_source: fierling2022
+  from_datum: nu_2d
+- id: rayon_script
+  quantity: radius_dv_nd
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Surface_Evolver_script.txt, lines: "5", quote: "PARAMETER rayon = 1"}
+- id: gaxe_script
+  quantity: axis_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "3"
+  citation: {file: Surface_Evolver_script.txt, lines: "6", quote: "PARAMETER gaxe = 3 //  gaxe=r_x/r_z"}
+  from_source: fierling2022
+  from_datum: axis_ratio_si
+- id: bend_coef_script
+  quantity: bend_coefficient
+  unit: dimensionless
+  origin: reported
+  printed: "0.3"
+  citation: {file: Surface_Evolver_script.txt, lines: "87", quote: "x^2/gaxe^2 + y^2 + (z+0.3/gaxe/rayon*x^2/2)^2 = rayon^2"}
+  note: the same constraint is in the saved states (e.g. Young100dixPoisson000Step013.dmp line 235)
+- id: space_script
+  quantity: vitelline_gap_relative
+  unit: dimensionless
+  origin: reported
+  printed: "0.0025"
+  citation: {file: Surface_Evolver_script.txt, lines: "31", quote: "PARAMETER space = 0.0025"}
+  from_source: fierling2022
+  from_datum: gap_rel
+- id: extachey_script
+  quantity: region_shape_factor
+  unit: dimensionless
+  origin: reported
+  printed: "12"
+  citation: {file: Surface_Evolver_script.txt, lines: "34", quote: "PARAMETER extachey= 12"}
+  note: DV shape factor of the myosin region; the same value in the saved states. Not in the paper.
+- id: extachex_script
+  quantity: region_shape_factor
+  unit: dimensionless
+  origin: reported
+  printed: "1.25"
+  citation: {file: Surface_Evolver_script.txt, lines: "33", quote: "PARAMETER extachex = 1.25"}
+  note: AP shape factor of the myosin region. Not in the paper.
+- id: delta_min_script
+  quantity: region_offset
+  unit: dimensionless
+  origin: reported
+  printed: "-0.15"
+  citation: {file: Surface_Evolver_script.txt, lines: "12", quote: "PARAMETER delta_min=-0.15"}
+- id: delta_max_script
+  quantity: region_offset
+  unit: dimensionless
+  origin: reported
+  printed: "0.2"
+  citation: {file: Surface_Evolver_script.txt, lines: "14", quote: "PARAMETER delta_max=0.2"}
+- id: delta_plus_script
+  quantity: crown_step
+  unit: dimensionless
+  origin: reported
+  printed: "0.02"
+  citation: {file: Surface_Evolver_script.txt, lines: "15", quote: "PARAMETER delta_plus=0.02"}
+- id: precision_script
+  quantity: convergence_tolerance
+  unit: dimensionless
+  origin: reported
+  printed: "1 x 10^-4"
+  citation: {file: Surface_Evolver_script.txt, lines: "38", quote: "PARAMETER precision = 1e-4"}
+- id: penalty_K_script
+  quantity: penalty_amplitude
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {file: Surface_Evolver_script.txt, lines: "55", quote: "#define K 1000"}
+- id: penalty_beta_script
+  quantity: penalty_steepness
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {file: Surface_Evolver_script.txt, lines: "56", quote: "#define beta 100"}
+- id: shrink_step_script
+  quantity: shrink_step_factor
+  unit: dimensionless
+  origin: reported
+  printed: "1.1"
+  citation: {file: Surface_Evolver_script.txt, lines: "286", quote: "ratio_shrink := ratio_shrink/1.1;"}
+
+# ===== the saved Surface Evolver states (.dmp): parameters as saved =====================================
+- id: bmod_dump
+  quantity: se_bending_modulus_nd
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "33", quote: "PARAMETER bmod =  2"}
+  note: "the script sets bmod = 2*kappa (line 24); the saved states also declare a second bending energy bending_bis of modulus 0.02 (line 221)"
+- id: delta_plus_dump
+  quantity: crown_step
+  unit: dimensionless
+  origin: reported
+  printed: "0.05"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "27", quote: "PARAMETER delta_plus = 0.05"}
+  note: the same in every released .dmp
+- id: precision_dump
+  quantity: convergence_tolerance
+  unit: dimensionless
+  origin: reported
+  printed: "0.001"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "41", quote: "PARAMETER precision = 0.001"}
+- id: penalty_K_dump
+  quantity: penalty_amplitude
+  unit: dimensionless
+  origin: reported
+  printed: "1000000"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "225", quote: "scalar_integrand: 1000000*(exp(-20*("}
+- id: penalty_beta_dump
+  quantity: penalty_steepness
+  unit: dimensionless
+  origin: reported
+  printed: "20"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "225", quote: "scalar_integrand: 1000000*(exp(-20*("}
+- id: shrink_step_dump
+  quantity: shrink_step_factor
+  unit: dimensionless
+  origin: reported
+  printed: "1.03"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "30897", quote: "{ ratio_shrink := ratio_shrink/1.03;"}
+  note: the myosin procedure as saved in the states; the released script divides by 1.1
+- id: n_vertices_dump
+  quantity: mesh_size
+  unit: dimensionless
+  origin: reported
+  printed: "2999"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "4", quote: "vertices_predicted      2999"}
+- id: n_facets_dump
+  quantity: mesh_size
+  unit: dimensionless
+  origin: reported
+  printed: "5993"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "6", quote: "facets_predicted        5993"}
+- id: frame13
+  quantity: frame_number
+  unit: dimensionless
+  origin: reported
+  printed: "13"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "45", quote: "PARAMETER framecounter = 13"}
+- id: frame37
+  quantity: frame_number
+  unit: dimensionless
+  origin: reported
+  printed: "37"
+  citation: {file: Young100dixPoisson000Step037.dmp, lines: "45", quote: "PARAMETER framecounter = 37"}
+- id: frame63
+  quantity: frame_number
+  unit: dimensionless
+  origin: reported
+  printed: "63"
+  citation: {file: Young100dixPoisson000Step063.dmp, lines: "45", quote: "PARAMETER framecounter = 63"}
+- id: frame213
+  quantity: frame_number
+  unit: dimensionless
+  origin: reported
+  printed: "213"
+  citation: {file: Young100dixPoisson000Step213.dmp, lines: "45", quote: "PARAMETER framecounter = 213"}
+- id: ratio_f13
+  quantity: shrink_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.701379880192973"
+  citation: {file: Young100dixPoisson000Step013.dmp, lines: "35", quote: "PARAMETER ratio_shrink = 0.701379880192973"}
+  note: "the state of Fig. 2a-c (README: Fig. 2a, 2c from step 013)"
+- id: ratio_f63
+  quantity: shrink_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.159989716294106"
+  citation: {file: Young100dixPoisson000Step063.dmp, lines: "35", quote: "PARAMETER ratio_shrink = 0.159989716294106"}
+  note: "the state of Fig. 2d, 5d and Supp. Fig. 1d-f (README)"
+
+# ===== gnuplot scripts: constants that turn the simulation into the paper's units ======================
+- id: chi_plot
+  quantity: compression_modulus_nd
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: time_profile_stress.plot, lines: "13", quote: "chi=50"}
+  from_source: fierling2022
+  from_datum: chi_nd
+  note: "settings.plot computes the same as chi=Y/2/(1-nu) (line 7) with Y=100, nu=0"
+- id: y_plot
+  quantity: young_modulus_2d_nd
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {file: stress_profile.plot, lines: "1", quote: "Y=100"}
+- id: nu_plot
+  quantity: poisson_ratio_2d
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: stress_profile.plot, lines: "2", quote: "nu=0"}
+- id: kappa_plot
+  quantity: bending_modulus_nd
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {none: "settings.plot (line 7) computes chi=Y/2/(1-nu) with no kappa or radius: it takes kappa = 1 and R_DV = 1, as the script does (Surface_Evolver_script.txt lines 5 and 22)"}
+- id: rayon_plot
+  quantity: radius_dv_nd
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {none: "settings.plot (line 7) uses no radius: the simulation unit of length is R_DV (Surface_Evolver_script.txt line 5)"}
+- id: c1_plot
+  quantity: shrink_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.7"
+  citation: {file: time_profile_stress.plot, lines: "14", quote: "c1=0.7"}
+  note: where the plot of Supp. Fig. 1a puts its arrow labelled 'epsilon_a^m=0.43' (line 21)
+- id: c2_plot
+  quantity: shrink_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.16"
+  citation: {file: time_profile_stress.plot, lines: "15", quote: "c2=0.16"}
+  note: where the plot puts its arrow labelled 'epsilon_a^m=5.25' (line 24)
+- id: eps_label_043
+  quantity: area_prestrain
+  unit: dimensionless
+  origin: reported
+  printed: "0.43"
+  citation: {file: time_profile_stress.plot, lines: "21", quote: "set label 1 \"{/Symbol e}@_a^m=0.43\" at HOR,H1"}
+  from_source: fierling2022
+  from_datum: eps_m_043
+- id: eps_label_525
+  quantity: area_prestrain
+  unit: dimensionless
+  origin: reported
+  printed: "5.25"
+  citation: {file: time_profile_stress.plot, lines: "24", quote: "set label 2 \"{/Symbol e}@_a^m=5.25\" at HOR,H2"}
+  from_source: fierling2022
+  from_datum: eps_m_525
+- id: rdv_plot
+  quantity: radius_dv
+  unit: um
+  origin: reported
+  printed: "90"
+  citation: {file: area_AP_DV_paper.plot, lines: "146", quote: "RADIUS=90"}
+  from_source: fierling2022
+  from_datum: r_dv
+  note: "also R_DV=90 in stress_profile_for_laser_ablations.plot (line 10), furrow_propagation.plot, curvature.plot and depth.plot"
+- id: rdv_ablation_plot
+  quantity: radius_dv
+  unit: um
+  origin: reported
+  printed: "90"
+  citation: {file: stress_profile_for_laser_ablations.plot, lines: "10", quote: "R_DV=90"}
+  from_source: fierling2022
+  from_datum: r_dv
+- id: row_width_plot
+  quantity: row_width
+  unit: um
+  origin: reported
+  printed: "6.5"
+  citation: {file: area_AP_DV_paper.plot, lines: "147", quote: "STRIPEWIDTH=6.5"}
+  note: converts the simulated angle into 'number of cell radii' for Fig. 3c-d (angle_to_row, line 148). Not in the paper.
+- id: t18_plot
+  quantity: time_rescale_factor
+  unit: dimensionless
+  origin: reported
+  printed: "2."
+  citation: {file: area_AP_DV_paper.plot, lines: "5", quote: "T18=2."}
+  note: "confocal time is (t_Guy - T0_Guy)/T18 with T0_Guy = -10.8 min (line 4); the paper's methods say confocal times were rescaled by a factor 2 (p. 12)"
+- id: c0_plot
+  quantity: shrink_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.399987"
+  citation: {file: area_AP_DV_paper.plot, lines: "30", quote: "c0=0.399987"}
+  note: the simulated MyoII curve of Fig. 3a is (1/ratio_shrink - 1)/(1/c0 - 1); c0 is the ratio of frame 32 (1.03^-31), at t = -1.5 min in the merged file
+- id: n_recoil_plot
+  quantity: sample_size
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {file: laser_ablation_recoil.plot, lines: "4", quote: "n=5"}
+  note: the number of embryo columns the script averages; laser_ablation_recoil.gdat holds six per position
+
+# ===== measured data in the released files ==============================================================
+- id: muvi_rows_tm1
+  quantity: area_fold_change
+  unit: dimensionless
+  origin: measured
+  citation: {file: rauzi_t=-1_area.gdat, lines: "2", quote: "0	11	-1.175	0.865763	0.892773	0.90782"}
+  conditions: {time: "-1.175 min"}
+  table: {index_quantity: cell_row, index_unit: dimensionless, index: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+          values: ["0.789199 to 0.953821", "0.832092 to 0.952394", "0.845148 to 1.02708", "0.788015 to 1.08892",
+                   "1.06118 to 1.2182", "1.06614 to 1.20583", "1.08974 to 1.21475", "0.977079 to 1.17296", "0.886942 to 1.15067"]}
+  note: >
+    MuVi SPIM apical area fold change of rows 1-9 (n = 3 embryos, both sides), each written as the file's
+    min6 to max6 columns for that row (columns 4+11+i and 4+22+i, the error bars area_AP_DV_paper.plot draws
+    for Fig. 3b, line 131). The means (columns 4+i) are 0.892773 ... 1.00328.
+- id: confocal_rows_tm1
+  quantity: area_fold_change
+  unit: dimensionless
+  origin: measured
+  citation: {file: Guy_area_myo_t=-1_area.gdat, lines: "2", quote: "1	-1.1	-13	0.846804	0.880659"}
+  conditions: {time: "-1.1 min"}
+  table: {index_quantity: cell_row, index_unit: dimensionless, index: ["1", "2", "3", "4", "5", "6", "7"],
+          values: ["0.82355 to 0.909968", "0.863218 to 0.881519", "0.955887 to 0.995145", "0.930642 to 1.04948",
+                   "0.975245 to 1.11201", "1.0648 to 1.14256", "1.09702 to 1.11899"]}
+  note: confocal apical area fold change of rows 1-7 (n = 3 embryos), the file's MinArea_i to MaxArea_i (Fig. 3b error bars, area_AP_DV_paper.plot line 134)
+- id: fig1c_t0
+  quantity: curvature
+  unit: 1/um
+  origin: measured
+  citation: {file: data_for_Fig_1c.tsv, lines: "2-5", quote: "embryo1	0.006422608	-0.04629629	0.0045106	-0.03968"}
+  conditions: {ablation_stage: "0"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4"],
+          values: ["0.006422608", "0.003987241", "0.007183908", "0.007107321"]}
+  note: Fig. 1c, column t0 (before ablation); n = 4 embryos as the caption says; unit from the figure's axis 'curvature 1/R (um^-1)'
+- id: fig1c_t1
+  quantity: curvature
+  unit: 1/um
+  origin: measured
+  citation: {file: data_for_Fig_1c.tsv, lines: "2-5", quote: "embryo1	0.006422608	-0.04629629	0.0045106	-0.03968"}
+  conditions: {ablation_stage: "1"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4"],
+          values: ["-0.04629629", "-0.02564103", "-0.05208333", "-0.04761905"]}
+- id: fig1c_t2
+  quantity: curvature
+  unit: 1/um
+  origin: measured
+  citation: {file: data_for_Fig_1c.tsv, lines: "2-5", quote: "embryo1	0.006422608	-0.04629629	0.0045106	-0.03968"}
+  conditions: {ablation_stage: "2"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4"],
+          values: ["0.0045106", "0.004837929", "0.003792188", "0.008680556"]}
+- id: fig1c_t3
+  quantity: curvature
+  unit: 1/um
+  origin: measured
+  citation: {file: data_for_Fig_1c.tsv, lines: "2-5", quote: "embryo1	0.006422608	-0.04629629	0.0045106	-0.03968"}
+  conditions: {ablation_stage: "3"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4"],
+          values: ["-0.03968", "-0.05556", "-0.06173", "-0.07092"]}
+- id: recoil_m16
+  quantity: recoil_velocity
+  unit: um/s
+  origin: measured
+  citation: {file: laser_ablation_recoil.gdat, lines: "2", quote: "-16     0.6744  1.18    0.6744  1.012   0.6744  0.8433"}
+  conditions: {dv_distance: "-16 um"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4", "5", "6"],
+          values: ["0.6744", "1.18", "0.6744", "1.012", "0.6744", "0.8433"]}
+  note: Fig. 5e raw recoil velocities, one column per embryo; the unit is the figure's axis (um/s)
+- id: recoil_m8
+  quantity: recoil_velocity
+  unit: um/s
+  origin: measured
+  citation: {file: laser_ablation_recoil.gdat, lines: "3", quote: "-8      1.012   1.012   1.518   2.024   0.8433  1.181"}
+  conditions: {dv_distance: "-8 um"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4", "5", "6"],
+          values: ["1.012", "1.012", "1.518", "2.024", "0.8433", "1.181"]}
+- id: recoil_0
+  quantity: recoil_velocity
+  unit: um/s
+  origin: measured
+  citation: {file: laser_ablation_recoil.gdat, lines: "4", quote: "0       1.35    1.518   1.687   2.192   1.687   1.519"}
+  conditions: {dv_distance: "0 um"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4", "5", "6"],
+          values: ["1.35", "1.518", "1.687", "2.192", "1.687", "1.519"]}
+- id: recoil_p8
+  quantity: recoil_velocity
+  unit: um/s
+  origin: measured
+  citation: {file: laser_ablation_recoil.gdat, lines: "5", quote: "8       1.012   1.518   1.349   1.349   1.011   1.012"}
+  conditions: {dv_distance: "8 um"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4", "5", "6"],
+          values: ["1.012", "1.518", "1.349", "1.349", "1.011", "1.012"]}
+- id: recoil_p16
+  quantity: recoil_velocity
+  unit: um/s
+  origin: measured
+  citation: {file: laser_ablation_recoil.gdat, lines: "6", quote: "16      1.012   1.349   1.181   1.181   0.6744  1.012"}
+  conditions: {dv_distance: "16 um"}
+  table: {index_quantity: embryo_index, index_unit: dimensionless, index: ["1", "2", "3", "4", "5", "6"],
+          values: ["1.012", "1.349", "1.181", "1.181", "0.6744", "1.012"]}
+
+# ===== values printed in the paper, copied here to compare the code with (checked against fierling2022) =====
+- id: chi_paper
+  quantity: compression_modulus_nd
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {none: "copied from the paper's record fierling2022 (chi_nd: Fig. 2 caption p. 5, SI p. 19)"}
+  from_source: fierling2022
+  from_datum: chi_nd
+- id: zp_paper
+  quantity: bend_parameter
+  unit: dimensionless
+  origin: reported
+  printed: "0.45"
+  citation: {none: "copied from the paper's record fierling2022 (zp: SI p. 18, 'Z_p = 0.45')"}
+  from_source: fierling2022
+  from_datum: zp
+- id: eps043_paper
+  quantity: area_prestrain
+  unit: dimensionless
+  origin: reported
+  printed: "0.43"
+  citation: {none: "copied from the paper's record fierling2022 (eps_m_043: Fig. 2a-c caption, p. 5)"}
+  from_source: fierling2022
+  from_datum: eps_m_043
+- id: eps525_paper
+  quantity: area_prestrain
+  unit: dimensionless
+  origin: reported
+  printed: "5.25"
+  citation: {none: "copied from the paper's record fierling2022 (eps_m_525: Fig. 2d caption p. 5, Supp. Fig. 1d-f p. 23)"}
+  from_source: fierling2022
+  from_datum: eps_m_525
+- id: stress_ratio_paper
+  quantity: stress_anisotropy_ratio
+  unit: dimensionless
+  origin: predicted
+  printed: "2"
+  citation: {none: "copied from the paper's record fierling2022 (stress_ratio_twice: 'AP tension twice the DV tension along the ventral midline', p. 5, citing Fig. 2c)"}
+  conditions: {area_prestrain: "0.43"}
+  from_source: fierling2022
+  from_datum: stress_ratio_twice
+- id: area_reduction_paper
+  quantity: apical_area_reduction
+  unit: percent
+  origin: measured
+  citation: {none: "copied from the paper's record fierling2022 (area_reduction_text: Discussion p. 9, 'from 20% at time 0 to 40% at 2 min')"}
+  from_source: fierling2022
+  from_datum: area_reduction_text
+  table: {index_quantity: time, index_unit: min, index: ["0", "2"], values: ["20", "40"]}
+  note: the sentence does not say whether in vivo or in the model; compared here with both released curves
+- id: n_recoil_paper
+  quantity: sample_size
+  unit: dimensionless
+  origin: reported
+  printed: "6"
+  citation: {none: "copied from fierling2022, Fig. 5e caption p. 10: 'n = 6 embryos, data are presented as mean values ± standard deviation' (not a datum of that record)"}
+  from_source: fierling2022
+- id: rows_paper
+  quantity: mesoderm_halfwidth_rows
+  unit: dimensionless
+  origin: reported
+  printed: "~7"
+  citation: {none: "copied from fierling2022 p. 4: 'MyoII shows a graded distribution over approximately seven AP rows of cells on both sides of the mesoderm' (not a datum of that record)"}
+  from_source: fierling2022
+- id: t_fig5d_paper
+  quantity: time
+  unit: s
+  origin: reported
+  printed: "30"
+  citation: {none: "copied from fierling2022, Fig. 5d caption p. 10: 'in simulations at t = 0'30''' (printed in minutes and seconds; not a datum of that record)"}
+  from_source: fierling2022
+  note: the README gives frame 063 for Fig. 5d
+- id: t_fig4a_paper
+  quantity: time
+  unit: s
+  origin: reported
+  printed: "252"
+  citation: {none: "copied from fierling2022, Fig. 4a caption p. 8: 'Embryo shape during VFF in simulations at t = 4'12''' (4 min 12 s, written here in seconds; not a datum of that record)"}
+  from_source: fierling2022
+  note: the README gives frame 213 for Fig. 4a
+- id: t_fig3b_paper
+  quantity: time
+  unit: min
+  origin: reported
+  printed: "-1"
+  citation: {none: "copied from fierling2022, Fig. 3b caption p. 8: 'at t = −1 min' (not a datum of that record)"}
+  from_source: fierling2022
+  note: area_AP_DV_paper.plot uses frame 037 for T_compare = -1 (line 10)

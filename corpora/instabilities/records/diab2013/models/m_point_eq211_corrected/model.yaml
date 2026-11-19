@@ -1,0 +1,28 @@
+id: m_point_eq211_corrected
+name: M-point from the second-order energy variation, with the p(2) term of Eq. 2.12b doubled
+role: model
+stated: {page: 7, printed_page: "7", quote: "The terms on the right-hand side of equation (2.11) are determined for a neo-Hookean EDM solid as", where: Eqs. 2.11-2.12}
+equation: >
+  as m_point_eq211, with d2phi u(2)u(2) = int_V { Q (ui,j(2) ui,j(2) - (2/lambda^2) det grad u(2)) - 2 p(2) (u1,1(2)/lambda + lambda u2,2(2)) } dV
+variant_of: m_point_eq211
+corrections:
+  - equation: Eq. 2.12b
+    change: "the pressure term -p(2)(u1,1(2)/lambda + lambda u2,2(2)) taken with factor 2"
+    evidence: >
+      The second derivative of the printed functional (2.1c) in the direction (u(2), p(2)) gives the mixed term
+      -p(J - 1) twice, -2 p(2) (u1,1(2)/lambda + lambda u2,2(2)), by the same symmetry that gives the factor -2 the
+      paper prints in Eq. 2.12a; the doubled form equals the fourth-order energy of the constrained (incompressible)
+      expansion, -(1/2) int p(1) alt(...) - (1/2) int p(2) det grad u(1). The paper's figure 2b and text (p. 7) show the
+      energy variation changing sign at eps_M; run with the printed factor 1 (model m_point_eq211) it shows no change
+      of sign in the scanned range.
+inputs: {}
+outputs:
+  eps_M: {quantity: bifurcation_strain, unit: dimensionless}
+  kbar_M: {quantity: normalized_wavenumber, unit: dimensionless}
+settings:
+  eps_scan_lo: 0.01
+  eps_scan_hi: 0.45
+  n_scan: 45
+  n_colloc: 60
+  n_x1: 64
+built_from: [m_point_eq211, bifurcation_wavenumber_eq28]

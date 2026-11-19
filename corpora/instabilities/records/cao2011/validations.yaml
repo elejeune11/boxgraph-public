@@ -1,0 +1,147 @@
+# Cross-validation against hong2009 (job 2026-11-19). This paper cites hong2009 for the crease threshold
+# lambda_1/lambda_2 = 0.42 (Eq. 1.2, p. 2), which hong2009 obtained from its finite element energy
+# comparison, not from a fit to experiment. hong2009 holds one measured strain, Gent & Cho's (and Ghatak &
+# Das's) crease onset in bent elastomer blocks, epsilon_exp = 0.35; Eq. 1.2 in plane strain gives that
+# quantity.
+- id: val_eps_C_hong2009_exp
+  model: crease_eq12
+  inputs: {ratio: ratio_C_hong, lam3: lambda3_plane_strain}
+  output: eps_C
+  against: hong2009/eps_exp_printed
+  purpose: validation
+  quantities: {hong2009/critical_strain_plane: crease_strain}
+  conditions_ok: >-
+    The measurement is the nominal compressive surface strain at which creases appear on bent elastomer
+    blocks (hong2009 p. 1, refs. 1, 2); the model is a neo-Hookean half-space compressed uniformly in plane
+    strain (lambda_3 = 1, this paper's FE condition, p. 108). hong2009 makes this same comparison itself
+    (p. 1: "When a block of an elastomer is bent, the compressed surface may form a crease", and its
+    epsilon_c set against epsilon_exp = 0.35), treating the surface strain of a bent block as the uniform
+    strain of the half-space because the crease is small against the strain gradient. Both are nominal
+    strains, 1 - lambda_1. The bending gradient, the finite size of the blocks and the rubber's departure
+    from neo-Hookean behaviour are not in the model.
+  basis: >-
+    p. 2 (printed 95): "Hong et al. (2009) have shown that for any fixed l3 a crease is energetically
+    favourable for compression in the fundamental state exceeding" lambda_1/lambda_2 = 0.42, with
+    eps_C = 1 - 0.65/sqrt(lambda_3), the strain at which a crease first lowers the energy. This paper
+    names Gent & Cho (1999) among the experiments on creasing of compressed elastomers (p. 1); hong2009
+    reports their crease onset strain (p. 1, "exceeds the experimental value"), the quantity eps_C gives.
+- id: val_eps_W_hong2009_exp
+  model: biot_eq28
+  inputs: {lam3: lambda3_plane_strain}
+  output: eps_W
+  against: hong2009/eps_exp_printed
+  purpose: validation
+  quantities: {hong2009/critical_strain_plane: wrinkling_strain}
+  conditions_ok: >-
+    hong2009's quantity is the plane-strain nominal compressive strain at the onset of a surface
+    instability of a compressed half-space, defined there for both its crease threshold and Biot's linear
+    perturbation threshold (hong2009 quantities). The measurement is that onset on bent elastomer blocks,
+    which crease; eps_W = 1 - lambda_W with lambda_3 = 1 is the onset by Biot's bifurcation analysis.
+    The difference in mode (smooth wrinkle against crease) is what this validation tests, as in
+    cao2012/val_eq7_plane_hong2009_eps_exp. The bending gradient, the finite blocks and the rubber's
+    departure from neo-Hookean behaviour are not in the model.
+  basis: >-
+    hong2009 p. 1: "Biot's linear perturbation analysis showed that the homogenous deformation in a rubber
+    becomes unstable when compressed to a critical strain, epsilon_biot = 0.46. This theoretical value,
+    however, exceeds the experimental value, epsilon_exp = 0.35." This paper's Eqs. 1.1 and 2.8 are Biot's
+    wrinkling bifurcation of the neo-Hookean half-space, and p. 2 sets eps_W against the crease strain
+    eps_C (p. 95, "a crease can exist at smaller compressive (nominal) strain than that required for the
+    onset of wrinkling"). This is the same prediction hong2009 sets against the measurement, run from this
+    record's model and inputs.
+# Cross-validation against trujillo2008 (job 2026-11-19). This paper cites Trujillo et al. (2008) among the
+# observations of surface instabilities of compressed soft materials (p. 1). trujillo2008 measures the
+# effective linear compressive strain at which surface-attached hydrogels crease under equibiaxial
+# (swelling) compression, and itself sets it against Biot's equibiaxial e_c = 0.334 (p. 4). Eq. 1.1 and
+# Eq. 1.2 of this paper, with lambda_3 = lambda_1 (added), give the wrinkling and crease strains for that
+# state. See q_trujillo2008_equibiaxial_lambda3.
+- id: val_eps_W_trujillo_modulus
+  model: biot_eq28
+  inputs: {lam3: lambda3_equibiaxial_W}
+  output: eps_W
+  against: trujillo2008/ec_mean_modulus_series
+  purpose: validation
+  quantities: {trujillo2008/critical_compressive_strain: wrinkling_strain}
+  conditions_ok: &truj_W_ok >-
+    Both are nominal compressive strains 1 - lambda along a direction in the surface (trujillo2008 e = 1 - l0/l,
+    with lambda = l0/l the in-plane stretch from the free swollen state; here eps_W = 1 - lambda_W). The
+    measurement is the onset of creasing of a gel film bonded to a rigid substrate and compressed
+    equibiaxially by swelling; the model is the onset of wrinkling of an incompressible neo-Hookean half-space
+    with lambda_3 set equal to lambda_1 (added). trujillo2008 makes this comparison itself ("The remarkable
+    proximity of our measured value of ec to Biot's prediction", p. 4). The films' thickness (3 um to 1 mm)
+    does not enter, as the half-space has no length scale and trujillo2008 finds e_c independent of thickness.
+    The gels' compressibility (Poisson's ratio ~0.3) and the crease-versus-wrinkle mode are not in the model.
+  basis: >-
+    p. 2 (printed 95): "With l3 imposed and fixed, Biot found that bifurcation into in-plane wrinkling modes
+    occurs when the in-plane compression attains" lambda_1/lambda_2 = 0.2956 (Eq. 1.1); for equibiaxial
+    compression this is trujillo2008's lambda_1^2 lambda_3 = 0.296 (its p. 2). Measured: mean e_c over the
+    cross-linker series at 200 um thickness (trujillo2008 Fig. 3(a), p. 3).
+- id: val_eps_W_trujillo_thickness
+  model: biot_eq28
+  inputs: {lam3: lambda3_equibiaxial_W}
+  output: eps_W
+  against: trujillo2008/ec_mean_thickness_series
+  purpose: validation
+  quantities: {trujillo2008/critical_compressive_strain: wrinkling_strain}
+  conditions_ok: *truj_W_ok
+  basis: >-
+    As val_eps_W_trujillo_modulus; measured: mean e_c over film thicknesses 3 um to 1 mm at 0.4 mol%
+    bis(acrylamide) (trujillo2008 Fig. 3(b), p. 4, "independent of thickness over more than two decades").
+- id: val_eps_C_trujillo_modulus
+  model: crease_eq12
+  inputs: {ratio: ratio_C_hong, lam3: lambda3_equibiaxial_C}
+  output: eps_C
+  against: trujillo2008/ec_mean_modulus_series
+  purpose: validation
+  quantities: {trujillo2008/critical_compressive_strain: crease_strain}
+  conditions_ok: &truj_C_ok >-
+    Both are nominal compressive strains 1 - lambda in the surface at which a crease appears (trujillo2008
+    e = 1 - l0/l; here eps_C = 1 - lambda_C). The measurement is on gel films bonded to a rigid substrate and
+    compressed equibiaxially by swelling; the model is Hong et al.'s crease threshold of an incompressible
+    neo-Hookean half-space with lambda_3 set equal to lambda_1 (added; Eq. 1.2 was found with lambda_3
+    held fixed). The films' thickness does not enter (no length scale; trujillo2008 finds e_c independent of
+    it). Eq. 1.2 is the energetic threshold, while trujillo2008 records where fully formed creases appear
+    (p. 4); the gels' compressibility is not in the model.
+  basis: >-
+    p. 2 (printed 95): "Hong et al. (2009) have shown that for any fixed l3 a crease is energetically
+    favourable for compression in the fundamental state exceeding" lambda_1/lambda_2 = 0.42 (Eq. 1.2), and
+    p. 1 names Trujillo et al. (2008) among the observed surface instabilities of compressed soft materials.
+    Measured: mean e_c over the cross-linker series (trujillo2008 Fig. 3(a), p. 3).
+- id: val_eps_C_trujillo_thickness
+  model: crease_eq12
+  inputs: {ratio: ratio_C_hong, lam3: lambda3_equibiaxial_C}
+  output: eps_C
+  against: trujillo2008/ec_mean_thickness_series
+  purpose: validation
+  quantities: {trujillo2008/critical_compressive_strain: crease_strain}
+  conditions_ok: *truj_C_ok
+  basis: >-
+    As val_eps_C_trujillo_modulus; measured: mean e_c over film thicknesses 3 um to 1 mm at 0.4 mol%
+    bis(acrylamide) (trujillo2008 Fig. 3(b), p. 4).
+# Cross-validation against wang2015 (job 2026-11-19). wang2015 does not cite this paper (its ref. 29 is the
+# Li, Cao, Feng & Gao review; its only Cao & Hutchinson reference, ref. 49, is cao2012), but it takes Hong et
+# al.'s crease threshold 0.35 (refs. 12, 43), which Eq. 1.2 here restates, as its flat-crease boundary for
+# mu_f/mu_s < 1.3, and measures the crease onset of films below that ratio. See q_validation_wang2015.
+- id: val_eps_C_wang2015_crease_onset
+  model: crease_eq12
+  inputs: {ratio: ratio_C_hong, lam3: lambda3_wang2015_film}
+  output: eps_C
+  against: wang2015/crease_onset_measured
+  purpose: validation
+  quantities: {wang2015/crease_onset_mismatch_strain: crease_strain}
+  conditions_ok: >-
+    Both are nominal compressive strains at crease onset: wang2015's eM = (Lf - Ls)/Lf is the film's
+    compressive strain once the substrate is relaxed, so 1 - eM is the film's stretch along the compression,
+    and here eps_C = 1 - lambda_C. The measurement is on Sylgard films about 200 um thick bonded to a 5 mm
+    Ecoflex substrate, with mu_f/mu_s = 0.3 and 0.64; the model is a homogeneous neo-Hookean half-space with
+    lambda_3 = 1 (added; wang2015 does not state the film's transverse stretch). A crease has no length scale
+    of its own, and wang2015 itself takes the half-space value 0.35 as the flat-crease boundary for every
+    mu_f/mu_s < 1.3 (Eq. 3, p. 4), so films below that ratio may be set against the half-space criterion.
+    The film's finite thickness and the stiffer substrate are not in the model, as in
+    hong2009/val_eps_c_wang2015_crease_onset (the same measurement against hong2009's own threshold).
+  basis: >-
+    p. 2 (printed 95): "Hong et al. (2009) have shown that for any fixed l3 a crease is energetically
+    favourable for compression in the fundamental state exceeding" lambda_1/lambda_2 = 0.42 (Eq. 1.2), the
+    nominal strain eps_C at which a crease first lowers the energy. wang2015 p. 6: "When eM reaches ,0.36
+    (for mf/ms 5 0.3 and 0.64), the initially flat surface suddenly forms discrete creases", which it
+    attributes to refs. 12 and 43 (hong2009). The 0.42 is Hong et al.'s finite element result, not a fit to
+    wang2015's films, so this is a test, not a fit.

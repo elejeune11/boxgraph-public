@@ -1,0 +1,13 @@
+id: prestress_si
+name: pre-stress from the Gram-matrix pre-strain factor (SI)
+role: model
+stated: {page: 21, quote: "Area pre-strain is thus equivalent to an isotropic pre-stress", where: "SI, Pre-strain and pre-stress"}
+equation: "G_S^gamma = gamma G_S ; sigma_a = chi_2D (gamma - 1)/gamma"
+inputs:
+  chi: {quantity: compression_modulus_nd, unit: dimensionless}
+  eps: {quantity: area_prestrain, unit: dimensionless, description: "epsilon_a^m; the SI's factor gamma multiplies the facet's Gram matrix, so the equilibrium area is gamma A_i = A_0 (p. 20: dimensions multiplied by sqrt(gamma)), hence gamma = A_0/A_i = 1/(1 + epsilon_a)"}
+  theta: {quantity: angle_from_midline, unit: rad, description: "position inside the midline band; does not enter"}
+outputs:
+  sigma_a: {quantity: prestress_nd, unit: dimensionless}
+settings: {}
+stochastic: false

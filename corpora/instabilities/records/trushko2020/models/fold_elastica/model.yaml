@@ -1,0 +1,21 @@
+id: fold_elastica
+name: shape of a single fold of an inextensible ring confined in a circle (elastica, Eqs. S28-S30)
+role: model
+stated: {page: 35, quote: "the local force balance equation for a material element of the buckled ring", where: "Eqs. S28-S30"}
+equation: "K d2phi/ds2 = -F_B sin phi; phi(0) = 0, phi(S*) = alpha; dphi/ds = 1/R and (x, y) = (sin alpha, cos alpha) at S*; P_B = F_B cos(alpha)/R"
+inputs:
+  delta_over_R: {quantity: fold_depth_ratio, unit: dimensionless}
+outputs:
+  alpha: {quantity: fold_opening_angle, unit: degree, description: "half opening angle alpha (Fig. 4D)"}
+  gamma: {quantity: fold_inflection_angle, unit: degree, description: "polar angle of the inflection point gamma (Fig. 4D)"}
+  PBR3_over_K: {quantity: normalized_buckling_pressure, unit: dimensionless, description: "P_B R^3 / K"}
+settings: {step_deg: 0.5}
+stochastic: false
+from_words: true
+reconstructed: >-
+  The paper states the boundary-value problem (Eqs. S28-S31, Methods S1 Section 4) but solves it
+  numerically without giving the method, and refers to Chan and McMinn (1966) for the intermediate
+  calculations. This is the reader's shooting solution of the stated problem in the inextensible
+  limit (the curves of Fig. 4H are drawn for lambda R^2/K = 10^8): apex curvature from the first
+  integral, force F_B by root finding on the contact position, alpha on a 0.5 degree grid, then
+  interpolated.

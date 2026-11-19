@@ -1,0 +1,22 @@
+id: nmode_asymptotic_strain
+name: overall strain at wrinkling instability from the N-mode asymptotic result (Fig. 5 line)
+role: model
+stated: {page: 16, printed_page: "109", quote: "the accuracy of asymptotic result", where: "p. 109 and Fig. 5 ('analytical solution based on 6-mode approximation')"}
+equation: "lambda* - lambda_W = c* lambda_W sqrt(xibar_1), eps* = 1 - lambda*, lambda_W = 0.5437/sqrt(lambda_3) (Eq. 1.1)"
+inputs:
+  b112: {quantity: coupling_b112, unit: dimensionless}
+  b123: {quantity: coupling_b123, unit: dimensionless}
+  b134: {quantity: coupling_b134, unit: dimensionless}
+  b235: {quantity: coupling_b235, unit: dimensionless}
+  b145: {quantity: coupling_b145, unit: dimensionless}
+  b156: {quantity: coupling_b156, unit: dimensionless}
+  c: {quantity: imperfection_coefficient_c, unit: dimensionless}
+  N: {quantity: number_of_modes, unit: dimensionless}
+  coef: {quantity: surface_instability_stretch_coefficient, unit: dimensionless}
+  lam3: {quantity: transverse_stretch, unit: dimensionless}
+  xi1: {quantity: imperfection_amplitude, unit: dimensionless}
+outputs:
+  eps: {quantity: overall_strain_at_instability, unit: dimensionless}
+settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+built_from: [nmode_cstar_eq46]
+stochastic: false

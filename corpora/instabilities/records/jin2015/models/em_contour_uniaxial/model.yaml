@@ -1,0 +1,14 @@
+id: em_contour_uniaxial
+name: contour of the minimal wrinkling strain in the (Hs/Hf, Gf/Gs) plane, uniaxial compression (Fig. 3(a))
+role: model
+stated: {page: 3, printed_page: "061008-3", quote: "show the contour plot of", where: "Sec. 2, Fig. 3(a)"}
+equation: "e_m^Uni(Gf/Gs, Hs/Hf) = level, e_m^Uni from Eqs. B7-B15 with lambda3 = 1/sqrt(lambda1); solved for Gf/Gs at each Hs/Hf"
+inputs:
+  Hs_Hf: {quantity: thickness_ratio, unit: dimensionless}
+  em: {quantity: wrinkle_onset_strain_uniaxial, unit: dimensionless, description: "the level of the contour, e_m^Uni"}
+outputs:
+  Gf_Gs: {quantity: shear_modulus_ratio, unit: dimensionless, description: "Gf/Gs on the contour"}
+settings: {g_lo: 1.0, g_hi: 10000.0, g_tol: 0.001, kh_min: 0.01, kh_max: 300.0, n_kh: 61, e_min: 0.0001, e_max: 0.75, n_e: 150, tol: 1.0e-7, n_golden: 30}
+built_from: [wrinkle_eigen_plane_strain]
+from_words: true
+stochastic: false

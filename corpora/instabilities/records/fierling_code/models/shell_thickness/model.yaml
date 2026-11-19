@@ -1,0 +1,16 @@
+id: shell_thickness
+name: thickness of the isotropic shell the script's moduli stand for
+role: model
+stated: {file: Surface_Evolver_script.txt, lines: "1", quote: "which enveloppe behaves like a shell of isotropic material of thickness racine[12(1-nu"}
+equation: "h = sqrt(12 (1 - nu^2) kappa / Y_2D)  (script comment: racine[12(1-nu^2)kappa/pois2D], with pois2D read as the 2D Young modulus), times R_DV"
+inputs:
+  Y: {quantity: young_modulus_2d_nd, unit: dimensionless}
+  nu: {quantity: poisson_ratio_2d, unit: dimensionless}
+  kappa: {quantity: bending_modulus_nd, unit: dimensionless}
+  R_DV: {quantity: radius_dv, unit: um}
+outputs:
+  h: {quantity: shell_thickness, unit: um}
+settings: {}
+stochastic: false
+# notes: port of the header comment of Surface_Evolver_script.txt line 1 (the thin-plate relation kappa = Y h^2 / (12 (1 - nu^2))).
+# The comment writes the denominator as 'pois2D', which is no parameter of the script; read as young2D (q_thickness_comment).

@@ -1,0 +1,279 @@
+- id: q_missing_first_page
+  kind: reading
+  about: []
+  text: >-
+    The PDF holds journal pages 546-550; page 545 (title, authors, abstract, first part of the
+    introduction) is missing, so anything printed there (for example an abstract statement of the
+    measured moduli or the thickness range) is not in this record, and the bibliographic data are not
+    checked against a page.
+  citation: {none: "the page is not in the PDF"}
+- id: q_Es_per_sample
+  kind: unstated_input
+  about: [Es_range, Es_added]
+  text: >-
+    The PDMS modulus was "measured before each experiment" (Methods, p. 5) but only the range
+    (1.5-2.0) ± 0.1 MPa is printed. Every modulus from Eq. 2 is proportional to Es, so the choice inside
+    this range moves an inferred modulus by up to about ±14%.
+  citation: {page: 5, printed_page: "549", quote: "The modulus of the PDMS was measured before each experiment", where: Methods}
+- id: q_nu_s
+  kind: unstated_input
+  about: [nu_s_added, wavelength_eq1, modulus_eq2]
+  text: >-
+    Eqs. 1 and 2 need the Poisson's ratio of the PDMS, nu_s, which the paper never states; 0.5 is added.
+    Ef from Eq. 2 scales as 1/(1 - nu_s^2), so 0.48 instead of 0.5 lowers it by about 3%.
+  citation: {page: 2, printed_page: "546", quote: "where h is the thickness of the upper film", where: text}
+- id: q_fig1b_inconsistent
+  kind: unexplained_difference
+  about: [h_fig1b, d_fig1b_caption, cmp_eq1_fig1b_caption, cmp_eq2_fig1b, cmp_eq2_fig1b_gradient]
+  text: >-
+    For the PS film of Fig. 1b the paper prints h ≈ 100 nm and d = 8 µm (≈ 8 µm in the text). Eq. 1 with
+    the paper's own PS modulus 3.4 GPa, nu_f = 0.33, nu_s = 0.5 and Es anywhere in 1.5-2.0 MPa gives
+    d of about 5 µm; Eq. 2 on h ≈ 100 nm and d = 8 µm gives a modulus of roughly 11-15 GPa instead of
+    3.4 GPa. A wavelength of 8 µm corresponds by Eq. 1 to a PS film of about 150-160 nm. Either the
+    thickness of the micrographed film is not ≈100 nm, or that film is not of the same system; the paper
+    does not say.
+  citation: {page: 2, printed_page: "546", quote: "micrograph shows a buckling wavelength for a PS film", where: text}
+- id: q_porosity_percent
+  kind: possible_error
+  about: [porosity_range, P_max_added, E_osg_Pmax]
+  text: >-
+    The porosities are printed as "ranging from 0 to 0.51 percent", but the porogen loadings run "from 0
+    to 0.50 mass fraction" and the porosity axis of Fig. 4 runs to about 50 %. The value is probably the
+    fraction 0.51 (51 %), with "percent" a slip; the record keeps the printed unit and adds P = 0.51 as a
+    fraction for Eq. 4.
+  citation: {page: 5, printed_page: "549", quote: "0 to 0.51 percent as determined by X-ray reflectivity", where: text}
+- id: q_E0_unstated
+  kind: unstated_input
+  about: [E0_added, porosity_eq4]
+  text: >-
+    The fit of Eq. 4 reports a and n but not E0, "the modulus of the matrix". E0 is added as the 9 GPa the
+    caption gives at zero porosity; the fitted E0 need not equal that measured point.
+  citation: {page: 5, printed_page: "549", quote: "where E0 is the modulus of the matrix and P is the porosity", where: text}
+- id: q_eq4_endpoint
+  kind: unexplained_difference
+  about: [cmp_eq4_Pmax, a_fit, n_fit, E_osg_Pmax]
+  text: >-
+    Eq. 4 with a = 1, n = 3.45 and E0 = 9 GPa gives about 0.77 GPa at P = 0.51 (0.82 GPa at P = 0.50),
+    against the printed 0.6 GPa at the highest porosity. Reaching 0.6 GPa would need E0 near 7 GPa or n
+    near 3.8. A least-squares fit need not pass through the end point, and E0 is not printed, so this
+    may only say that the fitted curve and the extreme measurement differ by about 0.15 GPa; the Fig. 4
+    reading (figure pass) can test the fit against all points.
+  citation: {page: 5, printed_page: "549", quote: "From this fit, we ascertain a and n to be 1 and", where: text}
+- id: q_allen_formula
+  kind: unstated_model
+  about: [allen_shortfall, allen_shortfall_PS]
+  text: >-
+    Allen's plane-stress solution (ref. 10) is used to claim a modulus ≈10% lower than Eq. 2, but its
+    formula is not printed. The record reconstructs it as a plane-stress face on an isotropic half-space
+    core; with nu_s = 0.5 and nu_f = 0.33 that gives about 10%. With nu_s = 0.48 it gives about 7%; the
+    printed ≈10% does not say which nu_s or nu_f the paper used.
+  citation: {page: 3, printed_page: "547", quote: "calculated modulus of the upper film that is ≈10% lower than expected", where: text}
+- id: q_figures_not_read
+  kind: reading
+  about: [E_PS_gradient, E_osg_Pmax, porosity_eq4, modulus_eq2]
+  text: >-
+    The measured data (Fig. 2b wavelength and modulus against thickness, Fig. 3 SIEBIMM and indentation
+    moduli against plasticizer, Fig. 4 SIEBIMM and indentation moduli against porosity with the Eq. 4
+    curve) are only plotted and were not read in this job; figures.md lists what each would test.
+  citation: {page: 3, printed_page: "547", quote: "Modulus versus thickness for a flow-coated thickness gradient sample", where: "Fig. 2 caption"}
+- id: q_gradient_range
+  kind: reading
+  about: [h_PS_gradient_fig2a, h_PS_gradient_text, E_PS_gradient]
+  text: >-
+    (Audit.) The Fig. 2a caption gives the PS gradient as 140 nm to 280 nm and says the doubling of the
+    thickness doubles the buckling period; the text gives 150 nm to 240 nm, and the Fig. 2b axis runs
+    from 140 to 260 nm. Fig. 2a (photograph) and Fig. 2b may show different specimens or different
+    stretches of the same gradient; the paper does not say. The condition on E_PS_gradient follows the text.
+  citation: {page: 3, printed_page: "547", quote: "PS thickness gradient on silicon wafer (140 nm to 280 nm)", where: "Fig. 2 caption"}
+- id: q_fig3_thickness_mismatch
+  kind: reading
+  about: [h_PS_plasticized, h_PS_indentation]
+  text: >-
+    (Audit, for the figure pass.) The Fig. 3 comparison of SIEBIMM with nanoindentation is made on films
+    of different thickness: 110-130 nm for SIEBIMM, about 200-500 nm for indentation. The paper calls the
+    indented films "equivalent"; a consistency comparison of the two Fig. 3 series must state these
+    differing conditions in conditions_ok.
+  citation: {page: 4, printed_page: "548", quote: "ranging from approximately 200 nm to 500 nm cast on silicon wafers", where: text}
+- id: q_fig4_zero_porosity
+  kind: overstated_claim
+  about: [cmp_siebimm_indentation_fig4, E_fig4_siebimm, E_fig4_indentation]
+  text: >-
+    (Figure pass.) The Fig. 4 caption says SIEBIMM and nanoindentation "show excellent agreement through the
+    entire range of porosity", but at the lowest porosity (about 0.7 %) the plotted SIEBIMM modulus reads
+    about 9.0 GPa (bar about 8.7-9.3) and the indentation modulus about 6.6 GPa (bar about 6.2-7.0): the bars
+    do not overlap. The other five indentation points agree with SIEBIMM within about 0.3 GPa. The paper does
+    not comment on the zero-porosity point.
+  citation: {page: 4, printed_page: "548", quote: "show excellent agreement through the entire range of porosity", where: "Fig. 4 caption"}
+- id: q_fig_settles_porosity_unit
+  kind: reading
+  about: [q_porosity_percent, porosity_range, P_max_added, E_fig4_siebimm]
+  text: >-
+    (Figure pass.) The Fig. 4 porosity axis is labelled "Porosity (%)" and its highest plotted point reads at
+    50.6 % (fig4_siebimm), so the printed "0 to 0.51 percent" (p. 5) is the fraction 0.51, as P_max_added
+    assumes; the caption's end values 9 and 0.6 GPa are also what the figure shows (8.98 and 0.61 GPa read).
+  citation: {page: 4, printed_page: "548", quote: "dramatically decreases from 9 GPa to 0.6 GPa", where: "Fig. 4 caption"}
+- id: q_fig_eq4_all_points
+  kind: reading
+  about: [q_eq4_endpoint, cmp_eq4_fig4, cmp_eq4_Pmax]
+  text: >-
+    (Figure pass.) Swept over all 13 SIEBIMM porosities of Fig. 4, Eq. 4 with a = 1, n = 3.45 and E0 = 9 GPa
+    falls within the plotted error bar of every point. At the highest porosity the reading is 0.61 GPa against
+    about 0.79 GPa from Eq. 4; that point's bar is hidden in its marker, so the record takes it as at most the
+    marker (about 0.44-0.78 GPa), and the comparison there turns on the marker size. The difference noted in
+    q_eq4_endpoint is therefore that of one extreme point from a fit through all of them.
+  citation: {page: 5, printed_page: "549", quote: "From this fit, we ascertain a and n to be 1 and", where: text}
+- id: q_fig2b_settles_fig1b
+  kind: reading
+  about: [q_fig1b_inconsistent, d_fig2b, h_fig1b]
+  text: >-
+    (Figure pass.) In Fig. 2b the thinnest PS film plotted, about 152 nm, has a wavelength of about 7.9 µm,
+    and the wavelengths rise linearly with thickness as Eq. 1 predicts with the paper's 3.4 GPa
+    (cmp_eq1_fig2b reproduced at all ten points). By the paper's own data an 8 µm wavelength belongs to a PS
+    film of about 150 nm, which supports the reading in q_fig1b_inconsistent that the micrographed film of
+    Fig. 1b is thicker than the printed ≈100 nm (or is not of the same system).
+  citation: {page: 3, printed_page: "547", quote: "The linear increase in buckling wavelength (open circles) with film thickness", where: "Fig. 2b"}
+- id: q_fig2b_Es
+  kind: unstated_input
+  about: [cmp_eq2_fig2b_points, Es_added]
+  text: >-
+    (Figure pass.) Eq. 2 on the ten plotted (h, d) points of Fig. 2b gives moduli 1.5-2.4 % below the plotted
+    filled circles with Es = 1.75 MPa (all within their bars); the ratio is nearly constant along the film
+    (0.976-0.985), as expected if the paper used one Es near 1.79 MPa for this sample. The sample's Es is not printed.
+  citation: {page: 5, printed_page: "549", quote: "The modulus of the PDMS was measured before each experiment", where: Methods}
+- id: q_richman_thickness_choice
+  kind: choice
+  about: [wavelength_eq1, Ef_brain_added, Es_brain_added, richman1975/t_27wk, richman1975/t_normal_fetus]
+  text: >-
+    (Cross-validation against richman1975.) The 8.5 mm intersulcal distance belongs to richman1975's 27-week
+    specimen, whose cortical thickness note 18 gives as ≈ 1.7 mm, while richman1975's own prediction uses
+    t ≈ 1.0 mm for the normal fetus. Which thickness is the measurement's condition is open, so Eq. 1 is run
+    with both. All three validations rest on the added moduli Ef/Es = 10 (richman1975's modelling choice, not
+    a measurement): since d scales as (Ef/Es)^(1/3), the verdicts test that choice as much as Eq. 1.
+- id: q_no_validation_from_richman1975
+  kind: choice
+  about: [d_fig2b, E_fig3_siebimm, E_fig3_indentation, E_fig4_siebimm, E_fig4_indentation, modulus_eq2, richman1975/plate_on_foundation, richman1975/wavelength_from_thickness]
+  text: >-
+    (Cross-validation job 2026-11-14.) No model of richman1975 is validated against this record's
+    measurements. Its plate_on_foundation gives l/t and a critical stress ratio, which this paper does not
+    measure (it prints wavelengths and thicknesses, not their ratio, and no stress), and it is a
+    reconstruction for two incompressible strata with Ecore/E1 near 1/10, far from PS on PDMS (Ef/Es about
+    2000, nu_f = 0.33); its wavelength_from_thickness takes l/t from a datum, and the only printed l/t
+    (8, Fig. 4A) is for the brain's Ecore/E1 = 1/10, not for these films. richman1975 has no model of a
+    film modulus, so the moduli of Figs. 3 and 4 have nothing there to predict them. In the other direction
+    Eq. 2 (modulus from wavelength) is not run on richman1975, since no modulus of the cortex is measured
+    there to compare with.
+- id: q_no_validation_from_cerda2003_data
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, cerda2003/two_Hs_hand, cerda2003/t_fig1, cerda2003/gamma_fig1]
+  text: >-
+    (Cross-validation job 2026-11-14.) No model of this record is validated against cerda2003's
+    measurements. cerda2003 measures only geometry (the Fig. 1 polyethylene sheet's length, width,
+    thickness and strain, and the pinched skin fold 2Hs ≈ 5 mm); it measures no wavelength and no
+    modulus, and its wavelengths (the apple, the hand) are its own scaling predictions. Eq. 1 also does
+    not describe the stretched sheet (there is no substrate). The other direction, cerda2003's
+    deep-substrate law against this record's Fig. 2b wavelengths, is entered in cerda2003
+    (val_deep_substrate_stafford_fig2b). Neither paper cites the other.
+- id: q_no_validation_from_cao2012_data
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, porosity_eq4, allen_shortfall]
+  text: >-
+    (Cross-validation job 2026-11-14.) No model of this record is validated against cao2012, because
+    cao2012 holds no measurement: it is a theory and finite element paper, and every datum it has is
+    reported or predicted (its figures.md: "The paper has no measurements"; the Fig. 8, 11 and 13 markers
+    are finite element results). cao2012's printed wrinkling strains and k h values are model outputs.
+    Setting Eq. 1 against them is a model-to-model comparison for the relation jobs. In the other
+    direction (cao2012's models against this record's wavelengths and moduli), nothing is entered either.
+    cao2012's models give only a strain and the dimensionless k h, not a wavelength or a modulus (see
+    cao2012/q_no_validation_stafford2004). Neither paper cites the other.
+- id: q_no_validation_from_biot1963
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, porosity_eq4, allen_shortfall, d_fig2b, E_fig3_indentation, E_fig4_indentation, biot1963/crit_stretch_plane, biot1963/plane_compression]
+  text: >-
+    (Cross-validation job 2026-11-14.) No validation is entered between this record and biot1963, in
+    either direction. biot1963 holds no measurement (its Table I is computed from its own equations, and
+    the paper has no figures), so this record's models have nothing measured there to test against.
+    biot1963's models give the critical stretch, load and decay factor of a homogeneous neo-Hookean
+    half-space, which has no length scale. None of them predicts this paper's wavelengths or moduli,
+    and this paper prints no buckling strain to set against them (see
+    biot1963/q_no_validation_stafford2004). The Biot cited here (ref. 9) is the 1937 paper on a beam on
+    an elastic foundation, not biot1963.
+- id: q_bowden_gold
+  kind: unexplained_difference
+  about: [wavelength_eq1, bowden1998/L_measured, bowden1998/cmp_L_eq3_vs_measured]
+  text: >-
+    (Cross-validation against bowden1998, job 2026-11-14.) Eq. 1 with bowden1998's printed gold and PDMS
+    constants (82 GPa, 20 MPa, 0.33, 0.48, t = 50 nm) gives about 3.4 um, against the measured 20-50 um: not
+    reproduced (55 nm, with the adhesion layer, moves it by only 10 %). This is bowden1998's own finding with
+    the same formula (its Eq. 3), which it attributes to a stiffer modified PDMS surface layer under the
+    metal; Eq. 1 has no such layer. Whether the miss tells against Eq. 1 or only shows that the gold/PDMS
+    samples are not the bilayer Eq. 1 describes is open.
+  citation: {none: "the difference is between two records; bowden1998 pp. 2-3 prints the inputs and the range"}
+- id: q_bowden_unused
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, bowden1998/depth_unheated, bowden1998/depth_300C, bowden1998/Em_gold]
+  text: >-
+    (Cross-validation against bowden1998, job 2026-11-14.) Not used: bowden1998's wrinkle depths (1.5 and
+    3.9 um), since no model here gives an amplitude and bowden1998 prints no strain to run one on. Eq. 2 is
+    not run on bowden1998's wavelengths to infer a gold modulus: the 82 GPa it would be compared with is a
+    handbook value (origin reported), not a measurement, and the comparison would repeat val_eq1_bowden_gold
+    inverted. bowden1998's Fig. 3 and Fig. 4a curves are model output, not measurements.
+  citation: {none: "a choice of this cross-validation job"}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, porosity_eq4, allen_shortfall, d_fig2b, d_fig1b_caption, E_fig3_indentation, E_fig4_indentation, tallinen2015/stiff_wavelength_asymptote, tallinen2015/mode_wavelength_h, tallinen2015/first_unstable_mode]
+  text: >-
+    (Cross-validation job 2026-11-14.) No validation is entered between this record and tallinen2015, in
+    either direction. Neither paper cites the other (tallinen2015 is later; its stiff-layer citations are
+    its refs. 15-20 and 26-28). tallinen2015 holds no measurement: its data are reported inputs, values
+    predicted by its own equations, and finite-element points (Figs. 2-4), so this record's models have
+    nothing measured there to test against. In the other direction, this record's measurements are
+    dimensional: wrinkle wavelengths d in um against thickness h (Figs. 1b, 2b, h_osg/d_osg), and film
+    moduli from nanoindentation (Figs. 3, 4). Every tallinen2015 wavelength model returns the ratio l/a or
+    l/h, a quantity this paper never prints as measured (making d/h from Fig. 2b would be a number computed
+    in this job); no tallinen2015 model gives a film modulus. The conditions differ as well: a glassy film
+    (nu_f = 0.33 or 0.26) wrinkled by an applied strain, against incompressible neo-Hookean solids
+    compressed by growth. The physical link (Eq. 1 at nu = 0.5 divided by h is tallinen2015's
+    stiff-layer asymptote l/a = 2 pi (eta/3)^(1/3)) is model against model, noted in tallinen2015's
+    relations.yaml for the relation jobs.
+  citation: {none: "a choice of this cross-validation job; the two records hold no common measured quantity"}
+- id: q_no_validation_trujillo2008
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, modulus_eq2_points, porosity_eq4, d_fig2b, E_fig3_indentation, E_fig4_indentation]
+  text: >-
+    (Cross-validation against trujillo2008, job 2026-11-18.) No validation entered, in either direction.
+    trujillo2008 cites this paper (its ref. 13) only as background on wrinkling of a rigid skin on a soft
+    substrate, which it contrasts with creasing of swollen hydrogels bonded to a rigid substrate with no
+    capping layer. Its measurements are critical compressive strains for creasing, thickness and free
+    swelling ratios, and gel moduli estimated from swelling; no model here gives any of these, and Eq. 1
+    (a stiff film on a thick compliant substrate) has no film/substrate pair to apply to there. Nothing
+    measured here (wrinkle wavelengths, thicknesses, nanoindentation moduli of glassy films) is predicted by
+    trujillo2008's Biot-threshold and swelling models. See trujillo2008/q_no_validation_stafford2004.
+  citation: {none: "a choice of this cross-validation job; the two records hold no common measured quantity"}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, modulus_eq2_points, allen_shortfall, porosity_eq4, d_fig2b, d_fig1b_caption, E_fig3_indentation, E_fig4_indentation]
+  text: >-
+    (Cross-validation against wang2014, job 2026-11-18.) No validation entered, in either direction.
+    wang2014 cites this paper (its ref. 25) only in its introduction, among works that induce instabilities
+    by "mechanical compression on the substrates [24-27]" (wang2014 p. 1); it does not say any of its
+    models explains or fits these measurements. Eq. 1 here gives a wrinkle wavelength and Eq. 2 a film
+    modulus from a wavelength, but wang2014 measures no wavelength: its measured values are Sylgard shear
+    moduli from uniaxial tension, film thicknesses, peel adhesion energies, the tension curves of Fig. 13
+    and the categorical initial modes placed on the phase diagram of Fig. 7(a). Eq. 2 cannot be run on
+    wang2014's films without a wavelength, and Eq. 1 run on them would have nothing measured to compare
+    with. In the other direction see wang2014/q_no_validation_stafford2004.
+  citation: {none: "a choice of this cross-validation job; wang2014 measures no quantity a model here predicts"}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [wavelength_eq1, modulus_eq2, modulus_eq2_points, porosity_eq4, allen_shortfall, d_fig2b, E_fig3_indentation, E_fig4_indentation, jin2015/exp_wrinkle_7p5to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_crease_15to1_text, jin2015/exp_crease_10to1_text, jin2015/film_H_exp, jin2015/substrate_H_exp]
+  text: >-
+    (Cross-validation against jin2015, job 2026-11-19.) No validation entered, in either direction.
+    jin2015 cites this paper (its ref. 5) only as a use of instabilities to "measure material properties"
+    (jin2015 p. 1). Its measurements are the uniaxial onset strains of wrinkles (7.5:1 and 10:1 PDMS films)
+    and creases (15:1 and 10:1 films) on a 30:1 PDMS substrate, and the layer thicknesses (18-20 um, about
+    550 um), which are inputs. Eq. 1 here gives a wavelength and Eq. 2 a modulus from a wavelength; none of
+    the models here gives an onset strain, and jin2015 measures no wavelength (its Fig. 6 is micrographs)
+    and prints no moduli (jin2015/q_exp_moduli), so Eq. 2 has no input there and Eq. 1 nothing to compare
+    with. Its PDMS/PDMS bilayers (Gf/Gs of order a few) are also outside Eq. 1's Ef/Es >> 1. In the other
+    direction see jin2015/q_no_validation_stafford2004.
+  citation: {none: "a choice of this cross-validation job; jin2015 measures no quantity a model here predicts"}

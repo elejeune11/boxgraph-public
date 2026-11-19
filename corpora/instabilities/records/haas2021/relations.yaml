@@ -1,0 +1,218 @@
+# Relations this paper states between its own equations. All quantities are nondimensional.
+#
+# Eqs. 64: each barred coefficient is printed both as a combination of Eq. 58 coefficients and in closed form.
+- id: rel_eq64a
+  kind: same_as
+  a: haas2021/coeffs_bar_combined
+  b: haas2021/coeffs_bar_eq64
+  mapping: {eta: "eta"}
+  output_map: {ab_ss: ab_ss}
+  regime: {eta: [-0.95, 0.95]}
+  provenance: stated
+  citation: {page: 10, printed_page: "022411-10", quote: "γsφ = γφs , γφφ are still given by", where: "Eq. 64a"}
+- id: rel_eq64b
+  kind: same_as
+  a: haas2021/coeffs_bar_combined
+  b: haas2021/coeffs_bar_eq64
+  mapping: {eta: "eta"}
+  output_map: {ab_sphi: ab_sphi}
+  regime: {eta: [-0.95, 0.95]}
+  provenance: stated
+  citation: {page: 10, printed_page: "022411-10", quote: "γsφ = γφs , γφφ are still given by", where: "Eq. 64b"}
+- id: rel_eq64c
+  kind: same_as
+  a: haas2021/coeffs_bar_combined
+  b: haas2021/coeffs_bar_eq64
+  mapping: {eta: "eta"}
+  output_map: {bb_ss: bb_ss}
+  regime: {eta: [-0.95, 0.95]}
+  provenance: stated
+  citation: {page: 10, printed_page: "022411-10", quote: "γsφ = γφs , γφφ are still given by", where: "Eq. 64c"}
+- id: rel_eq64d
+  kind: same_as
+  a: haas2021/coeffs_bar_combined
+  b: haas2021/coeffs_bar_eq64
+  mapping: {eta: "eta"}
+  output_map: {bb_sphi: bb_sphi}
+  regime: {eta: [-0.95, 0.95]}
+  provenance: stated
+  citation: {page: 10, printed_page: "022411-10", quote: "γsφ = γφs , γφφ are still given by", where: "Eq. 64d"}
+# The discriminant of the stretching energy, printed in closed form after Eq. 66.
+- id: rel_stretch_discriminant
+  kind: same_as
+  a: haas2021/stretch_discriminant
+  b: haas2021/stretch_discriminant_printed
+  mapping: {eta: "eta"}
+  regime: {eta: [-0.95, 0.95]}
+  provenance: stated
+  citation: {page: 10, printed_page: "022411-10", quote: "the stretching energy êstretch is positive semidefinite", where: "text after Eq. 66c"}
+# Sec. II C: the large-bending energy density (63) limits to the classical one (67) as eta -> 0.
+- id: rel_eq63_to_eq67
+  kind: reduces_to
+  a: haas2021/energy_eq63
+  b: haas2021/energy_eq67_classical
+  mapping: {C: "C", eps: "eps", h: "h", Es: "Es", Ephi: "Ephi", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e0: e}
+  limit: {eta: "0"}
+  regime: &energy_regime {C: [0.5, 2.0], eps: [0.05, 0.5], h: [0.5, 2.0], eta: [-0.9, 0.9], Es: [-1.0, 1.0], Ephi: [-1.0, 1.0], Ks: [-1.0, 1.0], Kphi: [-1.0, 1.0]}
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "limits to the form familiar from classical shell theories", where: "Eq. 67"}
+- id: rel_eq66a_to_eq69a
+  kind: reduces_to
+  a: haas2021/energy_eq63
+  b: haas2021/energy_eq67_classical
+  mapping: {C: "C", eps: "eps", h: "h", Es: "Es", Ephi: "Ephi", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e0_stretch: e_stretch}
+  limit: {eta: "0"}
+  regime: *energy_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "energy density separates into stretching and bending terms", where: "Eqs. 68, 69a"}
+- id: rel_eq66c_to_eq69b
+  kind: reduces_to
+  a: haas2021/energy_eq63
+  b: haas2021/energy_eq67_classical
+  mapping: {C: "C", eps: "eps", h: "h", Es: "Es", Ephi: "Ephi", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e0_bend: e_bend}
+  limit: {eta: "0"}
+  regime: *energy_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "energy density separates into stretching and bending terms", where: "Eqs. 68, 69b"}
+# Sec. II C 1: Eqs. 70 rewrite the stretching and bending energies of Eq. 66 "using Eqs. (58) and (64)".
+- id: rel_eq70a_same_as_eq66a
+  kind: same_as
+  a: haas2021/energy_eq63
+  b: haas2021/energy_eq70
+  mapping: {C: "C", eps: "eps", h: "h", eta: "eta", Es: "Es", Ephi: "Ephi", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e_stretch: e_stretch}
+  regime: *energy_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "where we have used Eqs. (58) and (64) and defined", where: "Eq. 70a"}
+- id: rel_eq70b_same_as_eq66c
+  kind: same_as
+  a: haas2021/energy_eq63
+  b: haas2021/energy_eq70
+  mapping: {C: "C", eps: "eps", h: "h", eta: "eta", Es: "Es", Ephi: "Ephi", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e_bend: e_bend}
+  regime: *energy_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "where we have used Eqs. (58) and (64) and defined", where: "Eq. 70b"}
+- id: rel_eq70a_prefactors_same_as_eq66a
+  kind: same_as
+  a: haas2021/energy_eq63
+  b: haas2021/energy_eq70_prefactors
+  mapping: {C: "C", eps: "eps", h: "h", eta: "eta", Es: "Es", Ephi: "Ephi", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e_stretch: e_stretch}
+  regime: *energy_regime
+  provenance: proposed
+  reason: "the reader's variant of Eq. 70a with the prefactor (C h/2) eps^3 on the correction term is tested against Eq. 66a, which the paper says Eq. 70 rewrites"
+- id: rel_eq70b_prefactors_same_as_eq66c
+  kind: same_as
+  a: haas2021/energy_eq63
+  b: haas2021/energy_eq70_prefactors
+  mapping: {C: "C", eps: "eps", h: "h", eta: "eta", Es: "Es", Ephi: "Ephi", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e_bend: e_bend}
+  regime: *energy_regime
+  provenance: proposed
+  reason: "the reader's variant of Eq. 70b with the prefactor (C h^3/2) eps^3 on the correction term is tested against Eq. 66c, which the paper says Eq. 70 rewrites"
+#
+# Relations to haas2015 (ref-8). Sec. II C 2 (p. 11): the classical energy density (67) "has the same structure
+# as the elastic energy densities used in the models referenced in the Introduction" [7,8,11-13], and (p. 11) it
+# is "the energy density of a thin Hookean shell ... with Poisson's ratio nu = 1/2 ... and elastic modulus E = 3C".
+# haas2015's Hookean energy (2.4) is tested through its density, haas2015/energy_density_eq24, as nu -> 1/2.
+# Mapping: E = 3C; the shell thickness h/R of haas2015 is eps h of haas2021, taken here as eps = h/R, h = 1;
+# haas2021's strains are scaled by eps (Eq. 60: eps Es = (f_s - f_s0)/f_s0), so Es_2021 = Es_2015/(h/R); the
+# curvature strains (Eq. 62) are taken equal. The paper adds that the strain definitions themselves differ
+# (Eqs. 60, 62 carry factors of f_s0, f_phi0 that haas2015's Eqs. 2.2, 2.3 lack): the mapping of strain to strain
+# holds as written only where the intrinsic stretches are 1. That difference is not part of the test.
+# Not entered: the full Volvox invagination problems (haas2015/shell_bifurcation, haas2021/volvox_invagination),
+# which p. 14 says show "qualitatively identical bifurcation behavior" with "quantitative differences" (Ref. [8]
+# for the classical theory). Neither runs, their inputs do not correspond (haas2015 contracts the posterior
+# through r_p, haas2021 through the intrinsic stretch f_p; haas2015's output is k R, haas2021's is d), so no
+# mapping can be written. Both take the relative thickness 0.15 and nu = 1/2 (haas2021: incompressible).
+- id: rel_eq24_to_eq67
+  kind: reduces_to
+  a: haas2015/energy_density_eq24
+  b: haas2021/energy_eq67_classical
+  mapping: &hookean_map {C: "Em/3", eps: "h", h: "1", Es: "Es/h", Ephi: "Ephi/h", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e0: e}
+  limit: {nu: "0.5"}
+  regime: &hookean_regime {Em: [0.5, 3.0], h: [0.05, 0.3], nu: [0.3, 0.5], Es: [-0.2, 0.2], Ephi: [-0.2, 0.2], Ks: [-3.0, 3.0], Kphi: [-3.0, 3.0]}
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "The energy density in Eq. (67) has the same structure", where: "Sec. II C 2; Eq. 67"}
+- id: rel_eq24_stretch_to_eq69a
+  kind: reduces_to
+  a: haas2015/energy_density_eq24
+  b: haas2021/energy_eq67_classical
+  mapping: *hookean_map
+  output_map: {e0_stretch: e_stretch}
+  limit: {nu: "0.5"}
+  regime: *hookean_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "In this classical theory, the same stretching modulus", where: "Eq. 69a; text after Eq. 69"}
+- id: rel_eq24_bend_to_eq69b
+  kind: reduces_to
+  a: haas2015/energy_density_eq24
+  b: haas2021/energy_eq67_classical
+  mapping: *hookean_map
+  output_map: {e0_bend: e_bend}
+  limit: {nu: "0.5"}
+  regime: *hookean_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "and the same bending modulus", where: "Eq. 69b; text after Eq. 69"}
+#
+#
+# Relations to hohn2015 (ref-7). The same statement (p. 11) names Ref. [7] among the earlier models whose energy
+# densities have "the same structure" as Eq. 67. hohn2015's Hookean energy (Eq. 3) is tested through its density,
+# hohn2015/energy_density_eq3, as nu -> 1/2, with the same mapping as for haas2015: E = 3C; hohn2015's
+# eps = h/R is haas2021's eps h, taken here as eps = eps, h = 1; Es_2021 = Es_2015/eps (Eq. 60 scales the strain
+# by eps); the curvature strains (Eq. 62, times R) are taken equal. As for haas2015, the strain definitions differ
+# by factors of f_s0, f_phi0 (Eqs. 1, 2 of hohn2015 lack them), which the test does not cover.
+# Not entered: hohn2015/shell_inversion against haas2021/volvox_invagination. Neither runs, and their inputs do
+# not correspond (hohn2015 contracts the posterior through r_p and a band of width lambda, haas2021 through
+# f_p and piecewise curvatures; outputs are shapes vs the displacement d), so no mapping can be written.
+- id: rel_hohn_eq3_to_eq67
+  kind: reduces_to
+  a: hohn2015/energy_density_eq3
+  b: haas2021/energy_eq67_classical
+  mapping: &hohn_map {C: "Em/3", eps: "eps", h: "1", Es: "Es/eps", Ephi: "Ephi/eps", Ks: "Ks", Kphi: "Kphi"}
+  output_map: {e0: e}
+  limit: {nu: "0.5"}
+  regime: &hohn_regime {Em: [0.5, 3.0], eps: [0.05, 0.3], nu: [0.3, 0.5], Es: [-0.2, 0.2], Ephi: [-0.2, 0.2], Ks: [-3.0, 3.0], Kphi: [-3.0, 3.0]}
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "The energy density in Eq. (67) has the same structure", where: "Sec. II C 2; Eq. 67"}
+- id: rel_hohn_eq3_stretch_to_eq69a
+  kind: reduces_to
+  a: hohn2015/energy_density_eq3
+  b: haas2021/energy_eq67_classical
+  mapping: *hohn_map
+  output_map: {e0_stretch: e_stretch}
+  limit: {nu: "0.5"}
+  regime: *hohn_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "In this classical theory, the same stretching modulus", where: "Eq. 69a; text after Eq. 69"}
+- id: rel_hohn_eq3_bend_to_eq69b
+  kind: reduces_to
+  a: hohn2015/energy_density_eq3
+  b: haas2021/energy_eq67_classical
+  mapping: *hohn_map
+  output_map: {e0_bend: e_bend}
+  limit: {nu: "0.5"}
+  regime: *hohn_regime
+  provenance: stated
+  citation: {page: 11, printed_page: "022411-11", quote: "and the same bending modulus", where: "Eq. 69b; text after Eq. 69"}
+#
+# Against trushko2020 (Trushko et al., Dev. Cell 2020): neither paper cites the other, and no datum of either record
+# takes a value from the other, so no cited.yaml line is added. The two papers' models describe different systems:
+# haas2021's morphoelastic energies (energy_eq63, energy_eq67_classical, volvox_invagination, ...) are for a cell
+# sheet bending under changes of its intrinsic stretches and curvatures, with no confinement and no pressure;
+# trushko2020's ring models (critical_strain_s21, pbuckling_eq1, fold_*) are for an epithelium growing against a
+# one-sided confining capsule, set by K/(lambda R^2) and the capsule pressure, which haas2021 has no counterpart for.
+# No substitution of inputs turns one into the other, so no relation between them is proposed.
+# Both papers use the thin Hookean plate moduli E h/(1 - nu^2) and E h^3/[12(1 - nu^2)] (haas2021 p. 11,
+# classical_moduli; trushko2020 p. 37, capsule_compressional_rigidity and capsule_bending_rigidity). That is not
+# entered either: haas2021/classical_moduli gives them nondimensionally (stretch_coeff in units of C (eps h), and the
+# bending modulus as the divisor 12(1 - nu^2)/E of C (eps h)^3), so its outputs are dimensionless while trushko2020's
+# are in uN/um and uN*um, and a mapping of inputs cannot make the outputs commensurable (the test reports a unit
+# error). The shared plate-bending formula is already related through trushko2020/rel_plate_bending_same_as_capsule_rigidity
+# (cerda2003). The formulas would join only forms in any case: haas2021's E is that of the Volvox cell sheet,
+# trushko2020's that of the alginate shell.

@@ -1,0 +1,163 @@
+- id: q_script_vs_states
+  kind: unexplained_difference
+  about: [cmp_shrink_script_13, cmp_shrink_script_63, shrink_step_script, shrink_step_dump, delta_plus_script, delta_plus_dump,
+          precision_script, precision_dump, penalty_K_script, penalty_K_dump, penalty_beta_script, penalty_beta_dump]
+  text: >
+    The released Surface_Evolver_script.txt is not the version that produced the released states. Its pre-strain loop
+    divides ratio_shrink by 1.1 per step and stops when the red facets' mean area falls below a quarter of its start
+    (lines 284-286); the .dmp states carry their own loop, which divides by 1.03 and runs to frame 250 with an inner energy
+    test (relative 0.0005, at most 6 passes, 'secoue' jiggling after frame 17). Every saved ratio_shrink equals 1.03^-(n-1)
+    (frame 13: 0.70138, 63: 0.15999, 213: 0.0019); with 1.1 frame 13 would be at 0.32 and frame 63 at 0.0027. Other
+    parameters differ too: the gradient crown step delta_plus (0.02 script, 0.05 states), the convergence tolerance
+    precision (1e-4 against 1e-3), the flipping penalty (K = 1000, beta = 100 in the script; 1e6 and 20, shifted by
+    0.15 and raised to the power 50, in the states), vika_plus (10 against 1.001), and the states declare a second
+    bending energy bending_bis of modulus 0.02 (Step013.dmp line 221) that the script lacks. The script also rescales
+    the intrinsic curvature h_zero of the pre-strained facets at each step (line 297), which the states' loop does not;
+    the paper says the intrinsic curvature is 'taken to be the initial one' (SI p. 18). Running the script as released
+    would therefore not reproduce the paper's frames.
+  citation: {file: Surface_Evolver_script.txt, lines: "286", quote: "ratio_shrink := ratio_shrink/1.1;"}
+- id: q_frame_offset
+  kind: reading
+  about: [shrink_schedule]
+  text: >
+    The shrink_schedule port takes frame n to follow n - 1 division steps: in the states' procedure youp calls
+    oneframebis once before myosin, and frame 2 of the merged statistics file has 0.970874 = 1/1.03. In the released
+    script, oneframebis increments framecounter after each step (lines 277-280), which would give n steps. Either way
+    the released script's factor 1.1 does not match the states.
+- id: q_hidden_choices
+  kind: unstated_input
+  about: [extachey_script, extachex_script, delta_min_script, delta_max_script, delta_plus_dump, bend_coef_script,
+          penalty_K_dump, penalty_beta_dump, n_vertices_dump, n_facets_dump, precision_dump, young2d_script]
+  text: >
+    Values the model uses that the paper does not print: the shape of the pre-strained region (extachex = 1.25,
+    extachey = 12, delta_min = -0.15, delta_max = 0.2; a uniform region of DV half-width 12.5 um and a cosine gradient to
+    44 um at the mid cross-section, run_region_min/max), the number of gradient crowns, the Young modulus itself
+    (young2D = 100; the paper gives only chi~ = 50 and nu = 0, which fix it), the facet-flipping penalty, the mesh
+    (2999 vertices, 5993 facets; made by refining and deleting edges shorter than 0.055 R_DV, set_mesh), and the
+    convergence tolerance. The paper says the region and pre-strain profile follow Fig. 1g; the cosine profile and its
+    width are in the code only. Fig. 2-5 cannot be judged for mesh convergence from the release.
+- id: q_pole_orientation
+  kind: reading
+  about: [pole_shape, cmp_zp, z_pole_code]
+  text: >
+    The script's ellipsoid, x^2/gaxe^2 + y^2 + (z + 0.3/gaxe/rayon x^2/2)^2 = rayon^2, has the same x^2 coefficient as the
+    paper's Gamma_0 with Z_p = 0.45 (0.3 x 3/2), but the opposite sign: its cross-section centres move towards -z at the
+    poles (z_pole = -0.45; the comment says 'flattened on the negative z's'), whereas the paper's poles are at
+    (+-R_AP, 0, +Z_p). The two surfaces are mirror images through z = 0; the code places the mesoderm at +z (bary_z >
+    -0.1), so its ventral side is the more curved one, as the paper says. cmp_zp compares the magnitude in the paper's
+    orientation. Note also that the script writes the bend as 0.3*gaxe/2, so Z_p would change with gaxe.
+- id: q_thickness_comment
+  kind: reading
+  about: [shell_thickness, thickness_code]
+  text: >
+    The script's first line says the envelope behaves as a shell of thickness racine[12(1-nu^2)kappa/pois2D]; pois2D is
+    no parameter of the script and is read as young2D (the thin-plate relation kappa = Y h^2/(12(1-nu^2))). With
+    young2D = 100, kappa = 1 and R_DV = 90 um this gives h = 0.35 R_DV = 31 um. The paper prints no thickness; it says
+    the ratio of Young to bending moduli was 'tuned to match observed in-plane deformations' (p. 9), and 31 um is of
+    the order of the height of the blastoderm cells rather than of an apical cortex, which the paper's 'thin elastic
+    shell' of the apical surface might suggest.
+- id: q_stress_ratio
+  kind: overstated_claim
+  about: [cmp_stress_ratio, ratio_mid_f13]
+  text: >
+    In the released Fig. 2c data (frame 13) the midline band has sigma_AP = 20.45 and sigma_DV = 12.40, a ratio of 1.65;
+    the text's 'twice' passes only at the precision of an integer. The midline file Stress_Midline_FINI_100_0.gdat gives
+    1.72 at the same step; there the ratio is 1.88 at step 16 and 5.8 at step 63.
+- id: q_area_reduction
+  kind: unexplained_difference
+  about: [cmp_reduction_sim, cmp_reduction_muvi, area_reduction_paper]
+  text: >
+    The released curves give a reduction of 20.9% at t = 0 and 41.6% at 2 min for the simulation, and 18.2% and 46.5%
+    for the MuVi SPIM mean, against the Discussion's '20% at time 0 to 40% at 2 min'. The simulation is the nearer at
+    both times; the methods define t = 0 by a 20% loss of the five midline rows, which the MuVi mean (all rows of the
+    ventral region) does not reach until about t = 0.1 min.
+  citation: {file: sync_rauzi_area.gdat, lines: "16", quote: "36.6443	32.923	3	0.817608"}
+- id: q_rows_fit
+  kind: unexplained_difference
+  about: [cmp_rows_muvi, cmp_rows_confocal]
+  text: >
+    With the released numbers, the simulated area fold change at t = -1 min (0.711, 0.714, 0.756 in rows 1-3) lies below
+    the whole range of the three MuVi embryos (minimum 0.789, 0.832, 0.845) and of the three confocal embryos (0.824,
+    0.863, 0.956), and rows 5-7 (0.97-1.02) lie below the MuVi range (from 1.06) and the confocal range. No row falls
+    inside the confocal range; only rows 4, 8 and 9 fall inside the MuVi range. The model reproduces where contraction turns into dilation, not the
+    magnitudes; the paper's 'fair quantitative agreement' is not quantified.
+- id: q_confocal_row7
+  kind: possible_error
+  about: [confocal_rows_tm1]
+  text: >
+    In Guy_area_myo_t=-1_area.gdat the mean of row 7 (Area_7 = 1.0946) is below its own minimum over embryos
+    (MinArea_7 = 1.09702, MaxArea_7 = 1.11899); a mean cannot lie outside the min-max of the values it averages, so one of
+    the three columns is computed differently (different embryos, time or normalisation). Fig. 3b plots the point below
+    its own error bar.
+  citation: {file: Guy_area_myo_t=-1_area.gdat, lines: "2", quote: "1.11403	1.0946"}
+- id: q_recoil_n
+  kind: possible_error
+  about: [cmp_n_recoil, recoil_stats, n_recoil_plot]
+  text: >
+    laser_ablation_recoil.gdat holds six embryos per position and the caption says n = 6, but the released plotting
+    script sets n=5 and so averages only the first five columns (mean at 0 um 1.687 against 1.659 with all six). The
+    printed bars match the six-column means more closely (Fig. 5e reading 1.663 at 0 um; both lie within the read bars).
+    The script's error bar is sqrt(sum (x - mean)^2)/(n - 1), which is the standard deviation divided by sqrt(n - 1),
+    not the standard deviation the caption names (at 0 um: 0.130 against SD 0.290 with six embryos); see fierling2022
+    q_recoil_errorbars.
+  citation: {file: laser_ablation_recoil.plot, lines: "44", quote: "sqrt(sum[col=2:n+1] (column(col)-(sum[col=2:n+1] column(col)/n))**2)/(n-1)"}
+- id: q_frame_times
+  kind: reading
+  about: [cmp_t_fig5d, cmp_t_fig4a, cmp_t_fig3b, frame_time]
+  text: >
+    The frames the README names are at t = 0.455 min (27.3 s) for Fig. 5d, captioned t = 0'30'', and 4.215 min (4'12.9'')
+    for Fig. 4a, captioned 4'12''. The Fig. 5d plotting script prints its time from line t+3 of the merged file
+    (stress_profile_for_laser_ablations.plot), which is frame 65 (0.545 min), not frame 63: an off-by-two in the line
+    count. How the simulation frames were put on the experiments' clock (t_rauzi) is not in the release; only the
+    result is, so the time synchronisation of every simulated time course (Fig. 3a, 4b, 4f) cannot be checked.
+- id: q_scales
+  kind: reading
+  about: [row_width_plot, rows_gradient, cmp_rows_region]
+  text: >
+    The plotting scripts convert simulated positions into rows of cells with two different scales: Fig. 3c-d use
+    6.5 um per row (STRIPEWIDTH, labelled 'number of cell radii'), while Fig. 1g maps rows 0-7.5 onto 0 to pi/12 rad
+    (myosin_profile.plot, x2 axis), i.e. 3.1 um per row at R_DV = 90 um. With 6.5 um per row the code's gradient region
+    ends at 7.1 rows, matching the paper's 'approximately seven rows'; with Fig. 1g's scale it would be about 15.
+  citation: {file: area_AP_DV_paper.plot, lines: "147", quote: "STRIPEWIDTH=6.5"}
+- id: q_not_released
+  kind: unstated_input
+  about: [frame_time]
+  text: >
+    Several plotting scripts read files that are not in the release (Data_sources/ is empty): curv_DV.gdat and
+    curv_AP.gdat (the MuVi curvature of Fig. 4f and Supp. Fig. 3e), ddt_depth_along_AP.gdat (the MuVi furrowing rates
+    of Fig. 4c; only the table rate_of_furrowing_t=3.gdat made from it is released), and the simulation statistics
+    from which the merged files and frame times were made. The MuVi side of Fig. 4f cannot be checked from the release.
+- id: q_not_rerun
+  kind: numerics
+  about: [stress_profile, area_curve, row_value]
+  text: >
+    The simulated profiles are read from the released output files; Surface Evolver is not installed and a run is
+    stated to take weeks (script line 2), so no result here re-computes the simulation. The adapters only check that
+    the figures show the released numbers and compare those numbers with the paper's statements.
+- id: q_cross_tuned
+  kind: choice
+  about: [row_value, area_curve]
+  text: >
+    Whether the simulated area changes test the model or measure its fit is open. fierling2022 says the model is
+    'validated since the imposed pre-stress results in surface area changes of the elastic sheet in good agreement
+    with cell apical surface changes measured in vivo' (p. 6), but also that the Poisson modulus and the ratio of Young
+    to bending moduli 'are tuned to match observed in-plane deformations' (p. 9), and the pre-stress itself is set
+    from the measured MyoII. The three validations against the measured area (Fig. 3a curve, Fig. 3b rows) are
+    therefore entered as fit_quality. Furrow depth, apex position and curvature, which the paper calls predictions,
+    would be real validations, but this record has no adapter for them (see q_cross_unused).
+  citation: {none: "fierling2022 p. 9: 'a ratio of Young to bending moduli which are tuned to match observed in-plane deformations'"}
+- id: q_cross_unused
+  kind: choice
+  about: [recoil_stats, ap_stress_vs_distance, row_value, recoil_m16, recoil_0, fig1c_t0, muvi_rows_tm1, confocal_rows_tm1]
+  text: >
+    Measurements considered for the cross-record job and not used. Of fierling2022: the AP and DV size by row (Fig. 3c-d,
+    MuVi and confocal) and the curvature of Fig. 4f, the furrow apex positions of Supp. Fig. 3d and the pole
+    displacement of Supp. Fig. 3g have no model here that outputs those quantities (row_value gives area fold change
+    only; furrow and curvature files are not read by any adapter, and the MuVi curvature files are not released). The
+    Fig. 5e recoil velocities are compared with the released recoil data already (val_fig5e_*), and no model here turns
+    the simulated sigma_AP into a velocity; fierling2022's recoil_from_stress does, but its measured counterpart here
+    (recoil_m16 ... recoil_p16) is indexed by embryo, not by DV distance, so it cannot be swept. Of this record: the
+    Fig. 1c curvatures after ablation, and the MuVi and confocal row ranges (muvi_rows_tm1, confocal_rows_tm1), are
+    predicted by no model of fierling2022 (its models are closed forms and processing steps; the simulation is only
+    there as figure readings). The comparisons of the paper's own readings with these files are this record's
+    validations above, which are checks of a figure against its data.

@@ -1,0 +1,24 @@
+id: lattice_simulation
+name: discrete spring-lattice simulation of the gut-mesentery composite (Methods, SI p. 6-10)
+role: model
+stated: {page: 7, quote: "The mesentery was modelled as a hexagonal lattice of", where: "Methods, Computational model"}
+equation: "Fm = sqrt(3) Em h/4 sum (rij - am)^2 + Em h^3/(12 sqrt 3) sum (na - nb)^2;  Ft = 5.6 sqrt(3) Et It/(8 ro^3) sum (rij - at)^2 + Et It/(2 ro sqrt 3) sum (na - nb)^2;  minimize Fm + Ft by damped molecular dynamics"
+runnable: false
+not_runnable_reason: >
+  The paper gives the energies but not enough to rerun the minimization: the damped molecular dynamics
+  scheme (damping, time step, stopping rule), the initial configuration and perturbation, the boundary
+  conditions at the ends of the 300 x 60 mesh, how lambda and R are measured on the result, and the code
+  (ref. 17 / SI refs 10, 11) are not given. It also needs a 3D discrete-elastic-sheet solver well beyond
+  a one-minute call.
+inputs:
+  Et: {quantity: tube_modulus, unit: kPa}
+  ro: {quantity: tube_outer_radius, unit: um}
+  ri: {quantity: tube_inner_radius, unit: um}
+  Em: {quantity: mesentery_modulus, unit: kPa}
+  h: {quantity: mesentery_thickness, unit: um}
+  e0: {quantity: effective_mismatch_strain, unit: dimensionless}
+outputs:
+  lam: {quantity: loop_wavelength, unit: mm}
+  R: {quantity: loop_radius, unit: mm}
+settings: {}
+stochastic: false

@@ -1,0 +1,219 @@
+# Proposed against huang2005 (neither paper cites the other). Both print the classic stiff-film result:
+# cao2012's Eq. 5 with Lambda = 1 is, in its own words (p. 2), "Allen's result for an incompressible film and
+# substrate with no prestretch"; huang2005's Eq. 17 is the same thick-substrate limit in plane-strain moduli.
+# For incompressible materials E = 3 mu and E_bar = E/(1 - 1/4) = 4 mu, so E_bar/Es_bar = mu_f/mu_s.
+# Only the critical strain is related: cao2012 prints the wavenumber k0 h, huang2005 the wavelength lambda/h,
+# which are reciprocal (lambda/h = 2 pi / k0 h) but not the same quantity.
+- id: rel_cao_simple_plane_to_huang_eq17
+  kind: reduces_to
+  a: cao2012/simple_formula_plane
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "mu_ratio"}
+  output_map: {Nc_over_hE: e0}
+  limit: {lam01: "1"}
+  regime: {mu_ratio: [10, 100000], lam01: [1, 1.5]}
+  provenance: proposed
+  reason: >
+    Without substrate prestretch (lambda0_1s = 1, so Lambda = 1) cao2012's Eq. 5 critical strain
+    e0 = (1/4)(3 mu_s/mu_f)^(2/3) is huang2005's Eq. 17 N_c/(h E_bar) = (1/4)(3 Es_bar/E_bar)^(2/3) with
+    E_bar/Es_bar = mu_f/mu_s for incompressible film and substrate.
+  assumptions:
+    - "both materials incompressible (nu = 1/2), as in cao2012, so E_bar/Es_bar = mu_f/mu_s"
+    - "in plane-strain uniaxial compression of the film, N_c/(h E_bar) is the film's critical compressive strain e0"
+- id: rel_cao_bilayer_plane_approx_huang_eq17
+  kind: approximated_by
+  a: cao2012/bilayer_plane_strain
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "mu_ratio"}
+  output_map: {Nc_over_hE: eW}
+  regime: {mu_ratio: [100, 10000], lam01: [1, 1]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >
+    cao2012's exact finite-strain neo-Hookean bifurcation strain eW, without prestretch, approaches the
+    small-strain linear-elastic thick-substrate result of huang2005's Eq. 17 for a stiff film; cao2012 says the
+    simple formula becomes "increasingly accurate" as mu_f/mu_s grows (p. 3). The tolerance is our choice.
+  assumptions:
+    - "both materials incompressible (nu = 1/2), so E_bar/Es_bar = mu_f/mu_s"
+    - "huang2005's thick substrate (H/h -> oo) is cao2012's deep substrate"
+    - "N_c/(h E_bar) is the film's critical compressive strain in plane strain; at these small strains nominal and linear strain agree"
+    - "tolerance 0.05 is added: a relative error the stiff-film regime mu_f/mu_s >= 100 should be within"
+# Against bowden1998 (neither paper cites the other; both take the classic result from Allen 1969): no relation
+# is entered. The two records' models share no output quantity. bowden1998 prints the critical film stress
+# (Eq. 2, 0.52 Em_bar^(1/3) Ep_bar^(2/3)) and the wavelength L/t (Eq. 3); cao2012 prints the critical film
+# strain e0/eW and the wavenumber k0 h. Without prestretch and for incompressible materials they are the same
+# classic result (sigma_crit = Ef_bar e0, since 3^(2/3)/4 = 0.520; L/t = 2 pi/(k0 h), since 2 pi/3^(1/3) = 4.36),
+# but each pair is linked by a product or a reciprocal, which a relation's output_map cannot express, and no
+# paper states it in a form that would justify a helper model.
+# Proposed against richman1975 (neither paper cites the other). richman1975's plate_on_foundation is the
+# reader's reconstruction (ref. 20 unpublished): incompressible thin plates (plate modulus 4E/3) on an
+# incompressible half-space of stiffness (2/3) Ecore k. With two equal strata (E2 = E1) it is one plate of
+# thickness t1 + t2 on a half-space, the small-strain stiff-film problem of cao2012's Eq. 5 without prestretch.
+# The outputs are different quantities: richman's critical stress sigma1/E1 is (4/3) times cao's strain e0 under
+# this reading, and richman's l/t is 2 pi / (k0 h). So only the scaling is proposed, on the stress/strain pair;
+# the wavelength pair (reciprocal, opposite log-slopes) is not entered.
+- id: rel_cao_simple_plane_scales_richman_plate
+  kind: scales_as
+  a: cao2012/simple_formula_plane
+  b: richman1975/plate_on_foundation
+  mapping: {t1: "1", t2: "1", E2_over_E1: "1", Ecore_over_E1: "1/mu_ratio", stress_ratio: "1"}
+  output_map: {sigma1_crit_over_E1: e0}
+  regime: {mu_ratio: [10, 100000], lam01: [1, 1]}
+  provenance: proposed
+  reason: >
+    Without substrate prestretch cao2012's Eq. 5 gives e0 = (1/4)(3 mu_s/mu_f)^(2/3), so the critical film strain
+    goes as (mu_f/mu_s)^(-2/3). richman1975's plate-on-foundation stand-in, with equal strata and equal stresses,
+    is a single incompressible plate on an incompressible half-space; its critical stress over the stratum
+    modulus goes as (Ecore/E1)^(2/3). For incompressible materials E = 3 mu, so Ecore/E1 = mu_s/mu_f and both
+    scale as (mu_f/mu_s)^(-2/3).
+  assumptions:
+    - "both materials incompressible (nu = 1/2), so Ecore/E1 = mu_s/mu_f"
+    - "richman1975 with E2/E1 = 1 and sigma2/sigma1 = 1: the two strata act as one homogeneous plate (t1 = t2 = 1 mm; the outputs do not depend on the thickness scale)"
+    - "richman1975's model is a reconstruction of an unpublished analysis, so this relates cao2012 to the reader's stand-in, not to the paper's own analysis"
+    - "lam01 = 1 (no prestretch): richman1975 has no substrate prestretch"
+# Stated against biot1963 (ref. 3): cao2012's Eq. 7 is "Biot's [3] result for surface wrinkling bifurcation of a
+# homogeneous neo-Hookean substrate under general uniform stretching", and it "provides the values quoted above for
+# plane strain and uniaxial stressing" (p. 4). Eq. 7 gives the strain eW = 1 - lambda_1 (Eq. 4), Biot's Eqs. 4.2 and
+# 4.13 the stretch lambda, so the relations use the helper models biot_surface_eq7_stretch and
+# biot_surface_eq7_uniaxial_stretch (Eq. 7 with Eq. 4 applied). Cao's printed constant c = 0.5437 is Biot's
+# plane-strain critical stretch; inverting Biot's Eq. 4.2, (1 - lambda^4)/(1 + lambda^4) = zeta, gives the mapping
+# zeta = (1 - c^4)/(1 + c^4). The plane-strain case is Eq. 7 at lambda_3 = 1; the uniaxial case then tests that
+# Eq. 7 with lambda_3 = lambda_1^(-1/2) gives Biot's separate uniaxial result, Eq. 4.13, from the same constant.
+# cao2012's bilayer limit mu_f/mu_s = 1 (eW = 0.456, "corresponding to Biot's [3] result", p. 2) is not entered: the
+# bilayer model gives a strain and Biot's a stretch, and no paper states it in a form that needs a further helper.
+- id: rel_cao_eq7_plane_to_biot_eq42
+  kind: reduces_to
+  a: cao2012/biot_surface_eq7_stretch
+  b: biot1963/crit_stretch_plane
+  mapping: {zeta: "(1 - c**4)/(1 + c**4)"}
+  limit: {lam3: "1"}
+  regime: {c: [0.5, 0.6], lam3: [0.8, 1.5]}
+  provenance: stated
+  citation: {page: 4, printed_page: "031019-4", quote: "This result provides the values quoted above for", where: "text after Eq. 7"}
+  assumptions:
+    - "Eq. 4: the compressive strain is eW = 1 - lambda_1, so Eq. 7 gives the critical stretch lambda_1 = c/sqrt(lambda_3)"
+    - "plane strain is lambda_3 = 1 (cao2012 p. 4: k3f = k3s = 1; biot1963 Sec. 4.1)"
+    - "cao2012's constant c is Biot's critical stretch in plane strain, related to Biot's root zeta of the cubic (Eq. 2.9) by Eq. 4.2"
+- id: rel_cao_eq7_uniaxial_same_as_biot_eq413
+  kind: same_as
+  a: cao2012/biot_surface_eq7_uniaxial_stretch
+  b: biot1963/crit_stretch_uniaxial
+  mapping: {zeta: "(1 - c**4)/(1 + c**4)"}
+  regime: {c: [0.5, 0.6]}
+  provenance: stated
+  citation: {page: 4, printed_page: "031019-4", quote: "This result provides the values quoted above for", where: "text after Eq. 7"}
+  assumptions:
+    - "Eq. 4: eW = 1 - lambda_1"
+    - "uniaxial stressing of an incompressible half-space: lambda_2 = lambda_3 = 1/sqrt(lambda_1) (cao2012 Sec. 3.3; biot1963 Sec. 4.2, S22 = S33 = 0)"
+    - "the same constant c, Biot's plane-strain critical stretch, mapped to Biot's zeta through Eq. 4.2 as in rel_cao_eq7_plane_to_biot_eq42"
+# Against hong2009 (ref. 7). cao2012 cites Hong et al. only for the crease threshold: "finite strain creases in
+# the film become energetically favorable when the compressive strain exceeds e = 0.35 in plane strain
+# compression [6,7]" (p. 2). That is a value, not a relation between models: cao2012 has no crease model, and
+# the value is not a datum in cao2012's data.yaml (left out by the reader, see source.yaml), so no cited.yaml
+# link is possible. hong2009's crease threshold (crease_zero_fig3) is a different mode from cao2012's wrinkling
+# bifurcation and is not related to any cao2012 model.
+# What the two papers share is Biot's surface-wrinkling threshold beyond plane strain. hong2009 transforms
+# epsilon_biot by Eq. 3 into lambda_3/lambda_1 = 1/(1 - epsilon)^2 (Eq. 6), "valid under the generalized plane-
+# strain conditions for any arbitrary value of lambda_2" (p. 3); cao2012's Eq. 7 gives Biot's result "under
+# general uniform stretching" as lambda_1 = c/sqrt(lambda_3) (with Eq. 4). Neither paper relates the two forms.
+# The axis labels differ: hong2009's 3 is the surface normal and 2 the free in-plane direction; cao2012's 2 is
+# the normal and 3 the in-plane transverse direction. With hong's lambda_2 = cao's lambda_3 = s and
+# incompressibility, hong's Eq. 6 reads 1/(lambda_1^2 s) = 1/(1 - eps)^2, i.e. lambda_1 = (1 - eps)/sqrt(s),
+# which is cao's Eq. 7 with c = 1 - eps. Neither record has a model of the general form taking s as an input,
+# so the identity is tested on the one non-plane-strain case both records carry: uniaxial stressing
+# (lambda_2 = lambda_3 = lambda_1^(-1/2)). The plane-strain case (lambda_1 = 1 - eps against c) would hold by
+# construction of the mapping and is not entered.
+- id: rel_hong_gps_uniaxial_same_as_cao_eq7_uniaxial
+  kind: same_as
+  a: hong2009/gps_uniaxial_stretch
+  b: cao2012/biot_surface_eq7_uniaxial_stretch
+  mapping: {c: "1 - eps"}
+  output_map: {lam1: lam1}
+  regime: {eps: [0.3, 0.6]}
+  provenance: proposed
+  reason: >
+    hong2009 extends Biot's plane-strain threshold to generalized plane strain by its Eq. 3 (Eq. 6, any lambda_2);
+    cao2012 extends it to general uniform stretching by its Eq. 7. Both are statements of how Biot's threshold
+    depends on the transverse stretch, made independently. Applied to uniaxial stressing of the half-space,
+    hong2009's route gives lambda_1 = (1 - eps)^(4/3) and cao2012's gives lambda_1 = c^(4/3); they are the same
+    when cao2012's constant c is hong2009's plane-strain critical stretch 1 - eps (0.5437 against 1 - 0.46 = 0.54).
+  assumptions:
+    - "cao2012's constant c (0.5437) is Biot's plane-strain critical stretch, and hong2009's epsilon is a plane-strain critical strain with lambda_1 = 1 - epsilon (hong2009 p. 3; cao2012 Eq. 4)"
+    - "hong2009's lambda_2 (free in-plane direction) is cao2012's lambda_3, and hong2009's lambda_3 (surface normal) is cao2012's lambda_2"
+    - "uniaxial stressing: both lateral stretches equal lambda_1^(-1/2) (cao2012 Sec. 3.3; hong2009/gps_uniaxial_stretch)"
+    - "regime eps 0.3-0.6 spans hong2009's crease (0.35) and Biot (0.46) strains; hong2009 states Eq. 3 for any plane-strain critical strain"
+# Proposed against trujillo2008 (neither paper cites the other; both take Biot's condition from biot1963).
+# cao2012's Eq. 7 with Eq. 4, lambda_1 = c/sqrt(lambda_3), is lambda_1^2 lambda_3 = c^2 (0.5437^2 = 0.2956);
+# trujillo2008 states the same condition as lambda1^2 lambda3 = 0.296 (p. 2) and specialises it to
+# equibiaxial compression, lambda1 = lambda3, giving e_c = 1 - 0.296^(1/3) (biot_equibiaxial). In Eq. 7 the
+# equibiaxial case is lambda_3 = lambda_1 = c/sqrt(lambda_3), i.e. lambda_3 = c^(2/3); substituting it gives
+# eW = 1 - c^(2/3), which is trujillo2008's e_c with lam_prod = c^2. No limit takes Eq. 7 to the equibiaxial
+# case (lambda_3 = c^(2/3) is not a constant), so the relation is entered as a derivation by substitution.
+# The other trujillo2008 models (stretch_product, the fits and processing of its own measurements) share no
+# output quantity with a cao2012 model, and cao2012's bilayer models have no equibiaxial case: none is related.
+- id: rel_cao_eq7_equibiaxial_to_trujillo_biot
+  kind: derived_from
+  a: cao2012/biot_surface_eq7
+  b: trujillo2008/biot_equibiaxial
+  mapping: {lam_prod: "c**2"}
+  steps: ["subs: lam3 = c**(2/3)"]
+  regime: {c: [0.5, 0.6], lam3: [0.5, 1.5]}
+  provenance: proposed
+  reason: >
+    Both papers print Biot's surface-instability condition for an incompressible neo-Hookean half-space under
+    general in-plane stretching: cao2012 as lambda_1 = 0.5437/sqrt(lambda_3) (Eqs. 4 and 7), trujillo2008 as
+    lambda1^2 lambda3 = 0.296. Under equibiaxial compression (lambda_1 = lambda_3) cao2012's Eq. 7 gives
+    lambda_3 = c^(2/3) and eW = 1 - c^(2/3), trujillo2008's e_c = 1 - (lambda1^2 lambda3)^(1/3) with the
+    product c^2. The printed constants then agree to their printed precision (0.5437^2 = 0.2956 against 0.296).
+  assumptions:
+    - "Eq. 4: cao2012's compressive strain is eW = 1 - lambda_1; trujillo2008's e_c = 1 - lambda (p. 2)"
+    - "cao2012's lambda_1 (compression) and lambda_3 (in-plane transverse) are trujillo2008's lambda1 and lambda3, both parallel to the free surface"
+    - "equibiaxial compression: lambda_3 = lambda_1, so Eq. 7 reads lambda_3^(3/2) = c"
+    - "cao2012's film_wrinkling_strain of the homogeneous half-space and trujillo2008's critical_compressive_strain are the same onset strain of Biot's surface mode; this is a correspondence of quantities, not a merge"
+# Against cao2011 (ref. 5, the companion Proc. R. Soc. A paper). cao2012 cites [5] for the imperfection sensitivity
+# of half-space wrinkling (p. 2) and for its Lagrangian formulation (p. 7), but attributes both Eq. 7 and the
+# homogeneous limit 0.456 to Biot [3], not to [5]; cao2011 does not mention the bilayer paper. Both relations are
+# therefore proposed. cao2011's biot_eq28 is Biot's condition solved in cao2011's own variables (Eq. 2.8, the root
+# r of r^3 - 3r^2 - r - 1 = 0, eps_W = 1 - (r lambda_3)^(-1/2), Eq. 1.1); cao2012's Eq. 7 prints the same law with
+# the constant rounded to 0.5437. No value in either data.yaml is taken from the other paper (their from_source
+# entries name Biot and Hong et al.), so no cited.yaml line is added. cao2011's crease model (Eq. 1.2) has no
+# counterpart: cao2012 quotes the crease strain 0.35 only in words, with no model.
+- id: rel_cao2011_biot_same_as_cao2012_eq7
+  kind: same_as
+  a: cao2011/biot_eq28
+  b: cao2012/biot_surface_eq7
+  mapping: {c: "0.5437", lam3: "lam3"}
+  output_map: {eW: eps_W}
+  regime: {lam3: [0.8, 2.0]}
+  tolerance: 0.0001
+  provenance: proposed
+  reason: >
+    Both papers, by the same authors, give Biot's surface-wrinkling strain of a neo-Hookean half-space with a fixed
+    out-of-plane stretch as eps_W = 1 - 0.5437/sqrt(lambda_3): cao2011 as Eq. 1.1, derived from its eigenvalue
+    condition Eq. 2.8, cao2012 as Eq. 7. cao2011's model computes the constant from the cubic (r^(-1/2) =
+    0.54369); cao2012's takes it as printed. The tolerance 1e-4 is added: the printed 0.5437 is the 4-digit
+    rounding of the root, which moves eps_W by about 3e-5 relative at lambda_3 = 0.8.
+  assumptions:
+    - "cao2012's lambda_3 (in-plane transverse stretch, Eq. 7) is cao2011's imposed out-of-plane stretch lambda_3; both name 1 the compression direction and 2 the surface normal"
+    - "both strains are nominal, eps = 1 - lambda_1 (cao2011 Eq. 1.1; cao2012 Eq. 4); cao2011's wrinkling_strain and cao2012's film_wrinkling_strain of the homogeneous half-space are the same onset strain"
+    - "regime lambda_3 0.8-2.0 keeps eps_W positive (it vanishes at lambda_3 = 0.2956)"
+- id: rel_cao2012_bilayer_reduces_to_cao2011_biot
+  kind: reduces_to
+  a: cao2012/bilayer_plane_strain
+  b: cao2011/biot_eq28
+  mapping: {lam3: "1"}
+  output_map: {eps_W: eW}
+  limit: {mu_ratio: "1", lam01: "1"}
+  regime: {mu_ratio: [1, 3], lam01: [1, 1.5]}
+  tolerance: 0.0001
+  provenance: proposed
+  reason: >
+    cao2012 says the homogeneous limit mu_f/mu_s = 1 of its exact plane-strain bilayer analysis (Fig. 2) is
+    eW = 0.456, "corresponding to Biot's [3] result" (p. 2). cao2011's biot_eq28 is that result in plane strain
+    (lambda_3 = 1). With equal moduli and no substrate prestretch the bilayer is one homogeneous half-space, so
+    the exact bifurcation strain should reduce to Biot's. The tolerance 1e-4 is added: the bilayer model finds
+    eW by a numerical root search and minimisation over kh (settings tol 1e-6 on strain grids).
+  assumptions:
+    - "plane strain: cao2012 Eq. 3 sets lambda_3f = lambda_3s = 1, cao2011's lambda_3 = 1"
+    - "both strains nominal, eps = 1 - lambda_1 (cao2012 Eq. 4, cao2011 Eq. 1.1)"
+    - "the limit takes both mu_f/mu_s and the plane-strain prestretch lambda0_1s to 1; with prestretch the substrate is not in the film's state and the limit is not Biot's"

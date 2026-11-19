@@ -1,0 +1,19 @@
+id: m_point_eq211
+name: M-point from the second-order (Koiter) energy variation along the bifurcation curve (Eqs. 2.10-2.12)
+role: model
+stated: {page: 7, printed_page: "7", quote: "The terms on the right-hand side of equation (2.11) are determined for a neo-Hookean EDM solid as", where: Eqs. 2.11-2.12}
+equation: >
+  delta phi^b = (1/2) zeta^4 ( d3phi u(1) u(1) u(2) + d2phi u(2) u(2) ) (2.11), with
+  d3phi u(1)u(1)u(2) = -2 int_V { p(1) alt (u1,1 u2,2 - u1,2 u2,1) + p(2) (u1,1(1) u2,2(1) - u1,2(1) u2,1(1)) } dV (2.12a),
+  d2phi u(2)u(2) = int_V { Q (ui,j(2) ui,j(2) - (2/lambda^2)(u1,1(2) u2,2(2) - u1,2(2) u2,1(2))) - p(2) (u1,1(2)/lambda + lambda u2,2(2)) } dV (2.12b),
+  evaluated at (eps, kbar) on Eq. 2.8; eps_M is where delta phi^b changes sign from positive to negative
+inputs: {}
+outputs:
+  eps_M: {quantity: bifurcation_strain, unit: dimensionless, description: "the bifurcation strain at which delta phi^b/zeta^4 first changes from positive to negative; if it stays positive over the scan, the end of the bifurcation curve, eps_B, where kbar diverges (the wrinkle is then stable along the whole curve)"}
+settings:
+  eps_scan_lo: 0.01
+  eps_scan_hi: 0.45
+  n_scan: 45
+  n_colloc: 60
+  n_x1: 64
+built_from: [bifurcation_wavenumber_eq28]

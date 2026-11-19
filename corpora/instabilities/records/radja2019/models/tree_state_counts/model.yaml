@@ -1,0 +1,22 @@
+id: tree_state_counts
+name: family counts by character state from the dots of the family tree (Fig. 5)
+role: processing
+stated: {page: 9, printed_page: "863", where: "Fig. 5 caption", quote: "Each terminal taxon is labeled with up to four states"}
+equation: "dots of all colours closer in angle than angle_tol_deg belong to one terminal taxon (family); count families with an orange dot, with only an orange dot, with orange and another colour, all families with any dot, families without an orange dot, and families with each other colour"
+from_words: true
+inputs:
+  O: {quantity: state_present, unit: dimensionless, curve: {quantity: tree_angle, unit: degree}, description: "orange dots: at equilibrium"}
+  P: {quantity: state_present, unit: dimensionless, curve: {quantity: tree_angle, unit: degree}, description: "pink dots: not at equilibrium, lambda > 3 um"}
+  G: {quantity: state_present, unit: dimensionless, curve: {quantity: tree_angle, unit: degree}, description: "green dots: not at equilibrium, 1-3 um"}
+  B: {quantity: state_present, unit: dimensionless, curve: {quantity: tree_angle, unit: degree}, description: "blue dots: not at equilibrium, < 1 um"}
+outputs:
+  n_eq: {quantity: family_count, unit: dimensionless, description: "families with an at-equilibrium state"}
+  n_eq_only: {quantity: family_count, unit: dimensionless, description: "families with only the at-equilibrium state"}
+  n_eq_mixed: {quantity: family_count, unit: dimensionless, description: "families with the at-equilibrium state and another"}
+  n_tips: {quantity: family_count, unit: dimensionless, description: "terminal taxa carrying at least one dot"}
+  n_noneq: {quantity: family_count, unit: dimensionless, description: "terminal taxa with dots but no at-equilibrium state"}
+  n_pink: {quantity: family_count, unit: dimensionless}
+  n_green: {quantity: family_count, unit: dimensionless}
+  n_blue: {quantity: family_count, unit: dimensionless}
+settings: {angle_tol_deg: 0.7}
+stochastic: false

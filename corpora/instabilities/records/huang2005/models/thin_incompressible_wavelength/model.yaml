@@ -1,0 +1,17 @@
+id: thin_incompressible_wavelength
+name: thin incompressible-substrate wrinkle wavelength in length units (Eq. 19 times h)
+role: processing
+stated: {page: 8, printed_page: "2108", quote: "incompressible, for the thin-substrate limit, we obtain that", where: Eq. 19}
+equation: "lambda_eq = 2 pi h sqrt(H/h) (E_bar/(18 Es_bar))^(1/6)"
+# Helper for relating this paper to cerda2003, whose shallow-substrate law lambda ~ (t Hs)^(1/2) (E/Es)^(1/6)
+# is in length units: Eq. 19's lambda_eq/(2 pi h) solved for lambda_eq. Huang links the two on p. 8
+# ("The power-law relations in Eqs. (17)-(19) have been predicted by Cerda and Mahadevan (2003)").
+inputs:
+  h: {quantity: film_thickness, unit: mm}
+  H_over_h: {quantity: substrate_to_film_thickness_ratio, unit: dimensionless}
+  Ebar_over_Esbar: {quantity: plane_strain_modulus_ratio, unit: dimensionless}
+outputs:
+  lam: {quantity: wrinkle_wavelength, unit: mm}
+built_from: [thin_incompressible_eq19]
+settings: {}
+stochastic: false

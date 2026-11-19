@@ -1,0 +1,76 @@
+# Cross-validation against hong2009 (job 2026-11-18). This paper cites hong2009 (ref. 7) for the crease threshold
+# e = 0.35 in plane strain (p. 2). hong2009 holds one measured strain: the nominal surface strain at which a bent
+# elastomer block creases, epsilon_exp = 0.35 (Gent & Cho; Ghatak & Das), which hong2009 sets against Biot's
+# linear-perturbation threshold. Eq. 7 here is that threshold for a homogeneous neo-Hookean half-space, so it is
+# the model of this record that makes a prediction for that measurement. See q_validation_hong2009.
+- id: val_eq7_plane_hong2009_eps_exp
+  model: biot_surface_eq7
+  inputs: {c: biot_coefficient, lam3: lambda3_plane_strain}
+  output: eW
+  against: hong2009/eps_exp_printed
+  purpose: validation
+  quantities: {hong2009/critical_strain_plane: film_wrinkling_strain}
+  conditions_ok: >-
+    The measurement is the nominal compressive strain (shortening over original length) at which the
+    compressed surface of a bent elastomer block first goes unstable (it creases); hong2009 treats it as the
+    plane-strain strain of a half-space (p. 1). Eq. 7 with lambda_3 = 1 is the plane-strain strain
+    eW = 1 - lambda_1 (Eq. 4) at which the surface of a homogeneous neo-Hookean half-space first goes
+    unstable by Biot's linear analysis. Both are nominal plane-strain strains at the onset of surface
+    instability of a homogeneous body. The strain gradient of bending, the finite blocks and the rubber's
+    departure from neo-Hookean behaviour are not in the model. Biot's analysis predicts a smooth wrinkle,
+    while the specimens crease. That difference in mode is what this validation tests; it is not a
+    reason to set the comparison aside.
+  basis: >-
+    hong2009 p. 1: "Biot's linear perturbation analysis showed that the homogenous deformation in a rubber
+    becomes unstable when compressed to a critical strain, epsilon_biot = 0.46. This theoretical value,
+    however, exceeds the experimental value, epsilon_exp = 0.35." This paper's Eq. 7 is "Biot's [3] result
+    for surface wrinkling bifurcation of a homogeneous" half-space (p. 4), which gives 0.456 in plane strain.
+    This is the same prediction that hong2009 sets against the measurement, now run from this record's own
+    model and inputs.
+
+# Cross-validation against trujillo2008 (job 2026-11-18). Neither paper cites the other. trujillo2008 measures
+# the equibiaxial strain at which surface-attached hydrogels crease and sets it against Biot's surface threshold
+# (its p. 2 and p. 4). Eq. 7 here is Biot's threshold "under general uniform stretching" (p. 4), so it gives that
+# prediction when run at the measurement's equibiaxial state, lambda_3 = lambda_1 = 1 - e_c (added input
+# lam3_equibiaxial_trujillo_added). See q_validation_trujillo2008.
+- id: val_eq7_equibiaxial_trujillo_modulus_series
+  model: biot_surface_eq7
+  inputs: {c: biot_coefficient, lam3: lam3_equibiaxial_trujillo_added}
+  output: eW
+  against: trujillo2008/ec_mean_modulus_series
+  purpose: validation
+  quantities: {trujillo2008/critical_compressive_strain: film_wrinkling_strain}
+  conditions_ok: >-
+    The measurement is the in-plane compressive strain e_c = 1 - l0/l (trujillo2008 p. 3) at which swollen,
+    surface-attached poly(acrylamide-co-sodium acrylate) gels (200 um, 0.05-2.0 mol% bis(acrylamide))
+    first crease, averaged over cross-linker content. It is a nominal strain 1 - lambda_1 like eW of Eq. 4.
+    The gels are compressed equibiaxially, which Eq. 7 covers through lambda_3 (set to 1 - e_c). The gels
+    are compressible (Poisson's ratio about 0.3, trujillo2008 p. 4), finite-thickness layers on a rigid
+    base, and they form creases, a nonlinear mode, while Eq. 7 is the linear wrinkling threshold of an
+    incompressible neo-Hookean half-space. trujillo2008 makes this same comparison itself and names these
+    differences (p. 4); they are what the validation tests, not a reason to set it aside.
+  basis: >-
+    trujillo2008 p. 2 gives Biot's condition for surface instability, "l1^2 l3 = 0.296", and "For the case
+    of equibiaxial compression (l1 = l3 = l) this leads to ec = 1 - l = 0.334", and on p. 4 compares its
+    measured e_c with "Biot's prediction of ec = 0.334". This paper's Eq. 7 is "Biot's [3] result for surface
+    wrinkling bifurcation of a homogeneous neo-Hookean substrate under general uniform stretching" (p. 4),
+    eW = 1 - 0.5437/sqrt(lambda_3), the same condition (0.5437^2 = 0.296). Run at the equibiaxial state of
+    the measurement it predicts the measured strain.
+- id: val_eq7_equibiaxial_trujillo_thickness_series
+  model: biot_surface_eq7
+  inputs: {c: biot_coefficient, lam3: lam3_equibiaxial_trujillo_added}
+  output: eW
+  against: trujillo2008/ec_mean_thickness_series
+  purpose: validation
+  quantities: {trujillo2008/critical_compressive_strain: film_wrinkling_strain}
+  conditions_ok: >-
+    As for val_eq7_equibiaxial_trujillo_modulus_series, for the series at 0.4 mol% bis(acrylamide) over
+    thicknesses of 3 um to 1 mm (trujillo2008 p. 4, Fig. 3(b)). Eq. 7 is for a half-space and has no
+    thickness; the measured strain is independent of thickness over that range (trujillo2008 p. 4), so the
+    half-space threshold is the one to compare with. Compressibility, the rigid base and the crease mode
+    differ as stated there.
+  basis: >-
+    trujillo2008 p. 4: "The critical strain measured for these samples is independent of thickness over more
+    than two decades, with an average value of ec = 0.33 +/- 0.01", compared in its Fig. 3 caption with "the
+    prediction of Biot". Eq. 7 is Biot's threshold under general uniform stretching (this paper, p. 4), run
+    at the equibiaxial state of the measurement.

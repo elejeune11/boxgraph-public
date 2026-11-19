@@ -1,0 +1,411 @@
+- id: q_boundary_165
+  kind: unexplained_difference
+  about: [boundary_Gf_Gs, cmp_boundary_plane_strain, cmp_boundary_uniaxial, wrinkle_eigen_plane_strain]
+  text: >
+    The printed boundary Gf/Gs = 1.65 (thin-film limit of the curve of equal critical strain, Fig. 3(a))
+    is not what Eqs. B7-B15 as printed give: the modulus ratio at which e_m^PE = 0.35 (or e_m^Uni = 0.44)
+    for a deep substrate comes out below 1.65 (see the two comparisons). The same matrix reproduces the
+    Biot strain 0.556 at Gf/Gs = 1 and the von Karman limit at large Gf/Gs, so the reading of the matrix
+    is unlikely to be the cause. The paper does not say how the contour was located; the crease strain
+    used for it is only given to two digits (0.35, 0.44). The paper adds that Ref. 47 (wang2014) predicted
+    the same condition; wang2014's own boundary at no prestretch is 1.54, closer to the value the printed
+    equations give than to 1.65.
+  citation: {page: 3, quote: "creases always form under a strain lower than"}
+- id: q_crease_fe
+  kind: unstated_model
+  about: [eF_compliant_layer, e_crease_pe, e_crease_uni]
+  text: >
+    The crease results (Figs. 4 and 5: crease depth and normalized energy against strain, snapping
+    backward strains, Maxwell strains e^fc_Maxwell and e^wc_Maxwell, the classification of points A-F) come
+    from ABAQUS finite element simulations with the Riks method, a defect of 10^-3 of the film thickness, an
+    added compliant layer of 1/200 of the film modulus and a crease spacing of 2(Hs + Hf). Mesh, element
+    count and the wrinkle-branch computation are not given, so these results cannot be rerun here. The crease
+    onset strains 0.35 and 0.44 used for the boundary of equal critical strain are taken from Ref. 39.
+  citation: {page: 3, quote: "We use the commercial finite element software"}
+- id: q_exp_moduli
+  kind: unstated_input
+  about: [exp_crease_15to1_text, exp_crease_10to1_text, exp_wrinkle_7p5to1_text]
+  text: >
+    The experiments give the film and substrate compositions (15:1, 10:1, 7.5:1 films on a 30:1 substrate)
+    and thicknesses (18-20 um film, about 550 um substrate, so Hs/Hf near 30) but not the shear moduli, so
+    the samples cannot be placed on the Gf/Gs plane of Fig. 5(g) and no model in the record can be run
+    against the measured strains. How the 'film strain' was measured (from the mounting-layer prestretch
+    or from the images) is not said either.
+  citation: {page: 7, quote: "by changing the mass ratio of base to crosslinker"}
+- id: q_no_validation_bowden1998
+  kind: choice
+  about: [wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, wrinkle_ec_uniaxial, bowden1998/L_measured, bowden1998/depth_unheated, bowden1998/depth_300C]
+  text: >-
+    (Cross-validation against bowden1998, cited here as ref. 33; job 2026-11-19.) No validation is
+    entered, in either direction. This paper cites bowden1998 only as an experiment where wrinkles are
+    observed, with no number taken from it or compared with it. bowden1998 measures wrinkle periods of
+    20-50 um (one range over all samples) and crest-to-trough depths of 1.5 and 3.9 um, for 50 nm gold
+    films on PDMS. The wrinkle analysis here (Eqs. B7-B15) gives the onset strain and the nominal
+    wavelength over the film thickness, L_m/Hf, a different quantity from a period in um. Its Gf/Gs input
+    would also be added, not measured: bowden1998 gives Young's moduli and Poisson ratios, and gold
+    (nu = 0.33) is not the incompressible neo-Hookean film modelled here. The ratio would be about 4000,
+    far beyond any ratio this paper computes. bowden1998 itself attributes the measured period to a
+    stiffened PDMS surface layer, a trilayer that no model here describes. No model here gives an
+    amplitude for the depths. In the other direction, see bowden1998/q_no_validation_jin2015.
+  citation: {page: 1, quote: "observed in experiments [1–3,33,34]. For a homogeneous"}
+- id: q_exp_strain_10to1
+  kind: possible_error
+  about: [exp_crease_10to1_fig6, exp_crease_10to1_text, exp_crease_10to1_video]
+  text: >
+    For the 10:1 film the onset of creases is 0.28 in the text and in the Video 2 description but 0.29 in the
+    Fig. 6(c) caption, which says the micrographs are taken where the instability first appears.
+  citation: {page: 7, quote: "Coexistence of creases and wrinkles at the strain of 0.29"}
+- id: q_exp_strain_15to1
+  kind: possible_error
+  about: [exp_crease_15to1_video, exp_crease_15to1_text]
+  text: >
+    For the 15:1 film, creases channel at 0.37 in the text and Fig. 6(b) but at 0.36 in the description of
+    Video 1.
+  citation: {page: 10, quote: "the surface at a film strain of 0.36"}
+- id: q_exp_vs_theory_uniaxial
+  kind: reading
+  about: [exp_crease_15to1_text, e_crease_uni, e_crease_pe]
+  text: >
+    The experiments are uniaxial compression, for which the homogeneous crease strain is 0.44, yet the
+    measured channeling strain 0.37 of the 15:1 film lies below it, and the 0.28 of the 10:1 film, which the
+    paper calls in good agreement with simulations (Figs. 5(c)-5(e)), lies further below. The paper explains
+    both by channeling at Maxwell strains, but gives no computed uniaxial Maxwell strain for these samples
+    (the simulations of Sec. 4 are plane strain, and the sample moduli are not given), so the agreement is
+    qualitative.
+  citation: {page: 7, quote: "in good agreement with simulations"}
+- id: q_eigen_scheme
+  kind: choice
+  about: [wrinkle_eigen_plane_strain, wrinkle_eigen_uniaxial, equal_strain_boundary_plane_strain, equal_strain_boundary_uniaxial]
+  text: >
+    The paper does not say how it solved det A = 0 or located the boundary curve. The reader's scheme: scan the
+    strain on a log grid, bisect the first sign change of det A (columns rescaled by positive factors so the
+    exponentials stay finite), minimize over log K Hf on a grid of 61 points from 0.01 to 300 with
+    golden-section refinement, and bisect in log Gf/Gs for the boundary.
+- id: q_vk_overestimate
+  kind: reading
+  about: [wrinkle_eigen_uniaxial]
+  text: >
+    The statement that for Gf/Gs = 2 linear elasticity with a von Karman plate overestimates e_m by around
+    0.05 (p. 10, Fig. 7(a) circles, from Ref. 58) is approximate and its formula is not printed here, so it is
+    not compared; the record leaves it for a relation with huang2005.
+  citation: {page: 10, quote: "the assumption of linear elasticity overestimates em for around 0.05"}
+- id: q_points_AF_diamonds
+  kind: reading
+  about: [run_em_pe_pointA, run_em_pe_pointB, run_em_pe_pointC, run_em_pe_pointD, run_em_pe_pointE, run_em_pe_pointF, boundary_Gf_Gs]
+  text: >
+    (Audit.) Section 4 classifies points A-F (p. 6) by whether e_m from the wrinkle analysis lies above
+    (A, B) or below (C-F) the plane strain crease strain 0.35, and marks e_m with a diamond in Figs. 5(a)-(f).
+    Only the diamonds carry values, so the record checks these e_m once a figure pass reads them (runs
+    run_em_pe_pointA-F are ready). Point B (Gf/Gs = 1.4, Hs/Hf = 2) sits below the boundary while the
+    boundary flattens near Gf/Gs = 1.65; whether the printed equations place the thin-film boundary
+    below 1.65 (q_boundary_165) also bears on how close points such as B are to it.
+  citation: {page: 6, quote: "indicated as point B in"}
+# --- figure pass (2026-11-19)
+- id: q_fig_boundary_flat
+  kind: unexplained_difference
+  about: [cmp_fig3a_c044, cmp_fig4a_boundary, cmp_fig5g_boundary, cmp_fig3a_c025, boundary_Gf_Gs, em_contour_uniaxial]
+  text: >
+    (Figure pass.) The boundary of equal critical strain is drawn three times: Fig. 3(a) (contour
+    e_m^Uni = 0.44), Fig. 4(a) and Fig. 5(g). Read by code, all three flatten at the printed 1.65, so
+    1.65 is the value the authors computed and plotted, not a misprint. The difference in
+    q_boundary_165 lies between that computation and Eqs. B7-B15 as printed and solved here. It is
+    not confined to the thin-film limit. Along the whole curve the contour from the equations lies
+    below the plotted one, most clearly for H_s/H_f between 0.3 and 1 and beyond 4, where the
+    comparisons come out close or not reproduced. The e_m^Uni = 0.25 contour shows the same, smaller
+    offset (close on its flat part). The contours 0.01 to 0.13 of Fig. 3(a), every solid curve of
+    Fig. 7 and every curve of Fig. 2 are reproduced by the same equations. The mismatch therefore grows
+    toward the homogeneous limit, where e_m changes slowly with G_f/G_s and a small difference in e_m
+    moves the contour far. The paper does not say how it located the contours.
+  citation: {page: 3, quote: "creases always form under a strain lower than"}
+- id: q_fig5_branch_start
+  kind: unexplained_difference
+  about: [cmp_fig5c_em, cmp_fig5d_em, cmp_fig5e_em, cmp_fig5f_em, cmp_fig5a_em, cmp_fig5b_em]
+  text: >
+    (Figure pass; settles the reading asked for in q_points_AF_diamonds.) The green diamonds marking
+    e_m in Figs. 5(a) and 5(b) (points A, B) are reproduced by Eqs. B7-B15 under plane strain. In
+    Figs. 5(c)-5(e) (points C, D, E) e_m is shown as the left end of the green wrinkle branch, under
+    the label e_m. That end lies slightly below the e_m of the equations, by about 1% of the strain in
+    all three, and these comparisons are not reproduced. In 5(f) (point F) the branch leaves the flat
+    line at a strain also slightly below it (close). The wrinkle branch in 5(c)-(f) is the energy of
+    the finite element wrinkled state, with a defect of 10^-3 of the film thickness. An imperfect
+    bilayer leaves the flat state before the bifurcation strain, which may explain why the plotted
+    branch starts early. The paper does not say whether its e_m labels in (c)-(f) were placed from the
+    wrinkle analysis or from the simulations. The classification of points C-F (e_m below 0.35) holds
+    either way.
+  citation: {page: 6, quote: "indicated as point B in"}
+- id: q_fig3b_L5_flat
+  kind: unexplained_difference
+  about: [fig3b_L5_flat_read, cmp_fig3b_L5, Lm_contour, wrinkle_eigen_plane_strain]
+  text: >
+    (Figure pass.) The contour L^m_wrinkle/H_f = 5 of Fig. 3(b) turns flat for H_s/H_f above about 0.3,
+    at G_f/G_s between 1.9 and 1.5. For H_s/H_f of 1 and above, Lm_contour (Eqs. B7-B15) finds no
+    G_f/G_s >= 1 where the wavelength at the minimal strain is 5 film thicknesses. There it stays near
+    the wavelength of the G_f/G_s = 2.5 end of Fig. 7(b), and at H_s/H_f = 0.5 the model's crossing
+    lies below the plotted one (not reproduced). The flat part is therefore recorded as data only
+    (fig3b_L5_flat_read). Near G_f/G_s = 1 the critical strain hardly depends on wavelength, so the
+    wavelength at its minimum is poorly defined and sensitive to how the minimum is searched (the
+    reader's grid, q_eigen_scheme). Fig. 7(b) does not reach below G_f/G_s = 2.5 to show which is
+    right. The other contours (11, 16, 25, 40) are reproduced or close, with the plotted ones a few
+    percent above the computed G_f/G_s.
+  citation: {page: 3, quote: "The corresponding nominal wavelengths are inde"}
+- id: q_fig7_vk_circles
+  kind: reading
+  about: [fig7a_vk_read, fig7b_vk_read, fig7c_vk_read, fig7d_vk_read]
+  text: >
+    (Figure pass.) The von Karman circles of Fig. 7 (Ref. 58, huang2005) are now read by code, with
+    their positions, in all four panels. A relation job can compare them with huang2005's linear
+    model, and check the statement that it overestimates e_m by about 0.05 at G_f/G_s = 2
+    (q_vk_overestimate). In Fig. 7(a), at G_f/G_s = 2, the circle lies above the curve for
+    H_s/H_f = 1000 (the paper's thin-film case), which itself is not read below G_f/G_s = 15
+    because it lies under the H_s/H_f = 4 curve.
+  citation: {page: 10, quote: "the assumption of linear elasticity overestimates em for around 0.05"}
+- id: q_no_validation_cao2012
+  kind: choice
+  about: [exp_wrinkle_7p5to1_text, exp_wrinkle_10to1_text, exp_crease_15to1_text, exp_crease_10to1_text, q_exp_moduli, cao2012/bilayer_uniaxial, cao2012/simple_formula_uniaxial]
+  text: >-
+    (Cross-validation against cao2012, cited here as ref. 48; job 2026-11-19.) No validation is entered, in
+    either direction. This paper cites cao2012 for Eq. 1 and for ridges, not for its experiments. cao2012
+    holds no measurement. Its uniaxial bilayer analysis gives the quantity of the measured wrinkle onsets
+    (7.5:1 and 10:1 films), but only at a film/substrate modulus ratio that neither paper prints
+    (q_exp_moduli). The crease onsets have no runnable crease model in cao2012. See
+    cao2012/q_no_validation_jin2015.
+  citation: {page: 3, printed_page: "061008-3", quote: "was also pointed out in Refs", where: text}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [exp_wrinkle_7p5to1_text, exp_wrinkle_10to1_text, exp_crease_15to1_text, exp_crease_10to1_text, film_H_exp, substrate_H_exp, wrinkle_eigen_uniaxial, cerda2003/deep_substrate_wavelength, cerda2003/two_Hs_hand]
+  text: >-
+    (Cross-validation against cerda2003, cited here as ref. 34; job 2026-11-19.) No validation is entered,
+    in either direction. This paper cites cerda2003 among experiments that observe wrinkles (p. 1) and among
+    linear von Karman analyses that "predict the critical strain and wavelength of wrinkles reasonably well"
+    (p. 10), not for any value it compares. (1) cerda2003's models against these measurements: the measured
+    quantities here are onset strains of wrinkles and creases in PDMS bilayers (and the layer thicknesses,
+    which are inputs). cerda2003's models give wavelengths, amplitudes, bending stiffness, thickness and a
+    persistence length; none gives an onset strain. No wrinkle wavelength is measured here (Fig. 6 is
+    micrographs, left out in figures.md; the L^m/H_f values are predictions), and the film/substrate moduli
+    are not printed (q_exp_moduli), so even cerda2003's deep-substrate law would have no measurement and no
+    input. (2) This record's models against cerda2003's measurements: those are the Fig. 1 polyethylene
+    sheet's length, width, thickness and tensile strain (a sheet under tension, not a compressed bilayer)
+    and the pinched skin fold 2Hs ≈ 5 mm, all inputs; the hand and apple wavelengths are cerda2003's
+    predictions, not measurements. No model here returns any of these. The other direction is
+    cerda2003/q_no_validation_jin2015.
+  citation: {page: 10, printed_page: "061008-10", quote: "Karman plate can predict the critical strain and wavelength of", where: text}
+- id: q_no_validation_diab2013
+  kind: choice
+  about: [exp_crease_15to1_text, exp_crease_10to1_text, exp_wrinkle_10to1_text, exp_wrinkle_7p5to1_text, q_exp_moduli, wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, eq1_crease_uniaxial_to_plane, diab2013/gent_cho_crease_strain, diab2013/biot_strain_eq28, diab2013/bifurcation_strain_eq28]
+  text: >-
+    (Cross-validation against diab2013, cited here as ref. 44; job 2026-11-19.) No validation is entered, in
+    either direction. This paper cites diab2013 only among works where the wrinkle onset of a layered material
+    can be smaller or larger than the crease onset (p. 1, refs. 43-47), not for any value it compares.
+    diab2013 holds no measurement of its own: its one experimental value, Gent & Cho's crease strain
+    0.28-0.42 of rubber strips under bending, is reported from another work, and no model here outputs a
+    crease onset (the crease strains 0.35 and 0.44 are data from hong2009; Eq. 1 only converts one to the
+    other, and bending is neither of its two loadings). diab2013's models describe a half-space whose modulus
+    decays exponentially with depth, under plane strain; this paper's measured onsets are of film/substrate
+    bilayers under uniaxial compression with unprinted moduli (q_exp_moduli), so diab2013's models have no
+    inputs for them. See diab2013/q_no_validation_jin2015.
+  citation: {page: 1, printed_page: "061008-1", quote: "smaller or larger than that for the onset of creases", where: text}
+- id: q_no_validation_hong2009
+  kind: choice
+  about: [eq1_crease_uniaxial_to_plane, eq1_general, wrinkle_eigen_plane_strain, wrinkle_eigen_uniaxial, e_crease_uni, e_crease_pe, hong2009/eps_exp_printed, hong2009/eta_exp_printed, exp_crease_15to1_text]
+  text: >-
+    (Cross-validation against hong2009, cited here as ref. 39; job 2026-11-19.) No validation is entered from
+    this record's models. hong2009 records two measurements, both taken from other works: Gent & Cho's crease
+    strain of bent elastomer blocks, epsilon_exp = 0.35 (hong2009/eps_exp_printed), and the range 2.0-3.7 of
+    the swelling ratio of bonded gels at creasing (hong2009/eta_exp_printed). No model here computes a crease
+    onset. The crease strains 0.35 and 0.44 are data taken from hong2009 (e_crease_pe, e_crease_uni), and
+    eq1_crease_uniaxial_to_plane only converts the uniaxial one into the plane-strain one. Run on 0.44 and set
+    against epsilon_exp, it would only return hong2009's own prediction against the experiment hong2009 already
+    compares it with (hong2009/cmp_epsc_fig3_exp). Bending is also neither of its two loadings (as in
+    q_no_validation_diab2013). The wrinkle models (Eqs. B7-B15) give the onset of wrinkles in a bilayer, not of
+    creases, and nothing here describes a swelling gel. In the other direction, hong2009's models give a
+    plane-strain critical strain or a uniaxial critical stretch. Neither is the uniaxial onset strain measured
+    here, and the 15:1 creases channel below e_F (q_exp_vs_theory_uniaxial). See
+    hong2009/q_no_validation_jin2015.
+  citation: {page: 6, printed_page: "061008-6", quote: "strain 0.35 under plane strain conditions and 0.44 under uniaxial", where: text}
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [exp_wrinkle_7p5to1_text, exp_wrinkle_10to1_text, exp_crease_15to1_text, exp_crease_10to1_text, q_exp_moduli, fig7a_vk_read, fig7b_vk_read, fig7c_vk_read, fig7d_vk_read, q_fig7_vk_circles, q_vk_overestimate, wrinkle_eigen_uniaxial, huang2005/sinusoidal_finite_substrate, huang2005/thick_substrate_eq17, huang2005/isotropic_critical_strain]
+  text: >-
+    (Cross-validation against huang2005, cited here as ref. 58; job 2026-11-19.) No validation is entered,
+    in either direction. This paper uses huang2005 only for the blue circles of Fig. 7 (p. 10, "The critical
+    strains obtained by the nonlinear theory for Hs/Hf = 1000 are plotted with blue circles for comparison
+    [58]"). Those circles are huang2005's predictions (origin predicted, from_source ref-58), not
+    measurements: setting huang2005's von Karman model against them, or this record's Eq. B7 curves against
+    them, is model against model, the relation jobs' work (q_fig7_vk_circles, q_vk_overestimate).
+    (1) huang2005's models against this paper's measurements: the measured quantities are the uniaxial onset
+    strains of wrinkles (7.5:1 and 10:1 films) and creases (15:1 and 10:1 films) in PDMS bilayers. No model in
+    huang2005 gives a crease onset. Its wrinkle models give N_c/(h E_bar) and the critical strain of a
+    film/substrate bilayer, the right kind of quantity for the wrinkle onsets, but only at a film/substrate
+    modulus ratio, and neither paper prints the moduli of the 30:1 substrate or the 7.5:1 and 10:1 films
+    (q_exp_moduli). Any ratio entered would be added, and since the critical strain varies as
+    (E_bar/Es_bar)^(-2/3), it would set the verdict by itself. The measured onsets (0.18-0.28) are also far
+    beyond huang2005's small-strain linear substrate: this paper says that at Gf/Gs = 2 that theory
+    overestimates e_m by about 0.05 (p. 10), so the measured samples sit where the paper itself does not
+    claim huang2005's model applies. The layer thicknesses (18-20 um, about 550 um) are measured inputs, not
+    predictions. (2) This record's models against huang2005's measurements: huang2005 prints none (its plotted
+    symbols are its own numerical solutions and simulations), so nothing here can be validated against it.
+    See huang2005/q_no_validation_jin2015.
+  citation: {page: 10, printed_page: "061008-10", quote: "obtained by the nonlinear theory for Hs =Hf ¼ 1000 are plotted", where: text}
+- id: q_no_validation_richman1975
+  kind: choice
+  about: [wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, wrinkle_ec_uniaxial, Lm_contour, em_contour_uniaxial, ref-13, richman1975/l_measured_27wk, richman1975/l_measured_sidman, richman1975/t_27wk, richman1975/R_27wk, richman1975/area_II_normal, richman1975/area_VI_normal, richman1975/plate_on_foundation, exp_wrinkle_7p5to1_text, exp_crease_15to1_text]
+  text: >-
+    (Cross-validation against richman1975, cited here as ref. 13; job 2026-11-19.) No validation is entered,
+    in either direction. This paper cites richman1975 only as one example of folding in nature (p. 1,
+    "folding of brains [13-15]"); it does not say its models explain any of that paper's measurements.
+    (1) This record's models against richman1975's measurements. richman1975 measures the layer areas of
+    Table 1, the radius (84 mm) and cortical thickness (about 1.7 mm) of a 27-week hemisphere, and two
+    incipient intersulcal distances (8.5 mm and 7.5 mm). The models here give critical strains, the nominal
+    wavelength over the film thickness L^m/Hf, and contours of Gf/Gs: none gives a length or a layer area,
+    and richman1975 measures no wavelength-over-thickness ratio (its l/t = 8 is a prediction of its own
+    unpublished analysis). Even read as l/t, the prediction would need the cortex-to-core modulus ratio and
+    the thickness ratio of the fetal brain, which richman1975 does not measure (E1 = E2 and Ecore/E1 = 1/10
+    are its assumptions, in its added.yaml); since L^m/Hf grows roughly as (Gf/Gs)^(1/3), an added ratio
+    would set the verdict by itself. The loading also differs: two cortical strata under equibiaxial growth
+    stress on a curved core there, a single film compressed uniaxially or in plane strain together with its
+    substrate here. (2) richman1975's models against this record's measurements: see
+    richman1975/q_no_validation_jin2015.
+  citation: {page: 1, printed_page: "061008-1", quote: "folding of brains [13-15], and morphogenesis of viruses", where: text}
+- id: q_no_validation_savin2011
+  kind: choice
+  about: [exp_wrinkle_7p5to1_text, exp_wrinkle_10to1_text, exp_crease_15to1_text, exp_crease_10to1_text, film_H_exp, substrate_H_exp, wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, savin2011/wavelength_eq1, savin2011/wavelength_eq3, savin2011/radius_eq4, savin2011/loop_number]
+  text: >-
+    (Cross-validation against savin2011, cited here as ref. 12; job 2026-11-19.) No validation is entered,
+    in either direction. This paper cites savin2011 only as an example of wrinkles and creases in nature
+    ("development of guts [12]", p. 1) and of layered tissues of dissimilar moduli, not for any value it
+    compares. (1) This record's models against savin2011's measurements: those are the moduli, prestrain and
+    dimensions of the gut tube and mesentery and the loop wavelength, radius and number by species and
+    stage. The models here (det A = 0 of Appendix B, Eq. 1) give the onset strain and wavelength of surface
+    wrinkles of a compressed neo-Hookean bilayer; the gut loops are the buckling of a stiff tube bound to a
+    prestrained sheet (the mesentery), not a surface instability of a bonded film on a substrate, and
+    savin2011 measures no onset strain. The fine mesentery wrinkles savin2011 mentions are not measured.
+    (2) savin2011's models against this record's measurements: its looping laws (Eqs. 1-4, n = Lt/lambda)
+    give loop wavelength, radius and number from Et It and Em h; none gives an onset strain of wrinkles or
+    creases of a PDMS bilayer, and the film/substrate moduli here are not printed (q_exp_moduli). The other
+    direction is savin2011/q_no_validation_jin2015.
+  citation: {page: 1, printed_page: "061008-1", quote: "invagination of embryos [11], development of guts [12]", where: text}
+- id: q_no_validation_stafford2004
+  kind: choice
+  about: [wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, wrinkle_ec_uniaxial, Lm_contour, ref-5, exp_wrinkle_7p5to1_text, exp_wrinkle_10to1_text, exp_crease_15to1_text, exp_crease_10to1_text, film_H_exp, substrate_H_exp, stafford2004/d_fig2b, stafford2004/d_fig1b_caption, stafford2004/d_osg, stafford2004/E_fig3_indentation, stafford2004/E_fig4_indentation, stafford2004/wavelength_eq1, stafford2004/modulus_eq2]
+  text: >-
+    (Cross-validation against stafford2004, cited here as ref. 5; job 2026-11-19.) No validation is entered,
+    in either direction. This paper cites stafford2004 only as a use of elastic instability to "measure
+    material properties [5]" (p. 1); it takes no number from it and compares nothing with it.
+    (1) This record's models against stafford2004's measurements: those are wrinkle wavelengths d in um
+    against film thickness (Figs. 1b, 2b, the organosilicate ~30 um), film thicknesses, the PDMS modulus
+    range, and nanoindentation moduli of the films (Figs. 3, 4). The models here give onset strains, the
+    nominal wavelength over film thickness L^m/Hf and contours of Gf/Gs; none gives a wavelength in um or a
+    modulus, and stafford2004 measures no L/Hf (forming d/h from Fig. 2b would be a number computed in this
+    job). The inputs would also be added: Gf/Gs of a glassy PS film (nu_f = 0.33, not the incompressible
+    neo-Hookean film modelled here) on PDMS is about 2000 with Hs/Hf of order 10^4, where L^m/Hf grows as
+    (Gf/Gs)^(1/3) and the per-sample Es is not printed (stafford2004/q_Es_per_sample), so the added ratio
+    would set the verdict. stafford2004 measures no onset strain. (2) stafford2004's models against this
+    paper's measurements: see stafford2004/q_no_validation_jin2015.
+  citation: {page: 1, printed_page: "061008-1", quote: "neering to fabricate stretchable electronics [4], measure material", where: text}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, wrinkle_ec_uniaxial, exp_crease_15to1_text, exp_crease_10to1_text, exp_wrinkle_10to1_text, exp_wrinkle_7p5to1_text]
+  text: >-
+    (Cross-validation against tallinen2015, which cites this paper as its ref. 38; job 2026-11-19.) No
+    validation is entered in either direction. tallinen2015 is an analysis with finite element simulations
+    of a growing layer on a substrate and holds no measurement, so the wrinkle analysis here (Eqs. B7-B15)
+    has nothing measured there to predict; its plotted thresholds and wavelengths are model results. In the
+    other direction, tallinen2015's models (growth of the layer only, on an unstrained, infinitely deep
+    substrate) do not describe the jointly compressed finite bilayers of the experiments here, as
+    tallinen2015 itself says (its p. 2), and the samples' modulus ratios are not given (q_exp_moduli). See
+    tallinen2015/q_no_validation_jin2015.
+  citation: {page: 7, printed_page: "061008-7", quote: "by changing the mass ratio of base to crosslinker", where: text}
+- id: q_no_validation_trujillo2008
+  kind: choice
+  about: [wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, eq1_general, eq1_crease_uniaxial_to_plane, exp_crease_15to1_text, exp_crease_10to1_text, exp_wrinkle_10to1_text, exp_wrinkle_7p5to1_text]
+  text: >-
+    (Cross-validation against trujillo2008, cited here as ref. 38; job 2026-11-19.) No validation is
+    entered in either direction. This paper cites ref. 38 only among the experiments in which creases are
+    observed on a homogeneous material (p. 1), and takes no number from it. trujillo2008 measures the
+    crease onset of single swollen gel layers under equibiaxial in-plane compression (e_c = 0.33, h/h0 =
+    2.0). The models here are the linear wrinkle analysis of a bilayer (Eqs. B7-B15) and Eq. 1, under
+    plane strain or uniaxial compression. They give a wrinkle threshold, not a crease threshold (the crease
+    strains 0.35/0.44 are inputs from hong2009, not produced by a model here), and no model here takes an
+    equibiaxial state: Eq. 1 holds lambda3 constant, while in equibiaxial compression lambda3 = lambda1
+    changes with the load. Mapping trujillo2008's critical_compressive_strain (crease, equibiaxial) to a
+    wrinkle_onset_strain_* here (wrinkle, plane strain or uniaxial) would map two quantities that only
+    share a dimension. The other direction is trujillo2008/q_no_validation_jin2015.
+  citation: {page: 1, printed_page: "061008-1", quote: "for the onset of creases, and creases are observed in experiments", where: text}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [wrinkle_eigen_plane_strain, wrinkle_eigen_uniaxial, equal_strain_boundary_plane_strain, equal_strain_boundary_uniaxial, q_exp_moduli, exp_crease_15to1_text, exp_crease_10to1_text, exp_wrinkle_10to1_text, exp_wrinkle_7p5to1_text, wang2014/exp_wrinkling_fig7a, wang2014/exp_creasing_fig7a, wang2014/exp_delamination_fig7a, wang2014/tension_fig13a, wang2014/adhesion_fig3_lp2, wang2014/wrinkle_linear_stability]
+  text: >-
+    (Cross-validation against wang2014, cited here as ref. 47; job 2026-11-19.) No validation is entered,
+    in either direction. This paper says its subcritical creases explain "why in Ref. [47] the authors
+    observed creases experimentally under higher Gf/Gs than the value predicted by their theory" (p. 6),
+    but that explanation rests on the finite-element crease simulations (q_crease_fe), which are not a
+    runnable model here, and it gives no number for wang2014's samples. (1) The models here against
+    wang2014's measurements: the wrinkle analysis (Eqs. B7-B15) and the equal-strain boundaries give onset
+    strains, L_m/Hf and a boundary modulus ratio. wang2014 measures none of these: its Fig. 7(a) data are
+    the modulus ratios at which each experiment was run, marked with the observed mode (a categorical
+    outcome, at substrate prestretch 2, which no model here includes); the rest are moduli, a thickness
+    range, peel-test adhesion energies (Fig. 3) and uniaxial tension curves (Fig. 13), for which this record
+    has no adhesion or constitutive model. The boundary between the observed modes (between about 1.84
+    and 3.8, wang2014/q_fig7a_experiments_read) is an inference from categorical points, not a measured
+    datum. (2) wang2014's wrinkle model against the onset strains measured here: it needs mu_f/mu_s,
+    which this paper does not print (q_exp_moduli). wang2014's measured Sylgard moduli (2-5% crosslinker,
+    6.7-155 kPa) do not cover the 15:1, 10:1 and 7.5:1 films here, which were also cured differently, so
+    any ratio entered would be extrapolated and added, and the critical strain is sensitive to it. Its
+    model is also plane strain with a prestretched substrate, while these experiments are uniaxial
+    compression of an unprestretched bilayer. See wang2014/q_no_validation_jin2015.
+  citation: {page: 6, printed_page: "061008-6", quote: "This explains why in Ref. [47] the authors", where: text}
+- id: q_no_validation_wang2015
+  kind: choice
+  about: [wrinkle_eigen_uniaxial, wrinkle_eigen_plane_strain, wrinkle_ec_uniaxial, wrinkle_stretch_uniaxial, equal_strain_boundary_plane_strain, equal_strain_boundary_uniaxial, exp_wrinkle_10to1_text, exp_wrinkle_7p5to1_text, exp_crease_15to1_text, exp_crease_10to1_text, film_H_exp, substrate_H_exp, wang2015/crease_onset_measured, wang2015/fold_onset_measured, wang2015/pd_onset_measured, wang2015/ridge_onset_measured, wang2015/wrinkle_wavelength_fig5a, wang2015/amplitude_fig5b_r3p6, wang2015/eq4_wrinkle_onset, wang2015/eq7_crease_wavelength, wang2015/eq8_initial_wrinkle_wavelength]
+  text: >-
+    (Cross-validation with wang2015; job 2026-11-19.) No validation is entered, in either direction.
+    Neither paper cites the other, and neither compares its models with the other's data. (1) The
+    models here against wang2015's measurements: wang2015 measures a crease onset (~0.36, mu_f/mu_s = 0.3
+    and 0.64), fold, period-double and ridge onsets (~0.33, ≈ 0.32, ≈ 0.33), and, in Fig. 5, wavelengths and
+    amplitudes divided by the initial wrinkle wavelength against (1 - eM)/(1 - eC). This record's runnable
+    models are the wrinkle analysis (Eqs. B7-B15, Eq. 1) and the equal-strain boundaries. They give wrinkle
+    onset strains, L_m/Hf at onset and a boundary modulus ratio. They give no crease onset, because the
+    crease strains 0.35 and 0.44 are constants from hong2009 and the finite element crease results cannot
+    be rerun (q_crease_fe). They give no post-bifurcation mode and no wavelength ratio past onset. wang2015
+    measures no wrinkle onset strain and no wavelength over film thickness. (2) wang2015's models against
+    the onset strains measured here: Eq. 4 gives eC_wrinkle, a plane strain mismatch strain with an unstrained
+    substrate, from mu_f/mu_s. The strains here are uniaxial compression (lambda3 = 1/sqrt(lambda1)) of
+    film and substrate together, so the quantities differ. Eq. 4 would also need mu_f/mu_s, which this
+    paper does not print (q_exp_moduli). wang2015's Sylgard range (3.1 kPa to 1.4 MPa, set by cross-linker
+    fraction) is not mapped to mixing ratios, so any ratio would be added, and the onset strain is sensitive
+    to it. Eqs. 7 and 8 give wavelengths over film thickness, which is not measured here. Setting
+    wang2015's Eq. 4 and its triple point (1.3) against the wrinkle analysis and the boundary 1.65 here is
+    a relation between models, not a validation. The other direction is wang2015/q_no_validation_jin2015.
+  citation: {page: 7, printed_page: "061008-7", quote: "by changing the mass ratio of base to crosslinker", where: text}
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [em_biot_uni, exp_crease_15to1_text, exp_crease_10to1_text, exp_wrinkle_10to1_text, exp_wrinkle_7p5to1_text, biot1963/crit_stretch_uniaxial, biot1963/crit_stretch_plane]
+  text: >-
+    (Cross-validation with biot1963; job 2026-11-19.) No validation is entered, in either direction,
+    although this paper cites biot1963 (ref-26) for the strain 0.556 that e_m reaches when Gf/Gs = 1
+    (em_biot_uni, a predicted value). (1) This record's models against biot1963: biot1963 holds no
+    measurement (it has no figures; Table I is computed from its own equations), so there is nothing to
+    predict. (2) biot1963's models against the measurements here: the measured onset strains of wrinkles
+    (0.18 to 0.28) and creases (0.28 to 0.37) are of PDMS bilayers (15:1, 10:1, 7.5:1 films on a 30:1
+    substrate, Hs/Hf near 30), none of them homogeneous. Biot's models treat a homogeneous half-space, give
+    the critical stretch lambda, zeta, P/mu0, k and incremental moduli rather than the nominal strain
+    1 - lambda measured here (a different quantity of the same dimension), and do not treat creases.
+    Setting 0.556 against biot1963's uniaxial stretch 0.444 is model against model, the relation jobs' work.
+    The other direction is biot1963/q_no_validation_jin2015.
+  citation: {page: 10, printed_page: "061008-10", quote: "one layer and em reaches the Biot strain under the uniaxial", where: text}
+- id: q_no_validation_cao2011
+  kind: choice
+  about: [exp_crease_15to1_text, exp_crease_10to1_text, exp_wrinkle_10to1_text, exp_wrinkle_7p5to1_text, q_exp_moduli, cao2011/biot_eq28, cao2011/crease_eq12]
+  text: >-
+    (Cross-validation with cao2011, Cao & Hutchinson, Proc. R. Soc. A 2012; job 2026-11-19, pair from the
+    corpus list.) No validation is entered, in either direction. This paper does not cite cao2011: its
+    ref. 48 is the companion cao2012, and its ref. 3 is a review by Li, Cao et al. (1) This record's models
+    against cao2011: cao2011 holds no measurement (its plotted markers are finite element results, origin
+    predicted). (2) cao2011's models against the measurements here: cao2011 treats only a homogeneous
+    neo-Hookean half-space at a fixed lambda_3. The measured wrinkle (0.18 to 0.28) and crease (0.28, 0.37)
+    onsets are of PDMS bilayers whose moduli are not printed (q_exp_moduli), under uniaxial loading.
+    cao2011's eps_W and eps_C are the bilayer's limits only at Gf/Gs = 1, which no sample has, and this
+    paper explains the crease strains by Maxwell-strain channeling (q_exp_vs_theory_uniaxial). Setting
+    cao2011's 0.456 and 0.35 beside this record's 0.556 and 0.44 (Eq. 1) compares model with model, for the
+    relation jobs. The other direction is cao2011/q_no_validation_jin2015.
+  citation: {page: 3, printed_page: "061008-3", quote: "was also pointed out in Refs", where: text}

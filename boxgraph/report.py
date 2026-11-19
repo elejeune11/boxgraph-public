@@ -18,7 +18,7 @@ from pathlib import Path
 from .synthesis import cross_id
 
 KIND_ORDER = ["not_reproduced", "refuted_relation", "family_conflict", "cited_value", "belongs_to_numerics",
-              "depends_on_added_input"]
+              "depends_on_added_input", "reader_model_differs"]
 
 KIND_TEXT = {
     "not_reproduced": "A printed result does not follow from the paper's own model and inputs",
@@ -27,6 +27,7 @@ KIND_TEXT = {
     "refuted_relation": "A relation a paper states is refuted",
     "family_conflict": "A conflict inside a family",
     "cited_value": "A cited value does not match its source",
+    "reader_model_differs": "The reader's model of an analysis the paper does not give misses the paper's result",
 }
 
 

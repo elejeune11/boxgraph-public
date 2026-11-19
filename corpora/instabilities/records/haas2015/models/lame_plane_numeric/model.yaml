@@ -1,0 +1,17 @@
+id: lame_plane_numeric
+name: contracted disc in a plane sheet, energy (2.5) minimized numerically by finite elements
+stated: {page: 3, quote: "of the classical Lamé problem", where: Eq. 2.5}
+equation: "minimize int_0^inf s{[r'(s) - f(s)]^2 + [r(s)/s - f(s)]^2 + 2 nu [r'(s) - f(s)][r(s)/s - f(s)]} ds, f(s) = f if s < 1, 1 if s > 1; F = r(1)"
+inputs:
+  nu: {quantity: poisson_ratio, unit: dimensionless}
+  f: {quantity: intrinsic_contraction_factor, unit: dimensionless}
+outputs:
+  Phi: {quantity: contracted_boundary_radius, unit: dimensionless}
+settings: {n: 200, s_max: 40.0}
+stochastic: false
+reconstructed: >
+  Fig. 2(c)'s numerical points come from the paper's bvp4c solution of the general shell
+  equations of (2.4), whose numerical set-up for this plane test case is not given. This stand-in
+  minimizes the printed reduced energy (2.5) with piecewise-linear elements (n per unit length,
+  two-point Gauss quadrature) on 0 < s < s_max, with r(0) = 0 and r(s_max) = s_max standing for
+  r ~ s at infinity.

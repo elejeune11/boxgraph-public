@@ -1,0 +1,36 @@
+- id: run_biot_strain
+  model: biot_strain_eq28
+  inputs: {}
+  outputs: {eps_B: eps_B_eq28}
+- id: run_kbar_at_eps_M
+  model: bifurcation_wavenumber_eq28
+  inputs: {eps: eps_M_printed}
+  outputs: {kbar: kbar_M_eq28}
+- id: run_eps_w_eq28
+  model: bifurcation_strain_eq28
+  inputs: {kbar: kbar_fig4a}
+  outputs: {eps: eps_w_eq28}
+- id: run_eq28_fig2a
+  model: bifurcation_wavenumber_eq28
+  inputs: {}
+  sweep: {eps: kbar_bifurcation_fig2a}
+  outputs: {kbar: kbar_eq28_fig2a}
+  note: "Eq. 2.8 at the strains where the bifurcation curve of figure 2a was read."
+- id: run_eq28_fig5
+  model: bifurcation_wavenumber_eq28
+  inputs: {}
+  sweep: {eps: kbar_C12_C13_fig5}
+  outputs: {kbar: kbar_eq28_fig5}
+  note: "Eq. 2.8 at the strains where the curves C12 and C13 of figure 5 were read."
+- id: run_m_point_printed
+  model: m_point_eq211
+  inputs: {}
+  settings: {eps_scan_lo: 0.01, eps_scan_hi: 0.45, n_scan: 45, n_colloc: 60, n_x1: 64}
+  outputs: {eps_M: eps_M_eq211}
+  note: "The scan settings and collocation sizes are the reader's choices; the paper states no numerical procedure for Eq. 2.12."
+- id: run_m_point_corrected
+  model: m_point_eq211_corrected
+  inputs: {}
+  settings: {eps_scan_lo: 0.01, eps_scan_hi: 0.45, n_scan: 45, n_colloc: 60, n_x1: 64}
+  outputs: {eps_M: eps_M_eq211c, kbar_M: kbar_M_eq211c}
+  note: "The scan settings and collocation sizes are the reader's choices; the paper states no numerical procedure for Eq. 2.12."

@@ -1,0 +1,176 @@
+- id: run_biot
+  model: biot_eq28
+  inputs: {lam3: lambda3_plane_strain}
+  outputs: {r: r_eq28, ratio: ratio_W_eq28, coef: coef_W_eq28, eps_W: eps_W_eq28}
+- id: run_crease
+  model: crease_eq12
+  inputs: {ratio: ratio_C_hong, lam3: lambda3_plane_strain}
+  outputs: {coef: coef_C_eq12, eps_C: eps_C_eq12}
+- id: run_A
+  model: quadratic_coefficient_eq38
+  inputs: {r: r_printed}
+  settings: {n_x1: 64, depth: 12.0}
+  outputs: {A: A_eq38}
+- id: run_b
+  model: cubic_coefficients_eq37
+  inputs: {r: r_printed}
+  settings: {n_x1: 64, depth: 12.0}
+  outputs: {b112: b112_eq37, b123: b123_eq37, b134: b134_eq37, b235: b235_eq37, b145: b145_eq37, b156: b156_eq37}
+- id: run_b_relations
+  model: cubic_coefficient_relations_eq43
+  inputs: {r: r_printed}
+  settings: {n_x1: 64, depth: 12.0}
+  outputs: {b224_4: b224_quarter_eq37, b336_9: b336_ninth_eq37, b246_4: b246_quarter_eq37}
+- id: run_K_printed
+  model: imperfection_energy_eq313
+  inputs: {r: r_printed}
+  outputs: {K: K_eq313}
+- id: run_K_r2m1
+  model: imperfection_energy_eq313_r2m1
+  inputs: {r: r_printed}
+  outputs: {K: K_eq313_r2m1}
+- id: run_c
+  model: c_definition_eq44
+  inputs: {K: K_imperfection_printed, A: A_printed}
+  outputs: {c: c_eq44}
+- id: run_energy_two_mode
+  model: two_mode_energy
+  inputs: {b112: b112_printed}
+  outputs: {E: energy_two_mode_calc}
+- id: run_cstar_two_mode
+  model: two_mode_cstar_eq49
+  inputs: {b112: b112_printed, c: c_printed}
+  outputs: {cstar: cstar_eq49}
+- id: run_shape
+  model: shape_imperfection_eq410
+  inputs: {c: c_printed}
+  outputs: {coef: cstar_shape_eq410}
+- id: run_cstar_table1_i
+  model: nmode_cstar_eq46
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed}
+  sweep: {N: cstar_table1_max_strain}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  outputs: {cstar: cstar_table1_i_calc}
+- id: run_cstar_table1_ii
+  model: nmode_cstar_local
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, r: r_printed}
+  sweep: {N: cstar_table1_local_strain}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  outputs: {cstar: cstar_table1_ii_calc}
+
+# Figure checks (calibrated readings in figures.yaml)
+- id: run_fig2a_perfect_pos
+  model: two_mode_perfect_eq48
+  inputs: {b112: b112_printed}
+  sweep: {D: fig2a_perfect_pos_read}
+  outputs: {xi1_pos: fig2a_perfect_pos_calc}
+- id: run_fig2a_perfect_neg
+  model: two_mode_perfect_eq48
+  inputs: {b112: b112_printed}
+  sweep: {D: fig2a_perfect_neg_read}
+  outputs: {xi1_neg: fig2a_perfect_neg_calc}
+- id: run_fig2b_perfect
+  model: two_mode_perfect_eq48
+  inputs: {b112: b112_printed}
+  sweep: {D: fig2b_perfect_read}
+  outputs: {xi2: fig2b_perfect_calc}
+- id: run_fig2a_imperfect_outer_pos
+  model: two_mode_imperfect_eq47
+  inputs: {b112: b112_printed, c: c_printed, s: s_fig2_pos}
+  sweep: {D: fig2a_imperfect_outer_pos_read}
+  outputs: {xi1_outer: fig2a_imperfect_outer_pos_calc}
+- id: run_fig2a_imperfect_inner_pos
+  model: two_mode_imperfect_eq47
+  inputs: {b112: b112_printed, c: c_printed, s: s_fig2_pos}
+  sweep: {D: fig2a_imperfect_inner_pos_read}
+  outputs: {xi1_inner: fig2a_imperfect_inner_pos_calc}
+- id: run_fig2a_imperfect_outer_neg
+  model: two_mode_imperfect_eq47
+  inputs: {b112: b112_printed, c: c_printed, s: s_fig2_neg}
+  sweep: {D: fig2a_imperfect_outer_neg_read}
+  outputs: {xi1_outer: fig2a_imperfect_outer_neg_calc}
+- id: run_fig2a_imperfect_inner_neg
+  model: two_mode_imperfect_eq47
+  inputs: {b112: b112_printed, c: c_printed, s: s_fig2_neg}
+  sweep: {D: fig2a_imperfect_inner_neg_read}
+  outputs: {xi1_inner: fig2a_imperfect_inner_neg_calc}
+- id: run_fig2b_imperfect_outer
+  model: two_mode_imperfect_eq47
+  inputs: {b112: b112_printed, c: c_printed, s: s_fig2_pos}
+  sweep: {D: fig2b_imperfect_outer_read}
+  outputs: {xi2_outer: fig2b_imperfect_outer_calc}
+- id: run_fig2b_imperfect_inner
+  model: two_mode_imperfect_eq47
+  inputs: {b112: b112_printed, c: c_printed, s: s_fig2_pos}
+  sweep: {D: fig2b_imperfect_inner_read}
+  outputs: {xi2_inner: fig2b_imperfect_inner_calc}
+- id: run_fig3_N2
+  model: nmode_perfect_shape
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, N: N2_fig3}
+  settings: {xtol: 1.0e-13}
+  sweep: {x: fig3_N2_read}
+  outputs: {u: fig3_N2_calc}
+- id: run_fig3_N4
+  model: nmode_perfect_shape
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, N: N4_fig3}
+  settings: {xtol: 1.0e-13}
+  sweep: {x: fig3_N4_trough_read}
+  outputs: {u: fig3_N4_calc}
+- id: run_fig3_N6
+  model: nmode_perfect_shape
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, N: N6_fig3}
+  settings: {xtol: 1.0e-13}
+  sweep: {x: fig3_N6_trough_read}
+  outputs: {u: fig3_N6_calc}
+- id: run_fig4_N2
+  model: nmode_reduction_curve
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, N: N2_fig4}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  sweep: {s: fig4_N2_read}
+  outputs: {dl: fig4_N2_calc}
+- id: run_fig4_N3
+  model: nmode_reduction_curve
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, N: N3_fig4}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  sweep: {s: fig4_N3_read}
+  outputs: {dl: fig4_N3_calc}
+- id: run_fig4_N4
+  model: nmode_reduction_curve
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, N: N4_fig4}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  sweep: {s: fig4_N4_read}
+  outputs: {dl: fig4_N4_calc}
+- id: run_fig4_N5
+  model: nmode_reduction_curve
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, N: N5_fig4}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  sweep: {s: fig4_N5_read}
+  outputs: {dl: fig4_N5_calc}
+- id: run_fig4_N6
+  model: nmode_reduction_curve
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, N: N6_fig4}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  sweep: {s: fig4_N6_read}
+  outputs: {dl: fig4_N6_calc}
+- id: run_fig5_asymptotic
+  model: nmode_asymptotic_strain
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, N: N6_fig5, coef: coef_W_printed, lam3: lambda3_plane_strain}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  sweep: {xi1: fig5_asymptotic_read}
+  outputs: {eps: fig5_asymptotic_calc}
+- id: run_fig5_asymptotic_at_fe
+  model: nmode_asymptotic_strain
+  inputs: {b112: b112_printed, b123: b123_printed, b134: b134_printed, b235: b235_printed, b145: b145_printed, b156: b156_printed, c: c_printed, N: N6_fig5, coef: coef_W_printed, lam3: lambda3_plane_strain}
+  settings: {eta_min: 0.01, eta_max: 3.0, n_steps: 1500, xtol: 1.0e-12}
+  sweep: {xi1: fig5_eps_star_fe_read}
+  outputs: {eps: fig5_asymptotic_at_fe_calc}
+- id: run_fig5_local
+  model: local_criterion_words
+  inputs: {eps_W: eps_W_printed}
+  sweep: {xi: fig5_eps_A_fe_read}
+  outputs: {eps_A: fig5_local_criterion_calc}
+- id: run_fig9_local
+  model: local_criterion_words_exp
+  inputs: {eps_W: eps_W_printed}
+  sweep: {xi: fig9_eps_A_fe_read}
+  outputs: {eps_A: fig9_local_criterion_calc}

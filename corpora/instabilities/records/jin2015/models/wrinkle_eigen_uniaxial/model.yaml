@@ -1,0 +1,14 @@
+id: wrinkle_eigen_uniaxial
+name: wrinkling of a neo-Hookean bilayer with a substrate of finite thickness, uniaxial compression (Sec. 2, Appendix B)
+role: model
+stated: {page: 2, printed_page: "061008-2", quote: "we show the results of the uniaxial compression condition", where: "Sec. 2, Eqs. B7-B15"}
+equation: "det A = 0 (Eq. B7) with lambda3 = 1/sqrt(lambda1); e_c = 1 - lambda_c; e_m = min over KHf of e_c; L_m/Hf = 2 pi/(KHf)"
+inputs:
+  Gf_Gs: {quantity: shear_modulus_ratio, unit: dimensionless}
+  Hs_Hf: {quantity: thickness_ratio, unit: dimensionless}
+outputs:
+  em: {quantity: wrinkle_onset_strain_uniaxial, unit: dimensionless, description: "e_m^Uni, the minimal critical strain"}
+  Lm: {quantity: wrinkle_wavelength_over_film_thickness, unit: dimensionless}
+settings: {kh_min: 0.01, kh_max: 300.0, n_kh: 61, e_min: 0.0001, e_max: 0.75, n_e: 150, tol: 1.0e-7, n_golden: 30}
+built_from: [wrinkle_eigen_plane_strain]
+stochastic: false

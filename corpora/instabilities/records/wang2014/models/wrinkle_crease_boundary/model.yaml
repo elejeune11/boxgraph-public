@@ -1,0 +1,14 @@
+id: wrinkle_crease_boundary
+name: wrinkling-creasing phase boundary of the initial modes (intersection of the wrinkling and crease onset strains)
+role: model
+stated: {page: 6, printed_page: "051004-6", quote: "intersections of curves in Fig. 6(a) provide the phase boundaries", where: "Sec. 4, Phase Diagram of Initial Modes"}
+equation: "mu_f/mu_s on the boundary solves e_c wrinkle(mu_f/mu_s, lambda_p) = e_c crease; the initial mode is the one with the lowest critical strain"
+from_words: true
+built_from: [wrinkle_linear_stability]
+inputs:
+  eps_crease: {quantity: crease_onset_strain, unit: dimensionless}
+  lam_p: {quantity: substrate_prestretch, unit: dimensionless}
+outputs:
+  mu_boundary: {quantity: wrinkle_crease_boundary_modulus_ratio, unit: dimensionless}
+settings: {mu_lo: 1.0, mu_hi: 3.0, xtol: 1.0e-4, max_iter: 40, kh_min: 0.001, kh_max: 30.0, n_kh: 41, e_min: 0.0001, e_max: 0.7, n_e: 120, tol: 1.0e-6, n_golden: 25}
+stochastic: false

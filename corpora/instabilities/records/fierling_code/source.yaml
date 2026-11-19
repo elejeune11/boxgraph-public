@@ -1,0 +1,60 @@
+id: fierling_code
+kind: software
+title: "Released data and Surface Evolver script of Fierling et al. 2022 (embryo-scale epithelial buckling)"
+authors: [Julien Fierling, Alphy John, Barthélémy Delorme, Alexandre Torzynski, Guy B. Blanchard, Claire M. Lye,
+  Anna Popkova, Grégoire Malandain, Bénédicte Sanson, Jocelyn Étienne, Philippe Marmottant, Catherine Quilliet,
+  Matteo Rauzi]
+year: 2022
+venue: Zenodo 6506336 (data and code of Nature Communications 13, 3348)
+doi: 10.5281/zenodo.6506336
+file: corpus/instabilities/code/fierling_code
+url: https://doi.org/10.5281/zenodo.6506336
+version: "sha256:e774757ea202258a806f27026700a18610e47128ac5c816e70bd603bff82b1bd"
+licence: CC-BY-4.0
+language: Surface Evolver command language, gnuplot, plain-text data
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "read_code-1", date: "2026-11-19"}
+notes: >
+  What the source is. The Zenodo deposit 6506336 of fierling2022 (the paper names 10.5281/zenodo.6043523; see its
+  q_zenodo); the folder has no licence file, and CC-BY-4.0 is the deposit's licence. README.md maps each figure panel to
+  a file. Surface_Evolver_script.txt (Latin-1 encoded) builds the bent ellipsoid, meshes it, puts the myosin region on it
+  and defines youp, the pre-strain loop; Surface Evolver is not installed and a run takes weeks, so it is not run. 17
+  .dmp files are saved Surface Evolver states (frames 13-213), each with its own parameters and procedures. The .gdat,
+  .dat and .tsv files are the plotted numbers (simulated stress and strain profiles by angular band, area by row and
+  over time, furrow depth and rates, light-sheet and confocal measurements, the Fig. 1c curvatures, the Fig. 5e recoil
+  velocities) and the .plot files the gnuplot scripts that drew the figures. Data_sources/ is empty.
+
+  How it was read. Parameters are cited by file and line. Formulas from the script, the saved states and the gnuplot
+  scripts are ported to Python (compression_modulus, shell_thickness, pole_shape, prestrain_from_shrink,
+  shrink_schedule, mesoderm_halfwidth: our code). Six adapters (software: true) read the released data files from
+  $BOXGRAPH_SOURCE without copying them (stress_profile, ap_stress_vs_distance, area_curve, row_value, recoil_stats,
+  frame_time). The paper's printed values are copied with from_source/from_datum and compared in comparisons.yaml.
+  The curves the paper's record reads from figures are compared with the released numbers in validations.yaml.
+
+  What reproduces. chi~ = Y/(2(1 - nu)) = 50 from young2D = 100 and poisson2D = 0; nu = 0, R_AP/R_DV = 3 (gaxe), the
+  vitelline gap 2.5e-3 R_DV (space) and R_DV = 90 um (plot scripts) equal the paper's values (from_datum). The script's
+  bend coefficient gives Z_p = 0.45, but with the opposite orientation of z (q_pole_orientation). The saved frames 13
+  and 63 have midline pre-strain 1/gamma - 1 = 0.426 and 5.250, the paper's 0.43 and 5.25. All 15 validations
+  reproduce: the pre-stress, sigma_AP and sigma_DV of Fig. 2c, the pre-stress of Supp. Fig. 1f, sigma_AP at 0, 8 and
+  16 um in Fig. 5d (207, 163, 35), both area curves of Fig. 3a, all simulated, MuVi and confocal points of Fig. 3b, and
+  the Fig. 5e means. The figures show the released data. The frame times match the captions of Fig. 3b (-1.07 min) and
+  Fig. 5d at the caption's precision (27 s against 0'30''). Fig. 4a's is close (4'12.9'' against 4'12'').
+
+  What does not, and differences from the paper. (1) The released script is not the version that made the released
+  states: it divides ratio_shrink by 1.1 per step, the states by 1.03. The script's loop would put frame 13 at gamma =
+  0.32, not 0.70. The script also differs in its gradient crowns, convergence tolerance and flipping penalty, and it
+  rescales the intrinsic curvature that the paper says stays initial (q_script_vs_states). (2) The Fig. 5e script
+  averages n = 5 of the six embryos the file holds and the caption counts. Its error bar is SD/sqrt(n - 1), not the
+  stated SD (q_recoil_n). (3) In the released confocal data, row 7's mean lies below its own minimum (q_confocal_row7).
+  (4) The stated 'twice' AP/DV tension is 1.65 in the released Fig. 2c data (q_stress_ratio). (5) The Discussion's
+  20%/40% area reduction fits the simulated curve (20.9%, 41.6%) better than the MuVi one (18.2%, 46.5%); neither is
+  within the printed digits (q_area_reduction). (6) The simulated row areas lie outside every confocal range and outside
+  the MuVi range in six of nine rows (q_rows_fit). Hidden in the code, not in the paper: the region shape and its cosine
+  gradient (uniform to 12.5 um, graded to 44 um = 7.1 rows of 6.5 um, matching 'about seven rows'), young2D itself, the
+  shell thickness the moduli imply (31 um), the flipping penalty, the mesh (2999 vertices, 5993 facets), the
+  time-rescaling constants of the plots (T18 = 2, T0 = -10.8 min) and two scales for rows of cells (q_scales). How frames
+  were put on the experimental clock is not released (q_frame_times, q_not_released).
+
+  Left out. The furrow-depth, furrowing-rate and curvature time courses (Fig. 4b, 4c, 4f, Supp. Fig. 3), the AP/DV
+  length profiles (Fig. 3c-d, Supp. Fig. 1e) and the time courses by row (Supp. Fig. 2). The paper's record reads none
+  of them, and the MuVi curvature files of Fig. 4f are not released. They are available here for a later cross-record
+  job through area_curve-style adapters. The .dmp meshes are not processed beyond their parameters.

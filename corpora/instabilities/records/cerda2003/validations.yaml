@@ -1,0 +1,89 @@
+# Cross-validation against richman1975 (job 2026-11-13). Neither paper cites the other. richman1975's
+# geometry, a stiff cortical layer bonded to "an infinitely deep elastic foundation" (p. 2) with a
+# wavelength l much less than the hemisphere radius (84 mm) and more than the thickness, is the
+# deep-substrate limit t << lambda << Hs of this paper (p. 3), so that law predicts the measured
+# incipient intersulcal distances. It is run with prefactor 1, as this record evaluates it.
+- id: val_deep_substrate_27wk
+  model: deep_substrate_wavelength
+  inputs: {t: richman1975/t_27wk, E_over_Es: E_over_Es_brain_added}
+  output: lam
+  against: richman1975/l_measured_27wk
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: sheet_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  basis: >-
+    The deep-substrate law (p. 3, "In this deep substrate limit") gives the wavelength of a stiff sheet
+    of thickness t on a soft deep substrate; richman1975 treats the fetal cortex as such a layer on an
+    elastic core (p. 2, "two flat plates, the cortical layers, bonded to an infinitely deep elastic
+    foundation") and identifies the buckling wavelength with the intersulcal distance (note 21). The
+    thickness is the one note 18 gives for the same 27-week specimen (t ≈ 1.7 mm); E/Es is added from
+    richman1975's Ecore/E1 = 1/10.
+- id: val_deep_substrate_27wk_t_normal
+  model: deep_substrate_wavelength
+  inputs: {t: richman1975/t_normal_fetus, E_over_Es: E_over_Es_brain_added}
+  output: lam
+  against: richman1975/l_measured_27wk
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: sheet_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    t ≈ 1.0 mm is richman1975's estimate for "the normal fetus during convolutional development" (p. 3),
+    not a value for this specimen; it is the thickness richman1975 itself uses when it compares its
+    l ≈ 8 mm with this 8.5 mm measurement, so the comparison is made on the same footing.
+  basis: >-
+    As val_deep_substrate_27wk, with the thickness richman1975 uses for its own prediction (p. 3,
+    "t ≈ 1.0 mm, and hence l ≈ 8t ≈ 8 mm"), which it calls in "reasonable agreement" with 8.5 mm.
+- id: val_deep_substrate_sidman
+  model: deep_substrate_wavelength
+  inputs: {t: richman1975/t_normal_fetus, E_over_Es: E_over_Es_brain_added}
+  output: lam
+  against: richman1975/l_measured_sidman
+  purpose: validation
+  quantities: {richman1975/cortical_thickness: sheet_thickness, richman1975/buckling_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    No cortical thickness is printed for the Sidman and Rakic specimen; richman1975 compares its
+    prediction from t ≈ 1.0 mm (normal fetus, end of the seventh month) with this 7.5 mm measurement
+    (p. 3), so the same thickness is used here.
+  basis: >-
+    As val_deep_substrate_27wk: a stiff cortical layer on a deep soft core is this paper's deep-substrate
+    limit; the measurement is the normal incipient intersulcal distance in the specimen of Sidman and
+    Rakic (richman1975 p. 3, "7.5 mm in a specimen illustrated in Sidman and Rakic").
+# Cross-validation against stafford2004 (job 2026-11-14). Neither paper cites the other. stafford2004's
+# polystyrene films on thick PDMS sheets (h of 150-250 nm on a substrate of order mm) are the deep-substrate
+# limit t << lambda << Hs of this paper (p. 3), so that law predicts the measured wavelength at each
+# plotted thickness of Fig. 2b. It carries prefactor: unknown, so the build fits its one constant: the test
+# is the law's shape, lambda proportional to t at fixed E/Es.
+- id: val_deep_substrate_stafford_fig2b
+  model: deep_substrate_wavelength
+  inputs: {E_over_Es: E_over_Es_PS_PDMS_added}
+  sweep: {t: 'stafford2004/d_fig2b'}
+  output: lam
+  against: 'stafford2004/d_fig2b'
+  purpose: validation
+  quantities: {'stafford2004/film_thickness': sheet_thickness, 'stafford2004/wrinkle_wavelength': wrinkle_wavelength}
+  basis: >-
+    The deep-substrate law (p. 3, "In this deep substrate limit") gives the wrinkle wavelength of a stiff
+    sheet of thickness t on a soft substrate much deeper than the wavelength. stafford2004's films are a
+    stiff polymer film on a thick PDMS sheet (its Eq. 1, p. 2, is stated for a substrate much thicker than
+    the film), one film of graded thickness on one substrate, so E/Es is the same at every point and the
+    law predicts lambda proportional to t. Fig. 2b plots the measured wavelength (open circles, light
+    scattering) against thickness ("The linear increase in buckling wavelength (open circles) with film
+    thickness"). Since the prefactor is unknown and fitted by the build, the value of E/Es (and the
+    SIEBIMM modulus it rests on, which stafford2004 derives from these same wavelengths) does not enter
+    the verdict; only the proportionality is tested.
+# Cross-validation against bowden1998 (job 2026-11-14). This paper cites bowden1998 (ref-15) for the
+# deep-substrate law itself (p. 3). bowden1998's 50 nm gold films on thick PDMS are that limit; the law,
+# prefactor unknown, run on one measured wavelength range reports the prefactor that range implies.
+- id: val_deep_substrate_bowden_L
+  model: deep_substrate_wavelength
+  inputs: {t: 'bowden1998/t_gold', E_over_Es: E_over_Es_Au_PDMS_added}
+  output: lam
+  against: 'bowden1998/L_measured'
+  purpose: validation
+  quantities: {'bowden1998/film_thickness': sheet_thickness, 'bowden1998/wrinkle_wavelength': wrinkle_wavelength}
+  basis: >-
+    The deep-substrate law (p. 3, "B=K1=4 giving tE=Es 1=3 [15]") is attributed to ref. 15, Bowden et al.
+    1998, whose experiment is a 50 nm gold film (with a 5 nm Ti or Cr interlayer) evaporated on a thick
+    PDMS block, a stiff sheet on a substrate much deeper than the wavelength. The measurement is the range of
+    wavelengths observed over all samples, 20 to 50 um (bowden1998 p. 2). bowden1998 itself compares these
+    with its Eq. 3, the same law with a prefactor, and finds them about nine times longer than predicted,
+    which it attributes to a stiffened surface layer of the PDMS; that layer is not in this law. The
+    prefactor is unknown, so no verdict follows: the build reports the prefactor the range implies.

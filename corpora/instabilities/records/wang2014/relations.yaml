@@ -1,0 +1,191 @@
+# Against huang2005 (ref-65). Wang and Zhao cite Huang, Hong and Suo only in a list of film-substrate
+# analyses (p. 9, "[6,7,9,11,13,14,30,65-71]"); they state no relation between models and take no value from
+# Huang. The relations below are proposed. Both papers' film and substrate are incompressible in these models
+# (wang2014: neo-Hookean, plane strain; huang2005 Eq. 17 with nu = nu_s = 1/2), so the plane-strain modulus
+# ratio E_bar/Es_bar of huang2005 equals the shear modulus ratio mu_f/mu_s of wang2014. Huang's N_c/(h E_bar)
+# is the critical plane-strain membrane strain (N = h E_bar eps in plane strain), the same quantity as Wang's
+# e_c wrinkle at small strain.
+- id: rel_eq5_half_reduces_to_huang_eq17
+  kind: reduces_to
+  a: wang2014/eq5_stiff_film_half
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "mu_ratio"}
+  output_map: {Nc_over_hE: e_wrinkle}
+  limit: {lam_p: "1"}
+  regime: {mu_ratio: [10, 100000], lam_p: [1, 2]}
+  provenance: proposed
+  reason: >
+    Without substrate prestretch (lambda_p = 1) the corrected Eq. 5, e_c = (1/4)(Lambda 3 mu_s/mu_f)^(2/3)
+    with Lambda = (1 + lambda_p^2)/2, is (1/4)(3 mu_s/mu_f)^(2/3), Huang's Eq. 17 critical membrane force
+    N_c/(h E_bar) = (1/4)(3 Es_bar/E_bar)^(2/3) for an incompressible film and substrate (E_bar/Es_bar =
+    mu_f/mu_s). Wang attributes this form to Allen [52] and Cao and Hutchinson [29], not to Huang.
+- id: rel_eq5_printed_reduces_to_huang_eq17
+  kind: reduces_to
+  a: wang2014/eq5_stiff_film
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "mu_ratio"}
+  output_map: {Nc_over_hE: e_wrinkle}
+  limit: {lam_p: "1"}
+  regime: {mu_ratio: [10, 100000], lam_p: [1, 2]}
+  provenance: proposed
+  reason: >
+    The same limit for Eq. 5 as printed, Lambda = (1 + lambda_p^2). At lambda_p = 1 the printed form gives
+    Lambda = 2, a factor 2^(2/3) above Huang's Eq. 17; this relation is expected to fail and records,
+    against an independent paper, the suspected misprint behind the corrected variant eq5_stiff_film_half.
+- id: rel_linear_stability_approximated_by_huang_eq17
+  kind: approximated_by
+  a: wang2014/wrinkle_linear_stability
+  b: huang2005/thick_substrate_eq17
+  mapping: {Ebar_over_Esbar: "mu_ratio"}
+  output_map: {Nc_over_hE: e_wrinkle}
+  regime: {mu_ratio: [10, 1000], lam_p: [1, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >
+    Wang's finite-strain linear stability analysis of a neo-Hookean film on an unprestretched neo-Hookean
+    half-space (lambda_p = 1) is, for a stiff film, approximated by the small-strain stiff-film result Huang
+    reproduces as Eq. 17 (Wang says Eq. 5 holds "for large values of moduli ratio (e.g., mu_f/mu_s > 10)").
+    No limit makes them equal at finite modulus ratio, since the finite critical strain changes the
+    stiffness of both layers; the tolerance 0.1 (added) is the accuracy expected at mu_f/mu_s >= 10, where
+    the critical strain is at most about 0.11.
+#
+# Against cao2012 (ref-29). Wang and Zhao state two relations to Cao and Hutchinson's models. (1) Their wrinkling
+# analysis is Cao and Hutchinson's: "Following Cao and Hutchinson [29], we perform linear stability analysis on a
+# film-substrate system with a prestretched substrate" (p. 3); the equations are not reprinted, so the reader's
+# wrinkle_linear_stability is cao2012's Appendix eigenvalue problem (Eqs. A1-A10) in plane strain, with Wang's
+# lambda_p as Cao's plane-strain prestretch lambda0_1s. (2) Eq. 5 is taken from Cao and Hutchinson and Allen: "for
+# large values of moduli ratio ... the critical strain can be approximated as [29,52]" (p. 4), i.e. cao2012's Eq. 5
+# (simple_formula_plane). Eq. 5 as printed has Lambda = 1 + lambda_p^2, cao2012's has (1/2)(1 + lambda_p^2): both
+# the printed form and the corrected variant are related, so the factor 2^(2/3) shows against the cited source.
+# Values: wang2014's maximum wrinkling strain 0.465 is its own result (cao2012 prints 0.456, Biot's), and the
+# period-doubling bound mu_f/mu_s >= 10 that Wang attributes to Cao and Hutchinson (pd_min_mu_ratio) is not a
+# datum in cao2012 (whose period-doubling values are onset strains at given ratios), so cited.yaml gains nothing.
+- id: rel_linear_stability_same_as_cao_bilayer_plane
+  kind: same_as
+  a: wang2014/wrinkle_linear_stability
+  b: cao2012/bilayer_plane_strain
+  mapping: {mu_ratio: "mu_ratio", lam01: "lam_p"}
+  output_map: {eW: e_wrinkle}
+  regime: {mu_ratio: [2, 1000], lam_p: [1, 2]}
+  tolerance: 1.0e-4
+  provenance: stated
+  citation: {page: 3, printed_page: "051004-3", quote: "Following Cao and Hutchinson [29], we perform", where: "Sec. 4, Wrinkling"}
+  assumptions:
+    - "Wang's film strain e = DL/L in plane strain is Cao's eW = 1 - lambda_1f (Eq. 4); the substrate stretch is lambda_p (1 - e), Cao's lambda_1s = lambda0_1s lambda_1f (Eq. 3)"
+    - "Wang's uniaxial prestretch lambda_p of a plane-strain substrate is Cao's plane-strain prestretch lambda0_1s with lambda0_3s = 1"
+    - "wang2014's equations are not printed; its model is the reader's implementation of cao2012's Eqs. A1-A10, so this checks the reading as much as the papers"
+    - "regime starts at mu_f/mu_s = 2: at mu_f/mu_s = 1, lambda_p = 1 the critical kh is arbitrary (homogeneous half-space); tolerance 1e-4 (added) covers the 1e-6 bisection of both solvers"
+- id: rel_eq5_half_same_as_cao_eq5
+  kind: same_as
+  a: wang2014/eq5_stiff_film_half
+  b: cao2012/simple_formula_plane
+  mapping: {mu_ratio: "mu_ratio", lam01: "lam_p"}
+  output_map: {e0: e_wrinkle}
+  regime: {mu_ratio: [10, 100000], lam_p: [1, 3]}
+  provenance: stated
+  citation: {page: 4, printed_page: "051004-4", quote: "strain can be approximated as [29,52]", where: Eq. 5}
+  assumptions:
+    - "Wang's lambda_p (uniaxial prestretch in the plane-strain substrate) is Cao's lambda0_1s"
+    - "this is the corrected variant, Lambda = (1 + lambda_p^2)/2"
+- id: rel_eq5_printed_same_as_cao_eq5
+  kind: same_as
+  a: wang2014/eq5_stiff_film
+  b: cao2012/simple_formula_plane
+  mapping: {mu_ratio: "mu_ratio", lam01: "lam_p"}
+  output_map: {e0: e_wrinkle}
+  regime: {mu_ratio: [10, 100000], lam_p: [1, 3]}
+  provenance: stated
+  citation: {page: 4, printed_page: "051004-4", quote: "strain can be approximated as [29,52]", where: Eq. 5}
+  assumptions:
+    - "Wang's lambda_p is Cao's lambda0_1s"
+    - "Eq. 5 as printed, Lambda = 1 + lambda_p^2: expected to differ from the cited cao2012 Eq. 5 by the constant factor 2^(2/3) = 1.587, the suspected misprint"
+#
+# Against hong2009 (ref-55). Wang and Zhao take hong2009's crease threshold as a value (e_c crease = 0.35, p. 4 and
+# p. 6; linked in cited.yaml) and use it as the eps_crease input of wrinkle_crease_boundary. They state no relation
+# between models, and none can be proposed: hong2009's models turn a plane-strain critical strain into stretches,
+# stretch ratios and gel swelling ratios, or read the strain off the finite-element energy curve of its Fig. 3;
+# wang2014 has no model of any of these, and hong2009 has no model of wrinkling or of a film on a substrate. The
+# Biot threshold both papers mention (hong2009's 0.46, wang2014's ~0.465 at mu_f/mu_s = 1, lambda_p = 1) is a
+# datum in hong2009, not a model, so it is a comparison for the relation jobs with biot1963, not a relation here.
+#
+# Against biot1963 (ref-51). Wang and Zhao state that the maximum wrinkling strain of their linear stability
+# analysis, at mu_f/mu_s = 1 and lambda_p = 1 (a homogeneous neo-Hookean half-space in plane strain), is
+# "consistent with Biot's [51]". Biot gives a critical stretch (Eq. 4.2, from the root zeta of the cubic Eq. 2.9);
+# Wang gives a nominal strain e = DL/L. The helper wrinkle_stretch_linear_stability (built from
+# wrinkle_linear_stability) gives the film stretch 1 - e_c wrinkle, Biot's variable. Biot's input zeta does not
+# depend on Wang's inputs: the mapping gives it as the real root of zeta^3 + 2 zeta^2 - 2 = 0 (Eq. 2.9) in
+# Cardano's closed form. Wang takes no value from Biot (the printed ~0.465 is its own result), so cited.yaml
+# gains nothing; that 0.465 differs from Biot's 1 - 0.544 = 0.456 is already a question (q on ew_max_printed).
+- id: rel_linear_stability_reduces_to_biot_plane
+  kind: reduces_to
+  a: wang2014/wrinkle_stretch_linear_stability
+  b: biot1963/crit_stretch_plane
+  mapping: {zeta: "((19 + sqrt(297))**(1/3) + (19 - sqrt(297))**(1/3))/3 - 2/3"}
+  output_map: {lam: lam_c}
+  limit: {mu_ratio: "1", lam_p: "1"}
+  regime: {mu_ratio: [1, 2], lam_p: [1, 1.5]}
+  tolerance: 1.0e-4
+  provenance: stated
+  citation: {page: 4, printed_page: "051004-4", quote: "is around 0.465 for lf =ls ¼ 1 and kp ¼ 1, consistent with Biot", where: "Sec. 4, Wrinkling"}
+  assumptions:
+    - "film stretch along the compression = 1 - e, with e = DL/L in plane strain (p. 3)"
+    - "Biot's plane-strain case (lambda_3 = 1, single force in x, Eq. 4.2) is the homogeneous limit of Wang's plane-strain film-substrate problem"
+    - "tolerance 1e-4 (added): the linear stability solver brackets the critical strain to 1e-6 and the limit is approached numerically"
+#
+# Against diab2013 (ref-32). Wang and Zhao cite Diab et al. only in a list of works on film-substrate instabilities
+# (p. 1, "[14,24,26,28-33]"); they state no relation between models and take no value from Diab (their crease
+# strain 0.35 is from Hong et al. [55] and Wong et al. [56], linked to hong2009), so cited.yaml gains nothing.
+# diab2013's crease analyses (setback creases, M-point) concern a homogeneous half-space and have no counterpart
+# among wang2014's runnable models (its crease threshold is an input, not a model). One relation is proposed: both
+# papers compute Biot's plane-strain surface-instability strain as a nominal compressive strain, wang2014 as the
+# homogeneous limit of its film-substrate linear stability analysis (the "around 0.465 ... consistent with Biot's"),
+# diab2013 as the strain where the bifurcation wavenumber of Eq. 2.8 diverges (eps_B = 0.456).
+- id: rel_linear_stability_reduces_to_diab_biot_strain
+  kind: reduces_to
+  a: wang2014/wrinkle_linear_stability
+  b: diab2013/biot_strain_eq28
+  mapping: {}
+  output_map: {eps_B: e_wrinkle}
+  limit: {mu_ratio: "1", lam_p: "1"}
+  regime: {mu_ratio: [1, 2], lam_p: [1, 1.5]}
+  tolerance: 1.0e-4
+  provenance: proposed
+  reason: >
+    At mu_f/mu_s = 1 and lambda_p = 1 the film-substrate system of wang2014 is a homogeneous incompressible
+    neo-Hookean half-space in plane strain, and its wrinkling strain e = DL/L (nominal) is the strain of Biot's
+    surface instability, the same nominal compressive strain eps = 1 - lambda at which diab2013's Eq. 2.8
+    wavenumber diverges (lambda^3 + lambda^2 + lambda - 1 = 0, eps_B = 0.4563). wang2014 prints ~0.465 there and
+    diab2013 prints 0.456; whether the computed limit matches is what this relation tests.
+  assumptions:
+    - "both strains are nominal compressive strains in plane strain, 1 - lambda along the compression (wang2014 p. 3; diab2013 p. 5)"
+    - "a homogeneous half-space has no length scale, so the critical wavenumber of wang2014 is arbitrary in the limit; only the strain is compared"
+    - "tolerance 1e-4 (added): the linear stability solver brackets the critical strain to 1e-6 and the limit is approached numerically"
+#
+# Against cao2011 (Cao & Hutchinson, Proc. R. Soc. A 468, 2012). Wang and Zhao do not cite this paper (their
+# ref. 29 is the companion JAM paper, record cao2012), so no relation is stated and no value is taken: cited.yaml
+# gains nothing. cao2011 has no film/substrate model and no prestretch (its only parameter is the fixed
+# out-of-plane stretch lambda_3), so it cannot settle wang2014's q_boundary_prestretch or the 2^(2/3) factor of
+# Eq. 5 (that is cao2012's Eq. 5). Its crease threshold crease_eq12 at lambda_3 = 1 is the 0.35 wang2014 takes as
+# an input (from hong2009, already linked), not a model of wang2014. One relation is proposed: the homogeneous
+# limit of wang2014's linear stability analysis is cao2011's plane-strain Biot problem.
+- id: rel_linear_stability_reduces_to_cao2011_biot
+  kind: reduces_to
+  a: wang2014/wrinkle_linear_stability
+  b: cao2011/biot_eq28
+  mapping: {lam3: "1"}
+  output_map: {eps_W: e_wrinkle}
+  limit: {mu_ratio: "1", lam_p: "1"}
+  regime: {mu_ratio: [1, 2], lam_p: [1, 1.5]}
+  tolerance: 1.0e-4
+  provenance: proposed
+  reason: >
+    At mu_f/mu_s = 1 and lambda_p = 1 wang2014's plane-strain film/substrate system is a homogeneous incompressible
+    neo-Hookean half-space, and its wrinkling strain e = DL/L is the nominal strain of Biot's surface instability,
+    which cao2011 solves again in its own variables (Eq. 2.8, r^3 - 3r^2 - r - 1 = 0) and gives as
+    eps_W = 1 - 0.5437/sqrt(lambda_3), 0.456 in plane strain (lambda_3 = 1). wang2014 prints ~0.465 there; whether
+    the computed limit gives 0.456 is what this relation tests.
+  assumptions:
+    - "both strains are nominal compressive strains along x1, 1 - lambda (wang2014 p. 3; cao2011 p. 2, eps_W = 1 - lambda_W)"
+    - "wang2014's plane strain is cao2011's fixed out-of-plane stretch lambda_3 = 1"
+    - "a homogeneous half-space has no length scale, so wang2014's critical wavenumber is arbitrary in the limit; only the strain is compared"
+    - "tolerance 1e-4 (added): the linear stability solver brackets the critical strain to 1e-6 and the limit is approached numerically"

@@ -1,0 +1,252 @@
+# Printed scalar results
+- id: run_kbar_w_p0
+  model: wrinkling_eq11_shell
+  inputs: {pbar: pbar_zero_p3, alpha: alpha_fig2}
+  outputs: {kbar_w: kbar_w_p0_pred}
+  note: "at p-bar = 0 the root does not depend on alpha"
+- id: run_kbar_B_p0
+  model: brazier_shell_eq9
+  inputs: {pbar: pbar_zero_p3}
+  outputs: {kbarB: kbar_B_p0_pred}
+- id: run_shape_first_order
+  model: cross_section_brazier
+  inputs: {pbar: pbar_zero_p3}
+  settings: {expansion: first_order}
+  outputs: {flattening: flattening_pred_first, moment_reduction: moment_reduction_pred_first}
+  note: "the result does not depend on p-bar (a2 = -1/3 at every pressure)"
+- id: run_shape_exact
+  model: cross_section_brazier
+  inputs: {pbar: pbar_zero_p3}
+  settings: {expansion: exact}
+  outputs: {flattening: flattening_pred_exact, moment_reduction: moment_reduction_pred_exact}
+- id: run_khat_w_p0_4
+  model: wrinkling_eq11
+  inputs: {phat: phat_0_4_p3, alpha: alpha_fig2}
+  outputs: {khat_w: khat_w_p0_4_pred}
+- id: run_khat_w_unpressurized
+  model: wrinkling_eq11
+  inputs: {phat: phat_absent_p4, alpha: alpha_fig2}
+  outputs: {khat_w: khat_w_unpressurized_pred}
+  note: "the paper does not say which alpha it used for this sentence; alpha ≈ 0.005 of the Fig. 2 caption"
+# Balloon limit of Eq. 11 (p. 3), added in the audit
+- id: run_wlimit_p0_4
+  model: wrinkling_balloon_limit
+  inputs: {phat: phat_0_4_p3}
+  outputs: {khat_w: wlimit_p0_4_pred}
+- id: run_wleading_p0_4
+  model: wrinkling_balloon_leading
+  inputs: {phat: phat_0_4_p3}
+  outputs: {khat_w: wleading_p0_4_pred}
+- id: run_wlimit_fig2b_crosses
+  model: wrinkling_balloon_limit
+  inputs: {}
+  sweep: {phat: fig2b_crosses}
+  outputs: {khat_w: wlimit_fig2b_crosses_pred}
+- id: run_wleading_fig2b_crosses
+  model: wrinkling_balloon_leading
+  inputs: {}
+  sweep: {phat: fig2b_crosses}
+  outputs: {khat_w: wleading_fig2b_crosses_pred}
+# Fig. 2: wrinkling points
+- id: run_eq11_fig2a_crosses
+  model: wrinkling_eq11_shell
+  inputs: {alpha: alpha_fig2}
+  sweep: {pbar: fig2a_crosses}
+  outputs: {kbar_w: eq11_fig2a_crosses_pred}
+- id: run_eq11_fig2a_dots
+  model: wrinkling_eq11_shell
+  inputs: {alpha: alpha_fig2}
+  sweep: {pbar: fig2a_dots}
+  outputs: {kbar_w: eq11_fig2a_dots_pred}
+- id: run_wnum_fig2a_dots
+  model: wrinkling_numerics_shell
+  inputs: {alpha: alpha_fig2}
+  sweep: {pbar: fig2a_dots}
+  outputs: {kbar_w: wnum_fig2a_dots_pred}
+- id: run_eq11_fig2b_crosses
+  model: wrinkling_eq11
+  inputs: {alpha: alpha_fig2}
+  sweep: {phat: fig2b_crosses}
+  outputs: {khat_w: eq11_fig2b_crosses_pred}
+- id: run_eq11_fig2b_dots
+  model: wrinkling_eq11
+  inputs: {alpha: alpha_fig2}
+  sweep: {phat: fig2b_dots}
+  outputs: {khat_w: eq11_fig2b_dots_pred}
+- id: run_wnum_fig2b_dots
+  model: wrinkling_numerics_balloon
+  inputs: {alpha: alpha_fig2}
+  sweep: {phat: fig2b_dots}
+  outputs: {khat_w: wnum_fig2b_dots_pred}
+# Fig. 2: torque-curvature curves
+- id: run_eq8_fig2a_p0
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_0_fig2a}
+  sweep: {kbar: fig2a_p0_eq8}
+  outputs: {Mbar: eq8_fig2a_p0_pred}
+- id: run_eq8_fig2a_p0_at_num
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_0_fig2a}
+  sweep: {kbar: fig2a_p0_num}
+  outputs: {Mbar: eq8_fig2a_p0_at_num_pred}
+- id: run_num_fig2a_p0
+  model: energy_numerics_shell
+  inputs: {pbar: pbar_0_fig2a, alpha: alpha_fig2}
+  sweep: {kbar: fig2a_p0_num}
+  outputs: {Mbar: num_fig2a_p0_pred}
+- id: run_eq8_fig2a_p2_5
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_2_5_fig2a}
+  sweep: {kbar: fig2a_p2_5_eq8}
+  outputs: {Mbar: eq8_fig2a_p2_5_pred}
+- id: run_eq8_fig2a_p2_5_at_num
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_2_5_fig2a}
+  sweep: {kbar: fig2a_p2_5_num}
+  outputs: {Mbar: eq8_fig2a_p2_5_at_num_pred}
+- id: run_num_fig2a_p2_5
+  model: energy_numerics_shell
+  inputs: {pbar: pbar_2_5_fig2a, alpha: alpha_fig2}
+  sweep: {kbar: fig2a_p2_5_num}
+  outputs: {Mbar: num_fig2a_p2_5_pred}
+- id: run_eq8_fig2a_p5
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_5_fig2a}
+  sweep: {kbar: fig2a_p5_eq8}
+  outputs: {Mbar: eq8_fig2a_p5_pred}
+- id: run_eq8_fig2a_p5_at_num
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_5_fig2a}
+  sweep: {kbar: fig2a_p5_num}
+  outputs: {Mbar: eq8_fig2a_p5_at_num_pred}
+- id: run_num_fig2a_p5
+  model: energy_numerics_shell
+  inputs: {pbar: pbar_5_fig2a, alpha: alpha_fig2}
+  sweep: {kbar: fig2a_p5_num}
+  outputs: {Mbar: num_fig2a_p5_pred}
+- id: run_eq8_fig2a_p7_5
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_7_5_fig2a}
+  sweep: {kbar: fig2a_p7_5_eq8}
+  outputs: {Mbar: eq8_fig2a_p7_5_pred}
+- id: run_eq8_fig2a_p7_5_at_num
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_7_5_fig2a}
+  sweep: {kbar: fig2a_p7_5_num}
+  outputs: {Mbar: eq8_fig2a_p7_5_at_num_pred}
+- id: run_num_fig2a_p7_5
+  model: energy_numerics_shell
+  inputs: {pbar: pbar_7_5_fig2a, alpha: alpha_fig2}
+  sweep: {kbar: fig2a_p7_5_num}
+  outputs: {Mbar: num_fig2a_p7_5_pred}
+- id: run_eq8_fig2a_p10
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_10_fig2a}
+  sweep: {kbar: fig2a_p10_eq8}
+  outputs: {Mbar: eq8_fig2a_p10_pred}
+- id: run_eq8_fig2a_p10_at_num
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_10_fig2a}
+  sweep: {kbar: fig2a_p10_num}
+  outputs: {Mbar: eq8_fig2a_p10_at_num_pred}
+- id: run_num_fig2a_p10
+  model: energy_numerics_shell
+  inputs: {pbar: pbar_10_fig2a, alpha: alpha_fig2}
+  sweep: {kbar: fig2a_p10_num}
+  outputs: {Mbar: num_fig2a_p10_pred}
+- id: run_eq8_fig2b_p0_02
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_02_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_02_eq8}
+  outputs: {Mhat: eq8_fig2b_p0_02_pred}
+- id: run_eq8_fig2b_p0_02_at_num
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_02_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_02_num}
+  outputs: {Mhat: eq8_fig2b_p0_02_at_num_pred}
+- id: run_num_fig2b_p0_02
+  model: energy_numerics_balloon
+  inputs: {phat: phat_0_02_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_02_num}
+  outputs: {Mhat: num_fig2b_p0_02_pred}
+- id: run_eq8_fig2b_p0_05
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_05_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_05_eq8}
+  outputs: {Mhat: eq8_fig2b_p0_05_pred}
+- id: run_eq8_fig2b_p0_05_at_num
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_05_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_05_num}
+  outputs: {Mhat: eq8_fig2b_p0_05_at_num_pred}
+- id: run_num_fig2b_p0_05
+  model: energy_numerics_balloon
+  inputs: {phat: phat_0_05_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_05_num}
+  outputs: {Mhat: num_fig2b_p0_05_pred}
+- id: run_eq8_fig2b_p0_1
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_1_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_1_eq8}
+  outputs: {Mhat: eq8_fig2b_p0_1_pred}
+- id: run_eq8_fig2b_p0_1_at_num
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_1_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_1_num}
+  outputs: {Mhat: eq8_fig2b_p0_1_at_num_pred}
+- id: run_num_fig2b_p0_1
+  model: energy_numerics_balloon
+  inputs: {phat: phat_0_1_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_1_num}
+  outputs: {Mhat: num_fig2b_p0_1_pred}
+- id: run_eq8_fig2b_p0_2
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_2_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_2_eq8}
+  outputs: {Mhat: eq8_fig2b_p0_2_pred}
+- id: run_eq8_fig2b_p0_2_at_num
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_2_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_2_num}
+  outputs: {Mhat: eq8_fig2b_p0_2_at_num_pred}
+- id: run_num_fig2b_p0_2
+  model: energy_numerics_balloon
+  inputs: {phat: phat_0_2_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_2_num}
+  outputs: {Mhat: num_fig2b_p0_2_pred}
+- id: run_eq8_fig2b_p0_4
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_4_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_4_eq8}
+  outputs: {Mhat: eq8_fig2b_p0_4_pred}
+- id: run_eq8_fig2b_p0_4_at_num
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_4_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_4_num}
+  outputs: {Mhat: eq8_fig2b_p0_4_at_num_pred}
+- id: run_num_fig2b_p0_4
+  model: energy_numerics_balloon
+  inputs: {phat: phat_0_4_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_p0_4_num}
+  outputs: {Mhat: num_fig2b_p0_4_pred}
+# Fig. 2: the shared low-curvature trunk (all ten lines of a panel coincide); Eq. 8 at the lowest and highest pressure
+- id: run_eq8_fig2a_trunk_p0
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_0_fig2a}
+  sweep: {kbar: fig2a_trunk}
+  outputs: {Mbar: eq8_fig2a_trunk_p0_pred}
+- id: run_eq8_fig2a_trunk_p10
+  model: torque_shell_eq8
+  inputs: {pbar: pbar_10_fig2a}
+  sweep: {kbar: fig2a_trunk}
+  outputs: {Mbar: eq8_fig2a_trunk_p10_pred}
+- id: run_eq8_fig2b_trunk_p0_02
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_02_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_trunk}
+  outputs: {Mhat: eq8_fig2b_trunk_p0_02_pred}
+- id: run_eq8_fig2b_trunk_p0_4
+  model: torque_balloon_eq8
+  inputs: {phat: phat_0_4_fig2b, alpha: alpha_fig2}
+  sweep: {khat: fig2b_trunk}
+  outputs: {Mhat: eq8_fig2b_trunk_p0_4_pred}

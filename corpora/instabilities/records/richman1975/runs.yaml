@@ -1,0 +1,61 @@
+- id: run_thickness_sum
+  model: stratum_sum
+  inputs: {t1: t1_normal, t2: t2_normal}
+  outputs: {t: t_sum_pred}
+- id: run_sphere_ratio_exact
+  model: sphere_area_ratio
+  inputs: {R: R_27wk, t: t_27wk}
+  outputs: {ratio: area_ratio_exact_pred}
+- id: run_sphere_ratio_approx
+  model: sphere_area_ratio_approx
+  inputs: {R: R_27wk, t: t_27wk}
+  outputs: {ratio: area_ratio_approx_pred, denominator: R_minus_2t_pred}
+- id: run_layer_ratio_normal
+  model: layer_area_ratio
+  inputs: {Ao: area_II_normal, Ai: area_VI_normal}
+  outputs: {ratio: area_ratio_measured_pred}
+- id: run_wavelength_normal
+  model: wavelength_from_thickness
+  inputs: {l_over_t: l_over_t_caption, t: t_normal_fetus}
+  outputs: {l: l_normal_pred}
+- id: run_wavelength_27wk_thickness
+  model: wavelength_from_thickness
+  inputs: {l_over_t: l_over_t_caption, t: t_27wk}
+  outputs: {l: l_27wk_pred}
+  note: The same l = 8t, with the cortical thickness note 18 gives for the 27-week specimen whose intersulcal distance is printed as 8.5 mm.
+- id: run_plate_normal
+  model: plate_on_foundation
+  inputs: {t1: t1_normal, t2: t2_normal, E2_over_E1: E2_over_E1_added, Ecore_over_E1: Ecore_over_E1_added, stress_ratio: stress_ratio_added}
+  outputs: {l_over_t: l_over_t_plate_pred, sigma1_crit_over_E1: sigma1_crit_plate_pred}
+- id: run_plate_sensitivity
+  model: plate_stiffness_sensitivity
+  inputs: {t1: t1_normal, t2: t2_normal, E2_over_E1: E2_over_E1_added, Ecore_over_E1: Ecore_over_E1_added, stress_ratio: stress_ratio_added, F: stiffness_factor_printed}
+  outputs: {factor: wavelength_factor_plate_pred}
+# Added by the audit: note 22, the inner stratum absent.
+- id: run_thickness_t2_absent
+  model: stratum_sum
+  inputs: {t1: t1_normal, t2: t2_absent}
+  outputs: {t: t_t2_absent_pred}
+- id: run_wavelength_t_sum
+  model: wavelength_from_thickness
+  inputs: {l_over_t: l_over_t_caption, t: t_sum_pred}
+  outputs: {l: l_t_sum_pred}
+- id: run_wavelength_t2_absent
+  model: wavelength_from_thickness
+  inputs: {l_over_t: l_over_t_caption, t: t_t2_absent_pred}
+  outputs: {l: l_t2_absent_pred}
+- id: run_reduction_note22
+  model: reduction_ratio_note22
+  inputs: {t_new: t_t2_absent_pred, t_old: t_sum_pred, l_new: l_t2_absent_pred, l_old: l_t_sum_pred}
+  outputs: {t_ratio: t_halving_pred, l_ratio: l_halving_pred}
+# Figure pass: the thin-plate reading swept over the stress ratios read from Fig. 4.
+- id: run_plate_fig4a
+  model: plate_on_foundation
+  inputs: {t1: t1_normal, t2: t2_normal, E2_over_E1: E2_over_E1_added, Ecore_over_E1: Ecore_over_E1_added}
+  sweep: {stress_ratio: l_over_t_fig4a}
+  outputs: {l_over_t: l_over_t_plate_fig4a_pred}
+- id: run_plate_fig4b
+  model: plate_on_foundation
+  inputs: {t1: t1_normal, t2: t2_normal, E2_over_E1: E2_over_E1_added, Ecore_over_E1: Ecore_over_E1_added}
+  sweep: {stress_ratio: sigma1_crit_fig4b}
+  outputs: {sigma1_crit_over_E1: sigma1_crit_plate_fig4b_pred}

@@ -1,0 +1,343 @@
+- id: q_apple_factor
+  kind: unexplained_difference
+  about: [lam_over_t_apple, lam_apple, deep_substrate_wavelength]
+  text: >-
+    lambda ~ t (E/Es)^(1/3) with E/Es ~ 10 gives lambda/t = 10^(1/3) ≈ 2.2, and so lambda ≈ 1.1 mm for
+    t ≈ 0.5 mm; the paper writes lambda ~ 3t and lambda ≈ 1.5 mm. With the Eq. 5 prefactor carried
+    through (lambda^4 = 16 pi^2 B lambda/Es) the factor would be about (16 pi^2 E/[12(1 - nu^2) Es])^(1/3) ≈ 5,
+    so neither prefactor-1 nor the Eq. 5 prefactor gives 3. Both numbers are printed with "~"/"≈", so no
+    verdict follows; the difference is noted only.
+  citation: {page: 3, printed_page: "074302-3", quote: "we estimate E=Es 10 [16], which yields", where: text}
+- id: q_vesicle_inputs
+  kind: unstated_input
+  about: [B_vesicle, bending_from_wavelength]
+  text: >-
+    B ≈ 4.6 x 10^-17 N m is computed from B = T lambda^4/16 pi^2 L^2 "using the data given in [21]", but the
+    tension T, wavelength lambda and length L of the vesicle are not printed. Ref. 21 as printed is a footnote
+    on the scaled Foppl-von Karman equations with no vesicle data; ref. 20 (Walter, Rehage and Leonard), the
+    source of Fig. 3(b), is the likely intended reference (possible misnumbering). The result cannot be run.
+  citation: {page: 3, printed_page: "074302-3", quote: "Using the data given in [21], we", where: text}
+- id: q_vesicle_ref_number
+  kind: possible_error
+  about: [B_vesicle, t_vesicle]
+  text: >-
+    Both vesicle results cite "[21]" for data and the in-plane modulus, but [21] is the footnote on the scaled
+    FvK equations; the vesicle paper is [20]. A misnumbered reference is suspected, not settled.
+  citation: {page: 4, printed_page: "074302-4", quote: "in-plane modulus in [21] gives the thickness", where: text}
+- id: q_vesicle_thickness
+  kind: unstated_model
+  about: [t_vesicle, membrane_thickness]
+  text: >-
+    The thickness 43 nm comes from B and "the in-plane modulus in [21]"; neither the modulus value nor the
+    relation used is printed. The record's membrane_thickness model takes B = E t^3/[12(1 - nu^2)] with the
+    in-plane modulus E t, giving t = [12(1 - nu^2) B/(E t)]^(1/2); the paper might have dropped (1 - nu^2) or
+    used another convention. With no modulus, the result is not run.
+- id: q_stretched_tilde
+  kind: reading
+  about: [stretched_sheet, rel_stretched_lambda_same_as_eq5, rel_stretched_amplitude_same_as_eq5]
+  text: >-
+    The stretched-sheet forms carry exact prefactors although they rest on T(x) ~ E h gamma and
+    Delta(x) ~ nu gamma W, written with "~". The relations take these as equalities (and h as the thickness t);
+    with that reading the printed forms follow exactly from Eq. 5.
+  citation: {page: 2, printed_page: "074302-2", quote: "For the example of the stretched sheet", where: text}
+- id: q_nu_fig1
+  kind: unstated_input
+  about: [nu_polyethylene_added, run_stretched_fig1]
+  text: "Poisson's ratio of the polyethylene sheet of Fig. 1 is not given; the run adds 0.4."
+- id: q_gamma_fig1
+  kind: reading
+  about: [gamma_fig1]
+  text: >-
+    The text says "For the sheet shown in Fig. 1, gamma ≈ 10^-2", right after the onset gamma ~ gamma_c, while
+    the Fig. 1 caption gives a strain gamma ≈ 0.10; the 10^-2 is most likely the critical strain gamma_c, not
+    the applied strain. It feeds no model and is left out of data.yaml.
+  citation: {page: 1, printed_page: "074302-1", quote: "For the sheet shown in Fig. 1", where: text}
+- id: q_scaling_prefactors
+  kind: choice
+  about: [wrinkle_eq6_scaling, persistence_length, deep_substrate_wavelength, shallow_substrate_wavelength]
+  text: >-
+    These laws are printed with "~" and no prefactor. They are evaluated with prefactor 1, as the paper does in
+    its own estimates (lambda ~ 3t, lambda ≈ Hs); their absolute values mean nothing beyond that, only their
+    exponents (tested against Eq. 5 as scales_as where the paper states the link).
+    Since v0.11 these models carry prefactor: unknown: the build judges their values on their shape only, and reports the prefactor a single value implies.
+- id: q_audit_gamma_two_values
+  kind: reading
+  about: [gamma_text_fig1, gamma_fig1]
+  text: >-
+    Audit: the text gives "For the sheet shown in Fig. 1, gamma ≈ 10^-2" with the symbol gamma, which the
+    paper defines as the applied stretching strain, while the caption gives gamma ≈ 0.10. The first reading
+    takes 10^-2 as the critical strain gamma_c (q_gamma_fig1); read literally, the two printed strains for
+    the same sheet differ tenfold. The value is now in data.yaml (gamma_text_fig1) so the difference is on
+    record; which strain run_stretched_fig1 should use is left to the first reading (it uses 0.10).
+  citation: {page: 1, printed_page: "074302-1", quote: "For the sheet shown in Fig. 1", where: text}
+- id: q_audit_substrate_derivations
+  kind: reading
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq6_scaling]
+  text: >-
+    Audit: the deep- and shallow-substrate laws are derived on p. 3 from Eq. 6, lambda ~ (B/K)^(1/4), with
+    K ~ Es/lambda and K ~ Es lambda^2/Hs^3 and B ~ E t^3. Both exponents check by hand
+    (lambda^3 ~ t^3 E/Es; lambda^6 ~ t^3 Hs^3 E/Es), but no relation tests them: K depends on lambda
+    itself, so the link to wrinkle_eq6_scaling is implicit and cannot be written as a mapping of inputs.
+  citation: {page: 3, printed_page: "074302-3", quote: "In this deep substrate limit", where: text}
+- id: q_audit_untested_scalings
+  kind: reading
+  about: [persistence_length, bending_from_wavelength]
+  text: >-
+    Audit: two stated consequences are not tested. (1) "If lambda_d ~ lambda, L_d ~ L" (p. 2): with the
+    stretched-sheet wavelength, lambda^2 gamma^(1/2)/t ~ L, which holds in exponents but has no printed
+    number to compare. (2) "Inverting (5) yields T ~ B L^2/lambda^4" (p. 3) is the same inversion as
+    bending_from_wavelength without its 16 pi^2, and is not entered as a separate model.
+  citation: {page: 2, printed_page: "074302-2", quote: "so that Ld", where: text}
+- id: q_no_validation_biot1963
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq5, wrinkle_eq6_scaling, stretched_sheet, biot1963/table1_mu, biot1963/table1_rigidity]
+  text: >-
+    No validation of this record's models against biot1963 is entered (cross-validation job 2026-11-13).
+    biot1963 has no measurements: every datum in it is a value its own theory gives (origin predicted:
+    the critical stretches 0.543 and 0.444, the root 0.839, the decay constant 0.295, the critical loads
+    and Table I), and it has no figures. Neither paper cites the other. The nearest physical link, a
+    homogeneous half-space under compression, is the limit E/Es -> 1 of the deep-substrate wavelength
+    law, which is a scaling law without prefactor and has no wavelength at all for Biot's surface
+    instability (it is wavelength-free), so it would not give a value to compare even if there were one.
+- id: q_validation_richman_prefactor
+  kind: choice
+  about: [deep_substrate_wavelength, E_over_Es_brain_added, richman1975/l_measured_27wk, richman1975/l_measured_sidman]
+  text: >-
+    The validations (val_deep_substrate_27wk, val_deep_substrate_27wk_t_normal, val_deep_substrate_sidman) against richman1975's intersulcal distances (8.5 mm, 7.5 mm) run the deep-substrate
+    law lambda ~ t (E/Es)^(1/3) with prefactor 1, as this record evaluates all of the paper's "~" laws.
+    The paper prints no prefactor, so the verdicts test that reading, not the paper: with E/Es = 10 the
+    law gives lambda/t ≈ 2.15, against richman1975's own l/t ≈ 8 for the same modulus ratio. An O(1)
+    prefactor of a few (as in fuller treatments of a plate on a half-space, which are not in this record)
+    would close most of the gap. The verdict also depends on E/Es, which neither paper measures for fetal
+    brain (richman1975's 1/10 for Ecore/E1 is a choice; it says Ecore/E1 is "not less than about 1/100",
+    p. 2), and on which thickness stands for the 27-week specimen: note 18's t ≈ 1.7 mm for that
+    specimen, or the t ≈ 1.0 mm richman1975 uses for the normal fetus when it makes the same comparison
+    (both are entered).
+    Since v0.11 the law carries prefactor: unknown, so the build gives these validations no verdict and reports the prefactor each measurement implies instead.
+- id: q_no_validation_cao2012
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq5, wrinkle_eq6_scaling, energy_minimum, amplitude_inextensibility, cao2012/eW_ratio30, cao2012/fig6a_kh_pre1_read]
+  text: >-
+    No validation of this record's models against cao2012 is entered (cross-validation job 2026-11-14).
+    cao2012 has no measurements: every datum in it is a reported input (modulus ratios, prestretches)
+    or a prediction of its own bifurcation analysis or finite element model (the wrinkling strains, the
+    wave numbers kh read from Figs. 3-7, the period-doubling, fold and ridge strains). Comparing this
+    record's deep-substrate law with cao2012's kh curves would be model against model, which is the
+    relation jobs' work, not a validation; it would also give no verdict, since the law is printed with
+    "~" and carries prefactor: unknown. Neither paper cites the other.
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq5, wrinkle_eq6_scaling, two_Hs_hand, huang2005/d_fig7_labyrinth, huang2005/d_fig10a_sym_H1]
+  text: >-
+    No validation of this record's models against huang2005 is entered (cross-validation job 2026-11-14).
+    huang2005 has no measurements: every datum in it is a reported input (moduli, Poisson's ratios,
+    thicknesses) or a prediction of its own analysis or numerical simulation (critical strains,
+    wavelengths, amplitudes, the symbols of its Figs. 7, 10 and 11). Comparing this record's scaling laws
+    with huang2005's Eqs. 17-19, which huang2005 says these laws predicted (its p. 8), is model against
+    model, the relation jobs' work; the laws also carry prefactor: unknown. In the other direction this
+    record's measurements (the Fig. 1 sheet's length, width, thickness and strain, and the pinched skin
+    fold 2Hs ≈ 5 mm) are inputs that no huang2005 model predicts, and no wavelength is measured here.
+- id: q_validation_stafford_choices
+  kind: choice
+  about: [deep_substrate_wavelength, E_over_Es_PS_PDMS_added, stafford2004/d_fig2b, stafford2004/d_fig1b_caption, stafford2004/d_osg]
+  text: >-
+    (Cross-validation against stafford2004, job 2026-11-14.) Only the Fig. 2b wavelength curve is used: it
+    is one film on one substrate, so E/Es is fixed and the law, whose prefactor is unknown, makes a
+    testable prediction (lambda proportional to t). Not used: the Fig. 1b wavelength (8 um at h ≈ 100 nm),
+    a single value against which a prefactor-unknown law only yields the prefactor it implies, and whose
+    thickness stafford2004 itself questions (its q_fig1b_inconsistent); the organosilicate wavelength "of
+    the order of 30 um", which gets no verdict; and the film moduli of Figs. 2b, 3 and 4, which no model
+    here predicts (bending_from_wavelength infers a bending stiffness from a tension, which those films do
+    not carry). In the other direction no stafford2004 model is run on this record: its measurements (the
+    Fig. 1 sheet's length, width, thickness and strain, and the pinched fold 2Hs ≈ 5 mm) are inputs, and
+    no wavelength or modulus is measured here.
+- id: q_validation_bowden_choices
+  kind: choice
+  about: [deep_substrate_wavelength, E_over_Es_Au_PDMS_added, bowden1998/L_measured, bowden1998/depth_unheated, bowden1998/depth_300C]
+  text: >-
+    (Cross-validation against bowden1998, job 2026-11-14.) Open choices in val_deep_substrate_bowden_L:
+    the film thickness is bowden1998's 50 nm of gold (t_gold), though its Fig. 3 inset labels the layer
+    Au/Ti (55 nm, bowden1998 q_t_fig3_inset); E/Es is 82 GPa/20 MPa = 4100 with the plane-strain ratio 3541
+    as alternative. Neither changes a verdict, since the law's prefactor is unknown. The measurement is a
+    range over all samples (20 to 50 um), not one sample's wavelength; bowden1998 explains it with a
+    modified PDMS layer that the law does not include. Not used: the crest-to-trough depths (1.5 um and
+    3.9 um), which are twice an amplitude, and the amplitude models here (wrinkle_eq5, amplitude_inextensibility)
+    need the compressive displacement Delta/W, which bowden1998 does not give (its thermal expansion
+    coefficients appear only as a ratio and the deposition temperature is unstated, bowden1998 q_eq1_inputs).
+    In the other direction no bowden1998 model is run on this record: this record's measurements (the
+    Fig. 1 sheet's length, width, thickness and strain, and the pinched fold 2Hs ≈ 5 mm) are inputs, and no
+    wavelength is measured here (the apple and hand wavelengths are predictions).
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq5, stretched_sheet, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, tallinen2015/fe_folding, tallinen2015/stiff_wavelength_asymptote]
+  text: >-
+    No validation between this record and tallinen2015 is entered, in either direction (cross-validation
+    job 2026-11-14). Neither paper cites the other. tallinen2015 holds no measurement: every datum in it is
+    its own analytic or finite-element result (predicted), a value computed from them (derived), or an input
+    it takes or chooses (reported: lambda_s = 0.647 from its ref. 32, the brain's eta ≈ 1 from its ref. 2,
+    the simulated modulus ratios); its figure readings are model output, and it says "very few experiments
+    have explored" this regime (its p. 5). So no model here has a measurement there to predict; setting the
+    deep-substrate law against tallinen2015's finite-element or Eq. 1 wavelengths would be model against
+    model, which the relation jobs have done (tallinen2015 relations.yaml, the stiff-layer wavelength
+    asymptote scales as this law), not a validation. In the other direction this record's measurements are
+    the Fig. 1 polyethylene sheet's length, width, thickness and tensile strain, and the pinched skin fold
+    2Hs ≈ 5 mm: inputs, which no tallinen2015 model gives as an output (its models give growth thresholds,
+    modulus ratios and wavelength-to-thickness ratios). No wavelength is measured here: the apple and hand
+    wavelengths are predictions, and the hand's lambda ≈ Hs rests on a finite substrate depth, while
+    tallinen2015's substrate is a half-space.
+- id: q_no_validation_chirat2013
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq6_scaling, wrinkle_eq5, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, chirat2013/infinite_rod_foundation, chirat2013/clamped_rod_buckling]
+  text: >-
+    No validation between this record and chirat2013 is entered, in either direction (cross-validation job
+    2026-11-14). Neither paper cites the other. chirat2013 holds no measurement: its mantle modulus and
+    dimensions are taken from squid and Nautilus studies, L0 = 1 cm is an order-of-magnitude spine spacing
+    ("it is ∼1 cm, so we take L0 = 1 cm"), Kf is tuned to give mode 3, and its other values are simulation
+    settings or its own model output; it gives no measured spine count or spacing, and its shell photographs
+    (Fig. 1) carry no values. So no model here has a measurement there to predict. Running Eq. 6 on the mantle
+    (B -> EI, K -> Kf) would set this law against chirat2013's chosen L0, which is an input, not a
+    measurement. In the other direction this record's measurements (the Fig. 1 sheet's length, width,
+    thickness and strain, and the pinched fold 2Hs ≈ 5 mm) are inputs, which no chirat2013 model gives as an
+    output.
+- id: q_no_validation_moulton2012
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq6_scaling, wrinkle_eq5, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, moulton2012/winkler_rod_wavelength]
+  text: >-
+    No validation between this record and moulton2012 is entered, in either direction (cross-validation job
+    2026-11-14). Neither paper cites the other. moulton2012 holds no measurement: its data are printed,
+    nondimensional parameters (EA, k_s, k_g, k_phi, EI, the length excess) and readings of its own computed
+    Fig. 5; its shell photographs give no rib count, spacing or scale. So no model here has a measurement
+    there to predict. In the other direction this record's measurements (the Fig. 1 sheet's length, width,
+    thickness and strain, and the pinched fold 2Hs ≈ 5 mm) are inputs, which no moulton2012 model gives as an
+    output. Setting Eq. 6 against moulton2012's Winkler rod wavelength (B -> EI, K -> k_s) is model against
+    model, for the relation jobs.
+- id: q_no_validation_radja2019
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq6_scaling, wrinkle_eq5, stretched_sheet, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, radja2019/pctdiff_spikes, radja2019/pctdiff_holes, radja2019/pctdiff_stripes, radja2019/mode_number_wavelength]
+  text: >-
+    No validation between this record and radja2019 is entered, in either direction (cross-validation job
+    2026-11-14). This paper predates radja2019; radja2019 cites Katifori, Alben, Cerda et al. (2010) on pollen
+    folding, not this paper, and never compares its patterns with a wrinkling law. radja2019's measurements
+    are the Table 1 percent differences between SEM and simulated wavelengths (not wavelengths), plant family
+    counts, the Fig. 5 character-state dots and GC peak abundances; none is a wrinkle wavelength or amplitude,
+    and radja2019 prints no primexine or wall thickness, modulus ratio, tension or strain on which the
+    wrinkling laws here could be run. Its pattern wavelengths are set by a phase-separation term whose
+    constants it does not tie to a thickness or a stiffness ratio (radja2019 q_elastic_link). In the other
+    direction this record's measurements (the Fig. 1 sheet's length, width, thickness and strain, and the
+    pinched fold 2Hs ≈ 5 mm) are inputs, and radja2019's only runnable model gives a mode number from a
+    sphere radius and a wavelength, neither of which is measured here.
+- id: q_no_validation_shyer2013
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq6_scaling, wrinkle_eq5, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, shyer2013/spacing_fig4b, shyer2013/spacing_fig6c, shyer2013/mu_ratio_fig4b, shyer2013/mu_ratio_fig6c]
+  text: >-
+    No validation between this record and shyer2013 is entered, in either direction (cross-validation job
+    2026-11-18). Neither paper cites the other. shyer2013's measured wavelengths are the fold spacings over
+    endoderm thickness of Figs. 4B and 6C (chick E8-E14, mouse E12.5-E15.5), curves against embryonic age.
+    The substrate laws here have no age input, so they cannot be run at each age of those curves. Their
+    modulus-ratio input is measured only at E8 and E10 (chick) and E14.5 (mouse), and as a shear-modulus
+    ratio. More decisively, neither limit of this paper holds for the gut. The deep-substrate law needs
+    t << lambda << Hs, and the shallow-substrate law lambda >> Hs >> t. In the gut the mesenchyme is only a
+    few endoderm thicknesses thick (stress-free hm = 3 he in the chick schedule, 2 he in the zigzag
+    simulation) and is backed by the confining muscle. shyer2013 itself says the wavelength is "comparable
+    to the thickness of the endoderm-mesenchyme composite" (p. 5). The endoderm is only about 10 times
+    (chick) or 1.5 times (mouse) stiffer than the mesenchyme, not the stiff sheet on a soft foundation these
+    laws describe. The spacings are also those of folds far past onset in a growing, muscle-confined tube,
+    not of the incipient wrinkles these laws give. Running the deep-substrate law with its fitted prefactor
+    would only report a constant, under conditions the law does not cover. In the other direction, this
+    record's measurements (the Fig. 1 sheet's length, width, thickness and strain, and the pinched skin fold
+    2Hs ≈ 5 mm) are inputs. No shyer2013 model gives any of them: its runnable models are the stress-free
+    growth schedules of its own simulations and averages of its own plots.
+  citation: {page: 3, printed_page: "074302-3", quote: "In this deep substrate limit", where: "text, right column"}
+- id: q_no_validation_wang2015
+  kind: choice
+  about: [amplitude_inextensibility, deep_substrate_wavelength, wrinkle_eq6_scaling, wrinkle_eq5, shallow_substrate_wavelength, two_Hs_hand, L_fig1, W_fig1, t_fig1, gamma_fig1, wang2015/wrinkle_wavelength_fig5a, wang2015/amplitude_fig5b_r3p6, wang2015/amplitude_fig5b_r9110, wang2015/crease_onset_measured]
+  text: >-
+    No validation is entered between this record and wang2015, in either direction (cross-validation job
+    2026-11-18). wang2015 cites this paper (its ref. 3) only as an example of wrinkled skins and fruits and
+    for a Table 1 row ("fruit", eM 0.1-0.4, mu_f/mu_s 10-100) whose numbers this paper does not print; it
+    compares none of its models with a value measured here. (1) This record's models against wang2015's
+    measurements: wang2015 measures moduli and thicknesses (inputs), onset mismatch strains of creases,
+    folds, period-doubles and ridges, and, in Fig. 5, wavelengths and amplitudes divided by the initial
+    wrinkle wavelength against (1 - eM)/(1 - eC). No model here gives an onset strain, and wang2015 prints
+    no absolute wavelength or amplitude and no wavelength over film thickness, which are what this record's
+    wavelength laws return. The inextensibility amplitude (amplitude_inextensibility) takes a displacement,
+    a width and a wavelength in metres, not Fig. 5B's normalized strain ratio, so it cannot be run on that
+    abscissa without a new model. (2) wang2015's models against this record's measurements: the Fig. 1
+    sheet dimensions and strain and the pinched fold 2Hs are inputs, and no wang2015 model (onset strains,
+    normalized wavelengths and amplitudes) gives any of them. The other direction is
+    wang2015/q_no_validation_cerda2003.
+  citation: {page: 2, printed_page: "074302-2", quote: "relating the wave number and the amplitude", where: "text before Eq. 5"}
+- id: q_no_validation_fierling2022
+  kind: choice
+  about: [deep_substrate_wavelength, shallow_substrate_wavelength, wrinkle_eq5, wrinkle_eq6_scaling, stretched_sheet, amplitude_inextensibility, bending_stiffness, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, fierling2022/curv_ablation_fig1c, fierling2022/furrow_z_p0_sf3d, fierling2022/area_muvi_fig3a]
+  text: >-
+    No validation is entered between this record and fierling2022, in either direction (cross-validation
+    job 2026-11-19). Neither paper cites the other. (1) This record's models against fierling2022's
+    measurements: every model here returns a periodic wrinkle wavelength, amplitude or persistence length,
+    or a bending stiffness or thickness inferred from them, for a sheet under tension or on a foundation.
+    fierling2022 measures apical cell areas and AP/DV sizes by cell row and over time, tissue curvature
+    around laser ablation, recoil velocities, furrow apex positions along the AP axis and the anterior pole
+    displacement. Its ventral furrow is a single fold driven by active apical contraction inside the
+    vitelline membrane, not a wrinkle train, and it prints no wavelength, no wrinkle amplitude and no
+    physical modulus or thickness of the epithelium (its moduli are nondimensional, in units of
+    kappa / R_DV^2) on which a law here could be run. (2) fierling2022's models against this record's
+    measurements: the Fig. 1 sheet's length, width, thickness and strain and the pinched fold 2Hs are
+    inputs, and no fierling2022 model (pre-stress, target size, stress and stretch ratios, area reduction,
+    strain under an exponential load, recoil, embryo dimensions, vitelline gap) gives any of them. The
+    other direction is fierling2022/q_no_validation_cerda2003.
+  citation: {page: 2, printed_page: "074302-2", quote: "relating the wave number and the amplitude", where: "text before Eq. 5"}
+- id: q_no_validation_trushko2020
+  kind: choice
+  about: [bending_stiffness, wrinkle_eq5, wrinkle_eq6_scaling, deep_substrate_wavelength, shallow_substrate_wavelength, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, trushko2020/capsule_bending_rigidity, trushko2020/Kcap_table, trushko2020/fig5f_exp_data, trushko2020/K_tissue_table]
+  text: >-
+    No validation is entered between this record and trushko2020, in either direction (cross-validation
+    job 2026-11-19). Neither paper cites the other. (1) This record's models against trushko2020's
+    measurements: bending_stiffness has the same form as trushko2020/capsule_bending_rigidity and could be
+    run on its measured capsule modulus (19.5 kPa) and thickness (19.9 um) with its assumed nu = 1/2, but
+    trushko2020 measures no bending rigidity: its Kcap (17 uN um) is derived by the same formula, so the
+    comparison would be a same-formula check, not a test against a measurement. Its measured quantities are
+    capsule moduli, thicknesses and radii (inputs), indentation spring constants, capsule pressures, cell
+    numbers, fold depths and opening angles, and fold-number histograms. No model here returns any of these.
+    The wrinkle laws give a periodic wavelength of a sheet bonded to a foundation or under tension, whereas
+    trushko2020's monolayer folds inward, away from the confining shell into a fluid lumen, in 1-3 folds set
+    by the confinement; no foundation stiffness per area and no monolayer modulus or thickness is measured
+    there (the tissue bending rigidity is fitted to the fold shapes), and the laws carry prefactor: unknown.
+    (2) trushko2020's models against this record's measurements: the Fig. 1 sheet's length, width,
+    thickness and strain and the pinched fold 2Hs ≈ 5 mm are inputs; trushko2020's models give ring
+    strains, buckling pressures, fold shapes, rigidities and spring constants, none of which is measured
+    here (B_vesicle is derived from unprinted inputs). The other direction is
+    trushko2020/q_no_validation_cerda2003.
+  citation: {page: 2, printed_page: "074302-2", quote: "the deformations which are predominantly in the y", where: "text after Eq. 1"}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [deep_substrate_wavelength, wrinkle_eq6_scaling, stretched_sheet, two_Hs_hand, gamma_fig1, jin2015/exp_wrinkle_7p5to1_text, jin2015/exp_crease_10to1_text]
+  text: >-
+    (Cross-validation against jin2015, which cites this paper as ref. 34; job 2026-11-19.) No validation
+    is entered, in either direction. (1) This record's models against jin2015's measurements: jin2015
+    measures the onset strains of wrinkles and creases in compressed PDMS film/substrate bilayers, with
+    film and substrate thicknesses as inputs. The models here give wrinkle wavelengths and amplitudes
+    (and bending stiffness, thickness, persistence length), never an onset strain. jin2015 prints no
+    measured wavelength (its Fig. 6 micrographs carry no values) and no film or substrate modulus
+    (jin2015/q_exp_moduli), so the deep-substrate or Eq. 6 laws would have neither a measurement nor
+    an input. (2) jin2015's models against this record's measurements: the Fig. 1 sheet's length, width,
+    thickness and strain and the pinched fold 2Hs ≈ 5 mm are inputs; jin2015's bilayer analysis gives
+    critical strains and wavelengths under compression, none of which is measured here. The other
+    direction is jin2015/q_no_validation_cerda2003.
+  citation: {page: 3, printed_page: "074302-3", quote: "In this deep substrate limit", where: text}
+- id: q_no_validation_savin2011
+  kind: choice
+  about: [deep_substrate_wavelength, wrinkle_eq5, wrinkle_eq6_scaling, stretched_sheet, L_fig1, W_fig1, t_fig1, gamma_fig1, two_Hs_hand, savin2011/lam_obs_chE12, savin2011/figS8b_obs_pts, savin2011/wavelength_eq3]
+  text: >-
+    (Cross-validation against savin2011, which cites this paper as its SI ref. 13; job 2026-11-19.) No
+    validation is entered, in either direction. savin2011 cites this paper only for the fine wrinkles of
+    the mesentery (its SI p. 10), which it does not measure. (1) This record's wrinkle laws against
+    savin2011's measurements: savin2011 measures loop wavelengths, radii and numbers of a gut tube held by
+    a prestrained mesentery, and the moduli, radii and thicknesses behind them. A loop is a rod bending
+    against a sheet stretched in its own plane, not a plate wrinkling on a foundation; the deep-substrate
+    law reaches it only through an effective thickness (It/h)^(1/3), a proposed analogy recorded as
+    savin2011/rel_eq1_scales_as_cerda_deep_substrate, not a sheet thickness, so no quantity measured there
+    is the wrinkle wavelength of a sheet of measured thickness. (2) savin2011's gut laws against this
+    record's measurements (the Fig. 1 sheet and the skin fold) give no wrinkle wavelength: they need tube
+    and mesentery moduli and radii that a single sheet does not have. The other direction is
+    savin2011/q_no_validation_cerda2003.
+  citation: {page: 3, printed_page: "074302-3", quote: "In this deep substrate limit", where: text}

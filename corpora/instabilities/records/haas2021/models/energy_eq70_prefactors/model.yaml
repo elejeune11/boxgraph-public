@@ -1,0 +1,34 @@
+id: energy_eq70_prefactors
+name: Eqs. 70a, 70b with the energy prefactors on the correction terms (variant)
+stated: {page: 11, printed_page: "022411-11", quote: "We compare the stretching and bending energies in the", where: "Eqs. 70a, 70b"}
+equation: >
+  e_stretch = e0_stretch + (C h/2) eps^3 eta^2 (2 - eta^2)/(1 - eta^2)^2 (2 Es + Ephi)^2;
+  e_bend = e0_bend + (C h^3/2) eps^3 eta^2 (3 - 2 eta^2)/[36 (1 - eta^2)^2] (3 Ks + Kphi)(k(eta) Ks + Kphi)
+inputs:
+  C: {quantity: material_parameter_C, unit: dimensionless}
+  eps: {quantity: thinness_parameter, unit: dimensionless}
+  h: {quantity: rescaled_thickness, unit: dimensionless}
+  eta: {quantity: large_bending_parameter, unit: dimensionless}
+  Es: {quantity: shell_strain, unit: dimensionless}
+  Ephi: {quantity: shell_strain, unit: dimensionless}
+  Ks: {quantity: curvature_strain, unit: dimensionless}
+  Kphi: {quantity: curvature_strain, unit: dimensionless}
+outputs:
+  e_stretch: {quantity: shell_energy_density, unit: dimensionless}
+  e_bend: {quantity: shell_energy_density, unit: dimensionless}
+built_from: [energy_eq70]
+variant_of: energy_eq70
+corrections:
+  - equation: Eq. 70a
+    change: "correction term multiplied by (C h/2) eps^3, the prefactor of the stretching energy in Eq. 66a"
+    evidence: >
+      e0,stretch (Eq. 69a) is of order C h eps^3 while the printed correction term carries no C, h or eps, so
+      the two terms of Eq. 70a cannot be added as printed (they scale differently with eps and C). Subtracting
+      Eq. 69a from Eq. 66a with Eqs. 58c, 64a, 64b gives exactly (C h/2) eps^3 times the printed term.
+  - equation: Eq. 70b
+    change: "correction term multiplied by (C h^3/2) eps^3, the prefactor of the bending energy in Eq. 66c"
+    evidence: >
+      e0,bend (Eq. 69b) is of order C h^3 eps^3 while the printed correction term carries no C, h or eps; the
+      paper says Eq. 70 follows from Eqs. 58 and 64, and Eq. 66c minus Eq. 69b with Eqs. 58h-58j is (C h^3/2)
+      eps^3 times the printed term.
+settings: {}

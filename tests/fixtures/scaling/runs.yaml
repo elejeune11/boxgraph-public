@@ -1,0 +1,31 @@
+- id: run_one
+  model: deep_law
+  inputs: {t: t, r: ratio}
+  outputs: {lam: lam_pred}
+- id: run_curve
+  model: deep_law
+  inputs: {r: ratio}
+  sweep: {t: lam_curve}
+  outputs: {lam: lam_curve_pred}
+- id: run_flat
+  model: deep_law
+  inputs: {r: ratio}
+  sweep: {t: lam_flat}
+  outputs: {lam: lam_flat_pred}
+- id: run_single_row
+  model: deep_law
+  inputs: {r: ratio}
+  sweep: {t: lam_single_row}
+  outputs: {lam: lam_single_row_pred}
+- id: run_period
+  model: period
+  inputs: {lam: lam_pred}
+  outputs: {p: period_pred}
+- id: run_plate
+  model: plate_guess
+  inputs: {t: t, r: ratio}
+  outputs: {lam: lam_plate}
+- id: run_check
+  model: reader_check
+  inputs: {t: t}
+  outputs: {lam: lam_check}

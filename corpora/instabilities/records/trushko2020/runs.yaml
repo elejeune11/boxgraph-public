@@ -1,0 +1,205 @@
+# ---- capsule shell (Table 1, Methods S1 Section 5) ----
+- id: run_Kcap
+  model: capsule_bending_rigidity
+  inputs: {E: E_capsule, h: h_capsule, nu: nu_capsule}
+  outputs: {Kcap: Kcap_pred}
+- id: run_lambda_cap
+  model: capsule_compressional_rigidity
+  inputs: {E: E_capsule, h: h_capsule, nu: nu_capsule}
+  outputs: {lambda_cap: lambda_cap_pred}
+- id: run_kcap_s36
+  model: capsule_spring_s36
+  inputs: {lambda_cap: lambda_cap_table, Kcap: Kcap_table, R: R_capsule}
+  outputs: {k_cap: k_cap_s36_pred}
+# ---- tissue rigidities from indentation (Eq. S37) ----
+- id: run_spring_ratio
+  model: spring_ratio
+  inputs: {k_tissue: k_tissue_table, k_cap: k_cap_table}
+  outputs: {ratio: spring_ratio_pred}
+- id: run_bending_ratio
+  model: bending_ratio
+  inputs: {K: K_tissue_table, Kcap: Kcap_table}
+  outputs: {ratio: bending_ratio_pred}
+- id: run_s37
+  model: compressional_from_s37
+  inputs: {spring_ratio: spring_ratio_s5, bending_ratio: bending_ratio_s5, lambda_cap: lambda_cap_table}
+  outputs: {lambda_ratio: lambda_ratio_pred, lam: lambda_s37_pred}
+- id: run_harris
+  model: compressional_from_modulus
+  inputs: {E_mono: E_monolayer_harris, a: cell_size}
+  outputs: {lam: lambda_harris_pred}
+# ---- buckling threshold and pressure ----
+- id: run_dc_s21_s5
+  model: critical_strain_s21
+  inputs: {K: K_s5_estimate, lam: lambda_s5_estimate, R: R_s5_estimate}
+  outputs: {delta_c: dc_s21_s5_pred}
+- id: run_dc_f10_s5
+  model: critical_strain_factor10
+  inputs: {K: K_s5_estimate, lam: lambda_s5_estimate, R: R_s5_estimate}
+  outputs: {delta_c: dc_f10_s5_pred}
+- id: run_dc_s21_table
+  model: critical_strain_s21
+  inputs: {K: K_tissue_table, lam: lambda_table, R: R_capsule}
+  outputs: {delta_c: dc_s21_table_pred}
+- id: run_P_s5
+  model: pressure_compressed_ring
+  inputs: {lam: lambda_s5_estimate, delta: dc_f10_s5_pred, R: R_s5_estimate}
+  outputs: {P: P_s5_pred}
+- id: run_P_eq1_table
+  model: pbuckling_eq1
+  inputs: {lam: lambda_table, K: K_tissue_table, R: R_capsule}
+  outputs: {P: P_eq1_table_pred}
+- id: run_lambda_eq1
+  model: lambda_from_eq1
+  inputs: {P: P_order_text, K: K_tissue_table, R: R_capsule}
+  outputs: {lam: lambda_eq1_pred}
+# ---- water flux (Methods S1, Section 1) ----
+- id: run_lumen
+  model: lumen_sphere
+  inputs: {R: R_lumen}
+  outputs: {V: V_lumen_pred, A: A_lumen_pred}
+- id: run_flux
+  model: water_flux_s1
+  inputs: {V: V_lumen, A: A_lumen, T: T_folding}
+  outputs: {J: J_pred}
+# ---- vertex model parameters (Methods S1, Sections 6 and 8) ----
+- id: run_fns
+  model: friction_force_scale
+  inputs: {Fbar: Fbar_NS, Karea: K_area, A0: A0_cell}
+  outputs: {F_NS: F_NS_pred}
+- id: run_vertex_norm
+  model: vertex_normalized_params
+  inputs: {ks: ks_sim, cb: cb_sim, Karea: K_area, A0: A0_cell}
+  outputs: {ks_bar: ks_bar_pred, cb_bar: cb_bar_pred, ratio: ratio_ks_cb_pred}
+- id: run_Karea_est
+  model: area_elasticity_estimate
+  inputs: {lam: lambda_table, A0: A0_cell}
+  outputs: {Karea: K_area_est_pred}
+- id: run_sim_P
+  model: sim_pressure_s42
+  inputs: {F_cs: F_cs_sim, n_cells: n_cells_sim, R: R_sim}
+  outputs: {P: P_sim_pred}
+# ---- fold shape (Eqs. S28-S30; Fig. 4H, 4I) ----
+- id: run_fold_alpha
+  model: fold_elastica
+  inputs: {}
+  sweep: {delta_over_R: alpha_fig4h}
+  outputs: {alpha: alpha_fig4h_pred}
+- id: run_fold_gamma
+  model: fold_elastica
+  inputs: {}
+  sweep: {delta_over_R: gamma_fig4h}
+  outputs: {gamma: gamma_fig4h_pred}
+- id: run_fold_pressure
+  model: fold_angle_vs_pressure
+  inputs: {K: K_tissue_table}
+  sweep: {PBR3: alpha_fig4i}
+  outputs: {alpha: alpha_fig4i_pred}
+- id: run_fit_K
+  model: fit_bending_rigidity
+  inputs: {Phi: phi_fig4i}
+  outputs: {K: K_fit_pred}
+# ---- second pass: runs on the figure readings ----
+- id: run_growth_fig1f
+  model: growth_rate_fit
+  inputs: {N: fig1f_cells_data}
+  outputs: {rate: growth_rate_fig1f_pred}
+- id: run_mean_k_1pct
+  model: mean_spring_constant
+  inputs: {k: fig3k_points_data}
+  outputs: {mean: k_1pct_mean_pred, n: n_fig3k_pred}
+- id: run_mean_P_1pct
+  model: mean_buckling_pressure
+  inputs: {P: fig3l_points_data}
+  outputs: {mean: P_1pct_mean_pred, n: n_fig3l_pred}
+- id: run_mean_k_empty_4j
+  model: mean_spring_constant
+  inputs: {k: fig4j_empty_data}
+  outputs: {mean: k_empty_4j_mean_pred, n: n_fig4j_empty_pred}
+- id: run_mean_k_tissue_4j
+  model: mean_tissue_spring_constant
+  inputs: {k: fig4j_tissue_data}
+  outputs: {mean: k_tissue_4j_mean_pred, n: n_fig4j_tissue_pred}
+- id: run_P_fig3g_1
+  model: pressure_at_concentration
+  inputs: {P: fig3g_pressure_data}
+  settings: {x0: 1.0}
+  outputs: {P0: P_fig3g_1_pred}
+- id: run_P_fig3g_1p5
+  model: pressure_at_concentration
+  inputs: {P: fig3g_pressure_data}
+  settings: {x0: 1.5}
+  outputs: {P0: P_fig3g_1p5_pred}
+- id: run_P_fig3g_2
+  model: pressure_at_concentration
+  inputs: {P: fig3g_pressure_data}
+  settings: {x0: 2.0}
+  outputs: {P0: P_fig3g_2_pred}
+- id: run_P_fig3g_2p5
+  model: pressure_at_concentration
+  inputs: {P: fig3g_pressure_data}
+  settings: {x0: 2.5}
+  outputs: {P0: P_fig3g_2p5_pred}
+- id: run_R_figs1g_2p5
+  model: radius_at_concentration
+  inputs: {R: figs1g_means_data}
+  settings: {x0: 2.5}
+  outputs: {R0: R_figs1g_2p5_pred}
+- id: run_hist_exp
+  model: histogram_total
+  inputs: {H: fig5f_exp_data}
+  outputs: {total: n_fig5f_exp_pred}
+- id: run_hist_sim
+  model: histogram_total
+  inputs: {H: fig5f_sim_data}
+  outputs: {total: n_fig5f_sim_pred}
+- id: run_s26_figs6c
+  model: pbuckling_s26_normalized
+  inputs: {}
+  sweep: {Lam: figs6c_lines_data}
+  outputs: {p: p_s26_figs6c_pred}
+- id: run_s25_figs6b_l8
+  model: ring_pressure_s25_normalized
+  inputs: {Lam: lambda_bar_1e8}
+  sweep: {x: figs6b_l8_data}
+  outputs: {p: p_s25_figs6b_l8_pred}
+- id: run_s25_figs6b_l7
+  model: ring_pressure_s25_normalized
+  inputs: {Lam: lambda_bar_1e7}
+  sweep: {x: figs6b_l7_data}
+  outputs: {p: p_s25_figs6b_l7_pred}
+- id: run_s25_figs6b_l6
+  model: ring_pressure_s25_normalized
+  inputs: {Lam: lambda_bar_1e6}
+  sweep: {x: figs6b_l6_data}
+  outputs: {p: p_s25_figs6b_l6_pred}
+- id: run_s25_figs6b_l5
+  model: ring_pressure_s25_normalized
+  inputs: {Lam: lambda_bar_1e5}
+  sweep: {x: figs6b_l5_data}
+  outputs: {p: p_s25_figs6b_l5_pred}
+- id: run_s25_figs6b_l4
+  model: ring_pressure_s25_normalized
+  inputs: {Lam: lambda_bar_1e4}
+  sweep: {x: figs6b_l4_data}
+  outputs: {p: p_s25_figs6b_l4_pred}
+- id: run_s18_figs6g
+  model: fold_small_strain_s17_s18
+  inputs: {n: n_one_fold}
+  sweep: {Delta: figs6g_alpha_data}
+  outputs: {alpha: alpha_s18_figs6g_pred}
+- id: run_s17_figs6h
+  model: fold_small_strain_s17_s18
+  inputs: {n: n_one_fold}
+  sweep: {Delta: figs6h_delta_data}
+  outputs: {delta_over_R: delta_s17_figs6h_pred}
+- id: run_fold_alpha_fig6b
+  model: fold_elastica
+  inputs: {}
+  sweep: {delta_over_R: fig6b_alpha_data}
+  outputs: {alpha: alpha_fig6b_pred}
+- id: run_fold_gamma_fig6b
+  model: fold_elastica
+  inputs: {}
+  sweep: {delta_over_R: fig6b_gamma_data}
+  outputs: {gamma: gamma_fig6b_pred}

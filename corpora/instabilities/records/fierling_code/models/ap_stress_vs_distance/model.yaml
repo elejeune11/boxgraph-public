@@ -1,0 +1,13 @@
+id: ap_stress_vs_distance
+name: simulated AP stress against DV distance from the midline (released StressEquatEulerStrains file, Fig. 5d)
+role: processing
+software: true
+stated: {file: stress_profile_for_laser_ablations.plot, lines: "53-55", quote: "w vectors nohead ls LS_Sim_AP lc rgb \"black\" tit \"stress σ_{AP}\""}
+equation: "sigma_AP (column 6) of the angular band of width pi/nbbins/2 centred on phi_Eul (column 3) that holds d/R_DV"
+inputs:
+  d: {quantity: dv_distance, unit: um}
+  R_DV: {quantity: radius_dv, unit: um}
+outputs:
+  sigma_ap: {quantity: stress_ap_nd, unit: dimensionless}
+settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step063.dmp.gdat", nbbins: 40}
+stochastic: false

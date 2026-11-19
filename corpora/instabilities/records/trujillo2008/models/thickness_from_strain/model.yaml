@@ -1,0 +1,17 @@
+id: thickness_from_strain
+name: thickness change of a surface-attached gel at a given effective compressive strain (reconstructed)
+role: model
+stated: {page: 5, printed_page: "568", quote: "on measured values of Poisson’s ratio for hydrogels similar to", where: text}
+equation: "h/h0 = (l/l0) [1 + 2 nu e / (1 - nu)],  l/l0 = 1/(1 - e)   (reader's reconstruction; the paper prints only e_c ~ 0.33 -> h/h0 ~ 2)"
+reconstructed: >
+  The paper states that, from measured Poisson's ratios, e_c ~ 0.33 corresponds to h/h0 ~ 2, but gives
+  no formula. The reader's stand-in follows the paper's own decomposition (Fig. 1(a)): free isotropic
+  swelling to l/l0 = 1/(1 - e), then equibiaxial in-plane compression by the strain e with a free
+  surface, whose thickness strain in linear elasticity is 2 nu e / (1 - nu).
+inputs:
+  e: {quantity: critical_compressive_strain, unit: dimensionless}
+  nu: {quantity: poisson_ratio, unit: dimensionless}
+outputs:
+  h_ratio: {quantity: thickness_swelling_ratio, unit: dimensionless}
+settings: {}
+stochastic: false

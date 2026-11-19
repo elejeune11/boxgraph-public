@@ -1,0 +1,15 @@
+id: gps_critical_strain
+name: critical compressive strain under generalized plane strain at a given lambda_2, from the plane-strain critical strain (Eq. 3)
+role: model
+stated: {page: 3, printed_page: "111901-3", quote: "this condition corresponding to", where: "text after Eq. 4, from Eq. 3"}
+equation: "lambda_1 sqrt(lambda_2) = lambda_1' = 1 - epsilon  =>  epsilon_1 = 1 - lambda_1 = 1 - (1 - epsilon)/sqrt(lambda_2)"
+from_words: true
+inputs:
+  eps: {quantity: critical_strain_plane, unit: dimensionless, description: "the plane-strain critical strain: epsilon_c for creasing or epsilon_biot"}
+  lam2: {quantity: transverse_inplane_stretch, unit: dimensionless, description: "lambda_2, the prescribed constant in-plane stretch normal to the compression"}
+outputs:
+  eps1: {quantity: critical_strain_gps, unit: dimensionless}
+built_from: [gps_equivalent_plane_strain]
+# A helper for the relation to cao2011 (cao2011/relations.yaml): cao2011 restates this paper's crease condition as
+# lambda_1 = 0.65/sqrt(lambda_3) "for any fixed lambda_3" (its Eq. 1.2) with strain eps_C = 1 - lambda_C. The paper
+# writes it as lambda_1 sqrt(lambda_2) = 0.65 (p. 3); this is that form solved for the strain along direction 1.

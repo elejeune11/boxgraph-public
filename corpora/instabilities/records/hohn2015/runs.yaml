@@ -1,0 +1,20 @@
+- id: run_area_contraction
+  model: area_contraction_estimate
+  inputs: {rp: rp_realistic}
+  settings: {}
+  outputs: {dA: area_decrease_contraction_only_pred}
+- id: run_snap_speed
+  model: snap_speed_scaling
+  inputs: {E: E_sheet_added, h: h_sheet_added, mu: mu_fluid_added, R: R_embryo_added}
+  settings: {}
+  outputs: {U: U_snap_scaling_pred}
+- id: run_median_figS3
+  model: median_of_points
+  inputs: {values: area_change_points_figS3}
+  settings: {}
+  outputs: {median: area_change_median_pred}
+- id: run_median_figS3_hd
+  model: median_of_points
+  inputs: {values: area_change_points_figS3_hd}
+  settings: {}
+  outputs: {median: area_change_median_hd_pred}

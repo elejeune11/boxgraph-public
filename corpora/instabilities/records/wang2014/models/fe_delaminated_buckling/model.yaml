@@ -1,0 +1,16 @@
+id: fe_delaminated_buckling
+name: onset of delaminated buckling from the flat state by the Maxwell criterion on finite-element energies (Eqs. 6-8)
+role: model
+stated: {page: 6, printed_page: "051004-6", quote: "we construct a finite-element model to calculate the elastic", where: "Eqs. 6-8, Fig. 5"}
+equation: "DPi_buckle = DU_buckle + Gamma D (Eq. 6); DPi_buckle = 0 (Eq. 7) and dDPi_buckle/dD = 0 (Eq. 8) give e_c buckle and D_c buckle; DU_buckle from a plane-strain finite-element model"
+inputs:
+  gamma: {quantity: normalized_adhesion_energy, unit: dimensionless}
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless}
+  lam_p: {quantity: substrate_prestretch, unit: dimensionless}
+outputs:
+  e_buckle: {quantity: delamination_onset_strain, unit: dimensionless}
+  D_buckle: {quantity: delaminated_length_normalized, unit: dimensionless}
+settings: {}
+runnable: false
+not_runnable_reason: "DU_buckle comes from a large-deformation finite-element model (half model, force perturbation at the top node, other modes deliberately suppressed) whose software, mesh, model length, perturbation size and suppression method are not given; a re-implementation is beyond a reading of this paper"
+stochastic: false

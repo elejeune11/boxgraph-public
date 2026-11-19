@@ -1,0 +1,283 @@
+- id: q_lattice_not_runnable
+  kind: unstated_model
+  about: [lattice_simulation]
+  text: >
+    The spring-lattice simulation (Methods, SI pp. 6-10) is described by its two discrete energies and its mesh
+    (typically 300 x 60 triangles, a 2-row tube strip with kt = 5.6 bt), but not the damped molecular dynamics
+    scheme, initial perturbation, end conditions or how lambda and R are measured on the result, and no code is
+    given, so it cannot be rerun. Its only per-stage outputs are plotted in Fig. S8b,c (filled circles) and the
+    nondimensional sweep of Figs. 4b,c and 5b,c (blue circles); see q_table_model_rows for the table rows.
+  citation: {page: 13, printed_page: "SI 6", quote: "we follow a method described in detail elsewhere", where: "SI, Computational model of gut looping"}
+- id: q_table_model_rows
+  kind: reading
+  about: [cmp_eq3_lam_cm_chE8, cmp_eq3_lam_cm_chE12, cmp_eq3_lam_cm_chE16, cmp_eq3_lam_cm_quE12, cmp_eq3_lam_cm_fiE13, cmp_eq3_lam_cm_moE16, cmp_eq4_R_cm_chE8, cmp_eq4_R_cm_quE12, cmp_n_eq3_cm_chE16]
+  text: >
+    The rows labelled "Computational model" in Tables 1 and 2 are reproduced, for every stage and species, by
+    Eqs. 3 and 4 evaluated on the footnote inputs, and their n by Lt over that lambda. The text (p. 4) says Table 1
+    compares the observations "with the expressions given in equations (3) and (4)", and Fig. S8b,c plots the
+    Eq. 3 values (open circles) apart from the simulated ones (filled circles), which differ visibly at E8 and E16.
+    The record therefore reads these rows as the scaling expressions, not as the lattice simulation; the row label
+    suggests the latter.
+  citation: {page: 4, printed_page: "60", quote: "with the expressions given in equations (3) and (4), and confirm", where: "text, right column"}
+- id: q_It_normalisation
+  kind: choice
+  about: [wavelength_eq3, radius_eq4, wavelength_eq1, radius_eq2]
+  text: >
+    The main text defines It only up to a factor (It ∝ ro^4 - ri^4, p. 3), yet Eqs. 3 and 4 carry numerical
+    prefactors (36 and 4) that depend on how It is normalized. The record takes It = (pi/4)(ro^4 - ri^4) from SI
+    footnote 6 (p. 16); with it the tables' model rows are reproduced at every stage, which supports the choice.
+    Eqs. 1 and 2 (no prefactor) use ro^4 - ri^4.
+  citation: {page: 16, printed_page: "SI 9", quote: "When rescaled correctly, bt is calculated as the ratio", where: "SI footnote 6"}
+- id: q_EtIt_straightening
+  kind: unexplained_difference
+  about: [cmp_EtIt_straightening, EtIt_si_E16]
+  text: >
+    The SI says both regimes of the curved-tube test give the same Et It = 5 x 10^-11 N m^2. The second regime
+    (axial stiffness 4 Et It/(ro^2 + ri^2), dF/d eps ≈ 10^-3 N) reproduces it; the first (Et It = (dF/d delta) v0^2
+    with dF/d delta ≈ 10^-4 N and v0 ≈ 1.5 ro, ro = 390 um) gives a smaller value. The inputs are printed only to
+    an order of magnitude ("≈ 10^-4 N"), so the claim may mean agreement in order only; the printed value carries
+    one significant figure.
+  citation: {page: 13, printed_page: "SI 6", quote: "yields the same value (Et It = 5 × 10−11 N · m2 )", where: "SI text"}
+- id: q_force_range
+  kind: unexplained_difference
+  about: [cmp_F_max, cmp_F_max_mid_bead, cmp_F_max_small_bead, F_range_high]
+  text: >
+    Methods says that for 2 mm < d < 8 mm the magnet force "ranges from 1 μN to 1 mN". The Table S1 power laws
+    reproduce the lower end (smallest bead at d = 8 mm), but at d = 2 mm the largest bead gives several mN and the
+    middle bead more than 1 mN; only the smallest bead stays below 1 mN. The SI (p. 9) gives the range as
+    10^-6 - 10^-3 N, so the printed ends are probably orders of magnitude; which beads were used for which tissue
+    is not stated.
+  citation: {page: 7, quote: "ranges from 1 mN to 1 mN", where: "Methods, Calibration of the magnetic force"}
+- id: q_strip_continuum
+  kind: overstated_claim
+  about: [cmp_strip_continuum_vs_fit, c_strip_fit, continuum_strip_coefficient]
+  text: >
+    The fitted in-plane bending coefficient of the 2-row strip, b1par h = 0.36 k1 a1^3, is called "consistent with
+    the continuum theory", but the continuum law the SI itself gives in footnote 3, b1par h = k1 (2 a1)^3/12, has a
+    coefficient almost twice as large. The footnote attributes the difference to "small deviations, due to
+    discretization errors".
+  citation: {page: 15, printed_page: "SI 8", quote: "consistent with the continuum theory", where: "SI text and footnote 3"}
+- id: q_strip_ratio_vs_tube
+  kind: overstated_claim
+  about: [ratio_strip_5p6, ratio_at_x_lo, ratio_at_x_hi, cmp_tube_ratio_lo, cmp_tube_ratio_hi]
+  text: >
+    The measured tubes give 2.9 bt < kt ro^2 < 3.6 bt (reproduced from 0.3 < ri/ro < 0.6), and the simulations use
+    kt ro^2 = 5.6 bt, which lies outside that range; the SI calls the two "in close agreement". The SI adds that
+    changing kt ro^2/bt by 40% did not significantly alter the results, which is the real support for the choice.
+  citation: {page: 15, printed_page: "SI 8", quote: "These inequalities are in close agreement with the symmetry of the tube bending stiffness", where: "SI text"}
+- id: q_radius_ratio_range
+  kind: reading
+  about: [x_lo_measured, x_hi_measured, ri_chE8, ro_chE8, ri_quE12, ro_quE12, ri_moE16, ro_moE16]
+  text: >
+    The SI states that the measured ri/ro lies between 0.3 and 0.6 for all biological and rubber systems, but the
+    printed table radii of chick E8 (ri = 44, ro = 155 um), quail E12 (154, 248 um) and mouse E16.5 (178, 270 um)
+    put ri/ro outside that interval (below it for chick E8, above it for quail and mouse). The interval may refer
+    only to the chick stages used for the simulations.
+  citation: {page: 15, printed_page: "SI 8", quote: "we measured that 0.3 < rroi < 0.6", where: "SI text"}
+- id: q_radius_exponent
+  kind: unstated_model
+  about: [radius_eq2, radius_eq4]
+  text: >
+    SI footnote 4 notes that a local torque balance gives R ~ (Et It/(Em h))^(1/3) eps0^beta with beta = -1, while
+    the loop-wise balance of the main text gives beta = -2/3 (Eq. 2), and Eq. 4 uses -2/3. The paper does not say
+    why the loop-wise balance is preferred; only the -2/3 form is entered as a model.
+  citation: {page: 15, printed_page: "SI 8", quote: "with β = −1 as a consequence of the local torque balance", where: "SI footnote 4"}
+- id: q_loop_number_agreement
+  kind: overstated_claim
+  about: [cmp_n_eq3_obs_chE12, cmp_n_eq3_obs_chE16, cmp_n_eq3_obs_chE8, cmp_n_eq3_obs_quE12, cmp_eq3_lam_obs_chE16, cmp_eq3_lam_obs_chE8, cmp_eq3_lam_obs_quE12]
+  text: >
+    The predicted loop numbers (Lt over the Eq. 3 wavelength, the tables' model rows) differ from the observed
+    ones by more than twice the printed standard deviation at chick E12 and E16 and by more than one at chick E8
+    and quail E12, and the Eq. 3 wavelength misses the observed one at chick E8, chick E16 and quail E12 by more
+    than one s.d.; the paper describes the model predictions as
+    "quantitatively consistent" and in "excellent agreement" with observations. The observed n, Lt and lambda are
+    themselves consistent (n = Lt/lambda is reproduced at every stage), so the gap is in the wavelength.
+  citation: {page: 4, printed_page: "60", quote: "show that the model predictions are quantitatively consistent with observations", where: "Table 1 caption"}
+- id: q_tension_stage
+  kind: reading
+  about: [cmp_tension_quail_chick, tension_ratio_quail_chick]
+  text: >
+    "The quail mesentery has a tension, Em h eps0, approximately five times greater than that in the chick
+    mesentery" does not name the chick stage. The record uses chick E12, the stage Table 2's quail shares; other
+    chick stages give quite different tensions (Em varies from 35 to 861 kPa across E8-E16).
+  citation: {page: 5, printed_page: "61", quote: "tension, Emhe0, approximately five times greater than that in the chick", where: "text, left column"}
+# ---- added by the audit ----
+- id: q_eps0_sign_convention
+  kind: possible_error
+  about: [lattice_simulation, e0_chE8, e0_chE12, e0_chE16]
+  text: >
+    Methods (p. 7) defines the imposed relative growth as eps0 = am/at - 1 (mesentery rest length over tube rest
+    length), while the SI (p. 16) sets at/am = 1 + eps0 (tube over mesentery). The two are inverse conventions: with
+    eps0 > 0 the Methods form makes the mesentery longer than the tube, the SI form makes the tube longer, which is
+    what the text describes (the tube grows longer than the mesentery perimeter, eps_p = Lt/Lm - 1). The Methods
+    form is probably a misprint. It does not touch Eqs. 1-4 but bears on the non-runnable lattice simulation.
+  citation: {page: 7, quote: "measured and input into the energy, with the relative growth", where: "Methods, Computational model; SI p. 9 (page 16)"}
+- id: q_fig_s3_caption_form
+  kind: possible_error
+  about: [magnet_force_law]
+  text: >
+    The Fig. S3 caption prints the power law as F(d) = F0 (d/d0)^alpha, while the SI text, the label inside the
+    plot and Table S1 use F(d) = F0 (d0/d)^alpha, the form entered in magnet_force_law. With alpha about 4 the
+    caption's form would give a force growing with distance, against the plotted curves; the caption is probably
+    a misprint. No variant model is written, since the record's model already follows the text.
+  citation: {page: 10, printed_page: "SI 3", quote: "The parameters for the power-law fit", where: "Fig. S3 caption"}
+- id: q_table_s1_vs_fig_s3
+  kind: unexplained_difference
+  about: [F0_rb0122, F0_rb0253, F0_rb0398, magnet_force_law, q_force_range]
+  text: >
+    On the page image, at a glance (not a figure reading), the plotted calibration curves of Fig. S3 reach only
+    about 10^-3 N for the largest bead near d = 1.5-2 mm and about 10^-4 N for the smallest, and the whole plot
+    spans 10^-6 to about 2 x 10^-3 N, consistent with the Methods range "1 μN to 1 mN". The Table S1 laws, with
+    F0 = F(d0 = 1 mm), give several times more at the same distances (e.g. 0.105 N/1.6^4.08 ≈ 1.5 x 10^-2 N for the
+    largest bead at 1.6 mm). The inset of Fig. S3 shows F0 between 10^-3 and 10^-1 N, as in the table. Either the
+    tabulated F0 or the reference distance d0 = 1 mm may be off; d0 also lies outside the fitted range 2 < d < 8 mm,
+    so F0 is an extrapolation. The figure job should read Fig. S3 and settle this; it would also explain
+    q_force_range.
+  citation: {page: 10, printed_page: "SI 3", quote: "The force vs. distance calibration curves for 3 different sizes", where: "Fig. S3 and Table S1"}
+- id: q_eq1_minimization
+  kind: reading
+  about: [wavelength_eq1]
+  text: >
+    The derivation of Eq. 1 (p. 3) takes Um ∝ Em eps*^2 h lambda^2, Ut ∝ Et It kappa^2 lambda with kappa ∝ A/lambda^2,
+    and eps* ∝ A/lambda, and says that "minimizing the sum of the two energies with respect to lambda" gives Eq. 1.
+    Substituted as printed, Um ∝ Em h A^2 does not depend on lambda and Ut ∝ Et It A^2/lambda^3 decreases
+    monotonically, so the sum has no minimum in lambda; Eq. 1 follows from balancing the two terms
+    (Et It/lambda^3 ~ Em h), not from minimizing them. The scaling as printed is what the record tests; the
+    question is only how it was obtained.
+  citation: {page: 3, printed_page: "59", quote: "minimizing the sum of the two energies with", where: "text before Eq. 1"}
+- id: q_bead_scaling_extrapolated
+  kind: reading
+  about: [magnet_force_bead_scaling, cmp_F0_rb3_0122, cmp_F0_rb3_0253, cmp_F0_rb3_0398]
+  text: >
+    The caption's F ∝ rb^3 d^-4 is tested (by the audit) on its rb^3 part only, against the three tabulated F0;
+    the fitted exponents 3.76, 4.16 and 4.08 (± 0.2) stand beside the d^-4 part with no model run on them. The F0 are
+    values at d0 = 1 mm, outside the 2-8 mm range of the fits.
+- id: q_relation_regime_ri
+  kind: reading
+  about: [rel_eq3_scales_as_eq1, rel_eq4_scales_as_eq2]
+  text: >
+    (Audit) The regime of the two scales_as relations bounds ri to 20-90 um, but the tabulated inner radii run from
+    44 um (chick E8) to 232 um (chick E16), and ro reaches 391 um. The regime as written samples only the thin-walled
+    end of the data; a range of about 40-240 um for ri would cover every tabulated case. Left as the first
+    reader set it.
+  citation: {page: 4, printed_page: "60", quote: "in accord with our simple scaling laws (equations (1) and (2))", where: "relations.yaml; Tables 1 and 2"}
+  citation: {page: 10, printed_page: "SI 3", quote: "closely F ∝ rb3 d −4 (see inset of Fig S3)", where: "Table S1 caption"}
+# ---- added by the figure pass (2026-11-19) ----
+- id: q_fig_s3_consistent
+  kind: reading
+  about: [q_table_s1_vs_fig_s3, q_force_range, cmp_figS3_rb0398, cmp_figS3_rb0253, cmp_figS3_rb0122, F0_rb0122, F0_rb0253, F0_rb0398]
+  text: >
+    Read with a calibrated reading, Fig. S3 agrees with Table S1: the power laws F0 (d0/d)^alpha with the tabulated
+    F0 and alpha, d0 = 1 mm, pass through the plotted points (comparisons cmp_figS3_*). The difference that
+    q_table_s1_vs_fig_s3 describes came from taking the largest bead's first point at d = 1.6 mm. The
+    plotted points begin at d of about 2.6 mm (largest bead), 2.2 mm (middle) and 1.8 mm (smallest), where
+    the tabulated laws give about 2 x 10^-3, 1 x 10^-3 and 2.4 x 10^-4 N, as plotted. On q_force_range: the
+    plotted forces span about 10^-6 to 2 x 10^-3 N, so Methods' "1 μN to 1 mN" is the plotted span to an order
+    of magnitude. The several mN that Table S1 gives at d = 2 mm for the two larger beads lie at distances the
+    calibration did not reach for the largest bead.
+  citation: {page: 10, printed_page: "SI 3", quote: "The force vs. distance calibration curves for 3 different sizes", where: "Fig. S3"}
+- id: q_sim_lambda_E16
+  kind: overstated_claim
+  about: [cmp_figS8b_sim_obs, figS8b_sim_pts, lam_obs_t1, lattice_simulation]
+  text: >
+    The lattice simulation's loop wavelength at E16, read from Fig. S8b (filled circle, about 7.9 mm with an s.d.
+    bar of about 7.1-8.7 mm), falls below the measured 9.5 ± 0.5 mm of Table 1 and Fig. S8b. The bars do not
+    overlap. At E8 and E12, and for R at every stage, simulation and measurement agree within their bars. The SI
+    calls the agreement "excellent parameter-free". The E16 wavelength is where the simple model (Eq. 3) also
+    misses the observation (q_loop_number_agreement).
+  citation: {page: 18, printed_page: "SI 11", quote: "and the excellent parameter-free agreement with experimental measurements", where: "SI text on Fig. S8"}
+- id: q_rubber_scatter
+  kind: reading
+  about: [cmp_fig4b_rubber_eq3, cmp_fig4c_rubber_eq4, fig4b_rubber, fig4c_rubber]
+  text: >
+    The rubber-model points of Figs. 4b and 4c scatter about the lines of Eqs. 3 and 4 by more than their
+    reading precision, so the fit-quality comparisons come out mostly "not reproduced". Their s.d. bars were not
+    read: the triangles stand in shared columns and their bars cannot be told apart. The plotted bars, by eye,
+    span the line for most points. The verdicts measure the scatter against the precision of the reading, not
+    against the experimental spread. The caption says only that the results are "consistent with the scaling
+    law".
+  citation: {page: 4, printed_page: "60", quote: "The results are consistent with the scaling law in equation (1)", where: "Fig. 4 caption"}
+- id: q_no_validation_moulton2012
+  kind: choice
+  about: [lam_obs_t1, R_obs_t1, n_obs_chE8, n_obs_chE12, n_obs_chE16, fig4b_chick_pts, fig4c_chick_pts, wavelength_eq1, wavelength_eq3, radius_eq2, moulton2012/winkler_rod_wavelength]
+  text: >-
+    No validation between this record and moulton2012 is entered, in either direction (cross-validation job
+    2026-11-19). Neither paper cites the other. moulton2012 holds no measurement (its data are nondimensional
+    model parameters and readings of its computed Fig. 5), so this record's scaling laws have nothing there to
+    be tested against. moulton2012's models (seashell rib dynamics, mantle radius, and a reconstructed Winkler
+    rod wavelength 2 pi (EI/k_s)^(1/4) in model units) give no loop wavelength, radius or number on the
+    measured gut conditions here: the mesentery is a prestrained sheet entering Eq. 1 as Em h, not a Winkler
+    foundation stiffness k_s, and the two laws differ in exponent (1/3 against 1/4). The analogy is for the
+    relation jobs, model against model.
+- id: q_no_validation_shyer2013
+  kind: choice
+  about: [wavelength_eq1, wavelength_eq3, radius_eq2, radius_eq4, loop_number, lattice_simulation, lam_obs_chE12, R_obs_chE12, n_obs_chE12, fig3f_Et_pts, fig3f_Em_pts, shyer2013/fe_luminal_patterns, shyer2013/stressfree_chick, shyer2013/spacing_fig4b, shyer2013/mu_endo_fig4b, shyer2013/mu_mes_fig4b]
+  text: >-
+    (Cross-validation against shyer2013, which cites this paper as its ref. 30; job 2026-11-19.) No
+    validation was entered in either direction. shyer2013 cites this paper only as earlier work on
+    macroscopic looping whose physical principles also apply to the lumen; it sets none of its models or
+    data against these. (1) This record's models against shyer2013's measurements: the loop laws (Eqs. 1-4,
+    the lattice simulation, Lt/n = lambda) return the wavelength, radius and number of loops of the tube
+    held by the mesentery; shyer2013 measures none of these. Its measurements are luminal: fold spacings
+    over endoderm thickness, compression ratios and circumferences of endoderm and muscle, and shear moduli
+    of endoderm and mesenchyme (Figs. 2-4, 6). These are inner layers of the tube, not the tube modulus Et
+    or the mesentery modulus Em measured here, and no model here takes them in or gives them out.
+    (2) shyer2013's models against these measurements: they are the stress-free layer schedules of its
+    luminal simulations, ratio arithmetic and a spot growth field, plus not-runnable finite-element codes;
+    none gives a loop wavelength, radius or number, a tube bending stiffness or a mesentery or tube stress.
+    See shyer2013/q_no_validation_savin2011.
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [wavelength_eq1, wavelength_eq3, radius_eq2, radius_eq4, loop_number, lattice_simulation, lam_obs_chE8, lam_obs_chE12, lam_obs_chE16, lam_obs_quE12, lam_obs_fiE13, lam_obs_moE16, figS8b_obs_pts, cerda2003/deep_substrate_wavelength, cerda2003/L_fig1, cerda2003/t_fig1, cerda2003/gamma_fig1, cerda2003/two_Hs_hand]
+  text: >-
+    (Cross-validation against cerda2003, cited here as SI ref. 13; job 2026-11-19.) No validation is
+    entered, in either direction. This paper cites Cerda & Mahadevan only for the fine wrinkles of the
+    mesentery seen in some rubber models (SI p. 10), which it calls "of no relevance in determining the
+    gut looping pattern" and does not measure: no wrinkle wavelength or amplitude of the mesentery is
+    printed or plotted. (1) cerda2003's models against these measurements: its wrinkle laws (Eq. 5, the
+    stretched sheet, the deep- and shallow-substrate limits, Eq. 6) give the wavelength of a thin plate on
+    a foundation or under tension. The measured loop wavelengths (Tables 1-2, Fig. S8b) are the looping of
+    a tube held by a prestrained sheet, a rod bending against a sheet stretched in its own plane; the
+    deep-substrate law reaches them only through an effective thickness (It/h)^(1/3) and E/Es -> Et/Em,
+    a proposed analogy of the two laws (rel_eq1_scales_as_cerda_deep_substrate, provenance proposed), not
+    a thickness of either tissue. Mapping loop_wavelength to cerda2003's wrinkle_wavelength and an
+    effective length to its sheet_thickness would cross quantities that only share a dimension, and
+    entering that length would mean writing a computed value as an input; the comparison belongs to the
+    relation jobs, model against model. (2) This record's models against cerda2003's measurements: those
+    are the Fig. 1 polyethylene sheet (L, W, t, gamma) and the pinched skin fold 2Hs ≈ 5 mm, all inputs;
+    no loop wavelength, radius or number is measured there, and the gut laws need tube and mesentery
+    moduli that a single sheet does not have. The other direction is cerda2003/q_no_validation_savin2011.
+  citation: {page: 17, printed_page: "SI 10", quote: "leads to the formation of many fine wrinkles", where: "SI text"}
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [wavelength_eq1, wavelength_eq3, radius_eq2, radius_eq4, loop_number, lam_obs_chE8, lam_obs_chE12, lam_obs_chE16, lam_obs_quE12, lam_obs_fiE13, lam_obs_moE16, figS8b_obs_pts, huang2005/thick_substrate_wavelength, huang2005/thin_incompressible_wavelength]
+  text: >-
+    (Cross-validation against huang2005; job 2026-11-19.) No validation is entered, in either direction.
+    Neither paper cites the other. (1) This record's models against huang2005's measurements: huang2005 is
+    theory and numerics only and prints no measurement, so the loop laws (Eqs. 1-4, n = Lt/lambda) have
+    nothing there to be tested against. (2) huang2005's models against these measurements: its wrinkle laws
+    give the wavelength of a film of thickness h bonded to a compliant substrate (thick limit Eq. 17, thin
+    limits Eqs. 18-19, set by the substrate depth). The measured loops are a tube bending against the
+    mesentery stretched in its own plane; no film thickness or substrate depth is measured, and the only
+    link is the effective length (It/h)^(1/3) with Et/Em of the proposed cerda2003 analogy
+    (rel_eq1_scales_as_cerda_deep_substrate), which would cross quantities that only share a dimension and
+    write a computed length as an input. The loop radius and loop number have no counterpart in huang2005.
+    The comparison of laws is for the relation jobs (see the note at the end of relations.yaml). The other
+    direction is huang2005/q_no_validation_savin2011.
+  citation: {page: 4, printed_page: "60", quote: "in accord with our simple scaling laws (equations (1) and (2))", where: "text after Eqs. 3 and 4"}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [lam_obs_t1, R_obs_t1, n_obs_chE8, n_obs_chE12, n_obs_chE16, wavelength_eq1, wavelength_eq3, radius_eq2, radius_eq4, loop_number, jin2015/wrinkle_eigen_uniaxial, jin2015/exp_crease_15to1_text, jin2015/exp_wrinkle_10to1_text]
+  text: >-
+    No validation between this record and jin2015 is entered, in either direction (cross-validation job
+    2026-11-19). jin2015 cites this paper (its ref. 12) only as an example of instabilities in nature; this
+    paper (2011) does not cite jin2015 (2015). (1) This record's models against jin2015's measurements:
+    those are the onset strains of wrinkles and creases in prestretched PDMS bilayers and the layer
+    thicknesses. The looping laws here (Eqs. 1-4 and n = Lt/lambda) give the wavelength, radius and number
+    of loops of a tube attached to a prestrained sheet; none gives an onset strain, and jin2015 measures no
+    loop. (2) jin2015's models against this record's measurements: its bilayer wrinkle analysis gives the
+    onset strain and wavelength of surface wrinkles of a bonded film on a substrate under compression, not
+    the loops of a tube on a stretched sheet. The fine mesentery wrinkles this paper mentions (SI p. 10) are
+    described, not measured, and are said to be of no relevance to the looping. The other direction is
+    jin2015/q_no_validation_savin2011.
+  citation: {page: 17, printed_page: "SI 10", quote: "leads to the formation of many fine wrinkles", where: "SI text"}

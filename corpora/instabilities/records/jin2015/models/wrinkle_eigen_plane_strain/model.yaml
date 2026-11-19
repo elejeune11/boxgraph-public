@@ -1,0 +1,13 @@
+id: wrinkle_eigen_plane_strain
+name: wrinkling of a neo-Hookean bilayer with a substrate of finite thickness, plane strain (Appendix B, Eqs. B7-B15)
+role: model
+stated: {page: 10, printed_page: "061008-10", quote: "The explicit expression of the matrix A is given as follows", where: "Eqs. B7-B15"}
+equation: "det A(Gf/Gs, Hs/Hf, KHf, lambda1, lambda3) = 0 (Eq. B7), A from Eqs. B8-B15; lambda3 = 1 (plane strain); e_c = 1 - lambda_c; e_m = min over KHf of e_c, L_m/Hf = 2 pi/(KHf) at the minimum"
+inputs:
+  Gf_Gs: {quantity: shear_modulus_ratio, unit: dimensionless, description: "Gf/Gs, film to substrate shear modulus ratio"}
+  Hs_Hf: {quantity: thickness_ratio, unit: dimensionless, description: "Hs/Hf, substrate to film thickness ratio (undeformed)"}
+outputs:
+  em: {quantity: wrinkle_onset_strain_plane_strain, unit: dimensionless, description: "e_m^PE, the minimal critical strain"}
+  Lm: {quantity: wrinkle_wavelength_over_film_thickness, unit: dimensionless, description: "L^m_wrinkle/Hf, nominal wavelength at the minimum"}
+settings: {kh_min: 0.01, kh_max: 300.0, n_kh: 61, e_min: 0.0001, e_max: 0.75, n_e: 150, tol: 1.0e-7, n_golden: 30}
+stochastic: false

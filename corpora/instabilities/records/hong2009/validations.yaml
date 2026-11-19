@@ -1,0 +1,95 @@
+# Cross-validation against trujillo2008 (job 2026-11-18). This paper cites trujillo2008 (ref. 6) among the
+# swelling-gel experiments "giving eta_exp = 2.0-3.7" (p. 3), but enters only the pooled range. trujillo2008
+# measures the thickness change h/h0 of 1 mm surface-attached gels at the onset of creasing, which is this
+# paper's eta (thickness of the swollen gel over that of the initial gel, bonded to a rigid substrate).
+- id: val_eta_crease_trujillo_onset
+  model: gel_critical_swelling
+  inputs: {eps: eps_c_printed}
+  output: eta
+  against: trujillo2008/hh0_onset_measured
+  purpose: validation
+  quantities: {trujillo2008/thickness_swelling_ratio: swelling_thickness_ratio}
+  conditions_ok: >-
+    trujillo2008 measures 1.0 mm thick gels with 0.4 mol% bis(acrylamide) on a rigid substrate; the model
+    is a gel bonded to a rigid substrate with no thickness, length scale or modulus in it. trujillo2008 finds
+    the onset strain independent of thickness from 3 um to 1 mm and of cross-linker content (Fig. 3), and
+    expects creasing of "any sufficiently thick surface-attached polymer network" (p. 5), so a criterion
+    without those conditions may be set against this one measurement. The model takes the gel as incompressible during creasing (p. 3, "solvent in
+    the gel has no time to migrate"), while trujillo2008's gels reach swelling equilibrium; that is the
+    paper's own assumption, tested here rather than excused.
+  basis: >-
+    p. 3: "Consider a gel bonded on a rigid substrate, and swells in the direction normal to the surface.
+    Let eta be the ratio of the thickness of the swollen gel and that of the initial gel ... the critical
+    condition is eta_c = 2.4 for creasing", set against experiments including ref. 6 (trujillo2008).
+    trujillo2008 measures exactly this ratio, h/h0 from the as-polymerized thickness, at the onset of
+    creasing (p. 5, "yield a value of h/h0 = 2.0 +/- 0.1 at the onset of creasing").
+- id: val_eta_biot_trujillo_onset
+  model: gel_critical_swelling
+  inputs: {eps: eps_biot_printed}
+  output: eta
+  against: trujillo2008/hh0_onset_measured
+  purpose: validation
+  quantities: {trujillo2008/thickness_swelling_ratio: swelling_thickness_ratio}
+  conditions_ok: >-
+    As val_eta_crease_trujillo_onset: a 1 mm gel layer on a rigid substrate against the half-space model,
+    with the model's incompressibility during creasing as the paper assumes it.
+  basis: >-
+    p. 3: the same construction transforms Biot's plane-strain threshold epsilon_biot = 0.46 into
+    "eta_biot = 3.4 for linear perturbation", which the paper contrasts with eta_c against the measured
+    range from refs. 4-6; trujillo2008's onset h/h0 is one of those measurements.
+# Cross-validation against wang2015 (job 2026-11-18). wang2015 cites this paper (ref. 43) for its flat-crease
+# boundary eC_crease = 0.35 (Eq. 3) and for the creases it observes on compliant films (p. 6, "creases with
+# the rise of eM12,43"). Its measured crease onset is the only value there that a model here produces.
+- id: val_eps_c_wang2015_crease_onset
+  model: crease_zero_fig3
+  inputs: {f: fig3_energy_curve}
+  settings: {n_last: 2}
+  output: eps_c
+  against: wang2015/crease_onset_measured
+  purpose: validation
+  quantities: {wang2015/crease_onset_mismatch_strain: critical_strain_plane}
+  conditions_ok: >-
+    wang2015 measures a Sylgard film bonded to a relaxed, prestretched Ecoflex substrate, with
+    mu_f/mu_s = 0.3 and 0.64, in plane strain; this paper's threshold is for a homogeneous neo-Hookean
+    half-space. Both strains are nominal plane-strain compressive strains (wang2015: eM = (Lf - Ls)/Lf,
+    the film's compressive strain once the substrate is relaxed, so 1 - eM is the film's in-plane stretch;
+    here epsilon with lambda_1 = 1 - epsilon). A crease forms in the film, and wang2015 itself takes the
+    half-space value 0.35 as the flat-crease boundary for every mu_f/mu_s < 1.3 (Eq. 3, refs. 12, 43), so
+    the films below 1.3 may be set against the half-space criterion. The film's finite thickness and the
+    stiffer substrate are differences this paper's model does not contain.
+  basis: >-
+    wang2015 p. 4: the flat-crease boundary "is calculated by setting Pflat 5 Pcrease12,43" (eC_crease = 0.35,
+    ref. 43 = this paper), and p. 6: "When eM reaches ,0.36 (for mf/ms 5 0.3 and 0.64), the initially flat
+    surface suddenly forms discrete creases ... with the rise of eM12,43". This paper's energy criterion
+    (f(epsilon_c) = 0 on the Fig. 3 curve) gives the plane-strain nominal strain at crease onset, the
+    quantity wang2015 observes.
+# Cross-validation against diab2013 (job 2026-11-18). diab2013 cites this paper (ref. 9) and holds no
+# measurement of its own; the one experimental value it records is Gent & Cho's crease strain in bending
+# (its ref. 1), printed there as the range 0.28-0.42. This paper sets its threshold against the same
+# experiments (ref. 1), but prints only the single value epsilon_exp = 0.35 (eps_exp_printed, compared in
+# cmp_epsc_fig3_exp); diab2013's range is the other paper's report of the same measurement.
+- id: val_eps_c_diab2013_gent_cho
+  model: crease_zero_fig3
+  inputs: {f: fig3_energy_curve}
+  settings: {n_last: 2}
+  output: eps_c
+  against: diab2013/gent_cho_crease_strain
+  purpose: validation
+  quantities: {diab2013/crease_onset_strain_measured: critical_strain_plane}
+  conditions_ok: >-
+    Gent & Cho compressed rubber strips by bending and report the nominal surface strain at creasing
+    (diab2013 p. 2, "compressed by bending creased at a nominal strain in the range 0.28-0.42"); the model
+    is a neo-Hookean half-space in uniform plane-strain compression. This paper makes the same comparison
+    itself (p. 1: "When a block of an elastomer is bent, the compressed surface may form a crease", and
+    epsilon_exp = 0.35 from refs. 1, 2 set against epsilon_c), treating the surface strain of a bent block,
+    where the crease is small against the strain gradient, as the uniform strain of the half-space. Both
+    are nominal compressive strains (shortening over original length). The strain gradient of bending,
+    the finite size of the strips and the rubber's departure from neo-Hookean behaviour are not in the model.
+  basis: >-
+    p. 1: "The critical strain for creasing measured experimentally is known to disagree with that
+    predicted by linear perturbation analysis. This paper calculates the critical strain by comparing the
+    elastic energy in a creased body and that in a smooth body", with "the experimental value,
+    epsilon_exp = 0.35" attributed to Gent & Cho (ref. 1) among others. diab2013 (ref. 1 = Gent & Cho
+    1999) reports that measurement as the range 0.28-0.42 and calls 0.35 consistent with this paper
+    (diab2013 p. 11). The model's output, the plane-strain nominal strain at crease onset, is the
+    quantity measured.

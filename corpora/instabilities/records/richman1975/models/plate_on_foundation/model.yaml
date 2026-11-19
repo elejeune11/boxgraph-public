@@ -1,0 +1,21 @@
+id: plate_on_foundation
+name: two bonded cortical plates on an elastic core, read from the paper's words (pp. 2-3)
+stated: {page: 2, printed_page: "19", quote: "two flat plates, the cortical layers, bonded", where: text}
+reconstructed: "the paper takes l/t and the critical stress from an analysis cited as unpublished (ref. 20, J. W. Hutchinson); this thin-plate-on-foundation model is the reader's stand-in, built from the paper's description of the setting"
+from_words: true
+described_from: ref-20
+equation: >
+  Not printed (ref. 20 is unpublished). The record's reading of the words: f(x,y) = sin(2 pi x/lx)
+  sin(2 pi y/ly) with 1/lx^2 + 1/ly^2 = 1/l^2; strata as two bonded incompressible thin plates
+  (plate modulus 4E/3) under equibiaxial compressive membrane force N = sigma1 t1 + sigma2 t2,
+  on an incompressible half-space core of stiffness p = (2/3) Ecore k w, k = 2 pi/l.
+  N(k) = D k^2 + (2/3) Ecore/k; l is the k that minimizes N; sigma1_crit = N_min/(t1 + (sigma2/sigma1) t2).
+inputs:
+  t1: {quantity: stratum_thickness, unit: mm}
+  t2: {quantity: stratum_thickness, unit: mm}
+  E2_over_E1: {quantity: stratum_modulus_ratio, unit: dimensionless}
+  Ecore_over_E1: {quantity: core_modulus_ratio, unit: dimensionless}
+  stress_ratio: {quantity: stress_ratio, unit: dimensionless}
+outputs:
+  l_over_t: {quantity: wavelength_thickness_ratio, unit: dimensionless}
+  sigma1_crit_over_E1: {quantity: critical_stress_ratio, unit: dimensionless}

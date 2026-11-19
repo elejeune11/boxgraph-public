@@ -1,0 +1,24 @@
+# Relations to biot1963 (ref. 21). The paper states (p. 2) that Biot found the surface instability
+# first occurs when the in-plane extension ratios satisfy lambda1^2 lambda3 = 0.296. Biot prints the
+# critical condition per loading case as the decay factor k of the surface mode, k = 0.295 at the
+# critical compression in both his cases (p. 181). With lambda1 the stretch along the compression
+# and lambda3 the other in-plane stretch, the paper's lambda1^2 lambda3 is Biot's k in each case.
+# mapping: b's input symbol -> expression in a's input symbols (all dimensionless)
+- id: rel_biot_k_plane_stretch_product
+  kind: same_as
+  a: biot1963/k_plane_eq411
+  b: trujillo2008/stretch_product
+  mapping: {lam1: "lam", lam3: "1"}
+  regime: {lam: [0.4, 1.0]}
+  provenance: stated
+  citation: {page: 2, printed_page: "565", quote: "instability should first occur when the extension ratios"}
+  assumptions: ["plane strain as in Biot Sec. 4: lambda1 = lambda along the compression, lambda3 = 1; Biot's k = lambda^2 (Eq. 4.11)"]
+- id: rel_biot_k_uniaxial_stretch_product
+  kind: same_as
+  a: biot1963/k_uniaxial
+  b: trujillo2008/stretch_product
+  mapping: {lam1: "lam", lam3: "lam**(-1/2)"}
+  regime: {lam: [0.4, 1.0]}
+  provenance: stated
+  citation: {page: 2, printed_page: "565", quote: "instability should first occur when the extension ratios"}
+  assumptions: ["uniaxial compression without lateral restraint as in Biot Eq. 3.27: lambda1 = lambda, lambda3 = lambda^(-1/2); Biot's k = lambda^(3/2) (p. 181)"]

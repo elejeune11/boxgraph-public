@@ -1,0 +1,134 @@
+# Cross-validation against richman1975 (job 2026-11-14). Neither paper cites the other. richman1975
+# treats the fetal cortex as stiff layers bonded "to an infinitely deep elastic foundation, the core"
+# (p. 2) and identifies the buckling wavelength with the incipient intersulcal distance (note 21); that is
+# the setting of Eq. 3 (a stiff film on a compliant half-space). The moduli are added (no paper measures
+# them): Em/Ep = 10 from richman1975's Ecore/E1 = 1/10, both incompressible (q_richman_thickness_choice).
+- id: val_eq3_richman_27wk
+  model: wavelength_eq3
+  inputs: {t: 'richman1975/t_27wk', Em: Em_brain_added, Ep: Ep_brain_added, nu_m: nu_brain_added, nu_p: nu_p_brain_added}
+  output: L
+  against: 'richman1975/l_measured_27wk'
+  purpose: validation
+  quantities: {'richman1975/cortical_thickness': film_thickness, 'richman1975/buckling_wavelength': wrinkle_wavelength}
+  conditions_ok: >-
+    Eq. 3 is a stiff film on a compliant half-space at onset; the core is deep (hemisphere radius 84 mm
+    against t ≈ 1.7 mm), but Em/Ep = 10 is only moderately large and the compression comes from
+    differential growth, not thermal mismatch. The onset wavelength of Eq. 3 does not depend on the cause
+    or size of the stress, so the comparison is of the same quantity.
+  basis: >-
+    Eq. 3 (p. 3, "has wavelength L (m) given by") gives the wrinkle wavelength of a stiff film of
+    thickness t on a compliant half-space; richman1975 models the cortex as such a layer (p. 2, "two flat
+    plates, the cortical layers, bonded to an infinitely deep elastic foundation"), with E1 = E2 so that
+    the two strata act as one film. The thickness is the one note 18 gives for the same 27-week specimen.
+- id: val_eq3_richman_27wk_t_normal
+  model: wavelength_eq3
+  inputs: {t: 'richman1975/t_normal_fetus', Em: Em_brain_added, Ep: Ep_brain_added, nu_m: nu_brain_added, nu_p: nu_p_brain_added}
+  output: L
+  against: 'richman1975/l_measured_27wk'
+  purpose: validation
+  quantities: {'richman1975/cortical_thickness': film_thickness, 'richman1975/buckling_wavelength': wrinkle_wavelength}
+  conditions_ok: >-
+    t ≈ 1.0 mm is richman1975's estimate for "the normal fetus during convolutional development" (p. 3),
+    not a value for this specimen; it is the thickness richman1975 itself uses when it compares its
+    l ≈ 8 mm with this 8.5 mm (q_richman_thickness_choice). Eq. 3's limits as in val_eq3_richman_27wk.
+  basis: >-
+    As val_eq3_richman_27wk, with the thickness richman1975 uses for its own prediction (p. 3,
+    "t ≈ 1.0 mm, and hence l ≈ 8t ≈ 8 mm").
+- id: val_eq3_richman_sidman
+  model: wavelength_eq3
+  inputs: {t: 'richman1975/t_normal_fetus', Em: Em_brain_added, Ep: Ep_brain_added, nu_m: nu_brain_added, nu_p: nu_p_brain_added}
+  output: L
+  against: 'richman1975/l_measured_sidman'
+  purpose: validation
+  quantities: {'richman1975/cortical_thickness': film_thickness, 'richman1975/buckling_wavelength': wrinkle_wavelength}
+  conditions_ok: >-
+    No cortical thickness is printed for the Sidman and Rakic specimen; richman1975 compares its
+    prediction from t ≈ 1.0 mm (normal fetus, end of the seventh month) with this 7.5 mm (p. 3), so the
+    same thickness is used. Eq. 3's limits as in val_eq3_richman_27wk.
+  basis: >-
+    As val_eq3_richman_27wk: the measurement is the normal incipient intersulcal distance in the specimen
+    of Sidman and Rakic (richman1975 p. 3, "7.5 mm in a specimen illustrated in Sidman and Rakic").
+- id: val_eq3s_richman_27wk
+  model: wavelength_eq3_simplified
+  inputs: {t: 'richman1975/t_27wk', Em: Em_brain_added, Ep: Ep_brain_added}
+  output: L
+  against: 'richman1975/l_measured_27wk'
+  purpose: validation
+  quantities: {'richman1975/cortical_thickness': film_thickness, 'richman1975/buckling_wavelength': wrinkle_wavelength}
+  conditions_ok: As val_eq3_richman_27wk.
+  basis: >-
+    As val_eq3_richman_27wk, with the second form of Eq. 3, 4.4t(Em/Ep)^(1/3), which drops the Poisson
+    factors (they cancel here, since both materials are taken incompressible).
+- id: val_eq3s_richman_27wk_t_normal
+  model: wavelength_eq3_simplified
+  inputs: {t: 'richman1975/t_normal_fetus', Em: Em_brain_added, Ep: Ep_brain_added}
+  output: L
+  against: 'richman1975/l_measured_27wk'
+  purpose: validation
+  quantities: {'richman1975/cortical_thickness': film_thickness, 'richman1975/buckling_wavelength': wrinkle_wavelength}
+  conditions_ok: As val_eq3_richman_27wk_t_normal.
+  basis: As val_eq3_richman_27wk_t_normal, with the second form of Eq. 3.
+- id: val_eq3s_richman_sidman
+  model: wavelength_eq3_simplified
+  inputs: {t: 'richman1975/t_normal_fetus', Em: Em_brain_added, Ep: Ep_brain_added}
+  output: L
+  against: 'richman1975/l_measured_sidman'
+  purpose: validation
+  quantities: {'richman1975/cortical_thickness': film_thickness, 'richman1975/buckling_wavelength': wrinkle_wavelength}
+  conditions_ok: As val_eq3_richman_sidman.
+  basis: As val_eq3_richman_sidman, with the second form of Eq. 3.
+# Cross-validation against stafford2004 (job 2026-11-14). stafford2004 cites this paper (its ref. 7) and
+# measures wrinkle wavelengths of polystyrene films on PDMS, the system of Eq. 3. Its PDMS is UV/ozone
+# treated for only 0.5 min, which it says "does not lead to significant changes in the surface modulus of
+# the PDMS" (stafford2004 p. 5), so the modified-layer reconstruction is not run on it.
+- id: val_eq3_stafford_fig1b
+  model: wavelength_eq3
+  inputs: {t: stafford2004/h_fig1b, Em: stafford2004/E_PS_gradient, nu_m: stafford2004/nu_f_PS, Ep: Ep_stafford_added, nu_p: nu_p_stafford_added}
+  output: L
+  against: stafford2004/d_fig1b_caption
+  purpose: validation
+  quantities: {stafford2004/film_thickness: film_thickness, stafford2004/film_modulus: film_youngs_modulus, stafford2004/film_poisson_ratio: film_poisson_ratio, stafford2004/wrinkle_wavelength: wrinkle_wavelength}
+  conditions_ok: >-
+    The modulus 3.4 GPa was inferred by stafford2004 from other PS films (the 150-240 nm gradient film and
+    films as thin as 30 nm), not from the Fig. 1b film, and stafford2004 says it is constant over that range;
+    the Fig. 1b film (h ≈ 100 nm) is taken to be the same polystyrene. Its PDMS modulus is not printed
+    (Ep_stafford_added). The thickness is printed only as ≈ 100 nm (q_stafford_fig1b_film).
+  basis: >-
+    Eq. 3 (p. 3, "has wavelength L (m) given by") is the wavelength of a stiff film on a compliant half-space;
+    stafford2004 measures that wavelength for a PS film on a thick PDMS sheet (stafford2004 p. 2, "micrograph
+    shows a buckling wavelength for a PS film (h ≈ 100 nm) of approximately 8 µm"), with an independently
+    obtained film modulus.
+- id: val_eq3s_stafford_fig1b
+  model: wavelength_eq3_simplified
+  inputs: {t: stafford2004/h_fig1b, Em: stafford2004/E_PS_gradient, Ep: Ep_stafford_added}
+  output: L
+  against: stafford2004/d_fig1b_caption
+  purpose: validation
+  quantities: {stafford2004/film_thickness: film_thickness, stafford2004/film_modulus: film_youngs_modulus, stafford2004/wrinkle_wavelength: wrinkle_wavelength}
+  conditions_ok: As val_eq3_stafford_fig1b.
+  basis: As val_eq3_stafford_fig1b, with the second form of Eq. 3, 4.4t(Em/Ep)^(1/3), without the Poisson factors.
+- id: val_eq3_stafford_fig2b
+  model: wavelength_eq3
+  inputs: {Em: stafford2004/E_PS_gradient, nu_m: stafford2004/nu_f_PS, Ep: Ep_stafford_added, nu_p: nu_p_stafford_added}
+  sweep: {t: stafford2004/d_fig2b}
+  output: L
+  against: stafford2004/d_fig2b
+  purpose: fit_quality
+  quantities: {stafford2004/film_thickness: film_thickness, stafford2004/film_modulus: film_youngs_modulus, stafford2004/film_poisson_ratio: film_poisson_ratio, stafford2004/wrinkle_wavelength: wrinkle_wavelength}
+  basis: >-
+    Fitted, not a test: the film modulus 3.4 GPa (stafford2004 Fig. 2 caption, "remains largely constant
+    (3.4 ± 0.1 GPa) over this thickness range") is inferred by stafford2004's Eq. 2, the inverse of this
+    Eq. 3, from these same measured wavelengths of the PS gradient film (Fig. 2b, open circles). Run at each
+    plotted thickness, Eq. 3 shows how well one modulus carries all ten wavelengths.
+- id: val_eq3s_stafford_fig2b
+  model: wavelength_eq3_simplified
+  inputs: {Em: stafford2004/E_PS_gradient, Ep: Ep_stafford_added}
+  sweep: {t: stafford2004/d_fig2b}
+  output: L
+  against: stafford2004/d_fig2b
+  purpose: fit_quality
+  quantities: {stafford2004/film_thickness: film_thickness, stafford2004/film_modulus: film_youngs_modulus, stafford2004/wrinkle_wavelength: wrinkle_wavelength}
+  basis: >-
+    As val_eq3_stafford_fig2b (the modulus was inferred from these wavelengths), with the second form of
+    Eq. 3, which drops the Poisson factors that stafford2004's Eq. 2 keeps; the difference shows what they
+    amount to (about 6 % in L for nu_m = 0.33, nu_p = 0.5).

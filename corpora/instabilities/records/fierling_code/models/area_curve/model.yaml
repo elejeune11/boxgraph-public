@@ -1,0 +1,14 @@
+id: area_curve
+name: a released apical-area time course read at given times
+role: processing
+software: true
+stated: {file: area_AP_DV_paper.plot, lines: "57-64", quote: "w l ls LS_SPIM tit \"MuVi SPIM\""}
+equation: "y(t): the column `y_column` against the column `t_column`, linearly interpolated (rows with `need_column` < need_value left out, as the plot does with stat_n3 == 3); reduction = 1 - y"
+inputs:
+  t: {quantity: time, unit: min}
+outputs:
+  y: {quantity: area_fold_change, unit: dimensionless}
+  reduction: {quantity: apical_area_reduction, unit: dimensionless}
+settings: {file: "merged_with_ref_BW=15_Stats_CQJE_Gastrulation_ordi_Wild_Type_STITCHED_100_0.gdat", t_column: "t_rauzi",
+           y_column: "aire_Rauzi/aire_Rauzi_ini", need_column: "", need_value: 0}
+stochastic: false

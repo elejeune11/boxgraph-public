@@ -1,0 +1,23 @@
+id: ribs_tension_eq5
+name: commarginal ribs from stress feedback, law stronger in tension (Eqs. 2, 3, 5, App. E)
+role: model
+stated: {page: 4, quote: "A feed- back law that takes this into account is", where: "Eqs. 2, 3, 5; Appendix E (p. 10)"}
+equation: "dr_s/dt = k_g cos(theta) sin(phi); dphi/dt = H2 = k_phi (1 - e^{K n3}); n3 = EA(alpha - 1), alpha = a/(gamma a0); (1/a) n3 + k_s (a - r_s) = 0"
+inputs:
+  n: {quantity: rib_index, unit: dimensionless}
+  kphi: {quantity: feedback_gain, unit: dimensionless}
+  K: {quantity: feedback_nonlinearity, unit: dimensionless}
+  rs0: {quantity: shell_radius, unit: dimensionless}
+  phi0: {quantity: deposition_angle, unit: dimensionless}
+  theta: {quantity: growth_vector_angle, unit: dimensionless}
+  kg: {quantity: shell_deposition_rate, unit: dimensionless}
+  gamma0: {quantity: mantle_growth_ratio, unit: dimensionless}
+  gamma_rate: {quantity: mantle_growth_rate, unit: dimensionless}
+  a0: {quantity: mantle_unstressed_radius, unit: dimensionless}
+  EA: {quantity: mantle_axial_stiffness, unit: dimensionless}
+  ks: {quantity: attachment_spring_stiffness, unit: dimensionless}
+outputs:
+  t_rib: {quantity: time_nondim, unit: dimensionless}
+  r_rib: {quantity: shell_radius, unit: dimensionless}
+settings: {t_max: 30.0, rtol: 1.0e-9}
+stochastic: false

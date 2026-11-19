@@ -1,0 +1,175 @@
+# The released numbers behind each plotted curve, read at the positions the paper's record reads its figures, against
+# those readings. These are checks of a figure against its own data (consistency); a comparison with another record's
+# datum can only be entered as a validation.
+- id: val_fig2c_prestress
+  model: stress_profile
+  inputs: {chi: chi_plot}
+  sweep: {theta: fierling2022/prestress_fig2c}
+  settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step013.dmp.gdat", nbbins: 20}
+  output: sigma_a
+  against: fierling2022/prestress_fig2c
+  quantities: {fierling2022/angle_from_midline: angle_from_midline, fierling2022/prestress_nd: prestress_nd}
+  basis: Fig. 2c is drawn by stress_profile.plot from the released Step013 file (README); its pre-stress line is chi*(1-x)/x of column 1.
+- id: val_fig2c_sap
+  model: stress_profile
+  inputs: {chi: chi_plot}
+  sweep: {theta: fierling2022/sap_fig2c}
+  settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step013.dmp.gdat", nbbins: 20}
+  output: sigma_ap
+  against: fierling2022/sap_fig2c
+  quantities: {fierling2022/angle_from_midline: angle_from_midline, fierling2022/stress_ap_nd: stress_ap_nd}
+  basis: Fig. 2c's sigma_AP line is column 6 of the released Step013 file (stress_profile.plot line 48).
+- id: val_fig2c_sdv
+  model: stress_profile
+  inputs: {chi: chi_plot}
+  sweep: {theta: fierling2022/sdv_fig2c}
+  settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step013.dmp.gdat", nbbins: 20}
+  output: sigma_dv
+  against: fierling2022/sdv_fig2c
+  quantities: {fierling2022/angle_from_midline: angle_from_midline, fierling2022/stress_dv_nd: stress_dv_nd}
+  basis: Fig. 2c's sigma_DV line is column 7 of the released Step013 file (stress_profile.plot line 43).
+- id: val_sf1f_prestress
+  model: stress_profile
+  inputs: {chi: chi_plot}
+  sweep: {theta: fierling2022/prestress_sf1f}
+  settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step063.dmp.gdat", nbbins: 40}
+  output: sigma_a
+  against: fierling2022/prestress_sf1f
+  quantities: {fierling2022/angle_from_midline: angle_from_midline, fierling2022/prestress_nd: prestress_nd}
+  basis: Supp. Fig. 1f is stress_profile.plot on the released Step063 file (README); nbbins = 40 for frame 63 (the script's comment, line 4).
+- id: val_fig5d
+  model: ap_stress_vs_distance
+  inputs: {R_DV: rdv_ablation_plot}
+  sweep: {d: fierling2022/sap_fig5d}
+  settings: {file: "StressEquatEulerStrains_Young100dixPoisson000Step063.dmp.gdat", nbbins: 40}
+  output: sigma_ap
+  against: fierling2022/sap_fig5d
+  quantities: {fierling2022/dv_distance: dv_distance, fierling2022/stress_ap_nd: stress_ap_nd}
+  conditions_ok: "the reading is labelled t = 0.5 min (the caption's 0'30''); the released frame 63 it is drawn from sits at t = 0.455 min (cmp_t_fig5d)"
+  basis: Fig. 5d is stress_profile_for_laser_ablations.plot on the released Step063 file, x = R_DV * phi_Eul.
+- id: val_fig3a_sim
+  model: area_curve
+  sweep: {t: fierling2022/area_sim_fig3a}
+  settings: {file: "merged_with_ref_BW=15_Stats_CQJE_Gastrulation_ordi_Wild_Type_STITCHED_100_0.gdat", t_column: "t_rauzi",
+             y_column: "aire_Rauzi/aire_Rauzi_ini", need_column: "", need_value: 0}
+  output: y
+  against: fierling2022/area_sim_fig3a
+  quantities: {fierling2022/time: time, fierling2022/area_fold_change: area_fold_change}
+  basis: Fig. 3a's 'Area Simulations' line is this column of the released file (area_AP_DV_paper.plot lines 62-64).
+- id: val_fig3a_muvi
+  model: area_curve
+  sweep: {t: fierling2022/area_muvi_fig3a}
+  settings: {file: "sync_rauzi_area.gdat", t_column: "t_rauzi", y_column: "mean3(A_Rauzi0,A_Rauzi1,A_Rauzi2)",
+             need_column: "stat_n3(a0_0,a1_0,a2_0)", need_value: 3}
+  output: y
+  against: fierling2022/area_muvi_fig3a
+  quantities: {fierling2022/time: time, fierling2022/area_fold_change: area_fold_change}
+  basis: Fig. 3a's 'Area MuVi SPIM' line is this column of the released file where three embryos are present (area_AP_DV_paper.plot lines 57-59).
+- id: val_fig3b_sim
+  model: row_value
+  sweep: {row: fierling2022/area_rows_sim}
+  settings: {file: "sims_t=-1_area.gdat", name: "stripe_{i}_norm", offset: 0}
+  output: y
+  against: fierling2022/area_rows_sim
+  quantities: {fierling2022/cell_row: cell_row, fierling2022/area_fold_change: area_fold_change}
+  basis: Fig. 3b's simulated squares are stripe_i_norm of the released file (area_AP_DV_paper.plot lines 136-138).
+- id: val_fig3b_sim_r7
+  model: row_value
+  sweep: {row: fierling2022/area_rows_sim_r7}
+  settings: {file: "sims_t=-1_area.gdat", name: "stripe_{i}_norm", offset: 0}
+  output: y
+  against: fierling2022/area_rows_sim_r7
+  quantities: {fierling2022/cell_row: cell_row, fierling2022/area_fold_change: area_fold_change}
+  basis: the same simulated squares, rows 1-7.
+- id: val_fig3b_muvi
+  model: row_value
+  sweep: {row: fierling2022/area_rows_muvi}
+  settings: {file: "rauzi_t=-1_area.gdat", name: "", offset: 4}
+  output: y
+  against: fierling2022/area_rows_muvi
+  quantities: {fierling2022/cell_row: cell_row, fierling2022/area_fold_change: area_fold_change}
+  basis: Fig. 3b's MuVi squares are column(4+i) of the released file (area_AP_DV_paper.plot lines 131-132); the reading's interval is its error bar.
+- id: val_fig3b_confocal
+  model: row_value
+  sweep: {row: fierling2022/area_rows_confocal}
+  settings: {file: "Guy_area_myo_t=-1_area.gdat", name: "Area_{i}", offset: 0}
+  output: y
+  against: fierling2022/area_rows_confocal
+  quantities: {fierling2022/cell_row: cell_row, fierling2022/area_fold_change: area_fold_change}
+  basis: Fig. 3b's confocal squares are Area_i of the released file (area_AP_DV_paper.plot lines 133-135).
+- id: val_fig5e_pos_n6
+  model: recoil_stats
+  sweep: {d: fierling2022/recoil_fig5e_pos}
+  settings: {n: 6}
+  output: mean
+  against: fierling2022/recoil_fig5e_pos
+  quantities: {fierling2022/dv_distance: dv_distance, fierling2022/recoil_velocity: recoil_velocity}
+  basis: Fig. 5e's bars are means of laser_ablation_recoil.gdat; with all six embryo columns, as the caption's n = 6 says.
+- id: val_fig5e_neg_n6
+  model: recoil_stats
+  sweep: {d: fierling2022/recoil_fig5e_neg}
+  settings: {n: 6}
+  output: mean
+  against: fierling2022/recoil_fig5e_neg
+  quantities: {fierling2022/dv_distance: dv_distance, fierling2022/recoil_velocity: recoil_velocity}
+  basis: as val_fig5e_pos_n6, at -16 and -8 um.
+- id: val_fig5e_pos_n5
+  model: recoil_stats
+  sweep: {d: fierling2022/recoil_fig5e_pos}
+  settings: {n: 5}
+  output: mean
+  against: fierling2022/recoil_fig5e_pos
+  quantities: {fierling2022/dv_distance: dv_distance, fierling2022/recoil_velocity: recoil_velocity}
+  basis: the released plotting script as written averages only the first n = 5 columns (laser_ablation_recoil.plot line 4).
+- id: val_fig5e_neg_n5
+  model: recoil_stats
+  sweep: {d: fierling2022/recoil_fig5e_neg}
+  settings: {n: 5}
+  output: mean
+  against: fierling2022/recoil_fig5e_neg
+  quantities: {fierling2022/dv_distance: dv_distance, fierling2022/recoil_velocity: recoil_velocity}
+  basis: as val_fig5e_pos_n5, at -16 and -8 um.
+
+# ---- cross-record job (fierling2022 + fierling_code): the released simulation numbers against the paper's
+# measurements. The paper says its moduli were 'tuned to match observed in-plane deformations' (p. 9), so the
+# simulated area changes are entered as fit quality, not as tests (q_cross_tuned).
+- id: val_sim_rows_vs_muvi
+  model: row_value
+  sweep: {row: fierling2022/area_rows_muvi}
+  settings: {file: "sims_t=-1_area.gdat", name: "stripe_{i}_norm", offset: 0}
+  output: y
+  against: fierling2022/area_rows_muvi
+  purpose: fit_quality
+  quantities: {fierling2022/cell_row: cell_row, fierling2022/area_fold_change: area_fold_change}
+  conditions_ok: "the released simulated rows are frame 37 (t = -1.07 min) and the MuVi rows t = -1.175 min (rauzi_t=-1_area.gdat); both are what Fig. 3b plots as 't = -1 min'"
+  basis: >
+    Fig. 3b sets the simulated area fold change by row beside the MuVi SPIM measurement (fierling2022 p. 6: 'These
+    results show that our model can faithfully reproduce the in-plane tissue deformation observed in vivo'); the
+    model's moduli were 'tuned to match observed in-plane deformations' (p. 9), so this is the quality of that tuning.
+- id: val_sim_rows_vs_confocal
+  model: row_value
+  sweep: {row: fierling2022/area_rows_confocal}
+  settings: {file: "sims_t=-1_area.gdat", name: "stripe_{i}_norm", offset: 0}
+  output: y
+  against: fierling2022/area_rows_confocal
+  purpose: fit_quality
+  quantities: {fierling2022/cell_row: cell_row, fierling2022/area_fold_change: area_fold_change}
+  conditions_ok: "simulated frame 37 (t = -1.07 min) against the confocal rows at t = -1.1 min (Guy_area_myo_t=-1_area.gdat, time rescaled by T18 = 2); Fig. 3b plots both as 't = -1 min'"
+  basis: >
+    As val_sim_rows_vs_muvi, against the confocal measurement of rows 1-7 that Fig. 3b plots beside the simulation
+    ('Apical area fold-change relative to the initial', p. 8).
+- id: val_sim_area_vs_muvi
+  model: area_curve
+  sweep: {t: fierling2022/area_muvi_fig3a}
+  settings: {file: "merged_with_ref_BW=15_Stats_CQJE_Gastrulation_ordi_Wild_Type_STITCHED_100_0.gdat", t_column: "t_rauzi",
+             y_column: "aire_Rauzi/aire_Rauzi_ini", need_column: "", need_value: 0}
+  output: y
+  against: fierling2022/area_muvi_fig3a
+  purpose: fit_quality
+  quantities: {fierling2022/time: time, fierling2022/area_fold_change: area_fold_change}
+  conditions_ok: "the simulation is put on the experimental clock by the released t_rauzi column; how that synchronisation was made is not released (q_frame_times)"
+  basis: >
+    fierling2022 p. 6: 'we compared the dynamics of area change obtained computationally to experimentally measured
+    changes in cell surface area' (Fig. 3a); the released simulated area curve against the paper's reading of the MuVi
+    SPIM curve at t = 0 and 2 min. The imposed pre-stress follows the measured MyoII and the moduli were tuned to the
+    in-plane deformations (p. 9), so this is fit quality.

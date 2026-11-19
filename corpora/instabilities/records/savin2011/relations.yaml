@@ -1,0 +1,50 @@
+# Relations this paper states between its own models.
+# Eqs. 3 and 4 are Eqs. 1 and 2 with the prefactors 36 and 4 fitted to the simulations and rubber models
+# ("find that they follow the relations", p. 4); Eq. 3 and 4 use It = (pi/4)(ro^4 - ri^4), Eqs. 1 and 2 It ~ ro^4 - ri^4.
+- id: rel_eq3_scales_as_eq1
+  kind: scales_as
+  a: savin2011/wavelength_eq3
+  b: savin2011/wavelength_eq1
+  mapping: {Et: Et, ro: ro, ri: ri, Em: Em, h: h}
+  output_map: {lam: lam}
+  regime: {Et: [1.0, 10.0], ro: [100.0, 500.0], ri: [20.0, 90.0], Em: [30.0, 1000.0], h: [5.0, 20.0]}
+  provenance: stated
+  citation: {page: 4, printed_page: "60", quote: "in accord with our simple scaling laws (equations (1) and (2))", where: "text after Eqs. 3 and 4"}
+- id: rel_eq4_scales_as_eq2
+  kind: scales_as
+  a: savin2011/radius_eq4
+  b: savin2011/radius_eq2
+  mapping: {Et: Et, ro: ro, ri: ri, Em: Em, h: h, e0: e0}
+  output_map: {R: R}
+  regime: {Et: [1.0, 10.0], ro: [100.0, 500.0], ri: [20.0, 90.0], Em: [30.0, 1000.0], h: [5.0, 20.0], e0: [0.1, 0.8]}
+  provenance: stated
+  citation: {page: 4, printed_page: "60", quote: "in accord with our simple scaling laws (equations (1) and (2))", where: "text after Eqs. 3 and 4"}
+# Across papers. Savin cites Cerda & Mahadevan [SI 13] only for the fine wrinkles of the mesentery (SI p. 17),
+# which no model here describes, not for the looping law; so nothing is stated and this relation is proposed.
+# ro, ri, h in um; Cerda's t and both lambdas in mm (1e-3).
+- id: rel_eq1_scales_as_cerda_deep_substrate
+  kind: scales_as
+  a: savin2011/wavelength_eq1
+  b: cerda2003/deep_substrate_wavelength
+  mapping: {t: "((ro**4 - ri**4)/h)**(1/3)*1e-3", E_over_Es: "Et/Em"}
+  output_map: {lam: lam}
+  regime: {Et: [1.0, 10.0], ro: [100.0, 500.0], ri: [20.0, 90.0], Em: [30.0, 1000.0], h: [5.0, 20.0]}
+  provenance: proposed
+  reason: >
+    Both laws come from one energy balance: the bending of a stiff element against an elastic medium whose
+    deformation reaches a distance lambda, so its stiffness falls as 1/lambda. Cerda's deep substrate has
+    K ~ Es/lambda against B ~ E t^3, giving lambda ~ t (E/Es)^(1/3) (p. 3); Savin's Eq. 1 has the mesentery
+    strain e ~ A/lambda over an area lambda^2 (Um ~ Em e^2 h lambda^2) against the tube bending Et It k^2 lambda,
+    giving lambda ~ (Et It/(Em h))^(1/3) (p. 3). With E/Es -> Et/Em and t^3 -> It/h the two forms coincide;
+    both are printed without prefactors, so only the scaling is claimed.
+  assumptions:
+    - "the tube (bending stiffness Et It) plays the plate (E t^3) and the mesentery sheet (Em h) the half-space (Es): a rod on a sheet, not a plate on a half-space"
+    - "Cerda's thickness t is an effective length (It/h)^(1/3), not a thickness of either tissue; the modulus ratio is Et/Em"
+# Against huang2005 (relation job 2026-11-19): nothing entered. Neither paper cites the other, and no datum
+# of either is taken from the other. Huang's Eq. 17 (plate on a half-space) could be set against Eq. 1 only
+# through the same effective thickness (It/h)^(1/3) as the cerda2003 relation above, and huang2005 already
+# states that Eq. 17 scales as cerda2003's deep-substrate law, so that relation would add nothing; its
+# prefactor 2 pi/3^(1/3) and Poisson factors belong to a plate on a half-space, not to Eq. 3's fitted 36.
+# Huang's thin-substrate laws (Eqs. 18-19, foundation stiffness set by the layer depth H) have no
+# counterpart: the mesentery is loaded in its own plane, with no depth. Eqs. 2 and 4 (loop radius from
+# the strain mismatch) and the loop number have no analogue in huang2005.

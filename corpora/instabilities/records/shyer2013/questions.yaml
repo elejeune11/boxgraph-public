@@ -1,0 +1,279 @@
+- id: q_spot_expansion_reading
+  kind: reading
+  about: [spot_growth, cmp_spot_growth_linear, cmp_spot_growth_areal, spot_growth_printed]
+  text: >
+    The SM gives the 'relative expansion of a spot' as 1 + (e^-eta - 0.2)t without saying whether it
+    stretches lengths or areas of the stress-free endoderm, and the main text's 'diameter doubles ...
+    relative to areas of the endoderm outside the spots' does not say which diameter (the record takes
+    the disc eta <= 1, diameter 6 he, which the main text's 'six times the endoderm thickness' matches).
+    Both readings are run (runs run_spots_linear, run_spots_areal); only one of them can match a doubling.
+    Another reading, the expansion at the centre over that far away, is not run.
+  citation: {page: 15, quote: "the relative expansion of a spot is given by", where: "SM, zigzag simulation"}
+- id: q_area_conservation
+  kind: unexplained_difference
+  about: [spot_growth, cmp_area_linear, cmp_area_areal, area_constant_printed, n_spots_added]
+  text: >
+    The SM says the expansion field 'keeps the total stress-free area of the endoderm approximately
+    constant'. With the stress-free endoderm sheet of one domain (we = 2W, le = 2L, W ≈ L = 2.0(he + hm),
+    he = hm/2) and the contributions of 'both spots' added, the computed area change under either
+    reading of the expansion is not near zero; with a single spot per domain (the alternative of
+    n_spots_added) and the areal reading it nearly is. Either the domain holds one spot's worth of
+    expansion, or the sheet is larger than these printed dimensions give, or the claim is loose. The
+    reading that makes the spot diameter double (linear) is not the one that conserves area (areal).
+  citation: {page: 15, quote: "This form of expansion keeps the total stress-free area", where: "SM, zigzag simulation"}
+- id: q_fe_not_runnable
+  kind: unstated_model
+  about: [fe_luminal_patterns, zigzag_spacing_sm, zigzag_spacing_main]
+  text: >
+    The luminal patterns (ridge and zigzag spacings, compression ratios and circumferences of Figs. 4B and
+    6C, the zigzag period 2.0(he + hm), the villus-like bulges) all come from a custom finite-element code
+    that is not published; it cannot be rerun here (see the model's reason). The record checks only what
+    follows from the printed stress-free dimensions (models stressfree_chick, stressfree_mouse) and the
+    printed zigzag-simulation inputs.
+- id: q_modulus_fit_not_runnable
+  kind: unstated_model
+  about: [fe_modulus_fit, modulus_increase_292]
+  text: >
+    The shear moduli come from ABAQUS simulations of a ring compressed between two planes, fitted to
+    force-displacement curves that are only plotted (Fig. S3 H-J), with ring geometries the paper does not
+    print. The fit and the residual-stress test (about 15% increase at an opening angle of 292.1 degrees)
+    cannot be rerun, so the moduli and that increase are recorded without a run.
+  citation: {page: 11, quote: "The extraction of the shear modulus of the stiff layer from experimental data is", where: "SM"}
+- id: q_t_to_day
+  kind: choice
+  about: [stressfree_chick, stressfree_mouse]
+  text: >
+    The SM ties t = 0 and t = 1 to E7 and E14 (chick) and E12.5 and E15.5 (mouse) and says D grows
+    linearly in t, but not how t maps to embryonic day in between. The record takes t linear in day.
+    Only the outputs at intermediate days (e.g. E13) depend on this choice; the composite-to-endoderm
+    thickness ratio of the chick schedule does not depend on t at all.
+  citation: {page: 14, quote: "corresponding to real time going from E7 to E14", where: "SM, chick simulation"}
+- id: q_modulus_ratio_values
+  kind: choice
+  about: [modulus_ratio_chick_sim, modulus_ratio_chick_text, cmp_modulus_ratio_chick]
+  text: >
+    The chick simulations use mu_e/mu_m = 12 ('we neglect the small difference in the measured modulus
+    between E8 and E10'), the main text says the endoderm is 'about 10 times' (p. 5) and 'more than 10
+    times' (p. 7) stiffer, and the snake simulations of Fig. S10 take 10. The measured ratios at E8 and E10
+    are only plotted (Fig. 4B, bottom right) and are left to the figure pass.
+- id: q_damping_units
+  kind: reading
+  about: [fe_luminal_patterns]
+  text: >
+    The SM prints the time step as dt = 0.1 a / sqrt(K), the node mass m = a^3 and the damping
+    gamma = 10 m. In the scheme v(t + dt) = v(t) + (f - gamma v) dt / m, gamma must have units of mass per
+    time; '10 m' is a mass, so the code presumably works in units where time (or density) is scaled to
+    one. The settings are recorded as printed.
+  citation: {page: 13, quote: "is the time step", where: "SM, explicit scheme"}
+- id: q_plotted_measurements
+  kind: reading
+  about: [circ_ratio_E8_E12, long_ratio_E14, modulus_ratio_chick_text, modulus_ratio_mouse_text]
+  text: >
+    The measured shear moduli (Figs. 4B, 6C, S3), layer circumferences and thicknesses, fold spacings
+    scaled by endoderm thickness (Figs. 4B, 6C), and the compression ratios and lengths of Figs. 2B, 2D, 3A,
+    3C, 3D are printed only as plots with error bars (one SD). They are the inputs and validations the
+    corpus's wrinkling laws need, and the dashed simulation curves of Figs. 4B and 6C are what the
+    stressfree_* models and fe_luminal_patterns predict; none was read in this pass (figure rendering was
+    not available to the job). A figure pass should read them.
+- id: q_circ_ratio_sim_vs_measured
+  kind: unexplained_difference
+  about: [stressfree_chick, circ_ratio_E8_E12]
+  text: >
+    (Audit.) The SM says the stress-free dimensions 'are chosen so as to approximately yield the
+    observed cross-sectional geometries and expansion ratios of separated mesenchyme-endoderm
+    composite'. The chick schedule keeps the mesenchyme's stress-free circumferential width at
+    wm = 1.5 pi D from E7 to E14, so the tube circumference over it is 1/1.5 throughout, whereas the
+    measured circumferential stretch ratio of the separated composite is 0.55 at E8-E12 (p. 2), which
+    would need wm of about 1.8 pi D. The record does not compare them because the model output
+    (nominal ratio of a flat stress-free sheet) and the measurement (inner muscle circumference over
+    outer circumference of the unfolded composite) are entered as different quantities; whether they
+    measure the same thing, and so whether the schedule matches the measured ratio, is open.
+  citation: {page: 14, quote: "chosen so as to approximately yield the", where: "SM, tube simulations"}
+- id: q_zigzag_ratios_source
+  kind: reading
+  about: [ratio_e_circ_printed, ratio_m_circ_printed, ratio_e_long_printed, ratio_m_long_printed]
+  text: >
+    (Audit.) The main text gives the zigzag simulation's initial nominal compression ratios, 0.5 for the
+    endoderm and 0.6 for the mesenchyme 'in both lateral directions, as measured experimentally
+    (Fig. 3A)'. Fig. 3A plots one longitudinal ratio per stage for the mesenchyme with attached endoderm
+    (about 0.75, 0.69, 0.55 at E13-E15); it gives no separate endoderm ratio and no circumferential ratio
+    (that is Fig. 2B, 0.55). Which measurement the endoderm's 0.5 comes from is not stated.
+  citation: {page: 5, printed_page: "216", quote: "tions, as measured experimentally (Fig. 3A)", where: text}
+- id: q_figS7_panel
+  kind: possible_error
+  about: [fe_luminal_patterns]
+  text: >
+    (Audit.) The caption of Fig. S7 says the mean endoderm circumference Se 'is plotted in Figs. 4A and
+    6C'; the circumferences are in Fig. 4B (top left) and Fig. 6C (left), Fig. 4A being the schematic.
+    A figure pass reading Se should take it from Fig. 4B.
+  citation: {page: 21, quote: "is plotted in Figs. 4A and 6C", where: "Fig. S7 caption"}
+# ---- figure pass (2026-11-18) ----
+- id: q_fig2b_ratio_axis
+  kind: reading
+  about: [circ_ratio_fig2b, f2b_ratio, cmp_mean_fig2b, circ_ratio_E8_E12]
+  text: >
+    The bars of Fig. 2B (compression ratio) are drawn against a right axis labelled 'ratio muscle/mes.'
+    that carries tick marks but no numbers; the record reads them on the labelled left axis
+    (circum., mm), whose ticks sit on the same rows. Read so, the five bars average 0.571 against the
+    text's 'consistently averages to 0.55' (cmp_mean_fig2b, not reproduced), while the measured
+    circumferential ratios of Fig. 4B (bottom left), E8-E12, average 0.551 (cmp_mean_fig4b,
+    reproduced). Either the bars sit on an unlabelled right scale that is not the left one, or the two
+    figures plot different sets of measurements of the same ratio.
+  citation: {page: 2, where: "Fig. 2B caption", quote: "with the compression ratio (bar graph)"}
+- id: q_stressfree_fig6c
+  kind: unexplained_difference
+  about: [stressfree_mouse, stressfree_fig6c, cmp_stressfree_fig6c]
+  text: >
+    The dotted line of Fig. 6C (middle), 'the stress-free thickness of the endoderm-mesenchyme
+    composite', read at E12.5 to E15.5, runs from 2.28 to 3.02 in units of he. The SM's printed mouse
+    schedule gives (he + hm)/he = (0.4666 - 0.1666t)/(0.2 - 0.1t): 2.333 at t = 0 and 3.0 at t = 1,
+    with 2.47 and 2.67 at E13.5 and E14.5 for t linear in day. The end values agree within about 2%,
+    but the plotted line is lower in between (about 0.1 at E13.5-E14.5, beyond the reading's interval)
+    and also slightly below at E12.5, where no mapping of t to day can matter (t = 0). The chick
+    dotted line of Fig. 4B is flat at 4.0 as the chick schedule gives. Whether the mouse line was drawn
+    from another version of the schedule, or a nonlinear t(day), is not stated.
+  citation: {page: 6, where: "Fig. 6C caption", quote: "Dotted line is the stress-free thickness of the endoderm-mesenchyme composite"}
+- id: q_spacing_fig6c
+  kind: unexplained_difference
+  about: [spacing_sim_fig6c, spacing_fig6c, cmp_spacing_fig6c, fe_luminal_patterns]
+  text: >
+    The main text says the mouse measurements used as inputs 'suffice to quantitatively predict the
+    formation of villi'. In Fig. 6C (middle) the simulated fold spacing over endoderm thickness is
+    3.8, 5.5 and 6.7 at E13.5, E14.5, E15.5 against measured 3.0 ± 0.5, 3.5 ± 0.7 and 6.5 ± 0.3 (1 SD,
+    as read): at E14.5 the simulation lies about three SD above the measurement. The finite-element
+    model cannot be rerun, so the difference is recorded, not explained.
+  citation: {page: 7, printed_page: "218", quote: "these measurements as inputs in our model suf", where: text}
+- id: q_s3_force_curves_unread
+  kind: reading
+  about: [fe_modulus_fit, mu_endo_fig4b, mu_mes_fig4b, mu_endo_fig6c, mu_mes_fig6c]
+  text: >
+    The force-displacement points and least-squares fits of Fig. S3 H-J (the data behind every
+    plotted shear modulus) were not read: the panels are a low-resolution raster in which the open
+    circles and squares blur into their same-coloured connecting lines and the overlapping
+    'Numerics' curves; automatic marker detection missed most points and found spurious ones. A
+    reading from a better copy of the supplement would give the inputs a rerun of the modulus fit
+    would need (with the ring geometries, which are not printed).
+- id: q_no_validation_bowden1998
+  kind: choice
+  about: [spacing_fig4b, spacing_fig6c, mu_endo_fig4b, mu_mes_fig4b, mu_ratio_fig4b, fe_luminal_patterns, bowden1998/wavelength_eq3]
+  text: >-
+    (Cross-validation against bowden1998, job 2026-11-18.) No validation was entered in either direction.
+    This paper cites bowden1998 (ref. 15) only for the qualitative zigzag pattern of a biaxially compressed
+    film on a substrate (p. 3). Its fold spacings over endoderm thickness are curves against embryonic age.
+    bowden1998's Eq. 3 has no age input, and it takes Young's moduli where this paper measures shear moduli.
+    Eq. 3 is also an onset law for a half-space, while here the mesenchyme is finite and muscle-confined,
+    with a wavelength "comparable to the thickness of the endoderm-mesenchyme composite" (p. 5). No model
+    of this record gives bowden1998's measured wavelengths or depths of metal films on PDMS. See
+    bowden1998/q_no_validation_shyer2013.
+  citation: {page: 3, quote: "may take on a zigzag topography when it is com", where: text}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [spacing_fig4b, spacing_fig6c, mu_ratio_fig4b, mu_ratio_fig6c, fe_luminal_patterns, cerda2003/deep_substrate_wavelength, cerda2003/shallow_substrate_wavelength]
+  text: >-
+    (Cross-validation against cerda2003, job 2026-11-18.) No validation was entered in either direction.
+    Neither paper cites the other. The fold spacings over endoderm thickness here (Figs. 4B, 6C) are curves
+    against embryonic age, and cerda2003's substrate laws have no age input. The moduli are measured only at
+    E8 and E10 (chick) and E14.5 (mouse). The gut is in neither of cerda2003's limits: the deep-substrate law
+    needs lambda << Hs and the shallow-substrate law Hs >> t. Here the mesenchyme is a few endoderm
+    thicknesses thick and confined by muscle, and the wavelength is "comparable to the thickness of the
+    endoderm-mesenchyme composite" (p. 5). The spacings are also those of folds far past onset. No model of
+    this record gives cerda2003's measurements (a stretched plastic sheet, skin). See
+    cerda2003/q_no_validation_shyer2013.
+  citation: {page: 5, printed_page: "216", quote: "with a wavelength and amplitude comparable to", where: text}
+- id: q_no_validation_huang2005
+  kind: choice
+  about: [spacing_fig4b, spacing_fig6c, mu_ratio_fig4b, mu_ratio_fig6c, stressfree_fig4b, fe_luminal_patterns, huang2005/sinusoidal_finite_substrate, huang2005/thick_substrate_eq17]
+  text: >-
+    (Cross-validation against huang2005, job 2026-11-18.) No validation was entered in either direction.
+    Neither paper cites the other, and huang2005 prints no measurements for a model here to predict.
+    huang2005's film on a finite substrate over a rigid support (Eqs. 10, 13) is the nearest analogue of an
+    endoderm on mesenchyme confined by the stiffer muscle, but the measured fold spacings over endoderm
+    thickness (Figs. 4B, 6C) are curves against embryonic age, and huang2005's models take no age, so they
+    cannot be run at each point of those curves. The modulus ratio is measured only at E8 and E10 (chick)
+    and E14.5 (mouse). The substrate-to-film thickness ratio hm/he is not measured: the stress-free (he +
+    hm)/he is a simulation schedule (SM p. 14), and the spacing is scaled by the deformed endoderm. The
+    folds are also far past onset (compression ratio about 0.55), where huang2005's wavelength is an onset
+    result. See huang2005/q_no_validation_shyer2013.
+  citation: {page: 5, printed_page: "216", quote: "with a wavelength and amplitude comparable to", where: text}
+
+- id: q_no_validation_shyer2015
+  kind: choice
+  about: [fe_luminal_patterns, stressfree_mouse, spacing_fig6c, mu_endo_fig6c, mu_mes_fig6c, mu_ratio_fig6c, circ_ratio_fig2b, culture_circ_ratio_fig2d, shyer2015/shh_diffusion_reaction, shyer2015/k_range_span, shyer2015/edu_control_fig4c, shyer2015/shh_box_e15_fig5d]
+  text: >-
+    (Cross-validation against shyer2015, job 2026-11-18.) No validation was entered in either direction.
+    shyer2015 cites this paper only for qualitative claims (the folds are buckled by muscle compression,
+    in mouse as in chick) and for the fold aspect ratios behind its not-runnable diffusion simulation; it
+    compares none of its numbers with this paper. Its measurements are Lgr5 mRNA counts, percent
+    EdU-positive cells and Shh staining intensities, which no model here returns, and it prints no modulus,
+    thickness, wavelength, curvature or villus spacing that stressfree_mouse or the mouse results of Fig. 6C
+    could be set against. Its two models (a count of decades of a degradation-rate range, and a
+    not-runnable diffusion-reaction solve returning a concentration) do not give any quantity measured
+    here. See shyer2015/q_no_validation_shyer2013.
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [spacing_fig4b, spacing_fig6c, mu_ratio_fig4b, mu_ratio_fig6c, fe_luminal_patterns, tallinen2015/first_unstable_mode, tallinen2015/mode_wavelength_h, tallinen2015/fe_folding]
+  text: >-
+    (Cross-validation against tallinen2015, job 2026-11-18.) No validation was entered in either direction.
+    tallinen2015 cites this paper (its ref. 3) only qualitatively: its far-from-threshold fold width of
+    about four undeformed layer thicknesses (finite elements, not runnable) "agrees with" gut folding, and
+    the gut's narrow sawtooth folds reflect a stiff epithelium. Its runnable models give the wavelength at
+    linear onset of a layer on a half-space (over the bonded or relaxed layer thickness) as a function of
+    the modulus ratio. The fold spacings here (Figs. 4B, 6C) are measured along the endoderm over its
+    deformed thickness, far past onset, in a finite mesenchyme confined by muscle, and are curves against
+    embryonic age with the modulus ratio measured only at E8, E10 (chick) and E14.5 (mouse). They are not
+    the quantity those models return. This record's models (stress-free schedules, ratio arithmetic, the
+    not-runnable finite-element code) give no quantity tallinen2015 measures, and it measures nothing. See
+    tallinen2015/q_no_validation_shyer2013.
+  citation: {page: 5, printed_page: "216", quote: "with a wavelength and amplitude comparable to", where: text}
+- id: q_no_validation_wang2015
+  kind: choice
+  about: [spacing_fig4b, spacing_fig6c, mu_ratio_fig4b, mu_ratio_fig6c, circ_ratio_E8_E12, fe_luminal_patterns, stressfree_chick, stressfree_mouse, spot_growth, wang2015/eq8_initial_wrinkle_wavelength, wang2015/eq7_crease_wavelength, wang2015/eq4_wrinkle_onset, wang2015/crease_onset_measured, wang2015/wrinkle_wavelength_fig5a]
+  text: >-
+    (Cross-validation against wang2015, which cites this paper as its ref. 16; job 2026-11-18.) No
+    validation was entered in either direction. (1) This record's models against wang2015's measurements:
+    wang2015 measures, on Ecoflex substrates with Sylgard, rubber, LDPE and Kapton films, the onset
+    mismatch strains of creases, folds, period-doubles and ridges, and the wavelengths and amplitudes of
+    Fig. 5 over the initial wrinkle wavelength. This record's runnable models are the stress-free layer
+    schedules of the gut simulations, ratio arithmetic on the gut's own measurements and the spot growth
+    field; none gives an onset strain or a normalized wavelength of a film on a substrate, and the
+    finite-element code that does produce fold spacings is not runnable. (2) wang2015's models against this
+    record's measurements: wang2015 uses ref. 16 only for a Table 1 row of its own estimates and in
+    qualitative statements. Its Eq. 8 (initial wrinkle wavelength over film thickness) is stated for
+    mu_f/mu_s > 10^3 on a deep substrate, its Eq. 7 for creases at mu_f/mu_s < 1.3, its Eq. 4 gives onset
+    strains not measured here, and the measured fold spacings over endoderm thickness (Figs. 4B, 6C) are
+    far past onset, at modulus ratios 1.5-13, in a thin mesenchyme confined by muscle: not the quantity any
+    of those models returns. See wang2015/q_no_validation_shyer2013.
+  citation: {page: 5, printed_page: "216", quote: "with a wavelength and amplitude comparable to", where: text}
+- id: q_no_validation_trushko2020
+  kind: choice
+  about: [fe_luminal_patterns, stressfree_chick, stressfree_mouse, spacing_fig4b, spacing_fig6c]
+  text: >-
+    No cross-validation with trushko2020 was added, in either direction. trushko2020 cites this paper
+    only qualitatively (villi compatible with buckling, confined by smooth muscle) and compares none of
+    its models with these data. This record's runnable models are the gut simulation's stress-free
+    layer schedules, ratio arithmetic on the gut's own measurements and the spot growth field. None
+    returns a buckling pressure, capsule spring constant, fold opening angle or fold count of a
+    monolayer in an alginate shell, and the FE model that produces fold patterns cannot be run.
+    trushko2020's confined-ring models have no foundation and take the fold count as an input, so they
+    do not give this record's fold spacing over endoderm thickness or compression ratios. See
+    trushko2020/q_no_validation_shyer2013.
+- id: q_no_validation_savin2011
+  kind: choice
+  about: [fe_luminal_patterns, stressfree_chick, stressfree_mouse, modulus_ratio_curve, mu_endo_fig4b, mu_mes_fig4b, spacing_fig4b, spacing_fig6c, circ_ratio_fig2b, savin2011/wavelength_eq3, savin2011/radius_eq4, savin2011/loop_number, savin2011/lam_obs_chE12]
+  text: >-
+    (Cross-validation against savin2011, this paper's ref. 30; job 2026-11-19.) No validation was entered in
+    either direction. This paper cites savin2011 only as the authors' "previous work" on macroscopic gut
+    looping, whose "same physical principles" (geometry, differential growth, tissue mechanics) it says
+    also drive luminal patterning (p. 7). It compares none of its numbers with savin2011's. (1) savin2011's
+    models against these measurements: its runnable models give the loop wavelength, loop radius and loop
+    number of the whole tube held by the mesentery (Eqs. 1-4, Lt/n = lambda), the tube's bending stiffness
+    from force-extension, magnet forces and growth rates from mitoses. None returns a fold spacing over
+    endoderm thickness, a circumferential or longitudinal compression ratio, a layer circumference or a
+    shear modulus of endoderm or mesenchyme, which are what is measured here (Figs. 2-4, 6). Eq. 3 is a
+    rod-on-sheet law with inputs (tube modulus, tube radii, mesentery modulus and thickness, mismatch
+    strain) that are not measured here, and the luminal folds are a layered tube confined by muscle, not a
+    rod held by a sheet. (2) This record's models against savin2011's measurements: they are the
+    stress-free layer schedules of the luminal simulations, ratio arithmetic on this paper's own data, the
+    spot growth field and two not-runnable finite-element codes. None gives a loop wavelength, radius or
+    number, a tube bending stiffness or a mesentery stress. See savin2011/q_no_validation_shyer2013.
+  citation: {page: 7, printed_page: "218", quote: "basis for the diversity of macroscopic looping", where: text}

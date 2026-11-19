@@ -1,0 +1,58 @@
+# The PS film of Fig. 1b: does Eq. 1 with the paper's own PS modulus give the printed wavelength,
+# and does Eq. 2 on the printed thickness and wavelength give the paper's PS modulus?
+- id: run_eq1_fig1b
+  model: wavelength_eq1
+  inputs: {h: h_fig1b, Ef: E_PS_30nm, nu_f: nu_f_PS, Es: Es_added, nu_s: nu_s_added}
+  outputs: {d: d_eq1_fig1b}
+- id: run_eq2_fig1b
+  model: modulus_eq2
+  inputs: {d: d_fig1b_caption, h: h_fig1b, nu_f: nu_f_PS, Es: Es_added, nu_s: nu_s_added}
+  outputs: {Ef: Ef_eq2_fig1b}
+
+# Eq. 4 with its printed fit constants at the highest porosity
+- id: run_eq4_Pmax
+  model: porosity_eq4
+  inputs: {E0: E0_added, P: P_max_added, a: a_fit, n: n_fit}
+  outputs: {Ef: Ef_eq4_Pmax}
+
+# Allen's plane-stress solution against Eq. 2 (reconstructed)
+- id: run_allen_PS
+  model: allen_shortfall
+  inputs: {nu_f: nu_f_PS, nu_s: nu_s_added}
+  outputs: {shortfall: allen_shortfall_PS}
+
+# Figure pass: runs on the figure readings
+# Fig. 2b: Eq. 2 on each plotted (h, d) point should give the plotted modulus at that thickness
+- id: run_eq2_fig2b_points
+  model: modulus_eq2_points
+  inputs: {d: d_fig2b, Ef_at: E_fig2b, nu_f: nu_f_PS, Es: Es_added, nu_s: nu_s_added}
+  settings: {max_dh: 2.0}
+  outputs: {Ef: Ef_eq2_fig2b_points}
+# Fig. 2b: Eq. 1 with the paper's PS modulus over the plotted thicknesses against the plotted wavelengths
+- id: run_eq1_fig2b
+  model: wavelength_eq1
+  inputs: {Ef: E_PS_gradient, nu_f: nu_f_PS, Es: Es_added, nu_s: nu_s_added}
+  sweep: {h: d_fig2b}
+  outputs: {d: d_eq1_fig2b}
+# Fig. 2b: the mean of the plotted moduli against the printed 3.4 ± 0.1 GPa
+- id: run_mean_fig2b
+  model: mean_modulus
+  inputs: {E: E_fig2b}
+  outputs: {E_mean: E_fig2b_mean}
+# Fig. 4: Eq. 4 with its printed a, n (E0 added) over the SIEBIMM porosities
+- id: run_eq4_fig4
+  model: porosity_eq4
+  inputs: {E0: E0_added, a: a_fit, n: n_fit}
+  sweep: {P: E_fig4_siebimm}
+  outputs: {Ef: Ef_eq4_fig4}
+# SIEBIMM against nanoindentation, at the indentation points
+- id: run_pair_fig3
+  model: pair_plasticizer
+  inputs: {E: E_fig3_siebimm, E_at: E_fig3_indentation}
+  settings: {max_dx: 0.5}
+  outputs: {E: E_fig3_siebimm_at_indentation}
+- id: run_pair_fig4
+  model: pair_porosity
+  inputs: {E: E_fig4_siebimm, E_at: E_fig4_indentation}
+  settings: {max_dx: 0.5}
+  outputs: {E: E_fig4_siebimm_at_indentation}

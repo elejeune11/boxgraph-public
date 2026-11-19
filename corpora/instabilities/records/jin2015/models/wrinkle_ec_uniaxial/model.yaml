@@ -1,0 +1,14 @@
+id: wrinkle_ec_uniaxial
+name: critical strain for wrinkles of a given wavelength, uniaxial compression (Fig. 2, Eqs. B7-B15)
+role: model
+stated: {page: 2, printed_page: "061008-2", quote: "The eigenvalue problem Eq.", where: "Sec. 2, Fig. 2, Eqs. B7-B15"}
+equation: "det A(Gf/Gs, Hs/Hf, K Hf, lambda1, lambda3) = 0 with K Hf = 2 pi/(L_wrinkle/Hf), lambda3 = 1/sqrt(lambda1); e_c = 1 - lambda_c, the smallest root"
+inputs:
+  Gf_Gs: {quantity: shear_modulus_ratio, unit: dimensionless}
+  Hs_Hf: {quantity: thickness_ratio, unit: dimensionless}
+  L: {quantity: wrinkle_wavelength_nominal, unit: dimensionless, description: "L_wrinkle/Hf, nominal wavelength over film thickness"}
+outputs:
+  ec: {quantity: wrinkle_critical_strain_uniaxial_at_wavelength, unit: dimensionless}
+settings: {e_min: 0.0001, e_max: 0.75, n_e: 150, tol: 1.0e-7}
+built_from: [wrinkle_eigen_plane_strain]
+stochastic: false

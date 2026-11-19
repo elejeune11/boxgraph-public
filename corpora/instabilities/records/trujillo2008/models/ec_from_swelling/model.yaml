@@ -1,0 +1,23 @@
+id: ec_from_swelling
+name: e_c interpolated from the free swelling of Fig. 2(b) at the flat/creased boundary of Fig. 2(a)
+role: processing
+stated: {page: 3, printed_page: "566", quote: "by using the best-fit line to interpolate a value", where: text}
+equation: "e = 1 - l0/l; l/l0 from the best-fit line of l/l0 against sodium acrylate content, at the content mid-way between the highest flat and the lowest creased composition"
+from_words: true
+inputs:
+  c: {quantity: crosslinker_content, unit: percent, description: "bis(acrylamide) content at which e_c is wanted (swept)"}
+  L02: {quantity: free_swelling_ratio, unit: dimensionless, curve: {quantity: sodium_acrylate_content, unit: percent}, description: "l/l0 series of the first legend entry"}
+  L04: {quantity: free_swelling_ratio, unit: dimensionless, curve: {quantity: sodium_acrylate_content, unit: percent}, description: "l/l0 series of the second legend entry"}
+  L07: {quantity: free_swelling_ratio, unit: dimensionless, curve: {quantity: sodium_acrylate_content, unit: percent}, description: "l/l0 series of the third legend entry"}
+  L10: {quantity: free_swelling_ratio, unit: dimensionless, curve: {quantity: sodium_acrylate_content, unit: percent}, description: "l/l0 series of the fourth legend entry"}
+  c02: {quantity: crosslinker_content, unit: percent, description: "legend value of series L02"}
+  c04: {quantity: crosslinker_content, unit: percent, description: "legend value of series L04"}
+  c07: {quantity: crosslinker_content, unit: percent, description: "legend value of series L07"}
+  c10: {quantity: crosslinker_content, unit: percent, description: "legend value of series L10"}
+  flat: {quantity: crosslinker_content, unit: percent, curve: {quantity: sodium_acrylate_content, unit: percent}, description: "compositions that stayed flat (Fig. 2(a))"}
+  creased: {quantity: crosslinker_content, unit: percent, curve: {quantity: sodium_acrylate_content, unit: percent}, description: "compositions that creased (Fig. 2(a))"}
+outputs:
+  e_c: {quantity: critical_compressive_strain, unit: dimensionless}
+settings:
+  composition_tol: 0.25   # relative: a Fig. 2(a) point belongs to a series when its bis(acrylamide) content is within 25% of the legend value
+stochastic: false

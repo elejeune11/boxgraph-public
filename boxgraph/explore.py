@@ -35,6 +35,9 @@ KINDS = {
                         "Two models the atlas treats as one family disagree on another paper's inputs."),
     "cited_value": ("Cited value travelled wrongly",
                     "A value one paper takes from another differs from what that paper printed."),
+    "reader_model_differs": ("Reader's model differs",
+                             "A model the reader built for an analysis the paper does not give misses the paper's result: "
+                             "the paper or the reader's model may be at fault."),
 }
 
 NODE_TYPES = (

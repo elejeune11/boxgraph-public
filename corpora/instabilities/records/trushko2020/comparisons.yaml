@@ -1,0 +1,99 @@
+# capsule shell
+- {id: cmp_Kcap_table, purpose: reproduction, computed: Kcap_pred, printed: Kcap_table}
+- {id: cmp_Kcap_s5, purpose: reproduction, computed: Kcap_pred, printed: Kcap_s5}
+- {id: cmp_lambda_cap_table, purpose: reproduction, computed: lambda_cap_pred, printed: lambda_cap_table}
+- {id: cmp_lambda_cap_s5, purpose: reproduction, computed: lambda_cap_pred, printed: lambda_cap_s5}
+- id: cmp_kcap_s36_measured
+  purpose: validation
+  computed: k_cap_s36_pred
+  printed: k_cap_table
+  note: "Eq. S36 against the measured spring constant of empty 2.5% capsules; the paper uses only the ratio of spring constants (Eq. S37), never S36 itself"
+- {id: cmp_kcap_table_fig4j, purpose: consistency, computed: k_cap_fig4j, printed: k_cap_table, note: "the mean printed above the box in Fig. 4J against Table 1"}
+- {id: cmp_ktissue_table_fig4j, purpose: consistency, computed: k_tissue_fig4j, printed: k_tissue_table, note: "the mean printed above the box in Fig. 4J against Table 1"}
+# tissue rigidities
+- {id: cmp_spring_ratio, purpose: reproduction, computed: spring_ratio_pred, printed: spring_ratio_s5}
+- {id: cmp_bending_ratio, purpose: reproduction, computed: bending_ratio_pred, printed: bending_ratio_s5}
+- {id: cmp_lambda_ratio, purpose: reproduction, computed: lambda_ratio_pred, printed: lambda_ratio_s5}
+- {id: cmp_lambda_s37, purpose: reproduction, computed: lambda_s37_pred, printed: lambda_s5}
+- {id: cmp_lambda_s37_table, purpose: reproduction, computed: lambda_s37_pred, printed: lambda_table}
+- {id: cmp_lambda_s37_text, purpose: reproduction, computed: lambda_s37_pred, printed: lambda_text_p8, note: "the main text's value of lambda (p. 8), in N/m"}
+- {id: cmp_lambda_harris, purpose: reproduction, computed: lambda_harris_pred, printed: lambda_harris}
+- id: cmp_lambda_harris_vs_s37
+  purpose: consistency
+  computed: lambda_harris_pred
+  printed: lambda_s5
+  note: "the paper says the literature estimate (20 kPa x 10 um) agrees with lambda from indentation"
+# buckling threshold and pressure
+- {id: cmp_dc_s21_s5, purpose: reproduction, computed: dc_s21_s5_pred, printed: delta_c_s5, note: "Eq. S21 with its printed factor 30 (5/2)^(2/3)"}
+- {id: cmp_dc_f10_s5, purpose: reproduction, computed: dc_f10_s5_pred, printed: delta_c_s5, note: "the factor set to 10, as the paper says it did"}
+- {id: cmp_dc_s21_table, purpose: reproduction, computed: dc_s21_table_pred, printed: delta_c_table, note: "Eq. S21 with the Table 1 values of K, lambda and R"}
+- {id: cmp_P_s5, purpose: reproduction, computed: P_s5_pred, printed: P_buckling_s5}
+- {id: cmp_P_eq1_table, purpose: reproduction, computed: P_eq1_table_pred, printed: P_buckling_table}
+- id: cmp_P_eq1_measured
+  purpose: validation
+  computed: P_eq1_table_pred
+  printed: P_buckling_1pct
+  conditions_ok: >-
+    the measured pressure is for 1% alginate capsules while K, lambda and R are the 2.5% values;
+    Equation 1 does not depend on the capsule stiffness, which the paper takes as agreeing with
+    measurements across concentrations (Figs. 3G, 3L)
+- {id: cmp_lambda_eq1, purpose: reproduction, computed: lambda_eq1_pred, printed: lambda_eq1_text}
+- id: cmp_P_eq1_measured_range
+  purpose: validation
+  computed: P_eq1_table_pred
+  printed: P_folding_measured
+  conditions_ok: >-
+    K, lambda and R are the 2.5% alginate values of Table 1, and 2.5% is among the concentrations whose
+    measured folding pressure lies between 50 and 100 Pa; Equation 1 does not depend on the capsule
+    stiffness, which the paper takes as agreeing with these measurements (p. 8, Figs. 3G and 3K)
+# water flux
+- {id: cmp_V_lumen, purpose: reproduction, computed: V_lumen_pred, printed: V_lumen}
+- {id: cmp_A_lumen, purpose: reproduction, computed: A_lumen_pred, printed: A_lumen}
+- {id: cmp_J, purpose: reproduction, computed: J_pred, printed: J_s1}
+# vertex model
+- {id: cmp_fns_s8, purpose: reproduction, computed: F_NS_pred, printed: F_NS_s8}
+- {id: cmp_fns_text, purpose: consistency, computed: F_NS_pred, printed: F_NS_text, note: "the main text's friction force against the supplement's normalised value 0.01"}
+- {id: cmp_ratio_ks_cb, purpose: consistency, computed: ratio_ks_cb_pred, printed: ratio_ks_cb, note: "dimensional k^s and c^b of Section 8 against the normalised line kbar_s/cbar_b = 0.1"}
+- {id: cmp_K_area_est, purpose: reproduction, computed: K_area_est_pred, printed: K_area_estimate_text}
+- {id: cmp_P_sim, purpose: reproduction, computed: P_sim_pred, printed: P_sim_s8}
+# fold shape
+- {id: cmp_alpha_fig4h, purpose: reproduction, computed: alpha_fig4h_pred, printed: alpha_fig4h}
+- {id: cmp_gamma_fig4h, purpose: reproduction, computed: gamma_fig4h_pred, printed: gamma_fig4h}
+- {id: cmp_alpha_fig4i, purpose: reproduction, computed: alpha_fig4i_pred, printed: alpha_fig4i}
+- {id: cmp_K_fit, purpose: reproduction, computed: K_fit_pred, printed: K_tissue_s5}
+# ---- second pass: comparisons with the figure readings ----
+- {id: cmp_growth_fig1f, purpose: consistency, computed: growth_rate_fig1f_pred, printed: growth_rate_text, note: "least-squares slope of the plotted means of Fig. 1F against the rate printed in the text"}
+- {id: cmp_k_1pct_mean_text, purpose: consistency, computed: k_1pct_mean_pred, printed: k_cap_1pct_text, note: "mean of the points of Fig. 3K against the text"}
+- {id: cmp_k_1pct_mean_label, purpose: consistency, computed: k_1pct_mean_pred, printed: k_cap_1pct_fig3k_label, note: "mean of the points of Fig. 3K against the value printed beside the box's small square"}
+- {id: cmp_n_fig3k, purpose: consistency, computed: n_fig3k_pred, printed: n_fig3k, note: "points found in Fig. 3K against the n of the text (a check of the reading)"}
+- {id: cmp_P_1pct_mean, purpose: consistency, computed: P_1pct_mean_pred, printed: P_buckling_1pct, note: "mean of the points of Fig. 3L against the text's 128 ± 6 Pa"}
+- {id: cmp_n_fig3l, purpose: consistency, computed: n_fig3l_pred, printed: n_fig3l, note: "points found in Fig. 3L against the text's n (a check of the reading)"}
+- {id: cmp_k_empty_4j_label, purpose: consistency, computed: k_empty_4j_mean_pred, printed: k_cap_fig4j, note: "mean of the black points of Fig. 4J against the mean printed above the box"}
+- {id: cmp_k_empty_4j_table, purpose: consistency, computed: k_empty_4j_mean_pred, printed: k_cap_table, note: "mean of the black points of Fig. 4J against Table 1"}
+- {id: cmp_n_fig4j_empty, purpose: consistency, computed: n_fig4j_empty_pred, printed: n_fig4j_empty, note: "points found against the legend's n (a check of the reading)"}
+- {id: cmp_k_tissue_4j_label, purpose: consistency, computed: k_tissue_4j_mean_pred, printed: k_tissue_fig4j, note: "mean of the red points of Fig. 4J against the mean printed above the box"}
+- {id: cmp_k_tissue_4j_table, purpose: consistency, computed: k_tissue_4j_mean_pred, printed: k_tissue_table, note: "mean of the red points of Fig. 4J against Table 1"}
+- {id: cmp_n_fig4j_tissue, purpose: consistency, computed: n_fig4j_tissue_pred, printed: n_fig4j_tissue, note: "points found against the legend's n (a check of the reading)"}
+- {id: cmp_P_fig3g_1pct, purpose: consistency, computed: P_fig3g_1_pred, printed: P_buckling_1pct, note: "the 1% point of Fig. 3G against the text's 128 ± 6 Pa for 1% capsules"}
+- {id: cmp_P_fig3g_1p5_range, purpose: consistency, computed: P_fig3g_1p5_pred, printed: P_folding_measured, note: "the text says the pressure at folding was between 50 and 100 Pa for 1.5, 2 and 2.5% alginate"}
+- {id: cmp_P_fig3g_2_range, purpose: consistency, computed: P_fig3g_2_pred, printed: P_folding_measured, note: "as cmp_P_fig3g_1p5_range, 2% point"}
+- {id: cmp_P_fig3g_2p5_range, purpose: consistency, computed: P_fig3g_2p5_pred, printed: P_folding_measured, note: "as cmp_P_fig3g_1p5_range, 2.5% point"}
+- id: cmp_R_figs1g_table
+  purpose: consistency
+  computed: R_figs1g_2p5_pred
+  printed: R_capsule
+  conditions_ok: >-
+    both are mean radii of 2.5% alginate capsules made the same way; Fig. S1G may include capsules
+    not used for Table 1 (whose n = 54), and the sample sizes of Fig. S1G are not stated
+- {id: cmp_n_fig5f_exp, purpose: consistency, computed: n_fig5f_exp_pred, printed: n_fig5f_exp, note: "sum of the bars of the experimental histogram against the legend's n (a check of the reading)"}
+- {id: cmp_n_fig5f_sim, purpose: consistency, computed: n_fig5f_sim_pred, printed: n_fig5f_sim, note: "sum of the bars of the simulated histogram against the legend's n"}
+- {id: cmp_s26_figs6c, purpose: approximation, computed: p_s26_figs6c_pred, printed: figs6c_lines_data, note: "Eq. S26 (shape only: one prefactor for the five values of lambda R^2/K) against the paper's own numerics"}
+- {id: cmp_s25_figs6b_l8, purpose: approximation, computed: p_s25_figs6b_l8_pred, printed: figs6b_l8_data, note: "Eq. S25 with Eq. S21 (shape only) against the numerics, lambda R^2/K = 10^8"}
+- {id: cmp_s25_figs6b_l7, purpose: approximation, computed: p_s25_figs6b_l7_pred, printed: figs6b_l7_data, note: "Eq. S25 with Eq. S21 (shape only) against the numerics, lambda R^2/K = 10^7"}
+- {id: cmp_s25_figs6b_l6, purpose: approximation, computed: p_s25_figs6b_l6_pred, printed: figs6b_l6_data, note: "Eq. S25 with Eq. S21 (shape only) against the numerics, lambda R^2/K = 10^6"}
+- {id: cmp_s25_figs6b_l5, purpose: approximation, computed: p_s25_figs6b_l5_pred, printed: figs6b_l5_data, note: "Eq. S25 with Eq. S21 (shape only) against the numerics, lambda R^2/K = 10^5"}
+- {id: cmp_s25_figs6b_l4, purpose: approximation, computed: p_s25_figs6b_l4_pred, printed: figs6b_l4_data, note: "Eq. S25 with Eq. S21 (shape only) against the numerics, lambda R^2/K = 10^4"}
+- {id: cmp_s18_figs6g, purpose: approximation, computed: alpha_s18_figs6g_pred, printed: figs6g_alpha_data, note: "small-strain law Eq. S18 (n = 1) against the paper's numerical alpha for lambda R^2/K = 10^8"}
+- {id: cmp_s17_figs6h, purpose: approximation, computed: delta_s17_figs6h_pred, printed: figs6h_delta_data, note: "small-strain law Eq. S17 (n = 1) against the paper's numerical delta/R for lambda R^2/K = 10^8"}
+- {id: cmp_alpha_fig6b, purpose: reproduction, computed: alpha_fig6b_pred, printed: fig6b_alpha_data, note: "the alpha line of Fig. 6B, drawn again from Fig. 4H"}
+- {id: cmp_gamma_fig6b, purpose: reproduction, computed: gamma_fig6b_pred, printed: fig6b_gamma_data, note: "the gamma line of Fig. 6B, drawn again from Fig. 4H"}

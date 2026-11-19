@@ -1,0 +1,17 @@
+id: winkler_rod_wavelength
+name: buckling wavelength of an elastic rod on a linear (Winkler) foundation, straight-rod limit
+role: model
+stated: {page: 5, quote: "minimizes the sum of the bending energy and the foundation energy", where: "Eqs. 7, 8"}
+equation: "E = (k_s/2) int |r - f|^2 ds + (EI/2) int kappa^2 ds  ->  lambda = 2 pi (EI/k_s)^(1/4) (not printed)"
+reconstructed: >
+  The paper minimises E_f + E_b (Eqs. 7, 8) numerically for the bivalve of Fig. 9 and states no wavelength,
+  number of folds or threshold. This is the classical linearised result for the same energy on a straight
+  rod, entered so that the paper's printed EI and k_s give a wavelength the corpus can relate to the
+  plate-on-foundation laws; it ignores the curvature of the aperture and the finite length excess.
+inputs:
+  EI: {quantity: mantle_bending_stiffness, unit: dimensionless}
+  ks: {quantity: attachment_spring_stiffness, unit: dimensionless}
+outputs:
+  lam: {quantity: buckling_wavelength, unit: dimensionless}
+settings: {}
+stochastic: false

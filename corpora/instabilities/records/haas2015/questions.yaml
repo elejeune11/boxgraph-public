@@ -1,0 +1,123 @@
+- id: q_b14_sign
+  kind: possible_error
+  about: [curvature_b14_numeric, rotation_b16_numeric]
+  text: >
+    (B 8) gives sigma0 = b0'' + K0 and sigma0'' = a0' = -b0, hence b0'''' + b0 = -K0'' with
+    K0 = K[delta(xi + Lambda/2) - delta(xi - Lambda/2)]; (B 14) prints the opposite sign,
+    b0'''' + b0 = +K0''. K^2 (3.3) does not depend on this sign. With the sign of (B 8), sigma0 is
+    smooth and the second-order problem (B 16) reproduces |B^(i)| of (B 18); with the printed sign
+    of (B 14), sigma0 would carry delta functions. The record's numerical models follow (B 8).
+  citation: {page: 10, quote: "The leading-order problem is thus", where: "Eq. B14"}
+- id: q_rotation_sign
+  kind: choice
+  about: [rotation_b16_numeric, B_fig3h]
+  text: >
+    The paper does not say whether the inward rotation Delta beta is an increase or a decrease of
+    beta = theta + gamma(b0 + gamma b1 + ...). The midpoint value b1(0) computed from (B 16) equals
+    -B^(i)(Lambda) cos(Theta) of (B 18) at every Lambda tried; the record takes inward rotation as a
+    decrease of beta (output -b1(0)/cos Theta) so that it can be compared with the plotted curve.
+- id: q_shell_not_rerun
+  kind: numerics
+  about: [shell_bifurcation, lambda_max_fig5, rp_fig5, rp_fig8_least, h_over_R_computations]
+  text: >
+    The bifurcation results (Fig. 5 branches, the critical point (lambda*, k*), the stability
+    diagram of Fig. 7 and the critical-point trajectories of Fig. 8) come from the paper's bvp4c
+    continuation of the full shell equations, whose set-up is not given (mesh, continuation,
+    the intrinsic stretches and kappa_phi^0 for contraction beyond the sketch of Fig. 4) and whose
+    branches are not labelled by lambda. They are not rerun and not read; the claims that
+    contraction lowers k* and raises l* (Fig. 8), and that k ~ d^1/2 is recovered for l << l*
+    (Fig. 5), stay unchecked.
+  citation: {page: 5, quote: "carry over to larger deformations of the shell", where: text}
+- id: q_lame_numeric
+  kind: choice
+  about: [lame_plane_numeric]
+  text: >
+    The numerical points of Fig. 2(c) come from the paper's general shell solver; the record's
+    stand-in minimizes the printed plane energy (2.5) by finite elements with an outer boundary at
+    s = 40 R (r = s there). Its residual offset from (2.9), about 1e-4 at f = 0.7, comes from the
+    finite outer boundary and is far below the reading precision.
+- id: q_figure_tools
+  kind: reading
+  about: [fig2c_points, fig3g, fig3h_i, fig3h_c]
+  text: >
+    In the reading session the page-render and figure-check commands were not available, so the
+    reading code was developed and checked on the 110-dpi page images scaled to each reading's dpi
+    (figwork/proxy_*), where every read point was seen to sit on its curve or marker. The build
+    runs the same code on the vector render of the PDF; the overlays there were not inspected.
+- id: q_lambda_max_pi2
+  kind: reading
+  about: [shell_bifurcation, lambda_max_fig5]
+  text: >
+    Audit: the paper also states lambda_max = pi R/2 (Fig. 8 label) and "lambda_max approx pi R/2
+    being fixed during invagination" (p. 8) as the Volvox-relevant end of the bend region, set
+    by thin-section data [12]. It is not recorded as a datum because it is printed as a multiple
+    of pi, not as a decimal; it is an input of the unrun shell computation and is worth carrying
+    to the comparison with haas2021.
+  citation: {page: 8, quote: "this corresponds to", where: text}
+- id: q_fig7c_inputs
+  kind: reading
+  about: [k_critical_branch_fig7c, critical_point_fig7c, cmp_critical_branch_fig7c_fig5]
+  text: >
+    Fig. 7(c) does not restate lambda_max or r_p. Its critical branch and critical point are taken
+    to be those of Fig. 5 (lambda_max = 1.1R, r_p = R) because the figure redraws that diagram
+    with the stability regions added; the comparison cmp_critical_branch_fig7c_fig5 tests that the
+    two drawings agree. The critical points of the two figures are read too (critical_point_fig5,
+    critical_point_fig7c) but cannot be compared by the build, which compares curves only at equal
+    x, and each dot's d/R is itself read from its figure.
+- id: q_fig2c_xticks
+  kind: reading
+  about: [fig2c_points]
+  text: >
+    In Fig. 2(c) the f axis has three tick intervals between the labels 0.8 and 1.0 (ticks 1/15
+    apart), and in Fig. 3(g, h) the ticks are 5/3 apart (labels on every third tick). The readings
+    calibrate on the labelled ticks only and treat the others as a regular grid.
+- id: q_no_cross_validation_haas2021
+  kind: reading
+  about: [shell_bifurcation, curvature_eq33, phi_eq29, kappa_upper_fig7b, kappa_lower_fig7b]
+  text: >
+    Cross-validation with haas2021 (which cites this paper as ref. 8) finds nothing to validate. haas2021
+    holds no measured data: its only experimental images are micrographs (Figs. 1, 4) with no values, and
+    every figure datum is a model result. So no model here can be checked against a haas2021 measurement.
+    The haas2021 results nearest to this paper's models (the classical energy of Eq. 67 and the (k, d)
+    bifurcation curves of Fig. 5(g), which haas2021 says behave like the bifurcation "discussed ... in
+    Ref. [8]") are model against model, a relation between models, not a validation. They are also not
+    rerun on either side (shell_bifurcation here, volvox_invagination there are not runnable). The
+    measurements this paper does invoke (the dynamic data of Hoehn et al., ref. 19, and the thin sections,
+    ref. 12) are not printed here as values, so they are not in this record.
+  citation: {page: 8, quote: "no such snapthrough shows up during invagination in", where: text}
+- id: q_no_validation_fierling2022
+  kind: reading
+  about: [curvature_eq33, curvature_b14_numeric, rotation_b18, rotation_contraction_eq35, phi_eq29, lame_plane_numeric, shell_bifurcation, fierling2022/curv_ablation_fig1c, fierling2022/area_muvi_fig3a]
+  text: >-
+    No validation is entered between this record and fierling2022, in either direction (cross-validation
+    job 2026-11-19). Neither paper cites the other. This record holds no measured data (figures.md: the
+    only experimental images are the micrographs of Fig. 1), so no fierling2022 model can be tested here.
+    In the other direction, this record's runnable models return the scaled intrinsic curvature needed for
+    pure invagination of a Volvox-like spherical sheet (3.3, B 14) and the width at its minimum, the inward
+    rotation of the invagination midpoint (B 18, 3.5), and the boundary radius of a contracted disc in a
+    plane sheet (2.9). fierling2022's measurements are apical area and AP/DV size fold-changes of cells by
+    row and time, the observed ventral tissue curvature around ablation and during furrowing, recoil
+    velocities, furrow apex positions and pole displacement. The intrinsic curvature k of (3.3) is a model
+    input, not the observed curvature fierling2022 measures, and fierling2022 gives no intrinsic curvature,
+    cell-sheet thickness d or bend-region width for the embryo. The Lame disc (2.9) needs the intrinsic
+    contraction f of a circular patch, while the Drosophila mesoderm is a long strip whose active pre-strain
+    is a simulation setting, not a measurement. Running either would rest on inputs added for the purpose,
+    which is not a test. The bifurcation model (shell_bifurcation) is not runnable.
+  citation: {page: 1, quote: "this interplay during the inversion process of the green alga Volvox"}
+- id: q_no_validation_hohn2015
+  kind: reading
+  about: [curvature_eq33, curvature_b14_numeric, curvature_eq33_minimum, rotation_b18, rotation_b16_numeric, rotation_contraction_eq35, phi_eq29, lame_plane_numeric, shell_bifurcation, hohn2015/e_ratio_fig2a_hd, hohn2015/area_ratio_fig2b_hd, hohn2015/kappa_star_fig2c_hd, hohn2015/e_ratio_early_stage, hohn2015/e_ratio_later_stage]
+  text: >-
+    No validation is entered against hohn2015's measurements (cross-validation job 2026-11-19), although this
+    paper builds on its model and data (ref. 19). hohn2015 measures, for Volvox embryos in inversion, the
+    bend-region distance ratio e/e0 (Fig. 2(a), and 0.97 +- 0.07, 0.49 +- 0.09 for averaged shapes), the area
+    ratio A/A0 and area changes (Fig. 2(b), S3, text), the bend curvature kappa* in 1/um (Fig. 2(c)), the
+    speed-up factor and the bend-region speed. This record's runnable models give none of these quantities:
+    the scaled intrinsic curvature K/sin^1/2 Theta needed for pure invagination and the width at its minimum
+    (3.3, B 14) are model inputs in units of the cell-sheet thickness d, not the observed curvature kappa*, and
+    hohn2015 gives no d, Theta or invagination width delta for the embryos; the midpoint rotation (B 18, 3.5)
+    is not measured there; the Lame disc (2.9) is a plane-sheet test case. The full shell model that would
+    give shapes, e/e0 and areas (shell_bifurcation) is not runnable. The one statement of this paper about
+    the data is qualitative: no snap-through shows up during invagination in the dynamic data of [19], which
+    constrains the parameter paths (p. 8) but quantifies no measured value a model here produces.
+  citation: {page: 8, quote: "no such snapthrough shows up during invagination in", where: text}

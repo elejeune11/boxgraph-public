@@ -91,6 +91,14 @@ as the paper's; the variant's are reported apart, and say whether the
 correction accounts for the difference. A printed value is never corrected
 this way: only an equation, and only with its evidence.
 
+**A scaling law fixes a shape, not a size.** A relation printed with "~" and
+no prefactor is entered as printed and marked as having an unknown
+prefactor. Its values are judged only on how they vary: one measurement gives
+the prefactor it implies and no verdict; several are judged after fitting the
+one constant. **A model the reader builds** in place of an analysis the paper
+does not give is marked as reconstructed, and its comparisons are reported
+apart from the paper's own, as a corrected variant's are.
+
 A record is **sound** when every value traces to the paper or is labelled
 as added, every model that can be made to run does run, and units and
 quantities agree. A model the paper gives only in words is still entered

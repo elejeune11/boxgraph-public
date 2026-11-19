@@ -1,0 +1,17 @@
+id: fold_angle_vs_pressure
+name: opening angle of a single fold against P_B R^3, for a given bending rigidity (Fig. 4I curve)
+role: model
+stated: {page: 36, quote: "we plot the pairs (δ/R, PB R3 /K) for a single value of the dimensionless compressional rigidity", where: "Methods S1, Section 4"}
+equation: "alpha = alpha(P_B R^3 / K), from Eqs. S28-S30 with P_B = F_B cos(alpha)/R"
+inputs:
+  PBR3: {quantity: pressure_times_radius_cubed, unit: uN*um}
+  K: {quantity: tissue_bending_rigidity, unit: uN*um}
+outputs:
+  alpha: {quantity: fold_opening_angle, unit: degree}
+settings: {step_deg: 0.5}
+built_from: [fold_elastica]
+from_words: true
+reconstructed: >-
+  The relation between alpha and P_B R^3/K comes from the boundary-value problem of Eqs. S28-S30,
+  which the paper solves numerically without giving the method; this uses the reader's solver of
+  fold_elastica.

@@ -1,0 +1,19 @@
+id: clamped_rod_buckling
+name: initial buckling mode of the clamped mantle rod on its adhesion foundation (linearized Eq. 4)
+role: model
+stated: {page: 5, quote: "computed using a linear buckling analysis (33)", where: "Appendix, Model Formulation"}
+equation: "linearization of Eq. 4 about the flat state (gamma -> 1, p = [s0, 0], nx = -P): y'''' + P y'' + kf y = 0, y = y' = 0 at s0 = 0 and 1"
+inputs:
+  kf: {quantity: foundation_stiffness_dimensionless, unit: dimensionless}
+outputs:
+  mode: {quantity: buckling_mode_number, unit: dimensionless}
+  P: {quantity: critical_load_dimensionless, unit: dimensionless}
+settings: {n_grid: 400, parity: any}   # parity: any | symmetric (lowest mode symmetric about s0 = 1/2)
+stochastic: false
+reconstructed: >-
+  The paper uses a linear buckling analysis of Eq. 4 (citing ref. 33) and states that kf from the SI values
+  gives mode 3, but prints neither the analysis nor how modes are numbered. This is the reader's
+  linearization of the printed Eq. 4 about the flat clamped state, solved by second-order finite differences
+  as a generalized eigenproblem; the mode number is one plus the number of interior sign changes of the
+  eigenvector of the lowest critical load (parity any), or of the lowest load among modes symmetric about
+  the middle (parity symmetric), the reader's two readings of how a single centred spine is selected.

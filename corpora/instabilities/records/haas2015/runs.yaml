@@ -1,0 +1,89 @@
+- id: run_phi_eq29_fig2c
+  model: phi_eq29
+  inputs: {nu: nu_computations}
+  sweep: {f: phi_fig2c}
+  outputs: {Phi: phi_eq29_curve}
+- id: run_phi_numeric_fig2c
+  model: lame_plane_numeric
+  inputs: {nu: nu_computations}
+  sweep: {f: phi_fig2c}
+  settings: {n: 200, s_max: 40.0}
+  outputs: {Phi: phi_numeric_curve}
+  note: "added numerical choices (the paper's own set-up is not given): 200 linear elements per unit length, outer boundary at s = 40 R with r = s there"
+- id: run_phi_numeric_f07
+  model: lame_plane_numeric
+  inputs: {nu: nu_computations, f: f_probe_added}
+  settings: {n: 50, s_max: 40.0}
+  outputs: {Phi: phi_numeric_f07}
+  note: "a single run at f = 0.7 for the mesh refinement; added numerical choices as above"
+- id: run_K_eq33_fig3g
+  model: curvature_eq33
+  inputs: {}
+  sweep: {L: Ks_fig3g}
+  outputs: {Ks: Ks_eq33_curve}
+- id: run_K_b14_fig3g
+  model: curvature_b14_numeric
+  inputs: {}
+  sweep: {L: Ks_fig3g}
+  settings: {x_half: 80.0, n_points: 65536}
+  outputs: {Ks: Ks_b14_curve}
+- id: run_K_b14_L2
+  model: curvature_b14_numeric
+  inputs: {L: L_probe_added}
+  settings: {x_half: 80.0, n_points: 4096}
+  outputs: {Ks: Ks_b14_L2}
+  note: "a single run at Lambda = 2 for the grid refinement"
+- id: run_L_min
+  model: curvature_eq33_minimum
+  inputs: {}
+  settings: {L_lo: 0.5, L_hi: 20.0, n_grid: 4000}
+  outputs: {L_min: L_min_eq33}
+- id: run_B_b18_fig3h
+  model: rotation_b18
+  inputs: {}
+  sweep: {L: B_fig3h}
+  outputs: {B: B_b18_curve}
+- id: run_B_b16_fig3h
+  model: rotation_b16_numeric
+  inputs: {}
+  sweep: {L: B_fig3h}
+  settings: {x_half: 80.0, n_points: 65536, theta: 0.7}
+  outputs: {B: B_b16_curve}
+- id: run_B_b16_L2
+  model: rotation_b16_numeric
+  inputs: {L: L_probe_added}
+  settings: {x_half: 80.0, n_points: 4096, theta: 0.7}
+  outputs: {B: B_b16_L2}
+  note: "a single run at Lambda = 2 for the grid refinement"
+- id: run_Bc_eq35_fig3h
+  model: rotation_contraction_eq35
+  inputs: {}
+  sweep: {L: Bc_fig3h}
+  outputs: {Bc: Bc_eq35_curve}
+- id: run_K_eq33_fig3g_v2
+  model: curvature_eq33
+  inputs: {}
+  sweep: {L: Ks_fig3g_v2}
+  outputs: {Ks: Ks_eq33_curve_v2}
+- id: run_K_b14_fig3g_v2
+  model: curvature_b14_numeric
+  inputs: {}
+  sweep: {L: Ks_fig3g_v2}
+  settings: {x_half: 80.0, n_points: 65536}
+  outputs: {Ks: Ks_b14_curve_v2}
+- id: run_B_b18_fig3h_v2
+  model: rotation_b18
+  inputs: {}
+  sweep: {L: B_fig3h_v2}
+  outputs: {B: B_b18_curve_v2}
+- id: run_B_b16_fig3h_v2
+  model: rotation_b16_numeric
+  inputs: {}
+  sweep: {L: B_fig3h_v2}
+  settings: {x_half: 80.0, n_points: 65536, theta: 0.7}
+  outputs: {B: B_b16_curve_v2}
+- id: run_Bc_eq35_fig3h_v2
+  model: rotation_contraction_eq35
+  inputs: {}
+  sweep: {L: Bc_fig3h_v2}
+  outputs: {Bc: Bc_eq35_curve_v2}

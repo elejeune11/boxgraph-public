@@ -1,0 +1,23 @@
+id: allen_shortfall
+name: how much lower Allen's plane-stress film modulus is than Eq. 2's, for the same wavelength
+role: model
+stated: {page: 3, printed_page: "547", quote: "applying Allen's model results in a", where: text}
+equation: >-
+  printed only in words: Allen's solution "for the case of an infinitely thin beam in the state of plane
+  stress", which "does not require the Poisson's ratio of the film", gives a modulus "≈10% lower than
+  expected from equation (2)". Reconstructed: Ef(Allen) = 12 Es/((3 - nu_s)(1 + nu_s)) (d/2 pi h)^3;
+  shortfall = 1 - Ef(Allen)/Ef(Eq. 2) = 1 - 4 (1 - nu_s)/((3 - nu_s)(1 - nu_f^2))
+described_from: ref-10
+reconstructed: >-
+  The paper cites Allen (ref. 10) but prints neither his formula nor the numbers its ≈10% comes from.
+  Allen's wrinkling of a thin face (bending stiffness Ef h^3/12, no Poisson factor) on an isotropic
+  half-space core in plane stress, whose surface stiffness to a sinusoid of wavenumber q is
+  2 Es q/((3 - nu_s)(1 + nu_s)), gives d = 2 pi h [(3 - nu_s)(1 + nu_s) Ef/(12 Es)]^(1/3); inverting it
+  and dividing by Eq. 2 for the same d, h and Es leaves a ratio that depends only on nu_s and nu_f.
+inputs:
+  nu_f: {quantity: film_poisson_ratio, unit: dimensionless}
+  nu_s: {quantity: substrate_poisson_ratio, unit: dimensionless}
+outputs:
+  shortfall: {quantity: modulus_relative_difference, unit: percent}
+settings: {}
+stochastic: false

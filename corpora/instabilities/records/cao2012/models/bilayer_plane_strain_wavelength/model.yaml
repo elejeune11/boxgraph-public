@@ -1,0 +1,17 @@
+id: bilayer_plane_strain_wavelength
+name: wavelength over film thickness of the critical plane strain wrinkling mode of the exact bilayer analysis (Appendix, lambda/h = 2 pi / kh)
+role: model
+stated: {page: 8, printed_page: "031019-8", quote: "The eigenvalue problem governing bifurcation is", where: "Eqs. A1-A10"}
+equation: "lambda/h = 2 pi / (k h), with k h the critical mode of |E| = 0 (Eq. A10) minimized over kh, plane strain"
+inputs:
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless, description: "mu_f / mu_s"}
+  lam01: {quantity: substrate_prestretch, unit: dimensionless, description: "lambda0_1s (plane strain prestretch, lambda0_3s = 1)"}
+outputs:
+  lam_over_h: {quantity: wrinkle_wavelength_over_film_thickness, unit: dimensionless}
+settings: {kh_min: 0.001, kh_max: 30.0, n_kh: 41, e_min: 0.0001, e_max: 0.7, n_e: 120, tol: 1.0e-6, n_golden: 25}
+built_from: [bilayer_plane_strain]
+stochastic: false
+# Added by the relation job cao2012+wang2015 as a helper: wang2015 (p. 5) says the wavelength of wrinkles at
+# initiation "can be calculated by linear stability analysis" (ref. 49, this paper) and approximated for large
+# modulus ratios by its Eq. 8, which gives lambda/H_f. cao2012 prints the critical mode as the wavenumber kh;
+# this model is the same solver with lambda/h = 2 pi/kh, so the two can be compared output to output.

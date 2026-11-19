@@ -1,0 +1,15 @@
+id: membrane_thickness
+name: membrane thickness from bending stiffness and in-plane modulus
+role: model
+stated: {page: 4, printed_page: "074302-4", quote: "using our bending stiffness just calculated and the", where: "text, left column"}
+reconstructed: "the paper does not print the relation or the in-plane modulus it used to get the thickness from B (q_vesicle_thickness); this relation is the reader's"
+equation: "t = [12(1 - nu^2) B/(E t)]^(1/2), from B = E t^3/[12(1 - nu^2)] with the in-plane modulus E t (in words)"
+from_words: true
+inputs:
+  B: {quantity: bending_stiffness, unit: N*m}
+  Y: {quantity: in_plane_modulus, unit: N/m}
+  nu: {quantity: poisson_ratio, unit: dimensionless}
+outputs:
+  t: {quantity: sheet_thickness, unit: m}
+settings: {}
+stochastic: false

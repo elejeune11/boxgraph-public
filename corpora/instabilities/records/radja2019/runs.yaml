@@ -1,0 +1,29 @@
+# likelihood-ratio statistics from the -ln L of Table 2
+- {id: run_lr_2state, model: likelihood_ratio, inputs: {nll_simple: nll_null2, nll_complex: nll_2state}, outputs: {LR: lr_2state_pred}}
+- {id: run_lr_3state, model: likelihood_ratio, inputs: {nll_simple: nll_null3, nll_complex: nll_3state}, outputs: {LR: lr_3state_pred}}
+- {id: run_lr_coarse, model: likelihood_ratio, inputs: {nll_simple: nll_coarse, nll_complex: nll_3state}, outputs: {LR: lr_coarse_pred}}
+# degrees of freedom from the numbers of rates of Table 2
+- {id: run_dof_2state, model: lrt_dof, inputs: {n_complex: nrates_2state, n_simple: nrates_null2}, outputs: {dof: dof_2state_pred}}
+- {id: run_dof_3state, model: lrt_dof, inputs: {n_complex: nrates_3state, n_simple: nrates_null3}, outputs: {dof: dof_3state_pred}}
+- {id: run_dof_coarse, model: lrt_dof, inputs: {n_complex: nrates_3state, n_simple: nrates_coarse}, outputs: {dof: dof_coarse_pred}}
+# p values from the printed statistic and degrees of freedom of Table S4
+- {id: run_p_2state, model: chi2_pvalue, inputs: {LR: lr_2state, dof: dof_2state}, outputs: {p: p_2state_pred}}
+- {id: run_p_coarse, model: chi2_pvalue, inputs: {LR: lr_coarse, dof: dof_coarse}, outputs: {p: p_coarse_pred}}
+# 20-fold rate ratio
+- {id: run_rate_ratio, model: rate_ratio, inputs: {q_forward: qAB, q_reverse: qBA}, outputs: {ratio: rate_ratio_pred}}
+# Table 1 averages by pattern type
+- {id: run_mean_spikes, model: mean_percent_difference, inputs: {d: pctdiff_spikes}, outputs: {mean: mean_spikes_pred}}
+- {id: run_mean_holes, model: mean_percent_difference, inputs: {d: pctdiff_holes}, outputs: {mean: mean_holes_pred}}
+- {id: run_mean_stripes, model: mean_percent_difference, inputs: {d: pctdiff_stripes}, outputs: {mean: mean_stripes_pred}}
+# family counts
+- {id: run_families_noneq, model: count_difference, inputs: {n_all: families_total, n_part: families_with_eq}, outputs: {n_rest: families_noneq_pred}}
+- {id: run_families_mixed, model: count_difference, inputs: {n_all: families_with_eq, n_part: families_only_eq}, outputs: {n_rest: families_mixed_pred}}
+# figure readings (first figure pass)
+- id: run_fig5_counts
+  model: tree_state_counts
+  inputs: {O: fig5_orange_dots, P: fig5_pink_dots, G: fig5_green_dots, B: fig5_blue_dots}
+  settings: {angle_tol_deg: 0.7}
+  outputs: {n_eq: fig5_n_eq, n_eq_only: fig5_n_eq_only, n_eq_mixed: fig5_n_eq_mixed, n_tips: fig5_n_tips, n_noneq: fig5_n_noneq,
+            n_pink: fig5_n_pink, n_green: fig5_n_green, n_blue: fig5_n_blue}
+  note: "angle_tol_deg is an added choice (the paper draws the tree, it does not group dots); any value from 0.4 to 0.9 gives the same groups"
+- {id: run_fig4_boundary_a, model: boundary_position, inputs: {L: fig4_boundary_a_l0}, outputs: {l0_b: fig4_boundary_a_mean}}

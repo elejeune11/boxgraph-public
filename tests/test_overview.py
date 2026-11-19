@@ -75,6 +75,16 @@ def test_a_checked_cited_value_links_the_two_sources_and_says_if_it_agrees(syn):
     assert code["agree"] == 0 and code["differ"] == 1
 
 
+def test_the_page_counts_its_sources_in_words_that_agree_with_the_number(syn):
+    """The line above the title counts papers, sources of code and data, and tested links, singular for one and plural otherwise."""
+    d = overview_data(syn)
+    n_other = sum(s["kind"] in ("software", "dataset") for s in d["sources"])
+    assert n_other == 1
+    assert "1 source of code and data" in d["counts"]
+    assert "1 sources" not in d["counts"]
+    assert d["counts"].endswith(f"{len(d['links'])} tested links" if len(d["links"]) != 1 else "1 tested link")
+
+
 def test_code_or_data_is_placed_with_the_papers_it_takes_values_from(syn):
     """Released code or data names the papers it belongs to: those it takes values from."""
     by = {s["id"]: s for s in overview_data(syn)["sources"]}

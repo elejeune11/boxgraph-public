@@ -1,0 +1,43 @@
+- id: rel_viscous_elastic
+  kind: approximated_by
+  a: fierling2022/strain_viscous_exp
+  b: fierling2022/strain_elastic_exp
+  mapping: {sigma0: sigma0, G: eta/tau, tau: tau, t: t}
+  regime: {sigma0: [1, 10], eta: [1, 10], tau: [1, 2], t: [30, 40]}
+  provenance: stated
+  citation: {page: 17, quote: "they are identical if material parameters are such", where: "SI, Role of viscoelastic relaxation"}
+  assumptions: ["t >> tau (the paper: 'For t > tau, the constant or the linear term ... becomes negligible')", "G = eta/tau"]
+  tolerance: 1.0e-4
+- id: rel_maxwell_elastic
+  kind: approximated_by
+  a: fierling2022/strain_maxwell_exp
+  b: fierling2022/strain_elastic_exp
+  mapping: {sigma0: sigma0, G: eta_ve/(tau + tau_r), tau: tau, t: t}
+  regime: {sigma0: [1, 10], eta_ve: [1, 10], tau: [1, 2], tau_r: [0.5, 1], t: [30, 40]}
+  provenance: stated
+  citation: {page: 17, quote: "they are identical if material parameters are such", where: "SI, Role of viscoelastic relaxation"}
+  assumptions: ["t >> tau", "G = eta_ve/(tau + tau_r)"]
+  tolerance: 1.0e-4
+# Against tallinen2015: no relation is entered. fierling2022 does not cite tallinen2015 (its reference list has no
+# Tallinen et al.; no "brain", "gyrification" or growth-on-substrate wrinkling reference), and tallinen2015 (2015)
+# cannot cite fierling2022. Neither record takes a value from the other (fierling2022's one from_source datum points to
+# ref-48, Clement et al. 2017; tallinen2015's to its ref-2 and ref-32), so no cited.yaml line is added. Nothing is
+# proposed, because no model pair measures the same quantity: tallinen2015's models give growth thresholds g, modulus
+# ratios eta at transitions and wavelengths l/a or l/h of a growing layer on an unstrained neo-Hookean half-space;
+# fierling2022's closed-form models are pre-stress from area pre-strain (prestress_main, prestress_si), facet target
+# size, embryo geometry, length compatibility of the contracting ventral band, the vitelline gap, viscoelastic strain
+# under exponentially rising stress, the MyoII time course (Eq. 1) and processing of stress and area curves. Its
+# buckling is of a closed pre-strained shell confined by the vitelline membrane, found only in Surface Evolver
+# simulations that are not in the record as runnable models, and no threshold or fold wavelength is given in closed
+# form that could be set against tallinen2015's.
+#
+# Against trushko2020: no relation is entered. fierling2022 does not cite trushko2020 (no Trushko, alginate capsule
+# or confined-monolayer reference), and trushko2020 (2020) cannot cite fierling2022. Neither record takes a value from
+# the other (fierling2022's from_source datum points to ref-48; trushko2020's to ref-harris2012 and ref-merzouki2016),
+# so no cited.yaml line is added. Nothing is proposed: both concern a curved sheet buckling under confinement, but
+# fierling2022's buckling is found only in Surface Evolver simulations of an actively pre-strained ellipsoidal shell
+# with no closed-form threshold, while trushko2020's closed forms (critical_strain_s21, pbuckling_eq1, fold_*) are for
+# a passively compressed ring pressing outward on a capsule. The only elastic constants the two write are different
+# quantities: fierling2022's 2D compression modulus chi_2D = Y_2D/(1 - nu_2D) (SI p. 19, used in prestress_main and
+# prestress_si as an input) and trushko2020's 1D stretching rigidity lambda^cap = E h/(1 - nu^2) of the capsule;
+# no fierling2022 model computes chi_2D from a modulus, so there is no model pair to map.

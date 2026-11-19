@@ -1,0 +1,16 @@
+id: target_size
+name: target size of a pre-strained facet from the area pre-strain (main text)
+role: model
+stated: {page: 4, printed_page: "4", quote: "where χ2D is the in-plane compression elastic modulus", where: "text, p. 4"}
+equation: "epsilon_a = (A_i - A_0)/A_0  =>  A_0/A_i = 1/(1 + epsilon_a)"
+inputs:
+  eps: {quantity: area_prestrain, unit: dimensionless, description: "epsilon_a at the midline, epsilon_a^m"}
+  theta: {quantity: angle_from_midline, unit: rad, description: "where on the cross-section the value is wanted; the midline pre-strain holds over the first angular band, so the target does not depend on theta there"}
+outputs:
+  s: {quantity: target_size_relative, unit: dimensionless}
+settings: {}
+stochastic: false
+# The paper defines only the area pre-strain. Figs. 2a and Supp. 1e plot a "Target size, AP and DV" per
+# axis; this model takes that plotted size to be the target area ratio A_0/A_i (the released gnuplot
+# script plots the column 'ratio_shrink_LOCAL', which is the area ratio). If the plotted size were a
+# length, it would be sqrt(A_0/A_i) instead (question q_target_size_measure).

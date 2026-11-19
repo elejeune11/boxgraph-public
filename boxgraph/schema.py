@@ -325,11 +325,17 @@ class Model(Strict):
     software: bool = False  # runs the source's own code (a software record): its outputs have origin run
     variant_of: str | None = None  # the printed model this one corrects; its verdicts are reported apart
     corrections: list[Correction] = []  # what a variant corrects, each with its evidence
+    # a scaling law printed with "~" and no prefactor: its values are judged on their shape only
+    prefactor: Literal["stated", "unknown"] = "stated"
+    # the reader's stand-in for an analysis the paper does not give (why): its verdicts are reported apart
+    reconstructed: str | None = None
 
     @model_validator(mode="after")
     def _reason_if_not_runnable(self) -> Model:
         if not self.runnable and not self.not_runnable_reason:
             raise ValueError(f"model {self.id}: not runnable needs a reason")
+        if self.reconstructed is not None and not self.reconstructed.strip():
+            raise ValueError(f"model {self.id}: reconstructed needs the reason the paper's own analysis cannot be used")
         return self
 
 

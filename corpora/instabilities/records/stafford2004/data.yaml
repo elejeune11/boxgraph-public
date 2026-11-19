@@ -1,0 +1,210 @@
+# Inputs of Eq. 1 / Eq. 2 for the polystyrene films (pp. 2, 4)
+- id: nu_f_PS
+  quantity: film_poisson_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.33"
+  citation: {page: 4, printed_page: "548", quote: "νf = 0.33 (ref. 19). In our experiments", where: text}
+  from_source: ref-19
+  note: used in Eq. 2 for the PS films
+- id: Es_range
+  quantity: substrate_modulus
+  unit: MPa
+  origin: measured
+  printed: "1.5 to 2.0"
+  citation: {page: 4, printed_page: "548", quote: "Es varied in the range", where: text}
+  note: >-
+    printed as "(1.5-2.0) ± 0.1 MPa depending on the exact mixing ratio, curing profile, and batch-to-batch
+    variability of the PDMS"; the Methods (p. 5) say Es was measured before each experiment, but no
+    per-sample value is printed. Runs use Es_added.
+
+# Polystyrene film modulus from SIEBIMM (pp. 3-4)
+- id: E_PS_gradient
+  quantity: film_modulus
+  unit: GPa
+  origin: derived
+  printed: "3.4 ± 0.1"
+  citation: {page: 3, printed_page: "547", quote: "remains largely constant (3.4 ± 0.1 GPa) over this thickness range", where: "Fig. 2 caption"}
+  conditions: {film_thickness: "150 to 240 nm"}
+  note: Ef from Eq. 2 with nu_f = 0.33 on the measured wavelengths of the PS thickness-gradient film (Fig. 2b)
+- id: E_PS_30nm
+  quantity: film_modulus
+  unit: GPa
+  origin: derived
+  printed: "3.4 ± 0.1"
+  citation: {page: 4, printed_page: "548", quote: "SIEBIMM measurements on films as thin as 30 nm and the measured", where: text}
+  conditions: {film_thickness: "30 nm"}
+  note: printed as "on films as thin as 30 nm and the measured modulus remains 3.4 ± 0.1 GPa"
+
+# The PS film of Fig. 1b (p. 2)
+- id: h_fig1b
+  quantity: film_thickness
+  unit: nm
+  origin: measured
+  printed: "≈ 100"
+  citation: {page: 2, printed_page: "546", quote: "micrograph shows a buckling wavelength for a PS film", where: text}
+  note: printed as "a PS film (h ≈ 100 nm)"
+- id: d_fig1b_caption
+  quantity: wrinkle_wavelength
+  unit: um
+  origin: measured
+  printed: "8"
+  citation: {page: 2, printed_page: "546", quote: "buckled film with amplitude 0.3 µm and wavelength 8 µm", where: "Fig. 1 caption"}
+- id: d_fig1b_text
+  quantity: wrinkle_wavelength
+  unit: um
+  origin: measured
+  printed: "≈ 8"
+  citation: {page: 2, printed_page: "546", quote: "approximately 8 µm, yet the amplitude is only a few hundred", where: text}
+  note: printed as "approximately 8 µm", the same micrograph as d_fig1b_caption
+
+# Nanoporous organosilicate films (pp. 4-5)
+- id: nu_f_osg
+  quantity: film_poisson_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.26"
+  citation: {page: 5, printed_page: "549", quote: "materials has been reported28 to be νf = 0.26, and this value was used", where: text}
+  from_source: ref-28
+  note: not used by a run here; it enters the Fig. 4 SIEBIMM moduli, whose wavelengths are not printed
+- id: porosity_range
+  quantity: porosity
+  unit: percent
+  origin: measured
+  printed: "0 to 0.51"
+  citation: {page: 5, printed_page: "549", quote: "0 to 0.51 percent as determined by X-ray reflectivity", where: text}
+  from_source: ref-25
+  note: printed as "porosities ranging from 0 to 0.51 percent"; see q_porosity_percent. Runs use P_max_added.
+- id: E_osg_Pmax
+  quantity: film_modulus
+  unit: GPa
+  origin: derived
+  printed: "0.6"
+  citation: {page: 4, printed_page: "548", quote: "dramatically decreases from 9 GPa to 0.6 GPa", where: "Fig. 4 caption"}
+  conditions: {porosity: "0.51 percent"}
+  note: SIEBIMM modulus at the highest porosity; the porosity condition is the top of porosity_range as printed
+- id: a_fit
+  quantity: porosity_coefficient
+  unit: dimensionless
+  origin: fitted
+  printed: "1"
+  citation: {page: 5, printed_page: "549", quote: "From this fit, we ascertain a and n to be 1 and", where: text}
+- id: n_fit
+  quantity: porosity_exponent
+  unit: dimensionless
+  origin: fitted
+  printed: "3.45"
+  citation: {page: 5, printed_page: "549", quote: "From this fit, we ascertain a and n to be 1 and", where: text}
+  note: printed as "a and n to be 1 and 3.45, respectively"
+
+# Allen's plane-stress solution against Eq. 2 (p. 3)
+- id: allen_shortfall_printed
+  quantity: modulus_relative_difference
+  unit: percent
+  origin: predicted
+  printed: "≈ 10"
+  citation: {page: 3, printed_page: "547", quote: "calculated modulus of the upper film that is ≈10% lower than expected", where: text}
+  note: '"For the systems studied here, applying Allen''s model results in a calculated modulus of the upper film that is ≈10% lower than expected from equation (2)."'
+
+# Added in the audit: printed values the first reading left out (pp. 3-4)
+- id: E_osg_P0
+  quantity: film_modulus
+  unit: GPa
+  origin: derived
+  printed: "9"
+  citation: {page: 4, printed_page: "548", quote: "dramatically decreases from 9 GPa to 0.6 GPa", where: "Fig. 4 caption"}
+  conditions: {porosity: "0 percent"}
+  note: >-
+    SIEBIMM modulus at the lowest porosity, the other end of the range whose top is E_osg_Pmax. It is
+    the basis of E0_added, so it is not compared with Eq. 4 at P = 0 (that would be circular).
+- id: h_PS_gradient_fig2a
+  quantity: film_thickness
+  unit: nm
+  origin: measured
+  printed: "140 to 280"
+  citation: {page: 3, printed_page: "547", quote: "PS thickness gradient on silicon wafer (140 nm to 280 nm)", where: "Fig. 2 caption"}
+  note: the Fig. 2a caption's range for the gradient film; the text (p. 3) gives 150 to 240 nm, see q_gradient_range
+- id: h_PS_gradient_text
+  quantity: film_thickness
+  unit: nm
+  origin: measured
+  printed: "150 to 240"
+  citation: {page: 3, printed_page: "547", quote: "number-average molecular weight respectively) ranging from 150 nm", where: text}
+  note: printed as "ranging from 150 nm to 240 nm (Fig. 2a)"
+- id: h_PS_plasticized
+  quantity: film_thickness
+  unit: nm
+  origin: measured
+  printed: "110 to 130"
+  citation: {page: 4, printed_page: "548", quote: "110 nm to 130 nm.The data are fit to a sigmoidal", where: "Fig. 3 caption"}
+  note: thickness of the plasticized PS films measured by SIEBIMM in Fig. 3
+- id: h_PS_indentation
+  quantity: film_thickness
+  unit: nm
+  origin: measured
+  printed: "≈ 200 to 500"
+  citation: {page: 4, printed_page: "548", quote: "ranging from approximately 200 nm to 500 nm cast on silicon wafers", where: text}
+  note: thickness of the PS films nanoindented for Fig. 3 (open circles), printed as "approximately 200 nm to 500 nm"
+- id: h_osg
+  quantity: film_thickness
+  unit: nm
+  origin: measured
+  printed: "≈ 725"
+  citation: {page: 5, printed_page: "549", quote: "typical buckling wavelength", where: text}
+  note: typical thickness of the organosilicate films of Fig. 4, printed as "(h ≈ 725 nm)"; also in the Methods
+- id: d_osg
+  quantity: wrinkle_wavelength
+  unit: um
+  origin: measured
+  printed: "~30"
+  citation: {page: 5, printed_page: "549", quote: "was of the order of 30 µm. The buckling wavelength was", where: text}
+  note: printed as "of the order of 30 µm"; no modulus is printed for this film alone, so it is not run
+
+# Figure pass: the plotted data, read by calibrated figure readings (figures.yaml, figures.md)
+- id: E_fig2b
+  quantity: film_modulus
+  unit: GPa
+  origin: derived
+  figure: fig2b_modulus
+  citation: {page: 3, printed_page: "547", quote: "Modulus versus thickness for a flow-coated thickness gradient sample", where: "Fig. 2b"}
+  note: >-
+    The filled circles of Fig. 2b: the SIEBIMM modulus from Eq. 2 (nu_f = 0.33) at each thickness of the PS
+    gradient film, one-standard-deviation bars. Origin derived as for E_PS_gradient (computed by Eq. 2 from
+    the measured wavelengths).
+- id: d_fig2b
+  quantity: wrinkle_wavelength
+  unit: um
+  origin: measured
+  figure: fig2b_wavelength
+  citation: {page: 3, printed_page: "547", quote: "The linear increase in buckling wavelength (open circles) with film thickness", where: "Fig. 2b"}
+  note: the open circles of Fig. 2b (right axis), measured by small-angle light scattering, one-standard-deviation bars
+- id: E_fig3_siebimm
+  quantity: film_modulus
+  unit: GPa
+  origin: derived
+  figure: fig3_siebimm
+  citation: {page: 4, printed_page: "548", quote: "Modulus versus plasticizer concentration (dioctyl phthalate) for thin", where: "Fig. 3"}
+  conditions: {film_thickness: "110 to 130 nm"}
+  note: the filled circles of Fig. 3 (SIEBIMM, Eq. 2 on the measured wavelengths; the wavelengths are not shown)
+- id: E_fig3_indentation
+  quantity: film_modulus
+  unit: GPa
+  origin: measured
+  figure: fig3_indentation
+  citation: {page: 4, printed_page: "548", quote: "Modulus versus plasticizer concentration (dioctyl phthalate) for thin", where: "Fig. 3"}
+  conditions: {film_thickness: "≈ 200 to 500 nm"}
+  note: the open circles of Fig. 3 (nanoindentation on films cast on silicon)
+- id: E_fig4_siebimm
+  quantity: film_modulus
+  unit: GPa
+  origin: derived
+  figure: fig4_siebimm
+  citation: {page: 4, printed_page: "548", quote: "Modulus versus porosity for a series of nanoporous organosilicate", where: "Fig. 4"}
+  note: the filled circles of Fig. 4 (SIEBIMM, Eq. 2 with nu_f = 0.26 on the measured wavelengths, not shown)
+- id: E_fig4_indentation
+  quantity: film_modulus
+  unit: GPa
+  origin: measured
+  figure: fig4_indentation
+  citation: {page: 4, printed_page: "548", quote: "Modulus versus porosity for a series of nanoporous organosilicate", where: "Fig. 4"}
+  note: the open circles of Fig. 4 (nanoindentation on the parallel films on silicon)

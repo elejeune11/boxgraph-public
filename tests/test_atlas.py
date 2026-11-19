@@ -69,6 +69,12 @@ def test_scales_as(atlas):
     assert atlas[2]["rel_scales"].status == "verified"
 
 
+def test_scales_as_does_not_need_the_outputs_in_the_same_units(atlas):
+    """Scales-as compares log-slopes, which no unit changes, so a dimensionless law can scale as a dimensional one; same-as cannot."""
+    assert atlas[2]["rel_scales_nd"].status == "verified", atlas[2]["rel_scales_nd"].detail
+    assert atlas[2]["rel_same_nd"].status == "unverifiable"
+
+
 def test_too_plain_is_flagged(atlas):
     """A form too plain to mean anything, such as a bare ratio, is flagged."""
     r = atlas[2]["rel_plain"]

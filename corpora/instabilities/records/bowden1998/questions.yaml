@@ -1,0 +1,243 @@
+- id: q_eq3_61
+  kind: possible_error
+  about: [L_over_t_eq3_printed, wavelength_eq3, wavelength_eq3_simplified]
+  text: >
+    With the printed parameters (Em = 82 GPa, Ep = 20 MPa, nu_m = 0.33, nu_p = 0.48) the first form of Eq. 3,
+    4.36t[Em(1 - nu_p^2)/(Ep(1 - nu_m^2))]^(1/3), gives about 66t and the second form, 4.4t(Em/Ep)^(1/3), about
+    70t; the printed last form is ≈ 61t, which neither gives (it would need a prefactor near 4.0 on the first
+    form). The paper's ratio "17 times" equals its printed 1,060t/61t, so 61 seems to be the coefficient the
+    authors used. The estimate L ~ 3.4 um fits 61t with t = 55 nm (Au plus Ti) or 66t with t = 50 nm.
+  citation: {page: 3, printed_page: "148", quote: "has wavelength L (m) given by", where: "Eq. 3"}
+- id: q_eq3_forms
+  kind: reading
+  about: [wavelength_eq3_simplified, transition_length_eq5_simplified]
+  text: >
+    The middle forms of Eqs. 3 and 5 drop the Poisson factor (1 - nu_p^2)/(1 - nu_m^2) = 0.86 (to the 1/3 power
+    in Eq. 3, 0.95). Eq. 3's 4.4 is then 4.36 rounded, not 4.36 times the Poisson factor (4.15). Both forms are
+    entered as printed, as separate models.
+- id: q_eq5_forms
+  kind: possible_error
+  about: [l_over_t_eq5_printed, transition_length_eq5_simplified]
+  text: >
+    The printed ≈ 1,060t follows from the first form of Eq. 5 (0.3 x 3541 = 1062) but not from the middle form
+    0.3t(Em/Ep) (1230t); the "≈" between the two forms hides a 14% difference.
+  citation: {page: 4, printed_page: "149", quote: "The transition length l (m) characterizing the", where: "Eq. 5"}
+- id: q_ratio_17
+  kind: unexplained_difference
+  about: [l_over_L_printed, transition_to_wavelength_ratio, transition_to_wavelength_ratio_simplified]
+  text: >
+    "17 times" matches the printed coefficients 1,060/61 = 17.4 and the simplified forms (1230/70.5 = 17.4), but
+    the first forms of Eqs. 5 and 3, which give the printed 1,060t, give 1062/66.4 = 16.0. Which forms the 17
+    comes from is not said.
+- id: q_eq5_prefactor
+  kind: unstated_model
+  about: [transition_length_eq5]
+  text: >
+    The derivation of Eq. 5 (a film on an elastic foundation of tangential springs) is not given: the spring
+    stiffness and the origin of the prefactor 0.3 are not stated, so only the paper's arithmetic on Eq. 5 can be
+    checked, not Eq. 5 itself.
+- id: q_t_which
+  kind: unstated_input
+  about: [t_film_added, L_estimate_eq3]
+  text: >
+    The thickness t used for the estimate L ~ 3.4 um is not stated: 50 nm of gold, or 55 nm with the Ti/Cr
+    interlayer. Taken as 50 nm (the modified layer of 2 um is "40 times that of the Au").
+- id: q_multilayer_model
+  kind: unstated_model
+  about: [multilayer_wavelength, factor_modified_printed]
+  text: >
+    The analysis behind Fig. 3 and the "factor of 7" is not given; the record's composite-plate model is a
+    reconstruction. It gives a factor of about 6.6 and L about 22 um for t1 = 2 um, E1 = 80 MPa, with an added
+    Poisson's ratio for the modified layer. Fig. 3 itself (read in the figure pass) would test the
+    reconstruction over t1/t from 0 to 50 for E1/Ep = 2 and 4.
+- id: q_eq1_inputs
+  kind: unstated_input
+  about: [thermal_stress_eq1]
+  text: >
+    Eq. 1 cannot be run on this paper's values: the thermal expansion coefficients are given only as the ratio
+    alpha_p ≈ 20 alpha_m, and the deposition temperature T_D of the PDMS surface is not stated (the substrate is
+    "warm (~110 degC)" in the Fig. 2 caption, 300 degC with external heating). No stress, critical temperature
+    drop or onset strain is computed in the paper, so the claim that the model "correctly estimates the
+    circumstances in which waves initiate" has no number to check.
+  citation: {page: 3, printed_page: "148", quote: "This model correctly estimates the circumstances in which waves", where: text}
+- id: q_nine_times
+  kind: reading
+  about: [cmp_L_eq3_vs_measured, L_measured]
+  text: >
+    "Approximately nine times larger" compares the estimate ~3.4 um with a representative observed wavelength of
+    about 30 um (the Fig. 1 sketch shows 30 um); the observed range 20-50 um is 6 to 15 times the estimate. The
+    ratio itself is not entered.
+- id: q_t_fig3_inset
+  kind: reading
+  about: [t_film_added, q_t_which, run_multilayer_modified_pdms]
+  text: >
+    Audit: the inset of Fig. 3 (p. 3) labels the top layer of thickness t as "Au/Ti", which points to t = 55 nm
+    (gold plus titanium) rather than the 50 nm of gold taken in t_film_added; the text's "40 times that of the Au"
+    points to 50 nm. With 55 nm, 61t gives 3.4 um, the printed estimate. The first reader's choice is kept, with
+    55 nm as its alternative; which thickness the authors put in Eq. 3 and Fig. 3 is open.
+  citation: {page: 3, printed_page: "148", quote: "with a modified layer of PDMS at the", where: "Fig. 3 inset"}
+- id: q_fig3_t55
+  kind: reading
+  about: [fig3_E1Ep4, fig3_E1Ep2, t_film_added, q_t_which, q_t_fig3_inset, cmp_fig3_E1Ep4, cmp_fig3_E1Ep2]
+  text: >
+    Figure pass: the curves of Fig. 3, read by code, start at about 3.7 um at t1/t = 1 (both curves
+    coincide there). Eq. 3's first form gives 3.32 um for t = 50 nm and 3.65 um for t = 55 nm, and the
+    printed 61t gives 3.05 or 3.36 um; so the figure is drawn with t near 55 nm (Au plus Ti, as its inset
+    labels the layer) and the full Poisson factors of Eq. 3, not with 61t. The record's composite-plate
+    reconstruction with t = 55 nm comes within about 5% of both curves from t1/t = 5 to 54, a little
+    above them beyond t1/t = 15 (E1/Ep = 4: 12.4 against 12.0 um at 20, 30.1 against 29.1 um at 50);
+    with the added t = 50 nm it is about 6-11% below them. This bears on q_t_which and q_t_fig3_inset: Fig. 3 points to 55 nm.
+  citation: {page: 3, printed_page: "148", quote: "How the wavelength changes with a modified layer of PDMS at the", where: "Fig. 3"}
+- id: q_fig4a_l
+  kind: unexplained_difference
+  about: [sx_fig4a, sy_fig4a, step_stress_eq4, l_over_t_eq5_printed, cmp_fig4a_sx, cmp_fig4a_sy]
+  text: >
+    Figure pass: the curves of Fig. 4a, read by code against its x scale (0 and 20 um) and its marked
+    sigma_0, decay with a length of about 3.4 um: sigma_x is 0.45 sigma_0 at 2 um and 0.76 sigma_0 at 5 um,
+    which Eq. 4a gives for l of 3.3-3.5 um. Eq. 5 for 50 nm of gold on PDMS gives l ≈ 1,060t ≈ 53 um, for
+    which sigma_x would be only 0.04 sigma_0 at 2 um and 0.31 sigma_0 at 20 um; the figure is not drawn
+    with the transition length the text computes (the paper says the transition length is 17 times the
+    wavelength, while the drawn decay length is about one Eq. 3 wavelength). The value of l used for the
+    figure is not stated. The shape of sigma_y agrees with Eq. 4b's minimum (1 - nu_m) sigma_0 = 0.67
+    sigma_0 at the step (about 0.75 read at x = ±1 um).
+  citation: {page: 3, printed_page: "148", quote: "PDMS (from equations (4a) and (4b))", where: "Fig. 4a"}
+- id: q_depth_no_model
+  kind: unstated_model
+  about: [depth_unheated, depth_300C]
+  text: >
+    Audit: the paper measures crest-to-trough depths (1.5 um without external heating, 3.9 um at 300 degC) but
+    gives no model or strain for the amplitude, so these measurements are not compared here. A post-buckling
+    amplitude law from another record could predict them only with an added mismatch strain, which this paper
+    does not state (q_eq1_inputs).
+- id: q_richman_thickness_choice
+  kind: choice
+  about: [wavelength_eq3, wavelength_eq3_simplified, Em_brain_added, Ep_brain_added, richman1975/t_27wk, richman1975/t_normal_fetus, richman1975/l_measured_27wk]
+  text: >-
+    (Cross-validation against richman1975, job 2026-11-14.) The 8.5 mm intersulcal distance belongs to
+    richman1975's 27-week specimen, whose cortical thickness note 18 gives as ≈ 1.7 mm, while richman1975's
+    own prediction uses t ≈ 1.0 mm for the normal fetus. Which thickness is the measurement's condition is
+    open, so Eq. 3 is run with both. All the validations rest on the added moduli Em/Ep = 10 (richman1975's
+    modelling choice, not a measurement); since L scales as (Em/Ep)^(1/3), the verdicts test that choice as
+    much as Eq. 3. Eq. 3 is also stated for a stiff film on a compliant substrate, and Em/Ep = 10 is only
+    moderately large. The composite-plate reconstruction multilayer_wavelength is not run on the cortex: with
+    E1 = E2 the two strata are one plate of thickness t1 + t2 and it reduces to Eq. 3.
+- id: q_no_validation_from_richman1975
+  kind: choice
+  about: [L_measured, depth_unheated, depth_300C, richman1975/plate_on_foundation, richman1975/wavelength_from_thickness, richman1975/plate_stiffness_sensitivity]
+  text: >-
+    (Cross-validation job 2026-11-14.) No model of richman1975 is validated against this record's
+    measurements. Its plate_on_foundation gives l/t and a critical stress ratio, which this paper does not
+    measure (it prints wavelengths of 20-50 um and depths, not their ratio to the thickness, and no stress); it
+    is moreover a reconstruction for two incompressible strata with Ecore/E1 near 1/10, far from gold on PDMS
+    (Em/Ep about 4000, nu_m = 0.33). wavelength_from_thickness takes l/t from a datum, and the only printed l/t
+    (8, Fig. 4A) is for the brain's Ecore/E1 = 1/10, not for these films. No model of richman1975 gives a
+    wrinkle depth. Neither paper cites the other.
+- id: q_stafford_fig1b_film
+  kind: unexplained_difference
+  about: [wavelength_eq3, wavelength_eq3_simplified, Ep_stafford_added, stafford2004/h_fig1b, stafford2004/d_fig1b_caption, stafford2004/q_fig1b_inconsistent]
+  text: >-
+    (Cross-validation against stafford2004, job 2026-11-14.) Eq. 3 with stafford2004's PS modulus 3.4 GPa
+    and h ≈ 100 nm gives about 5 um for the film of its Fig. 1b, against the printed 8 um: not reproduced,
+    for any Ep in 1.4-2.1 MPa. stafford2004's own record finds the same with its Eq. 1
+    (stafford2004/q_fig1b_inconsistent), and its Fig. 2b puts an 8 um wavelength at a PS film of about
+    150 nm. The miss points at stafford2004's printed thickness (or film) rather than at Eq. 3, which
+    carries all ten Fig. 2b wavelengths with the same modulus (val_eq3_stafford_fig2b, a fit).
+  citation: {none: "the difference is between two records; stafford2004 p. 2 prints the thickness and wavelength"}
+- id: q_stafford_unused
+  kind: choice
+  about: [wavelength_eq3, multilayer_wavelength, critical_stress_eq2, stafford2004/d_osg, stafford2004/E_fig3_indentation, stafford2004/E_fig4_indentation, stafford2004/E_fig3_siebimm, stafford2004/E_fig4_siebimm]
+  text: >-
+    (Cross-validation against stafford2004, job 2026-11-14.) Not used: the organosilicate wavelength
+    d_osg ("of the order of 30 µm", no verdict possible, and no modulus printed for that film alone); the
+    moduli of Figs. 3 and 4 (no model here gives a film modulus; Eq. 3 inverted is stafford2004's own Eq. 2,
+    already in that record); and the 0.3 um amplitude of Fig. 1b (no model here gives an amplitude, and the
+    applied strain is not printed). The multilayer reconstruction is not run: stafford2004's PDMS has no
+    modified surface layer (0.5 min of UV/ozone "does not lead to significant changes in the surface modulus
+    of the PDMS", stafford2004 p. 5), so it would reduce to Eq. 3. Eq. 2 gives a critical stress, which
+    stafford2004 does not measure. Only the Fig. 1b wavelength is a test; the Fig. 2b wavelengths are a fit,
+    since stafford2004's 3.4 GPa was inferred from them by Eq. 2.
+  citation: {none: "a choice of this cross-validation job"}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [wavelength_eq3, wavelength_eq3_simplified, multilayer_wavelength, critical_stress_eq2, L_measured, depth_unheated, depth_300C]
+  text: >-
+    (Cross-validation against tallinen2015, job 2026-11-14.) No validation entered, in either direction.
+    tallinen2015 holds no measurement: its data are its own Eq. 1 and finite-element results, the
+    modulus ratios it chooses, and tissue values it takes from other works. So no model here has anything
+    there to predict. In the other direction, tallinen2015's models give only dimensionless ratios (l/a, l/h,
+    A/h, growth thresholds), and the measured periods (L_measured) and depths here are lengths. Neither
+    paper cites the other. The stiff-film limit shared with Eq. 3 is model against model, related in
+    tallinen2015/relations.yaml. See tallinen2015/q_no_validation_bowden1998.
+  citation: {none: "a choice of this cross-validation job"}
+- id: q_no_validation_shyer2013
+  kind: choice
+  about: [wavelength_eq3, wavelength_eq3_simplified, multilayer_wavelength, multilayer_wavelength_ratio, critical_stress_eq2, shyer2013/spacing_fig4b, shyer2013/spacing_fig6c, shyer2013/mu_endo_fig4b, shyer2013/mu_mes_fig4b, shyer2013/mu_ratio_fig4b, shyer2013/modulus_ratio_chick_text]
+  text: >-
+    (Cross-validation against shyer2013, job 2026-11-18.) No validation was entered. shyer2013 cites this
+    paper (its ref. 15) only for a qualitative pattern: "a thin layer atop an elastic substrate may take on a
+    zigzag topography when it is compressed biaxially" (shyer2013 p. 3). That is a trend, and shyer2013 does
+    not quantify it as a pattern-selection measurement. The one measurement Eq. 3 might predict is the fold
+    spacing over endoderm thickness (shyer2013/spacing_fig4b, chick; spacing_fig6c, mouse). In Eq. 3,
+    L/t depends only on Em/Ep, and shyer2013 measures mu_e and mu_m (Figs. 4B, 6C). The comparison was
+    still not entered, for three reasons. (1) The measurements are curves indexed by embryonic age.
+    Moduli are plotted only at E8 and E10 (chick) and E14.5 (mouse), and no model here has an age input
+    to sweep, so the model cannot be run at each measured point. (2) shyer2013 measures shear moduli,
+    while Eq. 3 takes Young's moduli. Their ratios are equal only if the two tissues have the same
+    Poisson ratio, which neither paper states. (3) Eq. 3 is the onset wavelength of a stiff film on a
+    compliant half-space. In the gut, the mesenchyme is about three endoderm thicknesses deep (stress-free
+    (he + hm)/he = 4, shyer2013/stressfree_fig4b) and is confined by muscle. The tissue is also compressed
+    far past onset (circumferential ratio 0.55). shyer2013 itself says the wavelength is "comparable to
+    the thickness of the endoderm-mesenchyme composite" (p. 5), not to a film-on-half-space scale. A
+    validation would rest on these mappings more than on Eq. 3; the wrinkling laws of finite-depth
+    substrates (tallinen2015, huang2005) are the better candidates. No model of shyer2013 predicts a
+    measurement here: its models give gut compression ratios, stress-free schedules and an unrunnable
+    finite-element code, none of which apply to gold films on PDMS.
+  citation: {none: "a choice of this cross-validation job"}
+- id: q_no_validation_trujillo2008
+  kind: choice
+  about: [wavelength_eq3, wavelength_eq3_simplified, multilayer_wavelength, multilayer_wavelength_ratio, critical_stress_eq2, transition_length_eq5, L_measured, depth_unheated, depth_300C, trujillo2008/ec_mean_modulus_series, trujillo2008/ec_mean_thickness_series, trujillo2008/hh0_onset_measured]
+  text: >-
+    (Cross-validation against trujillo2008, job 2026-11-18.) No validation entered, in either direction.
+    trujillo2008 cites this paper (its ref. 11) only as an example of the wrinkling of "thin rigid films on
+    soft substrates" (trujillo2008 p. 2). It contrasts that wrinkling with the creasing of uncapped gels
+    bonded to rigid substrates, which it calls distinct in mechanics and conditions. Its measurements are
+    critical compressive strains for creasing, free swelling ratios, crosslinker contents and thickness
+    swelling ratios at onset. The models here describe a stiff film on a compliant half-space and give
+    wavelengths, transition lengths, a critical stress and a thermal stress. None of them gives a crease
+    strain, and the gels have no stiff film for Eq. 2 or Eq. 3 to describe. In the other direction,
+    trujillo2008's models (the Biot equibiaxial threshold and swelling conversions) give strains and
+    ratios, not the wrinkle periods or depths measured here. See trujillo2008/q_no_validation_bowden1998.
+  citation: {none: "a choice of this cross-validation job"}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [wavelength_eq3, wavelength_eq3_simplified, multilayer_wavelength, multilayer_wavelength_ratio, critical_stress_eq2, transition_length_eq5, transition_length_eq5_simplified, step_stress_eq4, L_measured, depth_unheated, depth_300C, wang2014/mu_s_ecoflex, wang2014/mu_f_sylgard_range, wang2014/H_f_range, wang2014/adhesion_fig3_lp1, wang2014/tension_fig13a, wang2014/exp_wrinkling_fig7a]
+  text: >-
+    (Cross-validation against wang2014, which cites this paper as its ref. 8; job 2026-11-18.) No
+    validation is entered, in either direction. wang2014 cites this paper only as an example of wrinkling
+    from thermal mismatch (wang2014 p. 1). wang2014 measures the shear moduli of the Ecoflex substrate and
+    the Sylgard films, a film thickness range of ~21 to ~583 um, peel adhesion energies (Fig. 3), uniaxial
+    tension curves (Fig. 13), and the categorical initial modes observed at points of its lambda_p = 2
+    phase diagram (Fig. 7(a)). It prints no measured wrinkle wavelength, critical stress, transition length
+    or step stress profile, so none of the outputs of Eqs. 2-5 or of the multilayer reconstruction can be
+    compared. The mode points are placed by modulus ratio and adhesion and give no wavelength. wang2014's
+    films are also of similar stiffness to their substrates (mu_f/mu_s about 0.6 to 15), far from the
+    stiff-film limit of Eq. 3. In the other direction, wang2014's models give onset strains, a boundary
+    modulus ratio, a dimensionless wavenumber kH_f and a tension curve. None of these is the wavelength in
+    um or the depth measured here; see wang2014/q_no_validation_bowden1998.
+  citation: {none: "a choice of this cross-validation job"}
+- id: q_no_validation_jin2015
+  kind: choice
+  about: [wavelength_eq3, wavelength_eq3_simplified, multilayer_wavelength, multilayer_wavelength_ratio, critical_stress_eq2, transition_length_eq5, step_stress_eq4, thermal_stress_eq1, L_measured, depth_unheated, depth_300C, jin2015/exp_wrinkle_7p5to1_text, jin2015/exp_wrinkle_10to1_text, jin2015/exp_crease_15to1_text, jin2015/exp_crease_10to1_text, jin2015/film_H_exp, jin2015/substrate_H_exp, jin2015/wrinkle_eigen_uniaxial]
+  text: >-
+    (Cross-validation against jin2015, which cites this paper as its ref. 33; job 2026-11-19.) No
+    validation is entered, in either direction. jin2015 cites this paper only among examples where
+    wrinkles "are observed in experiments [1-3,33,34]" (jin2015 p. 1), for a stiff thin film on a
+    compliant thick substrate; it neither fits nor predicts any number of this paper. jin2015's
+    measurements are onset strains of wrinkles and creases in PDMS bilayers (7.5:1, 10:1 and 15:1 films on
+    a 30:1 substrate) and the film and substrate thicknesses. No model here gives a strain: Eq. 2 gives a
+    critical stress, Eqs. 3 and 5 lengths, Eq. 4 stress profiles, and Eq. 1 a thermal stress. Turning Eq. 2
+    into a strain would need a constitutive step this paper does not state, and the film moduli of jin2015's
+    samples are not printed (jin2015/q_exp_moduli), so Eq. 2 could not be run on them anyway. jin2015's
+    films are also only a few times stiffer than their substrates, far from Eq. 2's stiff-film limit.
+    In the other direction, see jin2015/q_no_validation_bowden1998.
+  citation: {none: "a choice of this cross-validation job"}

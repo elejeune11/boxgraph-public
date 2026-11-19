@@ -1,0 +1,38 @@
+# Relations between the plotting scripts' formulas and the paper's printed models. No relation is stated in
+# words by either source; each is proposed from the shared symbols (the code's ratio_shrink gamma is the
+# SI's Gram-matrix factor, gamma = A_0/A_i = 1/(1 + epsilon_a)).
+- id: rel_code_prestress_main
+  kind: same_as
+  a: fierling2022/prestress_main
+  b: fierling_code/prestrain_from_shrink
+  mapping: {gamma: "1/(1 + eps)", chi: "chi"}
+  output_map: {sigma_a: sigma_a}
+  regime: {chi: [1, 100], eps: [0.01, 6], theta: [0, 0.3]}
+  provenance: proposed
+  reason: >
+    The pre-stress the released plots draw, siga(x) = chi*(1-x)/x of the shrink ratio x (settings.plot line 9),
+    is the main text's sigma_a = chi_2D epsilon_a (p. 4) once x = gamma = A_0/A_i = 1/(1 + epsilon_a), as the
+    plot labels epsilon_a^m = 0.43 and 5.25 at gamma = 0.7 and 0.16 imply (time_profile_stress.plot lines 14-24).
+- id: rel_code_prestress_si
+  kind: same_as
+  a: fierling2022/prestress_si
+  b: fierling_code/prestrain_from_shrink
+  mapping: {gamma: "1/(1 + eps)", chi: "chi"}
+  output_map: {sigma_a: sigma_a}
+  regime: {chi: [1, 100], eps: [0.01, 6], theta: [0, 0.3]}
+  provenance: proposed
+  reason: >
+    The SI prints sigma_a = chi_2D (gamma - 1)/gamma (p. 21) for the same Gram-matrix factor gamma that the code
+    calls ratio_shrink; the code computes chi (1 - gamma)/gamma. Proposed to test whether the printed SI form is
+    the one the released code uses (it differs by sign, the record's possible_error on the SI equation).
+- id: rel_code_prestress_si_sign
+  kind: same_as
+  a: fierling2022/prestress_si_sign
+  b: fierling_code/prestrain_from_shrink
+  mapping: {gamma: "1/(1 + eps)", chi: "chi"}
+  output_map: {sigma_a: sigma_a}
+  regime: {chi: [1, 100], eps: [0.01, 6], theta: [0, 0.3]}
+  provenance: proposed
+  reason: >
+    The sign-corrected variant of the SI's pre-stress, sigma_a = chi_2D (1 - gamma)/gamma, is the formula the
+    released settings.plot uses (siga(x) = chi*(1-x)/x), with x the saved states' ratio_shrink = gamma.

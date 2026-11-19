@@ -30,6 +30,12 @@ PURPOSES = {
 # a comparison computed by a corrected variant of a misprinted model is kept apart from the paper as printed
 PURPOSES |= {f"{p}, corrected": f"{d[:-1]}, computed with a corrected variant of a misprinted model: what the stated correction explains."
              for p, d in list(PURPOSES.items())}
+# a scaling law printed without its prefactor, and a model the reader built, are kept apart as well
+_BASE = dict(PURPOSES)
+PURPOSES |= {f"{p}, prefactor unknown": f"{d[:-1]}, through a scaling law printed without its prefactor: judged on its shape only."
+             for p, d in _BASE.items()}
+PURPOSES |= {f"{p}, reader's model": f"{d[:-1]}, computed with a model the reader built, not the paper's own analysis."
+             for p, d in _BASE.items()}
 VERDICTS = ("reproduced", "close", "not reproduced", "no verdict")
 EVIDENCE = ("comparison", "relation", "cited", "cross_check", "validation", "figure", "refinement", "family", "question")
 
@@ -162,7 +168,16 @@ def overview_data(syn: dict) -> dict:
         out_links.append(x)
     families = sorted(({"models": sorted(f), "sources": sorted({_src(m) for m in f})} for f in syn["families"]),
                       key=lambda f: f["models"])
-    return {"sources": sources, "links": out_links, "families": families}
+    n_other = sum(s["kind"] in ("software", "dataset") for s in sources)
+    counts = " · ".join(_count(n, one, many) for n, one, many in (
+        (len(sources) - n_other, "paper", "papers"),
+        (n_other, "source of code and data", "sources of code and data"),
+        (len(out_links), "tested link", "tested links")))
+    return {"sources": sources, "links": out_links, "families": families, "counts": counts}
+
+
+def _count(n: int, one: str, many: str) -> str:
+    return f"{n} {one if n == 1 else many}"
 
 
 def _weight(x: dict) -> float:
@@ -843,8 +858,6 @@ __NOTICE__
   function home() {
     var paras = (D.intro || []).map(function (p) { return "<p>" + esc(p) + "</p>"; });
     var lead = paras.slice(0, 1).join(""), more = paras.slice(1).join("");
-    var nArt = D.sources.filter(function (s) { return s.kind !== "software" && s.kind !== "dataset"; }).length;
-    var nOther = D.sources.length - nArt;
     var cases = D.case_studies.length ? D.case_studies.map(function (c) {
       return '<a class="case" href="#case-' + esc(c.id) + '">' + (c.teaches ? '<div class="teaches">' + esc(c.teaches) + "</div>" : "") +
         "<h3>" + esc(c.title) + "</h3><p class=\"muted\">" + esc(c.summary) + "</p></a>"; }).join("")
@@ -854,7 +867,7 @@ __NOTICE__
         "<td>" + esc(kindName[s.kind] || s.kind) + '</td><td class="num">' + s.models.length + '</td><td class="num">' + s.verdicts.length + "</td><td>" + bar(s.checked) + "</td></tr>"; }).join("");
     var outl = (D.links_out || []).map(function (l) { return '<a href="' + esc(l.href) + '" target="_blank" rel="noopener">' + esc(l.text) + "</a>"; }).join(" · ");
     app.innerHTML =
-      '<header class="head"><div class="eyebrow">' + nArt + " papers · " + nOther + " sources of code and data · " + D.links.length + " tested links</div>" +
+      '<header class="head"><div class="eyebrow">' + esc(D.counts) + "</div>" +
       "<h1>" + esc(D.title) + '</h1><div class="lede">' + lead + "</div></header>" +
       '<section aria-labelledby="g-h"><div class="graphhead"><h2 id="g-h" class="eyebrow" style="font-family:var(--body);font-size:12px">What was tested, and between what</h2>' +
       '<div class="seg" role="group" aria-label="View"><button type="button" id="view-full" aria-pressed="false">Everything</button><button type="button" id="view-sources" aria-pressed="false">Sources only</button></div></div>' +

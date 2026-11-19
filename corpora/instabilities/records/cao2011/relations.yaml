@@ -1,0 +1,83 @@
+# Relations to biot1963. Cao & Hutchinson restate Biot's wrinkling result (Eq. 1.1) and solve "the Biot
+# wrinkling problem" again in their own variables (Eqs. 2.6-2.8). Biot's models take his load parameter
+# zeta = P/(2 mu) as an input; Cao's Eq. 2.8 has its root built in, so the regime is pinned at the root of
+# Biot's cubic (Eq. 2.9), zeta = 0.8392867552141612.
+- id: rel_biot_k_ratio
+  kind: same_as
+  a: biot1963/decay_k_eq28
+  b: cao2011/biot_eq28
+  mapping: {lam3: "1"}
+  output_map: {ratio: k}
+  regime: {zeta: [0.8392867552141612, 0.8392867552141612]}
+  provenance: stated
+  citation: {page: 2, quote: "Biot found that bifurcation into in-plane wrinkling modes occurs", where: "Eq. 1.1"}
+  assumptions:
+    - "Biot's decay factor k equals the stretch ratio lambda_1/lambda_2 in both his cases (k = lambda^2 in plane strain, Eq. 4.11; k = lambda^(3/2) in uniaxial compression), which is Cao's ratio 1/r = l1/l2 at the critical state"
+    - "Cao's ratio does not depend on lam3 (any fixed out-of-plane stretch), so lam3 = 1 is taken; Biot's zeta is set to the root of his cubic"
+- id: rel_biot_plane_stretch
+  kind: same_as
+  a: biot1963/crit_stretch_plane
+  b: cao2011/biot_eq28
+  mapping: {lam3: "1"}
+  output_map: {coef: lam}
+  regime: {zeta: [0.8392867552141612, 0.8392867552141612]}
+  provenance: stated
+  citation: {page: 2, quote: "Biot found that bifurcation into in-plane wrinkling modes occurs", where: "Eq. 1.1"}
+  assumptions:
+    - "plane strain, lambda_3 = 1, where Cao's lambda_W = 0.5437/sqrt(lambda_3) is Biot's critical stretch of Eq. 4.3; Cao's coef = lambda_W sqrt(lambda_3) then equals lambda_W"
+    - "Biot's zeta is set to the root of his cubic (Eq. 2.9)"
+#
+# Relation to hong2009. Cao & Hutchinson restate Hong et al.'s crease threshold (p. 2, Eq. 1.2): "for any fixed
+# l3", a crease is favourable when l1/l2 = 0.42, or l1 = lC = 0.65/sqrt(l3), eps_C = 1 - lC. hong2009 writes the
+# same condition (p. 3) as lambda_1 sqrt(lambda_2) = 1 - eps_c = 0.65 and lambda_3/lambda_1 = 1/(1 - eps_c)^2 = 2.4
+# (Eq. 5). The axis labels differ: cao2011's 2 is the surface normal and 3 the held out-of-plane stretch;
+# hong2009's 3 is the surface normal and 2 the held in-plane stretch. So cao2011's l1/l2 is hong2009's
+# lambda_1/lambda_3 = (1 - eps)^2, and cao2011's l3 is hong2009's lambda_2. The helper hong2009/gps_critical_strain
+# is hong2009's form solved for the strain 1 - lambda_1 at a given lambda_2.
+# Not entered: cao2011's coef = sqrt(l1/l2) against hong2009/plane_strain_stretch (lambda_1 = 1 - eps) holds by the
+# same mapping at lambda_2 = 1 and is the plane-strain point of the relation below; hong2009/crease_zero_fig3 is the
+# finite-element zero itself, which cao2011 takes as a number (0.42, 0.65; cited.yaml), not as a model.
+- id: rel_hong_crease_gps_same_as_cao_eq12
+  kind: same_as
+  a: hong2009/gps_critical_strain
+  b: cao2011/crease_eq12
+  mapping: {ratio: "(1 - eps)**2", lam3: "lam2"}
+  output_map: {eps_C: eps1}
+  regime: {eps: [0.3, 0.5], lam2: [0.7, 1.5]}
+  provenance: stated
+  citation: {page: 2, printed_page: "95", quote: "a crease is energetically favourable for compression in the fundamental state exceeding", where: "Eq. 1.2"}
+  assumptions:
+    - "cao2011's l1/l2 (2 the surface normal) is hong2009's lambda_1/lambda_3 (3 the surface normal), the reciprocal of hong2009's Eq. 5 ratio: l1/l2 = (1 - eps)^2"
+    - "cao2011's fixed out-of-plane stretch l3 is hong2009's prescribed in-plane stretch lambda_2 normal to the compression"
+    - "both strains are nominal along the compression, 1 - lambda_1 (cao2011 p. 2: eps_C = 1 - lC; hong2009 p. 3: lambda_1 = 1 - eps_c)"
+    - "regime eps 0.3-0.5 spans hong2009's crease (0.35) and Biot (0.46) strains; lam2 0.7-1.5 covers held stretches on either side of plane strain"
+#
+# Relation to trujillo2008. cao2011 cites Trujillo et al. only as an observation of surface instabilities
+# (p. 1); it states no relation to any of trujillo2008's models. Proposed: trujillo2008's Biot condition
+# lambda1^2 lambda3 = 0.296 specialised to equibiaxial compression (e_c = 1 - lambda, lambda^3 = 0.296) is
+# cao2011's Eq. 1.1 at l3 = l1 = lW. With l1 l2 l3 = 1, cao2011's l1/l2 is l1^2 l3, trujillo2008's product;
+# cao2011's lW = (r l3)^(-1/2) with l3 = lambda = lam_prod^(1/3) gives lW^3 = 1/r. cao2011's Eq. 2.8 has the
+# root built in, so the regime is pinned at trujillo2008's lam_prod = 1/r (trujillo2008 prints 0.296).
+# Not entered: trujillo2008's mean_ec_* and ec_from_swelling are processing of measurements, and the other
+# trujillo2008 models (modulus, thickness ratio) have no counterpart in cao2011. cao2011/crease_eq12 at
+# l3 = l1 gives an equibiaxial crease strain 1 - 0.65^(2/3) = 0.25 against trujillo2008's measured 0.33; that
+# is a validation against data, not a relation between models.
+- id: rel_trujillo_equibiaxial_same_as_cao_biot
+  kind: same_as
+  a: trujillo2008/biot_equibiaxial
+  b: cao2011/biot_eq28
+  mapping: {lam3: "lam_prod**(1/3)"}
+  output_map: {eps_W: e_c}
+  regime: {lam_prod: [0.29559774252208487, 0.29559774252208487]}
+  provenance: proposed
+  reason: >
+    Both are Biot's wrinkling condition for a neo-Hookean half-space. trujillo2008 (p. 2) writes it as
+    lambda1^2 lambda3 = 0.296 and takes equibiaxial compression, lambda1 = lambda3 = lambda, e_c = 1 - lambda;
+    cao2011 (Eq. 1.1) writes l1/l2 = 0.2956, i.e. l1^2 l3 = 0.2956 by incompressibility, with lW = 0.5437/sqrt(l3).
+    Setting cao2011's out-of-plane stretch l3 equal to the critical in-plane stretch lambda (equibiaxial) gives
+    the same critical strain.
+  assumptions:
+    - "trujillo2008's 1 and 3 are the two in-plane directions and 2 the surface normal, as in cao2011, so trujillo2008's lambda1^2 lambda3 is cao2011's l1^2 l3 = l1/l2"
+    - "Biot's condition depends only on the homogeneous state at bifurcation, so cao2011's 'l3 held fixed' during the incremental bifurcation admits l3 = l1 at the critical state of equibiaxial loading"
+    - "both strains are nominal along the compression, 1 - lambda (trujillo2008 p. 2; cao2011 p. 2)"
+    - "cao2011's root is built in, so trujillo2008's lam_prod is pinned at 1/r = 0.29560, the value it prints as 0.296"

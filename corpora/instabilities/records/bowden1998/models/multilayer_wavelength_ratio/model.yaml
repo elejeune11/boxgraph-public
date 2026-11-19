@@ -1,0 +1,25 @@
+id: multilayer_wavelength_ratio
+name: wrinkle wavelength against t1/t for a given E1/Ep (Fig. 3), composite-plate reconstruction
+role: model
+stated: {page: 3, printed_page: "148", quote: "How the wavelength changes with a modified layer of PDMS at the", where: "Fig. 3"}
+reconstructed: >
+  The paper gives no equation or method for the multilayer wavelength plotted in Fig. 3. This is the
+  record's composite-plate stand-in (multilayer_wavelength), written in the variables of Fig. 3: the
+  thickness ratio t1/t on its x axis and the modulus ratio E1/Ep that labels its curves, so that it can
+  be swept along the figure's curves.
+from_words: true
+equation: "L = 2 pi (4 D / E_p_bar)^(1/3), D = sum_i E_i_bar [t_i^3/12 + t_i (z_i - z_n)^2], t1 = (t1/t) t, E1 = (E1/Ep) Ep"
+built_from: [multilayer_wavelength]
+inputs:
+  Em: {quantity: film_youngs_modulus, unit: Pa}
+  nu_m: {quantity: film_poisson_ratio, unit: dimensionless}
+  t: {quantity: film_thickness, unit: nm}
+  E1_over_Ep: {quantity: modified_to_substrate_modulus_ratio, unit: dimensionless}
+  nu_1: {quantity: modified_layer_poisson_ratio, unit: dimensionless}
+  t1_over_t: {quantity: modified_to_film_thickness_ratio, unit: dimensionless}
+  Ep: {quantity: substrate_youngs_modulus, unit: Pa}
+  nu_p: {quantity: substrate_poisson_ratio, unit: dimensionless}
+outputs:
+  L: {quantity: wrinkle_wavelength, unit: um}
+settings: {}
+stochastic: false

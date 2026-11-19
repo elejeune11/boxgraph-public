@@ -1,0 +1,17 @@
+id: eq1_threshold
+name: growth at which a sinusoidal mode of given wavelength becomes linearly unstable (Eq. 1)
+role: model
+stated: {page: 2, printed_page: "022720-2", quote: "we conclude the layer becomes linearly unstable when g", where: Eq. 1}
+equation: >
+  det[[b e^(-ak/g^2), b e^(ak/g^2), 2 e^(-ak) g^4, 2 e^(ak) g^4],
+      [-2 g^2 e^(-ak/g^2), 2 e^(ak/g^2) g^2, -b e^(-ak), b e^(ak)],
+      [b eta/2 + 1, b eta/2 - 1, eta g^4 + g^2, g^4 eta - g^2],
+      [eta + 1, 1 - eta, b eta/(2 g^2) + 1, 1 - b eta/(2 g^2)]] = 0, b = 1 + g^4
+inputs:
+  eta: {quantity: modulus_ratio, unit: dimensionless}
+  l_over_a: {quantity: wavelength_over_deformed_thickness, unit: dimensionless, description: "l/a = 2 pi/(k a)"}
+outputs:
+  g: {quantity: growth_ratio, unit: dimensionless, description: "the smallest g > 1 at which the determinant vanishes"}
+settings:
+  g_max: 4.0
+  n_scan: 200

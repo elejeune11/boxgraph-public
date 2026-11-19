@@ -1,0 +1,15 @@
+id: fe_postbifurcation
+name: plane strain finite element simulation of post-bifurcation modes of the neo-Hookean bilayer (Sec. 4, ABAQUS)
+role: model
+stated: {page: 4, printed_page: "031019-4", quote: "simulations have been performed via the commercial software", where: Sec. 4}
+equation: "incompressible neo-Hookean film and substrate, CPE6MH hybrid elements, wavelength/element size about 100, imperfection 0.005h (buckle eigenmode) or u2 = 0.025h cos(kx1), width 5-10 wavelengths, depth > 10 wavelengths, displacement-controlled compression"
+inputs:
+  mu_ratio: {quantity: shear_modulus_ratio, unit: dimensionless}
+  lam01: {quantity: substrate_prestretch, unit: dimensionless}
+outputs:
+  e_PD: {quantity: period_doubling_onset_strain, unit: dimensionless}
+  e_MR: {quantity: mountain_ridge_onset_strain, unit: dimensionless}
+settings: {element: CPE6MH, wavelength_over_element_size: 100, imperfection_buckle: "0.005 h", imperfection_prestretch: "0.025 h"}
+runnable: false
+not_runnable_reason: "a large-deformation finite element analysis in the commercial code ABAQUS (Ref. 8) with mesh change steps for the prestretch; the mesh, model width, increments and the criterion used to call a mode's onset are not given, and a re-implementation is beyond a reading of this paper"
+stochastic: false

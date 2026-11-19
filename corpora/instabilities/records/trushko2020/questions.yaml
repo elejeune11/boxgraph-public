@@ -1,0 +1,312 @@
+- id: q_s21_factor
+  kind: choice
+  about: [critical_strain_factor10, critical_strain_s21, delta_c_s5, P_buckling_s5]
+  text: >-
+    Eq. S21 prints the numerical factor 30 (5/2)^(2/3) (about 55), but the order-of-magnitude
+    estimate of Section 5 says the factor "has been set to 10" without saying why. Both forms are
+    recorded; with the printed factor the threshold excess strain is larger than with 10.
+  citation: {page: 37, quote: "where the numerical factor has been set to 10 in Eq. S21"}
+- id: q_eq1_prefactor
+  kind: unstated_input
+  about: [lambda_from_eq1, pbuckling_eq1, lambda_eq1_text]
+  text: >-
+    Equation 1 is a scaling law printed without a prefactor, yet the main text derives a number
+    from it (lambda ~ 0.1 N/m from P ~ 100 Pa and K = 0.5 uN um). The prefactor used is not given;
+    the chain of Section 5 (factor 10 in Eq. S21, then P ~ lambda Delta/R) would fix one, but the
+    paper does not say that this is what was used for the main-text estimate.
+  citation: {page: 8, quote: "we estimated l z 0.1 N/m from Equation 1"}
+- id: q_eq1_duplicated
+  kind: reading
+  about: [pbuckling_eq1]
+  text: >-
+    Equation 1 is typeset twice on one line ("Pbuckling ~ lambda^(2/5) K^(3/5) / R^(11/5)
+    Pbuckling ~ lambda^(2/5) K^(3/5) / R^(11/5)"); read as a single relation, the same as Eq. S26.
+  citation: {page: 8, quote: "Hence, the pressure at the buck"}
+- id: q_friction_force
+  kind: unexplained_difference
+  about: [F_NS_text, F_NS_s8, Fbar_NS, friction_force_scale]
+  text: >-
+    The main text and figure legends give a friction force F_NS ~ 5.10^-3 uN (5 x 10^-9 N), while
+    Section 8 gives F_NS = Fbar_NS K (A^0)^(3/2) with Fbar_NS = 0.01, "which corresponds to
+    F_NS = O(10^-8) N". With K = 10^9 N/m^3 and A^0 = 300 um^2 the formula gives about ten times the
+    main-text value; Fbar_NS = 0.001, the lower end of the range explored, would give the main-text
+    value. Which value the simulations of Figs. 5 and 6 used is not stated.
+  citation: {page: 40, quote: "which corresponds to FN S = O(10−8 ) N"}
+- id: q_fit_K_method
+  kind: unstated_model
+  about: [fit_bending_rigidity, K_tissue_s5, K_tissue_table, phi_fig4i]
+  text: >-
+    How K = 0.5 ± 0.2 uN um was fitted is described three ways: from "the relation between
+    alpha^2/delta and P_B" (main text), from the pairs (delta/R, P_B R^3/K) (Methods S1 Section 4),
+    and as the green line alpha against P_B R^3 in Fig. 4I. The fitting criterion and how the
+    ± 0.2 was obtained are not stated. The record fits alpha(P_B R^3/K) to the 14 points of Fig. 4I
+    by least squares in angle, which is the reading the figure supports.
+  citation: {page: 8, quote: "tion between a2/d and PB, we found for the bending rigidity"}
+- id: q_fold_model_limit
+  kind: choice
+  about: [fold_elastica, fold_angle_vs_pressure, fit_bending_rigidity]
+  text: >-
+    The fold-shape curves of Fig. 4H are drawn for lambda R^2/K = 10^8; the record solves Eqs.
+    S28-S30 in the inextensible limit (lambda -> infinity), where the axial terms of Eq. S31 vanish.
+    The paper states that these relations are, to a good approximation, independent of lambda.
+    Signs: the paper's phi(S*) = alpha is taken as the tangent angle of the confining circle at the
+    contact point (-alpha in the record's orientation), and the contact point (sin alpha, cos alpha)
+    as being in units of R.
+  citation: {page: 36, quote: "most remarkably to a good approximation they are independent of the compressional modulus"}
+- id: q_s36_absolute
+  kind: unexplained_difference
+  about: [capsule_spring_s36, cmp_kcap_s36_measured, k_cap_table]
+  text: >-
+    Eq. S36 (K^cap = 4 sqrt(lambda^cap K^cap)/R), evaluated with the Table 1 values of lambda^cap,
+    K^cap and R, gives an empty-capsule spring constant about twice the measured 0.064 ± 0.003
+    uN/um. The paper uses only the ratio of spring constants with and without tissue (Eq. S37),
+    so this difference does not enter its estimate of lambda, but S35-S37 rest on the same
+    point-force scaling (Eq. S34, printed with "~") whose absolute value does not match the
+    measurement. Possible reasons, none stated: the flat 50 x 50 um indenter tip is not a point
+    force, the AFM modulus is an apparent modulus, or the prefactor 4 of the scaling is not exact.
+  citation: {page: 37, quote: "for capsules without tissues"}
+- id: q_sample_sizes
+  kind: reading
+  about: [k_cap_table, k_tissue_table]
+  text: >-
+    Table 1 gives n = 30 empty and n = 16 tissue-lined capsules for the spring constants; the
+    legend of Fig. 4J gives n = 31 and n = 17.
+  citation: {page: 9, quote: "Spring constant values of 2.5% alginate capsules with"}
+- id: q_audit_ratio_tilde
+  kind: reading
+  about: [spring_ratio_s5, bending_ratio_s5, lambda_ratio_s5, cmp_spring_ratio, cmp_bending_ratio, cmp_lambda_ratio]
+  text: >-
+    Audit: Section 5 prints the three ratios after a tilde ("K/K^cap ∼ 1.16 ± 0.12", "K/K^cap ∼ 0.03 ±
+    0.01", "λ/λ^cap ∼ 0.28 ± 0.24"), and the record enters them without it, so they get a verdict. The
+    same paragraph writes "K^cap ∼ 0.064 ± 0.003 µN/µm" for a value that Table 1 prints without a tilde,
+    so the tilde here seems to stand for "=" before a value with its SEM. The first reader's choice is
+    kept; with the tilde recorded, these three comparisons would get no verdict.
+  citation: {page: 37, quote: "we use the ratio between K/K cap ∼ 1.16 ± 0.12"}
+- id: q_fig4e_equation_reference
+  kind: possible_error
+  about: [critical_strain_s21]
+  text: >-
+    The legend of Fig. 4E says the dashed threshold line is "given by Equation S25", but Eq. S25 is the
+    pressure of the compressed ring. The threshold is Eq. S21, which Methods S1 Section 3 (p. 34) says
+    "is in qualitative agreement with numerical simulations" shown in Fig. 4e. The legend probably refers
+    to the wrong equation.
+  citation: {page: 9, quote: "The dashed line stands for the threshold given by Equation S25"}
+- id: q_fold_force_notation
+  kind: reading
+  about: [fold_angle_vs_pressure, fold_elastica]
+  text: >-
+    Section 4 (p. 36) writes the triad as "(α, δ/R, P_B R^3/K cos α)", which can be read as P_B R^3 cos α / K
+    or as P_B R^3 / (K cos α). With F_B = P_B R / cos α (p. 35) the dimensionless force F_B R^2/K is
+    P_B R^3 / (K cos α). Fig. 4I plots P_B R^3, and the record converts using P_B = F_B cos α / R (p. 37).
+    That is consistent with pp. 35 and 37, but the printed notation is ambiguous.
+  citation: {page: 36, quote: "we obtain the triad of parameters"}
+- id: q_sim_pressure_range
+  kind: reading
+  about: [P_sim_s8, F_cs_sim, sim_pressure_s42]
+  text: >-
+    The simulated pressure P ~ 0.17 kPa is computed from a cross-section force "between 0.5 uN
+    and 1 uN"; the run uses the middle of that range, as the build reads a printed range, so the
+    printed value is compared with an input the paper gives only as a range.
+  citation: {page: 40, quote: "a force applied by the tissue cross-section Fext between 0.5 µN and 1 µN"}
+# ---- second pass (figure readings) ----
+- id: q_growth_rate_fit
+  kind: unexplained_difference
+  about: [growth_rate_fit, cmp_growth_fig1f, growth_rate_text, fig1f_cells_data]
+  text: >-
+    The text gives a linear growth of 3.6 ± 0.1 cells per hour over 55 h (Fig. 1F). A least-squares line
+    through the plotted means of Fig. 1F has a steeper slope (the build reports it): the plotted mean
+    rises faster between about 15 and 40 h than at the start and end, so the curve is not linear. The
+    printed rate is close to the end-to-end rise of the plotted means over 55 h. How the rate and its
+    error were obtained (per capsule and averaged, on the means, over which interval) is not stated.
+  citation: {page: 4, quote: "number increased linearly with a rate of 3.6 ± 0.1 cells per"}
+- id: q_fig3g_range
+  kind: overstated_claim
+  about: [P_folding_measured, fig3g_pressure_data, cmp_P_fig3g_2p5_range]
+  text: >-
+    The text says the pressure at folding "was between 50 and 100 Pa for 1.5, 2, and 2.5% alginate".
+    In Fig. 3G the 2.5% point lies at about 35 Pa, with its SEM bar reaching up to about 52 Pa; the 1.5%
+    point is at the lower end of the range (about 52 Pa). The statement holds for the 1.5% and 2% means
+    only.
+  citation: {page: 5, quote: "and was between 50 and 100 Pa for 1.5, 2, and 2.5% alginate"}
+- id: q_fig3f_axis_label
+  kind: reading
+  about: [fig3f_1_data, fig3f_1p5_data, fig3f_2_data, fig3f_2p5_data]
+  text: >-
+    The lowest label of the pressure axis of Fig. 3F, at the x axis, is printed "-0.1" while the labels
+    above it are 0, 100, ..., 600 Pa, evenly spaced; the readings take that position as -100 Pa, as the
+    spacing gives. Its printed label is probably a leftover from an axis in kPa.
+  citation: {page: 8, quote: "Evolution of pressure (Pa) within capsules over time during epithelium proliferation"}
+- id: q_fig4j_means_reading
+  kind: reading
+  about: [cmp_k_empty_4j_label, cmp_k_tissue_4j_label, fig4j_empty_data, fig4j_tissue_data]
+  text: >-
+    The means of the points read from Fig. 4J agree with Table 1 but not with the five-digit means
+    printed above the boxes (0.06363 and 0.07437 N/m), within the precision those digits imply. The
+    reading finds 30 of the 31 black points and 16 of the 17 red points (touching points not all
+    separated), so this difference comes from the reading, not from the paper.
+  citation: {page: 9, quote: "Spring constant values of 2.5% alginate capsules with"}
+- id: q_s18_numerics
+  kind: unexplained_difference
+  about: [fold_small_strain_s17_s18, cmp_s18_figs6g, cmp_s17_figs6h, figs6g_alpha_data, figs6h_delta_data]
+  text: >-
+    Eq. S18, alpha = (2/5)^(1/3) (Delta/n)^(1/3) with n = 1, has the 1/3 slope of the paper's own
+    numerical alpha in Fig. S6G but lies about four times below it at every excess strain read, from
+    1.5e-4 to 0.09 (the build reports the values). Eq. S17 for delta comes closer to Fig. S6H (within
+    about a factor 1.5 at small excess strain). Possible reasons, none stated: alpha in Eq. S18 measured
+    differently from the plotted alpha (e.g. in other angular units or as another angle of the fold), a
+    misprinted prefactor, or n not 1 in the numerics. alpha of Fig. S6G is in degrees; Eq. S18 is taken
+    in radians.
+  citation: {page: 33, quote: "we deduce the power-law relations between the geometrical properties of the buckled ring"}
+- id: q_s26_numerics_prefactor
+  kind: unexplained_difference
+  about: [pbuckling_s26_normalized, cmp_s26_figs6c, pbuckling_eq1, lambda_eq1_text]
+  text: >-
+    Fig. S6C bears on q_eq1_prefactor. The paper's own numerics give P_buckling R^3/K = c (lambda R^2/K)^(2/5)
+    with one constant c for all five values of lambda R^2/K (the exponent of Eq. S26 holds; the build
+    reports c, of order 10^-3), and Fig. S6B gives the same c through Eq. S25 with the printed factor of
+    Eq. S21. With K = 0.5 uN um and R = 97 um, the prefactor that the main text would need to get
+    lambda of about 0.1 N/m from a pressure of about 100 Pa through Equation 1 is of order 10 (the
+    prefactor the build reports for cmp_P_eq1_measured), some four orders of magnitude larger. So the
+    main-text estimate did not use the prefactor of the paper's own ring numerics; what it used remains
+    unstated.
+  citation: {page: 28, quote: "Normalized buckling pressure (PBuckling R3 /K) as a function"}
+- id: q_figs1_caption_letters
+  kind: reading
+  about: [figs1g_means_data]
+  text: >-
+    The caption of Fig. S1 describes the panels as A-F, but the figure has panels A-G: caption E
+    ("phase-contrast ... image") describes panel F, and caption F ("Box-plot of mean capsule radius")
+    describes panel G; panel E (alginate-FITC and laminin) has no caption. The reading takes the box plot
+    of the caption to be panel G. Its line for 2.5% alginate (about 100 um) is a little above the Table 1
+    radius of 97 ± 1 um; the sample sizes of Fig. S1G are not given.
+  citation: {page: 23, quote: "Box-plot of mean capsule radius as a function of alginate solution"}
+- id: q_fig5gh_radial_scale
+  kind: reading
+  about: [fig5f_exp_data]
+  text: >-
+    (About Figs. 5G and 5H, which have no datum; listed with the fold-number histogram of the same
+    figure.) The polar histograms of Figs. 5G and 5H (angle between consecutive folds) cannot be read: their
+    radial count labels are not evenly spaced from the centre (in 5G, 0 to 2 spans about 35 px and 2 to 4
+    about 48 px at 600 dpi; in 5H the labels 0, 5, 15, 25, 35 and 0, 4, 12, 20, 28 are uneven too), so
+    the count a sector's length stands for is not defined by the figure.
+  citation: {page: 12, quote: "Angle distribution between consecutive folds for two"}
+- id: q_no_validation_shyer2013
+  kind: choice
+  about: [critical_strain_s21, fold_small_strain_s17_s18, pbuckling_eq1, fold_elastica]
+  text: >-
+    No cross-validation with shyer2013 was added, in either direction. This paper cites shyer2013 only
+    qualitatively (gut villi "compatible with shapes resulting from buckling", with confinement by
+    smooth muscle rather than an elastic shell) and compares none of its models with that paper's data.
+    (1) This record's models against shyer2013's measurements: the ring models are an inextensible or
+    compressible ring confined inside a rigid circle with no foundation (Eqs. S17-S30, Equation 1). They
+    return a critical excess strain, a buckling pressure, and fold depth and opening angle for a given
+    fold count n, which is an input, not an output. shyer2013 measures circumferential and longitudinal
+    compression ratios (0.5-0.66, far past any onset), fold spacing over endoderm thickness, and layer
+    shear moduli of an endoderm bonded to a soft mesenchyme confined by muscle. That is a bilayer on a
+    foundation, whose fold spacing is set by thickness and modulus ratio. None of those is the quantity
+    a model here returns under its own assumptions, and no pressure, bending rigidity or fold angle of
+    the gut is measured. (2) shyer2013's models against this record's measurements: they are the gut
+    simulation's stress-free layer schedules (in embryonic time, for chick and mouse), ratio arithmetic
+    on the gut's own measurements, a spot growth field and an FE energy minimisation that cannot be run.
+    None takes an MDCK monolayer in an alginate capsule as input or returns a buckling pressure, spring
+    constant, fold angle or fold count. See shyer2013/q_no_validation_trushko2020.
+  citation: {page: 4, printed_page: "657", quote: "villi in the mice gut (Shyer et al., 2013)", where: text}
+- id: q_no_validation_tallinen2015
+  kind: choice
+  about: [critical_strain_s21, pbuckling_eq1, fold_elastica, fig5f_exp_data, tallinen2015/first_unstable_mode, tallinen2015/mode_wavelength_h]
+  text: >-
+    No cross-validation with tallinen2015 was added, in either direction (job 2026-11-19). This paper
+    cites Tallinen et al. 2014 (gyrification), not tallinen2015, and neither paper compares its model
+    with the other's data. (1) tallinen2015 holds no measurement: its plotted points are finite-element
+    results and its other values are predicted, derived or reported, so this record's models have
+    nothing there to predict. (2) tallinen2015's models against this record's measurements: they give the
+    threshold growth ratio and the wrinkle wavelength (in layer thicknesses) of a growing neo-Hookean
+    layer bonded to a neo-Hookean half-space. Here the monolayer lines a thin alginate shell (19.9 um wall,
+    97 um radius), detaches from it and folds into the lumen in 1-3 folds set by the confinement; the
+    monolayer's modulus and thickness are not measured, and no measured quantity here is a growth ratio
+    or a wavelength in layer thicknesses. A fold count from tallinen2015's wavelength would rest on a
+    half-space and a bonding the experiment does not have. See tallinen2015/q_no_validation_trushko2020.
+  citation: {page: 13, printed_page: "666", quote: "the gut and the brain gyration (Savin et al., 2011; Tallinen", where: text}
+- id: q_no_validation_wang2014
+  kind: choice
+  about: [critical_strain_s21, pbuckling_eq1, pressure_compressed_ring, fold_elastica, capsule_bending_rigidity, capsule_compressional_rigidity, ref-mandal2014, wang2014/neo_hookean_uniaxial, wang2014/wrinkle_linear_stability]
+  text: >-
+    No cross-validation with wang2014 (Wang & Zhao 2014, film-substrate phase diagrams) was added, in either
+    direction (job 2026-11-19). The pair was suggested by ref-mandal2014, but that is Mandal, Wang, Vitiello,
+    Orellana & Balland (2014), Nat. Commun., cited (pp. 4-5) for a cellular traction force: a different Wang and
+    a different work. This paper never cites wang2014 and compares none of its models with that paper's data.
+    (1) This record's models against wang2014's measurements: the ring and capsule models return a critical
+    excess strain, a buckling pressure, fold shapes, and the capsule's bending and compressional rigidities
+    from E, h, nu. wang2014 measures shear moduli of Ecoflex and Sylgard, a film thickness range, peel-test
+    adhesion energies (Fig. 3), uniaxial tension curves (Fig. 13) and the observed initial mode of each
+    experiment on a flat bonded film (Fig. 7(a), recorded as its modulus ratio). None is a pressure, a ring
+    strain, a fold shape or a plate rigidity, and capsule_bending_rigidity run on a Sylgard modulus and
+    thickness would give a rigidity nobody measured. (2) wang2014's models against this record's measurements:
+    they give the wrinkling onset strain of a neo-Hookean film bonded to a prestretched neo-Hookean half-space,
+    the wrinkling/creasing boundary in mu_f/mu_s, and a neo-Hookean nominal stress in uniaxial tension. Here
+    the monolayer lines a thin alginate shell and folds into a fluid lumen with no substrate behind it; no
+    modulus ratio, onset strain or tension curve is measured (the capsule moduli come from AFM and indentation
+    as single values, not stress-stretch curves). See wang2014/q_no_validation_trushko2020.
+  citation: {page: 5, printed_page: "658", quote: "cell (Mandal et al., 2014). Dividing this value by the invagination", where: text}
+- id: q_no_validation_cerda2003
+  kind: choice
+  about: [capsule_bending_rigidity, capsule_compressional_rigidity, critical_strain_s21, pbuckling_eq1, fold_elastica, Kcap_table, E_capsule, h_capsule, nu_capsule, fig5f_exp_data, K_tissue_table, cerda2003/bending_stiffness, cerda2003/wrinkle_eq6_scaling, cerda2003/deep_substrate_wavelength, cerda2003/B_vesicle]
+  text: >-
+    No cross-validation with cerda2003 was added, in either direction (job 2026-11-19). This paper does not
+    cite cerda2003 (its Mahadevan references are Liang & Mahadevan 2009, Savin et al. 2011, Shyer et al. 2013
+    and Tallinen et al. 2014), and neither paper compares its models with the other's data. (1) This record's
+    models against cerda2003's measurements: cerda2003 measures only the Fig. 1 polyethylene sheet's length,
+    width, thickness and tensile strain and the pinched skin fold 2Hs ≈ 5 mm. These are inputs; no model here
+    returns a sheet dimension, a strain of a stretched sheet or a skin fold thickness. capsule_bending_rigidity
+    has the same form as cerda2003/bending_stiffness (E h^3/12(1 - nu^2)), but cerda2003 measures no bending
+    stiffness: its only B (B_vesicle) is derived from inputs it does not print. (2) cerda2003's models against
+    this record's measurements: cerda2003/bending_stiffness run on the measured capsule modulus, thickness and
+    the assumed nu = 1/2 gives a capsule bending rigidity, but this paper never measures one: Kcap_table and
+    Kcap_s5 are derived with the same formula, so setting them side by side is a same-formula check, not a
+    validation against a measurement. The wrinkle laws (Eq. 5, Eq. 6, the deep- and shallow-substrate limits)
+    give a periodic wavelength of a sheet bonded to a foundation or under tension. Here the monolayer presses
+    on a thin shell and folds inward, into a fluid lumen with nothing behind it, in 1-3 folds whose number
+    is set by the confinement (Fig. 5F); the shell resists only outward motion and is not a bonded foundation
+    of measured stiffness per area, and the monolayer's modulus and thickness are not measured (its bending
+    rigidity, K_tissue_table, is fitted to the fold shapes). A fold count from lambda ~ (B/K)^(1/4) would
+    rest on a foundation the experiment does not have and on a fitted B, and the law has an unknown
+    prefactor. See cerda2003/q_no_validation_trushko2020.
+  citation: {page: 37, quote: "approximated by elastic shells with a bending rigidity", where: "Methods S1, Section 5"}
+- id: q_no_validation_haas2021
+  kind: choice
+  about: [critical_strain_s21, fold_small_strain_s17_s18, pbuckling_eq1, fold_elastica, capsule_spring_s36]
+  text: >-
+    No cross-validation with haas2021 was added, in either direction. Neither paper cites the other.
+    (1) This record's models against haas2021's measurements: haas2021 records no measured value at all
+    (every datum is reported or predicted; its figures are model curves, micrographs and drawings, and
+    its Volvox shapes of Fig. 5 are model output). So there is nothing for the ring, fold or capsule
+    models here to predict. (2) haas2021's models against this record's measurements: they are the
+    coefficient functions of its large-bending shell energy (Eqs. 58, 64, 71), energy densities
+    (Eqs. 63, 67, 70), the large-bending parameter eta (Eq. 59), the volume-conservation region, the
+    neo-Hookean modulus E = 3C, and the Volvox invagination BVP, which is not runnable
+    (haas2021/q_volvox_not_rerun). All are in units of C and h, for a sheet bending under intrinsic
+    stretches and curvatures. None takes a monolayer in an alginate capsule, a pressure or an
+    indentation as input, or returns a buckling pressure, spring constant, fold count, fold depth or
+    opening angle, capsule modulus or thickness, the quantities measured here. classical_moduli gives a
+    shell's stretching and bending moduli from E and h, which are the quantities of
+    capsule_compressional_rigidity and capsule_bending_rigidity. But those rigidities are derived here,
+    not measured, so a crossing would only repeat arithmetic, not test a model. See
+    haas2021/q_no_validation_trushko2020.
+  citation: {none: "neither paper cites the other; the finding rests on the two records' models and data"}
+- id: q_no_validation_fierling2022
+  kind: choice
+  about: [critical_strain_s21, pbuckling_eq1, fold_elastica, fold_small_strain_s17_s18, capsule_spring_s36]
+  text: >-
+    (Cross-validation against fierling2022; job 2026-11-19.) No validation is entered in either direction.
+    Neither paper cites the other. (1) This record's models against fierling2022's measurements: those are
+    apical area fold changes and area reduction of ventral cell rows, AP and DV cell length fold changes,
+    tissue curvatures, furrow apex positions over time, pole displacement and laser-ablation recoil
+    velocities in the Drosophila embryo. The ring and fold models here give a critical excess strain,
+    buckling pressure, fold number, fold depth and opening angle, and capsule spring constant, of a
+    passively growing monolayer pressing outward on an elastic capsule. fierling2022 measures none of these.
+    Its tissue buckles inward under an active apical pre-strain inside the vitelline membrane, with no
+    measured bending or compressional rigidity, confining pressure or capsule stiffness to run these models
+    on. Its area reduction is an active contraction, not the excess strain Delta of Eq. S21, so mapping the
+    two would join quantities that only share a dimension. (2) fierling2022's models against the
+    measurements here: see fierling2022/q_no_validation_trushko2020.
+  citation: {none: "neither paper cites the other; the finding rests on the two records' models and data"}

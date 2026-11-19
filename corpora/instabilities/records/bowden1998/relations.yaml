@@ -1,0 +1,42 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units
+# richman1975's plate model works in units of E1 (moduli as ratios) and mm; bowden1998's Eq. 3 in Pa and nm.
+# E1 is set to 1e6 Pa: Eq. 3 depends only on the ratio Em/Ep, so the choice does not matter.
+- id: rel_richman_plate_single_layer_to_bowden_eq3
+  kind: reduces_to
+  a: richman1975/plate_on_foundation
+  b: bowden1998/wavelength_eq3
+  mapping: {Em: "1e6", Ep: "1e6*Ecore_over_E1", nu_m: "0.5", nu_p: "0.5", t: "t1*1e6"}
+  output_map: {L_over_t: l_over_t}
+  limit: {t2: "0"}
+  regime: {t1: [0.1, 2], t2: [0, 1], E2_over_E1: [0.5, 2], Ecore_over_E1: [0.0001, 0.1], stress_ratio: [0.5, 2]}
+  tolerance: 0.0012
+  provenance: proposed
+  reason: >
+    Neither paper cites the other. With stratum 2 removed (t2 -> 0), richman1975's reconstructed model is one
+    incompressible plate (plate modulus 4E1/3) on an incompressible half-space (p = (2/3) Ecore k w), whose
+    minimum-load wavelength is l/t1 = 2 pi (E1/(3 Ecore))^(1/3) = 4.3566 (E1/Ecore)^(1/3). That is bowden1998's
+    Eq. 3, first form, with nu_m = nu_p = 1/2, whose prefactor 4.36 is 2 pi/3^(1/3) printed to three figures;
+    the tolerance 0.0012 is that printed precision (0.005/4.36 relative). The test checks the reader's
+    reconstruction of richman1975's unpublished analysis against the classic film-on-substrate wavelength.
+  assumptions:
+    - "both layers incompressible (nu = 1/2), as richman1975's reconstruction takes them"
+    - "E1 = 1e6 Pa sets the scale of richman1975's modulus ratios; only Ecore/E1 enters"
+- id: rel_richman_plate_single_layer_to_bowden_eq3_simplified
+  kind: reduces_to
+  a: richman1975/plate_on_foundation
+  b: bowden1998/wavelength_eq3_simplified
+  mapping: {Em: "1e6", Ep: "1e6*Ecore_over_E1", t: "t1*1e6"}
+  output_map: {L_over_t: l_over_t}
+  limit: {t2: "0"}
+  regime: {t1: [0.1, 2], t2: [0, 1], E2_over_E1: [0.5, 2], Ecore_over_E1: [0.0001, 0.1], stress_ratio: [0.5, 2]}
+  tolerance: 0.012
+  provenance: proposed
+  reason: >
+    As the relation to Eq. 3's first form: at t2 -> 0 richman1975's reconstructed model gives
+    l/t1 = 4.3566 (E1/Ecore)^(1/3) for an incompressible plate on an incompressible half-space, the same
+    Poisson factor for film and substrate, so the factors cancel as in bowden1998's simplified form
+    L = 4.4 t (Em/Ep)^(1/3). Its prefactor is printed to two figures; the tolerance 0.012 is that
+    precision (0.05/4.4 relative).
+  assumptions:
+    - "both layers incompressible (nu = 1/2), so the Poisson factors of Eq. 3 cancel"
+    - "E1 = 1e6 Pa sets the scale of richman1975's modulus ratios; only Ecore/E1 enters"
