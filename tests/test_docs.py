@@ -26,6 +26,7 @@ def test_the_repository_holds_no_copy_of_a_paper():
         pytest.skip("not a git checkout")
     allowed_text = ("tests/fixtures/", "pipeline/evals/")  # hand-written and synthetic papers only
     own_images = {"docs/figures/overview.png", "docs/figures/overview-cardio.png",  # screenshots of our own pages
+                  "docs/figures/overview-instabilities.png",
                   # our own rendering of released (openly licensed) network data, and its copy next to the page
                   *(f"{d}/schwarz_tree_{v}.png" for d in ("corpora/cardio/overview_figures", "site/cardio/img")
                     for v in ("pressure", "wss", "diameter"))}  # named one by one
