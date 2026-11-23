@@ -1,0 +1,410 @@
+# Relations to Bangasser et al. 2017 (ref. 40, record bangasser2017), reviewed 2026-11-21.
+# The paper cites ref. 40 twice: its optimal stiffness "matches experimental observations reported to
+# date [35,40]" (p. 5), and "the original model has provided a mechanistic explanation of stiffness
+# sensitive cell migration and the existence of a stiffness optimum for different cell types [40]"
+# (p. 7). Its own model is "a modification to the classical clutch model [35]" (p. 2), ref. 35 being
+# Bangasser et al. 2013, not ref. 40. So no relation to a bangasser2017 model is stated, and no value
+# is taken from ref. 40 (no cited.yaml). The two relations below are proposed.
+#
+# Not entered: bangasser2017/cms (the whole-cell migration simulator, whose shape paired these papers).
+# It is runnable: false in its record, so no relation to it can be tested, and its outputs (mean module
+# flow over many modules, summed traction over modules and cell body, aspect ratio, motility) are
+# whole-cell quantities that the one-module model here does not produce. The relation is entered with
+# that record's one-module stand-in instead, which is the cms rule set for a single module.
+#
+# Units pN, nm, s on both sides; both records count forces, positions and flow positive in the
+# retrograde direction.
+- id: rel_axial_ke0_reduces_to_bangasser2017_module_flow
+  kind: reduces_to
+  a: panzetta2023/clutch_axial_ssa
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "Fm", vm: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks"}
+  output_map: {v_flow: v_retro}
+  limit: {ke: "0"}
+  regime: {nc: [40, 60], nm: [40, 60], Fm: [1.6, 2.4], vu: [96, 144], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.1, 1], ke: [0, 1], l: [500, 1500], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    With the orthogonal spring removed (ks^eps0 -> 0), Eq. 6 leaves Fs = ks xs and the model is one
+    motor-clutch module: Bell off-rate koff exp(Fc,i/Fb) (Eq. 3; bangasser2017 Eq. 1), linear motor
+    law vf = vu (1 - Fs/(nm Fm)) (Eq. 10; bangasser2017 Eq. 2), clutch-substrate force balance (Eqs.
+    4-5; bangasser2017 Eq. 4), engaged clutches advanced with the F-actin flow and a newly engaged
+    clutch starting at the substrate position, solved by Gillespie's algorithm. These are the module
+    rules of bangasser2017's CMS, which its record runs as module_ssa. The paper itself says the
+    dynamics are "not substantially affected by the introduction of the orthogonal spring" (p. 5).
+  assumptions:
+    - "the two simulations differ in Gillespie variant (first-reaction method, Eq. 12 here; direct method, bangasser2017 Eqs. 10-11), run length (100,000 events here; 500 s there) and random stream; both are exact samplers of the same jump process, so time averages agree within sampling noise, which the 10 % tolerance (added) is meant to cover"
+    - "tolerance basis (added, measured by the relator 2026-11-21 at ke = 1e-8, Table 1 values, nc = nm = 40-60, ks = 0.1-1 pN/nm, 8 seeds each): one module_ssa run of 500 s has a seed-to-seed coefficient of variation up to 3.5 % in traction (range 10 %) and clutch_axial_ssa up to 1 %; the seed-averaged means of the two agree within 1 %. A first tolerance of 5 % was below this noise for a maximum over 20 single runs; 10 % is about three times the largest coefficient of variation, and the value bangasser2017's other module relations use"
+    - "panzetta2023's clutch number and motor number stand for bangasser2017's module maxima n*c and n*m that its stand-in module holds (correspondences of quantities, not merged)"
+    - "the regime is centred on panzetta2023's Table 1 values (nm = nc between 40 and 60, ks 0.1 to 1 pN/nm); l and eps0 drop out in the limit"
+- id: rel_axial_ke0_reduces_to_bangasser2017_module_traction
+  kind: reduces_to
+  a: panzetta2023/clutch_axial_ssa
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "Fm", vm: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks"}
+  output_map: {F_trac: F_clutch}
+  limit: {ke: "0"}
+  regime: {nc: [40, 60], nm: [40, 60], Fm: [1.6, 2.4], vu: [96, 144], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.1, 1], ke: [0, 1], l: [500, 1500], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    As rel_axial_ke0_reduces_to_bangasser2017_module_flow, for the force: with ks^eps0 -> 0 the summed
+    engaged-clutch force here (Eq. 5) equals the substrate force ks xs, which is bangasser2017's
+    module traction κs xs (its Eq. 4).
+  assumptions:
+    - "as rel_axial_ke0_reduces_to_bangasser2017_module_flow; panzetta2023's F_clutch (time average of the summed clutch force) and bangasser2017's F_trac (time average of κs xs) stand for the same force once the orthogonal spring carries none"
+#
+# Relations to cms_code (the MATLAB CMS v1.0 released with ref. 40), reviewed 2026-11-21: none entered.
+# The paper does not cite or use the released code (its references list no code; its simulation is its
+# own one-module Gillespie scheme, Sec. 2.2), and no datum here comes from it, so there is no stated
+# relation and no cited.yaml line. Not proposed:
+# - cms_code/cms2d_code (the whole simulator, the shape that paired the records) is runnable: false, and
+#   its output rgflow is a whole-cell average over many modules, not one module's flow; as with
+#   bangasser2017/cms above, nothing could be tested.
+# - cms_code/off_rate_port and flow_port are single rules; here the same rules (Eqs. 3 and 10) sit inside
+#   clutch_axial_ssa and have no model of their own, and the paper states no relation that would justify
+#   adding one. They meet through bangasser2017: cms_code/rel_offrate_eq1 and rel_flow_eq2 relate the
+#   ports to bangasser2017's Eqs. 1-2, and the relations above relate this model to bangasser2017's module.
+#
+# Relations to Panzetta et al. 2019 (ref. 39, record panzetta2019), reviewed 2026-11-21.
+# The paper says its model extends ref. 39's "first modification of the molecular clutch model" (p. 2)
+# and that the orthogonal spring "accounts for the strain energy accumulated within the substrate, when
+# a given strain eps0 is introduced [39]" (p. 4). Ref. 39's prestretch x0 moves P1 along the substrate
+# spring with an orthogonal spring of stiffness ks and rest length l (its Eqs. 6-7): that is this
+# paper's transverse case (Fig. 1C; Eqs. 7-9) with ks^eps0 = ks and eps0 = sqrt(l^2 + x0^2)/l - 1.
+# Ref. 39 solves the mean-field ODEs of Bangasser and Odde (2013b) over one load-and-fail cycle; this
+# paper simulates the clutches one by one (Gillespie). No value is taken from ref. 39 (no datum names
+# it as source), so there is no cited.yaml.
+# Units pN, nm, s on both sides; forces, positions and flow positive in the retrograde direction.
+- id: rel_transverse_derived_from_panzetta2019_two_spring
+  kind: derived_from
+  a: panzetta2019/clutch_two_spring_cycle
+  b: panzetta2023/clutch_transverse_ssa
+  mapping: {nc: "nc", nm: "nm", Fm: "Fm", vu: "vu", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks",
+            ke: "ks", l: "l", eps0: "sqrt(l**2 + x0**2)/l - 1"}
+  steps:
+    - "keep ref. 39's substrate of two orthogonal springs (Fig. 1; Eqs. 6-7 there)"
+    - "let the orthogonal spring carry a residual strain eps0 along its own axis (axial) or by moving P1 (transverse), Eq. 1"
+    - "solve the clutches one by one with a Gillespie algorithm (Eq. 12, Sec. 2.2) instead of ref. 39's mean-field ODEs"
+  provenance: stated
+  citation: {page: 2, printed_page: "2", quote: "by an extension of the clutch model: a stochastic", where: "Introduction; also p. 4: 'when a given strain eps0 is introduced [39]'"}
+  assumptions:
+    - "the steps are the paper's words; the change from mean-field ODEs to a stochastic simulation is not a step that can be applied symbolically, so the derivation stands as stated and is tested numerically in rel_transverse_approximated_by_panzetta2019_two_spring"
+    - "the mapping is the reader's: ref. 39's prestretch x0 is this paper's transverse displacement of P1, giving eps0 by Eq. 9, and ref. 39's orthogonal spring has the substrate's stiffness (ks^eps0 = ks, as this paper also sets, Sec. 2.2)"
+- id: rel_transverse_approximated_by_panzetta2019_two_spring
+  kind: approximated_by
+  a: panzetta2023/clutch_transverse_ssa
+  b: panzetta2019/clutch_two_spring_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks",
+            r: "3", x0: "l*sqrt((1 + eps0)**2 - 1)", l: "l"}
+  output_map: {v_mean: v_retro}
+  regime: {nc: [400, 400], nm: [400, 400], Fm: [2, 2], vu: [120, 120], kon: [0.3, 0.3], koff: [0.1, 0.1],
+           Fb: [2, 2], kc: [0.8, 0.8], ks: [1, 1], ke: [1, 1], l: [500, 2000], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    The numerical test of the stated derivation above: ref. 39's two-spring model at prestretch x0 is
+    this paper's transverse case at eps0 = sqrt(l^2 + x0^2)/l - 1 with ks^eps0 = ks, solved in the
+    mean field (ref. 39's Eqs. 3, 11: <k*off> averaged with a gamma closure of shape r) instead of
+    clutch by clutch with the Bell off-rate koff exp(Fc,i/Fb) (Eq. 3 here). A mean-field closure of a
+    stochastic model is an approximation, so the error between the two is measured.
+  assumptions:
+    - "inputs at this paper's Table 1 and stiff substrate (ks = ks^eps0 = 1 pN/nm, the substrate of its transverse-strain results, Fig. 7); l and eps0 sampled over the ranges of its figures (l 500 to 2000 nm, eps0 0 to 1)"
+    - "nc = nm = 400, the paper's load-and-fail case (p. 4); the paper always sets nm = nc (p. 5), which a regime of independent ranges cannot keep, and a first test with nc and nm sampled apart over 50 to 1000 left ref. 39's model without a cycle (stalled motors) wherever nm < nc"
+    - "r = 3 is panzetta2019's added value (r_added, from ref. 42); this paper has no r"
+    - "the outputs are not defined alike: ref. 39's flow is averaged over one load-and-fail cycle from an unbound start, this one's over a run of 100,000 events (time average); both are the readers' readings of 'actin flow rate' in each record"
+    - "the F0 of Eq. 8 here, ks^eps0 eps0 l + ks x0 as printed, is not the horizontal force of ref. 39's Eq. 6 at x0 (whose orthogonal term carries a factor x0/sqrt(l^2 + x0^2)); the record's transverse model uses the printed F0, so part of any difference at eps0 > 0 can come from it"
+    - "tolerance 0.1 (added, set before the test) is the acceptable error the corpus uses for stochastic-against-deterministic module relations; a probe by the relator at nc = nm = 50 to 1000 found the mean-field flow up to about 25 % below the simulated one near the optimum (nc 200 to 1000)"
+- id: rel_canonical_approximated_by_panzetta2019_canonical
+  kind: approximated_by
+  a: panzetta2023/clutch_axial_ssa
+  b: panzetta2019/clutch_canonical_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks",
+            r: "3", x0: "0"}
+  output_map: {v_mean: v_retro}
+  regime: {nc: [400, 400], nm: [400, 400], Fm: [2, 2], vu: [120, 120], kon: [0.3, 0.3], koff: [0.1, 0.1],
+           Fb: [2, 2], kc: [0.8, 0.8], ks: [0.1, 1], ke: [0, 0], l: [1000, 1000], eps0: [0, 0]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    The two papers' canonical models: this paper's with the orthogonal spring removed (ks^eps0 = 0,
+    as its record runs the canonical curves of Figs. 3, 4 and S2) and ref. 39's canonical form of SI
+    Appendix 1. Both are the classical motor-clutch model of refs. 34-35 with a linear substrate
+    spring; ref. 39 solves it in the mean field, this paper clutch by clutch, so the error is measured.
+  assumptions:
+    - "inputs at this paper's Table 1, its two substrates spanned (ks 0.1 to 1 pN/nm); x0 = 0 on ref. 39's side, where s.4-s.6 do not depend on it"
+    - "nc = nm = 400 for the reason given in rel_transverse_approximated_by_panzetta2019_two_spring"
+    - "r = 3 is panzetta2019's added value (r_added); the outputs differ in definition as in rel_transverse_approximated_by_panzetta2019_two_spring"
+    - "tolerance 0.1 (added, set before the test); a probe by the relator at ks = 0.1 pN/nm, nc = nm = 50 to 1000 found the mean-field flow 20 to 37 % below the simulated one"
+#
+# Relations to Bangasser and Odde 2013b (ref. 34, record bangasser2013b), reviewed 2026-11-21.
+# The paper says its master equations "are those introduced by Bengasser et al. with some
+# modifications that consider the presence of the spring ks^eps0 and the residual strain eps0" (p. 3),
+# and that the substrate spring translates "as happens in the original motor clutch formulation
+# [34,35]" (p. 4). The unnumbered "Bengasser et al." is read as ref. 34, the paper titled "Master
+# equation-based analysis": its Eqs. 2-4 and 10-11 are bangasser2013b's single-clutch Eqs. 1, 2, 4, 6
+# and 7 term for term. No value is taken from ref. 34 (no datum names it as source), so there is no
+# cited.yaml. Units pN, nm, s on both sides; both count forces, positions and flow positive in the
+# retrograde direction.
+- id: rel_axial_derived_from_bangasser2013b_master_equations
+  kind: derived_from
+  a: bangasser2013b/single_clutch_ode
+  b: panzetta2023/clutch_axial_ssa
+  mapping: {nc: "nc", nm: "nm", Fm: "Fm", vu: "vu", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks",
+            ke: "ks", l: "1000", eps0: "0"}
+  steps:
+    - "keep the single-clutch master equations of ref. 34 (dpb,i/dt, the Bell off-rate, Hooke's law for the clutch, the motor law and dxc,i/dt: Eqs. 2-4, 10-11 here)"
+    - "add the orthogonal spring ks^eps0 to the substrate force (Eq. 6) and let it carry an axial residual strain eps0 (Eq. 1, Fig. 1B)"
+    - "solve the clutches by a Gillespie algorithm (Eq. 12, Sec. 2.2) instead of integrating the ODEs"
+  provenance: stated
+  citation: {page: 3, printed_page: "3", quote: "by Bengasser et al. with some modiﬁcations that consider the presence of", where: "Sec. 2.1, before Eq. 2; also p. 4: 'as happens in the original motor clutch formulation [34,35]'"}
+  assumptions:
+    - "'Bengasser et al.' (unnumbered, p. 3) is read as ref. 34, whose title names the master equations; ref. 35 (bangasser2013) is the other Bangasser paper cited"
+    - "the steps are the paper's words; adding a spring and changing the solver cannot be applied symbolically, so the derivation stands as stated, untested; it is tested numerically, against the clutch-ensemble form of ref. 34, in rel_axial_ke0_approximated_by_bangasser2013b_flow"
+    - "the mapping of the new ingredients is the reader's: ks^eps0 = ks as the paper sets (Sec. 2.2), l = 1000 nm as printed (l_ortho, p. 7), eps0 = 0 (no residual strain)"
+- id: rel_transverse_derived_from_bangasser2013b_master_equations
+  kind: derived_from
+  a: bangasser2013b/single_clutch_ode
+  b: panzetta2023/clutch_transverse_ssa
+  mapping: {nc: "nc", nm: "nm", Fm: "Fm", vu: "vu", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks",
+            ke: "ks", l: "1000", eps0: "0"}
+  steps:
+    - "keep the single-clutch master equations of ref. 34 (Eqs. 2-4, 10-11 here)"
+    - "add the orthogonal spring ks^eps0 and a transverse residual strain eps0 by moving P1 to P1' (Fig. 1C), with the force balance F0 + sum Fc,i = Fs (Eqs. 7-9)"
+    - "solve the clutches by a Gillespie algorithm (Eq. 12, Sec. 2.2) instead of integrating the ODEs"
+  provenance: stated
+  citation: {page: 3, printed_page: "3", quote: "by Bengasser et al. with some modiﬁcations that consider the presence of", where: "Sec. 2.1, before Eq. 2"}
+  assumptions:
+    - "as rel_axial_derived_from_bangasser2013b_master_equations: 'Bengasser et al.' read as ref. 34; the steps stand as stated, untested; the new ingredients mapped by the reader"
+- id: rel_axial_ke0_approximated_by_bangasser2013b_flow
+  kind: approximated_by
+  a: panzetta2023/clutch_axial_ssa
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks", r: "2"}
+  output_map: {v_mean: v_retro}
+  regime: {nc: [400, 400], nm: [400, 400], Fm: [2, 2], vu: [120, 120], kon: [0.3, 0.3], koff: [0.1, 0.1],
+           Fb: [2, 2], kc: [0.8, 0.8], ks: [0.1, 1], ke: [0, 0], l: [1000, 1000], eps0: [0, 0]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    With the orthogonal spring removed (ks^eps0 = 0) this paper's model is the classical motor-clutch
+    model of refs. 34-35 simulated clutch by clutch; ref. 34's clutch-ensemble ODEs (its Eqs. 8-12 with
+    the gamma closure Eq. 19) are the mean-field form of the same model, which ref. 34 itself compares
+    with Gillespie simulations ("good agreement ... for many clutches", its p. 5). A mean-field closure
+    of a stochastic model is an approximation, so the error between the two is measured.
+  assumptions:
+    - "inputs at this paper's Table 1, its two substrates spanned (ks 0.1 to 1 pN/nm), nc = nm = 400, the load-and-fail case of Fig. 2 (p. 4); the paper always sets nm = nc"
+    - "r = 2, the closure ref. 34 uses in its comparison with the MC (its Fig. 2); this paper has no r"
+    - "the outputs are not defined alike: ref. 34's flow is averaged over one load-and-fail cycle from an unbound start, this one's over a run of 100,000 events (time average); both stand for the mean retrograde flow (retrograde_flow_rate and cycle_mean_flow_rate, a correspondence of quantities)"
+    - "tolerance 0.25 (added, set before the test) is the one bangasser2013b's stated relations to ref. 1's SSA use for 'good agreement'"
+- id: rel_axial_ke0_approximated_by_bangasser2013b_cycle_time
+  kind: approximated_by
+  a: panzetta2023/clutch_axial_ssa
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks", r: "2"}
+  output_map: {t_cycle: t_cycle}
+  regime: {nc: [400, 400], nm: [400, 400], Fm: [2, 2], vu: [120, 120], kon: [0.3, 0.3], koff: [0.1, 0.1],
+           Fb: [2, 2], kc: [0.8, 0.8], ks: [0.1, 1], ke: [0, 0], l: [1000, 1000], eps0: [0, 0]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    As rel_axial_ke0_approximated_by_bangasser2013b_flow, for the load-and-fail cycle time.
+  assumptions:
+    - "as rel_axial_ke0_approximated_by_bangasser2013b_flow for the inputs, r and tolerance"
+    - "this model's cycle time is run time over the number of times the last engaged clutch let go; ref. 34's is the time of the abrupt failure of one cycle from the unbound state (load_fail_cycle_time and cycle_time, a correspondence of quantities)"
+#
+# Relations to Chan and Odde 2008 (ref. 36, record chan2008), reviewed 2026-11-21.
+# The paper cites ref. 36 only for what the clutch model explains: stiffness sensing ("the ECM stiffness
+# [34,36]", p. 2; "sense ECM stiffness [34,36]", p. 3) and the stiffness optimum ("is maximum [34,36]",
+# p. 2); the superscript "36" on p. 5 ("cause the failure of the system36") is a run-in citation in the
+# same sense. Its own model is "a modification to the classical clutch model [35]" (p. 2) and its
+# master equations are "those introduced by Bengasser et al." (p. 3), not ref. 36's. So no relation to a
+# chan2008 model is stated, and no value is taken from ref. 36 (no datum names it as source; chan2008 is
+# the earlier paper, so it takes none from this one): no cited.yaml on either side.
+#
+# Not entered: chan2008/force_velocity_eq3 (the shape that paired the records). This paper's Eq. 10,
+# vf = vu (1 - Fs/(nm Fm)), is the same linear motor law as Chan's Eqs. 3-4, but here it sits inside
+# clutch_axial_ssa and has no model of its own, and a whole Gillespie simulation is not the same as one
+# step of it. The law meets Chan's through the reduction below. The other chan2008 models (off_rate_eq1,
+# cerruti_force_eq11, ksub_eq13, motor_clutch_E) have no counterpart here; this paper's substrate is a
+# spring stiffness, never a Young's modulus.
+#
+# The reduction below is proposed: with the orthogonal spring removed (ks^eps0 -> 0), Eq. 6 leaves
+# Fs = ks xs and the model is the classical one-module motor-clutch model, which is Chan's SOM Eqs. 1-5
+# term for term (Bell off-rate Eq. 3 = Chan Eq. 1, Hooke clutch Eq. 4 = Chan Eq. 2, motor law Eq. 10 =
+# Chan Eqs. 3-4, force balance Eq. 5 = Chan Eq. 5), solved by a different algorithm.
+# Units pN, nm, s on both sides. Chan signs retrograde quantities negative (Table S1: vu, Fm, Fb < 0) and
+# its record reports the flow and mean traction as positive magnitudes; this record counts them positive.
+- id: rel_axial_ke0_reduces_to_chan2008_flow
+  kind: reduces_to
+  a: panzetta2023/clutch_axial_ssa
+  b: chan2008/motor_clutch
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ksub: "ks"}
+  output_map: {v_retro: v_retro}
+  limit: {ke: "0"}
+  regime: {nc: [40, 60], nm: [40, 60], Fm: [1.6, 2.4], vu: [96, 144], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.1, 1], ke: [0, 1], l: [500, 1500], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    With ks^eps0 -> 0 this paper's model is Chan and Odde's motor-clutch model (SOM Eqs. 1-5) with the
+    substrate as one linear spring: the same Bell off-rate, clutch spring, linear motor law and force
+    balance, and a newly engaged clutch starting at the substrate position. Chan steps time at a fixed
+    dt; this paper uses Gillespie's first-reaction method (Eq. 12). Both sample the same jump process
+    (Chan's to first order in dt), so their time-averaged retrograde flows should agree within sampling
+    and time-step error.
+  assumptions:
+    - "signs: Chan's vu, Fm and Fb are negative by its convention (Table S1), so they map to minus this paper's positive values; Chan's v_retro (time average of -vfilament) and this one (time average of vf, retrograde positive) are then both positive"
+    - "the runs differ in algorithm (fixed step dt = 0.005 s for 300 s there; 100,000 events, several thousand seconds here) and random stream; the 10 % tolerance (added, set before the test) is the corpus's tolerance for one-module stochastic relations (as rel_axial_ke0_reduces_to_bangasser2017_module_flow and bangasser2013/rel_chan_fixed_step_approximates_ssa)"
+    - "the regime is centred on this paper's Table 1 values (nm, nc 40 to 60, ks 0.1 to 1 pN/nm); l and eps0 drop out in the limit"
+    - "probe by the relator after the first test (2026-11-21; nc = nm = 50, Table 1 values, ke = 1e-8, seed 1): flow 101.6 here against 77.6 in Chan's model at ks = 0.1 pN/nm and 105.5 against 99.9 at ks = 1; Chan's result moves by under 5 % with dt ten times smaller (0.0005 s) or the run ten times longer (3000 s), so the gap is not Chan's time step or run length but the two algorithms (fixed-step association/dissociation each step, against a first-reaction step whose rates stay frozen over each event interval); both sides obey their own motor law v = vu (1 - F/(nm Fm)), so the difference is in the clutch load, not in the mapping"
+- id: rel_axial_ke0_reduces_to_chan2008_traction
+  kind: reduces_to
+  a: panzetta2023/clutch_axial_ssa
+  b: chan2008/motor_clutch
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ksub: "ks"}
+  output_map: {F_mean: F_clutch}
+  limit: {ke: "0"}
+  regime: {nc: [40, 60], nm: [40, 60], Fm: [1.6, 2.4], vu: [96, 144], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.1, 1], ke: [0, 1], l: [500, 1500], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    As rel_axial_ke0_reduces_to_chan2008_flow, for the force: with ks^eps0 -> 0 the summed engaged-clutch
+    force here (Eq. 5) equals the substrate force ks xs, whose time average with the sign turned positive
+    is Chan's mean traction force (-κsub xsub).
+  assumptions:
+    - "as rel_axial_ke0_reduces_to_chan2008_flow; this paper's F_clutch (time average of the summed clutch force) and Chan's F_mean (time average of -κsub xsub) stand for the same force once the orthogonal spring carries none (clutch_force_total and mean_traction_force, a correspondence of quantities)"
+#
+# Relations to Bangasser, Rosenfeld and Odde 2013 (ref. 35, record bangasser2013), reviewed 2026-11-21.
+# The paper says "we introduced a modification to the classical clutch model [35] by including a second
+# spring in the perpendicular direction" (p. 2), that the substrate spring translates "as happens in the
+# original motor clutch formulation [34,35]" (p. 4), and compares "the original clutch model and its
+# modified version" with no residual strain (Sec. 3.2, Fig. 2: nc = 50 and 400, ks = 1 pN/nm), finding
+# the dynamics "not substantially affected by the introduction of the orthogonal spring" (p. 5). Its
+# optimum "matches experimental observations reported to date [35,40]" (p. 5) is a statement about
+# experiments, not a model relation.
+# No value is taken from ref. 35 (no datum names it as source; bangasser2013 is the earlier paper), so
+# there is no cited.yaml on either side.
+# Not entered:
+# - bangasser2013/catch_slip_eq9 (the shape that paired the records): this paper uses only the Bell slip
+#   bond koff exp(Fc,i/Fb) (Eq. 3), inside clutch_axial_ssa, with no model of its own; Eq. 9's first term
+#   meets it through bangasser2013/rel_ssa_offrate_from_bell and the relations below. Its catch term has
+#   no counterpart here, and a whole simulation's cycle time is not a bond lifetime.
+# - bangasser2013/optimal_stiffness against optimal_nc_axial: one is an optimum over substrate stiffness
+#   at fixed nc, the other over nc (= nm) at fixed stiffness; no mapping relates them.
+# Units pN, nm, s on both sides; both records count forces, positions and flow positive in the
+# retrograde direction.
+- id: rel_axial_derived_from_bangasser2013_ssa
+  kind: derived_from
+  a: bangasser2013/motor_clutch_ssa
+  b: panzetta2023/clutch_axial_ssa
+  mapping: {nc: "nc", nm: "nm", Fm: "Fm", vu: "vu", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub",
+            ke: "ksub", l: "1000", eps0: "0"}
+  steps:
+    - "keep the classical motor-clutch model of ref. 35 (Bell off-rate, clutch springs, linear motor law, clutch-substrate force balance, Gillespie events)"
+    - "include a second spring ks^eps0 perpendicular to the substrate spring, joined to it by a pin-roller at P1 (Fig. 1A; Eq. 6)"
+    - "let that spring carry an axial residual strain eps0 by moving its roller from P2 to P2' (Eq. 1, Fig. 1B)"
+  provenance: stated
+  citation: {page: 2, printed_page: "2", quote: "we introduced a modiﬁcation to the classical clutch model [35] by", where: "Sec. 2.1; also p. 4: 'as happens in the original motor clutch formulation [34,35]'"}
+  assumptions:
+    - "the steps are the paper's words; adding a spring cannot be applied symbolically, so the derivation stands as stated; it is tested numerically in rel_axial_eps0_approximates_bangasser2013_ssa_* and rel_axial_ke0_reduces_to_bangasser2013_ssa_*"
+    - "the mapping of the new ingredients is the reader's: ks^eps0 = ks as the paper sets (Sec. 2.2), l = 1000 nm as printed (p. 7), eps0 = 0"
+- id: rel_transverse_derived_from_bangasser2013_ssa
+  kind: derived_from
+  a: bangasser2013/motor_clutch_ssa
+  b: panzetta2023/clutch_transverse_ssa
+  mapping: {nc: "nc", nm: "nm", Fm: "Fm", vu: "vu", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub",
+            ke: "ksub", l: "1000", eps0: "0"}
+  steps:
+    - "keep the classical motor-clutch model of ref. 35"
+    - "include a second spring ks^eps0 perpendicular to the substrate spring (Fig. 1A; Eq. 6)"
+    - "let that spring carry a transverse residual strain eps0 by moving the pin-roller from P1 to P1', with the force balance F0 + sum Fc,i = Fs (Eqs. 7-9, Fig. 1C)"
+  provenance: stated
+  citation: {page: 2, printed_page: "2", quote: "we introduced a modiﬁcation to the classical clutch model [35] by", where: "Sec. 2.1"}
+  assumptions:
+    - "as rel_axial_derived_from_bangasser2013_ssa: the steps stand as stated; the new ingredients mapped by the reader"
+- id: rel_axial_eps0_approximates_bangasser2013_ssa_nc50
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: panzetta2023/clutch_axial_ssa
+  mapping: {nc: "nc", nm: "nm", Fm: "Fm", vu: "vu", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub",
+            ke: "ksub", l: "1000", eps0: "0"}
+  output_map: {v_retro: v_retro}
+  regime: {nm: [50, 50], Fm: [2, 2], vu: [120, 120], nc: [50, 50], kon: [0.3, 0.3], koff: [0.1, 0.1],
+           Fb: [2, 2], kc: [0.8, 0.8], ksub: [1, 1]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 4, printed_page: "4", quote: "comparison between the original clutch model and its modiﬁed version", where: "Sec. 3.2, Fig. 2 (A against C); p. 5: 'not substantially affected by the introduction of the orthogonal spring'"}
+  assumptions:
+    - "'the original clutch model' of Sec. 3.2 is read as ref. 35's (the 'classical clutch model [35]' of p. 2, 'original motor clutch formulation [34,35]' of p. 4), which bangasser2013's record runs as motor_clutch_ssa"
+    - "the paper's control condition: no residual strain (eps0 = 0), ks^eps0 = ks (Sec. 2.2), l = 1000 nm (p. 7), at Fig. 2's nc = nm = 50 and ks = 1 pN/nm, other inputs at Table 1 (the same values as bangasser2013's Table 1)"
+    - "the orthogonal spring is still present (ks^eps0 = ks), so this is an approximation, not a limit; 'not substantially affected' is read with a 10 % tolerance on the time-averaged flow (added, set before the test; the corpus's tolerance for one-module stochastic relations)"
+    - "each model runs at its own settings and seed (1000 s there, 100,000 events here)"
+- id: rel_axial_eps0_approximates_bangasser2013_ssa_nc400
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: panzetta2023/clutch_axial_ssa
+  mapping: {nc: "nc", nm: "nm", Fm: "Fm", vu: "vu", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub",
+            ke: "ksub", l: "1000", eps0: "0"}
+  output_map: {v_retro: v_retro}
+  regime: {nm: [400, 400], Fm: [2, 2], vu: [120, 120], nc: [400, 400], kon: [0.3, 0.3], koff: [0.1, 0.1],
+           Fb: [2, 2], kc: [0.8, 0.8], ksub: [1, 1]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 4, printed_page: "4", quote: "comparison between the original clutch model and its modiﬁed version", where: "Sec. 3.2, Fig. 2 (B against D)"}
+  assumptions:
+    - "as rel_axial_eps0_approximates_bangasser2013_ssa_nc50, at Fig. 2's load-and-fail case nc = nm = 400"
+- id: rel_axial_ke0_reduces_to_bangasser2013_ssa_flow
+  kind: reduces_to
+  a: panzetta2023/clutch_axial_ssa
+  b: bangasser2013/motor_clutch_ssa
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ksub: "ks"}
+  output_map: {v_retro: v_retro}
+  limit: {ke: "0"}
+  regime: {nc: [40, 60], nm: [40, 60], Fm: [1.6, 2.4], vu: [96, 144], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.1, 1], ke: [0, 1], l: [500, 1500], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    With the orthogonal spring removed (ks^eps0 -> 0), Eq. 6 leaves Fs = ks xs and this paper's model is
+    the classical model of ref. 35 term for term: Bell off-rate (Eq. 3; bangasser2013 Eq. 9 first term),
+    clutch springs (Eq. 4), force balance (Eq. 5), linear motor law (Eq. 10), engaged clutches advanced by
+    the flow, and events drawn as -ln(random)/k with the shortest executed (Eq. 12; bangasser2013 Eq. 1).
+    Both are exact samplers of the same jump process, so time averages agree within sampling noise.
+  assumptions:
+    - "the runs differ in length (100,000 events here; 1000 s there), in where the force balance falls in the step, and in the random stream; the 10 % tolerance (added, set before the test) is the corpus's tolerance for one-module stochastic relations"
+    - "the regime is centred on the two papers' common Table 1 values (nm = nc = 50, kon = 0.3 1/s, kc = 0.8 pN/nm), ks 0.1 to 1 pN/nm as in this paper; l and eps0 drop out in the limit"
+    - "probe by the relator after the first test (2026-11-21; Table 1 values, ke = 1e-8, seed 1; build/motor_clutch/relate-check/bangasser2013+panzetta2023/probe.py): at ks = 1 pN/nm the flows agree within 6 % (nc = nm = 40: 106.3 here, 101.5 there; 60: 104.8, 99.1) and the engaged numbers within 10 %; at ks = 0.1 the flow is 104.8 here against 73.9 there (nc = 40) and bangasser2013's SSA holds about 2.5 times more engaged clutches (15.4 against 6.1). The same gap appears against chan2008 (rel_axial_ke0_reduces_to_chan2008_flow), while bangasser2013's SSA agrees with odde_code within 4 % (bangasser2013/rel_ssa_approx_code_flow) and this model with bangasser2017's module within 5 %; so the two implementations of one stated scheme differ on soft substrates, not the mapping. The paper's own comparison (Fig. 2) is at ks = 1 only, where they agree (rel_axial_eps0_approximates_bangasser2013_ssa_*)"
+- id: rel_axial_ke0_reduces_to_bangasser2013_ssa_traction
+  kind: reduces_to
+  a: panzetta2023/clutch_axial_ssa
+  b: bangasser2013/motor_clutch_ssa
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ksub: "ks"}
+  output_map: {F_mean: F_clutch}
+  limit: {ke: "0"}
+  regime: {nc: [40, 60], nm: [40, 60], Fm: [1.6, 2.4], vu: [96, 144], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.1, 1], ke: [0, 1], l: [500, 1500], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    As rel_axial_ke0_reduces_to_bangasser2013_ssa_flow, for the force: with ks^eps0 -> 0 the summed
+    engaged-clutch force (Eq. 5) equals the substrate force ks xs, bangasser2013's traction κsub x_sub.
+  assumptions:
+    - "as rel_axial_ke0_reduces_to_bangasser2013_ssa_flow; F_clutch (time average of the summed clutch force) and F_mean (time average of κsub x_sub) stand for the same force once the orthogonal spring carries none (clutch_force_total and mean_traction_force, a correspondence of quantities)"
+- id: rel_axial_ke0_reduces_to_bangasser2013_ssa_engaged
+  kind: reduces_to
+  a: panzetta2023/clutch_axial_ssa
+  b: bangasser2013/motor_clutch_ssa
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ksub: "ks"}
+  output_map: {n_eng: n_eng}
+  limit: {ke: "0"}
+  regime: {nc: [40, 60], nm: [40, 60], Fm: [1.6, 2.4], vu: [96, 144], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.1, 1], ke: [0, 1], l: [500, 1500], eps0: [0, 1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: "As rel_axial_ke0_reduces_to_bangasser2013_ssa_flow, for the time-averaged number of engaged clutches."
+  assumptions:
+    - "as rel_axial_ke0_reduces_to_bangasser2013_ssa_flow"

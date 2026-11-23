@@ -1,0 +1,23 @@
+id: fiber_network_point_load
+name: 2D random fibre network under a point load at its central node (Abaqus explicit; Fig. 6A-B, S16)
+role: model
+stated: {page: 12, printed_page: "1970", quote: "Deformations of a fibrous network were simulated using the finite", where: "Fiber network simulations"}
+equation: "linear beams (axial and bending stiffness, ratio κ = κb/(κs l^2)) on a lattice-based random network in a circular domain, perimeter pinned; point force at the node nearest the centre; displacement of that node along the load, repeated over loads and random geometries"
+inputs:
+  kappa: {quantity: bending_stretching_ratio, unit: dimensionless}
+  Ef:    {quantity: fiber_youngs_modulus, unit: MPa}
+  d:     {quantity: fiber_diameter, unit: nm}
+  l:     {quantity: crosslink_spacing, unit: um}
+  F:     {quantity: point_load_force, unit: nN}
+outputs:
+  u: {quantity: point_load_displacement, unit: um}
+settings: {fiber_length_min_over_spacing: 2.8, fiber_length_max_over_spacing: 3.4, short_element_cutoff_over_spacing: 0.1, seed: null}  # seed and number of networks not stated
+stochastic: true
+runnable: false
+not_runnable_reason: >-
+  The network generation is only partly printed: the lattice type and its spacing in micrometres, the radius
+  of the circular domain (in lattice spacings or micrometres), the randomisation procedure (given only as
+  "as described previously (Notbohm et al., 2015a)"), the number of random networks, the beam element
+  discretisation, the explicit solver's damping and time stepping, and the conversion from dimensionless to
+  real units ("using the values described") are not given, nor is the code. Rebuilding it would be a
+  different network, not the paper's.

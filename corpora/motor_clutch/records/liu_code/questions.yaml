@@ -1,0 +1,261 @@
+- id: q_alpha
+  kind: unexplained_difference
+  about: [alpha_tw, alpha_wt2, alpha_me, alpha_T1_paper, cmp_alpha_tw, cmp_alpha_wt2, cmp_tw_unfolded, cmp_tw_alpha2_unfolded, talin_wt_port]
+  text: >
+    The number of new clutch sites per unfolded R3 domain, alpha of Eq. F8, is 100 in talin_WT_model.m
+    (line 95) and 200 in WT2_model.m (line 104), but Table T1 prints alpha = 2 for the talin WT model
+    and Table T2 says the WT-2 model keeps Table T1's other values; only the master-equation program
+    (2.55, line 81) is close to the 2.6 of Table T4. The code applies alpha exactly as Eq. F8 does
+    (Nc / (1 - alpha int p_u), lines 351-356), with the denominator floored at 0.01 (line 353-354), so
+    the two are the same parameter. Table T1 calls alpha's effect on the traction and flow curves not
+    strong; in the port, alpha changes the unfolded share of engaged talin clutches on the stiffest
+    substrate (compare cmp_tw_unfolded and cmp_tw_alpha2_unfolded), which is the 1-2% the paper prints.
+  citation: {file: talin_WT_model.m, lines: "95", quote: "number_added_sites_per_unfolded_clutch = 100;"}
+- id: q_kon_KD
+  kind: unexplained_difference
+  about: [kon_lkd]
+  text: >
+    Linear_KD_WT_model.m sets k_on = 0.0051 s^-1 for the linear KD model (line 27, and in its comment);
+    Table T1 prints 0.005 s^-1. The printed value is the code's rounded to one significant figure. The
+    linear KD model is close to its cusp (bistability onset near sigma_m ~ 44 um^-2), where a 2%
+    change in kon moves the cusp; liu2025's q_sm43_bistable found the cusp just below 43 um^-2 with
+    kon = 0.005.
+  citation: {file: Linear_KD_WT_model.m, lines: "27", quote: "k_on = 0.0051; %0.0051; %0.23;"}
+- id: q_r_WT
+  kind: unexplained_difference
+  about: [a1_lwt]
+  text: >
+    The linear WT value of a_1 (r) in the comment of line 17 is 0.75 nm; Table T1 prints 0.8 nm. 0.75
+    rounds to 0.8 only by rounding half up. Whether the authors ran 0.75 or 0.8 is not settled by the
+    code, since the WT set appears only in comments; the record runs the comment's 0.75.
+  citation: {file: Linear_KD_WT_model.m, lines: "17", quote: "a_1 = 26; %26; %0.75;"}
+- id: q_wt_set_in_comments
+  kind: reading
+  about: [a1_lwt, sm_lwt, kc_lwt, kon_lwt, ly_lwt, linear_port]
+  text: >
+    Linear_KD_WT_model.m is set up for the linear KD model; the linear WT values are written only as
+    the last of the trailing comments of lines 17, 22, 25, 27 and 28 (e.g. "%71; %85;"). The record
+    reads the last comment value as the WT set, which matches Table T1 except for r (q_r_WT) and gives
+    ly = 1000 nm where Table T1 prints only "> 300 nm" (this settles liu2025's q_ly_WT: the authors'
+    ly is 1000 nm).
+  citation: {file: Linear_KD_WT_model.m, lines: "22", quote: "myosin_density = 71; %71; %85;"}
+- id: q_Fu
+  kind: unexplained_difference
+  about: [xu_tw, xu_me, Fu_wt2, Fu_T1_paper, cmp_Fu_tw]
+  text: >
+    The characteristic unfolding force of R3 is kT / 5.7 in talin_WT_model.m (line 79) and in the
+    master-equation program (line 65), i.e. 4.278 / 5.7 = 0.75 pN with the code's kT, but 0.7 pN in
+    WT2_model.m (line 87). Table T1 prints Fu = 0.7 pN. The 5.7 nm is the unfolding transition
+    distance of R3 from the code's commented table of Yao et al. (talin_X_unfold, line 99).
+  citation: {file: talin_WT_model.m, lines: "79", quote: "unfolding_force = kT / 5.7;"}
+- id: q_R3_rigid
+  kind: unexplained_difference
+  about: [LcR3_tw, LcR3_wt2, talin_wt_port]
+  text: >
+    Appendix F says the unfolded mechanosensitive domain is described with the worm-like chain model.
+    In force_vs_extension_clutch_v2.m the unfolded R3 domain is instead three more rigid bodies of
+    b = 5 nm in the freely-jointed chain (line 20, its comment: "upon unfolding of R3 domain, it becomes
+    a chain of 4 rigid bodies - alpha helices, with contour length of ~ 20 nm"); the WLC part is the
+    37 nm linker alone (line 19). The unfolded contour length 49.6 nm (domain_contour_length) is passed
+    to the function but used only in a commented-out line (line 16). This answers liu2025's
+    q_talin_model: the talin force-extension curves are the FJC of 12 (folded) or 15 (unfolded)
+    domains of 5 nm in series with a 37 nm WLC (Lp = 1 nm) and the substrate spring.
+  citation: {file: force_vs_extension_clutch_v2.m, lines: "19-20", quote: "total_wormlike_contour = linker_size;"}
+- id: q_hidden_numerics
+  kind: choice
+  about: [talin_wt_port, linear_port]
+  text: >
+    Choices in the code that the paper does not print: all off- and unfolding rates capped at 100 /s
+    (talin_WT_model.m lines 294-306); clutch force capped at 100 pN beyond 0.9999 of the contour length
+    plus 100 / k's, and from the first smoothed value above 100 pN (force_vs_extension_clutch_v2.m line
+    34, tabulate_clutch_force_and_energy.m lines 90-91); the force tables are smoothed with a cubic
+    smoothing spline, csaps p = 0.1 (line 89), whose effect depends on the extension step v/200; the
+    extension range is cut at min(1000 nm, 150 + sqrt(1e4/k's) nm, 20 v s) (line 254), so at small v
+    p_on is followed only to 20 v; the march stops when sum(p_on) < 1e-6 (line 337); the denominator
+    1 - alpha int p_u is floored at 0.01 (lines 353-355); Fm is floored at -0.5 pN (talin, line 58) or
+    -1000 pN (linear, line 57). The steady states are read off a 100 x 100 (v, E) grid by MATLAB's
+    contour (line 471), v from 1 to 300 nm/s (talin) or 0.1 to 300 nm/s (linear). The ports keep all
+    of these except the E grid.
+  citation: {file: talin_WT_model.m, lines: "294", quote: "k_off_step( k_off_step > 1e+2 ) = 1e+2;"}
+- id: q_tension_range
+  kind: unexplained_difference
+  about: [Ff_main_paper, Ff_si_paper, cmp_tw_Ff_main, cmp_tw_Ff_si]
+  text: >
+    The paper gives two ranges for the tension of talin clutches with folded R3 on stiff substrates:
+    0.7-1.3 pN in the main text (p. 6) and a plateau of 0.5-1.3 pN in the caption of Supplementary
+    Fig. S1 (p. 49), which the main text cites for it. Both are compared with the port at the code's
+    stiffest E (10^6 Pa).
+  citation: {file: talin_WT_model.m, lines: "46", quote: "Young_modulus_max = 10^6;"}
+- id: q_wt2_values
+  kind: unexplained_difference
+  about: [a12_wt2, kon1_wt2, cmp_r_talin_wt2, cmp_kon_nontalin_wt2]
+  text: >
+    WT2_model.m sets r = 0.25 nm for talin-based clutches (line 49) and kon = 0.0044 s^-1 for
+    non-talin-based ones (line 25); Table T2 prints 0.3 nm and 0.004 s^-1. Both could be roundings
+    (0.25 only by rounding half up). WT2_model.m also starts the march from the assembly split
+    k_on_vector / k_on (lines 263-269), i.e. kf0/(kf0+ku0) for folded talin, as Eq. F6 writes it,
+    whereas talin_WT_model.m starts from Boltzmann weights of the tabulated free energies at l = 0
+    (lines 263-265); the two agree up to F(0) h / kT.
+  citation: {file: WT2_model.m, lines: "49", quote: "a_1_2 = 0.25;"}
+- id: q_wt2_not_ported
+  kind: unstated_model
+  about: [wt2_model]
+  text: >
+    The WT-2 model (WT2_model.m) is recorded but not ported: liu2025's record holds no result of it
+    (Extended Data Fig. 2 and Fig. S1c,d were not read), so a port would have nothing to be checked
+    against. It shares all its machinery with talin_wt_port plus one linear state and could be ported
+    the same way once those curves are read.
+  citation: {file: WT2_model.m, lines: "3-5", quote: "Two types of molecular clutches: talin-based, non-talin-based"}
+- id: q_master_not_ported
+  kind: numerics
+  about: [master_equation, dt_me, lstep_me, lmax_me, tend_me]
+  text: >
+    The master-equation program integrates Eqs. I1-I2 by explicit Euler in time (dt = 5e-5 s to 181 s)
+    with an upwind difference in l (step 0.01 nm to 1800 nm): about 3.6e6 steps over 180001 points.
+    A faithful port cannot run within a validation, and liu2025's record holds none of its results
+    (Fig. 4, Extended Data Figs. 6-7), so it is recorded but not ported. Note the CFL number
+    v dt / dl = 120 x 5e-5 / 0.01 = 0.6 at the free motor speed.
+  citation: {file: solve_full_master_equation_main.m, lines: "122-123", quote: "time_step = 0.00005;"}
+- id: q_master_hidden
+  kind: unstated_input
+  about: [koff_factor_me, S0_NA_me, xis_me, E_me, sm_me]
+  text: >
+    The master-equation program holds values the paper does not print: the factor 1.6 on both
+    catch-bond terms of vinculin-free talin clutches (lines 40-41; p. 11 says this rate was 'found by
+    fitting' without a value), the initial NA area S_0 = 0.165 um^2 (line 24), the substrate viscous
+    coefficient 1 pN s/nm (line 37) and E = 1 MPa (line 34) for the run, and a commented myosin density
+    68 um^-2 (line 20).
+  citation: {file: solve_full_master_equation_main.m, lines: "40", quote: "k_off_1_talin = 1.6 * 0.3755;"}
+- id: q_kT_in_code
+  kind: reading
+  about: [kB_tw, T_tw, cmp_xt_code, cmp_xtp_code]
+  text: >
+    The code works with characteristic dissociation forces F_d (4.411 and -38.09 pN), the paper with
+    transition distances x_t = kBT / F_d (0.97 and -0.11 nm). The code's kBT is 1.38e-23 x 310 J
+    (line 75), so the temperature liu2025 left unstated (its q_kT) is 310 K, and the code's F_d convert
+    to the printed x_t (cmp_xt_code, cmp_xtp_code). The linear program itself never uses kBT.
+  citation: {file: talin_WT_model.m, lines: "75", quote: "kT = 1.38e-23 * 310 / 1e-21;"}
+- id: q_contour_vs_E
+  kind: numerics
+  about: [linear_port, talin_wt_port]
+  text: >
+    The code reads the steady states off a 100 x 100 grid in (log v, log E) with MATLAB's contour;
+    the ports take the same v grid at the E of each printed point, so they do not reproduce the
+    interpolation across the code's E grid (spacing 0.08 decades for the linear program, 0.04 for
+    talin WT). Near a fold of the steady-state curve (the bistable KD case) the code's contour and the
+    port can differ by up to one grid cell in E.
+  citation: {file: Linear_KD_WT_model.m, lines: "296", quote: "M = contour(log10(v_actin), log10(Young_modulus), Cell_traction_substrate-Cell_traction_myosin, [0 0], 'k');"}
+- id: q_code_data
+  kind: reading
+  about: [linear_port, talin_wt_port]
+  text: >
+    Every main program also types in measured traction and flow values of Elosegui-Artola et al. 2016
+    for plotting (e.g. Linear_KD_WT_model.m lines 67-146). They are not parameters of the models and are
+    not recorded here; their E positions differ slightly between files (11000 and 30000 Pa in the
+    linear program, 12000 and 29000 Pa in the talin programs).
+  citation: {file: Linear_KD_WT_model.m, lines: "63", quote: "Experimental data from [Artola, Nat Cell Biol, 2016]"}
+- id: q_xval_elosegui2014_none
+  kind: choice
+  about: [linear_port, talin_wt_port, wt2_model, master_equation, xt_from_Fd, Fu_from_xu]
+  text: >
+    No model of this record predicts an elosegui2014 measurement, so no validation is entered. The programs
+    cite elosegui2014 ('Artola, Nature Materials, 2014') only in comments beside parameter values (v0 = 110
+    nm/s, Fst = 2 pN, a_2 = 550 nm, clutch stiffness 1 nN/nm), which the programs do not use (they set 120
+    nm/s, 1700 nm and 1.6 or 0.05 pN/nm); the data they plot and fit are elosegui2016's (q_code_data).
+    elosegui2014's measurements are the traction, actin flow and integrin density of MCF10A myo ctrl / myo
+    b6 cells against stiffness (Figs. 1b,c, 4d-l), SPR rates and response curves (Fig. 2a), and integrin
+    densities, recruitment and bead detachment (Fig. 2b-g). linear_port and talin_wt_port give traction and
+    flow, but only with a myosin density, clutch-site density, kon and adhesion size for those cells, which
+    neither record states; the code's values are fitted to MEF data, and refitting them to these curves
+    would be a fit, not a test. No program outputs an off-rate (the catch-bond terms are inputs only), so
+    the SPR koff, which liu2025's Eq. 4 is checked against (liu2025/val_koff_zero_force_spr_a5b1), has no
+    model here. The other measurements are quantities no program computes. The reverse direction is in
+    elosegui2014/q_xval_liu_code_none.
+  citation: {file: Linear_KD_WT_model.m, lines: "20", quote: "= 110 nm/s [Artola, Nature Materials, 2014]"}
+- id: q_xval_liu2025_scope
+  kind: choice
+  about: [linear_port, talin_wt_port, wt2_model, master_equation]
+  text: >
+    (Cross-record validation against liu2025.) The validations entered are the linear KD, linear WT and talin WT
+    ports, each with the code's own values, against the measured points liu2025 fitted them to (Fig. 2c,d;
+    Extended Data Fig. 5a,b): all fit_quality, since these programs are the paper's fitting code. They differ
+    from liu2025's own fit checks (liu2025/cmp_*_data_*) only where the code's values differ from Table T1's
+    (kon 0.0051, r 0.75 nm, ly 1000 nm, alpha 100). Not used, and why: (1) Extended Data Fig. 5b with the
+    talin WT model (dotted curves): neither liu2025 nor the code prints the talin WT myosin densities at 15 and
+    50 uM blebbistatin. (2) Fig. 3a,b at 1 and 100 ug/ml fibronectin: the fitted k0on, r and sigma_m per coating
+    are only figure readings of liu2025's Fig. 3c (liu2025/kon_talinWT_fig3c etc.), curves over fibronectin
+    concentration that no input here can take as one value, and no program sets them; the 10 ug/ml points are
+    the same points as Fig. 2c, already entered. (3) Fig. 4c,d (vinculin mutants, VD1/VKO), Fig. 4f (force-loading
+    rates) and Fig. 4g (talin force-extension): outputs of WT2_model.m, the master-equation program or the
+    loading-rate statistics and force-extension helpers, none of which is ported (q_wt2_not_ported,
+    q_master_not_ported). (4) Extended Data Fig. 4b (flow on viscous substrates): no port has a Maxwell
+    substrate. (5) Fig. 3e (myosin stacks), the Fig. S4 off-rates and Table T3 stiffness: no program outputs
+    them (the off-rate terms are inputs only). Nothing of this record is a measurement, so no model of liu2025
+    has anything here to predict (liu2025/q_xval_liu_code_none).
+  citation: {file: Linear_KD_WT_model.m, lines: "3", quote: "This is the main function of the linear KD and linear WT models"}
+- id: q_xval_liu2025_branch
+  kind: choice
+  about: [linear_port, sm_KD_bleb50_paper, 'liu2025/P_KD_data_50uM_ed5a']
+  text: >
+    At sigma_m = 26 um^-2 the linear KD model has two stable steady states on rigid substrates (Extended Data
+    Fig. 5a, dashed unstable branch). The validation runs the strong (slow-flow, high-traction) branch at every
+    measured point, as liu2025's own fit check does; liu2025 does not say which branch each 50 uM point is meant
+    to lie on, and the weak branch is the alternative for the stiffest points.
+  citation: {file: Linear_KD_WT_model.m, lines: "296", quote: "M = contour(log10(v_actin), log10(Young_modulus), Cell_traction_substrate-Cell_traction_myosin, [0 0], 'k');"}
+# ==== cross-record validation with kong2009 (2026-11-21): none added =======================
+- id: q_xval_kong2009_none
+  kind: unstated_model
+  about: [linear_port, talin_wt_port, wt2_model, master_equation, xt_from_Fd, Fu_from_xu, 'kong2009/lt_FN_a5b1Fc_CaMg', 'kong2009/lt_FN_a5b1Fc_MgEGTA', 'kong2009/lt_FN_a5b1Fc_Mn']
+  text: >
+    No model of this record predicts a kong2009 measurement, so no validation is entered. The programs name
+    Kong 2009 once, in Linear_KD_WT_model.m lines 43-47: a commented-out set of two-exponential catch-bond
+    constants ('% [Kong 2009] data': k_off_1 = 5.463, k_off_2 = 0.1381 1/s, F_d_1 = -10.98, F_d_2 = 20.58 pN),
+    presumably fitted to Kong's lifetime-force curves. The programs do not use that set, and kong2009 prints
+    no such fit. kong2009's measurements are mean lifetimes (+- SEM) of single FNIII7-10/a5b1 chains under a
+    clamped force (Figs. 3-6), adhesion frequencies, rupture-force histograms, cantilever stiffness by
+    lifetime bin, event counts against lifetime (Fig. S5) and flow-cytometry intensities. No program here
+    outputs a bond lifetime: the catch-bond terms k_off_i exp(F/F_d_i) are inputs of linear_port and
+    talin_wt_port, which output traction, flow, mean clutch tension and engaged-clutch densities of a whole
+    adhesion; xt_from_Fd and Fu_from_xu are unit conversions. Testing the commented Kong set against
+    kong2009/lt_FN_a5b1Fc_CaMg would need a lifetime model, 1/(k_off_1 exp(F/F_d_1) + k_off_2 exp(F/F_d_2)),
+    that the programs never compute and that equals the mean lifetime only for a single first-order decay,
+    which kong2009 itself questions (Fig. S5 subpopulations); it would also be a fit, not a test. In the
+    other direction, see kong2009/q_xval_liu_code_none.
+  citation: {file: Linear_KD_WT_model.m, lines: "43", quote: "% [Kong 2009] data"}
+# ==== cross-record validation with elosegui2016 (2026-11-21) ==================================
+- id: q_xval_elosegui2016_scope
+  kind: choice
+  about: [linear_port, talin_wt_port, wt2_model, master_equation, 'elosegui2016/fig3d_control_data', 'elosegui2016/fig3d_shrna_data', 'elosegui2016/fig1a_control_data', 'elosegui2016/fig1a_shrna_data', 'elosegui2016/fig6b_control_data', 'elosegui2016/fig6g_control_data', 'elosegui2016/fig6a_control_data', 'elosegui2016/fig6d_control_data']
+  text: >
+    (Cross-record validation against elosegui2016.) Entered: the linear KD, linear WT and talin WT ports with the
+    code's own values against elosegui2016's tractions (Fig. 3d), actin flows (Fig. 3e) and the 15 and 50 uM
+    blebbistatin tractions (Fig. 6h,i), shRNA cells for the KD set and control cells for the WT sets. All are
+    fit_quality: liu2025 fitted these programs' parameters to exactly these data (Fig. 2c,d; Extended Data Fig. 5;
+    q_code_data). Which panel carries the measurement is a choice: Fig. 1a, Fig. 3d and Fig. 6b (10 ug/ml) plot the
+    same untreated points (elosegui2016 figures.md); Fig. 3d is used because its reading finds the most points.
+    The code types in the points at slightly different rigidities (11 and 30 kPa linear, 12 and 29 kPa talin);
+    the runs take elosegui2016's read rigidities. Not used, and why: (1) Fig. 6g (5 uM blebbistatin): liu2025
+    fits only 15 and 50 uM and prints no myosin density for 5 uM; (2) Fig. 6a,c (1 and 100 ug/ml fibronectin):
+    liu2025's per-coating kon, r and sigma_m exist only as readings of its Fig. 3c curves (q_xval_liu2025_scope),
+    which no program sets; (3) Fig. 6d-f (GPen): liu2025 does not model integrin inhibition; (4) talin WT at 15 and
+    50 uM: no myosin density is printed for it; (5) adhesion lengths, YAP ratios, spread areas, attached-cell
+    fractions, alphavbeta3 bond lifetimes (Fig. 3a) and the 5 kPa threshold: no program outputs these quantities
+    (the catch-bond terms are inputs, not outputs); (6) L325R, rod/head, IVVI and VD1 rescues: no parameter set for
+    them. Nothing in this record is a measurement, so no elosegui2016 model has anything here to predict
+    (elosegui2016/q_xval_liu_code_none).
+  citation: {file: Linear_KD_WT_model.m, lines: "63", quote: "Experimental data from [Artola, Nat Cell Biol, 2016]"}
+- id: q_xval_elosegui2016_wt_plateau
+  kind: unexplained_difference
+  about: [linear_port, talin_wt_port, 'elosegui2016/fig3d_control_data', 'elosegui2016/fig3e_control_data']
+  text: >
+    (Validations val_fit_lwt_traction_elosegui2016_fig3d, val_fit_lwt_flow_elosegui2016_fig3e,
+    val_fit_tw_traction_elosegui2016_fig3d and val_fit_tw_flow_elosegui2016_fig3e.) The WT fits to elosegui2016's untreated control cells come out not reproduced. elosegui2016's control tractions
+    hold a plateau (about 92, 89 and 89 Pa at 4.7, 11.3 and 14.5 kPa) before rising to about 137 Pa at 29 kPa, and the
+    flows hold about 57 and 54 nm/s at 11 and 14.5 kPa. The linear WT set rises monotonically through it (a direct run of
+    linear_port: 85, 117, 124, 139 Pa and 60, 38, 33, 22 nm/s at 4.7, 11.3, 14.5, 29.4 kPa). It meets the 4.7 and 29 kPa
+    points but misses the two middle ones, which elosegui2016 explains by talin unfolding and reinforcement above the
+    threshold, an ingredient the linear and talin WT models lack. The talin WT port, fitted to the same points and close to
+    the linear WT curve (liu2025 p. 6), also comes out not reproduced on both curves. The same models are close or reproduced at 15 and 50 uM blebbistatin and for the shRNA cells, so
+    the misfit is in the shape of the untreated WT curve, not in the reading. liu2025 says 'Both WT models reproduce
+    the WT data' (p. 5); judged within the s.e.m. bars, the middle points are not reproduced.
+  citation: {file: Linear_KD_WT_model.m, lines: "63", quote: "Experimental data from [Artola, Nat Cell Biol, 2016]"}

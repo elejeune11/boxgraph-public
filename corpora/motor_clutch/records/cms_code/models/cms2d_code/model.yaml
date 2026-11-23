@@ -1,0 +1,51 @@
+# The whole simulator, cms2Dv1_0.m lines 35-426, with its analysis analyzeCMSoutputv1_0.m lines 9-115.
+# Not ported (see not_runnable_reason). Its rules that a check needs are ported one by one:
+# module_max_port (lines 39-40), kmod_port (171), off_rate_port (175, 180-181), flow_port (200-202),
+# polyrate_port (207, 371), module_assign_port (229-245), keff_port (310-315).
+# Order of one event in the code (lines 170-359), which follows the paper's steps 2-11: rates of all
+# clutches, capping and module birth; dt = -log(rand)/sum(k); event by a second rand; flow and
+# polymerization of every module over dt (lines 197-213, engaged clutches carried back, clutches past
+# the motors released); event executed (216-281); modules with sdist - mdist < lmin deleted (293);
+# effective springs (296-319); cell position by fsolve of the force balance (321, 431-448); module and
+# cell-body springs, substrate and clutch positions updated (324-357); state recorded each tint.
+id: cms2d_code
+name: "two-dimensional cell migration simulator of motor-clutch modules (cms2Dv1_0.m, MATLAB, not ported)"
+role: model
+stated: {file: cms2Dv1_0.m, lines: "30", quote: "%% 2-D motor-clutch migration"}
+described_from: bangasser2017
+equation: >-
+  Direct Gillespie SSA over clutch binding (kon), unbinding (koff exp(|Fc|/Fb)), module capping (kcap)
+  and birth (kmod0 (1 - factin/totact)^4); per module vf = vu (1 - Ksub sdisp/(nm Fm)) clipped at 0,
+  polymerization maxpoly (1 - factin/totact) while uncapped; module spring Keff = (1/Kcell + 1/(n Kc) +
+  1/Ksub)^-1, cell body (1/(n Kc) + 1/Ksub)^-1; cell position from sum of module and cell-body forces = 0
+  (fsolve); outputs every tint s; analysis: MSD of 15-min samples after texc, weighted fit msd = 4 D t
+  to the first half; traction |Frc| + sum |Fr|; mean module flow; shape from the final state.
+inputs:
+  mpool:   {quantity: n_motors_total, unit: dimensionless}
+  cpool:   {quantity: n_clutches_total, unit: dimensionless}
+  totact:  {quantity: total_actin, unit: nm}
+  maxpoly: {quantity: max_polymerization_velocity, unit: nm/s}
+  kmod0:   {quantity: max_module_birth_rate, unit: 1/s}
+  kcap:    {quantity: module_capping_rate, unit: 1/s}
+  lcell:   {quantity: initial_module_length, unit: nm}
+  lmin:    {quantity: min_module_length, unit: nm}
+  Kcell:   {quantity: cell_spring_constant, unit: pN/nm}
+  nc:      {quantity: n_cell_body_clutches, unit: dimensionless}
+  Fm:      {quantity: motor_stall_force, unit: pN}
+  vu:      {quantity: unloaded_motor_velocity, unit: nm/s}
+  kon:     {quantity: clutch_on_rate, unit: 1/s}
+  koff:    {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Kc:      {quantity: clutch_stiffness, unit: pN/nm}
+  Fb:      {quantity: bond_rupture_force, unit: pN}
+  Ksub:    {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  rgflow:   {quantity: motor_retraction_velocity, unit: nm/s, description: "rgflow: mean over the 15-min samples of the mean module flow"}
+settings: {seed: shuffle, tint_s: 1, tanalysis_min: 15, texc_min: 60, durr_h: 10, cellnum: 50, nucr_nm: 10000}
+stochastic: true
+runnable: false
+not_runnable_reason: >-
+  MATLAB cannot run here, and a faithful Python port of the whole simulator would not fit a build: the
+  shell's settings simulate 10 h per cell for 50 cells, the readme says 5 h of the low set takes about
+  10 h on a quad-core processor, and each event calls fsolve for the cell position. No printed result of
+  the simulator has a precision that would give a verdict (the paper's optima are '~0.1', '~1', '~10'
+  pN/nm). The rules a check needs are ported one by one instead.

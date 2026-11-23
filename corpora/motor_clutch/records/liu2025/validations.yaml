@@ -1,0 +1,126 @@
+# Cross-validation against elosegui2014 (cited as ref. 12). See q_xval_elosegui2014_scope.
+- id: val_koff_zero_force_spr_a5b1
+  model: koff_eq4
+  inputs: {k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, F: F_zero_spr}
+  output: koff
+  against: 'elosegui2014/koff_a5b1'
+  purpose: validation
+  quantities: {'elosegui2014/unbinding_rate': bond_off_rate}
+  conditions_ok: >
+    Both are the dissociation rate of the alpha5beta1 integrin from the FN7-10 fragment. Eq. 4 was fitted
+    (Fig. S4, p. 52) to single-bond rupture data under load from SI ref. [10] (elosegui2016); elosegui2014
+    measured the rate by SPR of purified integrin flowed over immobilized FN7-10 (p. 6), with no applied
+    force, so the model is run at F = 0 (added F_zero_spr). The two set-ups differ (cell-surface bonds
+    pulled under load against purified integrins in solution), which is part of what this test probes; the
+    SPR value was not used in the fit. At F = 0 the result does not depend on kT.
+  basis: >
+    Eq. 4 is liu2025's dissociation rate of the integrin-fibronectin bond as a function of force (Table T1,
+    p. 55, 'Catch-bond dissociation rates of molecular clutches at ... zero mechanical load'); at zero force
+    it gives k0off + k0'off, the zero-load rate of the same bond whose solution-phase koff elosegui2014
+    measured (Fig. 2a table, p. 3). The printed koff depends on how the column header 's-1 x 10^2' is
+    read (elosegui2014/q_koff_column_multiplier; q_xval_koff_header_choice).
+# ==== Cross-validation against elosegui2016 (ref. 13 = SI ref. [10]), 2026-11-21 =========================
+# Every elosegui2016 measurement a model here outputs is one this paper fitted its parameters to (Fig. 2c,d:
+# 'Fitting of experimental data ... from refs. 13,21'; Extended Data Fig. 5: 'by varying only the density of
+# myosin II motors'), so all are fit_quality, judged against elosegui2016's own readings of the points.
+# What was not used, and why: q_xval_elosegui2016_scope.
+- id: val_fit_WT_traction_elosegui2016_fig3d
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig3d_control_data'}
+  output: P
+  against: 'elosegui2016/fig3d_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: >
+    Same cells and condition (control MEFs, 10 ug/ml fibronectin, untreated); Liu calls elosegui2016's
+    control cells 'MEF WT' and plots these points as its Fig. 2c WT data (cited.yaml). The model's P is the
+    traction over an adhesion complex, which Liu fits directly to the measured average cell traction.
+  basis: >
+    The linear WT parameters (Table T1, Extended Data Table 2) were fitted to these tractions: Fig. 2c (p. 5),
+    'Fitting of experimental data for cell traction (c) and retrograde actin flow (d) from refs. 13,21 collected
+    for MEF WT cells (red circles) ... to the linear clutch model'. A fit, not a test.
+- id: val_fit_KD_traction_elosegui2016_fig3d
+  model: steady_linear
+  inputs: {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig3d_shrna_data'}
+  output: P
+  against: 'elosegui2016/fig3d_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: >
+    Same cells and condition (talin 1 KO, talin 2 shRNA MEFs, 10 ug/ml fibronectin, untreated), plotted by Liu
+    as the KD data of Fig. 2c (cited.yaml). P is fitted directly to the measured cell traction.
+  basis: >
+    The linear KD parameters (Table T1) were fitted to these tractions: Fig. 2c (p. 5), 'Fitting of experimental
+    data ... MEF Talin 1 KO, Talin 2 shRNA cells (green triangles) to the linear clutch model'. A fit.
+- id: val_fit_WT_flow_elosegui2016_fig3e
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig3e_control_data'}
+  output: v
+  against: 'elosegui2016/fig3e_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/actin_retrograde_flow': actin_flow_speed}
+  conditions_ok: "Same cells and condition (control MEFs, 10 ug/ml fibronectin), plotted by Liu as the WT data of Fig. 2d (cited.yaml)."
+  basis: >
+    The linear WT parameters were fitted to these flows as well: Fig. 2c,d (p. 5), 'retrograde actin flow (d)
+    from refs. 13,21 collected for MEF WT cells'. A fit.
+- id: val_fit_KD_flow_elosegui2016_fig3e
+  model: steady_linear
+  inputs: {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig3e_shrna_data'}
+  output: v
+  against: 'elosegui2016/fig3e_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/actin_retrograde_flow': actin_flow_speed}
+  conditions_ok: "Same cells and condition (talin-depleted MEFs, 10 ug/ml fibronectin), plotted by Liu as the KD data of Fig. 2d (cited.yaml)."
+  basis: "The linear KD parameters were fitted to these flows: Fig. 2c,d (p. 5). A fit."
+- id: val_fit_WT_bleb15_elosegui2016_fig6h
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT_bleb15, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig6h_control_data'}
+  output: P
+  against: 'elosegui2016/fig6h_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: >
+    elosegui2016's datum carries the condition blebbistatin 15 uM; the run's sigma_m = 41 um^-2 is the density
+    Liu fitted for exactly that condition (Extended Data Fig. 5b label), the only input that changes with it.
+  basis: >
+    Extended Data Fig. 5b (p. 70): MEF WT tractions under 15 uM blebbistatin (ref. 13; elosegui2016 Fig. 6h,
+    cited.yaml) fitted 'by varying only the density of myosin II motors'. A fit of sigma_m to these points.
+- id: val_fit_WT_bleb50_elosegui2016_fig6i
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT_bleb50, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig6i_control_data'}
+  output: P
+  against: 'elosegui2016/fig6i_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: "Blebbistatin 50 uM on elosegui2016's datum; sigma_m = 24 um^-2 is Liu's fitted density for that condition (Extended Data Fig. 5b)."
+  basis: "Extended Data Fig. 5b (p. 70): MEF WT tractions under 50 uM blebbistatin (elosegui2016 Fig. 6i), fitted by varying only sigma_m. A fit."
+- id: val_fit_KD_bleb15_elosegui2016_fig6h
+  model: steady_linear
+  inputs: {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD_bleb15, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig6h_shrna_data'}
+  output: P
+  against: 'elosegui2016/fig6h_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: "Blebbistatin 15 uM on elosegui2016's datum; sigma_m = 43 um^-2 is Liu's fitted density for that condition (Extended Data Fig. 5a)."
+  basis: "Extended Data Fig. 5a (p. 70): talin-depleted tractions under 15 uM blebbistatin (elosegui2016 Fig. 6h), fitted by varying only sigma_m. A fit."
+- id: val_fit_KD_bleb50_elosegui2016_fig6i
+  model: steady_linear
+  inputs: {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD_bleb50, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  sweep: {E: 'elosegui2016/fig6i_shrna_data'}
+  settings: {branch: strong}
+  output: P
+  against: 'elosegui2016/fig6i_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: "Blebbistatin 50 uM on elosegui2016's datum; sigma_m = 26 um^-2 is Liu's fitted density for that condition (Extended Data Fig. 5a)."
+  basis: >
+    Extended Data Fig. 5a (p. 70): talin-depleted tractions under 50 uM blebbistatin (elosegui2016 Fig. 6i),
+    fitted by varying only sigma_m. At sigma_m = 26 the model is bistable over part of the E range; the
+    strong branch is taken, as in this record's run_KD_data_50uM_ed5a (q_xval_elosegui2016_branch). A fit.

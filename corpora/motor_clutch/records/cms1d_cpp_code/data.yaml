@@ -1,0 +1,333 @@
+# ---- Cell1DPublish.cpp, Cell1D::InitFile (lines 42-70): the parameter set ---------------------------
+# Units: the comments of Cell1DPublish.h give them where they exist (pN, nm, s, hours); where they do not,
+# the unit is the one the code's arithmetic implies (lengths in nm, forces in pN), said in a note.
+# Where prahl2020 prints the same parameter (Table S1, PDF p. 22), from_source/from_datum let the build
+# check the code's value against it. Several Table S1 values are printed as bare powers of ten (10^3,
+# 10^-1, 10^-3, 10^4), which get no verdict; ksub is linked to the main text's "1000" instead.
+- id: n_modules_initial
+  quantity: n_modules_initial
+  unit: dimensionless
+  origin: reported
+  printed: "4"
+  citation: {file: Cell1DPublish.cpp, lines: "42", quote: "n_modules_ = 4;"}
+  note: "Init (lines 78-97) makes n_modules_/2 = 2 modules at theta = 0 (+x) and 2 at theta = pi (-x); prahl2020 starts with two +x and one -x (question q_initial_state)"
+- id: ksub_code
+  quantity: substrate_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "1"
+  citation: {file: Cell1DPublish.cpp, lines: "43", quote: "ksub_cell = 1;"}
+  from_source: prahl2020
+  from_datum: ksub_text
+  note: "no unit in the code (Cell1DPublish.h line 81: 'substrate stiffness'); it is added in series with clutch_k_ (pN/nm) and cell_k (pN/nm) at lines 515 and 537, so pN/nm. Every module gets the same value (ksub_cell is passed to each Module, lines 82, 92, 485)"
+- id: duration_code
+  quantity: simulated_time
+  unit: hour
+  origin: reported
+  printed: "6"
+  citation: {file: Cell1DPublish.cpp, lines: "44", quote: "duration_ = 6;"}
+  note: "Cell1DPublish.h line 119: 'length of the simulation in hours'; prahl2020 p. S3 says '5-7 hours of simulated time' (no datum in that record)"
+- id: length_code
+  quantity: initial_module_length
+  unit: nm
+  origin: reported
+  printed: "5000"
+  citation: {file: Cell1DPublish.cpp, lines: "45", quote: "length_ = 5000;"}
+  from_source: prahl2020
+  from_datum: Lcell
+  note: "no unit in the code; module lengths are compared with 100 (line 384) and grow by maxpoly_ (nm/s) times dt, so nm"
+- id: kcell_code
+  quantity: cell_spring_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "10000"
+  citation: {file: Cell1DPublish.cpp, lines: "46", quote: "cell_k = 10000;"}
+  from_source: prahl2020
+  from_datum: kcell
+  note: "Cell1DPublish.h line 58: 'cell spring constant in pN / nm'"
+- id: Atotal_code
+  quantity: total_actin_length
+  unit: nm
+  origin: reported
+  printed: "100000"
+  citation: {file: Cell1DPublish.cpp, lines: "47", quote: "total_actin_pool_ = 100000;"}
+  from_source: prahl2020
+  from_datum: Atotal
+  note: "Cell1DPublish.h line 62 says 'in nM', but the code subtracts module lengths (nm) from it (lines 48-49, 395), so it is a length in nm (question q_actin_pool_unit)"
+- id: nmotor_code
+  quantity: n_motors_cell
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {file: Cell1DPublish.cpp, lines: "50", quote: "motor_pool_ = 1000;"}
+  from_source: prahl2020
+  from_datum: nmotor
+- id: nclutch_code
+  quantity: n_clutches_cell
+  unit: dimensionless
+  origin: reported
+  printed: "750"
+  citation: {file: Cell1DPublish.cpp, lines: "53", quote: "clutch_pool_ = 750;"}
+  from_source: prahl2020
+  from_datum: nclutch
+- id: clutch_input_code
+  quantity: n_clutches_group_input
+  unit: dimensionless
+  origin: reported
+  printed: "750"
+  citation: {file: Cell1DPublish.cpp, lines: "54", quote: "double clutch_input = 750;"}
+  note: "G_factor = clutch_input/clutch_pool_ (line 55) multiplies the clutch stiffness in every effective spring (lines 515, 537); here it is 1 (question q_group_factor)"
+- id: motor_divisor_code
+  quantity: pool_divisor
+  unit: dimensionless
+  origin: reported
+  printed: "10.0"
+  citation: {file: Cell1DPublish.cpp, lines: "57", quote: "max_module_motors_ = int(motor_pool_/10.0);"}
+- id: clutch_divisor_code
+  quantity: pool_divisor
+  unit: dimensionless
+  origin: reported
+  printed: "10.0"
+  citation: {file: Cell1DPublish.cpp, lines: "58", quote: "max_module_clutches_ = int(clutch_pool_/10.0);"}
+- id: nclutch_cell_code
+  quantity: n_clutches_cell_body
+  unit: dimensionless
+  origin: reported
+  printed: "10"
+  citation: {file: Cell1DPublish.cpp, lines: "59", quote: "n_clutches_cell = 10;"}
+  from_source: prahl2020
+  from_datum: nclutch_cell
+- id: kon_code
+  quantity: clutch_on_rate
+  unit: 1/s
+  origin: reported
+  printed: "1"
+  citation: {file: Cell1DPublish.cpp, lines: "60", quote: "clutch_on_rate_ = 1;"}
+  from_source: prahl2020
+  from_datum: kon
+  note: "Cell1DPublish.h line 69: 'clutch on rate constant in 1 / s'"
+- id: koff_code
+  quantity: clutch_off_rate_unloaded
+  unit: 1/s
+  origin: reported
+  printed: "0.1"
+  citation: {file: Cell1DPublish.cpp, lines: "61", quote: "clutch_off_rate_ = 0.1;"}
+  from_source: prahl2020
+  from_datum: koff
+  note: "Cell1DPublish.h line 70: 'clutch off rate constant in 1 / s'"
+- id: Fb_code
+  quantity: bond_rupture_force
+  unit: pN
+  origin: reported
+  printed: "2"
+  citation: {file: Cell1DPublish.cpp, lines: "62", quote: "clutch_rupture_force_ = 2;"}
+  from_source: prahl2020
+  from_datum: Fbond
+  note: "Cell1DPublish.h line 71: 'bond (cell clutch) rupture force in pN'"
+- id: kc_code
+  quantity: clutch_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "0.8"
+  citation: {file: Cell1DPublish.cpp, lines: "63", quote: "clutch_k_ = 0.8;"}
+  from_source: prahl2020
+  from_datum: kclutch
+  note: "Cell1DPublish.h line 72: 'clutch spring constant in pN / nm'"
+- id: Fm_code
+  quantity: motor_stall_force
+  unit: pN
+  origin: reported
+  printed: "2"
+  citation: {file: Cell1DPublish.cpp, lines: "66", quote: "motor_stall_force_ = 2;"}
+  from_source: prahl2020
+  from_datum: Fmotor
+  note: "Cell1DPublish.h line 100: 'motor stall force in pN'"
+- id: vu_code
+  quantity: unloaded_motor_velocity
+  unit: nm/s
+  origin: reported
+  printed: "120"
+  citation: {file: Cell1DPublish.cpp, lines: "67", quote: "v_unloaded_ = 120;"}
+  from_source: prahl2020
+  from_datum: vmotor
+  note: "Cell1DPublish.h line 101: 'unloaded motor velocity in nm / s'"
+- id: vpoly_code
+  quantity: actin_polymerization_velocity_max
+  unit: nm/s
+  origin: reported
+  printed: "200"
+  citation: {file: Cell1DPublish.cpp, lines: "68", quote: "maxpoly_ = 200;"}
+  from_source: prahl2020
+  from_datum: vactin_max
+  note: "Cell1DPublish.h line 61: 'Max polymerization rate in nm / s'"
+- id: knuc0_code
+  quantity: nucleation_rate_max
+  unit: 1/s
+  origin: reported
+  printed: "1"
+  citation: {file: Cell1DPublish.cpp, lines: "69", quote: "module_birth_rate_0 = 1;"}
+  from_source: prahl2020
+  from_datum: knuc0
+  note: "Cell1DPublish.h line 86: 'module birth rate in 1 / s'"
+- id: kcap_code
+  quantity: capping_rate
+  unit: 1/s
+  origin: reported
+  printed: "0.001"
+  citation: {file: Cell1DPublish.cpp, lines: "70", quote: "cap_rate_ = 0.001);"}
+  from_source: prahl2020
+  from_datum: kcap
+  note: "Cell1DPublish.h line 102: 'module capping rate in 1 / s'. The line as written has a stray closing parenthesis (question q_does_not_compile)"
+
+# ---- Cell1DPublish.cpp, Cell1D::Cell1D (lines 23-30): switches and hidden factors -------------------
+- id: seed_code
+  quantity: rng_seed
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Cell1DPublish.cpp, lines: "23", quote: "randSeed = 1;"}
+  note: "used by gsl_rng_set (line 143); prahl2020 uses 'a unique, randomly generated seed for each run' (p. S3)"
+- id: aflow_ratio_code
+  quantity: flow_coupling_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "0.2"
+  citation: {file: Cell1DPublish.cpp, lines: "25", quote: "aflow_ratio = 0.2;"}
+  note: "lines 415-417 and 423-425: a module's substrate and reference positions and its length move back by aflow_ratio times the flow distance (question q_aflow_ratio)"
+- id: polyvary_code
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Cell1DPublish.cpp, lines: "27", quote: "PolyVary = 1;"}
+  note: "switches on the time-varying motor factor of lines 184-199 (question q_motor_schedule)"
+- id: polyfactor_code
+  quantity: polymerization_factor
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Cell1DPublish.cpp, lines: "28", quote: "PolyFactor = 1;"}
+- id: polypow_code
+  quantity: motor_factor_gain
+  unit: dimensionless
+  origin: reported
+  printed: "3"
+  citation: {file: Cell1DPublish.cpp, lines: "29", quote: "PolyPow = 3;"}
+- id: polar_code
+  quantity: polarity_parameter
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: Cell1DPublish.cpp, lines: "30", quote: "Polar = 0;"}
+
+# ---- Cell1D::Simulate and Update: run length, analysis and numerical cut-offs ------------------------
+- id: motor_schedule_control
+  quantity: motor_factor_schedule
+  unit: dimensionless
+  origin: reported
+  citation: {file: Cell1DPublish.cpp, lines: "185-186", quote: "double factor_arr[] = {1, 1.04, 1.14, 0.91, 0.98, 1.19, 1.12, 0.99, 1.19, 1.14, 1.10, 1.31, 1};//control"}
+  table: {index_quantity: time_hours, index_unit: hour,
+          index: ["0", "1.25", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5", "5.5", "6", "7"],
+          values: ["1", "1.04", "1.14", "0.91", "0.98", "1.19", "1.12", "0.99", "1.19", "1.14", "1.10", "1.31", "1"]}
+  note: "time_arr (line 185) against factor_arr (line 186, 'control'); factor_arr[i] holds from time_arr[i] to time_arr[i+1] (lines 191-197), the last pair is 'add last term'. Two other arrays are commented out: '//C646' (line 187) and '//SMIFH2' (line 188)"
+- id: motor_factor_floor_code
+  quantity: motor_factor_floor
+  unit: dimensionless
+  origin: reported
+  printed: "0.1"
+  citation: {file: Cell1DPublish.cpp, lines: "195", quote: "if (nmFactor < 0.1) nmFactor = 0.1;"}
+- id: discard_code
+  quantity: discarded_time
+  unit: s
+  origin: reported
+  printed: "3600"
+  citation: {file: Cell1DPublish.cpp, lines: "153", quote: "double analysis_time = 3600;//initial analysis time = 1hr"}
+  note: "prahl2020 p. S3: 'We excluded the first hour of simulated data'"
+- id: sampling_code
+  quantity: sampling_interval
+  unit: min
+  origin: reported
+  printed: "5"
+  citation: {file: Cell1DPublish.cpp, lines: "156", quote: "double trunc_time = 5*60.0; //truncate time = 10min"}
+  note: "written 5*60.0 s; the comment says 10 min, and line 216 'analyze data every 10min' (question q_comments); prahl2020 p. S3: 'sampled every 5 minutes'"
+- id: record_interval_code
+  quantity: recording_interval
+  unit: s
+  origin: reported
+  printed: "1"
+  citation: {file: Cell1DPublish.cpp, lines: "203", quote: "if (current_time_ > RecordSecond+1) { // record every second"}
+- id: jump_code
+  quantity: jump_threshold
+  unit: nm
+  origin: reported
+  printed: "1000"
+  citation: {file: Cell1DPublish.cpp, lines: "209", quote: "if (mag(cell_pos - cell_pos_prev)>1000) {"}
+  note: "applied once per recording interval of 1 s, so a jump is a velocity above 1000 nm/s = 1 um/s, the threshold prahl2020 states (p. S3)"
+- id: lmin_code
+  quantity: minimum_module_length
+  unit: nm
+  origin: reported
+  printed: "100"
+  citation: {file: Cell1DPublish.cpp, lines: "384", quote: "if (m->mlen < 100) {"}
+  from_source: prahl2020
+  from_datum: Lmin
+- id: ksum_cap_code
+  quantity: event_rate_cap
+  unit: 1/s
+  origin: reported
+  printed: "1 x 10^6"
+  citation: {file: Cell1DPublish.cpp, lines: "260", quote: "if (k_sum>1e6) k_sum = 1e6;"}
+- id: fb_tol_code
+  quantity: force_balance_tolerance
+  unit: pN
+  origin: reported
+  printed: "1 x 10^-7"
+  citation: {file: Cell1DPublish.cpp, lines: "697", quote: "status = gsl_multiroot_test_residual (s->f, 1e-7);"}
+- id: fb_iter_code
+  quantity: force_balance_max_iterations
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {file: Cell1DPublish.cpp, lines: "698", quote: "} while (status == GSL_CONTINUE && iter < 100);"}
+
+# ---- inputs for the ported allocation rule at the start of a module's birth -----------------------
+- id: active_zero
+  quantity: n_motors_active
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: Cell1DPublish.cpp, lines: "459", quote: "active_motors_ = 0;"}
+  note: "the sum starts at zero; used as the motor count held by modules when none exists"
+- id: active_clutch_zero
+  quantity: n_clutches_active
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: Cell1DPublish.cpp, lines: "460", quote: "active_clutches_ = 0;"}
+  note: "the sum starts at zero; used as the clutch count held by modules when none exists"
+
+# ---- what prahl2020 prints for the values the ports produce (copied from its record) ---------------
+- id: nmotor_module_p20
+  quantity: n_motors_module_max
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {none: "copied from the paper's record prahl2020 (nmotor_module: Table S1, PDF p. 22)"}
+  from_source: prahl2020
+  from_datum: nmotor_module
+- id: nclutch_module_p20
+  quantity: n_clutches_module_max
+  unit: dimensionless
+  origin: reported
+  printed: "75"
+  citation: {none: "copied from the paper's record prahl2020 (nclutch_module: Table S1, PDF p. 22)"}
+  from_source: prahl2020
+  from_datum: nclutch_module
+- id: psi_pol_p20
+  quantity: polarity_factor
+  unit: dimensionless
+  origin: fitted
+  printed: "0.9"
+  citation: {none: "copied from the paper's record prahl2020 (psi_pol: Table S1, PDF p. 22)"}
+  from_source: prahl2020
+  from_datum: psi_pol

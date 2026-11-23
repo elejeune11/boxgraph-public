@@ -1,0 +1,15 @@
+id: bell_off_rate
+name: force-dependent clutch unbinding rate, the off-rate rule inside motor_clutch_reinforced (Supplement p. 24)
+role: model
+stated: {page: 24, quote: "scales with clutch extension according to a single exponential Bell", where: "Supplemental Materials, first paragraph"}
+equation: "koff* = koff exp(Fclutch/Fbond), Fclutch = κclutch × clutch extension (given in words)"
+described_from: ref-bell1978
+from_words: true
+inputs:
+  koff:    {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fclutch: {quantity: clutch_force, unit: pN, description: "force on one engaged clutch, κclutch times its extension"}
+  Fb:      {quantity: bond_rupture_force, unit: pN, description: "characteristic bond force Fbond"}
+outputs:
+  koff_star: {quantity: clutch_off_rate_loaded, unit: 1/s}
+settings: {}
+stochastic: false

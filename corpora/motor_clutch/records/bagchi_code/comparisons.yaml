@@ -1,0 +1,47 @@
+# ---- does the code's Gaussian block give the S2/S3 Tables' deltas? -------------------------------------
+# S3 Table, connected column, against C as shipped (s = 1, s1 = 2)
+- {id: cmp_delta_eta_conn_C, purpose: reproduction, computed: minND_C, printed: delta_eta_conn_p,
+   note: "the Table prints the exponent -711 (bagchi2025 q_delta_eta_711)"}
+- {id: cmp_delta_eps_conn_C, purpose: reproduction, computed: minND1_C, printed: delta_eps_conn_p}
+# ... and with s = 10 from the comment of line 219
+- {id: cmp_delta_eps_conn_C_s10, purpose: reproduction, computed: minND1_C_s10, printed: delta_eps_conn_p,
+   note: "with the commented s = 10; the column's own sigma_eta is 1 (question q_s3_columns)"}
+# S3 Table, disconnected column, against C's commented values (s = 8, s1 = 5)
+- {id: cmp_delta_eta_disc_C, purpose: reproduction, computed: minND_C_disc, printed: delta_eta_disc_p}
+- {id: cmp_delta_eps_disc_C, purpose: reproduction, computed: minND1_C_disc, printed: delta_eps_disc_p}
+# S2 Table against D as shipped (4 cell springs) and with the commented 36
+- {id: cmp_delta_eta_s2_D, purpose: reproduction, computed: minND_D, printed: delta_eta_s2_p}
+- {id: cmp_delta_eps_s2_D, purpose: reproduction, computed: minND1_D, printed: delta_eps_s2_p}
+- {id: cmp_delta_eta_s2_D36, purpose: reproduction, computed: minND_D36, printed: delta_eta_s2_p}
+- {id: cmp_delta_eps_s2_D36, purpose: reproduction, computed: minND1_D36, printed: delta_eps_s2_p}
+- {id: cmp_delta_eps_disc_D36, purpose: reproduction, computed: minND1_D36, printed: delta_eps_disc_p,
+   conditions_ok: "the S3 disconnected delta_eps equals the S2 value; D's s = 10, s1 = 5 are the S2 Table's widths and also the disconnected column's sigma_eps = 5",
+   note: "the column's own sigma_eta is 8, not 10 (question q_s3_columns)"}
+
+# ---- omega_k and delta_k (reconstructed stiffness profile) -------------------------------------------
+- {id: cmp_omega_k_disc_C, purpose: reproduction, computed: omega_kc_C, printed: omega_k_disc_p}
+- {id: cmp_delta_k_disc_C, purpose: reproduction, computed: delta_kc_C, printed: delta_k_disc_p}
+- {id: cmp_omega_k_conn_C1, purpose: reproduction, computed: omega_kc_C1, printed: omega_k_conn_p}
+- {id: cmp_delta_k_conn_C1, purpose: reproduction, computed: delta_kc_C1, printed: delta_k_conn_p}
+- {id: cmp_omega_k_s2_D36, purpose: reproduction, computed: omega_kc_D36, printed: omega_k_s2_p}
+- {id: cmp_delta_k_s2_D36, purpose: reproduction, computed: delta_kc_D36, printed: delta_k_s2_p}
+
+# ---- one factor from the code's units to the S1 Table's (reconstructed maps) ------------------------
+- {id: cmp_kl_map, purpose: consistency, computed: kl_mapped, printed: kl_p,
+   conditions_ok: "the code's collagen spring and the S1 ligand spring are the same spring of the chain"}
+- {id: cmp_kcl_map, purpose: consistency, computed: kcl_mapped, printed: kcl_p,
+   conditions_ok: "the code's collagen-cell link and the S1 cell-ligand spring are the same spring"}
+- {id: cmp_kls_map, purpose: consistency, computed: kls_mapped, printed: kls_p,
+   conditions_ok: "the code's substrate-collagen link and the S1 ligand-substrate spring are the same spring"}
+- {id: cmp_kc_map_D, purpose: consistency, computed: kc_mapped_D, printed: kc_p,
+   conditions_ok: "the code's uniform cell spring (D, H) and the S1 cell spring stiffness are the same spring"}
+- {id: cmp_kmax_map_D, purpose: consistency, computed: kmax_mapped_D, printed: kmax_p,
+   conditions_ok: "the code's durotaxis maximum and Fig 11's uniformly stiff substrate k_max"}
+- {id: cmp_kmin_map_H, purpose: consistency, computed: kmin_mapped_H, printed: kmin1_p,
+   conditions_ok: "H's durotaxis minimum (unused in H) and the first k_min of Fig 11k-l"}
+- {id: cmp_eta_l_map, purpose: consistency, computed: eta_l_mapped, printed: eta_l_p,
+   conditions_ok: "the code's collagen damping and the S1 ligand damping are the same node damping"}
+- {id: cmp_eta_c_map, purpose: consistency, computed: eta_c_mapped, printed: eta_c_p,
+   conditions_ok: "the code's minimum cell damping (C) and the S1 cell damping constant, which equals beta_eta of the S2 Table and the S3 connected column"}
+- {id: cmp_eta_c_map_disc, purpose: consistency, computed: eta_c_mapped_disc, printed: beta_eta_disc_p,
+   conditions_ok: "the commented 2.51 of C line 170 and the S3 disconnected beta_eta, both the cell damping at the edge"}

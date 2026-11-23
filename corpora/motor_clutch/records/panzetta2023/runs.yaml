@@ -1,0 +1,79 @@
+# Optimal nc by the paper's own search (p. 3, p. 6): ks = 0.1 pN/nm on 25 values of nc between 10 and 200,
+# ks = 1 pN/nm on 20 values between 10 and 1000; 100 k events per point; nm = nc.
+- {id: run_opt_soft_0, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_0}, settings: {nc_min: 10, nc_max: 200, n_nc: 25}, outputs: {nc_opt: ncopt_soft_0, v_min: vmin_soft_0}}
+- {id: run_opt_soft_01, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_01}, settings: {nc_min: 10, nc_max: 200, n_nc: 25}, outputs: {nc_opt: ncopt_soft_01, v_min: vmin_soft_01}}
+- {id: run_opt_soft_3, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_3}, settings: {nc_min: 10, nc_max: 200, n_nc: 25}, outputs: {nc_opt: ncopt_soft_3, v_min: vmin_soft_3}}
+- {id: run_opt_stiff_0, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_0}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: ncopt_stiff_0, v_min: vmin_stiff_0}}
+- {id: run_opt_stiff_01, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_01}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: ncopt_stiff_01, v_min: vmin_stiff_01}}
+- {id: run_opt_stiff_3, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_3}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: ncopt_stiff_3, v_min: vmin_stiff_3}}
+# Transverse (longitudinal) residual strain, Fig. 7, ks = 1 pN/nm
+- {id: run_opt_tr_025, model: optimal_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_025}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: ncopt_tr_025, v_min: vmin_tr_025}}
+- {id: run_opt_tr_05, model: optimal_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_05}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: ncopt_tr_05, v_min: vmin_tr_05}}
+- {id: run_opt_tr_1, model: optimal_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_1}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: ncopt_tr_1, v_min: vmin_tr_1}}
+# Increases of the optimal nc with respect to no residual strain
+- {id: run_inc_soft_01, model: relative_increase, inputs: {n_ref: ncopt_soft_0, n: ncopt_soft_01}, outputs: {pct: inc_soft_01, dn: dn_soft_01}}
+- {id: run_inc_soft_3, model: relative_increase, inputs: {n_ref: ncopt_soft_0, n: ncopt_soft_3}, outputs: {pct: inc_soft_3, dn: dn_soft_3}}
+- {id: run_inc_stiff_01, model: relative_increase, inputs: {n_ref: ncopt_stiff_0, n: ncopt_stiff_01}, outputs: {pct: inc_stiff_01, dn: dn_stiff_01}}
+- {id: run_inc_stiff_3, model: relative_increase, inputs: {n_ref: ncopt_stiff_0, n: ncopt_stiff_3}, outputs: {pct: inc_stiff_3, dn: dn_stiff_3}}
+- {id: run_inc_tr_025, model: relative_increase, inputs: {n_ref: ncopt_stiff_0, n: ncopt_tr_025}, outputs: {pct: inc_tr_025, dn: dn_tr_025}}
+- {id: run_inc_tr_05, model: relative_increase, inputs: {n_ref: ncopt_stiff_0, n: ncopt_tr_05}, outputs: {pct: inc_tr_05, dn: dn_tr_05}}
+- {id: run_inc_tr_1, model: relative_increase, inputs: {n_ref: ncopt_stiff_0, n: ncopt_tr_1}, outputs: {pct: inc_tr_1, dn: dn_tr_1}}
+- {id: run_ratio_sim, model: optimum_ratio, inputs: {n_stiff: ncopt_stiff_0, n_soft: ncopt_soft_0}, outputs: {ratio: ratio_sim}}
+- {id: run_ratio_printed, model: optimum_ratio, inputs: {n_stiff: ncopt_stiff_0_printed, n_soft: ncopt_soft_0_printed}, outputs: {ratio: ratio_from_printed}}
+# Eq. 1 lengths
+- {id: run_ldef_eps3, model: strain_eq1, inputs: {l: l_ortho, eps0: eps_3}, outputs: {l_def: ldef_eps3}}
+- {id: run_ldef_eps0, model: strain_eq1, inputs: {l: l_ortho, eps0: eps_0}, outputs: {l_def: ldef_eps0}}
+- {id: run_ldef_eps1, model: strain_eq1, inputs: {l: l_ortho, eps0: eps_1}, outputs: {l_def: ldef_eps1}}
+- {id: run_lrest_s3, model: strain_eq1_inverse, inputs: {l_def: ldef_s3, eps0: eps_1_s3}, outputs: {l: lrest_s3}}
+# Single simulations at the Fig. 2-3 settings (ks = 1 pN/nm; axial no strain, transverse strain 1).
+# The figures are not read here (q_figures); these runs hold the values a reading would be compared with.
+- {id: run_sim_ax_nc50, model: clutch_axial_ssa, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, nc: nc_50, nm: nm_50, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_0}, outputs: {v_retro: v_ax_nc50, n_eng: neng_ax_nc50, F_clutch: F_ax_nc50, x_sub: xs_ax_nc50, t_cycle: tc_ax_nc50}}
+- {id: run_sim_ax_nc400, model: clutch_axial_ssa, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, nc: nc_400, nm: nm_400, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_0}, outputs: {v_retro: v_ax_nc400, n_eng: neng_ax_nc400, F_clutch: F_ax_nc400, x_sub: xs_ax_nc400, t_cycle: tc_ax_nc400}}
+- {id: run_sim_tr_nc400, model: clutch_transverse_ssa, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, nc: nc_400, nm: nm_400, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_1}, outputs: {v_retro: v_tr_nc400, n_eng: neng_tr_nc400, F_clutch: F_tr_nc400, x_sub: xs_tr_nc400, t_cycle: tc_tr_nc400}}
+# ---- figure pass: the paper's curves, run at the x positions read (sweeps), nm = nc --------------------
+# Curve runs use 2 seeds per point (the paper ran one 100 k-event simulation per point); see q_events.
+# Fig. 3 (ks = 1 pN/nm, nc 50 and 400): canonical (ke = 0) and modified (l = 1000 nm)
+- {id: run_f3_canonical, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_canonical_added, l: l_ortho, eps0: eps_0}, sweep: {nc: f3a_canonical}, replicates: 2, outputs: {v_retro: f3_canonical_v, t_cycle: f3_canonical_tc, x_sub: f3_canonical_xs, F_clutch: f3_canonical_F, n_eng: f3_canonical_n}}
+- {id: run_f3_modified, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_0}, sweep: {nc: f3a_modified}, replicates: 2, outputs: {v_retro: f3_modified_v, t_cycle: f3_modified_tc, x_sub: f3_modified_xs, F_clutch: f3_modified_F, n_eng: f3_modified_n}}
+# Fig. 4 (ks = 1 pN/nm, no strain)
+- {id: run_f4a_canonical, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_canonical_added, l: l_ortho, eps0: eps_0}, sweep: {nc: f4a_canonical}, replicates: 2, outputs: {v_retro: f4a_canonical_v}}
+- {id: run_f4a_modified, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_100, eps0: eps_0}, sweep: {nc: f4a_modified_l100}, replicates: 2, outputs: {v_retro: f4a_modified_v}}
+- {id: run_f4b_modified, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_0}, sweep: {nc: f4b_modified_l1000}, replicates: 2, outputs: {v_retro: f4b_modified_v}}
+# Fig. 5A (ks = 0.1 pN/nm) and 5B (ks = 1 pN/nm), l = 1000 nm, axial strain
+- {id: run_f5a_e0, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_0}, sweep: {nc: f5a_e0}, replicates: 2, outputs: {v_retro: f5a_e0_v}}
+- {id: run_f5a_e01, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_01}, sweep: {nc: f5a_e01}, replicates: 2, outputs: {v_retro: f5a_e01_v}}
+- {id: run_f5a_e025, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_025_ax}, sweep: {nc: f5a_e025}, replicates: 2, outputs: {v_retro: f5a_e025_v}}
+- {id: run_f5a_e05, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_05_ax}, sweep: {nc: f5a_e05}, replicates: 2, outputs: {v_retro: f5a_e05_v}}
+- {id: run_f5a_e1, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_1_ax}, sweep: {nc: f5a_e1}, replicates: 2, outputs: {v_retro: f5a_e1_v}}
+- {id: run_f5a_e2, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_2}, sweep: {nc: f5a_e2}, replicates: 2, outputs: {v_retro: f5a_e2_v}}
+- {id: run_f5a_e3, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho, eps0: eps_3}, sweep: {nc: f5a_e3}, replicates: 2, outputs: {v_retro: f5a_e3_v}}
+- {id: run_f5b_e0, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_0}, sweep: {nc: f5b_e0}, replicates: 2, outputs: {v_retro: f5b_e0_v}}
+- {id: run_f5b_e01, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_01}, sweep: {nc: f5b_e01}, replicates: 2, outputs: {v_retro: f5b_e01_v}}
+- {id: run_f5b_e025, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_025_ax}, sweep: {nc: f5b_e025}, replicates: 2, outputs: {v_retro: f5b_e025_v}}
+- {id: run_f5b_e05, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_05_ax}, sweep: {nc: f5b_e05}, replicates: 2, outputs: {v_retro: f5b_e05_v}}
+- {id: run_f5b_e1, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_1_ax}, sweep: {nc: f5b_e1}, replicates: 2, outputs: {v_retro: f5b_e1_v}}
+- {id: run_f5b_e2, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_2}, sweep: {nc: f5b_e2}, replicates: 2, outputs: {v_retro: f5b_e2_v}}
+- {id: run_f5b_e3, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_3}, sweep: {nc: f5b_e3}, replicates: 2, outputs: {v_retro: f5b_e3_v}}
+# Fig. 6: the optimum search (p. 3, p. 6) at each strain read
+- {id: run_f6_soft, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_soft, ke: ke_soft, l: l_ortho}, sweep: {eps0: f6_soft}, settings: {nc_min: 10, nc_max: 200, n_nc: 25}, outputs: {nc_opt: f6_soft_opt, v_min: f6_soft_vmin}}
+- {id: run_f6_stiff, model: optimal_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho}, sweep: {eps0: f6_stiff}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: f6_stiff_opt, v_min: f6_stiff_vmin}}
+# Fig. 7 (transverse strain, ks = 1 pN/nm)
+- {id: run_f7a_e0, model: flow_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_0}, sweep: {nc: f7a_e0}, replicates: 2, outputs: {v_retro: f7a_e0_v}}
+- {id: run_f7a_e025, model: flow_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_025}, sweep: {nc: f7a_e025}, replicates: 2, outputs: {v_retro: f7a_e025_v}}
+- {id: run_f7a_e05, model: flow_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_05}, sweep: {nc: f7a_e05}, replicates: 2, outputs: {v_retro: f7a_e05_v}}
+- {id: run_f7a_e1, model: flow_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho, eps0: eps_1}, sweep: {nc: f7a_e1}, replicates: 2, outputs: {v_retro: f7a_e1_v}}
+- {id: run_f7b, model: optimal_nc_transverse, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: l_ortho}, sweep: {eps0: f7b}, settings: {nc_min: 10, nc_max: 1000, n_nc: 20}, outputs: {nc_opt: f7b_opt, v_min: f7b_vmin}}
+# Fig. 8 from Fig. 6 (the paper's own processing, run on the readings): by the caption's colours, and swapped
+- {id: run_f8a_soft_from_f6, model: normalise_optimum, inputs: {n: f6_soft, n_ref: ncopt_soft_0_printed, grid: f8a_soft}, outputs: {r: f8a_soft_from_f6}}
+- {id: run_f8a_stiff_from_f6, model: normalise_optimum, inputs: {n: f6_stiff, n_ref: ncopt_stiff_0_printed, grid: f8a_stiff}, outputs: {r: f8a_stiff_from_f6}}
+- {id: run_f8a_grey_from_f6_stiff, model: normalise_optimum, inputs: {n: f6_stiff, n_ref: ncopt_stiff_0_printed, grid: f8a_soft}, outputs: {r: f8a_grey_from_f6_stiff}}
+- {id: run_f8a_black_from_f6_soft, model: normalise_optimum, inputs: {n: f6_soft, n_ref: ncopt_soft_0_printed, grid: f8a_stiff}, outputs: {r: f8a_black_from_f6_soft}}
+- {id: run_f8b_soft_from_f8a, model: secant_slope, inputs: {r: f8a_soft, grid: f8b_soft}, outputs: {s: f8b_soft_from_f8a}}
+- {id: run_f8b_stiff_from_f8a, model: secant_slope, inputs: {r: f8a_stiff, grid: f8b_stiff}, outputs: {s: f8b_stiff_from_f8a}}
+# Fig. S2: the original model (ke = 0), 1000 k events per point as the caption says; one seed
+- {id: run_fS2l, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, nc: nc_s2l_added, ke: ke_canonical_added, l: l_ortho, eps0: eps_0}, sweep: {ks: fS2l_flow}, settings: {n_events: 1000000}, replicates: 1, outputs: {v_retro: fS2l_v}}
+- {id: run_fS2r, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_s2r_added, ke: ke_canonical_added, l: l_ortho, eps0: eps_0}, sweep: {nc: fS2r_flow}, settings: {n_events: 1000000}, replicates: 1, outputs: {v_retro: fS2r_v}}
+# Fig. S3: strain 1, deformed length 1000 nm (undeformed 500 nm, p. 7), ks = 1 pN/nm, axial
+- {id: run_fS3_solid, model: flow_nc_axial, inputs: {Fm: Fm_t1, vu: vu_t1, kon: kon_t1, koff: koff_t1, Fb: Fb_t1, kc: kc_t1, ks: ks_stiff, ke: ke_stiff, l: lrest_s3_printed, eps0: eps_1_s3}, sweep: {nc: fS3_solid}, replicates: 2, outputs: {v_retro: fS3_solid_v}}
+# Audit: the '+1 clutch' (p. 9) against the printed 3 % of the printed optimum 40 (p. 6)
+- {id: run_dn_soft_01_printed, model: increase_from_percent, inputs: {n_ref: ncopt_soft_0_printed, pct: inc_soft_01_printed}, outputs: {dn: dn_soft_01_from_printed}}

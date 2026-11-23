@@ -1,0 +1,519 @@
+# Relations this paper states about its models.
+- id: rel_eq6_to_s11
+  kind: reduces_to
+  a: alonsomatilla2023/kopt_eq6
+  b: alonsomatilla2023/kopt_s11
+  mapping: {C2: "C2", nc: "nc", Fb: "Fb", kon: "kon", vu: "vu"}
+  output_map: {ks_opt: ks_opt}
+  limit: {C3: "0"}
+  regime: {C2: [0.1, 1], nc: [10, 1000], Fb: [1, 5], kon: [0.1, 10], vu: [100, 300], koff: [0.1, 10], nm: [10, 1000], Fm: [1, 3]}
+  provenance: stated
+  citation: {page: 29, quote: "is recovered in", where: "text below Eq. S12"}
+# Relations to Bangasser et al. 2013 (record bangasser2013, ref. 10). The paper cites ref. 10 for the
+# kc-independence of the optimum (p. 8, p. 12) and for the condition that binding time equals cycle time
+# (p. 8), but compares its Eq. 6 and its mean-field model only with its own numerics and with the
+# dimensionless stochastic model of refs. 2 and 17, never with ref. 10's model. So both are proposed.
+# Numbers in each model's port units: 1 pN/nm = 1000 pN/um.
+- id: rel_b13_optimum_approx_eq6
+  kind: approximated_by
+  a: bangasser2013/optimal_stiffness
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "Fb", kon: "kon", vu: "vu", koff: "koff", nm: "nm", Fm: "Fm"}
+  output_map: {ks_opt: ks_opt}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.4, 1.6]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    Eq. 6 is Alonso-Matilla's closed-form optimum substrate stiffness for the same clutch scheme as
+    Bangasser's (linear motor force-velocity, Bell slip-bond clutches koff exp(F/Fb), linear clutch springs,
+    one substrate spring), with no reinforcement and no catch bonds. The paper says Eq. 6 explains why
+    the optimum is independent of clutch stiffness "as previously reported in other studies (10,17)"
+    (p. 8) and that optimality is reached when binding time equals cycle time (10,17), Bangasser's Fig. 6D
+    finding. If so, Eq. 6 with its fitted C2 = 0.4 and C3 = 0.05 should approximate the optimum of
+    Bangasser's stochastic model, including over a fourfold range of kc, which Eq. 6 does not contain.
+  assumptions:
+    - "the two papers' nm, Fm, vu, nc, kon, koff, Fb, kc are the same parameters of one clutch scheme (Table 1 of each)"
+    - "C2 = 0.4 and C3 = 0.05 as printed with Eq. 6 (fitted by Alonso-Matilla to their own mean-field numerics)"
+    - "Bangasser's optimum is located on a 4-per-decade stiffness grid of one seeded 1000 s SSA run per point (this record's optimal_stiffness)"
+    - "regime: +-20% around Bangasser's Table 1 base set (nm = nc = 50, kon = 0.3 /s, koff = 0.1 /s, Fb = Fm = 2 pN, vu = 120 nm/s), kc from 0.4 to 1.6 pN/nm"
+    - "tolerance 0.25 (added, chosen before testing): Eq. 6 is a scaling estimate with fitted constants, and 0.25 is about the half-width of one grid step of the optimum search (10^0.125 = 1.33)"
+- id: rel_b13_ssa_traction_approx_mean_field
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: alonsomatilla2023/mean_field_dimensional
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "1000*ksub"}
+  output_map: {T: F_mean}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 0.1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    Alonso-Matilla's mean-field model without reinforcement or catch bonds is a closure of the same
+    stochastic clutch scheme Bangasser simulates (linear motor force-velocity, Bell slip bonds
+    koff exp(F/Fb), clutch and substrate springs in series), and the paper reports "near-perfect agreement"
+    between its mean-field and stochastic solutions (p. 8). A mean-field closure is not exact, so the time-averaged
+    traction of the two is compared as an approximation.
+  assumptions:
+    - "the two papers' nm, Fm, vu, nc, kon, koff, Fb, kc and substrate spring constant are the same parameters of one clutch scheme"
+    - "Bangasser's time-averaged traction ksub x_sub over one seeded 1000 s run is the mean-field long-time average T"
+    - "regime: +-20% around Bangasser's Table 1 base set, on soft substrates (0.01-0.1 pN/nm, load-and-fail below and near the optimum); stiffer substrates are left out because one mean-field run there takes about a minute"
+    - "tolerance 0.1 (added): allows for the noise of one seeded stochastic run"
+
+# Relations to Bangasser and Odde 2013 (record bangasser2013b, ref. 17 / SI ref. S16). The paper says
+# its mean-field theory "is a generalization of the model by Bangasser and Odde (17)" (p. 2) and that
+# it relaxes "the adjustable parameter assumption made in (17)" (ε of Eq. 30) to derive a more general
+# optimum (Eq. 6, p. 2). Both are entered as stated approximated_by relations: the generalization keeps
+# the whole density of clutch extensions where ref. 17 keeps one bound probability with a gamma
+# closure (Eq. 19), and no limit makes the two the same. Ref. 17's balanced regime is nm = nc, which an
+# independent box over nm and nc cannot hold, so the Eq. 30 relations are pinned at the two ends of
+# ref. 17's Fig. 4 (nm = nc = 25 and 3600, Table S1 base set otherwise), where ref. 17 itself evaluates
+# Eq. 30 and its ODE optimum. Units pN, nm, s on both sides. Not entered: the paper's comparisons with
+# "the dimensionless version of the stochastic motor-clutch model (17)" (p. 27) and "a stochastic
+# Langevin-type approach (17)" (p. 31): the bangasser2013b record has no stochastic model (its MC is
+# ref. 1's, record bangasser2013). Table 1 cites ref. 17 among others for the ranges of vu, kon and koff
+# (p. 4), but its data carry no from_source and ranges are not values ref. 17 prints, so cited.yaml has
+# no link to bangasser2013b.
+# The generalization is entered as derived_from with the paper's steps in words. A numeric
+# approximated_by between mean_field_optimum and clutch_ensemble_optimum was tried (2026-11-21) and
+# did not finish within 10 minutes: the test runs 40 mean-field optimum searches of 13 mean-field
+# runs each. The optima are compared through Eq. 6 below instead.
+- id: rel_mean_field_generalizes_b13b_ensemble
+  kind: derived_from
+  a: bangasser2013b/clutch_ensemble_cycle
+  b: alonsomatilla2023/mean_field
+  mapping: {F: "nm*Fm/(nc*Fb)", tau: "kon/koff", omega: "vu*kc/(Fb*koff)", K: "ks/(nc*kc)"}
+  steps:
+    - "ref. 17 introduces a probability that each existing clutch is mechanically linking the actin cytoskeleton and the substrate (its Pb, Eqs. 8-12)"
+    - "this paper replaces it by a multibond probability density of finding any clutch with a given extension at any time, and derives its conservation equation (Eq. 1, SI)"
+    - "the closure of ref. 17 (balanced motors and clutches, the gamma distribution of clutch forces with its adjustable r, Eq. 19) is dropped"
+    - "the equations are made dimensionless with the groups F, tau, omega, K (Table 2), giving Eqs. 3-4"
+  provenance: stated
+  citation: {page: 2, printed_page: "3370", quote: "mean-field theory is a generalization of the model by", where: "Materials and Methods, first paragraph"}
+  assumptions:
+    - "the same parameter names are the same parameters of one clutch scheme (nm, Fm, vu, nc, kon, koff, Fb, kc, substrate spring constant ks in pN/nm)"
+    - "the steps are the paper's words; they cannot be applied symbolically, so the relation is not tested"
+- id: rel_b13b_eq30_approx_eq6_n25
+  kind: approximated_by
+  a: bangasser2013b/optimum_eq30
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "2", kon: "kon", vu: "vu", koff: "0.1", nm: "nm", Fm: "Fm"}
+  output_map: {ks_opt: ks_opt}
+  regime: {Fm: [2, 2], nm: [25, 25], kon: [1, 1], vu: [120, 120], nc: [25, 25], eps: [0.01, 0.01]}
+  tolerance: 0.5
+  provenance: stated
+  citation: {page: 2, printed_page: "3370", quote: "we relax the adjustable parameter assumption made", where: "Introduction, last paragraph"}
+  assumptions:
+    - "the 'more general expression for the optimum substrate stiffness' is Eq. 6 (C2 = 0.4, C3 = 0.05 as printed with it), and the expression with the adjustable parameter of ref. 17 is its Eq. 30 with ε = 0.01 (ref. 17, p. 5)"
+    - "a generalization should agree with Eq. 30 where ref. 17 applies it: the balanced regime nm = nc, here its Fig. 4 end nm = nc = 25 with the Table S1 base set"
+    - "Eq. 6 needs Fb and koff, which Eq. 30 does not contain; they are ref. 17's Table S1 values, 2 pN and 0.1 /s"
+    - "tolerance 0.5 (a factor of 2) is the relator's choice for two scaling estimates with fitted or chosen constants"
+- id: rel_b13b_eq30_approx_eq6_n3600
+  kind: approximated_by
+  a: bangasser2013b/optimum_eq30
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "2", kon: "kon", vu: "vu", koff: "0.1", nm: "nm", Fm: "Fm"}
+  output_map: {ks_opt: ks_opt}
+  regime: {Fm: [2, 2], nm: [3600, 3600], kon: [1, 1], vu: [120, 120], nc: [3600, 3600], eps: [0.01, 0.01]}
+  tolerance: 0.5
+  provenance: stated
+  citation: {page: 2, printed_page: "3370", quote: "we relax the adjustable parameter assumption made", where: "Introduction, last paragraph"}
+  assumptions:
+    - "as rel_b13b_eq30_approx_eq6_n25, at the other end of ref. 17's Fig. 4, nm = nc = 3600"
+- id: rel_b13b_ode_optimum_approx_eq6_n25
+  kind: approximated_by
+  a: bangasser2013b/clutch_ensemble_optimum
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "Fb", kon: "kon", vu: "vu", koff: "koff", nm: "nm", Fm: "Fm"}
+  output_map: {ks_opt: ks_opt}
+  regime: {nm: [25, 25], Fm: [2, 2], vu: [120, 120], nc: [25, 25], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], r: [3, 3]}
+  tolerance: 0.5
+  provenance: proposed
+  reason: >-
+    Eq. 6 is this paper's scaling estimate of the optimum of its mean-field model, which it calls a
+    generalization of ref. 17's model (p. 2); ref. 17's clutch-ensemble ODEs give an optimum of the same
+    clutch scheme by a cruder closure. If Eq. 6 holds for the scheme generally, it should approximate the
+    ODE optimum too; Eq. 6 has no kc and no closure parameter r, so these are the ODE's own.
+  assumptions:
+    - "the same parameter names are the same parameters of one clutch scheme; C2 = 0.4, C3 = 0.05 as printed with Eq. 6"
+    - "pinned at ref. 17's Fig. 4 end nm = nc = 25 (Table S1 base set, r = 3), where ref. 17 prints its ODE optimum (1 pN/nm)"
+    - "tolerance 0.5 (a factor of 2) is the relator's choice"
+- id: rel_b13b_ode_optimum_approx_eq6_n3600
+  kind: approximated_by
+  a: bangasser2013b/clutch_ensemble_optimum
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "Fb", kon: "kon", vu: "vu", koff: "koff", nm: "nm", Fm: "Fm"}
+  output_map: {ks_opt: ks_opt}
+  regime: {nm: [3600, 3600], Fm: [2, 2], vu: [120, 120], nc: [3600, 3600], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], r: [3, 3]}
+  tolerance: 0.5
+  provenance: proposed
+  reason: >-
+    As rel_b13b_ode_optimum_approx_eq6_n25, at the other end of ref. 17's Fig. 4 (nm = nc = 3600), where
+    ref. 17 prints its ODE optimum as 200 pN/nm.
+  assumptions:
+    - "as rel_b13b_ode_optimum_approx_eq6_n25, pinned at nm = nc = 3600"
+
+# Relations to Bangasser et al. 2017 (ref. 12, record bangasser2017), reviewed 2026-11-21. The paper
+# cites ref. 12 for experiments and simulations, not for its models: motility and traction forces
+# with a biphasic dependence on stiffness (p. 2), an optimal stiffness "as observed experimentally
+# (12,14)" (p. 2), stromal targeting of the optimum (p. 11), cell-migration models on compliant
+# substrates (p. 13), and the stiffness-modulus equivalence "studied for different focal adhesion
+# sizes" (SI legend E, p. 21). None of these states a relation to a model of ref. 12, so none is
+# entered as stated; the stiffness_from_modulus formula is attributed to refs 10, 11, and ref. 12's
+# record has no stiffness-modulus model (it reports moduli for its gels and spring constants for its
+# simulations). Values: no datum here names ref-12 as its from_source, so cited.yaml has nothing to
+# link. One relation is proposed below. Not entered: the high module set of ref. 12 (n*m = 1000,
+# n*c = 750), whose optimum search at the record's own 1000 s per grid point takes about ten times
+# longer (its run in bangasser2017 uses 300 s); and off_rate_eq1 / motor_velocity_eq2, which have no
+# standalone model here (Bell's law and the linear force-velocity law are inside mean_field).
+- id: rel_b17_module_optimum_approx_eq6
+  kind: approximated_by
+  a: bangasser2017/module_optimum
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "Fb", kon: "kon", vu: "vm", koff: "koff", nm: "nm", Fm: "Fm"}
+  output_map: {ks_opt: ks_trac_max}
+  regime: {nm: [100, 100], Fm: [2, 2], vm: [120, 120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [0.8, 0.8]}
+  tolerance: 0.5
+  provenance: proposed
+  reason: >-
+    Eq. 6 is this paper's closed-form optimum substrate stiffness (maximal traction) for the classic
+    clutch scheme: linear motor force-velocity, Bell slip bonds koff exp(F/Fb), linear clutch springs,
+    one substrate spring, no reinforcement or catch bonds. Ref. 12's motor-clutch module follows the same
+    rules (its Eqs. 1, 2, 4) and ref. 12 locates the stiffness of maximal traction of its simulated cell
+    (Fig. 1d). If Eq. 6 holds for the scheme generally, it should approximate the traction optimum of
+    ref. 12's module at ref. 12's own parameters; Eq. 6 has no kc, so kc is the module's own.
+  assumptions:
+    - "module_optimum is bangasser2017's one-module stand-in for the whole-cell simulator (reconstructed: fixed cell body, no polymerization or module turnover), holding the module maxima n*m and n*c; these are taken as Eq. 6's nm and nc"
+    - "the two papers' Fm, vu (v*m), kon, koff (k*off), Fb are the same parameters of one clutch scheme"
+    - "C2 = 0.4 and C3 = 0.05 as printed with Eq. 6 (fitted by this paper to its own mean-field numerics)"
+    - "pinned at ref. 12's Supplementary Table 2 low module set (n*m = 100, n*c = 75, kon = 1 /s, k*off = 0.1 /s, Fb = Fm = 2 pN, v*m = 120 nm/s, κc = 0.8 pN/nm): one seeded optimum search costs about 15 s, and a pinned regime runs it once per sample"
+    - "module_optimum's traction maximum (ks_trac_max) is the stiffness of maximal mean traction, Eq. 6's quantity; it is located on a 2-per-decade grid with a parabola, so a grid step is a factor of 3.2"
+    - "tolerance 0.5 (a factor of 2, chosen before testing) is the relator's choice, as for Eq. 6 against ref. 17"
+
+# Relations to Bell 1978 (ref. 52, record bell1978), reviewed 2026-11-21. The paper cites ref. 52 once
+# in the main text, for its clutch off-rate: clutches "unbind with an effective dissociation rate that
+# increases exponentially with force according to Bell's law" k_off^load = k_off e^{|Fc|/Fb} (p. 2),
+# repeated for Eq. S1 (p. 21) and in SI legend C (p. 20), where Fb = kB T / Delta with Delta "estimated
+# by fitting the force-dependent clutch rupture rate using Bell's model". Bell's form of the law is the
+# loaded reverse rate k_ exp(gamma f / kT) that replaces k_ in his Eq. 12 (p. 6); the paper's Fb is
+# Bell's kT / gamma. The law has no standalone model here (it is inside mean_field), so the helper
+# model clutch_off_rate_bell enters it as printed on p. 2. Bell's lifetime Eq. 16 is the same law for the
+# reciprocal (tau = 1/k) and is not entered again. Not related: modulus_from_stiffness and Bell's
+# laplace_pressure share only a shape (a pressure from a force per length over a length) and describe
+# different physics (a punch's Young's modulus, a membrane's surface tension); bell_rupture_force
+# (kB T / Delta) and Bell's rupture_force_eq15 (E0 / r0) are different forces. Values: no datum here
+# takes a value from ref. 52 (kB T = 4.114 pN nm and Delta = 2.4 nm come from SI refs on talin-vinculin),
+# so cited.yaml has nothing to link.
+# Units: 1 dyne = 1e7 pN; 1 eV = 160.2176634 pN nm, so kT/gamma in eV/nm is 160.2176634 kT/gamma pN.
+- id: rel_bell_off_rate_same
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: alonsomatilla2023/clutch_off_rate_bell
+  mapping: {koff: "k_minus", Fc: "1e7*f", Fb: "160.2176634*kT/gamma"}
+  output_map: {koff_load: k_minus_F}
+  regime: {k_minus: [0.0001, 10], gamma: [0.1, 1], f: [0, 2e-6], kT: [0.025, 0.028]}
+  provenance: stated
+  citation: {page: 2, printed_page: "3370", quote: "force according to Bell’s law kload", where: "Materials and Methods, second paragraph"}
+  assumptions:
+    - "Bell's reverse rate k_ is the unloaded clutch off-rate k_off, his force per bond F/Nb the clutch force Fc (non-negative in the regime, so |Fc| = Fc), and Fb is kT/gamma, as the paper's SI legend C (p. 20) takes Fb = kB T / Delta from a fit of Bell's model"
+    - "regime: Bell's forces per bond up to 2 x 10^-6 dyne (20 pN), his gamma of order r0 (0.1-1 nm) and kT near 37 degC (0.0268 eV)"
+
+# Relations to Chan and Odde 2008 (ref. 2 / SI ref. S17, record chan2008), reviewed 2026-11-21. The paper
+# says it introduces "a mean-field representation of the motor-clutch model (2)" (p. 2) and compares its
+# numerical mean-field solution "with the stochastic motor-clutch model version (2)", finding "very good
+# agreement ... for all the model parameters tested" (p. 4). That is entered as a stated approximated_by
+# between Chan's stochastic simulation and the dimensional mean-field model. Not entered: kopt_eq6 and
+# chan2008/motor_clutch_E share only the shape of their inputs (motor, clutch and substrate parameters);
+# Eq. 6 gives an optimum stiffness and Chan's record has no optimum model (Chan reports flow and traction
+# against stiffness, not an optimum formula), so there is nothing to compare. stiffness_from_modulus
+# (2 pi d E / 9, a punch on a half-space, attributed to refs 10, 11) and chan2008/ksub_eq13
+# (pi E delta / (1 + nu), Cerruti) are different formulas; both are linear in E and a length, a form too
+# plain to relate. The paper's other mentions of ref. 2 are results (load-and-fail dynamics, p. 6; failure
+# frequency falling with compliance "in agreement with Chan and Odde (2)", p. 6; the free-flowing regime,
+# p. 7), parameter ranges in Table 1 (p. 4) and a surface density of adhesion molecules (SI p. 19).
+# Values: no datum here carries from_source ref-2 or si-ref-17 (Table 1 cites ref. 2 for ranges of Fm, vu,
+# kon, koff, which Chan does not print as ranges), so cited.yaml has nothing to link.
+# Signs: Chan's Table S1 prints vu, Fm and Fb negative (retrograde is -x) and chan2008/motor_clutch runs in
+# that convention, returning F_mean as a positive magnitude; the mapping flips the three signs.
+# Units: ks in pN/um here, ksub in pN/nm in chan2008: ks = 1000 ksub.
+- id: rel_chan_ssa_approx_mean_field
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: alonsomatilla2023/mean_field_dimensional
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ks: "1000*ksub"}
+  output_map: {T: F_mean}
+  regime: {nm: [60, 90], Fm: [-2.4, -1.6], vu: [-144, -96], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [-2.4, -1.6], kc: [4, 6], ksub: [0.1, 1]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 2, printed_page: "3370", quote: "introduce a mean-field representation of the motor-clutch", where: "Introduction, last paragraph; compared on p. 4"}
+  assumptions:
+    - "the two papers' nm, Fm, vu, nc, kon, koff, Fb, kc and substrate spring constant are the same parameters of one clutch scheme (linear motor force-velocity, Bell slip bonds, clutch and substrate springs in series), with Chan's signs flipped"
+    - "Chan's time-averaged traction -ksub xsub over one seeded 300 s run at his dt = 5 ms (chan2008/motor_clutch's settings) is the mean-field long-time average T"
+    - "regime: +-20% around Chan's Table S1 base set (nm = nc = 75, Fm = Fb = -2 pN, vu = -120 nm/s, kon = 1 /s, koff = 0.1 /s, kc = 5 pN/nm), on 0.1-1 pN/nm substrates (Chan Fig. 1D); softer substrates are left out because there a loading cycle (about nm Fm / (ksub vu) = 125 s at 0.01 pN/nm) is not short against Chan's 300 s run"
+    - "tolerance 0.1 (added, chosen before testing): allows for the noise of one seeded stochastic run, as for bangasser2013"
+    - "scratch check (2026-11-21, before entering): at Chan's base set the stochastic F_mean is 49 and 47 pN at ksub = 0.1 and 1 pN/nm against mean-field T = 95 and 114 pN; at Chan's dt / 8 (0.625 ms, where the chan2008 refinements settle) it is 88 pN at 0.1 pN/nm, within 9%. The relation is tested at Chan's own dt"
+
+# Proposed: the off-rate laws of the two papers. Both take Bell's law (Chan from SOM ref. S5, this paper
+# from ref. 52), and both are already related to bell1978 as stated same_as; this is the direct link.
+- id: rel_chan_off_rate_same
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: alonsomatilla2023/clutch_off_rate_bell
+  mapping: {koff: "koff", Fc: "Fclutch", Fb: "Fb"}
+  output_map: {koff_load: koff_star}
+  regime: {koff: [0.01, 10], Fclutch: [0, 20], Fb: [1, 5]}
+  provenance: proposed
+  reason: >-
+    Chan's Eq. 1 koff* = koff exp(Fclutch/Fb) and this paper's k_off^load = k_off exp(|Fc|/Fb) (p. 2) are the
+    same loaded off-rate of one clutch under its own force; the paper takes its clutch scheme from ref. 2
+    (p. 2) but cites ref. 52 for the law, so no sentence states this link.
+  assumptions:
+    - "Chan's clutch tension Fclutch is this paper's clutch force Fc, and the two Fb are the same characteristic rupture force"
+    - "regime in positive forces; Chan's Table S1 prints Fclutch and Fb both negative, which leaves Fclutch/Fb, and |Fc|/Fb with the sign of Fb flipped, unchanged"
+
+# Relations to the CMS v1.0 code (record cms_code), the MATLAB simulator released with Bangasser et al.
+# 2017 (ref. 12 / SI ref. 18), reviewed 2026-11-21. The paper never mentions the code. It cites ref. 12
+# only for results: cell motility and traction forces depending on stiffness (p. 2), focal adhesion sizes
+# and force distributions (SI p. 21), compliant-substrate models (p. 13) and the optimum shifting to higher
+# stiffness with more motors and clutches (SI p. 28, refs. 15, 18). So no relation is stated. The code's
+# whole simulator (cms2d_code) is not runnable, and its ported rules are module-level pieces (module
+# birth, polymerization, pool assignment, series springs) with no counterpart here, except the clutch
+# off-rate: proposed below. flow_port (vu (1 - Ksub sdisp/(nm Fm)), clipped at 0) is the same linear
+# motor force-velocity law this paper uses inside mean_field (Eq. S1), but that law has no standalone
+# model here, so it is not entered. Values: no datum here carries from_source ref-12 or SI ref. 18
+# (Table 1 cites refs. 2, 10, 17 for its ranges), so cited.yaml has nothing to link.
+- id: rel_cms_off_rate_same
+  kind: same_as
+  a: cms_code/off_rate_port
+  b: alonsomatilla2023/clutch_off_rate_bell
+  mapping: {koff: "koff", Fc: "Fc", Fb: "Fb"}
+  output_map: {koff_load: koff_i}
+  regime: {koff: [0.01, 10], Fc: [0, 20], Fb: [1, 5]}
+  provenance: proposed
+  reason: >-
+    The code's line 181 ('off-rate increases with load according to Bell Model') computes
+    koff exp(|Fc|/Fb) on the magnitude of a clutch's 2D force; this paper's k_off^load = k_off e^{|F_c|/F_b}
+    (p. 2, Bell's law, ref. 52) is the same loaded off-rate of one clutch under its own force. Both are
+    already related to chan2008/off_rate_eq1 as same_as; this is the direct link, which no sentence states.
+  assumptions:
+    - "the code's clutch force norm |Fc| is this paper's |F_c|, and the two Fb are the same characteristic rupture force; the code's clutch is two-dimensional, this paper's one-dimensional, and only the magnitude enters"
+    - "regime in non-negative forces: the code's Fc is a norm, never negative"
+
+# Relations to Elosegui-Artola et al. 2014 (ref. 13 / SI ref. S3, record elosegui2014), reviewed
+# 2026-11-21: none entered. The paper cites ref. 13 in the main text only among studies of rigidity
+# sensing "(10-15)" and for traction forces with a biphasic dependence on stiffness "(12,13)" (p. 2), and
+# in the SI as ref. S3 only for integrin densities on the membrane of 500-2500 units/um^2 (legend B,
+# p. 19), which has no datum here. The SI's "(13,14)" (p. 22, an equivalent governing equation) and
+# "(13,19)" (p. 38, the high-motor traction solution) are SI refs S13 (Sabass and Schwarz), S14 (Bressloff)
+# and S19 (Sens), not ref. 13. The force-dependent reinforcement this paper adds is attributed to refs 14
+# and 28 (Elosegui-Artola 2016, 2018), not to ref. 13. No relation is proposed: elosegui2014's clutch
+# model (integrin_clutch_sim: two competing integrin types, an FN-a5b1 catch bond, reinforcement by
+# integrin density) is not runnable (its equations are in an unreadable SI) and works in Young's
+# modulus, so a relation to mean_field could only be unverifiable; its other models are ratios of its
+# own SPR rates and integrin densities, with no counterpart here. Values: no datum here takes a value
+# from ref-13 or si-ref-3, so cited.yaml has nothing to link.
+
+# Relations to Elosegui-Artola et al. 2016 (ref. 14, record elosegui2016), reviewed 2026-11-21: none
+# entered. The paper cites ref. 14 for the idea of force-dependent clutch reinforcement "(14,28)" (p. 2,
+# twice), among sources for the load-dependent reinforcement it adds "(14,28,51,62-64)" (p. 10), and for an
+# optimal stiffness "as observed experimentally (12,14)" (p. 2). The SI's "(13,14)" (p. 22) are SI refs
+# S13, S14 (Sabass and Schwarz; Bressloff), not ref. 14. No sentence states a relation to a model of
+# ref. 14. This paper's reinforcement model (Eq. 7 / S59-S73) is not in this record, and its reinforcement
+# rule differs from Elosegui's anyway. In this paper the association rate depends on the fraction of
+# bound clutches loaded above Fth. In Elosegui's, talin unfolding and vinculin binding raise the integrin
+# density. So no relation is proposed. Not related: mean_field / mean_field_dimensional and
+# elosegui2016/clutch_no_talin_sim. Elosegui's clutches are catch bonds (a sum of two exponentials, times
+# 0.9, raised below 1 pN) on a fibronectin-integrin geometry, and its outputs are a traction in Pa and an
+# actin flow. Here the clutches are Bell slip bonds, and the catch-bond variant (S86-S88) has no model in
+# this record. A comparison would fail for that known reason alone. modulus_from_stiffness and
+# clutch_no_talin_sim only share a shape. The first converts a spring constant to a Young's modulus
+# (2 pi d E / 9, refs 10, 11). The second is a whole simulation, whose ksub = c E ra sits inside it with
+# no standalone model. Values: Fth = 5 pN comes from refs 47-51 (Table 1, p. 4), and no datum here
+# carries from_source ref-14, so cited.yaml has nothing to link. elosegui2016 is the earlier paper and
+# does not cite this one.
+
+# Relations to Gong et al. 2018 (ref. 37, record gong2018), reviewed 2026-11-21. The paper cites ref. 37
+# twice: among "Previous mean-field model studies" of traction "in compliant linearly elastic (17) and
+# viscoelastic (37) substrates" (p. 2), and for viscous dissipation raising the initial force loading
+# rate "(37,100)" (p. 13, Discussion). Neither sentence states a relation between models: the first
+# places Gong's model in the same family as this paper's mean field, and the second is a result.
+# Not entered: mean_field / mean_field_dimensional against gong2018/mean_field_elastic or mean_field_sls,
+# although they share inputs (motors, clutches, Bell slip bonds, clutch and substrate springs, vu). With
+# ka = 0 and alpha = 0 (no Maxwell element, no reinforcement) Gong's model is on the same linear-spring
+# substrate, but (1) the closures differ: Gong's ensemble clutch gives every bound clutch one stretch
+# xc - xs, so newly bound clutches inherit it, while Eqs. 3-4 here carry a density P(x) in which new
+# clutches bind unstretched; (2) the outputs differ: Gong returns the spreading speed Vp - xc/t_total, the
+# cycle lifetime and the plain time average Fa of the per-clutch force, none of them this paper's
+# time-averaged substrate traction T = nc Fb T*, and nc Pb Fc averaged is not nc Fa; (3) Gong's cycles end
+# at Pb < 1/nc and reinforce from cycle to cycle, with no counterpart here. No paper states how close the
+# two mean fields should be, so an approximated_by would need an unfounded tolerance, and comparing T with
+# Fa would compare different quantities.
+# Not entered: optimum-stiffness models (kopt_eq6 and its relatives) against gong2018: Gong has no
+# optimum model (its relaxation-time matching, lifetime_timescale, is for a viscoelastic substrate).
+# Proposed below: the off-rate laws. Gong's roff = roff0 exp(Fc/Fb) (p. 2, "a Bell model (27)") and this
+# paper's k_off^load = k_off e^{|Fc|/Fb} (p. 2, ref. 52) are both Bell's law, ref. 27 there and ref. 52 here
+# being the same work (bell1978), and both are already related to bell1978 as stated same_as; this is the
+# direct link, which no sentence states.
+# Values: no datum here carries from_source ref-37 (Table 1 cites refs. 2, 10, 17 and 47-51), so
+# cited.yaml has nothing to link; gong2018 is the earlier paper and does not cite this one.
+- id: rel_gong_off_rate_same
+  kind: same_as
+  a: gong2018/bell_off_rate
+  b: alonsomatilla2023/clutch_off_rate_bell
+  mapping: {koff: "roff0", Fc: "Fc", Fb: "Fb"}
+  output_map: {koff_load: roff}
+  regime: {roff0: [0.01, 10], Fc: [0, 20], Fb: [1, 5]}
+  provenance: proposed
+  reason: >-
+    Gong's roff,i = roff0 exp(Fc,i/Fb) (p. 2, a Bell model, ref. 27) and this paper's
+    k_off^load = k_off e^{|F_c|/F_b} (p. 2, Bell's law, ref. 52) are the same loaded off-rate of one clutch
+    under its own force, both taken from Bell 1978; no sentence in either paper states the link.
+  assumptions:
+    - "Gong's unloaded off-rate roff0 is this paper's k_off, its clutch force Fc this paper's F_c, and the two Fb the same characteristic rupture force (Gong's 1.3 or 2 pN, this paper's kB T / Delta)"
+    - "regime in non-negative forces, where |Fc| = Fc; Gong's mean field applies the law to the ensemble clutch force kc (xc - xs), which is non-negative while the motors pull"
+
+# Relations to the Odde lab's motor-clutch scripts (record odde_code: motorclutch1_1.m, motorclutch2_3.m,
+# an event-stepping simulation of Chan and Odde's clutch scheme), reviewed 2026-11-21. The paper never
+# mentions the code (no "MATLAB", "software" or code availability in the text or SI); it compares its
+# mean field with "the stochastic motor-clutch model version (2)" (p. 4), which is Chan and Odde's model,
+# already related above as stated. So nothing is stated, and the relations below are proposed.
+# Values: the record's data carry from_source only for SI refs 1 and 2 (densities), none from the code,
+# so cited.yaml has nothing to link.
+# Signs: the code prints vu, Fm, Fb negative (retrograde is -x) and mc_event_port / optimum_port run in
+# that convention; the mappings flip the three signs. Units: Ksub in pN/nm in the code, ks in pN/um in
+# mean_field_dimensional (ks = 1000 Ksub); kopt_eq6 and optimum_port both give pN/nm.
+# Not entered: mc_event_port against kopt_eq6 directly. They share inputs (nm, Fm, vu, nc, kon, koff, Fb),
+# but mc_event_port gives flow and traction at one stiffness, not an optimum; optimum_port is the code's
+# optimum and is related instead. mc_event_port against clutch_off_rate_bell: the code's off-rate
+# koff exp(Fc/(Fb + gain Fc)) is inside the event loop with no standalone model.
+- id: rel_odde_optimum_approx_eq6_base
+  kind: approximated_by
+  a: odde_code/optimum_port
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "-Fb", kon: "kon", vu: "-vu", koff: "koff", nm: "nm", Fm: "-Fm"}
+  output_map: {ks_opt: ks_opt}
+  regime: {nm: [50, 50], Fm: [-2, -2], vu: [-120, -120], nc: [50, 50], kon: [0.3, 0.3], koff: [0.1, 0.1],
+           Fb: [-2, -2], Kc: [0.8, 0.8], gain: [0, 0]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    Eq. 6 is this paper's closed-form optimum substrate stiffness for the classic clutch scheme (linear motor
+    force-velocity, Bell slip bonds koff exp(F/Fb), linear clutch springs, one substrate spring), which the
+    code simulates by event stepping (with its gain term at 0, as written). If Eq. 6 holds for the scheme
+    generally, it should approximate the stiffness of least retrograde flow (maximal traction) of the code's
+    stiffness sweep at the code's own parameters; Eq. 6 has no kc, so Kc is the code's own.
+  assumptions:
+    - "the two sources' nm, Fm, vu, nc, kon, koff, Fb are the same parameters of one clutch scheme, with the code's signs flipped"
+    - "C2 = 0.4 and C3 = 0.05 as printed with Eq. 6 (fitted by this paper to its own mean-field numerics)"
+    - "optimum_port's least-flow stiffness is Eq. 6's traction optimum (in the code's model flow falls as traction rises, vf = vu (1 - Ftrac/(nm Fm)))"
+    - "pinned at motorclutch2_3.m as written (nm = nc = 50, kon = 0.3 /s, koff = 0.1 /s, Fb = Fm = -2 pN, vu = -120 nm/s, Kc = 0.8 pN/nm, gain = 0): one seeded sweep of 10 stiffnesses at 1e5 events"
+    - "tolerance 0.25 (added, chosen before testing), as for Eq. 6 against bangasser2013's optimum: about the half-width of a grid step of the code's logspace(-2,2,10) sweep is 10^(4/18) = 1.67, refined by a parabola"
+- id: rel_odde_optimum_approx_eq6_n25
+  kind: approximated_by
+  a: odde_code/optimum_port
+  b: alonsomatilla2023/kopt_eq6
+  mapping: {C2: "0.4", C3: "0.05", nc: "nc", Fb: "-Fb", kon: "kon", vu: "-vu", koff: "koff", nm: "nm", Fm: "-Fm"}
+  output_map: {ks_opt: ks_opt}
+  regime: {nm: [25, 25], Fm: [-2, -2], vu: [-120, -120], nc: [25, 25], kon: [1, 1], koff: [0.1, 0.1],
+           Fb: [-2, -2], Kc: [5, 5], gain: [0, 0]}
+  tolerance: 0.5
+  provenance: proposed
+  reason: >-
+    As rel_odde_optimum_approx_eq6_base, at the parameter set where odde_code runs its sweep for Bangasser
+    and Odde 2013's Fig. 4A end (nm = nc = 25, Chan's Table S1 otherwise; run_n25_opt), and where Eq. 6 is
+    also related to that paper's Eq. 30 and ODE optimum above.
+  assumptions:
+    - "as rel_odde_optimum_approx_eq6_base, pinned at nm = nc = 25, kon = 1 /s, koff = 0.1 /s, Fb = Fm = -2 pN, vu = -120 nm/s, Kc = 5 pN/nm, gain = 0"
+    - "tolerance 0.5 (a factor of 2), as for Eq. 6 against bangasser2013b's optima at the same set"
+- id: rel_odde_ssa_traction_approx_mean_field
+  kind: approximated_by
+  a: odde_code/mc_event_port
+  b: alonsomatilla2023/mean_field_dimensional
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "Kc", ks: "1000*Ksub"}
+  output_map: {T: F_trac}
+  regime: {nm: [40, 60], Fm: [-2.4, -1.6], vu: [-144, -96], nc: [40, 60], kon: [0.24, 0.36], koff: [0.08, 0.12],
+           Fb: [-2.4, -1.6], Kc: [0.64, 0.96], gain: [0, 0], Ksub: [0.01, 0.1]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    This paper's mean field (without reinforcement or catch bonds) is a closure of the same stochastic clutch
+    scheme the code simulates by event stepping, and the paper reports very good agreement between its
+    mean-field solution and the stochastic model (pp. 3-4, ref. 2, whose model the code says it
+    reduplicates). A mean-field closure is not exact, so the time-averaged traction of the two is compared as
+    an approximation, as for bangasser2013's and chan2008's stochastic models above.
+  assumptions:
+    - "the two sources' nm, Fm, vu, nc, kon, koff, Fb, clutch and substrate spring constants are the same parameters of one clutch scheme, with the code's signs flipped and its gain term at 0"
+    - "the code's time-weighted mean traction -avtrac over one seeded run of 1e5 events (start-up included) is the mean-field long-time average T"
+    - "regime: +-20% around motorclutch2_3.m's set (Bangasser 2013's base set), on soft substrates (0.01-0.1 pN/nm) where one mean-field run is short"
+    - "tolerance 0.1 (added, chosen before testing): allows for the noise of one seeded stochastic run"
+
+# Relations to Mekhdjian et al. 2017 (SI ref. S11, record mekhdjian2017), reviewed 2026-11-22. The paper
+# cites S11 once, in SI legend E (p. 20), together with S10 (Ghibaudo 2008) for its substrate spring
+# constant from the Young's modulus, κs = 2π ds Es / 9. Mekhdjian's Eq. 5 (p. 25) is
+# Esubstrate = 9 κsubstrate / (4 π radhesion): the same law when ds is the diameter 2 radhesion of the
+# circular contact. Mekhdjian has no standalone model of Eq. 5 (it sits inside motor_clutch_reinforced),
+# so the helper model mekhdjian2017/modulus_eq5 enters it as printed, and it is related to this paper's
+# modulus_from_stiffness (the same law solved for Es) as a stated same_as.
+# Proposed: Mekhdjian's stochastic motor-clutch model without reinforcement (kadd = 0) is the Bangasser
+# 2013 clutch scheme, which this paper's mean field approximates (see rel_b13_ssa_traction_approx_mean_field);
+# the paper never compares its mean field with Mekhdjian's model, so the link is proposed, at Mekhdjian's own
+# two Fig. 5 cells. Scratch check (2026-11-22, before entering): at 10^6 events (seed 1) the stochastic
+# F_sub and the mean-field T differ by 0.6% and 2.2% for the nm = 250, nc = 150 cell at 0.1 and 1 kPa, and
+# by 2.2% and 1.5% for the nm = nc = 500 cell at 0.1 and 1 kPa. Not entered: the reinforced model
+# (kadd > 0) against this paper's reinforcement (Eq. 7 / S59-S73), which has no model in this record and
+# follows another rule (an association rate raised by the fraction of bound clutches loaded above Fth,
+# where Mekhdjian adds new clutches at kadd nthreshold favailable up to nclutch,max); and Mekhdjian's
+# Bell off-rate, which has no standalone model there. Values: no datum here carries from_source si-ref-11
+# (ds ~ 500 nm, d_fa, is the paper's own assumption), and Mekhdjian is the earlier paper and does not cite
+# this one, so neither cited.yaml has a link.
+# Units: kPa nm = 1 pN/um, so κs (pN/um) = 4 π radhesion E / 9 with E in kPa and radhesion in nm;
+# κs (pN/um) = 1000 κsubstrate (pN/nm).
+- id: rel_mekhdjian_eq5_same_modulus
+  kind: same_as
+  a: mekhdjian2017/modulus_eq5
+  b: alonsomatilla2023/modulus_from_stiffness
+  mapping: {d: "2*r_adh", ks: "1000*ksub"}
+  output_map: {E: E}
+  regime: {ksub: [0.001, 100], r_adh: [100, 1000]}
+  provenance: stated
+  citation: {page: 20, quote: "the equivalent substrate Young’s modulus E6 as", where: "SI legend E, kappa_s = 2 pi d_s E_s / 9 (10,11)"}
+  assumptions:
+    - "this paper's focal adhesion diameter ds is twice Mekhdjian's radius radhesion of the circular cell-substrate contact"
+    - "this paper's κs and Mekhdjian's κsubstrate are the same one-dimensional substrate spring constant"
+- id: rel_mekhdjian_ssa_approx_mean_field_ctrl
+  kind: approximated_by
+  a: mekhdjian2017/motor_clutch_reinforced
+  b: alonsomatilla2023/mean_field_dimensional
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "4*pi*r_adh*E/9"}
+  output_map: {T: F_sub}
+  regime: {nm: [250, 250], Fm: [2, 2], vu: [120, 120], nc: [150, 150], kon: [0.3, 0.3], koff: [0.1, 0.1], Fb: [2, 2],
+           kc: [0.8, 0.8], E: [0.1, 0.1], r_adh: [550, 550], kadd: [0, 0], Fthresh: [12, 12], ncmax: [750, 750]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    With kadd = 0 Mekhdjian's model is the Bangasser 2013 clutch scheme (linear motor force-velocity, Bell
+    slip bonds koff exp(F/Fbond), clutch and substrate springs in series, no clutch added), simulated by the
+    direct Gillespie method; this paper's mean field without reinforcement or catch bonds is a closure of
+    that scheme and is reported in "very good agreement" with the stochastic model (p. 4). A mean-field
+    closure is not exact, so the time-averaged substrate force of the two is compared as an approximation.
+  assumptions:
+    - "the two papers' nm, Fm, vu, nc, kon, koff, Fb, kc are the same parameters of one clutch scheme; this paper's ks is Mekhdjian's κsubstrate from Eq. 5, 4 π radhesion E / 9"
+    - "Mekhdjian's time-averaged κsubstrate xsubstrate over one seeded run of 10^6 events (its model's settings) is the mean-field long-time average T"
+    - "pinned at the Fig. 5 untreated cell (nm = 250, nc = 150, Fm = Fb = 2 pN, vu = 120 nm/s, kon = 0.3 /s, koff = 0.1 /s, κc = 0.8 pN/nm), kadd = 0, at 0.1 kPa with the record's added radhesion = 550 nm (κs = 77 pN/um): a pinned regime runs one 20 s simulation per sample"
+    - "tolerance 0.1 (added, chosen before entering), as for the other stochastic models related to the mean field"
+- id: rel_mekhdjian_ssa_approx_mean_field_tgf
+  kind: approximated_by
+  a: mekhdjian2017/motor_clutch_reinforced
+  b: alonsomatilla2023/mean_field_dimensional
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "4*pi*r_adh*E/9"}
+  output_map: {T: F_sub}
+  regime: {nm: [500, 500], Fm: [2, 2], vu: [120, 120], nc: [500, 500], kon: [0.3, 0.3], koff: [0.1, 0.1], Fb: [2, 2],
+           kc: [0.8, 0.8], E: [1, 1], r_adh: [550, 550], kadd: [0, 0], Fthresh: [12, 12], ncmax: [750, 750]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    As rel_mekhdjian_ssa_approx_mean_field_ctrl, for Mekhdjian's Fig. 5 TGFβ-treated cell (nm = nc = 500), whose
+    traction peaks at a higher stiffness, at 1 kPa.
+  assumptions:
+    - "as rel_mekhdjian_ssa_approx_mean_field_ctrl, pinned at nm = nc = 500, E = 1 kPa (κs = 768 pN/um), kadd = 0"

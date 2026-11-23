@@ -1,0 +1,60 @@
+# The whole simulator, Cell1DPublish.cpp lines 22-708 with modulePublish.cpp lines 12-73. Not ported:
+# see not_runnable_reason and question q_sim_not_run. The module-level rules it is built from are
+# ported as their own models (built_from).
+id: cms1d_sim
+name: "the code's 1D cell migration simulator (Cell1D::Simulate and Update), not ported"
+role: model
+stated: {file: Cell1DPublish.cpp, lines: "256-279", quote: "double Cell1D::Update() {"}
+described_from: prahl2020
+equation: >-
+  per step: dt = -log(rr)/k_sum (k_sum capped at 1e6); pick one event by its share of k_sum: a cell-body
+  clutch binds or unbinds, a module clutch binds or unbinds, a module is capped, or a module is born
+  (BirthNewModule: length min(free_actin_, length_), nm and nc from the allocation rule, +x with
+  probability (Polar+1)/2); then TransportAndPolymerize (modules shorter than 100 nm removed; flow
+  filament_vel_ = max(0, vu (1 - F/(nm nmFactor Fm))); substrate and reference positions move back by
+  aflow_ratio times the flow distance and forward by the polymerization distance maxpoly_ PolyFactor
+  (free/total) dt; an engaged clutch unbinds when its extension exceeds the module length);
+  PrepareForForceBalance (effective springs 1/(1/cell_k + 1/(n_eng clutch_k_ G_factor) + 1/ksub) per module,
+  1/(1/(n_eng clutch_k_ G_factor) + 1/ksub_cell) for the cell body); ForceBalance (1D root of the sum of
+  forces on the cell position, GSL hybrids, residual 1e-7, at most 100 iterations); UpdatePositionsAndForces
+  (clutch forces, off-rates koff exp(|F|/Fb), birth rate knuc0 (free/total)^4, new k_sum). Cell position
+  filtered for jumps above 1000 nm per 1 s; sampled every 5 min after the first hour; nothing is written out.
+built_from: [offrate_port, flow_port, poly_port, nucleation_port, module_alloc_port, polarity_port]
+inputs:
+  motor_pool:  {quantity: n_motors_cell, unit: dimensionless}
+  clutch_pool: {quantity: n_clutches_cell, unit: dimensionless}
+  clutch_input: {quantity: n_clutches_group_input, unit: dimensionless}
+  n_clutches_cell: {quantity: n_clutches_cell_body, unit: dimensionless}
+  n_modules:   {quantity: n_modules_initial, unit: dimensionless}
+  Fm:          {quantity: motor_stall_force, unit: pN}
+  vu:          {quantity: unloaded_motor_velocity, unit: nm/s}
+  kon:         {quantity: clutch_on_rate, unit: 1/s}
+  koff:        {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:          {quantity: bond_rupture_force, unit: pN}
+  kc:          {quantity: clutch_stiffness, unit: pN/nm}
+  ksub:        {quantity: substrate_stiffness, unit: pN/nm}
+  cell_k:      {quantity: cell_spring_stiffness, unit: pN/nm}
+  kcap:        {quantity: capping_rate, unit: 1/s}
+  knuc0:       {quantity: nucleation_rate_max, unit: 1/s}
+  maxpoly:     {quantity: actin_polymerization_velocity_max, unit: nm/s}
+  total_actin: {quantity: total_actin_length, unit: nm}
+  length:      {quantity: initial_module_length, unit: nm}
+  Lmin:        {quantity: minimum_module_length, unit: nm}
+  Polar:       {quantity: polarity_parameter, unit: dimensionless}
+  aflow_ratio: {quantity: flow_coupling_ratio, unit: dimensionless}
+  PolyFactor:  {quantity: polymerization_factor, unit: dimensionless}
+  PolyPow:     {quantity: motor_factor_gain, unit: dimensionless}
+outputs:
+  x_cell: {quantity: cell_position, unit: um, curve: {quantity: simulated_time, unit: min}}
+settings: {duration_h: 6, discard_s: 3600, sample_s: 300, record_s: 1, jump_nm: 1000, ksum_cap: 1.0e+6,
+           fb_tol: 1.0e-7, fb_iter: 100, PolyVary: 1, seed: 1}
+stochastic: true
+runnable: false
+not_runnable_reason: >-
+  C++ does not run here, and a Python port of the whole simulator cannot be run within the build's
+  budget: with 750 clutches and kon = 1 /s the code executes several hundred events per simulated second,
+  each touching every clutch and solving a force balance, so one 6 h run is of order 10^7 events (hours in
+  Python), and prahl2020's printed means average 36-60 runs. The code also does not produce the paper's
+  results: Record() is empty and the sampled positions (data_cell_pos) are never written or analysed, so
+  there is no MSD, no fit of Eq. 2, and no velocity or motility coefficient to compare with v_sim or mu_sim.
+  The module-level rules are ported and checked instead (built_from).

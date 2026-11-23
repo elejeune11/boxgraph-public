@@ -1,0 +1,53 @@
+id: mekhdjian2017
+kind: article
+title: >-
+  Integrin-mediated traction force enhances paxillin molecular associations and adhesion dynamics that
+  increase the invasiveness of tumor cells into a three-dimensional extracellular matrix
+authors: [Armen H. Mekhdjian, FuiBoon Kai, Matthew G. Rubashkin, Louis S. Prahl, Laralynne M. Przybyla,
+  Alexandra L. McGregor, Emily S. Bell, J. Matthew Barnes, Christopher C. DuFort, Guanqing Ou, Alice C. Chang,
+  Luke Cassereau, Steven J. Tan, Michael W. Pickup, Jonathan N. Lakins, Xin Ye, Michael W. Davidson,
+  Jan Lammerding, David J. Odde, Alexander R. Dunn, Valerie M. Weaver]
+year: 2017
+venue: Molecular Biology of the Cell 28, 1467-1488
+doi: 10.1091/mbc.E16-09-0654
+file: corpus/motor_clutch/2017_Mekhdjian.pdf
+page_range: [1, 40]
+pages: {1: "1467", 2: "1468", 3: "1469", 4: "1470", 5: "1471", 6: "1472", 7: "1473", 8: "1474", 9: "1475", 10: "1476",
+  11: "1477", 12: "1478", 13: "1479", 14: "1480", 15: "1481", 16: "1482", 17: "1483", 18: "1484", 19: "1485",
+  20: "1486", 21: "1487", 22: "1488"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-22"}
+notes: >-
+  Scope: the paper's quantitative modelling core, the motor-clutch simulations of Fig. 5b-d and of the
+  Supplemental Materials (pp. 24-29, Fig. S4), and the MCF10A measurements on PA gels they are set against
+  (Fig. 5e). The model is the Chan-Odde / Bangasser et al. 2013 motor-clutch model (same Fm, vu, kon, koff, Fb, κc
+  as Bangasser et al.'s Table 1; only nm and nc differ), run by the direct Gillespie method, with clutch
+  reinforcement added (kadd, Fthreshold, nclutch,max; Eqs. 10-12), a 1D-to-2D conversion through an adhesion
+  radius (Eqs. 4-5) and a cell spread area from an actin mass balance (Eqs. 6-9). Between cell types the paper
+  changes only nm and nc: untreated MCF10A nm = 250, nc = 150; TGFβ-treated nm = nc = 500 ("motors and clutches
+  both increased", a shift from a weak-clutch to a balanced regime). The reinforcement alternative (Fig. S4) uses
+  nm = nc = 150 with kadd = 0-1 /s, Fthreshold = 12 pN, nclutch,max = 750. Unstated inputs (added): radhesion,
+  [Actin]Total and vpolymerization; the first two were inferred from plateaus of Fig. S4, which is said in their
+  bases. One reinforced simulation model (motor_clutch_reinforced) produces every model curve; the spread area is
+  the reader's steady-state form of Eqs. 6-9 (reconstructed: Lactin is not given and Eq. 8 mixes dimensions).
+  Curves were read from Figs. 5c-d and S4c-e by the record's code at nine moduli. Left out: the experiments no model
+  predicts (invasion, constriction transit, AFM, nuclear aspiration, MTS forces, adhesion composition,
+  bioinformatics; see figures.md); Fig. S4e's 5 pN lines (parameters not given). No 3D quantity of the paper
+  (invasion into 3D collagen) is the output of any model here; the clutch model is compared only with the 2D gels.
+  Why parameters change: the paper attributes the TGFβ (EMT-like) shift to more myosin motors and more integrin
+  clutches together (nm 250 -> 500, nc 150 -> 500), keeping every per-molecule parameter at Bangasser et al.'s
+  values; reinforcement is offered as an alternative route to the same stiffness response (Fig. S4), and the paper
+  does not cite Bangasser et al. 2017, so no relation to that record is stated. Relations recorded (stated):
+  derived from bangasser2013/motor_clutch_ssa and chan2008/motor_clutch, off-rate from Bell 1978. Outcome of the
+  reading, as the questions record it: the Fig. 5c-d curves are run with an added radhesion and an added actin
+  balance, so their agreement rests on those inferences (q_radhesion, q_actin_balance); the kadd = 0.01 /s curves
+  of Fig. S4c-d rise at high stiffness where the reader's run of Eqs. 10-12 does not (q_kadd001_strength); the
+  text's "~10 kPa" optimum disagrees with the paper's own Fig. 5c dashed line (q_eopt_10kpa); Fig. S4b's nm = 150
+  conflicts with the nm = 250 no-reinforcement line of Fig. 5 (q_nm_fig5_vs_s4); the plotted total forces of
+  Fig. 5e exceed stress times area by 2-3x (q_total_force_product). The 0.1 kPa point of the S4c-d dashed line is
+  not read (it lies on the other lines). Second figure pass (2026-11-22): every remaining plot of data is read by
+  calibrated code (48 more readings: invasion in 3D collagen, constriction transit, AFM and nuclear aspiration,
+  traction on 2.7-kPa gels, tension-sensor forces, adhesion lifetime, length, composition and axial position,
+  patient survival and hazard ratios, Figs. S2-S3, S5-S8, S10), measurements recorded as measured data; Fig. S5's
+  gel bars replot Fig. 5e (consistency comparisons) and its spread areas also validate the simulated areas. The
+  3D invasion data are recorded but are the output of no model here. See figures.md and q_s3c_product,
+  q_mts_readings.

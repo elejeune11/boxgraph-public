@@ -1,0 +1,512 @@
+# Files (paths in the code folder):
+#   C  = Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp
+#   D  = Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp
+#   H  = Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp
+# The three drivers set the same values unless a D or H datum below says otherwise (D and H have extra
+# lines for the durotaxis and haptotaxis switches, so a shared value sits a few lines lower). Values written only in a comment of the line ("//8", "OG is 5") are
+# recorded as their own data, with a note: they are what the authors say they used before or elsewhere.
+# The mechanical parameters are in the code's own units, which the code never states (quantities *_code).
+# Where bagchi2025 prints the same parameter, from_source/from_datum link it; for the *_code values the
+# units differ, so the cited check cannot convert them, and the comparisons of runs of stiffness_unit_map
+# and damping_unit_map test them instead.
+
+# ---- control version, driver C: the chain ---------------------------------------------------------------
+- id: numsubnode_C
+  quantity: n_subdivisions
+  unit: dimensionless
+  origin: reported
+  printed: "3"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "148", quote: "unsigned numsubnode = 3;"}
+- id: cell_rest_length_C
+  quantity: length_code
+  unit: dimensionless
+  origin: reported
+  printed: "0.5"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "150", quote: "double cell_rest_length = 0.5;"}
+  note: "the comment says it was 'changed it to 0.2 on 8-19-23 for checking differenecs in contraction stability conn vs disconn' and back. The cell mesh nodes are 0.5 apart (StraightVertexMeshGenerator_ab3.cpp line 177, kk = kk + 0.5)"
+# Lines 152 and 154 set the collagen and substrate rest lengths to 0.5/numsubnode (the node spacing of
+# those meshes, StraightVertexMeshGenerator_ab3.cpp line 89: kk + pp*0.5/numSubNode); written as an
+# expression, they are not recorded as values.
+- id: collagen_k_C
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "1500"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "159", quote: "double collagen_spring_constant  = 1500;"}
+  from_source: bagchi2025
+  from_datum: kl_s1
+  note: "the ligand (collagen) spring, set by p_mesh_ab3->SetSpringConstant (line 410)"
+- id: substrate_k_C
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "500"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "160", quote: "double substrate_spring_constant  = 500;"}
+  from_source: bagchi2025
+  from_datum: ks_s1
+  note: "set by p_mesh_ab2->SetSpringConstant (line 409); the reference value of stiffness_unit_map"
+- id: cell_collagen_link_k_C
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "2500"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "162", quote: "double collagen_cell_link_spring_constant  = 2500;"}
+  from_source: bagchi2025
+  from_datum: kcl_s1
+  note: "the clutch-like link, set on CollagenCellLinkForce_ab (line 413), whose spring_stiffness = mSpringConstant (CollagenCellLinkForce_ab.cpp line 127)"
+- id: substrate_collagen_link_k_C
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "163", quote: "double substrate_collagen_link_spring_constant  = 1000;"}
+  from_source: bagchi2025
+  from_datum: kls_s1
+- id: collagen_damping_C
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "166", quote: "double collagen_damping_constant  = 2;"}
+  from_source: bagchi2025
+  from_datum: eta_l_s1
+- id: substrate_damping_C
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "167", quote: "double substrate_damping_constant  = 2;"}
+  from_source: bagchi2025
+  from_datum: eta_s_s1
+  note: "the reference value of damping_unit_map"
+- id: variable_damping_C
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "168", quote: "bool variable_damping_constant = true;"}
+- id: constant_cell_damping_C
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "169", quote: "double constant_cell_damping_constant  = 5;"}
+- id: min_cell_damping_C
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "170", quote: "double min_cell_damping_constant = 5;//2.51;//5;"}
+  from_source: bagchi2025
+  from_datum: beta_eta_conn
+  note: "passed to SetVariableDampingConstant (line 422), whose code is not in the release; the S1 Table cell damping (0.55) and beta_eta of the S2 Table and S3 connected column (0.55) correspond"
+- id: min_cell_damping_C_alt
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "2.51"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "170", quote: "double min_cell_damping_constant = 5;//2.51;//5;"}
+  from_source: bagchi2025
+  from_datum: beta_eta_disc
+  note: "in a comment of the line only; the S3 disconnected beta_eta (0.28) corresponds"
+- id: protrusive_force_C
+  quantity: force_code
+  unit: dimensionless
+  origin: reported
+  printed: "6750"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "175", quote: "double protrusive_force  = 6750;"}
+  from_source: bagchi2025
+  from_datum: Fp_s1
+  note: "applied as +-mProtrusiveForce in x on each leader node while its protrusion flag is on (CellProtrusiveContractileForce_ab.cpp lines 101-118); the comment says it was 'changed it to 0 on 8-19-23' and back"
+- id: simulation_time_C
+  quantity: simulated_time
+  unit: hour
+  origin: reported
+  printed: "20"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "179", quote: "double simulation_time = 20;"}
+  note: "passed to SetEndTime (line 346); hours by Chaste's convention and the comment of line 183; the comment says '2 is 1000 timesteps fyi'"
+- id: num_time_steps_C
+  quantity: n_time_steps
+  unit: dimensionless
+  origin: reported
+  printed: "10000"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "181", quote: "unsigned num_time_steps = 10000;"}
+  note: "comment: 'max is equal to (simulation_time*500)'"
+- id: time_step_C
+  quantity: time_step
+  unit: hour
+  origin: reported
+  printed: "0.0002"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "183", quote: "double time_step = 0.0002;"}
+  note: "comment: 'defaut is 0.002 hr for vertex based simulation'"
+- id: threshold_division_C
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "186", quote: "bool threshold_based_division = true;"}
+- id: max_threshold_length_C
+  quantity: threshold_division_length
+  unit: dimensionless
+  origin: reported
+  printed: "0.675"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "190", quote: "double max_threshold_division_length = 0.675;"}
+  from_source: bagchi2025
+  from_datum: alpha_eps_conn
+  note: "passed to GenerateBasicRandom_ab (line 315), whose code is not in the release; the paper's alpha_epsilon is a strain, the code's name a length (question q_threshold_length)"
+- id: constant_threshold_length_C
+  quantity: threshold_division_length
+  unit: dimensionless
+  origin: reported
+  printed: "0.95"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "192", quote: "double constant_threshold_division_length = 0.95;"}
+  note: "'To be used in case variable_threshold_division is set false'; it is true (line 188)"
+- id: long_collagen_C
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "199", quote: "bool islongcollagen = true;"}
+  note: "true = connected ligands (one long fibre); the false line 197 is commented out"
+- id: fibre_connectivity_C
+  quantity: fibre_connectivity
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "201", quote: "unsigned short_fiber_connectivity = 2;"}
+  note: "the comment: 'made it to 2 (OG - 90) for haptotaxis control simulation 8-26-23'; bagchi2025 p. 27: 'every two nodes disconnected from the third node'"
+- id: nodes_removed_C
+  quantity: nodes_removed
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "205", quote: "double num_nodes_removed = 1;"}
+
+# ---- control version, driver C: the spatial profiles (Eqs 10-12) -----------------------------------------
+- id: stdev_kcell_C
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "209", quote: "double stdev_cell_spring_constant  = 5;//1;"}
+  from_source: bagchi2025
+  from_datum: sigma_k_disc
+  note: "passed to SetVariableSpringConstant (line 403), not in the release; 5 is the S3 Table's disconnected sigma_k, while this driver's other profile values are the connected column's"
+- id: stdev_kcell_C_alt
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "209", quote: "double stdev_cell_spring_constant  = 5;//1;"}
+  from_source: bagchi2025
+  from_datum: sigma_k_conn
+  note: "in a comment of the line only"
+- id: cell_nodes_C
+  quantity: n_cell_springs
+  unit: dimensionless
+  origin: reported
+  printed: "36"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "211", quote: "unsigned cell_nodes = 36;"}
+  note: "'actual nodes of cell are (cell_nodes+1)'; the comment also says 'made it to 4 (36 - OG) for haptotaxis control simulation 8-26-23'"
+- id: nd_factor_kcell_C
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "213", quote: "double ND_factor_kcell = 100;//10;"}
+  from_source: bagchi2025
+  from_datum: gamma_k_conn
+  note: "'this factor multiplies the normal distribution of spring stiffness within the cell mesh'; the comment says it was 10000000 originally; S3 prints gamma_k 1000 (connected) and 10000 (disconnected) (question q_gamma_k)"
+- id: nd_factor_tdl_C
+  quantity: eps_profile_gain
+  unit: dimensionless
+  origin: reported
+  printed: "0.8"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "215", quote: "double ND_factor_tdl = 0.8;"}
+  from_source: bagchi2025
+  from_datum: gamma_eps_conn
+  note: "comment: 'OG is 2, changing it for conn vs disconn, with different spatial variations 9-6-23'"
+- id: nd_factor_dc_C
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "20"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "217", quote: "double ND_factor_dc = 20;//400;//75;//20;"}
+  from_source: bagchi2025
+  from_datum: gamma_eta_conn
+- id: nd_factor_dc_C_alt400
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "400"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "217", quote: "double ND_factor_dc = 20;//400;//75;//20;"}
+  from_source: bagchi2025
+  from_datum: gamma_eta_disc
+  note: "in a comment of the line only"
+- id: nd_stdev_dc_C
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "219", quote: "double ND_stdev_dc = 1;//8;//10;//1;"}
+  from_source: bagchi2025
+  from_datum: sigma_eta_conn
+  note: "s = ND_stdev_dc (line 224) is the width of the damping Gaussian and also the prefactor 1/(s sqrt(2 pi)) of the threshold Gaussian (line 250)"
+- id: nd_stdev_dc_C_alt8
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "8"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "219", quote: "double ND_stdev_dc = 1;//8;//10;//1;"}
+  from_source: bagchi2025
+  from_datum: sigma_eta_disc
+  note: "in a comment of the line only"
+- id: nd_stdev_dc_C_alt10
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "10"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "219", quote: "double ND_stdev_dc = 1;//8;//10;//1;"}
+  note: "in a comment of the line only; also the value of ND_stdev in D and H"
+- id: nd_stdev_tdl_C
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "221", quote: "double ND_stdev_tdl = 2;"}
+  from_source: bagchi2025
+  from_datum: sigma_eps_conn
+- id: nd_stdev_tdl_C_og
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "221", quote: "double ND_stdev_tdl = 2;	//OG is 5"}
+  from_source: bagchi2025
+  from_datum: sigma_eps_disc
+  note: "the comment 'OG is 5' only"
+- id: collagen_elements_C
+  quantity: n_mesh_elements
+  unit: dimensionless
+  origin: reported
+  printed: "80"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "272", quote: "StraightVertexMeshGenerator_ab3 gen3(80,1,2,false,true,islongcollagen,num_nodes_removed,short_fiber_connectivity,numsubnode);"}
+  note: "comment: 'changed from 80 to 48 on 8-26-23 for running Haptotaxis control'"
+- id: substrate_elements_C
+  quantity: n_mesh_elements
+  unit: dimensionless
+  origin: reported
+  printed: "96"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "276", quote: "StraightVertexMeshGenerator_ab3 gen2(96,1,0,true,false,false,0,0,numsubnode);"}
+  note: "comment: 'changed from 96 to 60 on 8-26-23 for running Haptotaxis control'"
+- id: rest_disp_C
+  quantity: length_code
+  unit: dimensionless
+  origin: reported
+  printed: "0.00001"
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/Simulation/numerical_methods/ForwardEulerNumericalMethod_ab.cpp, lines: "238", quote: "if (node_iter->IsLeaderNode()==true && abs(displacement[0])<=0.00001)"}
+  note: "the rest criterion of the paper's step 1 ('only if it is at equilibrium (at rest)'): a leader node's protrusion switches on when its x displacement in one time step is at most this"
+
+# ---- Durotaxis version, driver D: values that differ from C -------------------------------------------
+- id: durotaxis_D
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "148", quote: "bool durotaxis = true;"}
+- id: cell_k_D
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "160", quote: "double cell_spring_constant  = 50;"}
+  from_source: bagchi2025
+  from_datum: kc_s1
+  note: "set by p_mesh_ab1->SetSpringConstant (line 409) after SetVariableSpringConstant (line 403); in C both line 158 and the call (line 408) are commented out ('commented 8-16-23'). The same in H (lines 173, 427)"
+- id: kmin_duro_D
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "350"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "163", quote: "double substrate_durotaxis_min_spring_constant = 350;"}
+  note: "passed to SetSpringConstantDurotaxis (line 418), not in the release; no curve of Fig 11k-l has this k_min (question q_durotaxis_kmin)"
+- id: kmax_duro_D
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "164", quote: "double substrate_durotaxis_max_spring_constant = 1000;"}
+  from_source: bagchi2025
+  from_datum: kmax_fig11
+- id: long_collagen_D
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "201", quote: "bool islongcollagen = false;"}
+  note: "disconnected ligands (short fibres of 2 nodes); the same in H (line 216)"
+- id: stdev_kcell_D
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "10"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "213", quote: "double stdev_cell_spring_constant  = 10;"}
+  from_source: bagchi2025
+  from_datum: sigma_k_s2
+  note: "the same in H (line 228)"
+- id: cell_nodes_D
+  quantity: n_cell_springs
+  unit: dimensionless
+  origin: reported
+  printed: "4"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "215", quote: "unsigned cell_nodes = 4;// 36;"}
+  note: "five cell nodes as shipped; the same in H (line 230) (question q_cell_nodes_4)"
+- id: cell_nodes_D_alt
+  quantity: n_cell_springs
+  unit: dimensionless
+  origin: reported
+  printed: "36"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "215", quote: "unsigned cell_nodes = 4;// 36;"}
+  note: "in a comment of the line only; the value of C ('36 - OG')"
+- id: nd_factor_kcell_D
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "217", quote: "double ND_factor_kcell = 100;"}
+  from_source: bagchi2025
+  from_datum: gamma_k_s2
+  note: "the S2 Table prints gamma_k 1000 (question q_gamma_k); the same in H (line 232)"
+- id: nd_factor_tdl_D
+  quantity: eps_profile_gain
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "219", quote: "double ND_factor_tdl = 2;"}
+  from_source: bagchi2025
+  from_datum: gamma_eps_s2
+  note: "the same in H (line 234)"
+- id: nd_factor_dc_D
+  quantity: damping_code
+  unit: dimensionless
+  origin: reported
+  printed: "75"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "221", quote: "double ND_factor_dc = 75;"}
+  from_source: bagchi2025
+  from_datum: gamma_eta_s2
+  note: "the S2 Table prints gamma_eta 75, the code's number in the code's units (question q_code_units); the same in H (line 236)"
+- id: nd_stdev_D
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "10"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "223", quote: "double ND_stdev = 10;"}
+  from_source: bagchi2025
+  from_datum: sigma_eta_s2
+  note: "named ND_stdev here (ND_stdev_dc in C); s = ND_stdev (line 228); the same in H (lines 238, 243)"
+- id: nd_stdev_tdl_D
+  quantity: profile_width
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "225", quote: "double ND_stdev_tdl = 5;"}
+  from_source: bagchi2025
+  from_datum: sigma_eps_s2
+  note: "the same in H (line 240)"
+- id: max_threshold_length_D
+  quantity: threshold_division_length
+  unit: dimensionless
+  origin: reported
+  printed: "0.675"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "194", quote: "double max_threshold_division_length = 0.675;"}
+  from_source: bagchi2025
+  from_datum: alpha_eps_s2
+- id: collagen_elements_D
+  quantity: n_mesh_elements
+  unit: dimensionless
+  origin: reported
+  printed: "48"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "273", quote: "StraightVertexMeshGenerator_ab3 gen3(48,1,2,false,true,islongcollagen,num_nodes_removed,short_fiber_connectivity,numsubnode);"}
+  note: "H passes col_nodes = 48 (lines 231, 288)"
+- id: substrate_elements_D
+  quantity: n_mesh_elements
+  unit: dimensionless
+  origin: reported
+  printed: "60"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "277", quote: "StraightVertexMeshGenerator_ab3 gen2(60,1,0,true,false,false,0,0,numsubnode);"}
+  note: "the same in H (line 294)"
+- id: rest_disp_D
+  quantity: length_code
+  unit: dimensionless
+  origin: reported
+  printed: "0.0001"
+  citation: {file: Chaste_8_14_23_Durotaxis/cell_based/test/VertexAmrit/Simulation/numerical_methods/ForwardEulerNumericalMethod_ab.cpp, lines: "229", quote: "double stop_disp = 0.0001;"}
+  note: "'added 8-13-23, value before was 0.00001'; used at lines 240 and 247; the same in H (ForwardEulerNumericalMethod_ab.cpp line 229)"
+
+# ---- Haptotaxis version, driver H: values that differ from C and D ---------------------------------------
+- id: durotaxis_H
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "159", quote: "bool durotaxis = false;"}
+- id: haptotaxis_H
+  quantity: option_switch
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "161", quote: "bool haptotaxis = true;"}
+- id: kmin_duro_H
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "5"
+  citation: {file: Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "176", quote: "double substrate_durotaxis_min_spring_constant = 5;"}
+  from_source: bagchi2025
+  from_datum: kmin_c1
+  note: "not used in H, where durotaxis is false (line 159), so the substrate gets substrate_spring_constant (line 431)"
+- id: kmax_duro_H
+  quantity: stiffness_code
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {file: Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "177", quote: "double substrate_durotaxis_max_spring_constant = 1000;"}
+- id: pbind_min_H
+  quantity: binding_probability
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {file: Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "178", quote: "double collagen_haptotaxis_min_binding_probability = 0;"}
+  note: "passed to SetBindingProbabilityHaptotaxis (line 420), not in the release"
+- id: pbind_max_H
+  quantity: binding_probability
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {file: Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "179", quote: "double collagen_haptotaxis_max_binding_probability = 1;"}
+  note: "bagchi2025 p. 27: 'Every ligand node has equal binding probability to cell node which is set to 1'"
+
+# ---- bagchi2025's values, copied from its record (S1-S3 Tables, Fig 11), for the comparisons ----------
+- {id: ks_p, quantity: spring_stiffness, unit: nN/um, origin: reported, printed: "6.17", citation: {none: "copied from the paper's record bagchi2025 (ks_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: ks_s1}
+- {id: kl_p, quantity: spring_stiffness, unit: nN/um, origin: reported, printed: "18.51", citation: {none: "copied from the paper's record bagchi2025 (kl_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: kl_s1}
+- {id: kcl_p, quantity: spring_stiffness, unit: nN/um, origin: reported, printed: "30.86", citation: {none: "copied from the paper's record bagchi2025 (kcl_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: kcl_s1}
+- {id: kls_p, quantity: spring_stiffness, unit: nN/um, origin: reported, printed: "12.34", citation: {none: "copied from the paper's record bagchi2025 (kls_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: kls_s1}
+- {id: kc_p, quantity: spring_stiffness, unit: nN/um, origin: reported, printed: "4.92", citation: {none: "copied from the paper's record bagchi2025 (kc_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: kc_s1}
+- {id: kmax_p, quantity: spring_stiffness, unit: nN/um, origin: reported, printed: "12.3", citation: {none: "copied from the paper's record bagchi2025 (kmax_fig11: Fig 11 caption, PDF p. 21)"}, from_source: bagchi2025, from_datum: kmax_fig11}
+- {id: kmin1_p, quantity: spring_stiffness, unit: nN/um, origin: reported, printed: "0.06", citation: {none: "copied from the paper's record bagchi2025 (kmin_c1: Fig 11 caption and legend, PDF p. 21)"}, from_source: bagchi2025, from_datum: kmin_c1}
+- {id: eta_s_p, quantity: damping_constant, unit: nN*s/um, origin: reported, printed: "0.22", citation: {none: "copied from the paper's record bagchi2025 (eta_s_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: eta_s_s1}
+- {id: eta_l_p, quantity: damping_constant, unit: nN*s/um, origin: reported, printed: "0.22", citation: {none: "copied from the paper's record bagchi2025 (eta_l_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: eta_l_s1}
+- {id: eta_c_p, quantity: damping_constant, unit: nN*s/um, origin: reported, printed: "0.55", citation: {none: "copied from the paper's record bagchi2025 (eta_c_s1: S1 Table, PDF p. 39)"}, from_source: bagchi2025, from_datum: eta_c_s1}
+- {id: beta_eta_disc_p, quantity: damping_constant, unit: nN*s/um, origin: reported, printed: "0.28", citation: {none: "copied from the paper's record bagchi2025 (beta_eta_disc: S3 Table, PDF p. 42; no unit printed, the paper record takes nN um-1 s)"}, from_source: bagchi2025, from_datum: beta_eta_disc}
+- {id: omega_k_s2_p, quantity: profile_peak, unit: dimensionless, origin: reported, printed: "0.398", citation: {none: "copied from the paper's record bagchi2025 (omega_k_s2: S2 Table, PDF p. 41)"}, from_source: bagchi2025, from_datum: omega_k_s2}
+- {id: omega_k_conn_p, quantity: profile_peak, unit: dimensionless, origin: reported, printed: "0.398", citation: {none: "copied from the paper's record bagchi2025 (omega_k_conn: S3 Table, PDF p. 42)"}, from_source: bagchi2025, from_datum: omega_k_conn}
+- {id: omega_k_disc_p, quantity: profile_peak, unit: dimensionless, origin: reported, printed: "0.079", citation: {none: "copied from the paper's record bagchi2025 (omega_k_disc: S3 Table, PDF p. 42)"}, from_source: bagchi2025, from_datum: omega_k_disc}
+- {id: delta_k_s2_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "1.75 x 10^-71", citation: {none: "copied from the paper's record bagchi2025 (delta_k_s2: S2 Table, PDF p. 41)"}, from_source: bagchi2025, from_datum: delta_k_s2}
+- {id: delta_k_conn_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "1.75 x 10^-71", citation: {none: "copied from the paper's record bagchi2025 (delta_k_conn: S3 Table, PDF p. 42)"}, from_source: bagchi2025, from_datum: delta_k_conn}
+- {id: delta_k_disc_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "1.22 x 10^-4", citation: {none: "copied from the paper's record bagchi2025 (delta_k_disc: S3 Table, PDF p. 42)"}, from_source: bagchi2025, from_datum: delta_k_disc}
+- {id: delta_eps_s2_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "6.11 x 10^-5", citation: {none: "copied from the paper's record bagchi2025 (delta_eps_s2: S2 Table, PDF p. 41)"}, from_source: bagchi2025, from_datum: delta_eps_s2}
+- {id: delta_eps_conn_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "1.02 x 10^-19", citation: {none: "copied from the paper's record bagchi2025 (delta_eps_conn: S3 Table, PDF p. 42)"}, from_source: bagchi2025, from_datum: delta_eps_conn}
+- {id: delta_eps_disc_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "6.11 x 10^-5", citation: {none: "copied from the paper's record bagchi2025 (delta_eps_disc: S3 Table, PDF p. 42)"}, from_source: bagchi2025, from_datum: delta_eps_disc}
+- {id: delta_eta_s2_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "7.89 x 10^-3", citation: {none: "copied from the paper's record bagchi2025 (delta_eta_s2: S2 Table, PDF p. 41)"}, from_source: bagchi2025, from_datum: delta_eta_s2}
+- {id: delta_eta_conn_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "1.75 x 10^-711", citation: {none: "copied from the paper's record bagchi2025 (delta_eta_conn: S3 Table, PDF p. 42; the exponent -711 as printed)"}, from_source: bagchi2025, from_datum: delta_eta_conn}
+- {id: delta_eta_disc_p, quantity: profile_shift, unit: dimensionless, origin: reported, printed: "3.97 x 10^-3", citation: {none: "copied from the paper's record bagchi2025 (delta_eta_disc: S3 Table, PDF p. 42)"}, from_source: bagchi2025, from_datum: delta_eta_disc}

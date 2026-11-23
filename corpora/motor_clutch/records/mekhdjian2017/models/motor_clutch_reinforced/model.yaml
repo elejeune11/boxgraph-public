@@ -1,0 +1,39 @@
+id: motor_clutch_reinforced
+name: stochastic motor-clutch model with force-dependent clutch reinforcement, direct Gillespie method (Supplemental Eqs. 4, 5, 10-13)
+role: model
+stated: {page: 24, quote: "We modified an existing motor-clutch model of cell traction forces", where: "Supplemental Materials pp. 24-29; Eqs. 4, 5 (p. 24-25), 10-12 (p. 27), 13 (p. 28)"}
+equation: >-
+  Rules of Chan and Odde (2008) / Bangasser et al. (2013), given in words (p. 24): nm motors of stall force Fm
+  pull F-actin at vu with a force-velocity relation; nc clutches bind at kon, unbind at koff scaled by a single
+  exponential Bell law with Fbond; clutches are springs κclutch; the substrate is a spring κsubstrate found by a
+  force balance on engaged clutches. Effective Young's modulus Esubstrate = 9 κsubstrate / (4 π radhesion)
+  (Eq. 5); traction stress Tcell = Fsubstrate / (π radhesion^2) (Eq. 4). Reinforcement: nthreshold =
+  Σ_i [Fclutch,i > Fthreshold] (Eq. 10), favailable = (nclutch,max - nclutch(t))/nclutch,max (Eq. 11),
+  k*add = kadd nthreshold favailable (Eq. 12); a new clutch joins unbound at xsubstrate; no clutch removal.
+  Direct Gillespie: Δt = -log(URN)/Σ k_i (Eq. 13), a second URN selects the event; clutch positions advance
+  by retrograde flow over Δt "as previously described (Bangasser et al., 2013)"; 10^6 events per stiffness.
+inputs:
+  nm:      {quantity: n_motors, unit: dimensionless}
+  Fm:      {quantity: motor_stall_force, unit: pN}
+  vu:      {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:      {quantity: n_clutches, unit: dimensionless, description: "initial clutch number nclutch(0)"}
+  kon:     {quantity: clutch_on_rate, unit: 1/s}
+  koff:    {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:      {quantity: bond_rupture_force, unit: pN}
+  kc:      {quantity: clutch_stiffness, unit: pN/nm}
+  E:       {quantity: substrate_modulus, unit: kPa, description: "effective Young's modulus, turned into κsubstrate by Eq. 5"}
+  r_adh:   {quantity: adhesion_radius, unit: nm}
+  kadd:    {quantity: clutch_addition_rate, unit: 1/s}
+  Fthresh: {quantity: reinforcement_threshold_force, unit: pN}
+  ncmax:   {quantity: n_clutches_max, unit: dimensionless}
+outputs:
+  T:       {quantity: traction_stress, unit: Pa, description: "Eq. 4 on the time-averaged substrate force"}
+  F_sub:   {quantity: mean_traction_force, unit: pN, description: "time average of κsubstrate xsubstrate over the run"}
+  v_retro: {quantity: retrograde_flow_rate, unit: nm/s, description: "time average of the F-actin flow over the run"}
+  n_eng:   {quantity: engaged_clutch_number, unit: dimensionless, description: "time average of the engaged clutches"}
+  nc_mean: {quantity: n_clutches, unit: dimensionless, description: "time average of the ensemble size nclutch(t)"}
+  t_sim:   {quantity: simulated_time, unit: s, description: "simulated time reached after n_events events"}
+settings: {n_events: 1000000, seed: 1}
+stochastic: true
+from_words: true
+described_from: bangasser2013

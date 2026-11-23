@@ -1,0 +1,20 @@
+# Reconstructed (our stand-in): neither the code nor the paper says how the code's stiffnesses become the
+# S1 Table's nN/um. This model maps a code stiffness by the one factor that turns the code's substrate
+# spring (500, C line 160) into the S1 Table's 6.17 nN/um, to test whether one factor maps every stiffness.
+id: stiffness_unit_map
+name: "a code stiffness in nN/um by the substrate spring's factor (reconstructed)"
+role: processing
+stated: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "160", quote: "double substrate_spring_constant  = 500;"}
+described_from: bagchi2025
+reconstructed: >-
+  The code states no units and the paper no conversion from the code's values to its S1 Table; one
+  proportional factor, fixed by the substrate spring, is our hypothesis.
+equation: "k = x k_ref / x_ref"
+inputs:
+  x:     {quantity: stiffness_code, unit: dimensionless, description: "the code's stiffness to map"}
+  x_ref: {quantity: stiffness_code, unit: dimensionless, description: "the code's substrate spring stiffness"}
+  k_ref: {quantity: spring_stiffness, unit: nN/um, description: "the S1 Table's substrate spring stiffness"}
+outputs:
+  k: {quantity: spring_stiffness, unit: nN/um}
+settings: {}
+stochastic: false

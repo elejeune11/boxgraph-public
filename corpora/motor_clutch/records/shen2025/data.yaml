@@ -1,0 +1,694 @@
+# ==== Table I (PDF p. 4): physical parameters ====================================================
+- {id: wa, quantity: motor_attachment_rate, unit: 1/s, origin: reported, printed: "40", citation: {page: 4, printed_page: "014417-4", quote: "Motor attachment rate ωa 40 s−1", where: Table I}, from_source: ref-40}
+- {id: wd0, quantity: motor_detachment_rate_unloaded, unit: 1/s, origin: reported, printed: "350", citation: {page: 4, printed_page: "014417-4", quote: "Motor detachment rate ωd0 350 s−1", where: Table I}, from_source: ref-40}
+- {id: Nm, quantity: n_motors_total, unit: dimensionless, origin: reported, printed: "100", citation: {page: 4, printed_page: "014417-4", quote: "Total number of motors Nm 100", where: Table I}}
+- {id: kon, quantity: clutch_on_rate, unit: 1/s, origin: reported, printed: "1", citation: {page: 4, printed_page: "014417-4", quote: "Clutch attachment rate kon 1 s−1", where: Table I}, from_source: ref-8}
+- {id: koff0, quantity: clutch_off_rate_unloaded, unit: 1/s, origin: reported, printed: "0.1", citation: {page: 4, printed_page: "014417-4", quote: "Clutch detachment rate koff", where: Table I}, from_source: ref-8}
+- id: vb
+  quantity: motor_back_velocity
+  unit: um/s
+  origin: reported
+  printed: "0.2256"
+  citation: {page: 4, printed_page: "014417-4", quote: "Back velocity vb 0.2256 µm/s", where: Table I}
+  from_source: ref-40
+  note: Enters only the piecewise force-velocity relation (p. 2); the dimensionless system Eq. 6 uses the linear branch only, so no model here uses it (q_piecewise_dropped).
+- {id: fs, quantity: motor_stall_force, unit: pN, origin: reported, printed: "4.96", citation: {page: 4, printed_page: "014417-4", quote: "Stall force fs 4.96 pN", where: Table I}, from_source: ref-40}
+- {id: fd, quantity: motor_detachment_force, unit: pN, origin: reported, printed: "2.4", citation: {page: 4, printed_page: "014417-4", quote: "Detachment force fd 2.4 pN", where: Table I}, from_source: ref-41}
+- {id: Fb, quantity: clutch_rupture_force, unit: pN, origin: reported, printed: "6.25", citation: {page: 4, printed_page: "014417-4", quote: "Clutch bond rupture force Fb 6.25 pN", where: Table I}, from_source: ref-27}
+- {id: km, quantity: motor_stiffness, unit: pN/nm, origin: reported, printed: "0.3", citation: {page: 4, printed_page: "014417-4", quote: "Motor spring stiffness km 0.3 pN/nm", where: Table I}, from_source: ref-40}
+- {id: kc, quantity: clutch_stiffness, unit: pN/nm, origin: reported, printed: "0.03144", citation: {page: 4, printed_page: "014417-4", quote: "Clutch spring stiffness kc 0.03144 pN/nm", where: Table I}, from_source: ref-42}
+- id: Gamma_kT
+  quantity: actin_friction_per_kT
+  unit: s/nm^2
+  origin: reported
+  printed: "893 x 10^-6"
+  citation: {page: 4, printed_page: "014417-4", quote: "Viscous friction coefficient 893 × 10−6 kB Ts/nm2", where: Table I}
+  from_source: ref-43
+  note: Printed in kB T s/nm^2; entered as Gamma/(kB T) in s/nm^2 (the units registry has no kB T unit).
+# derived scales, Table I bottom; defined on p. 3 (l0 = (kBT/(wd0 Gamma))^1/2, tau = 1/wd0, v0 = l0 wd0, f = (wd0 Gamma kBT)^1/2)
+- {id: l0_printed, quantity: char_length, unit: nm, origin: derived, printed: "1.7887", citation: {page: 4, printed_page: "014417-4", quote: "Characteristic length l0 1.7887 nm", where: Table I}}
+- {id: tau_printed, quantity: char_time, unit: s, origin: derived, printed: "0.0029", citation: {page: 4, printed_page: "014417-4", quote: "Characteristic time τ 0.0029 s", where: Table I}}
+- {id: v0_printed, quantity: char_velocity, unit: nm/s, origin: derived, printed: "626.0490", citation: {page: 4, printed_page: "014417-4", quote: "Characteristic velocity v0 626.0490 nm/s", where: Table I}}
+- id: f_printed
+  quantity: char_force_per_kT
+  unit: 1/nm
+  origin: derived
+  printed: "2.3033"
+  citation: {page: 4, printed_page: "014417-4", quote: "Characteristic force f 2.3033 kB T/nm", where: Table I}
+  note: Printed in kB T/nm, entered as f/(kB T) in 1/nm, exactly as printed (see q_f_unit).
+
+# ==== conditions stated in the text and captions ==================================================
+- id: F_unloaded
+  quantity: external_load_nd
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {page: 8, printed_page: "014417-8", quote: "it is unloaded, namely when the external load", where: "Sec. III C"}
+- id: loadfrac_F0
+  quantity: load_fraction
+  unit: dimensionless
+  origin: reported
+  printed: "0"
+  citation: {page: 12, printed_page: "014417-12", quote: "point of this arrow corresponds to an external load", where: "Fig. 12 caption (j = 0)"}
+- id: ks_stiff
+  quantity: substrate_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "1"
+  citation: {page: 8, printed_page: "014417-8", quote: "occurs when ks = 1 pN/nm", where: "Sec. III C; Fig. 2(e,f)"}
+- id: g_fig2a
+  quantity: friction_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "1"
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(a), panel label 'ks = kc, gamma = Gamma' (in the figure, not in the text layer)"}
+- id: g_fig2d
+  quantity: friction_ratio
+  unit: dimensionless
+  origin: reported
+  printed: "2"
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(d), panel label 'ks = nc kc, gamma = 2 Gamma' (in the figure, not in the text layer)"}
+- {id: Nc_fig6b, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "10", citation: {page: 9, printed_page: "014417-9", quote: "Nc is set at 10 and ṽu at 1.7", where: "Fig. 6 caption"}}
+- {id: vu_fig6b, quantity: motor_velocity_nd, unit: dimensionless, origin: reported, printed: "1.7", citation: {page: 9, printed_page: "014417-9", quote: "Nc is set at 10 and ṽu at 1.7", where: "Fig. 6 caption"}}
+- {id: Nc_fig11_5, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "5", citation: {page: 11, printed_page: "014417-11", quote: "at fixed values of Nc = 5, 10, and 15", where: "Fig. 11 caption"}}
+- {id: Nc_fig11_10, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "10", citation: {page: 11, printed_page: "014417-11", quote: "at fixed values of Nc = 5, 10, and 15", where: "Fig. 11 caption"}}
+- {id: Nc_fig11_15, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "15", citation: {page: 11, printed_page: "014417-11", quote: "at fixed values of Nc = 5, 10, and 15", where: "Fig. 11 caption"}}
+
+# ==== printed results ================================================================================
+- id: vu0_Nc10_caption
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  printed: "1.7"
+  citation: {page: 9, printed_page: "014417-9", quote: "positioning this point close to the upper boundary of the US region", where: "Fig. 6 caption"}
+  conditions: {n_clutches_total: "10", friction_ratio: "1"}
+  note: >-
+    The caption places (Nc, v~u) = (10, 1.7) "close to" the upper boundary of the US region of Fig. 2(a), i.e. the
+    Hopf boundary v~u0(Nc = 10) is near 1.7. The text (p. 9) says the point is "near the SS and US boundary".
+
+# ==== figure readings (second pass, generated from figures/) ====
+- {id: g_fig2b, quantity: friction_ratio, unit: dimensionless, origin: reported, printed: "100", citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(b), panel label 'ks = kc, gamma = 100 Gamma' (in the figure, not in the text layer)"}}
+- {id: Nc_fig8_10, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "10", citation: {page: 10, printed_page: "014417-10", quote: "Light-colored lines represent the scenario at", where: "Fig. 8 caption"}}
+- {id: Nc_fig8_20, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "20", citation: {page: 10, printed_page: "014417-10", quote: "while dark-colored lines are used for Nc = 20", where: "Fig. 8 caption"}}
+- {id: Nc_fig9_10, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "10", citation: {page: 10, printed_page: "014417-10", quote: "Light-colored lines denote the case at Nc = 10", where: "Fig. 9 caption"}}
+- {id: Nc_fig9_20, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "20", citation: {page: 10, printed_page: "014417-10", quote: "whereas dark-colored lines correspond to Nc = 20", where: "Fig. 9 caption"}}
+- {id: Nc_fig10, quantity: n_clutches_total, unit: dimensionless, origin: reported, printed: "20", citation: {page: 10, printed_page: "014417-10", quote: "tem’s fixed point within the stable region at Nc = 20", where: "Fig. 10 caption"}}
+- id: loadfrac_half
+  quantity: load_fraction
+  unit: dimensionless
+  origin: reported
+  printed: "0.5"
+  citation: {page: 12, printed_page: "014417-12", quote: "Panels (a) and (b) represent the stability diagrams at", where: "Fig. 13 caption, panel (a)"}
+  note: Printed as the fraction 1/2 (F~ = (1/2) nm0 f~s; the text layer reads '21'); written as 0.5 because the record's printed-value syntax has no fractions.
+- id: dat_fig2a_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2a_hopf
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(a)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2a_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2a_usu
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(a)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2a_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2a_s_ss
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(a)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2b_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2b_hopf
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(b)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2b_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2b_usu
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(b)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2b_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2b_s_ss
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(b)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2c_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2c_hopf
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(c)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2c_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2c_usu
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(c)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2c_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2c_s_ss
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(c)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2d_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2d_hopf
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(d)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2d_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2d_usu
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(d)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2d_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2d_s_ss
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(d)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2e_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2e_hopf
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(e)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2e_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2e_usu
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(e)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2e_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2e_s_ss
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(e)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2f_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2f_hopf
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(f)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2f_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2f_usu
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(f)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2f_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2f_s_ss
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(f)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2a_wedge_top
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2a_wedge_top
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(a)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2a_wedge_bottom
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2a_wedge_bottom
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(a)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2c_wedge_top
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2c_wedge_top
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(c)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2c_wedge_bottom
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2c_wedge_bottom
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(c)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2e_band_top
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2e_band_top
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(e)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2e_band_bottom
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2e_band_bottom
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(e)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2f_band_top
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2f_band_top
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(f)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig2f_band_bottom
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig2f_band_bottom
+  citation: {page: 6, printed_page: "014417-6", where: "Fig. 2(f)", quote: "Stability diagram of the Nc -ṽu plane for the system"}
+- id: dat_fig8a_Nc20
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8a_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(a)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig8b_Nc10
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8b_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(b)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig8b_Nc20
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8b_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(b)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig8c_Nc10
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8c_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(c)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig8c_Nc20
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8c_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(c)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig8d_Nc10
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8d_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(d)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig8d_Nc20
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8d_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(d)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig8e_Nc10
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8e_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(e)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig8e_Nc20
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8e_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(e)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig8f_Nc10
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8f_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(f)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig8f_Nc20
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig8f_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 8(f)", quote: "The impact of parameters variations on nc0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig9a_Nc20
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9a_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(a)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig9b_Nc10
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9b_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(b)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig9b_Nc20
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9b_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(b)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig9c_Nc10
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9c_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(c)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig9c_Nc20
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9c_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(c)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig9d_Nc10
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9d_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(d)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig9d_Nc20
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9d_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(d)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig9e_Nc10
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9e_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(e)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig9e_Nc20
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9e_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(e)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig9f_Nc10
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9f_Nc10
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(f)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig9f_Nc20
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig9f_Nc20
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 9(f)", quote: "The impact of variations in parameters on x̃o0 within the"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig5a_n_edge
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig5a_n_edge
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 5(a)", quote: "Stability diagram of the Nc -ω̃ plane"}
+- id: dat_fig5a_hopf
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig5a_hopf
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 5(a)", quote: "Stability diagram of the Nc -ω̃ plane"}
+- id: dat_fig5a_ss_s
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig5a_ss_s
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 5(a)", quote: "Stability diagram of the Nc -ω̃ plane"}
+- id: dat_fig5b_n_edge
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig5b_n_edge
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 5(b)", quote: "Stability diagram of the Nc -ω̃ plane"}
+- id: dat_fig5b_u_us
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig5b_u_us
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 5(b)", quote: "Stability diagram of the Nc -ω̃ plane"}
+- id: dat_fig5b_hopf
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig5b_hopf
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 5(b)", quote: "Stability diagram of the Nc -ω̃ plane"}
+- id: dat_fig5b_ss_s
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig5b_ss_s
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 5(b)", quote: "Stability diagram of the Nc -ω̃ plane"}
+- id: dat_fig13c_n_edge
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13c_n_edge
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(c)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13c_hopf
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13c_hopf
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(c)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13c_ss_s
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13c_ss_s
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(c)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13d_n_edge
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13d_n_edge
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(d)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13d_u_us
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13d_u_us
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(d)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13d_hopf
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13d_hopf
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(d)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13d_ss_s
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13d_ss_s
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(d)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13e_hopf
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13e_hopf
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(e)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13e_ss_s
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13e_ss_s
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(e)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13f_u_us
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13f_u_us
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(f)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13f_hopf
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13f_hopf
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(f)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13f_ss_s
+  quantity: motor_rate_ratio_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13f_ss_s
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(f)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13a_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13a_hopf
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(a)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13a_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13a_usu
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(a)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13a_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13a_s_ss
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(a)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13b_hopf
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13b_hopf
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(b)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13b_usu
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13b_usu
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(b)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig13b_s_ss
+  quantity: motor_velocity_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig13b_s_ss
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 13(b)", quote: "The influence of external load F̃ on system stability"}
+- id: dat_fig6a_band_top
+  quantity: clutch_stiffness_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig6a_band_top
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 6(a)", quote: "Stability diagram of the k̃s -k̃c plane"}
+- id: dat_fig6a_band_bottom
+  quantity: clutch_stiffness_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig6a_band_bottom
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 6(a)", quote: "Stability diagram of the k̃s -k̃c plane"}
+- id: dat_fig6a_right_top
+  quantity: clutch_stiffness_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig6a_right_top
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 6(a)", quote: "Stability diagram of the k̃s -k̃c plane"}
+- id: dat_fig6a_right_bottom
+  quantity: clutch_stiffness_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig6a_right_bottom
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 6(a)", quote: "Stability diagram of the k̃s -k̃c plane"}
+- id: dat_fig6b_hopf
+  quantity: clutch_stiffness_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig6b_hopf
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 6(b)", quote: "Stability diagram of the k̃s -k̃c plane"}
+- id: dat_fig6b_usu
+  quantity: clutch_stiffness_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig6b_usu
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 6(b)", quote: "Stability diagram of the k̃s -k̃c plane"}
+- id: dat_fig6b_right_top
+  quantity: clutch_stiffness_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig6b_right_top
+  citation: {page: 9, printed_page: "014417-9", where: "Fig. 6(b)", quote: "Stability diagram of the k̃s -k̃c plane"}
+- id: dat_fig12_points
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig12_points
+  citation: {page: 12, printed_page: "014417-12", where: "Fig. 12", quote: "The influence of external load F̃ on saddle-node"}
+- id: dat_fig11c_Nc5
+  quantity: oscillation_frequency
+  unit: Hz
+  origin: predicted
+  figure: fig11c_Nc5
+  citation: {page: 11, printed_page: "014417-11", where: "Fig. 11(c)", quote: "Frequency and amplitude of the limit cycle"}
+  conditions: {n_clutches_total: "5"}
+- id: dat_fig11c_Nc10
+  quantity: oscillation_frequency
+  unit: Hz
+  origin: predicted
+  figure: fig11c_Nc10
+  citation: {page: 11, printed_page: "014417-11", where: "Fig. 11(c)", quote: "Frequency and amplitude of the limit cycle"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig11c_Nc15
+  quantity: oscillation_frequency
+  unit: Hz
+  origin: predicted
+  figure: fig11c_Nc15
+  citation: {page: 11, printed_page: "014417-11", where: "Fig. 11(c)", quote: "Frequency and amplitude of the limit cycle"}
+  conditions: {n_clutches_total: "15"}
+- id: dat_fig11d_Nc5
+  quantity: motor_extension_amplitude_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig11d_Nc5
+  citation: {page: 11, printed_page: "014417-11", where: "Fig. 11(d)", quote: "Frequency and amplitude of the limit cycle"}
+  conditions: {n_clutches_total: "5"}
+- id: dat_fig11d_Nc10
+  quantity: motor_extension_amplitude_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig11d_Nc10
+  citation: {page: 11, printed_page: "014417-11", where: "Fig. 11(d)", quote: "Frequency and amplitude of the limit cycle"}
+  conditions: {n_clutches_total: "10"}
+- id: dat_fig11d_Nc15
+  quantity: motor_extension_amplitude_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig11d_Nc15
+  citation: {page: 11, printed_page: "014417-11", where: "Fig. 11(d)", quote: "Frequency and amplitude of the limit cycle"}
+  conditions: {n_clutches_total: "15"}
+- id: dat_fig10a
+  quantity: n_motors_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig10a
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 10(a)", quote: "The effect of variations in the parameter"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig10b
+  quantity: n_clutches_bound
+  unit: dimensionless
+  origin: predicted
+  figure: fig10b
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 10(b)", quote: "The effect of variations in the parameter"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig10c
+  quantity: actin_displacement_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig10c
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 10(c)", quote: "The effect of variations in the parameter"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig10d
+  quantity: motor_extension_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig10d
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 10(d)", quote: "The effect of variations in the parameter"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig10e
+  quantity: substrate_extension_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig10e
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 10(e)", quote: "The effect of variations in the parameter"}
+  conditions: {n_clutches_total: "20"}
+- id: dat_fig10f
+  quantity: clutch_extension_nd
+  unit: dimensionless
+  origin: predicted
+  figure: fig10f
+  citation: {page: 10, printed_page: "014417-10", where: "Fig. 10(f)", quote: "The effect of variations in the parameter"}
+  conditions: {n_clutches_total: "20"}

@@ -1,0 +1,46 @@
+# Port to Python (our code) of Linear_KD_WT_model.m: the steady state of the linear clutch model on
+# the code's (v, E) grid, lines 12-61 (grid and parameters), 164-188 (Fc for each E and v, with
+# force_with_yield_point.m and k_off_integral_catch_bond_v4c.m), 296-312 (zero contour of
+# Fc - Fm and the traction at it) and 357-403 (mean tension and density of engaged clutches).
+# Notes (the schema has no notes field for a model): the contour is taken along v at the requested E
+# (the code takes it on its 100 x 100 grid); MATLAB's adaptive integral to Inf is scipy quad on
+# [0, l_yield] plus the exact tail. Stability: a root where Fc - Fm rises with v is stable, as the
+# code's plot marks (solid between turning points of the contour in E, dashed between a maximum and
+# a minimum, lines 319-343). The plots (lines 63-156, 192-287) are not ported.
+id: linear_port
+name: "steady state of the linear KD / linear WT clutch model, Linear_KD_WT_model.m (Python port)"
+role: model
+stated: {file: Linear_KD_WT_model.m, lines: "3", quote: "This is the main function of the linear KD and linear WT models"}
+described_from: liu2025
+equation: >-
+  k's = E (4 pi/9) a_1 1e-9 1000; k = k's kc/(k's + kc); I(x) = sum_i koff_i Fd_i/k (exp(k x/Fd_i) - 1) for x <= ly,
+  linear beyond; C = kon/(kon int_0^inf exp(-I/v) + v); Fc = Nc int_0^inf F(x) C exp(-I/v) dx, F = k min(x, ly);
+  Fm = Fst Nm (1 - v/v0); Fc = Fm on the grid; P = Fm/(pi a_2^2); Nm = pi a_2^2 sigma_m, Nc = pi a_2^2 sigma_c
+inputs:
+  E:       {quantity: youngs_modulus, unit: Pa}
+  a_1:     {quantity: adhesion_site_size, unit: nm}
+  a_2:     {quantity: adhesion_complex_size, unit: nm}
+  v0:      {quantity: motor_free_speed, unit: nm/s}
+  Fst:     {quantity: motor_stall_force, unit: pN}
+  sigma_m: {quantity: myosin_density, unit: 1/um**2}
+  sigma_c: {quantity: clutch_site_density, unit: 1/um**2}
+  kc:      {quantity: clutch_spring_constant, unit: pN/nm}
+  kon:     {quantity: clutch_assembly_rate, unit: 1/s}
+  l_yield: {quantity: linear_limit_extension, unit: nm}
+  k_off_1: {quantity: zero_load_off_rate, unit: 1/s}
+  k_off_2: {quantity: zero_load_off_rate, unit: 1/s}
+  F_d_1:   {quantity: dissociation_force, unit: pN}
+  F_d_2:   {quantity: dissociation_force, unit: pN}
+outputs:
+  P:    {quantity: traction_stress, unit: Pa, description: "z_zero_contour, lines 309-312"}
+  v:    {quantity: actin_flow_speed, unit: nm/s, description: "10^x_zero_contour, line 351"}
+  F1:   {quantity: clutch_tension, unit: pN, description: "F_average_catch_full_model, line 381"}
+  n_on: {quantity: engaged_clutch_density, unit: 1/um**2, description: "Clutches_on_density, line 403"}
+settings:
+  n_steps: 100        # line 12
+  v_min: 0.1          # line 15
+  v_span: 3000        # line 14: v = 0.1 exp(index log(3000)/(n_steps - 1))
+  E_min: 100          # line 31
+  E_max: 10000000000  # line 30
+  branch: strong      # which stable root: strong (slowest flow), weak; or unstable (the middle root)
+stochastic: false

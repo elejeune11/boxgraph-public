@@ -1,0 +1,25 @@
+id: optimal_nc_transverse
+name: optimal number of clutches (minimum of retrograde flow over nc), transverse residual strain
+role: model
+stated: {page: 7, printed_page: "7", quote: "correspondent values of optimal nc", where: "Fig. 7; text p. 7"}
+equation: >-
+  nc_opt = argmin over nc of the mean retrograde flow of clutch_transverse_ssa, nm = nc, nc log-spaced
+  between nc_min and nc_max, minimum on a cubic spline (as optimal_nc_axial)
+from_words: true
+inputs:
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: clutch_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  ke:   {quantity: orthogonal_spring_stiffness, unit: pN/nm}
+  l:    {quantity: orthogonal_spring_rest_length, unit: nm}
+  eps0: {quantity: residual_strain, unit: dimensionless}
+outputs:
+  nc_opt: {quantity: optimal_clutch_number, unit: dimensionless}
+  v_min:  {quantity: retrograde_flow_rate, unit: nm/s}
+settings: {nc_min: 10, nc_max: 1000, n_nc: 20, n_events: 100000, seed: 1}
+stochastic: true
+built_from: [optimal_nc_axial, clutch_transverse_ssa]

@@ -1,0 +1,526 @@
+- id: q_slip_220_beyond_pole
+  kind: possible_error
+  about: [v_p06_printed, cmp_v_eq13_p06, clutch_velocity_eq13]
+  text: >-
+    Eqn. 13 reproduces v = 220 nm/s at αc = 0.6, but only by passing through its pole. With Ftot = 1000 pN,
+    Ct = 500 and kon = 1 s-1, kon Ct − αc Ftot changes sign at αc = 0.5 pN-1 s-1; at αc = 0.6 eqn. 11 gives
+    Cb = (500 − 600)/2 = −50 bound clutches, and both factors of eqn. 13 are negative, so their product is
+    positive. The model has no steady state there (Fig. S17 stops below αc = 0.5, where v already exceeds
+    100 nm/s). The paper's reading of the number ("not biologically reasonable, illustrating the relative
+    fragility of the slip-bond connection") holds, but 220 nm/s is not a value the model gives for a physical
+    adhesion: v diverges as αc approaches 0.5 from below.
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "Note that if αc = 0.6 (slip bond) v = 220 nm", where: text}
+- id: q_eq13_or_eq14
+  kind: reading
+  about: [v_m015_printed, cmp_v_eq14_m015, run_eq14_m015]
+  text: >-
+    The text says "Applying values from the literature to eqn. 14 yields values of v that are in good
+    agreement" and then "equation 13 yields v = 1.7 nm s-1 for αc = -0.15". Eqn. 13 gives 1.66 nm/s (reproduced);
+    eqn. 14 (all clutches bound) gives 1.4 nm/s with the same inputs. The record reads the printed 1.7 as the
+    eqn. 13 result, as the sentence that prints it says.
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "Applying values from the literature to eqn. 14 yields values of", where: text}
+- id: q_alpha_units
+  kind: possible_error
+  about: [alpha_m015, alpha_m06, alpha_p06, clutch_force_sensitivity]
+  text: >-
+    αc is printed with three units: "-0.15 pN-1 nm-1" and "-0.6 pN-1 nm-1" (first paragraph of Supp. p. 6),
+    "-0.15 to -0.6 s-1 pN-1" (list of reasonable values) and "pN-1 s-1" (Fig. S17 axis). Eqn. 10,
+    koff = k0 + αc F, requires a rate per force, so pN-1 s-1 is dimensionally right and pN-1 nm-1 cannot be.
+    The record uses pN-1 s-1.
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "Reasonable values for αc range from -0.15 pN-1 nm-1", where: text}
+- id: q_alpha_source
+  kind: unstated_input
+  about: [alpha_m015, alpha_m06]
+  text: >-
+    How αc = -0.15 and -0.6 pN-1 s-1 follow from the cited catch-bond data (Kong et al. 2009; Chen et al.
+    2012; an unpublished vinculin-actin study) is not shown. In the linearized model αc = (ks δs − kc δc)/kBT
+    (eqns 9-10), but no ks, kc, δs or δc are printed, so the values cannot be traced through eqns 6-10 here.
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "based on the catch bond formed by", where: text}
+- id: q_validation_mean_vs_range
+  kind: overstated_claim
+  about: [val_v_eq13_elongation_range, val_v_eq13_table1, v_elongation_observed, t1_diff_velocity]
+  text: >-
+    The model result (1.7 nm/s at αc = -0.15) is said to be "in good agreement with the observed rate of stress
+    fiber elongation (0-3 nm s-1) in our study". The study's own mean relative speed of actin and zyxin plaques
+    is 58 ± 3.1 nm/min (Table 1), about 0.97 ± 0.05 nm/s, and the reported distribution runs from below 20 to
+    above 180 nm/min (0.3 to 3 nm/s). The model value lies inside the range but well above the measured mean.
+    The model's inputs (Ftot = 1 nN, Ct = 500, kon = k0 = 1 s-1, κ = 1 pN/nm) are generic, and αc is free
+    between -0.15 and -0.6, so reaching the measured mean takes only a small change in αc. The agreement
+    therefore tests the order of magnitude, not the model.
+  citation: {page: 7, printed_page: "1965", quote: "with relative velocities ranging from <20 to >180 nm/min", where: text}
+- id: q_no_continuous_rearward_flow
+  kind: overstated_claim
+  about: [t1_actn_all, t1_diff_velocity, clutch_velocity_eq13]
+  text: >-
+    The paper reports that closer examination "did not reveal a continuous rearward flow of the actin
+    cytoskeleton over slower moving adhesions" (abstract; Discussion p. 10), against the 2D clutch picture of
+    continuous retrograde flow. The support in the data is directional and qualitative: α-actinin-1
+    puncta move both retrograde and anterograde along protrusions (Fig. 4B, 25 protrusions in 18 cells;
+    Fig. S11, 13/18 cells with one protrusion), as do paxillin plaques (Fig. 3G) and zyxin plaques (Fig. S14D);
+    neighbouring stress fibres move independently (Fig. 4E-F); and new α-actinin-1 puncta nucleate at a subset of
+    adhesions and flow into the fibre (Fig. 5D, S14A). Table 1 gives speeds, which are magnitudes and cannot
+    show direction. No printed number gives the fraction of retrograde motion or a mean signed velocity along the
+    protrusion axis, and the rose plots are not quantified in the text. The measured actin speeds
+    (53-95 nm/min, about 1-1.6 nm/s) are 1-2 orders of magnitude below 2D retrograde flow (e.g. 5-20 um/min cited
+    on p. 9). So the claim rests on angle distributions read from figures, not on a tested quantity. The
+    paper's own clutch model (eqns 11-14) has a single velocity v per adhesion and no direction, so it neither
+    predicts nor excludes continuous flow.
+  citation: {page: 1, printed_page: "1959", quote: "did not reveal a continuous rearward flow of the actin cytoskeleton", where: abstract}
+- id: q_kappa_main
+  kind: unexplained_difference
+  about: [kappa_ratio_main, cmp_kappa_main, run_kappa_main, bending_ratio_persistence]
+  text: >-
+    The printed κ ≈ 2.4 × 10^-6 does not follow from the printed inputs, as far as they are given. With
+    κb = kB T Lp (T = 310 K, Lp = 40 um), κs = 15 MPa × π(160 nm)^2 and l = 10 um, κ = κb/(κs l^2) is about
+    1.4 × 10^-9, some 1700 times smaller. The paper's own second value disagrees with it in direction too:
+    with the softer 2 MPa fibre modulus and the same Lp it prints κ ≈ 2 × 10^-8 (computed here about
+    1.1 × 10^-8). A 7.5-fold smaller κs must give a 7.5-fold larger κ, yet 2 × 10^-8 is about 100 times smaller
+    than 2.4 × 10^-6. The paper does not say how κb was taken from Lp (it calls the estimate a lower bound),
+    so the main value may rest on another κb or another l. A cross-link spacing of about 0.24 um would give 2.4 × 10^-6.
+    The simulations of Fig. 6 use this value.
+  citation: {page: 13, printed_page: "1971", quote: "gives a value of κ ≈ 2.4 × 10−6", where: text}
+- id: q_kappa_rod
+  kind: unexplained_difference
+  about: [kappa_ratio_rod, cmp_kappa_rod, bending_ratio_rod]
+  text: >-
+    For a uniform rod of diameter d, κb/(κs l^2) = (E π d^4/64)/(E π d^2/4 · l^2) = d^2/(16 l^2), which is
+    6.4 × 10^-5 for d = 320 nm and l = 10 um, about three times the printed ≈ 2 × 10^-5. The printed value is
+    what the same formula gives with the radius (160 nm) in place of the diameter (1.6 × 10^-5). The fibre
+    modulus 14.5 MPa cancels and does not affect the ratio.
+  citation: {page: 13, printed_page: "1971", quote: "κ ≈ 2 × 10−5 is calculated when κb is derived by treating each ele", where: text}
+- id: q_crosslink_spacing
+  kind: reading
+  about: [l_crosslink, L_fiber]
+  text: >-
+    l is defined as "the average distance between cross-links" and set to 10 um, the measured length of a whole
+    fibre between its two ends (p. 12). The same paragraph notes that "each fiber typically connected to multiple
+    fibers along its 10-um length", so the distance between cross-links would be shorter than 10 um. κ scales
+    as 1/l^2.
+  citation: {page: 12, printed_page: "1970", quote: "measured to be ∼10 µm. Note that each fiber typically connected", where: text}
+- id: q_network_not_runnable
+  kind: unstated_model
+  about: [fiber_network_point_load, k_node_max]
+  text: >-
+    The fibre-network simulation behind Fig. 6B and Fig. S16 (and so the "up to ~24 nN/um" node stiffness and
+    its spread between nodes) cannot be rerun. Missing are the lattice and its spacing in real units, the domain
+    radius, the randomisation (cited to Notbohm et al. 2015a), the number of networks, the beam discretisation,
+    the explicit solver's damping, and the conversion to real units. The code is not released (only FIDVC is).
+    The node-to-node variation in effective stiffness, the paper's main modelling result, is only plotted, and it
+    is not summarised as a distribution.
+  citation: {page: 13, printed_page: "1971", quote: "Simulations are performed in dimensionless", where: text}
+- id: q_stiffness_scale_mismatch
+  kind: reading
+  about: [kappa_1, k_node_max, k_cont_printed]
+  text: >-
+    The clutch model takes κ = 1 pN/nm (= 1 nN/um), citing "Elosegui-Artola et al. 2016; Fig. 6B". Fig. 6B is
+    said to give node stiffnesses "up to ~24 nN/um", and the continuous-gel estimate is 5 nN/um at 10 kPa. In
+    eqns 13-14 v scales as 1/κ, so using the network's stiffer nodes would lower v by up to about 24-fold. The
+    link between the network result and the clutch model is qualitative only: no run of eqn. 13 at a network
+    stiffness is printed.
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "κ 1 pN nm-1 (Elosegui-Artola et al. 2016; Fig. 6B)", where: "list of reasonable values"}
+- id: q_continuum_poisson
+  kind: unstated_input
+  about: [eta_continuum_added, cmp_k_cont, cmp_E_node]
+  text: >-
+    The Poisson ratio in πEr/2(1+η) is not given for the 10 kPa example. With η = 0.5 the formula gives
+    5.2 nN/um, printed as 5. With η = 0.3 it gives 6.0 nN/um, which would not round to 5.
+  citation: {page: 20, printed_page: "Supp. p. 3", quote: "is πEr/2(1+η), where η is Poisson's ratio", where: text}
+- id: q_localization_inputs
+  kind: unstated_input
+  about: [localization_correction_eq2, s1_pax_speed_corr_10, s1_actn_speed_corr_10, s1_pax_speed_corr_1, s1_actn_speed_corr_1]
+  text: >-
+    The corrected displacements and speeds of Table S1 come from Supp. eqn. 2. Its inputs are not printed: the
+    mean squared displacement <d^2> (only mean displacements are given) and σxy, σz ("a half voxel length",
+    with no voxel size printed). The model is recorded but not run. Some corrected values are larger than the
+    measured ones (paxillin at τ = 10 min: 523 vs 520 nm), which the Supplement explains by var(d) being large.
+  citation: {page: 19, printed_page: "Supp. p. 2", quote: "We estimated σxy and σz to be a half voxel length", where: text}
+- id: q_track_count_1583
+  kind: possible_error
+  about: [t1_fib_minus_pax, t1_fib_pax, t1_pax_fib]
+  text: >-
+    Table 1 gives 1538 tracks for paxillin and for the colocalized fibrin, but 1583 for their differential
+    velocity v_fib − v_pax, which is computed from the same pairs. One of the two counts may be a transposition.
+  citation: {page: 6, printed_page: "1964", quote: "Mean speeds calculated in all experiments", where: "Table 1"}
+- id: q_lag_time_fibrin
+  kind: reading
+  about: [t1_actn_fib, t1_fib_actn]
+  text: >-
+    The lag time for α-actinin-1 velocities measured with fibrin is printed as 3.4-6 min (Table 1, Materials and
+    Methods) and as "a time decay of 3.2-6 min" in the Supplement (p. 20). The record uses 3.4 to 6 min.
+  citation: {page: 20, printed_page: "Supp. p. 3", quote: "where we used a time decay of 3.2-6 min", where: text}
+- id: q_actinin_S1_vs_T1
+  kind: unexplained_difference
+  about: [cons_actn_S1_T1, s1_actn_speed_meas_10, t1_actn_all]
+  text: >-
+    Table S1 gives 70 nm/min as the measured mean α-actinin-1 speed at τ = 10 ± 1 min, while Table 1 gives
+    63.2 ± 0.22 nm/min for α-actinin-1 in all experiments at the same lag. The cells behind Table S1 are not
+    stated, so the two may be different subsets.
+  citation: {page: 20, printed_page: "Supp. p. 3", quote: "Mean speed, 119 nm/min 53 nm/min 223 nm/min 70 nm/min", where: "Table S1"}
+- id: q_3d_validation_of_2d_models
+  kind: choice
+  about: [t1_diff_velocity, t1_actn_all, kappa_1, k_node_max]
+  text: >-
+    The corpus's 2D-calibrated clutch models (chan2008 motor_clutch, bangasser2013, odde_code, mekhdjian2017)
+    predict a retrograde flow speed of actin relative to a substrate spring of stiffness κsub. The nearest
+    measured quantity here is the speed of actin relative to its adhesion (Table 1, |v_zyx − v_actn|, 58 ± 3.1
+    nm/min), with fibrin, paxillin and α-actinin-1 speeds as context. To validate those models against it, a
+    cross-validation entry would go in each model's own record. It would need added inputs that this paper
+    does not give: the substrate stiffness (no measured local stiffness; κ = 1 pN/nm in the clutch model, up to
+    ~24 nN/um from the unrunnable network, or the bulk 200-300 Pa through a Cerruti-type conversion), motor
+    number and clutch number for fibroblast stress fibres, and a sign convention (the measured speeds are
+    unsigned magnitudes in both directions). The paper's measured speeds are slow (about 1 nm/s), close to a
+    stalled clutch. In those models that needs many clutches relative to motors, which is the paper's own
+    reading (p. 10). No such entry is made from this record.
+  citation: {page: 10, printed_page: "1968", quote: "Low velocities, such as we ob", where: Discussion}
+# ---- added by the audit (second reading, 2026-11-22) ----
+- id: q_figure_misreferences
+  kind: possible_error
+  about: [clutch_velocity_eq13, t1_diff_velocity]
+  text: >-
+    Two figure references point to the wrong supplementary figure. (1) Supp. p. 6 says slip-bond connections
+    "are much more sensitive to both F and αc (Fig. S16)" and ends with "(Fig. S16)" again, but Supp. Fig. S16
+    (p. 40) shows fibre-network point-load simulations at κ = 2 × 10^-8 and 2 × 10^-5. The v-against-αc curve of
+    eqn. 13 is Supp. Fig. S17 (p. 41), which the main text cites correctly (p. 8). (2) Materials and Methods
+    (p. 13) says the zyxin and α-actinin-1 velocity vectors were subtracted "as shown in Supplemental Figure S15B".
+    Fig. S15 is VASP staining (p. 39). Table 1 cites Supplemental Figure S14, B and E, for the same quantity.
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "much more sensitive to both F and αc (Fig.", where: text}
+- id: q_raw_or_corrected_velocities
+  kind: possible_error
+  about: [t1_actn_all, t1_pax_all, s1_actn_speed_meas_10, s1_actn_speed_corr_10, cons_actn_S1_T1, cons_pax_S1_T1]
+  text: >-
+    Two passages contradict each other on whether reported speeds are corrected for localization error.
+    Materials and Methods (p. 13) says "reported mean velocities of paxillin, α-actinin, and zyxin from particle
+    tracking were determined from displacement distances corrected as described in the Supplemental Discussion".
+    The Supplement (p. 20) says "All velocities in the paper reflect the raw measured velocities". For paxillin at
+    τ = 10 ± 1 min, Table S1's measured and corrected values are the same (53 nm/min), so Table 1 (53.9) cannot
+    tell them apart. For α-actinin-1, Table 1's 63.2 nm/min matches neither the measured 70 nor the corrected
+    77 nm/min of Table S1. The record compares Table 1 with the measured column, as the Supplement says.
+  citation: {page: 13, printed_page: "1971", quote: "determined from displacement distances corrected as described in", where: "Determination of velocity from tracking data"}
+- id: q_spooling_rows_imply_fast_zyxin
+  kind: unexplained_difference
+  about: [t1_diff_speed, t1_actn_coloc_zyx, t1_zyx_coexp, t1_diff_velocity]
+  text: >-
+    Table 1 rows 6 and 7 are means over the same 192 colocalized zyxin and α-actinin-1 pairs:
+    mean(|v_zyx| − |v_actn|) = 29 ± 1.8 and mean |v_actn| = 58 ± 2.8 nm/min. Because a mean is linear, the mean
+    zyxin-plaque speed over these pairs is 58 + 29 = 87 nm/min. That is well above the 55 ± 1.5 nm/min of all
+    864 zyxin tracks in the same 7 cells, and it means these plaques move faster than their α-actinin-1 puncta.
+    The text (p. 6) reports the opposite for paxillin, that adhesions were less mobile than actin. The mean of
+    row 7 (58) also equals the mean of row 5 (58 ± 3.1). The rows may be right, for example if colocalized plaques
+    are the fast ones, but nothing printed explains this. A positive scalar difference is allowed: the caption
+    of Fig. S14E (p. 39) calls it "a lower bound on the spooling speed".
+  citation: {page: 39, printed_page: "Supp. p. 22", quote: "provides a lower bound on the spooling speed", where: "Fig. S14 caption"}
+- id: q_S1_speed_vs_displacement
+  kind: reading
+  about: [s1_pax_speed_meas_1, s1_actn_speed_meas_1, s1_pax_speed_corr_1, s1_actn_speed_corr_1, s1_pax_speed_meas_10, s1_actn_speed_meas_10]
+  text: >-
+    The first reader left out Table S1's mean displacements and mean time resolutions, but they check the
+    speeds in the same table. For τ = 10 ± 1 min, displacement / time resolution gives the printed speeds:
+    520/9.7 = 53.6 (53), 523/9.7 = 53.9 (53), 700/9.9 = 70.7 (70), 763/9.9 = 77.1 (77) nm/min. For τ = 1
+    timepoint it does not: 362/3.6 = 101 (printed 119), 261/3.6 = 73 (90), 298/1.7 = 175 (223), 203/1.7 = 119
+    (149) nm/min, all 18-27% below. The short-lag speeds may be means of per-track ratios, but the paper does not
+    say. The auditor would record the displacements and times as data and compare them with a speed = d/τ
+    processing model. This is left to the first reader's scope and noted here.
+  citation: {page: 20, printed_page: "Supp. p. 3", quote: "Mean time resolution 3.6 min 9.7 min 1.7 min 9.9 min", where: "Table S1"}
+- id: q_continuum_formula_precedence
+  kind: reading
+  about: [continuum_stiffness, modulus_from_stiffness, cmp_k_cont, cmp_E_node]
+  text: >-
+    The printed "πEr/2(1+η)" is ambiguous inline. It is read as πEr/[2(1+η)], which with η = 0.5 gives
+    5.2 nN/um (printed 5) and is the known stiffness of a disc load on a half-space. Read literally left to right,
+    (πEr/2)(1+η) gives 11.8 nN/um. The reading in the record is the one that reproduces the printed result.
+  citation: {page: 20, printed_page: "Supp. p. 3", quote: "is πEr/2(1+η), where η is Poisson's ratio", where: text}
+- id: q_node_stiffness_spread
+  kind: reading
+  about: [fiber_network_point_load, k_node_max, q_network_not_runnable]
+  text: >-
+    The network's main result is stated in words: nodes "may differ in effective stiffnesses by an order of
+    magnitude" (p. 8), with "a wide variation in effective stiffnesses" up to ~24 nN/um. No minimum, median or
+    count of nodes or networks is printed, so the distribution exists only as the curves of Fig. 6B and S16B, D.
+    A figure reading of the secant slopes is the only way to record it. One part of the missing unit conversion
+    can be inferred: fibres are 2.8-3.4 lattice spacings long (p. 12) and about 10 um long (p. 12), so the lattice
+    spacing is about 3 um. The force scale (κs or Ef with d) and the domain radius are still not given.
+  citation: {page: 8, printed_page: "1966", quote: "nesses by an order of magnitude, and 2) reasonable bulk material", where: text}
+# ---- figure readings (questions cited by the second pass's comparisons, and the third pass) ----
+- id: q_figS17_unclamped
+  kind: reading
+  about: [cmp_eq13_figS17, d_figS17_v, clutch_velocity_eq13]
+  text: >-
+    Fig. S17 plots eqn. 13 with the caption's inputs. For alpha_c <= -0.5 the stated condition (v = 0 when
+    k0 <= -alpha_c Ftot/Ct, p. 23) gives v = 0, and the model in the record applies it; the plotted curve there
+    runs slightly below zero, as eqn. 13 does without the condition. The difference is within the reading's
+    intervals, so cmp_eq13_figS17 comes out reproduced, but the figure suggests it was drawn from eqn. 13 alone.
+  citation: {page: 41, printed_page: "Supp. p. 24", quote: "Variation in v as a function of", where: "Fig. S17"}
+- id: q_spooling_hist_mean
+  kind: unexplained_difference
+  about: [cons_hmean_figS14e_rel, cons_hmean_figS14e_diff, d_figS14e_rel, d_figS14e_diff, t1_diff_velocity, t1_diff_speed]
+  text: >-
+    The binned mean of the spooling-speed histogram of Fig. S14E (|v_zyx - v_actn|; its counts add up to the 192
+    pairs of Table 1) comes out about 70 nm/min against the 58 ± 3.1 nm/min of Table 1 row 5, and the mean of the
+    scalar difference |v_zyx| - |v_actn| about 35 against 29 ± 1.8 (row 6; negative differences lie off the plotted
+    axis, which starts at 0, so that mean is biased high). Taking each count at its bin centre moves a mean by at
+    most half a bin (6 nm/min), half the 12 nm/min gap. Either the histogram and the table were made from different sets or
+    lag times, or the table's mean is not the mean of the plotted values.
+  citation: {page: 39, printed_page: "Supp. p. 22", quote: "the distribution of spooling speeds", where: "Fig. S14E caption"}
+- id: q_fig4a_hist_mean
+  kind: unexplained_difference
+  about: [cons_hmean_fig4a_actn, cons_hmean_fig4a_fib, t1_actn_fib, t1_fib_actn]
+  text: >-
+    The binned mean of the alpha-actinin-1 speed histogram of Fig. 4A is about 82 nm/min against 95.0 ± 0.42 in
+    Table 1 row 11, and the adjacent-fibrin histogram gives about 27.8 against 26.9 ± 0.16 (row 12). The actinin
+    histogram is visibly cut at 200 nm/min, which biases its mean low by an unknown amount; the fibrin difference is
+    small but outside the table's SE. Neither difference can be settled from the figure.
+  citation: {page: 7, printed_page: "1965", quote: "velocities of EGFP–α-actinin-1 and the adjacent fibrin", where: "Fig. 4A"}
+- id: q_figS2_x_labels
+  kind: reading
+  about: [d_figS2_cell1_disp_mag, d_figS2_cell1_disp_normal, d_figS2_cell1_disp_tangential, d_figS2_cell1_disp_parallel, d_figS2_cell1_protrusion_strain, d_figS2_cell1_lagrange_strain, d_figS2_cell1_shear_strain]
+  text: >-
+    In Supp. Fig. 2 the x axes are labelled 0, 50, 100 (left four columns) but carry one tick, under the 50, and
+    the printed "100" sits at the end of the axis line, which by the 0-50 tick scale is at about 87.5 um. The
+    plotted vertices are evenly spaced at about 5 um on the tick scale, starting at 2.5 um (5-um bin centres), or
+    about 5.7 um on the printed labels; the caption says the distances "were binned into 2 μm bins". The readings
+    use the tick scale (0 at the y axis, 50 at the tick); on the printed labels every distance would be about 14%
+    larger. Neither scale gives 2-um bins.
+  citation: {page: 26, printed_page: "Supp. p. 9", quote: "were binned into 2 μm bins", where: "Supp. Fig. 2 caption"}
+- id: q_figS2_unlabelled_columns
+  kind: reading
+  about: [d_figS2_cell1_disp_mag]
+  text: >-
+    Only the left column of Supp. Fig. 2 has y tick labels. The other five columns (four more example cells and the
+    summary column, headed "mean" over N = 7 cells and n = 10 protrusions while the caption says median) have tick
+    marks without labels, at rows and spacings that differ from the left column's in the same row (each panel has its
+    own y limits). Their values cannot be read from the page, so the summary profile over 10 protrusions, the one
+    the text relies on, is not in the record.
+  citation: {page: 25, printed_page: "Supp. p. 8", quote: "as well as the median values for 10", where: "Supp. Fig. 2 caption"}
+- id: q_figS11_reading
+  kind: reading
+  about: [d_figS11_cell01, d_figS11_cell13, d_figS11_cell16, d_fig4b_rose]
+  text: >-
+    Each rose of Supp. Fig. 11 prints only the value of its outer ring (5 to 200); the inner ring is read as half
+    of it (MATLAB polar rings are at equal steps from 0, and the two-ring fit through the centre has a misfit of
+    at most 1.3 px). The bin width is taken as 18 deg (20 bins), which the outlines of roses 1-5 give by
+    themselves. The blue fill extends beyond the wedge outlines in places (roses 9 and 16: the outline path was
+    filled as one polygon), so wedge ends are read from the outlines only. Rose 13 also prints "30", the
+    30-deg angle label. The per-cell counts are said to be a breakdown of Fig. 4B, whose bins are narrower (about
+    9 deg), so the two can be compared only as sums over pairs of bins.
+  citation: {page: 35, printed_page: "Supp. p. 18", quote: "Cell-by-cell breakdown of the data portrayed in Figure 4B", where: "Supp. Fig. 11 caption"}
+- id: q_no_validation_baker2015
+  kind: choice
+  about: [ref-baker2015, clutch_velocity_eq13, clutch_velocity_eq14, continuum_stiffness, modulus_from_stiffness, bending_ratio_rod, youngs_from_shear]
+  text: >-
+    Cross-validation with baker2015 (pair review, 2026-11-22) found no measurement of either paper that a model of
+    the other predicts, so no validation is entered in either record. Owen cites Baker et al. (2015) once, as an
+    example of "ECM remodeling/ligand clustering" (p. 10), and says nothing about Baker's data. Owen's models give
+    an actin-adhesion relative speed (eqns 13-14), an adhesion or node effective stiffness and the modulus implied
+    by it (continuum_stiffness, modulus_from_stiffness), a bending-to-stretching ratio (bending_ratio_*), a Young's
+    modulus from a shear modulus (youngs_from_shear), node forces, off-rates and histogram means of speeds. Baker
+    measures none of these: no flow or adhesion speeds, no adhesion or node stiffness, no shear modulus (its moduli
+    are from indentation and bending), no bending ratio. Running bending_ratio_rod or continuum_stiffness on Baker's
+    fibre diameters or network moduli would give a number with no measurement to meet. Baker's models
+    (membrane_indentation, histogram_moments of fibre-diameter histograms, soft_stiff_ratio of proliferation,
+    uv_dose_exposure) are processing steps on Baker's own measurements; Owen has no indentation curve, no
+    fibre-diameter histogram (its 320 nm diameter is a single value), no proliferation and no UV dose. Baker's
+    fibre recruitment, bead displacements (Supp. Fig. 6b), spread areas and focal-adhesion sizes are not outputs of
+    any Owen model; the fibre-network model that would be closest (fiber_network_point_load) is not runnable and
+    gives a node displacement under a point load, not recruitment around a cell.
+  citation: {page: 10, quote: "remodeling ligand clustering Baker et al 2015 Chaudhuri et al", where: text}
+# ---- cross-record validation with cao2017 (2026-11-22): none added ----
+- id: q_xval_cao2017_none
+  kind: unstated_model
+  about: [modulus_from_stiffness, continuum_stiffness, youngs_from_shear, clutch_velocity_eq13, clutch_velocity_eq14, fiber_network_point_load, node_force_constant, bending_ratio_rod, bending_ratio_persistence, 'cao2017/coarse_grained_fa_ecm']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of cao2017, and
+    no model of cao2017 against this record's measurements. Owen does not cite Cao et al. (2017); its
+    one Shenoy-group citation is Abhilash et al. (2014), for building the 2D fibre network (p. 8).
+    cao2017's measurements are all baker2015's, re-plotted: fibre recruitment (Fig. 3D), average FA area
+    (Fig. 5D) and FA size normalized by the stiff fibrous ECM (Fig. S7). No model here gives a fibre
+    recruitment or an adhesion size (see q_no_validation_baker2015 for the same data in baker2015). The
+    models here give an actin-adhesion relative speed (eqns 13-14), an adhesion or node effective
+    stiffness and its equivalent modulus (continuum_stiffness, modulus_from_stiffness), a Young's modulus
+    from a shear modulus, node forces, bending ratios, off-rates, histogram means and a localization
+    correction. modulus_from_stiffness has the shape of cao2017/coarse_grained_fa_ecm (a modulus from a
+    length and stiffness), but cao2017's effective modulus E*FA (Fig. 4A, 4C) is a prediction of its
+    COMSOL model, not a measurement, and the node stiffness this model takes is a simulation output that
+    cao2017 does not have; running it on cao2017's values would compare two models, not a model with
+    data, and is left to the job that relates models across papers. In the other direction no model of
+    cao2017 gives a speed, displacement, angle or gel modulus (cao2017/q_xval_owen2017_none).
+  citation: {page: 8, printed_page: "1966", quote: "matrix constructed of a 2D fiber network (Abhilash et al., 2014;", where: text}
+# ---- cross-record validation with craig2015 (2026-11-22): none added ----
+- id: q_xval_craig2015_none
+  kind: unstated_model
+  about: [clutch_velocity_eq13, clutch_velocity_eq14, fiber_network_point_load, continuum_stiffness, modulus_from_stiffness, t1_diff_velocity, t1_actn_all, 'craig2015/lamellipodial_width', 'craig2015/hill_eq11', 'craig2015/network_displacement']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of craig2015,
+    and no model of craig2015 against this record's measurements. Owen does not cite Craig et al. (2015)
+    and says nothing about its data. fiber_network_point_load and craig2015/lamellipodial_width have the
+    same shape (a length from a length and a pressure) only formally: the network model is not runnable
+    (q_network_not_runnable) and gives a node displacement under a point load, while Craig's gives a
+    lamellipodial width; neither paper measures the other's output. clutch_velocity_eq13/eq14 give the
+    actin speed relative to one adhesion from that adhesion's force, kon, k0, alpha_c, Ct and kappa.
+    craig2015's measurements (U2OS lamellar flow speed and total traction force under Y-27632, supp. fig.
+    1(a)-(c); Ptk1 leading-edge and lamellar flow speeds printed with "~", from ref. 14; Fig. 2(d) intensity
+    profiles) are whole-cell 2D values for which none of those inputs, the number of adhesions or the
+    substrate stiffness is printed: every input would be added, so a comparison would be a fit, not a test.
+    Conversely, craig2015's hill_eq11 needs a cell's total traction force, which this paper does not
+    measure (its Ftot = 1000 pN per adhesion is assumed), and its flow-profile models are dimensionless
+    with no printed V0, T0; its network_displacement would need actin-network displacements, which are not
+    recorded here (Table S1 displacements left out) and would be speed times lag time by construction.
+    Running a 2D lamellar model on 3D stress-fibre speeds would map quantities that only share a dimension.
+    See craig2015/q_xval_owen2017_none.
+  citation: {page: 22, printed_page: "Supp. p. 5", quote: "We can now solve for v as an experimentally measureable property of the adhesion", where: "eqn. 13"}
+# ---- cross-record validation with gardel2008 (2026-11-22): none added ----
+- id: q_xval_gardel2008_none
+  kind: unstated_model
+  about: [clutch_velocity_eq13, clutch_velocity_eq14, youngs_from_shear, t1_actn_all, t1_diff_velocity, 'gardel2008/switch_speed_claim', 'gardel2008/switch_speed_by_condition', 'gardel2008/v_lamella']
+  text: >-
+    (Cross-record validation, 2026-11-22.) No model of gardel2008 is validated against a measurement of this
+    record, and no model here against gardel2008's (see gardel2008/q_xval_owen2017_none for the other way).
+    Gardel's only models (switch_speed_claim, switch_speed_by_condition) say in words that traction stress is
+    maximal at one F-actin speed, Vc = 8-10 nm/s. Their output is the F-actin speed at peak traction. This
+    paper measures no traction stress per adhesion and so has no speed at peak traction. Its α-actinin-1,
+    paxillin, zyxin and fibrin speeds (Table 1, Table S1, Figs. 3-5, S14) are speeds of tracked objects. The
+    relative speed |v_zyx - v_actn| is a different quantity, and mapping either to Gardel's output would join
+    quantities that only share a dimension. The p. 9 sentence that these actin speeds are "comparable" to
+    Gardel's compares measurement with measurement, with no number quoted, so it is no model's prediction. It
+    also places Gardel's speeds on cells "adhering to glass", but Gardel measured on 1.5-6 kPa
+    polyacrylamide gels (gardel2008/substrate_modulus_range). Nothing here was fitted to Gardel's data, so
+    there is no fit_quality entry either.
+  citation: {page: 9, printed_page: "1967", quote: "sured in the cell body and lamellum for cells", where: Discussion}
+# ---- cross-record validation with kong2009 (2026-11-22): none added ----
+- id: q_xval_kong2009_none
+  kind: unstated_model
+  about: [off_rate_slip_eq6, off_rate_catch_eq7, clutch_velocity_eq13, clutch_velocity_eq14, alpha_m015, 'kong2009/lt_FN_a5b1Fc_CaMg', 'kong2009/lt_FN_a5b1Fc_MgEGTA', 'kong2009/lt_FN_a5b1Fc_Mn']
+  text: >-
+    (Cross-record validation, 2026-11-22.) No model here is validated against a measurement of kong2009,
+    which this paper cites twice on Supp. p. 6 (ref-kong2009). Both times it is the basis for the catch-bond
+    force sensitivity αc = -0.15. It is never cited as data that a model of this paper explains. The only
+    models here that could meet Kong's force-clamp lifetimes are the off-rate laws (eqns 6 and 7). They are
+    not validated, for three reasons. (1) Their output is a clutch off rate (1/s), while Kong measures the
+    mean lifetime of a bond or chain of bonds in a force bin (s). A mean lifetime is 1/koff only for a
+    single first-order bond, and Kong's complexes are serial chains (FNIII7-10/a5b1-Fc/GG-7). No model
+    output here is that lifetime. (2) This paper prints no ks, kc, δs or δc (q_alpha_source). Every input
+    would have to be added and chosen to match Kong's curves, which is a fit made by this job, not a test
+    of the paper's model. The paper made no such fit, so it cannot be entered as fit_quality either.
+    (3) The linearization koff = k0 + αc F (eqn. 10, used inside eqns 13-14) with k0 = 1 /s and
+    αc = -0.15 /pN/s gives koff ≤ 0 above about 6.7 pN. So it cannot describe Kong's lifetimes over
+    10-50 pN, and the paper does not claim that it does. The velocity models (eqns 13-14) give actin speeds
+    relative to an adhesion, which Kong does not measure. In the other direction, see
+    kong2009/q_xval_owen2017_none.
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "based on the catch bond formed by", where: text}
+# ==== cross-record validation with bangasser2013 (2026-11-22): none added =======================
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [clutch_velocity_eq13, clutch_velocity_eq14, off_rate_catch_eq7, off_rate_slip_eq6, continuum_stiffness]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2013's
+    measurements. That record's measured data are three sets. (1) Kong et al.'s integrin lifetimes,
+    redrawn in its Fig. 7C (bangasser2013/tau_kong_fig7c). The off-rate laws here (eqns 6-7) output a
+    rate, not a lifetime, and this paper prints none of their parameters. This is the same reason as
+    q_xval_kong2009_none, and that question covers the same data at its source. (2) The neuron
+    filopodia flow against gel modulus (bangasser2013 Fig. S1B, from Chan and Odde). Eqns 13-14 give an
+    actin speed relative to an adhesion, but the paper states no Ftot, Ct, kon, k0 or αc for neurons.
+    It says only that "smaller, positive values of αc yield actin velocities consistent with those
+    observed in the lamella of some cells adhering to flat continuous surfaces (Chan & Odde 2008)"
+    (Supp. p. 6). That is a trend over a free parameter, not a prediction at stated conditions. Every
+    input would have to be added and αc chosen to fit, which would be a fit made here. (3) Normalized
+    migration and traction against stiffness (bangasser2013 Fig. 1A-B). No model here outputs either.
+    In the other direction, bangasser2013's motor_clutch_ssa is validated against this record's
+    t1_diff_velocity and v_elongation_observed (bangasser2013 val_relspeed_owen_*, q_xval_owen2017_others).
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "smaller, positive values of αc yield actin velocities consistent with those", where: text}
+- id: q_xval_bangasser2013b_none
+  kind: choice
+  about: [clutch_velocity_eq13, clutch_velocity_eq14]
+  text: >-
+    No model of this record is validated against bangasser2013b. That paper is a modelling paper. Its only
+    measured data are the run times of its ODE and Monte Carlo software (bangasser2013b Fig. 6B), which no
+    model here outputs. Its ODE flows, cycle times, bound fractions and optima are predictions, not
+    measurements. In the other direction, bangasser2013b's clutch_ensemble_cycle is validated against this
+    record's t1_diff_velocity and v_elongation_observed (bangasser2013b val_relspeed_owen2017_*).
+  citation: {none: "the absence of a shared measured quantity is a property of the two records together"}
+# ==== cross-record validation with chan2008 (2026-11-22): none added here =======================
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [clutch_velocity_eq13, clutch_velocity_eq14, continuum_stiffness, modulus_from_stiffness, youngs_from_shear, fiber_network_point_load, 'chan2008/v_fig3c_260', 'chan2008/v_fig3c_57k', 'chan2008/v_fig3d_exp_sem', 'chan2008/T_max_fig', 'chan2008/delta_text']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of chan2008.
+    chan2008 measures neuron filopodial F-actin retrograde flow on 260 Pa to 57 kPa polyacrylamide (Fig. 3C,
+    3D, S8C), the peak filopodial force and the force-to-bead distance from the Cerruti solution (Fig. S10),
+    bead step and failure statistics (Fig. S4, S5) and surface tension (Fig. 4E). The only claim here about
+    those data is that "smaller, positive values of αc yield actin velocities consistent with those observed
+    in the lamella of some cells adhering to flat continuous surfaces (Chan & Odde 2008)" (Supp. p. 6). That is
+    a trend over a free parameter: eqns 13-14 would need Ftot, Ct, kon, k0, κ and αc for a neuron
+    filopodium, none of which either paper states for this model, so every input would be added and αc
+    chosen to meet the flow, a fit made here. eqns 13-14 also have no motor velocity limit, which the
+    Supplement itself says caps the speed "(Chan & Odde 2008)" (Supp. p. 24), so at chan2008's 80-110 nm/s
+    the model is outside its stated scope. continuum_stiffness and modulus_from_stiffness give an adhesion
+    stiffness and its equivalent modulus; chan2008 measures neither (its gel moduli are inputs, its κsub is
+    computed by its own Eq. 13). youngs_from_shear needs a shear modulus chan2008 does not measure, and
+    fiber_network_point_load is not runnable and has no polyacrylamide counterpart. The p. 9 sentence that
+    "5-20 μm/min actin velocities were measured ... (Chan and Odde, 2008 ...)" compares measurement with
+    measurement; chan2008's means (78-110 nm/s, 4.7-6.6 um/min) sit at the low end of that span. In the other
+    direction, chan2008's motor_clutch is validated against this record's t1_diff_velocity and
+    v_elongation_observed (chan2008 val_relspeed_owen2017_*, q_xval_owen2017_unused).
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "smaller, positive values of αc yield actin velocities consistent with those", where: text}
+# ==== cross-record validation with chaudhuri2015 (2026-11-22): none added ====
+- id: q_xval_chaudhuri2015_none
+  kind: unstated_model
+  about: [youngs_from_shear, modulus_from_stiffness, continuum_stiffness, clutch_velocity_eq13, clutch_velocity_eq14, off_rate_slip_eq6, off_rate_catch_eq7, fiber_network_point_load, 'chaudhuri2015/fig2c_elastic', 'chaudhuri2015/fig2c_relax', 'chaudhuri2015/supp_table1_covalent_modulus', 'chaudhuri2015/fig2b_cov_gp', 'chaudhuri2015/fig2b_ion_gp']
+  text: >-
+    (Cross-record validation.) No model here is validated against chaudhuri2015's measurements. Those are
+    of alginate gels and cells on them: AFM initial Young's moduli (Fig. 2c, Supp. Table 1), stress
+    relaxation and rheology normalized by their initial or 1 Hz values (Fig. 2a-b, Supp. Fig. 3), and cell
+    spread areas, stress-fibre, attachment and proliferation fractions and YAP ratios (Figs. 3-4, Supp.
+    Figs. 4-5). The one model here that could meet the gel data is youngs_from_shear (E = 2G(1+ν)): its
+    output is a Young's modulus like Fig. 2c, but its input is an absolute shear modulus, and chaudhuri2015
+    prints only G' and G'' divided by G' at 1 Hz, so no absolute G exists for any of its gels (and the
+    normalized curves are dimensionless, not the moduli the model takes). modulus_from_stiffness needs an
+    adhesion stiffness and continuum_stiffness outputs one; chaudhuri2015 measures none. The clutch models
+    (eqns 6-7, 13-14) give a clutch off rate and the actin speed relative to an adhesion; chaudhuri2015
+    measures neither (its spreading speeds are lattice-model outputs, not measurements). The fibre network
+    is not runnable (q_network_not_runnable), and the histogram means process this paper's own tracks. This
+    paper cites Chaudhuri et al. (2015) only for "ECM remodeling/ligand clustering" (p. 10), not for data a
+    model explains. In the other direction, see chaudhuri2015/q_xval_owen2017_none.
+  citation: {page: 10, printed_page: "1968", quote: "remodeling ligand clustering Baker et al 2015 Chaudhuri et al", where: text}
+# ==== cross-record validation with elosegui2016 (2026-11-22): none added here ====
+- id: q_xval_elosegui2016_none
+  kind: unstated_model
+  about: [clutch_velocity_eq13, clutch_velocity_eq14, off_rate_catch_eq7, off_rate_slip_eq6, continuum_stiffness, modulus_from_stiffness, youngs_from_shear, 'elosegui2016/fig3e_control_data', 'elosegui2016/fig3e_shrna_data', 'elosegui2016/fig3d_control_data', 'elosegui2016/fig3a_lifetime_data', 'elosegui2016/E_gel_4p71']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against elosegui2016's measurements.
+    The nearest are its MEF actin rearward flows against gel modulus (Fig. 3e, control and talin shRNA).
+    eqns 13-14 give an actin speed relative to an adhesion, but would need Ftot, Ct, kon, k0 and αc for MEF
+    adhesions, none of which either paper states for this model; this paper says only that "smaller,
+    positive values of αc yield actin velocities consistent with those observed in the lamella of some cells
+    adhering to flat continuous surfaces" (Supp. p. 6), a trend over a free parameter. Every input would be
+    added and αc chosen to meet the flow, a fit made here. The p. 9 sentence citing elosegui2016 ("Even
+    faster, 5–20 μm/min actin velocities ... measured") compares measurement with measurement. eqns 13-14 also
+    have no gel modulus input, only κ (the κ = 1 pN/nm taken from elosegui2016, Supp. p. 6, is one value, not a
+    map from the gel moduli of Fig. 3e), and no motor speed limit. The tractions (Figs. 1, 3d, 4-6, S2), YAP
+    ratios, adhesion lengths, areas and stainings are outputs of no model here. The bond lifetimes of Fig. 3a
+    are lifetimes, while eqns 6-7 give an off rate with no printed parameters (as q_xval_kong2009_none). The
+    gel moduli (Supp. Table 2) are AFM measurements of polyacrylamide; youngs_from_shear needs a shear modulus
+    and modulus_from_stiffness an adhesion stiffness, neither measured there. In the other direction,
+    elosegui2016's clutch_talin_sim is validated against this record's t1_diff_velocity and
+    v_elongation_observed (elosegui2016 val_relspeed_owen2017_*, q_xval_owen2017_unused).
+  citation: {page: 9, printed_page: "1967", quote: "Even faster, 5–20 μm/min actin velocities", where: Discussion}
+
+- id: q_xval_mekhdjian2017_none
+  kind: unstated_model
+  about: [clutch_velocity_eq13, clutch_velocity_eq14, off_rate_slip_eq6, off_rate_catch_eq7, continuum_stiffness, modulus_from_stiffness, node_force_constant, youngs_from_shear, ref-mekhdjian2017]
+  text: >-
+    (Cross-record validation, 2026-11-22.) No model of this record is validated against a measurement of
+    mekhdjian2017. This paper cites Mekhdjian et al. (2017) once (p. 10), for clutch-model variants in which
+    actin velocity is set by motor force and clutch drag; it never says its own models explain a Mekhdjian
+    number, and Mekhdjian (same year, same journal) does not cite it. mekhdjian2017 measures MCF10A cells:
+    spread area, traction stress and total force on polyacrylamide (Figs. 4, 5e, S3, S5), MTS force per
+    sensor and per cell (Fig. 6), adhesion lifetimes and lengths (Fig. 7), protein axial positions, invasion
+    and constriction measures, indentation stiffness of the cells, protein levels and survival. No model here
+    outputs any of these. eqns 13-14 give the actin speed relative to an adhesion, which Mekhdjian does not
+    measure. The off-rate laws (eqns 6-7) give a clutch off rate, not a whole-adhesion lifetime in minutes
+    (Fig. 7b). continuum_stiffness gives an adhesion's substrate stiffness, not a cell's indentation stiffness
+    in Pa (Fig. 3e); node_force_constant gives the force on a fibre-network node, not a molecular-tension
+    sensor's force (Fig. 6d, f), and needs a node stiffness Mekhdjian has no network for; youngs_from_shear
+    needs a shear modulus and modulus_from_stiffness an adhesion stiffness, neither measured there. In the
+    other direction, mekhdjian2017's motor_clutch_reinforced is validated against this record's
+    t1_diff_velocity and v_elongation_observed (mekhdjian2017 val_relspeed_owen2017_*,
+    mekhdjian2017/q_xval_owen2017_unused).
+  citation: {page: 10, printed_page: "1968", quote: "et al., 2013; Mekhdjian et al., 2017). Low velocities, such as we ob", where: Discussion}

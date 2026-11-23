@@ -1,0 +1,27 @@
+id: limit_cycle_ptp
+name: limit cycle of Eq. 6, amplitude of y~ read as the peak-to-peak range (Sec. III E; Fig. 11(d))
+role: model
+stated: {page: 11, printed_page: "014417-11", quote: "limit cycles within the unstable spirals region are determined", where: "Sec. III E; Fig. 11"}
+equation: "numerical solution of Eq. 6; f = 1/(period tau); amplitude of y~ = max y~ - min y~ on the cycle"
+from_words: true
+built_from: [limit_cycle]
+inputs:
+  w: {quantity: motor_rate_ratio_nd, unit: dimensionless}
+  Nm: {quantity: n_motors_total, unit: dimensionless}
+  kon: {quantity: clutch_on_rate_nd, unit: dimensionless}
+  koff: {quantity: clutch_off_rate_nd, unit: dimensionless}
+  fs: {quantity: stall_force_nd, unit: dimensionless}
+  fd: {quantity: detachment_force_nd, unit: dimensionless}
+  Fb: {quantity: rupture_force_nd, unit: dimensionless}
+  km: {quantity: motor_stiffness_nd, unit: dimensionless}
+  kc: {quantity: clutch_stiffness_nd, unit: dimensionless}
+  ks: {quantity: substrate_stiffness_nd, unit: dimensionless}
+  F: {quantity: external_load_nd, unit: dimensionless}
+  g: {quantity: friction_ratio, unit: dimensionless, description: "gamma/Gamma"}
+  Nc: {quantity: n_clutches_total, unit: dimensionless}
+  vu: {quantity: motor_velocity_nd, unit: dimensionless}
+  tau: {quantity: char_time, unit: s}
+outputs:
+  freq: {quantity: oscillation_frequency, unit: Hz}
+  amp: {quantity: motor_extension_amplitude_nd, unit: dimensionless}
+settings: {t_transient: 20000.0, t_window: 20000.0, n_samples: 200001, rtol: 1.0e-8, atol: 1.0e-10, perturb: 0.01}

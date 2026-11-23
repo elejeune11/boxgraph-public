@@ -1,0 +1,553 @@
+- id: q_cms_not_run
+  kind: numerics
+  about: [cms, module_ssa, module_optimum]
+  text: >-
+    The whole-cell simulator is not run in this record. Its simulated time per cell is not printed
+    (the Methods say only that the first hour was discarded; Supplementary Fig. 5 shows steady state
+    after about 100 min), the number of simulated cells per condition is in Supplementary Table 3
+    (6-71), and one call at 750-7,500 clutches stepped event by event over hours is far beyond a
+    build's run budget. The 2D force balance (reference positions, direction of the cell springs, how
+    the cell-body clutches of Eq. 5 share the load) is given in words and in the Fig. 1b schematic only.
+    So no printed simulator result of Figs. 1c-g or Supplementary Fig. 5 is reproduced here. The module
+    rules are checked one by one (Eqs. 1-3, 7-9) and one module stands in for the cell (module_ssa,
+    module_optimum, reconstructed). The released MATLAB code is read in record cms_code.
+  citation: {page: 7, printed_page: "7", quote: "were excluded from analysis to allow the system to reach steady state", where: "Methods, Simulation analysis"}
+
+- id: q_fig1f_swapped
+  kind: possible_error
+  about: [ks_rmcpeak_low_fig1f, ks_rmcpeak_high_fig1f]
+  text: >-
+    The Fig. 1f legend says the random motility coefficient peaks at ~10 pN/nm for low motors and
+    clutches and at ~1 pN/nm for high. In the panel (page image) the red (low) points peak at 1 pN/nm
+    and the blue (high) points at 10 pN/nm, and the text (p. 2) says the optimum "was shifted to a
+    higher stiffness by increasing the numbers of motors and clutches (Fig. 1f)". The legend appears to
+    swap the two cases. Recorded as printed; read by eye from the page image only (no calibrated reading).
+  citation: {page: 3, printed_page: "3", quote: "For low motors and clutches, random motility coefﬁcient peaks at", where: "Fig. 1f legend"}
+
+- id: q_fig1d_traction_optimum
+  kind: overstated_claim
+  about: [ks_tracmax_low_fig1d, ks_tracmax_high_fig1d]
+  text: >-
+    The text (p. 2) says the simulator "predicted a stiffness optimum for cell traction force that was
+    reduced by altering the numbers of motors and clutches (Fig. 1d)", while the Fig. 1d legend says the
+    traction maximum is at ~0.1 pN/nm for both the low and the high sets, i.e. not shifted. The two
+    statements do not say the same thing about the optimum.
+  citation: {page: 2, printed_page: "2", quote: "traction force that was reduced by altering the numbers of", where: "Results, Cell migration simulator"}
+
+- id: q_fig1g_p
+  kind: possible_error
+  about: [dK_opt_fig1g]
+  text: >-
+    Fig. 1g prints "P <0.0001" in the panel and the legend "(P = 0.0001)" for the same bootstrapped
+    shift of the composite optimum. Minor; the shift itself (4-fold) is recorded but not recomputed,
+    because it needs the composite metric points and their Gaussian fits, which are only plotted.
+  citation: {page: 3, printed_page: "3", quote: "show a statistically signiﬁcant shift in the optimum stiffness for the low", where: "Fig. 1g legend"}
+
+- id: q_stiffness_mapping
+  kind: unstated_model
+  about: [cms, Eopt_u251_text, Eopt_ecfn_text, quantity:substrate_stiffness, quantity:substrate_modulus]
+  text: >-
+    Simulated optima are in substrate spring constant (pN/nm, Fig. 1) and measured ones in gel Young's
+    modulus (kPa, Figs. 2-4). The text moves between them (the increase "from ~1 kPa for neurons to
+    ~100 kPa for glioma cells" is read off Fig. 1c, p. 3) and the Discussion says simulated motility,
+    aspect ratio and flow "differed at most by ~25% from the experimental values", but the paper gives
+    no conversion from κs to E (Chan and Odde 2008, ref. 7, has one: their Eq. 13). Without it the
+    ~25% claim and the kPa readings of the simulator cannot be checked.
+  citation: {page: 7, printed_page: "7", quote: "coefﬁcient, cell aspect ratio and actin ﬂow rate differed at most", where: "Discussion"}
+
+- id: q_sim_length
+  kind: unstated_input
+  about: [cms, module_optimum, run_module_opt_low, run_module_opt_high]
+  text: >-
+    The simulated time per cell is not printed. The stand-in module runs 1000 s per substrate (300 s
+    for the high set, whose event rate is ten times larger) and averages over the whole run; the
+    simulated time and the κs grid are refined (ref_t_module_opt_low, ref_t_module_opt_high,
+    ref_grid_module_opt_low).
+
+- id: q_module_standin
+  kind: choice
+  about: [module_ssa, module_optimum, cmp_module_ksflow_low, cmp_module_ksflow_high, cmp_module_kstrac_low, cmp_module_kstrac_high, cmp_module_traction_fold]
+  text: >-
+    The single module holds the module maxima n*m, n*c (Eqs. 8-9 give a module fewer when the pools
+    are partly used), has a fixed cell body, no polymerization, capping or destruction, and no cell
+    spring (κcell = 10,000 pN/nm, about 10^4 times κc). A clutch's forced unbinding when its attachment
+    passes the motors is left out (the module has no length). The paper's optima are of the whole cell,
+    with several modules sharing the pools and the cell body clutches, so the comparisons are
+    approximations (purpose approximation) and the printed optima are approximate ("around", "~"), so
+    they carry no verdict.
+
+- id: q_eq10_index
+  kind: possible_error
+  about: [cms, module_ssa]
+  text: >-
+    Eq. 10 prints the sum in the denominator with lower limit "i = i" (page image); the text defines k_i
+    for i = 1..n events, so the lower limit is presumably i = 1. The record's code sums over all events.
+  citation: {page: 7, printed_page: "7", quote: "was calculated by equation (10) where URN1 is a uniformly", where: "Eq. 10"}
+
+- id: q_strain_energy_700
+  kind: possible_error
+  about: [quantity:substrate_modulus]
+  text: >-
+    The Fig. 3e legend says "Mean strain energy of ECFNs and U251 glioma cells on 700 kPa
+    polyacrylamide gels", while the text (p. 4: "on 700 Pa modulus gels") and the Fig. 3d legend
+    ("on 700 Pa polyacrylamide gels") give 700 Pa. The legend's kPa appears to be a misprint.
+  citation: {page: 5, printed_page: "5", quote: "and U251 glioma cells on 700 kPa polyacrylamide gels", where: "Fig. 3e legend"}
+
+- id: q_aspect_ratio_optimum
+  kind: possible_error
+  about: [quantity:cell_aspect_ratio]
+  text: >-
+    For the measured U251 aspect ratio the text says it "exhibited a maximum of ~20-100 kPa" (p. 2),
+    while the Fig. 2e legend says it "has a potential maximum at ~9 kPa". The two do not agree; the
+    panel was not read (figure tools unavailable).
+  citation: {page: 4, printed_page: "4", quote: "Cell aspect ratio has a potential maximum at B9 kPa", where: "Fig. 2e legend"}
+
+- id: q_drug_units
+  kind: reading
+  about: [quantity:substrate_modulus]
+  text: >-
+    Drug doses: the OCR of the Fig. 4e legend reads "6 mM blebbistatin and 0.6 mM cyclo(RGDfV)"; the
+    Supplementary Fig. 4 legend prints 6 µM and 0.6 µM. The OCR drops µ throughout this PDF (µm reads
+    mm, µl reads ml), so these are taken to be µM. They feed no model and are not recorded as data.
+  citation: {page: 20, quote: "Scaled strain energy for U251 glioma cells with 6 µM blebbistatin", where: "Supplementary Fig. 4h legend"}
+
+- id: q_gel_thickness
+  kind: unexplained_difference
+  about: [gel_thickness, cmp_gel_thin, cmp_gel_thick]
+  text: >-
+    A flat disc of the pipetted prepolymer under the coverslip (4 µl under 12 mm; 300 µl under 25 mm)
+    is thinner than the printed thicknesses (40-100 µm, from ref. 7; 700-1,000 µm). Swelling of the
+    gel after polymerization, or prepolymer left outside the coverslip edge, would explain a
+    difference; the paper does not say how the thicknesses were obtained.
+
+- id: q_pixel_size
+  kind: unstated_input
+  about: [pixel_size_40x, piv_length, cmp_piv_coarse, cmp_piv_search, cmp_piv_fine, cmp_piv_lattice]
+  text: >-
+    The paper prints PIV windows both in pixels and in µm but not the pixel size. The record adds
+    6.45 µm / 40 = 0.16125 µm (the camera maker's pixel and the stated objective). The printed lengths
+    (7.8 µm for 48 px, 16.3 µm for 100 px, 3.9 µm for 24 px, 2.0 µm for 12 px) imply about 0.163 µm,
+    so the paper's own conversion likely used a calibrated pixel size about 1% larger; the
+    alternative 0.163 is run.
+
+- id: q_eye_only_figures
+  kind: reading
+  about: [cms, rmc_eq12, dK_opt_fig1g, dEopt_fig4f]
+  text: >-
+    The figure tools (high-resolution rendering, calibrated code readings) were refused by this
+    session's permission mode, so no figure was read: the simulated curves of Figs. 1c-g and
+    Supplementary Fig. 5, and the measured points (with s.e.m. bars) of Figs. 2c-e, 3c, 3e-f, 4a-f and
+    Supplementary Figs. 2e and 4, are left for a figure pass (figures.md). Eq. 12 (rmc_eq12) is
+    entered so that the measured MSD curves of Supplementary Fig. 2e can be checked against the
+    motility coefficients of Fig. 2c once read; the composite metric and its log-Gaussian fit could
+    then reproduce ΔKsub,opt = 4-fold and ΔEopt = 2-fold.
+
+# ---- added by the audit ----------------------------------------------------------------------
+- id: q_fig4b_traction_drop
+  kind: unexplained_difference
+  about: [quantity:substrate_modulus]
+  text: >-
+    The Fig. 4b legend says both drugs "decreased traction strain energy by approximately fourfold
+    on all stiffnesses", while the text (p. 5) says "On 9.3 kPa, the traction strain energy was
+    reduced by about an order of magnitude in each single drug case and the combined treatment".
+    The two statements give different fold drops for the combined treatment at ~9 kPa. The bars
+    were not read (figure pass), so neither value is recorded as data.
+  citation: {page: 6, printed_page: "6", quote: "decreased traction strain energy by approximately fourfold on all stiffnesses", where: "Fig. 4b legend"}
+
+- id: q_u251_flow_min_range
+  kind: unexplained_difference
+  about: [quantity:substrate_modulus]
+  text: >-
+    The text (p. 3) says the U251 actin flow "has a minimum between 20 and 100 kPa" (Fig. 3c),
+    while the Fig. 3c legend (p. 5) says "U251 actin flow has a minimum between 9 and 200 kPa".
+    The ranges differ; the panel was not read.
+  citation: {page: 5, printed_page: "5", quote: "minimum between 9 and 200 kPa", where: "Fig. 3c legend"}
+
+- id: q_fig4f_p
+  kind: possible_error
+  about: [dEopt_fig4f]
+  text: >-
+    As for Fig. 1g (q_fig1g_p): the Fig. 4f panel prints "P <0.015" (page image) and its legend
+    "(P = 0.015)" for the same shift of the fitted optimum. Minor.
+  citation: {page: 6, printed_page: "6", quote: "treated U251 glioma cell composite metric", where: "Fig. 4f panel and legend"}
+
+- id: q_shift_proportionality
+  kind: unexplained_difference
+  about: [dK_opt_fig1g, ks_flowmin_low_fig1c, ks_flowmin_high_fig1c, optimum_fold_p3, cmp_celltype_fold_p3]
+  text: >-
+    The text (pp. 3-4) reads a ~100-fold higher optimum (~1 kPa ECFN, ~100 kPa U251) as ~100-fold more
+    motors and clutches "according to the cell migration simulator (Fig. 1c)", i.e. an optimum that
+    shifts in proportion to the motor-clutch numbers. In the simulator a tenfold change shifts the flow
+    minimum tenfold (Fig. 1c legend, ~0.1 to ~1 pN/nm) but the composite optimum only 4-fold (Fig. 1g),
+    the traction maximum not at all (Fig. 1d legend), and the motility peak tenfold. Which metric the
+    proportional rule applies to, and why it extends from a tenfold to a hundredfold change, is not
+    stated; the shift for 100-fold more motors and clutches is not simulated in the paper.
+  citation: {page: 3, printed_page: "3", quote: "According to the cell migration simulator (Fig. 1c)", where: text}
+
+- id: q_approx_signs
+  kind: reading
+  about: [ks_flowmin_low_fig1c, Eopt_u251_text, Eopt_treated_text, Eopt_ecfn_text]
+  text: >-
+    Audit disagreement, not changed: these data are entered with a "~" where the page prints the value
+    with a word ("around a spring constant of 0.1", "near 50 kPa", "near 20 kPa", "near 1 kPa"), not with
+    the ~ sign. The words do mark the values as approximate, so the first reader's choice (no verdict)
+    is kept; a reader who takes "printed" literally would enter "0.1", "50", "20", "1", and
+    cmp_Eopt_fold (2.5 against 2) and cmp_module_ksflow_low (one-module stand-in) would then get verdicts.
+  citation: {page: 5, printed_page: "5", quote: "cells have a higher optimum stiffness near 50 kPa", where: text}
+
+# ---- added by the figure pass (2026-11-19) ----------------------------------------------------
+- id: q_figure_pass
+  kind: reading
+  about: [q_eye_only_figures]
+  text: >-
+    The figures left out by the first pass (q_eye_only_figures) are now read by calibrated code
+    (figures.yaml, figures/_kit.py, figures.md): 64 readings of Figs. 1c-g, 2c-e, 3c, 3e-f, 4a-f and
+    Supplementary Figs. 2E, 4C-I and 5A-H. With them the composite metrics of Figs. 1g and 4f are
+    recomputed from the paper's own metric panels (composite_metric_sim, composite_metric_exp), the
+    log-Gaussian optima refitted (gaussian_optimum_ks, gaussian_optimum_E) and the printed shifts
+    ΔKsub,opt = 4-fold and ΔEopt = 2-fold compared (cmp_kfold_*, cmp_Efold_*), and Eq. 12 is applied to
+    the MSD curves of Supplementary Fig. 2E (cmp_rmc_msd).
+
+- id: q_gauss_amplitude
+  kind: choice
+  about: [gaussian_optimum_ks, gaussian_optimum_E, cmp_kfold_fig1g, cmp_kfold_sim, cmp_Efold_fig4f, cmp_Efold_exp]
+  text: >-
+    The Methods say a logarithmic Gaussian was fitted "without constraining the variance" but do not
+    say whether the amplitude was fitted. The fitted curves drawn in Figs. 1g and 4f all peak at 1, so
+    the fits here fix the amplitude at 1 (setting fit_amplitude: false); fit_amplitude: true is the
+    alternative. The paper also does not say whether the fit is on the mean points or on all cells; the
+    fits here use the plotted (or recomputed) mean composite points, unweighted.
+  citation: {page: 9, printed_page: "9", quote: "to the data without constraining the variance", where: "Methods, Composite metrics"}
+
+- id: q_rmc_msd
+  kind: choice
+  about: [rmc_eq12_msd_set, run_rmc_msd, cmp_rmc_msd, figs2e_msd_4kPa, figs2e_msd_100kPa, figs2e_msd_200kPa]
+  text: >-
+    Eq. 12 is applied to the averaged MSD curves of Supplementary Fig. 2E as read: each value is the
+    middle of the plotted s.e.m. bar (or of the line where no bar stands out), every 15 min from 15 to
+    390 min (the 4 kPa curve from 30 min, its first point being hidden at the origin), unweighted,
+    fitted through the origin over the first half of the points. The paper fits Eq. 12 per cell (with
+    weights) and averages the coefficients for Fig. 2c, so the two need not agree exactly even if
+    both are right; a disagreement beyond the s.e.m. bars of Fig. 2c is still worth noting.
+  citation: {page: 16, quote: "squared displacement versus time plots for U251", where: "Supplementary Fig. 2E legend"}
+
+- id: q_supp2e_key
+  kind: reading
+  about: [figs2e_msd_4kPa, E_msd_4p6]
+  text: >-
+    The key inside Supplementary Fig. 2E labels the red curve "4 kPa" while the legend says the curves are
+    on 4.6, 100 and 200 kPa gels. The run uses the legend's 4.6 kPa (E_msd_4p6), the modulus at which Fig. 2c
+    plots its point.
+  citation: {page: 16, quote: "migration on 4.6 kPa, 100 kPa, and", where: "Supplementary Fig. 2 legend"}
+
+- id: q_fig3f_right_axis
+  kind: reading
+  about: [fig3f_u251, cmp_strain_fig3f_fig4b]
+  text: >-
+    Fig. 3f has two y axes; the left one (gold, ECFN) is labelled "ECFN strain energy (pJ)" and the right
+    one (blue, U251) has no label. The reading takes it as U251 traction strain energy in pJ, as in Fig. 3e
+    (U251 on 700 Pa, about 1.8 pJ by fig3e_bars, against the 0.74 kPa point of fig3f_u251) and in Fig. 4b,
+    whose blue axis has the same 0-5 range; cmp_strain_fig3f_fig4b checks the two plots of these data.
+  citation: {page: 5, printed_page: "5", quote: "stain energy has a maximum between 4.6 and 20 kPa", where: "Fig. 3f"}
+
+- id: q_supp4_pa_axis
+  kind: possible_error
+  about: [figs4d_ecfn, figs4g_ecfn, figs4h_drugs, figs4i_u251, quantity:substrate_modulus]
+  text: >-
+    The x axes of Supplementary Figs. 4D, 4G, 4H and 4I print "Young's modulus (Pa)", while their legend
+    (p. 20: "between 9 kPa and 20 kPa", "between 4.6 kPa-100 kPa"), Supplementary Fig. 4E and the main
+    figures give the same gels in kPa, and the points stand at the kPa moduli of Figs. 3f and 4b (about
+    0.05, 0.74, 4.6, 9.3, 19.8, 98.5). The axis unit appears to be a misprint for kPa. The readings keep
+    the axis as printed (Pa), so they are not compared with the kPa data; the y axis "pJ*kPa" of 4G-I is
+    consistent with kPa.
+  citation: {page: 20, quote: "The correction eliminates the significant difference between 9 kPa and 20 kPa", where: "Supplementary Fig. 4 legend"}
+
+- id: q_supp4d_ecfn_x
+  kind: unexplained_difference
+  about: [figs4d_ecfn, figs4g_ecfn, fig3f_ecfn]
+  text: >-
+    The second ECFN point stands at about 1.1 on the x axis of Supplementary Fig. 4D but at about 1.3 in
+    Supplementary Fig. 4G and in Fig. 3f (readings figs4d_ecfn, figs4g_ecfn, fig3f_ecfn, x read from the
+    image), although 4G is 4D's strain energy scaled by the same moduli. The first point agrees (about
+    0.72-0.73) in all three.
+  citation: {page: 20, quote: "ECFN strain energy is above the noise floor", where: "Supplementary Fig. 4D"}
+
+- id: q_figures_settle
+  kind: reading
+  about: [q_fig1f_swapped, q_fig1d_traction_optimum, q_aspect_ratio_optimum, q_u251_flow_min_range, q_fig4b_traction_drop]
+  text: >-
+    What the calibrated readings say about earlier questions (the questions' own text is unchanged):
+    q_fig1f_swapped: fig1f_low (red) is highest at 1 pN/nm and fig1f_high (blue) at 10 pN/nm, as the text
+    says and opposite to the Fig. 1f legend, so the legend swaps the two cases.
+    q_fig1d_traction_optimum: fig1d_low and fig1d_high both peak at 0.1 pN/nm, as the legend says; the text's
+    "reduced" optimum is not what the panel shows.
+    q_aspect_ratio_optimum: fig2e_u251 is highest at the 19.8 kPa point and nearly as high at 98.5 kPa; the
+    point at 9.3 kPa is lower. The panel supports the text's "~20-100 kPa", not the legend's "~9 kPa".
+    q_u251_flow_min_range: fig3c_u251 is lowest at 19.8 and 98.5 kPa, inside both printed ranges.
+    q_fig4b_traction_drop: in fig4b_bars_9kPa the untreated bar reads about 4.0 pJ and the three drug bars
+    about 0.5, 0.8 and 0.75 pJ; in fig4b_bars_4kPa the untreated bar reads about 3.7 pJ and the drug bars
+    about 0.24, 0.34 and 0.77 pJ. These readings can decide between the legend's "approximately fourfold on
+    all stiffnesses" and the text's "about an order of magnitude" on 9.3 kPa; no model in this record
+    computes the ratios, so no verdict is given. The insets are labelled 4 and 9 kPa, the text 4.6 and 9.3 kPa.
+  citation: {page: 3, printed_page: "3", quote: "For low motors and clutches, random motility coefﬁcient peaks at", where: "Fig. 1f legend"}
+
+# ==== cross-record validation with bangasser2013 (2026-11-19): none added =======================
+- id: q_xval_bangasser2013_none
+  kind: choice
+  about: [off_rate_eq1, module_ssa, module_optimum, cms]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2013's measurements.
+    (1) off_rate_eq1 has the shape of bangasser2013/catch_slip_eq9, but it gives a loaded off-rate, while
+    Kong et al.'s points redrawn there (bangasser2013/tau_kong_fig7c) are mean bond lifetimes, a different
+    quantity; and this paper's Eq. 1 is a slip bond with no catch regime, which this paper never sets
+    against those lifetimes. (2) The neuron flow of Chan and Odde (bangasser2013/v_figS1b_measured) is a
+    curve over Young's modulus, which module_ssa (a spring-constant port) cannot be swept over, and
+    module_ssa carries this paper's U251 parameter set, not a neuron set; the paper says only that neurons
+    have the lower optimum (a trend, p. 3). (3) The normalized migration and traction of other cell types
+    (bangasser2013/migration_fig1a_*, traction_fig1b_*) are outputs of no runnable model here: the
+    whole-cell simulator (cms) is not run and module_ssa gives an absolute flow and traction for one
+    module, not a quantity normalized to a cell type's maximum. In the other direction, see
+    bangasser2013/q_xval_bangasser2017_none.
+  citation: {page: 3, printed_page: "3", quote: "the increase in optimal stiffness from B1 kPa for neurons to", where: text}
+# cross-record validation with bangasser2013b (2026-11-19): none added
+- id: q_xval_bangasser2013b_none
+  kind: choice
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013b. That paper's only measured data are the computation times of its ODE and Monte Carlo
+    software (bangasser2013b/fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal, Fig. 6b), which no model here
+    outputs. Its other plotted values are outputs of its own ODEs (origin predicted): setting them beside
+    module_ssa or module_optimum is a model-to-model comparison, not a validation. This paper cites it
+    (ref. 15) only for the predicted shift of the optimal stiffness with motor and clutch numbers, a trend.
+    module_ssa and bangasser2013b/clutch_ensemble_cycle have the same shape (a flow from forces, rates and
+    stiffnesses), but sharing a shape does not make one predict a measurement of the other. In the other
+    direction (bangasser2013b's ODEs against the U251 flow measured here), see
+    bangasser2013b/q_xval_bangasser2017_none.
+  citation: {page: 2, printed_page: "2", quote: "Our previous theoretical analysis of a single motor–clutch", where: text}
+# cross-record validation with bell1978 (2026-11-19): none added
+- id: q_xval_bell1978_none
+  kind: unstated_input
+  about: [off_rate_eq1, cms, module_ssa, module_optimum]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978. That paper's only measured data are the force to detach adherent cells, about 1 dyne
+    per cell, quoted from its ref. 52 (bell1978/force_adhesive, printed "~ 1", so it gets no verdict
+    anyway), and the free-sugar concentrations of a cited inhibition experiment (bell1978/c_sugar_low,
+    c_sugar_high), which are inputs, not outcomes. No model here outputs a cell detachment force or a
+    concentration: off_rate_eq1 gives a clutch off-rate at a given clutch force, module_ssa and
+    module_optimum give a module's flow and traction on a compliant substrate, and cms (not runnable)
+    gives migration outputs. A detachment force for a whole cell would need the number of bonds and
+    how load is shared among them, which neither paper states for the cells of bell1978's ref. 52.
+    This paper takes the Bell form of off_rate_eq1 from bell1978 (ref. 19, p. 7); that relates the
+    two models, it is not a prediction of a measurement. cms and bell1978/peak_inertial_force share a
+    shape (a force from a length and a rate) but describe different things. In the other direction,
+    see bell1978 q_xval_bangasser2017_none.
+  citation: {page: 7, printed_page: "7", quote: "that depends on the clutch force, Fc,i, according to the Bell model19", where: text}
+# cross-record validation with chan2008 (2026-11-19): none added here
+- id: q_xval_chan2008_none
+  kind: choice
+  about: [cms, module_ssa, module_optimum, motor_velocity_eq2, off_rate_eq1]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of chan2008.
+    chan2008 measures neuron (ECFN) filopodia: retrograde flow against gel Young's modulus
+    (chan2008/v_fig3d_exp_sem, v_figS8C_*), flow histograms, bead step and strain histograms, failure
+    frequencies, surface tension, and the peak filopodial force and contact distance from the Cerruti
+    analysis. cms is not runnable. module_ssa takes a substrate spring constant, not a modulus (this
+    paper gives no conversion from E to κs), and carries this paper's U251 module set, not a neuron set;
+    the paper says only that ECFNs have the lower optimum (~1 kPa, p. 3), a trend, and does not run its
+    simulator for neurons. cms and chan2008/force_velocity_eq3 share a shape (a velocity from a force,
+    a stiffness and a velocity) and the same motor law (motor_velocity_eq2); that relates the models but
+    predicts no measurement. In the other direction, chan2008/motor_clutch_E is set against the ECFN flow
+    redrawn in Fig. 3c (chan2008/val_flow_bangasser2017_fig3c, fit_quality), and against nothing else
+    here (chan2008/q_xval_bangasser2017_unused).
+  citation: {page: 3, printed_page: "3", quote: "maximal traction strain energy on a stiffness of B1 kPa7,14", where: text}
+# cross-record validation with chaudhuri2015 (2026-11-19): none added
+- id: q_xval_chaudhuri2015_none
+  kind: choice
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2, ref-10]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chaudhuri2015. chaudhuri2015 measures alginate gels (initial Young's modulus by AFM, normalized
+    stress relaxation, normalized storage and loss moduli) and U2OS / 3T3 cells on elastic and
+    stress-relaxing gels (spread area, fraction attached, fraction with stress fibres, YAP
+    nuclear ratio, fraction proliferating; its Figs. 2-4, Supp. Figs. 3-5). None of these is an
+    output of a model here: cms (not runnable) gives flow, traction, aspect ratio and motility
+    coefficient, and module_ssa / module_optimum give a module's flow and traction, on a purely
+    elastic spring; no model here has a viscous or stress-relaxing substrate, a spread area, or the
+    biochemical readouts. This paper cites chaudhuri2015 (ref. 10) only as one use of motor-clutch
+    modelling ("the effect of substrate stress relaxation on cell spreading"), not as data its
+    simulator explains. cms and chaudhuri2015/clutch_springs_nolattice share a shape (a velocity from
+    a force, rates, stiffnesses and a motor velocity); that relates the models but predicts no
+    measurement. In the other direction, see chaudhuri2015 q_xval_bangasser2017_none.
+  citation: {page: 2, printed_page: "2", quote: "substrate stress relaxation on cell spreading, collective cell", where: text}
+# cross-record validation with cms1d_cpp_code (2026-11-19): none added
+- id: q_xval_cms1d_cpp_code_none
+  kind: choice
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2, polymerization_eq3, module_birth_eq7]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against cms1d_cpp_code. That record is
+    a later (2022) C++ 1D simulator from the same lab; all its data are parameters set in the code (origin
+    reported, plus one value copied from prahl2020 as fitted), with no figure readings and no measured
+    values, so no model here has a measurement there to predict. This paper (2017) does not cite or discuss
+    the code. cms and cms1d_cpp_code/flow_port share a shape (a velocity from a force and a velocity), and
+    the code's module rules match this paper's Eqs. 1-3 and 7-9 (cms1d_cpp_code/relations.yaml); that
+    relates the models, it is not a test against data. In the other direction (the code's ports against
+    the U251 flows and motility measured here), see cms1d_cpp_code/q_xval_bangasser2017_none.
+  citation: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: text}
+
+# cross-record validation with cms_code (2026-11-19): none added
+- id: q_xval_cms_code_none
+  kind: unstated_model
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2, polymerization_eq3, module_birth_eq7]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against cms_code, the released MATLAB
+    CMS v1.0 of this paper (reference code-cms). cms_code is software: all its data are parameters the
+    shells set (origin reported), it has no figure readings and ships no simulated or measured results,
+    so there is no measurement there for cms or any other model here to predict. cms and
+    cms_code/cms2d_code share a shape, and the code's ported rules match this paper's Eqs. 1-3 and 7-9
+    (relations.yaml, cms_code/relations.yaml); that relates the models, it is not a test against data.
+    In the other direction (the code's models against the U251 motility, flow, traction, area, aspect
+    ratio and MSD measured here), see cms_code/q_xval_bangasser2017_none: the code's whole simulator is
+    not runnable here, and its runnable ports output module-level quantities this paper does not measure.
+  citation: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: text}
+
+# cross-record validation with elosegui2014 (2026-11-19): none added
+- id: q_xval_elosegui2014_none
+  kind: choice
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2, ref-8]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2014. That paper measures myoepithelial (myo ctrl, myo b6) cells on fibronectin-coated gels:
+    average traction stress (Pa) and actin rearward flow (nm/s) against gel Young's modulus (kPa), with
+    and without integrin-blocking antibodies (its Figs. 1b,c and 4d-l), integrin densities in adhesions
+    (a.u.) and on the membrane, SPR sensorgrams, bead detachment times and integrin recruitment to beads.
+    cms, the only model here of a whole cell, is not runnable. module_ssa and module_optimum give one
+    module's mean flow (nm/s) and traction force (pN) on a substrate spring constant (pN/nm): neither
+    paper gives a conversion from the gels' Young's modulus to κs, and the module carries this paper's
+    U251 parameter set (Supplementary Table 2), not one for myoepithelial cells with two integrin types,
+    a catch bond and reinforcement; every motor, clutch and rate value for those cells would be an added
+    input, so a run would test the added values, not the model. Traction stress (Pa) is not the
+    module's traction force (pN) without an adhesion area neither paper states. Integrin densities, SPR
+    responses, detachment times and recruitment have no counterpart among the outputs here. The paper
+    cites ref. 8 only in a list of motor-clutch models that "naturally predicts biphasic stiffness
+    dependence" (p. 2), a trend, not as data its simulator explains. In the other direction, see
+    elosegui2014/q_xval_bangasser2017_none.
+  citation: {page: 2, printed_page: "2", quote: "naturally predicts biphasic stiffness dependence as an outcome of", where: text}
+
+# cross-record validation with elosegui2016 (2026-11-19): none added
+- id: q_xval_elosegui2016_none
+  kind: choice
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2, ref-9, 'elosegui2016/fig1a_control_data', 'elosegui2016/fig3d_control_data', 'elosegui2016/fig3e_control_data', 'elosegui2016/fig6a_control_data']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2016 (ref. 9). The paper cites ref. 9 only as one of the motor-clutch models ("the
+    model7–9") that predict a biphasic stiffness dependence (p. 2): a trend, not data its simulator is
+    said to explain. elosegui2016 measures mouse embryonic fibroblasts (control, talin-2 knockout with
+    talin-1 shRNA, L325R) on fibronectin-coated polyacrylamide gels: average traction stress (Pa) and
+    actin retrograde flow (nm/s) against gel Young's modulus (kPa) (Figs. 1a, 3d,e, 6a-i, at several
+    fibronectin densities and myosin/integrin conditions), a threshold rigidity (~5 kPa, p. 2), adhesion
+    lengths, YAP ratios and gel moduli. cms, the only whole-cell model here, is not runnable.
+    module_ssa and module_optimum give one module's mean flow (nm/s) and traction force (pN) on a
+    substrate spring constant κs (pN/nm), with this paper's U251 parameter set (Supplementary Table 2).
+    Neither paper gives a conversion from a gel's Young's modulus to κs, nor motor, clutch and rate
+    values for MEFs (elosegui2016's own MEF parameters, its Supplementary Table 1, are numbers of
+    fibronectin molecules, integrin densities, myosins and a catch bond with talin reinforcement, not
+    this module's nm, nc, kon and koff), so every module input would be added and a run would test the
+    added values. Traction stress (Pa) is not the module's force (pN) without an adhesion area; adhesion
+    lengths, YAP ratios and the threshold rigidity have no counterpart among the outputs here. In the
+    other direction, see elosegui2016/q_xval_bangasser2017_none.
+  citation: {page: 2, printed_page: "2", quote: "naturally predicts biphasic stiffness dependence as an outcome of", where: text}
+
+# cross-record validation with odde_code (2026-11-19): none added
+- id: q_xval_odde_code_none
+  kind: choice
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against odde_code, the Odde lab's
+    MATLAB motor-clutch scripts (motorclutch1_1.m, motorclutch2_3.m). odde_code is software: its data are
+    parameters set in the scripts (origin reported) and predicted curves copied from the papers' records;
+    it holds no measurement, so there is nothing there for cms or any other model here to predict.
+    cms and odde_code/mc_event_port share a shape (a flow from a force, rates and stiffnesses), and
+    module_ssa is the same one-module event-stepping model with this paper's Eqs. 1 and 2; that relates
+    the models, it is not a test against data. In the other direction (the code's ports against the U251
+    and ECFN actin flows measured here), see odde_code/q_xval_bangasser2017_none.
+  citation: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: text}
+
+# cross-record validation with prahl2020 (2026-11-19): none added
+- id: q_xval_prahl2020_none
+  kind: unstated_model
+  about: [cms, module_ssa, module_optimum, rmc_eq12, 'prahl2020/v_exp', 'prahl2020/mu_exp', 'prahl2020/fig2g_exp']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    prahl2020, a later paper (2020) that this one does not cite. prahl2020 measures U251 cells migrating
+    in 1D confining PDMS channels: drift velocity and motility coefficient (v_exp, mu_exp, and the cRGD,
+    Y-27632, latrunculin A and MTA series of its Figs. 3-7), the pooled MSD curve (fig2g_exp), EB1
+    microtubule growth speeds (eb1_mean) and cell length and nucleus position (Fig. S5C-D). cms, the only
+    whole-cell model here, is not runnable and is a 2D unconfined simulator with module directions
+    uniform in the plane, not the channel with a polarity bias that prahl2020 built its 1D CMS for.
+    module_ssa and module_optimum give one module's mean flow and traction on a spring constant; prahl2020
+    measures no retrograde flow, traction or adhesion lifetime. rmc_eq12 is processing (an MSD curve to a
+    2D random motility coefficient, <r^2>/(4t)); run on prahl2020's 1D MSD it would not give that paper's
+    motility coefficient, which is the 1D diffusion term of a fit with drift (its Eq. 2, n = 1), so the
+    two quantities are not the same and processing another paper's data is not a model test.
+    prahl2020's claims of agreement with this paper are trends ("consistent with 2D CMS predictions",
+    prahl2020 p. 7). In the other direction, see prahl2020/q_xval_bangasser2017_none.
+  citation: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: text}
+
+# cross-record validation with alonsomatilla2023 (2026-11-21): none added
+- id: q_xval_alonsomatilla2023_none
+  kind: unstated_model
+  about: [off_rate_eq1, module_ssa, module_optimum, cms]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    alonsomatilla2023, a later (2023) mean-field modelling paper that this one cannot cite. That paper
+    prints no measurement: every value it plots is a mean-field, analytical or stochastic model result
+    (alonsomatilla2023 figures.md), and its data are parameters taken from the literature or estimated.
+    Setting module_ssa or module_optimum against its curves would relate two models, not validate one.
+    So would the shared shape of off_rate_eq1 and alonsomatilla2023/clutch_off_rate_bell (Bell's slip
+    law, rate from force and rate). In the other direction, see
+    alonsomatilla2023/q_xval_bangasser2017_none: no model there outputs the flows, strain energies,
+    cell shapes or motilities measured here.
+  citation: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: text}
+
+# cross-record validation with bagchi2025 (2026-11-21): none added
+- id: q_xval_bagchi2025_none
+  kind: unstated_model
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2, rmc_eq12, composite_metric_exp]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bagchi2025, a later (2025) paper on collective migration of epithelial monolayers on aligned (AF)
+    and random (RF) collagen fibres over polyacrylamide, which this one cannot cite. Its measurements
+    are monolayer quantities: AF/RF speed ratios (~1.56, 1.34, 1.33), leading-edge strain rates,
+    velocity autocorrelations, chi_4, cell areas and aspect ratios, monolayer traction and stress
+    profiles, division counts and fibre-angle histograms (bagchi2025 figures.md). The CMS (cms) is not
+    runnable here (q_cms_not_run) and simulates one cell on a uniform substrate given as a spring
+    constant, with no fibre alignment, cell-cell contact or monolayer; module_ssa and module_optimum give
+    one module's mean flow and traction on a spring constant, which bagchi2025 does not measure, and no
+    conversion from its gel Young's modulus to a spring constant is given (q_stiffness_mapping).
+    rmc_eq12 and composite_metric_exp are processing of an MSD curve and of this paper's own metric
+    panels; bagchi2025 plots no MSD and none of the composite's inputs, and processing another paper's
+    data is not a model test. In the other direction, see bagchi2025/q_xval_bangasser2017_none.
+  citation: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: text}
+- id: q_xval_mekhdjian2017_none
+  kind: unstated_input
+  about: [cms, module_ssa, module_optimum, off_rate_eq1, motor_velocity_eq2, rmc_eq12, composite_metric_exp]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    mekhdjian2017, a paper from the same year that this one does not cite (and that does not cite this
+    one). mekhdjian2017 measures MCF10A and MCF10AT cells (untreated and TGFβ-treated), PyMT and Met1
+    cells: traction stress, total traction force and spread area on PA gels of 0.4-13.8 kPa (its Fig. 5e,
+    Fig. S5) and on 2.7-kPa gels (Figs. 4b, 4d, S3c), molecular-tension-sensor forces, adhesion lifetime,
+    length and protein positions, AFM stiffness, nuclear protrusion, constriction transit and 3D invasion.
+    cms has the matching shape (force, flow from force, rates and stiffness) and outputs traction
+    magnitude and aspect ratio, but it is not runnable here (q_cms_not_run), and its parameter sets are
+    for U251 glioma cells. module_ssa and module_optimum give one module's mean flow and traction force
+    (pN) on a spring constant (pN/nm): mekhdjian2017 measures a stress (Pa) and a whole-cell force (nN) on
+    a modulus (kPa), and neither paper gives a conversion for this model, nor motor and clutch numbers for
+    an MCF10A module (q_stiffness_mapping; mekhdjian2017's 9 κ / 4π r radhesion has an unstated radius,
+    mekhdjian2017/q_radhesion). Every input that would make the run possible would be added for another
+    cell type, so the result would test the additions. rmc_eq12 and composite_metric_exp process MSD
+    curves and this paper's own metric panels; mekhdjian2017 plots neither. In the other direction, see
+    mekhdjian2017/q_xval_bangasser2017_none.
+  citation: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: text}

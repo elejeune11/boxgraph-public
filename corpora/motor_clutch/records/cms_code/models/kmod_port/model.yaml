@@ -1,0 +1,18 @@
+# Port (our code) of cms2Dv1_0.m line 171: the module birth rate at each event.
+#   kmod=kmod0*(1-(factin/totact))^4
+# factin is the F-actin held in the modules (line 290: the sum over modules of sdist - mdist, in nm),
+# so 1 - factin/totact is the paper's AG/AT. Note: the code uses the factin of the previous event
+# (computed at lines 284-291 after the event), as the paper's step order (2) after (9) implies.
+id: kmod_port
+name: "module birth rate from the free-actin fraction to the fourth power (cms2Dv1_0.m line 171, Python port)"
+role: model
+stated: {file: cms2Dv1_0.m, lines: "171", quote: "kmod=kmod0*(1-(factin/totact))^4; %module birth rate in 1/s"}
+equation: "kmod = kmod0*(1-(factin/totact))^4"
+inputs:
+  kmod0:  {quantity: max_module_birth_rate, unit: 1/s}
+  factin: {quantity: f_actin_length, unit: nm}
+  totact: {quantity: total_actin, unit: nm}
+outputs:
+  kmod: {quantity: module_birth_rate, unit: 1/s}
+settings: {}
+stochastic: false

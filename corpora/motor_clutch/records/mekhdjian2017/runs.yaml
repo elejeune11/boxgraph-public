@@ -1,0 +1,131 @@
+- id: run_5c_low
+  model: motor_clutch_reinforced
+  inputs: {nm: nm_low_5c, nc: nc_low_5c, Fm: Fm_5b, vu: vu_5b, kon: kon_5b, koff: koff_5b, Fb: Fb_5b, kc: kc_5b, r_adh: r_adh_added, kadd: kadd_0, Fthresh: Fthresh_s4, ncmax: ncmax_s4}
+  sweep: {E: T_5c_low}
+  settings: {n_events: 200000, seed: 1}
+  replicates: 2
+  outputs: {T: T_5c_low_sim, v_retro: v_5c_low_sim}
+  note: "2 x 10^5 events per stiffness instead of the paper's 10^6 (reader's choice for build time; without reinforcement the run is stationary, checked by ref_events); two seeds"
+- id: run_5c_high
+  model: motor_clutch_reinforced
+  inputs: {nm: nm_high_5c, nc: nc_high_5c, Fm: Fm_5b, vu: vu_5b, kon: kon_5b, koff: koff_5b, Fb: Fb_5b, kc: kc_5b, r_adh: r_adh_added, kadd: kadd_0, Fthresh: Fthresh_s4, ncmax: ncmax_s4}
+  sweep: {E: T_5c_high}
+  settings: {n_events: 200000, seed: 1}
+  replicates: 2
+  outputs: {T: T_5c_high_sim, v_retro: v_5c_high_sim}
+  note: "2 x 10^5 events per stiffness instead of the paper's 10^6 (reader's choice for build time; without reinforcement the run is stationary, checked by ref_events); two seeds"
+- id: run_area_5d_low
+  model: spread_area_pss
+  inputs: {v: v_5c_low_sim, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_5d_low_sim}
+- id: run_area_5d_high
+  model: spread_area_pss
+  inputs: {v: v_5c_high_sim, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_5d_high_sim}
+- id: run_s4_k0
+  model: motor_clutch_reinforced
+  inputs: {Fm: Fm_s4, vu: vu_s4, kon: kon_s4, koff: koff_s4, Fb: Fb_s4, kc: kc_s4, r_adh: r_adh_added, nm: nm_s4, nc: nc_s4, Fthresh: Fthresh_s4, ncmax: ncmax_s4, kadd: kadd_0}
+  sweep: {E: T_s4c_k0}
+  settings: {n_events: 200000, seed: 1}
+  replicates: 2
+  outputs: {T: T_s4_k0_sim, v_retro: v_s4_k0_sim}
+  note: "2 x 10^5 events per stiffness instead of the paper's 10^6 (reader's choice for build time; without reinforcement the run is stationary, checked by ref_events); two seeds"
+- id: run_s4_k001
+  model: motor_clutch_reinforced
+  inputs: {Fm: Fm_s4, vu: vu_s4, kon: kon_s4, koff: koff_s4, Fb: Fb_s4, kc: kc_s4, r_adh: r_adh_added, nm: nm_s4, nc: nc_s4, Fthresh: Fthresh_s4, ncmax: ncmax_s4, kadd: kadd_001}
+  sweep: {E: T_s4c_k001}
+  settings: {n_events: 1000000, seed: 1}
+  replicates: 2
+  outputs: {T: T_s4_k001_sim, v_retro: v_s4_k001_sim, nc_mean: nc_s4_k001_sim, t_sim: t_s4_k001_sim}
+  note: "the paper's 10^6 events per stiffness; two seeds"
+- id: run_s4_k01
+  model: motor_clutch_reinforced
+  inputs: {Fm: Fm_s4, vu: vu_s4, kon: kon_s4, koff: koff_s4, Fb: Fb_s4, kc: kc_s4, r_adh: r_adh_added, nm: nm_s4, nc: nc_s4, Fthresh: Fthresh_s4, ncmax: ncmax_s4, kadd: kadd_01}
+  sweep: {E: T_s4c_k01}
+  settings: {n_events: 1000000, seed: 1}
+  replicates: 2
+  outputs: {T: T_s4_k01_sim, v_retro: v_s4_k01_sim, nc_mean: nc_s4_k01_sim, t_sim: t_s4_k01_sim}
+  note: "the paper's 10^6 events per stiffness; two seeds"
+- id: run_s4_k1
+  model: motor_clutch_reinforced
+  inputs: {Fm: Fm_s4, vu: vu_s4, kon: kon_s4, koff: koff_s4, Fb: Fb_s4, kc: kc_s4, r_adh: r_adh_added, nm: nm_s4, nc: nc_s4, Fthresh: Fthresh_s4, ncmax: ncmax_s4, kadd: kadd_1}
+  sweep: {E: T_s4c_k1}
+  settings: {n_events: 1000000, seed: 1}
+  replicates: 2
+  outputs: {T: T_s4_k1_sim, v_retro: v_s4_k1_sim, nc_mean: nc_s4_k1_sim, t_sim: t_s4_k1_sim}
+  note: "the paper's 10^6 events per stiffness; two seeds"
+- id: run_area_s4_k0
+  model: spread_area_pss
+  inputs: {v: v_s4_k0_sim, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_s4_k0_sim}
+- id: run_area_s4_k001
+  model: spread_area_pss
+  inputs: {v: v_s4_k001_sim, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_s4_k001_sim}
+- id: run_area_s4_k01
+  model: spread_area_pss
+  inputs: {v: v_s4_k01_sim, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_s4_k01_sim}
+- id: run_area_s4_k1
+  model: spread_area_pss
+  inputs: {v: v_s4_k1_sim, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_s4_k1_sim}
+- id: run_val_ctrl
+  model: motor_clutch_reinforced
+  inputs: {nm: nm_low_5c, nc: nc_low_5c, Fm: Fm_5b, vu: vu_5b, kon: kon_5b, koff: koff_5b, Fb: Fb_5b, kc: kc_5b, r_adh: r_adh_added, kadd: kadd_0, Fthresh: Fthresh_s4, ncmax: ncmax_s4}
+  sweep: {E: T_5e_ctrl}
+  settings: {n_events: 200000, seed: 1}
+  replicates: 2
+  outputs: {T: T_val_ctrl, v_retro: v_val_ctrl}
+  note: "the Fig. 5 untreated cell (nm = 250, nc = 150) at the four PA gel moduli of Fig. 5e; 2 x 10^5 events, two seeds"
+- id: run_val_tgf
+  model: motor_clutch_reinforced
+  inputs: {nm: nm_high_5c, nc: nc_high_5c, Fm: Fm_5b, vu: vu_5b, kon: kon_5b, koff: koff_5b, Fb: Fb_5b, kc: kc_5b, r_adh: r_adh_added, kadd: kadd_0, Fthresh: Fthresh_s4, ncmax: ncmax_s4}
+  sweep: {E: T_5e_tgf}
+  settings: {n_events: 200000, seed: 1}
+  replicates: 2
+  outputs: {T: T_val_tgf, v_retro: v_val_tgf}
+  note: "the Fig. 5 TGFβ-treated cell (nm = nc = 500) at the four PA gel moduli of Fig. 5e; 2 x 10^5 events, two seeds"
+- id: run_area_val_ctrl
+  model: spread_area_pss
+  inputs: {v: v_val_ctrl, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_val_ctrl}
+- id: run_area_val_tgf
+  model: spread_area_pss
+  inputs: {v: v_val_tgf, Atot: Atot_added, vpoly: vpoly_added, Lnuc: Lnucleus}
+  outputs: {A: A_val_tgf}
+- id: run_tsim_k1
+  model: motor_clutch_reinforced
+  inputs: {Fm: Fm_s4, vu: vu_s4, kon: kon_s4, koff: koff_s4, Fb: Fb_s4, kc: kc_s4, r_adh: r_adh_added, nm: nm_s4, nc: nc_s4, Fthresh: Fthresh_s4, ncmax: ncmax_s4, kadd: kadd_1, E: E_gel_27}
+  settings: {n_events: 1000000, seed: 1}
+  replicates: 2
+  outputs: {t_sim: t_sim_k1_27}
+  note: "the simulated time reached by the paper's 10^6 events, for the S4b cell with kadd = 1.0 /s at 2.7 kPa"
+- id: run_opt_fig
+  model: traction_optimum
+  inputs: {T: T_5c_high}
+  outputs: {E_opt: E_opt_fig}
+  note: "the largest of the nine points read from the dashed line of Fig. 5c"
+- id: run_opt_sim
+  model: traction_optimum
+  inputs: {T: T_5c_high_sim}
+  outputs: {E_opt: E_opt_sim}
+- id: run_force_ctrl
+  model: total_force_product
+  inputs: {T: T_5e_ctrl, A: A_5e_ctrl}
+  outputs: {F: F_prod_ctrl}
+- id: run_force_tgf
+  model: total_force_product
+  inputs: {T: T_5e_tgf, A: A_5e_tgf}
+  outputs: {F: F_prod_tgf}
+# Added by the audit: the peak position of the Fig. 5c solid line, plotted and simulated (the caption's
+# "shifts the peak traction to a higher stiffness" compares it with the dashed line's).
+- id: run_opt_fig_low
+  model: traction_optimum
+  inputs: {T: T_5c_low}
+  outputs: {E_opt: E_opt_fig_low}
+  note: "the largest of the nine points read from the solid (nm = 250, nc = 150) line of Fig. 5c"
+- id: run_opt_sim_low
+  model: traction_optimum
+  inputs: {T: T_5c_low_sim}
+  outputs: {E_opt: E_opt_sim_low}

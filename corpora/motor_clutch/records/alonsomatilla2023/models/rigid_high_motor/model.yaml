@@ -1,0 +1,15 @@
+id: rigid_high_motor
+name: high-motor limit on a rigid substrate (Eqs. S55 and S57)
+role: model
+stated: {page: 38, quote: "Equation (S55) is in very good agreement with the stochastic model results", where: "Eqs. S55, S57"}
+equation: >-
+  n_b* -> tau e^{1/omega} Gamma(0, 1/omega) / (tau e^{1/omega} Gamma(0, 1/omega) + omega);
+  T* -> G^{30}_{23}(1/omega | 1,1; 0,0,0) / Gamma(0, 1/omega) x n_b*
+inputs:
+  tau:   {quantity: clutch_kinetic_parameter, unit: dimensionless}
+  omega: {quantity: dimensionless_motor_velocity, unit: dimensionless}
+outputs:
+  T:  {quantity: dimensionless_traction, unit: dimensionless}
+  nb: {quantity: fraction_bound_clutches, unit: dimensionless}
+settings: {}
+stochastic: false

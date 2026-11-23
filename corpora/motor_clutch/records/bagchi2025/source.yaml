@@ -1,0 +1,75 @@
+id: bagchi2025
+kind: article
+title: Fast yet force-effective mode of supracellular collective cell migration due to extracellular force transmission
+authors: [Amrit Bagchi, Bapi Sarker, Jialiang Zhang, Marcus Foston, Amit Pathak]
+year: 2025
+venue: PLoS Comput Biol 21(1), e1012664
+doi: 10.1371/journal.pcbi.1012664
+file: corpus/motor_clutch/2025_Bagchi_with_SI.pdf
+page_range: [1, 47]
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-21"}
+notes: >
+  PDF pages 1-38 are the article with its supporting-information captions; pages 39-47 are
+  the joined supporting files: S1 Table (base simulation parameters, p. 39; its symbol column
+  survives only in the page image, the text layer has names and values), S2 Table (p. 41),
+  S3 Table (p. 42) and S1-S5 Figs (pp. 43-47, images without text). Measured data are on
+  Figshare and the code on Zenodo; neither is in this record (the code is the record
+  bagchi_code).
+
+  The model is a one-dimensional chain (not a vertex model): cell, ligand and substrate
+  layers of Kelvin-Voigt springs in series, linked by cell-ligand and ligand-substrate
+  springs (Eqs 1-8), integrated by forward Euler with a protrusion-at-rest rule and
+  strain-threshold cell division. Its printed results (rest after 6 vs 21 min; velocity
+  and traction ratios ~1.38, ~2.42, ~1.7, ~1.8, "twice"; Figs 6-11 kymographs and
+  efficiencies) are recorded where printed as numbers, but the chain itself is recorded
+  as not runnable: the paper does not give the time step, the number of nodes, the rest
+  criterion, the clutch binding rule beyond "nearest ligand node", or the units the
+  equations are solved in, and its strains and displacements are mixed in Eqs 3 and 6.
+  Those results are therefore not compared; see the questions.
+
+  What is checked is every closed form the paper gives for the inputs of that chain,
+  against the profiles it plots: Eq 10 (threshold division strain), Eq 11 (cell spring
+  stiffness) and Eq 12 (cell damping) with the S2 Table parameters against Fig 8j-l and
+  with the S3 Table parameters against Fig 9a-c (connected and disconnected); Eq 13
+  (ligand binding probability) with the six alpha values of Fig 10l against the six
+  curves of Fig 10k; and Eq 14 (linear substrate-stiffness gradient) with the five k_min
+  of the Fig 11l legend against the five lines of Fig 11k. All curves were read with the
+  record's own code (figures/_panel.py). The centre node of the Gaussian profiles and of
+  the arctangent, and x_max of Eq 14, are not stated; they are added inputs taken from the
+  plotted node ranges, with alternatives.
+
+  Findings in brief: Eq 10 reproduces Figs 8j and 9c with both tables. Eq 11 as printed
+  gives values about 81 times the plotted ones at the edges (398 vs 4.9 nN/um), and with
+  the S2 Table width (sigma_k = 10) it also misses the shape of Fig 8k; Eq 12 as printed
+  gives an amplitude about nine times the plotted one; the S2/S3 Tables state no units.
+  Eq 13 as printed (tan^-1(alpha(-x_c) + 1.5)/3) gives negative probabilities; a variant
+  (tan^-1(-alpha x_c) + 1.5)/3, evident from Fig 10k, is run beside it. Eq 14 reproduces
+  Fig 11k. Two experimental statements disagree between Results and Methods (softer gel
+  0.6 vs 0.3 kPa; collagen alignment 16 h vs 2 h in the magnet), compared as consistency.
+
+  Left out: the experimental measurements (Figs 1-5, S2, S3: velocities, tractions,
+  strain energies, stresses, correlation functions, chi4, cell areas, divisions), which
+  feed no model of this paper and are mostly kymographs and box plots of data held on
+  Figshare; the scalar ratios the text prints from them (1.56, 1.34, 23%, 26%, 31%, 33%,
+  1/5, 1/4) are recorded only where two printed statements of the same ratio can be
+  compared. Fig 9l is a stacked bar chart (the disconnected bar is drawn on top of the
+  connected one), whose ratios the text prints only approximately ("~1.38", "~2.42"), so
+  it gets no verdict and was not read. The S1 Table cites references [1] and [2] for F_p,
+  k_c and k_c-l, but the reference list of that table (S1 Table References) is not in the
+  PDF, so those parameters cannot be traced to the motor-clutch base sets (chan2008,
+  bangasser2013/2017); the paper's own motor-clutch citation for the model is ref. 58
+  (Schaumann et al. 2018), not the Chan-Odde line.
+
+  Figure pass (2026-11-21): every other panel that plots values was read with calibrated
+  code (figures/_kit.py, _stack.py, settings in _specs.py; figures.md lists each panel).
+  Measurements now recorded as figure data: Fig 1k-n, 1p, 2m-p, 4a-b, 4d-f, 4i-n and
+  S1d-f, S2a-f, S3a-d (box plots by their medians, histograms bin by bin). Simulated
+  results recorded as figure data: Figs 6h-k, 7a-d, 8m, 9l, 9o, 10l-m, 11l and S4i, S4l,
+  S5; they have no runnable model here (q_sim_figures_not_compared). The two-colour bars of
+  Fig 9l and S4i Fig are run through small processing models in both readings (stacked,
+  overlaid) and compared with the ratios the text prints, and the medians of S2a and S3a
+  Figs with the printed AF/RF speed ratios. Left out, with reasons in figures.md:
+  micrographs, schematics, kymographs and heat maps, the trajectory and contour plots of
+  Fig 1c-d, 1g-h, the scatter of Fig 1o, the polar histograms and overlapping cumulative
+  curves of Fig 3c-i and S3e-i, Fig 4c, and the spiky oscillating traces of Fig 9f, 9i,
+  S4c, S4f.

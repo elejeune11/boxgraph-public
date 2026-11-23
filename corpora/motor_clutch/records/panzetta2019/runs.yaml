@@ -1,0 +1,78 @@
+# Every input is added (added.yaml): the paper prints none (q_params_unstated).
+# Each curve run sweeps the x axis of the figure reading it is compared with.
+- id: run_s13l
+  model: clutch_canonical_cycle
+  inputs: &canon {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, x0: x0_canonical_added}
+  sweep: {ks: figS13l_flow}
+  outputs: {v_mean: s13l_flow_pred, t_cycle: s13l_tcycle_pred}
+- id: run_s13r_blue
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_blue_added}
+  sweep: {ks: figS13r_blue_flow}
+  outputs: {v_mean: s13r_blue_flow_pred, t_cycle: s13r_blue_tcycle_pred}
+- id: run_s13r_purple
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_purple_added}
+  sweep: {ks: figS13r_purple_flow}
+  outputs: {v_mean: s13r_purple_flow_pred, t_cycle: s13r_purple_tcycle_pred}
+- id: run_s13r_green
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_green_added}
+  sweep: {ks: figS13r_green_flow}
+  outputs: {v_mean: s13r_green_flow_pred, t_cycle: s13r_green_tcycle_pred}
+- id: run_f9r_blue
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_blue_added}
+  sweep: {ks: fig9r_blue_flow}
+  outputs: {v_mean: f9r_blue_flow_pred, t_cycle: f9r_blue_tcycle_pred}
+- id: run_f9r_purple
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_purple_added}
+  sweep: {ks: fig9r_purple_flow}
+  outputs: {v_mean: f9r_purple_flow_pred, t_cycle: f9r_purple_tcycle_pred}
+- id: run_f9r_green
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_green_added}
+  sweep: {ks: fig9r_green_flow}
+  outputs: {v_mean: f9r_green_flow_pred, t_cycle: f9r_green_tcycle_pred}
+- id: run_f9l_blue
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, ks: ks_fig9l_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_blue_added}
+  sweep: {nc: fig9l_blue_flow}
+  outputs: {v_mean: f9l_blue_flow_pred, t_cycle: f9l_blue_tcycle_pred}
+- id: run_f9l_purple
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, ks: ks_fig9l_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_purple_added}
+  sweep: {nc: fig9l_purple_flow}
+  outputs: {v_mean: f9l_purple_flow_pred, t_cycle: f9l_purple_tcycle_pred}
+- id: run_f9l_green
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, ks: ks_fig9l_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_green_added}
+  sweep: {nc: fig9l_green_flow}
+  outputs: {v_mean: f9l_green_flow_pred, t_cycle: f9l_green_tcycle_pred}
+# single points for the refinement series (solver tolerance, failure threshold)
+- id: run_two_spring_ref
+  model: clutch_two_spring_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, l: l_added, x0: x0_purple_added, ks: ks_fig9l_added}
+  outputs: {v_mean: ref_two_spring_flow, t_cycle: ref_two_spring_tcycle}
+  note: "one point (ks = 30 pN/nm, the middle x0) at which the ODE numerics are refined"
+- id: run_canonical_ref
+  model: clutch_canonical_cycle
+  inputs: {nm: nm_added, Fm: Fm_added, vu: vu_added, nc: nc_added, kon: kon_added, koff: koff_added, Fb: Fb_added, kc: kc_added, r: r_added, x0: x0_canonical_added, ks: ks_fig9l_added}
+  outputs: {v_mean: ref_canonical_flow, t_cycle: ref_canonical_tcycle}
+  note: "one point (ks = 30 pN/nm) at which the ODE numerics are refined"
+# Fig. S1: the printed fit equations against the plotted lines, and PU's Young's modulus from its shear slope
+- id: run_s1_tensile
+  model: s1_tensile_fit
+  inputs: {E: E_pdms_fit_legend}
+  sweep: {eps: s1_pdms_line}
+  outputs: {sigma: s1_pdms_line_pred}
+- id: run_s1_shear
+  model: s1_shear_fit
+  inputs: {G: G_pu_fit_legend}
+  sweep: {gamma: s1_pu_line}
+  outputs: {tau: s1_pu_line_pred}
+- id: run_pu_youngs
+  model: youngs_from_shear
+  inputs: {G: G_pu_fit_legend, nu: nu_pu_added}
+  outputs: {E: E_pu_pred}

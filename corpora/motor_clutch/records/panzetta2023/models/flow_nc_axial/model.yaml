@@ -1,0 +1,26 @@
+id: flow_nc_axial
+name: mean retrograde flow and averages of the modified clutch model (axial strain) with as many motors as clutches
+role: model
+stated: {page: 5, printed_page: "5", quote: "number is always set equal to the clutches", where: "Sec. 3.2; Eqs. 2-6, 10-12"}
+equation: "clutch_axial_ssa with nm = nc (p. 5); with ks^eps0 = 0 the canonical model"
+inputs:
+  nc:   {quantity: clutch_number, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: clutch_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  ke:   {quantity: orthogonal_spring_stiffness, unit: pN/nm}
+  l:    {quantity: orthogonal_spring_rest_length, unit: nm}
+  eps0: {quantity: residual_strain, unit: dimensionless}
+outputs:
+  v_retro:  {quantity: retrograde_flow_rate, unit: nm/s, description: "time average of vf over the run (q_average)"}
+  n_eng:    {quantity: engaged_clutch_number, unit: dimensionless}
+  F_clutch: {quantity: clutch_force_total, unit: pN, description: "time average of the summed clutch force, positive in the retrograde direction"}
+  x_sub:    {quantity: substrate_position, unit: nm, description: "time average of xs, positive in the retrograde direction"}
+  t_cycle:  {quantity: cycle_time, unit: s}
+settings: {n_events: 100000, seed: 1, average: time}
+stochastic: true
+built_from: [clutch_axial_ssa]

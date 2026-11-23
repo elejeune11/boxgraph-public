@@ -1,0 +1,56 @@
+# ---- dimensional motor-clutch parameters (Table 1, SI Table 2 notes) ----
+- {id: n_motors, name: number of myosin motors in the cellular protrusion, dimension: dimensionless, description: "nm"}
+- {id: motor_stall_force, name: stall force of a single myosin motor, dimension: "[force]", description: "Fm"}
+- {id: unloaded_motor_velocity, name: load-free velocity of the myosin motors, dimension: "[length]/[time]", description: "vu"}
+- {id: n_clutches, name: number of clutches in the cellular protrusion, dimension: dimensionless, description: "nc"}
+- {id: clutch_on_rate, name: clutch association rate constant, dimension: "1/[time]", description: "kon"}
+- {id: clutch_off_rate_unloaded, name: unloaded clutch dissociation rate constant, dimension: "1/[time]", description: "koff"}
+- {id: bond_rupture_force, name: characteristic clutch-bond rupture force, dimension: "[force]", description: "Fb"}
+- {id: clutch_stiffness, name: molecular clutch stiffness, dimension: "[force]/[length]", description: "kappa_c"}
+- {id: substrate_stiffness, name: compliant substrate stiffness, dimension: "[force]/[length]", description: "kappa_s"}
+- {id: reinforcement_threshold_force, name: load-dependent clutch reinforcement threshold force, dimension: "[force]", description: "Fth"}
+
+# ---- inputs of the parameter estimates (SI pp. 19-20) ----
+- {id: motor_surface_density, name: myosin-II surface density of the fission yeast contractile ring, dimension: "1/[length]**2", description: "rho_myo^ring"}
+- {id: clutch_surface_density, name: surface density of adhesion molecules, dimension: "1/[length]**2", description: "rho_c"}
+- {id: protrusion_length, name: length of the cylinder approximating the protrusion, dimension: "[length]", description: "l_prot"}
+- {id: protrusion_diameter, name: diameter of the cylinder approximating the protrusion, dimension: "[length]", description: "d_prot"}
+- {id: protrusion_surface_area, name: lateral surface of the protrusion cylinder, dimension: "[length]**2"}
+- {id: thermal_energy, name: thermal energy kBT, dimension: "[energy]"}
+- {id: bond_transition_distance, name: talin-vinculin clutch transition distance (Bell fit), dimension: "[length]", description: "Delta in SI legend C"}
+- {id: focal_adhesion_diameter, name: focal adhesion diameter, dimension: "[length]", description: "ds"}
+- {id: substrate_youngs_modulus, name: Young's modulus of the substrate, dimension: "[pressure]", description: "Es"}
+- {id: optimal_youngs_modulus, name: substrate Young's modulus at which the time-averaged traction is maximal, dimension: "[pressure]"}
+
+# ---- dimensionless groups (Table 2) ----
+- {id: myosin_activity, name: "myosin activity parameter F = nm Fm / nc Fb", dimension: dimensionless}
+- {id: clutch_kinetic_parameter, name: "clutch kinetic parameter tau = kon / koff", dimension: dimensionless}
+- {id: dimensionless_motor_velocity, name: "dimensionless myosin unloaded velocity omega = vu kc / Fb koff", dimension: dimensionless}
+- {id: dimensionless_substrate_stiffness, name: "dimensionless substrate stiffness K = ks / nc kc", dimension: dimensionless}
+- {id: dimensionless_reinforcement_threshold, name: "dimensionless clutch reinforcement threshold force Delta = Fth / Fb", dimension: dimensionless}
+
+# ---- fitted constants of the scaling laws ----
+- {id: optimum_constant_c2, name: "constant C2 of the optimum substrate stiffness (Eqs. 6, S11, S12)", dimension: dimensionless}
+- {id: optimum_constant_c3, name: "constant C3 of the optimum substrate stiffness (Eqs. 6, S12)", dimension: dimensionless}
+
+# ---- results ----
+- {id: traction_force, name: time-averaged traction force on the substrate, dimension: "[force]", description: "T"}
+- {id: dimensionless_traction, name: "dimensionless time-averaged traction force T* = T / nc Fb", dimension: dimensionless}
+- {id: fraction_bound_clutches, name: "time-averaged fraction of bound clutches n_b* = n_b / nc", dimension: dimensionless}
+- {id: dimensionless_clutch_extension_rate, name: "time-averaged dimensionless clutch extension rate v_e*", dimension: dimensionless}
+- {id: optimal_substrate_stiffness, name: substrate stiffness at which the time-averaged traction is maximal, dimension: "[force]/[length]", description: "kappa_s^opt"}
+- {id: optimal_dimensionless_stiffness, name: "dimensionless optimum substrate stiffness K_opt = kappa_s^opt / nc kc", dimension: dimensionless}
+
+# ---- added in audit ----
+- {id: optimum_constant_c1, name: "constant C1 of the critical myosin activity (Eqs. 5, S20)", dimension: dimensionless}
+- {id: critical_myosin_activity, name: "critical myosin activity F_c-i^crit between the clutch-dominated and balanced regimes", dimension: dimensionless}
+- {id: critical_myosin_activity_rigid, name: "critical myosin activity F_c-i^crit on rigid substrates (open symbols of Fig. 2(C))", dimension: dimensionless, description: "the same regime border as critical_myosin_activity, but for K -> infinity; kept apart so that the soft-substrate law Eq. 5 is not compared with it"}
+- {id: optimal_myosin_activity, name: "myosin activity F_opt at which the time-averaged traction on a rigid substrate is maximal", dimension: dimensionless}
+- {id: optimal_motor_velocity, name: "dimensionless load-free myosin velocity omega_opt at which the high-motor traction on a rigid substrate is maximal", dimension: dimensionless}
+- {id: clutch_stiffness_parameter, name: "clutch stiffness parameter beta_c of Fig. 3 (kappa_c proportional to beta_c)", dimension: dimensionless}
+- {id: reduced_motor_velocity, name: "omega' = omega / beta_c, the load-free velocity parameter held fixed in Fig. 3", dimension: dimensionless}
+- {id: reduced_substrate_stiffness, name: "K' = K beta_c, the substrate stiffness parameter held fixed in Fig. 3", dimension: dimensionless}
+
+# ---- added for the relation to bell1978 (helper model clutch_off_rate_bell) ----
+- {id: clutch_force, name: force on one clutch, dimension: "[force]", description: "F_c = kappa_c x_c"}
+- {id: clutch_off_rate_loaded, name: effective dissociation rate of a clutch under force, dimension: "1/[time]", description: "k_off^load"}

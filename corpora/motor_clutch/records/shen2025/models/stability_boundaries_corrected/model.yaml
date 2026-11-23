@@ -1,0 +1,32 @@
+id: stability_boundaries_corrected
+name: as stability_boundaries, with the Gamma/gamma factor applied to both terms of the Jacobian entry J55
+role: model
+stated: {page: 14, printed_page: "014417-14", quote: "We compute the Jacobian matrix about the fixed points of the system", where: "Eq. A3"}
+equation: "J55 = -(Gamma/gamma)(nc0 k~c + k~s), the rest of A3 as printed"
+variant_of: stability_boundaries
+corrections:
+  - equation: Eq. A3
+    change: "J55 = -(Gamma/gamma)(nc0 k~c + k~s) instead of the printed -(Gamma/gamma) nc0 k~c - k~s"
+    evidence: >-
+      A3 is stated to be the Jacobian of Eq. A1 (= Eq. 18), whose fifth component is
+      (Gamma/gamma)[nc k~c (x~o - x~s) - k~s x~s]; its derivative with respect to x~s is
+      -(Gamma/gamma)(nc k~c + k~s). Every other entry of A3 equals the derivative of A1 (checked symbolically).
+built_from: [stability_boundaries]
+inputs:
+  w: {quantity: motor_rate_ratio_nd, unit: dimensionless}
+  Nm: {quantity: n_motors_total, unit: dimensionless}
+  kon: {quantity: clutch_on_rate_nd, unit: dimensionless}
+  koff: {quantity: clutch_off_rate_nd, unit: dimensionless}
+  fs: {quantity: stall_force_nd, unit: dimensionless}
+  fd: {quantity: detachment_force_nd, unit: dimensionless}
+  Fb: {quantity: rupture_force_nd, unit: dimensionless}
+  km: {quantity: motor_stiffness_nd, unit: dimensionless}
+  kc: {quantity: clutch_stiffness_nd, unit: dimensionless}
+  ks: {quantity: substrate_stiffness_nd, unit: dimensionless}
+  F: {quantity: external_load_nd, unit: dimensionless}
+  g: {quantity: friction_ratio, unit: dimensionless, description: "gamma/Gamma"}
+  Nc: {quantity: n_clutches_total, unit: dimensionless}
+outputs:
+  vu_hopf: {quantity: motor_velocity_nd, unit: dimensionless, description: "upper boundary of US, v~u0(Nc)"}
+  vu_unstable: {quantity: motor_velocity_nd, unit: dimensionless, description: "boundary between US and U"}
+settings: {vu_max: 15.0, vu_min: 0.001, n_grid: 3000, tol: 1.0e-6}

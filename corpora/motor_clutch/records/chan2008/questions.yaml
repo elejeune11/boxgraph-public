@@ -438,3 +438,235 @@
     magnetic-tweezers bead speeds, loading rates and stiffnesses, AFM moduli, spreading areas) are
     quantities no model here outputs. In the other direction, see andreu2021/q_xval_chan2008_none.
   citation: {page: 4, printed_page: "1689", quote: "Measurements of F-actin retrograde flow over a range of stiffness", where: "Fig. 3D"}
+# ==== cross-record validation with cms_code (2026-11-19): none added ===========================
+- id: q_xval_cms_code_none
+  kind: unstated_model
+  about: [motor_clutch, motor_clutch_E, force_velocity_eq3, off_rate_eq1, ksub_eq13, cerruti_force_eq11]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of cms_code,
+    the released MATLAB cell migration simulator of bangasser2017. cms_code is software: its data are the
+    shells' parameter values and constants (file and line), and none is measured, so there is nothing for
+    motor_clutch, force_velocity_eq3 or off_rate_eq1 to predict, although their rules are the code's
+    module rules (cms_code/rel_offrate_chan2008). In the other direction, no model of cms_code can be run
+    against this record's flow, force or failure measurements (cms_code/q_xval_chan2008_none).
+  citation: {page: 11, printed_page: "SOM p. 4", quote: "according to a linear force-velocity relation given by", where: "Eqs. 3-4"}
+# cross-record validation against prahl2020 (2026-11-19): none added
+- id: q_xval_prahl2020_none
+  kind: unstated_model
+  about: [motor_clutch, motor_clutch_E, force_velocity_eq3, off_rate_eq1]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    prahl2020. prahl2020 measures U251 glioma cell migration in rigid PDMS microchannels: drift
+    velocity and motility coefficient (with drugs, RGD peptide, Y-27632, latrunculin A and
+    microtubule-targeting agents), MSD curves, their histograms, EB1 growth speeds, cell length and
+    nucleus position. The models here describe a single filopodium (one motor-clutch ensemble with no
+    polymerization, nucleation or cell body) and output retrograde flow, traction force, a loaded
+    off-rate or a motor-limited filament velocity; none outputs a cell migration speed, motility
+    coefficient, MSD or microtubule growth speed, and prahl2020 measures no retrograde flow or
+    traction. prahl2020 cites this paper only for its module laws (prahl2020/q_xval_chan2008_none),
+    not for data either way.
+  citation: {page: 11, printed_page: "SOM p. 4", quote: "according to a linear force-velocity relation given by", where: "Eqs. 3-4"}
+# cross-record validation with bangasser2017 (2026-11-19)
+- id: q_xval_bangasser2017_unused
+  kind: choice
+  about: [motor_clutch_E, motor_clutch, force_velocity_eq3]
+  text: >-
+    (Cross-record validation.) Of bangasser2017's measurements only the ECFN flow of its Fig. 3c
+    (bangasser2017/fig3c_ecfn_pts, this paper's own Fig. 3D data redrawn) is used, as fit_quality
+    (val_flow_bangasser2017_fig3c), since this paper's nc, kon and Δ were tuned to it. Not used: the
+    ECFN traction strain energy (bangasser2017/fig3f_ecfn_pts, figs4d_ecfn_pts, figs4g_ecfn_pts and the
+    ECFN bar of fig3e_bars_pts), a strain energy of the gel's traction field that no model here outputs
+    (motor_clutch_E gives a mean and a peak force per filopodium; the stored-energy Eq. 9 is not in the
+    record); the ECFN composite metric (bangasser2017/fig4f_ecfn_pts), derived and output by no model
+    here; and every U251 glioma measurement (flow, strain energy, area, aspect ratio, motility, MSD), for
+    which this paper states no parameter set: its Table S1 set is for neurons, and running it on glioma
+    cells would test a set nobody proposed. force_velocity_eq3 needs a load force, which no bangasser2017
+    measurement gives together with a velocity.
+  citation: {page: 25, printed_page: "SOM p. 18", quote: "In order to test how well our model predictions of F-actin", where: text}
+# ==== CROSS-VALIDATION against liu2025 (2026-11-21): none added ====
+- id: q_xval_liu2025_none
+  kind: unstated_input
+  about: [motor_clutch, motor_clutch_E, off_rate_eq1, force_velocity_eq3, ksub_eq13, cerruti_force_eq11, 'liu2025/v_WT_data_fig2d', 'liu2025/v_KD_data_fig2d', 'liu2025/P_KD_data_fig2c', 'liu2025/koff_data_figS4', 'liu2025/v_exp_ed4b']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    liu2025, which cites this paper (ref. 7) only as an earlier clutch model, for its stiff clutches
+    and linear force-velocity law and for nearly constant filopodial flow, never comparing with its
+    data. liu2025's measurements are re-plotted from other works: MEF traction stress and actin flow
+    against modulus and blebbistatin (Fig. 2c,d, Fig. 3a,b, Extended Data Fig. 5; ref. 13 =
+    elosegui2016), vinculin-mutant traction and flow (Fig. 4c,d, ref. 21), force-loading rates
+    (Fig. 4f, ref. 20), talin force-extension (Fig. 4g, ref. 22), flow on viscous substrates
+    (Extended Data Fig. 4b, ref. 73), plus its own myosin stack densities (Fig. 3e) and the
+    integrin-fibronectin catch-bond off-rates of Fig. S4. motor_clutch_E gives flow from modulus, but
+    its Table S1 set is for chick forebrain neuron filopodia (nm, nc, kon tuned to them) and neither
+    paper states it for MEFs, as q_no_validation_elosegui2016 sets out for the same ref. 13 data; its
+    traction is a force in pN, not the stress in Pa plotted by Liu, and a viscous substrate is
+    outside it. off_rate_eq1 with Chan's koff and Fb describes this paper's generic neuron clutch,
+    not the alpha5beta1-fibronectin bond of Fig. S4, whose catch-bond data no one proposed a single
+    Bell term with these values to fit. cerruti_force_eq11 needs bead displacements, ksub_eq13 gives
+    a stiffness nobody measured there, and force_velocity_eq3 needs a load force measured with a
+    velocity, which liu2025 does not give. No model here outputs a loading rate per clutch, a talin
+    extension or a myosin density. In the other direction, see liu2025/q_xval_chan2008_none.
+  citation: {page: 25, printed_page: "SOM p. 18", quote: "In order to test how well our model predictions of F-actin", where: text}
+# ==== CROSS-VALIDATION against panzetta2019 (2026-11-21): none added ====
+- id: q_xval_panzetta2019_none
+  kind: choice
+  about: [motor_clutch, motor_clutch_E, off_rate_eq1, force_velocity_eq3, ksub_eq13, cerruti_force_eq11]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    panzetta2019. It cites this paper (ref. 26) only among clutch-model works and measures none of
+    the quantities the models here give: no retrograde flow, traction force, clutch off-rate or
+    substrate spring constant. Its measurements are intracellular tracer MSDs and radii of gyration,
+    cell and nucleus areas, shape factors, cell orientation counts and AFM cell moduli (fibroblasts and
+    preosteoblasts on prestretched PDMS and PU), and the stress-strain curves of its substrates. No
+    model here outputs any of these. force_velocity_eq3 would need a load force measured together with a
+    velocity, which panzetta2019 does not give. The shared shape of force_velocity_eq3 and
+    panzetta2019/clutch_canonical_cycle (its Eq. s.5) relates two models; it is not a validation. In
+    the other direction, see panzetta2019/q_xval_chan2008_none.
+  citation: {none: "the absence of matching measurements is a property of the other record, panzetta2019"}
+
+# ==== cross-record validation with panzetta2023 (2026-11-21): none added =========================
+- id: q_xval_panzetta2023_none
+  kind: choice
+  about: [motor_clutch, motor_clutch_E, off_rate_eq1, force_velocity_eq3, ksub_eq13, cerruti_force_eq11]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    panzetta2023, because that paper has none. It is a simulation study, so its data are Table 1
+    parameters (reported), outputs of its own Gillespie simulations (predicted) and arithmetic on
+    them (derived). force_velocity_eq3 and panzetta2023/clutch_axial_ssa share a shape (a velocity
+    from a force, a length, a stiffness and a velocity), which relates two models; it is not a
+    validation. For the other direction, panzetta2023's models against this paper's measured flows,
+    see panzetta2023/q_xval_chan2008_none.
+  citation: {none: "the absence of measurements is a property of the other record, panzetta2023"}
+# cross-record validation against shen2025 (2026-11-21): none added
+- id: q_xval_shen2025_none
+  kind: choice
+  about: [motor_clutch, motor_clutch_E, off_rate_eq1, force_velocity_eq3, ksub_eq13, cerruti_force_eq11]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    shen2025, because that paper has none: it is a theory paper, its data are Table I-II parameters
+    and model results, and its figures.md says every plot is a model result. force_velocity_eq3 and
+    shen2025/motor_force_velocity share a shape (a velocity from a force and a velocity), which
+    relates two models; it is not a validation. In the other direction, see
+    shen2025/q_xval_chan2008_none.
+  citation: {none: "the absence of measurements is a property of the other record, shen2025"}
+# cross-record validation against alonsomatilla2023 (2026-11-21): none added
+- id: q_xval_alonsomatilla2023_none
+  kind: choice
+  about: [motor_clutch, motor_clutch_E, off_rate_eq1, force_velocity_eq3, ksub_eq13, cerruti_force_eq11]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    alonsomatilla2023, because that paper has none: it is a theory paper (generalized mean-field
+    motor-clutch model), its data are Table 1-2 parameters and model results, and its figures.md
+    says every plotted value is a model result. off_rate_eq1 and
+    alonsomatilla2023/clutch_off_rate_bell share a shape (a Bell slip law, rate from force and
+    rate), which relates two models; it is not a validation. In the other direction, that paper's
+    models against this paper's measured flows, failure frequencies and peak force, see
+    alonsomatilla2023/q_xval_chan2008_none.
+  citation: {none: "the absence of measurements is a property of the other record, alonsomatilla2023"}
+# cross-record validation against baker2015 (2026-11-21): none added
+- id: q_xval_baker2015_none
+  kind: unstated_model
+  about: [motor_clutch, motor_clutch_E, ksub_eq13, cerruti_force_eq11, off_rate_eq1, force_velocity_eq3]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against baker2015's measurements.
+    baker2015 (which cites this paper as ref. 39) measures moduli (fibres, networks, DexMA gels, collagen),
+    hMSC spread area, proliferation, FA number, area and size, pFAK, fibre recruitment, construct contraction,
+    network indentation force, and bead total displacement against distance (Supp. Fig. 6b). None of these is
+    an output of a model here: motor_clutch and motor_clutch_E give retrograde flow, mean traction and peak
+    filopodial force; ksub_eq13 a substrate spring constant; cerruti_force_eq11 a point force and its
+    distance from two bead displacements; off_rate_eq1 and force_velocity_eq3 a loaded off rate and a
+    filament velocity. baker2015 measures none of flow, traction force or bead pairs, and its cells (hMSCs,
+    whole-cell spreading on fibre networks) are not this paper's neuronal filopodia. baker2015 cites this
+    paper only for the qualitative "load-and-fail" picture of cyclic bead motion on soft hydrogels (its p. 4),
+    a trend no measurement there quantifies in a form these models output. Testing that would need a model of
+    bead displacement against distance from a cell, which neither paper states. See also
+    baker2015/q_xval_chan2008_none.
+  citation: {none: "the absence of a measured quantity these models output is a property of the other record, baker2015"}
+# cross-record validation against cao2017 (2026-11-21): none added
+- id: q_xval_cao2017_none
+  kind: unstated_model
+  about: [motor_clutch, motor_clutch_E, ksub_eq13, cerruti_force_eq11, off_rate_eq1, force_velocity_eq3]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of cao2017.
+    cao2017 is a model paper; its measured data are all re-plotted from baker2015 (its ref. 16): average
+    FA area on soft and stiff hydrogels and fibre networks (Fig. 5D and its p. 5 values), FA size
+    normalized to the stiff fibre network (Fig. S7), and fibre recruitment box plots (Fig. 3D). None is an
+    output of a model here: motor_clutch and motor_clutch_E give retrograde flow, mean traction and peak
+    filopodial force; ksub_eq13 a substrate spring constant; cerruti_force_eq11 a point force; off_rate_eq1
+    and force_velocity_eq3 a loaded off rate and a filament velocity. No model here has an adhesion size or
+    a fibre network, and the cells (hMSCs on DexMA) are not this paper's neuronal filopodia. These are the
+    same measurements already set aside against baker2015 itself (q_xval_baker2015_none). This paper
+    predates cao2017 and cannot cite it; cao2017 cites this paper only for integrin binding taking "a few
+    seconds" (cao2017 p. 2). The shape match of motor_clutch_E with cao2017/keff_1d relates two models; it
+    is not a validation. In the other direction, see cao2017/q_xval_chan2008_none.
+  citation: {none: "the absence of a measured quantity these models output is a property of the other record, cao2017"}
+# cross-record validation against bagchi2025 (2026-11-21): none added
+- id: q_xval_bagchi2025_none
+  kind: unstated_model
+  about: [motor_clutch, motor_clutch_E, ksub_eq13, cerruti_force_eq11, off_rate_eq1, force_velocity_eq3]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of bagchi2025.
+    bagchi2025 measures MCF10A epithelial monolayers expanding on aligned (AF) or random (RF) collagen
+    fibres over modified polyacrylamide gels of one stiffness per experiment (about 2.4 kPa; 0.6 or 0.3 kPa
+    in the softer repeat): monolayer and leading-edge speeds (um/hr), strain rates, traction stresses (Pa)
+    and their profiles across the monolayer, intercellular stresses, correlation functions, chi_4, cell
+    areas, aspect ratios, division counts, fibre-angle histograms and an FTIR spectrum (bagchi2025 Figs
+    1-4, S1-S3). motor_clutch and motor_clutch_E give a single filopodium's F-actin retrograde flow (nm/s),
+    mean traction force and peak force (pN); none is a monolayer migration speed or a traction stress, and
+    their one condition variable is substrate stiffness, while bagchi2025 compares fibre alignments on the
+    same gel (the softer-gel repeat again compares AF with RF). ksub_eq13, cerruti_force_eq11, off_rate_eq1
+    and force_velocity_eq3 give a substrate spring constant, a point force, a loaded off rate and a
+    filament velocity, none of which bagchi2025 measures. This paper predates bagchi2025 and cannot cite
+    it; bagchi2025 cites this paper (its ref. 48) only for the relay of force by myosin on actin bundles
+    (bagchi2025 p. 8). In the other direction, see bagchi2025/q_xval_chan2008_none.
+  citation: {none: "the absence of a measured quantity these models output is a property of the other record, bagchi2025"}
+# cross-record validation against mekhdjian2017 (2026-11-22): none added
+- id: q_xval_mekhdjian2017_none
+  kind: unstated_model
+  about: [motor_clutch, motor_clutch_E, ksub_eq13, cerruti_force_eq11, off_rate_eq1, force_velocity_eq3]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    mekhdjian2017. mekhdjian2017 measures mammary epithelial cells (MCF10A, MCF10AT, PyMT, Met1): whole-cell
+    spread area (um^2), average traction stress (Pa) and total traction force (nN) on 1.1-13.8 kPa gels
+    (Figs. 4b, 4d, 5e, S3c, S5), MTS force per sensor and per cell, invasion and protrusion indices, transit
+    times and passage through constrictions, AFM cell stiffness, adhesion lifetimes, lengths and axial
+    positions, protein levels and patient survival. It measures no retrograde flow. motor_clutch and
+    motor_clutch_E give one neuron filopodium's retrograde flow, mean traction force and peak force (pN) on
+    a substrate spring; none is a cell's spread area, a traction stress over a cell, or a whole-cell force
+    in nN (which mekhdjian2017 obtains as stress times spread area), and Table S1 is a set for chick
+    forebrain neurons, with no parameters for these cells. The pN of mekhdjian2017's MTS force per sensor
+    is the force on one integrin tension sensor, not the bundle's substrate force (F_mean) or the Cerruti
+    peak force. cerruti_force_eq11 needs two bead displacements along a filopodium and their separation,
+    which mekhdjian2017 does not measure (its traction microscopy is whole-cell); its "same shape" as
+    mekhdjian2017/motor_clutch_reinforced is a shape of ports, not a shared measurement. ksub_eq13,
+    off_rate_eq1 and force_velocity_eq3 give a spring constant, a loaded off rate and a filament velocity,
+    none measured there. This paper predates mekhdjian2017, which cites it for the model it modifies
+    (mekhdjian2017 Supplement p. 24) and does not compare its data with this paper's model. In the other
+    direction, see mekhdjian2017/q_xval_chan2008_none.
+  citation: {none: "the absence of a measured quantity these models output is a property of the other record, mekhdjian2017"}
+# ==== cross-record validation with owen2017 (2026-11-22) ========================================
+- id: q_xval_owen2017_unused
+  kind: choice
+  about: [motor_clutch, motor_clutch_E, cerruti_force_eq11, ksub_eq13, ksub_owen_fibrin_added]
+  text: >-
+    (Cross-record validation.) motor_clutch is judged against owen2017's speed of actin relative to its
+    adhesion (Table 1 row 5, 58 ± 3.1 nm/min, and the stated 0-3 nm/s elongation rate), with Table S1's
+    neuron-tuned set and an added κsub for the fibrin gel. The κsub is open: owen2017 measures no local
+    stiffness. The primary value is owen2017's continuum formula on the bulk gel (0.141 pN/nm); the
+    alternatives run from 0.105 to 24 pN/nm (ksub_owen_fibrin_added). Over that whole span Table S1's
+    set gives a mean flow of about 76-109 nm/s (seed 1, 300 s), some 80-110 times the measured mean of
+    about 0.97 nm/s and far above the 0-3 nm/s range, so the verdict does not rest on the κsub choice. Reaching about 1 nm/s would need a
+    strongly stalled module (many more clutches than motors, owen2017's own reading on p. 10); neither
+    paper gives motor or clutch numbers for fibroblast adhesions, and tuning them to the measurement would
+    be a fit made here, so it is not entered. motor_clutch_E is not used: its Eq. 13 conversion (δ or the
+    fitted Δ = 277 nm) belongs to a filopodial point load on polyacrylamide, not a 0.5 um adhesion in
+    fibrin. Other owen2017 measurements are not used. The lab-frame α-actinin-1, paxillin, zyxin and fibrin
+    speeds (Table 1, S1) need a moving substrate; this model's anchor is fixed and its flow is relative to
+    it. Paxillin-fibrin slippage (row 10) is adhesion sliding on the matrix, which the model has no element
+    for. The speed difference |v_zyx| - |v_actn| (row 6) is not a speed of actin past the adhesion.
+    Fibrin displacement and strain profiles (Fig. 2D-H, S2) need a 3D continuum or network around the cell;
+    cerruti_force_eq11 needs two bead displacements along one filopodium and their separation, which
+    owen2017 does not measure. Rose plots, directional correlations and pair counts are directions, which
+    the model lacks. owen2017 measures no traction force, so F_mean and F_max have nothing to meet; the
+    rheology (S10) and localization error (S9B) are not cell mechanics.
+  citation: {none: "owen2017 cites this paper (p. 8, p. 9, Supp. pp. 6 and 24); neither paper states that a model of this record predicts a measurement of owen2017"}

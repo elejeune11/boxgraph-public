@@ -1,0 +1,215 @@
+# Relations to Elosegui-Artola et al. 2016 (record elosegui2016; ref-artola2016), checked 2026-11-21.
+# The programs cite ref-artola2016 only for the measured traction and flow they plot (q_code_data) and take
+# their catch-bond F_d values from it (Fd1_lin, Fd2_lin, ...), which elosegui2016 does not print (its catch-bond
+# coefficients are added values from andreu2021_code), so cited.yaml has no link. No program states a relation
+# to Elosegui's models. One is proposed: on a rigid substrate the shared substrate spring of Elosegui's
+# simulation and the local spring of Liu's model both drop out, and what is left is the same clutch ensemble.
+# mapping: b's input symbol -> expression in a's input symbols, in each model's port units.
+- id: rel_elosegui_no_talin_rigid_approximated_by_linear_port
+  kind: approximated_by
+  a: elosegui2016/clutch_no_talin_sim
+  b: liu_code/linear_port
+  mapping:
+    E: "1000*E"
+    a_1: "0.75"
+    a_2: "ra"
+    v0: "vu"
+    Fst: "Fm"
+    sigma_m: "nm*1e6/(pi*ra**2)"
+    sigma_c: "nf*1e6/(pi*ra**2)"
+    kc: "1000*kc"
+    kon: "kont*dint"
+    l_yield: "0.1/kc"
+    k_off_1: "koff_scale*koff_a"
+    k_off_2: "koff_scale*koff_c"
+    F_d_1: "1/koff_b"
+    F_d_2: "1/koff_d"
+  output_map: {P: traction}
+  regime: {E: [100000, 1000000], nf: [2400, 3000], kont: [0.0006, 0.0009], dint: [300, 300], nm: [650, 900],
+           Fm: [1.8, 2.2], vu: [100, 140], kc: [0.00003, 0.00008], ra: [1700, 1700], koff_scale: [1, 1],
+           koff_a: [0.33, 0.42], koff_b: [-0.03, -0.023], koff_c: [0.00004, 0.00007], koff_d: [0.2, 0.25],
+           koff_g: [0, 0], koff_fend: [0.15, 0.15], ksub_factor: [1.396, 1.396]}
+  tolerance: 0.05
+  provenance: proposed
+  reason: >-
+    Both are the motor-clutch model with a linear force-velocity law for the motors (stall force Fst Nm = nm Fm,
+    free speed v0 = vu), clutches binding at kon = kont dint from a fixed pool (Nc = pi a_2^2 sigma_c = nf) and
+    unbinding by a two-exponential catch bond (Liu's k_off_i exp(F/F_d_i) is Elosegui's koff_a exp(koff_b f) +
+    koff_c exp(koff_d f) with F_d = 1/koff_b, 1/koff_d). They differ in the substrate: Elosegui loads all clutches
+    through one shared spring ksub = c E ra (load and fail), Liu puts a local spring k's = 4 pi a_1 E/9 in series
+    with each clutch, and Elosegui simulates the ensemble by Monte Carlo while Liu takes the stationary
+    master-equation distribution at a constant flow. On a rigid substrate (ksub >> nb kc and k's >> kc) both
+    substrate springs drop out: the clutches are stretched at the common flow v, their summed force balances the
+    motors, and Liu's steady state is the mean-field description of Elosegui's simulation, which it should
+    approximate for the ~2500-3000 clutches of an adhesion. The relation does not hold on soft substrates, where
+    the two substrate models differ by design (liu2025's relations.yaml says why no relation joins them there).
+  assumptions:
+    - "rigid-substrate regime only: E = 1e5-1e6 kPa gives ksub ~ 2e5-2e6 pN/nm against nb kc < 300 pN/nm, and (with a_1 = 0.75 nm, the code's linear WT value) k's ~ 100-1000 pN/nm against kc < 0.08 pN/nm"
+    - "the catch bond is restricted to Liu's two exponentials (koff_g = 0, no added low-force term, koff_scale = 1); the regime is around the code's values k_off = 0.3755 and 5.433e-5 1/s, F_d = -38.09 and 4.411 pN"
+    - "l_yield = 100 pN / kc (added): Elosegui's clutch spring is linear without limit; at 100 pN the catch bond's survival is below exp(-1e4), so the yield point is never reached"
+    - "regime around the code's linear WT set (kc = 0.05 pN/nm, kon = 0.23 1/s, sigma_m = 85 um^-2, a_2 = 1700 nm): a clutch gains kc v dt < 0.1 pN of load in Elosegui's 5 ms step, small against the F_d, and the steady state has a single stable root; the bistable linear KD set is left out"
+    - "only traction is compared (Elosegui's time-averaged substrate force over pi ra^2 against Liu's Fm/(pi a_2^2) at the steady flow). A scratch check at three regime points found traction within 1-2% (MC 155, 109, 207 Pa against 157, 111, 208 Pa) but the mean flow 11-16% higher in the MC, which averages over its start from v = vu with no bound clutches"
+    - "tolerance 0.05 (added, not stated by either paper): the single-run scatter and start-up transient of a 100 s simulation's mean traction"
+
+# Relations to Kong et al. 2009 (record kong2009; ref-kong2009), checked 2026-11-21: none.
+# The programs name Kong 2009 once, Linear_KD_WT_model.m lines 43-47: a commented-out alternative set of
+# two-exponential catch-bond constants ("% [Kong 2009] data": k_off_1 = 5.463, k_off_2 = 0.1381 1/s,
+# F_d_1 = -10.98, F_d_2 = 20.58 pN), presumably a fit to Kong's lifetime-force data. The program does not
+# use them, this record holds no datum for them, and kong2009 prints no such fit (only lifetime-force
+# curves and ln(events)-t lines), so cited.yaml has no link. No relation is stated, and none is proposed:
+# kong2009's models (series_bonds, 1/tau = 1/tau_1 + 1/tau_2; survival_first_order, ln N = ln N0 - k t)
+# have no counterpart among these programs, which take k_off(F) as given constants rather than as a model.
+
+# Relations to the paper of these programs, Liu et al. 2025 (record liu2025; ref-liu2025), checked 2026-11-21.
+# Each main program names the model of the paper it computes (its header comment), so the relations are
+# stated. The linear program is the paper's linear KD / linear WT model (Methods Eqs. 1, 4, 5/11, 8-10,
+# liu2025/steady_linear) in the code's symbols: the code's two-exponential catch bond k_off_i exp(F/F_d_i) is
+# Eq. 4 with F_d = kBT/x_t (k_off_1, F_d_1 < 0 the paper's k0'off, x't; k_off_2, F_d_2 the paper's k0off, xt),
+# a_1 is r, a_2 is R. The two differ only in how the root of Fc = Fm is found: the code reads it off a
+# 100-point log grid in v from 0.1 to 300 nm/s (MATLAB contour, linear in log10 v), liu2025/steady_linear
+# bisects to 1e-10, so a tolerance stands for the code's grid. One output per relation: traction and flow,
+# each in the regime of the linear WT set and of the linear KD set (Table T1). Unit conversions: none
+# (both in Pa, nm, pN, 1/s, um^-2). kBT is an input of liu2025/steady_linear only; the mapping folds it
+# into F_d.
+# Not related: liu2025/cusp_sigma_m shares linear_port's port dimensions only; it outputs the myosin
+# density and Young's modulus at the cusp of the saddle-node points of steady_linear, which the program
+# does not compute (it plots the contour but locates no cusp). Fu_from_xu and xt_from_Fd are our unit
+# conversions of the code's constants, not models of the paper. wt2_model and master_equation are the
+# code's forms of the WT-2 model and the Appendix I master equation, which liu2025's record does not hold
+# as models.
+- id: rel_steady_linear_same_as_linear_port_WT_P
+  kind: same_as
+  a: liu2025/steady_linear
+  b: liu_code/linear_port
+  mapping: &lin_map
+    E: "E"
+    a_1: "r"
+    a_2: "R"
+    v0: "v0"
+    Fst: "Fst"
+    sigma_m: "sm"
+    sigma_c: "sc"
+    kc: "kc"
+    kon: "kon"
+    l_yield: "ly"
+    k_off_1: "k0offp"
+    k_off_2: "k0off"
+    F_d_1: "kT/xtp"
+    F_d_2: "kT/xt"
+  output_map: {P: P}
+  regime: &wt_regime
+    E: [200, 1000000]
+    kon: [0.2, 0.26]
+    k0off: [0.00005, 0.00006]
+    k0offp: [0.35, 0.4]
+    xt: [0.9, 1.0]
+    xtp: [-0.12, -0.1]
+    kT: [4.2, 4.3]
+    v0: [110, 130]
+    Fst: [1.8, 2.2]
+    sm: [75, 95]
+    sc: [280, 320]
+    kc: [0.04, 0.06]
+    r: [0.7, 0.8]
+    ly: [500, 1000]
+    R: [1500, 2000]
+    S: [9, 9]
+  tolerance: 0.02
+  provenance: stated
+  citation: {file: Linear_KD_WT_model.m, lines: "3", quote: "This is the main function of the linear KD and linear WT models"}
+  assumptions: &lin_assumptions
+    - "the code's k_off_i exp(F/F_d_i) is the paper's Eq. 4 with F_d = kBT/x_t; the code's k_off_1 with F_d_1 < 0 is the paper's k0'off with x't < 0, k_off_2 is k0off (see data koff1_lin, koff2_lin)"
+    - "a_1 is the paper's r (Eq. 1, k's = 4 pi r E/9) and a_2 its R (Nm = pi R^2 sigma_m); the traction P = Fm/(pi a_2^2) = sigma_m Fst (1 - v/v0) at the root does not depend on R, nor does steady_linear's P on S"
+    - "both take the strong (slowest stable) root; in this regime there is one stable root"
+    - "tolerance 0.02 (added): the code reads the root off a 100-point grid in log10 v (0.1-300 nm/s) by linear interpolation; near v0 (soft substrates) a small error in v is a larger relative error in P = sigma_m Fst (1 - v/v0)"
+- id: rel_steady_linear_same_as_linear_port_WT_v
+  kind: same_as
+  a: liu2025/steady_linear
+  b: liu_code/linear_port
+  mapping: *lin_map
+  output_map: {v: v}
+  regime: *wt_regime
+  tolerance: 0.02
+  provenance: stated
+  citation: {file: Linear_KD_WT_model.m, lines: "3", quote: "This is the main function of the linear KD and linear WT models"}
+  assumptions: *lin_assumptions
+- id: rel_steady_linear_same_as_linear_port_KD_P
+  kind: same_as
+  a: liu2025/steady_linear
+  b: liu_code/linear_port
+  mapping: *lin_map
+  output_map: {P: P}
+  regime: &kd_regime
+    E: [1000, 1000000]
+    kon: [0.0045, 0.0055]
+    k0off: [0.00005, 0.00006]
+    k0offp: [0.35, 0.4]
+    xt: [0.9, 1.0]
+    xtp: [-0.12, -0.1]
+    kT: [4.2, 4.3]
+    v0: [110, 130]
+    Fst: [1.8, 2.2]
+    sm: [65, 78]
+    sc: [280, 320]
+    kc: [1.4, 1.8]
+    r: [24, 28]
+    ly: [140, 160]
+    R: [1500, 2000]
+    S: [9, 9]
+  tolerance: 0.02
+  provenance: stated
+  citation: {file: Linear_KD_WT_model.m, lines: "3", quote: "This is the main function of the linear KD and linear WT models"}
+  assumptions: *lin_assumptions
+- id: rel_steady_linear_same_as_linear_port_KD_v
+  kind: same_as
+  a: liu2025/steady_linear
+  b: liu_code/linear_port
+  mapping: *lin_map
+  output_map: {v: v}
+  regime: *kd_regime
+  tolerance: 0.02
+  provenance: stated
+  citation: {file: Linear_KD_WT_model.m, lines: "3", quote: "This is the main function of the linear KD and linear WT models"}
+  assumptions: *lin_assumptions
+# The talin WT program is the paper's talin WT model (Appendix F, liu2025/talin_wt). liu2025/talin_wt is not
+# runnable (its force-extension curves are given only in words), so this relation cannot be tested; it
+# records that talin_wt_port is the runnable form of that model. liu2025/talin_wt has E as its only input,
+# so the mapping fixes the program's other inputs at the paper's Table T1 talin WT values (PDF p. 55), not
+# at the code's own (which differ in alpha, 100 against 2, and Fu, kBT/5.7 against 0.7 pN; q_alpha, q_Fu):
+# x_u = kB T/Fu with Fu = 0.7 pN and the code's kB T = 4.278 pN nm.
+- id: rel_talin_wt_same_as_talin_wt_port
+  kind: same_as
+  a: liu2025/talin_wt
+  b: liu_code/talin_wt_port
+  mapping:
+    E: "E"
+    a_1: "0.6"
+    a_2: "1700"
+    v0: "120"
+    Fst: "2"
+    sigma_m: "82"
+    sigma_c: "300"
+    kon: "0.3"
+    k_off_1: "0.38"
+    k_off_2: "0.000054"
+    F_d_1: "-38.09"
+    F_d_2: "4.411"
+    kB: "1.38e-23"
+    T: "310"
+    ku0: "0.018"
+    kf0: "22.2"
+    x_u: "1.38e-23*310/1e-21/0.7"
+    Lp: "1"
+    L: "37"
+    Ng: "12"
+    N_integrin: "0"
+    b: "5"
+    alpha: "2"
+  output_map: {P: P}
+  regime: {E: [1000, 1000000]}
+  tolerance: 0.05
+  provenance: stated
+  citation: {file: talin_WT_model.m, lines: "3-4", quote: "This is the main function of the talin WT model"}
+  assumptions:
+    - "the program's three-state FJC for the unfolded R3 domain is its form of the paper's 'WLC' description (q_R3_rigid); the relation records the correspondence, not that the two force-extension laws agree"
+    - "F_d values are the code's (the paper prints xt = 0.97 and x't = -0.11 nm, the same to the printed digits with kBT at 310 K)"

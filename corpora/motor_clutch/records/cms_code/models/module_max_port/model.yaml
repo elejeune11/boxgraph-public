@@ -1,0 +1,18 @@
+# Port (our code) of cms2Dv1_0.m lines 39-40: the module maxima are a fixed fraction of the pools.
+#   maxm=mpool*0.1; maxc=cpool*0.1
+# The fraction 0.1 is a literal in the code; here it is an input (data maxm_fraction_code, maxc_fraction_code).
+id: module_max_port
+name: "maximum motors and clutches of one module as one tenth of the pools (cms2Dv1_0.m lines 39-40, Python port)"
+role: model
+stated: {file: cms2Dv1_0.m, lines: "39-40", quote: "maxm=mpool*0.1; %maximum number of motors in a single module"}
+equation: "maxm = mpool*0.1; maxc = cpool*0.1"
+inputs:
+  mpool: {quantity: n_motors_total, unit: dimensionless}
+  cpool: {quantity: n_clutches_total, unit: dimensionless}
+  fm:    {quantity: module_max_fraction, unit: dimensionless, description: "the literal 0.1 of line 39"}
+  fc:    {quantity: module_max_fraction, unit: dimensionless, description: "the literal 0.1 of line 40"}
+outputs:
+  maxm: {quantity: n_motors_module_max, unit: dimensionless}
+  maxc: {quantity: n_clutches_module_max, unit: dimensionless}
+settings: {}
+stochastic: false

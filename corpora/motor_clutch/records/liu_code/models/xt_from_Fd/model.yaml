@@ -1,0 +1,14 @@
+# Our conversion between the code's catch-bond form koff_i exp(F / F_d,i) and the paper's
+# k0off exp(beta x_t F) (Eq. 4): x_t = kBT / F_d, with the code's own kBT (talin_WT_model.m line 75).
+id: xt_from_Fd
+name: transition distance from the code's characteristic dissociation force
+role: processing
+stated: {file: talin_WT_model.m, lines: "34-35", quote: "characteristic dissociation force of talin-based molecular clutches (catch bond)"}
+equation: "x_t = kB T / F_d (kT = 1.38e-23 * 310 / 1e-21 pN nm, line 75)"
+inputs:
+  kB: {quantity: boltzmann_constant, unit: J/K}
+  T:  {quantity: temperature, unit: K}
+  Fd: {quantity: dissociation_force, unit: pN}
+outputs:
+  xt: {quantity: transition_distance, unit: nm}
+stochastic: false

@@ -1,0 +1,41 @@
+# The whole simulation: TestRunningVertexBasedSimulationsTutorial_ab1.hpp (driver), OffLatticeSimulation_ab1
+# (time loop, UpdateAdhesions1: after each protrusion a leader node re-attaches to the nearest collagen node,
+# lines 445-552), ForwardEulerNumericalMethod_ab (forward Euler on the cell, collagen and substrate meshes;
+# the rest criterion, lines 238-253), and the force classes CollagenCellLinkForce_ab, CollagenHookeForce_ab,
+# SubstrateCollagenLinkForce_ab, SubstrateHookeForce_ab, IntraCellForce_ab and CellProtrusiveContractileForce_ab.
+# Not ported: see not_runnable_reason.
+id: chain_sim
+name: "the code's 1-D cell-collagen-substrate chain simulation (not ported)"
+role: model
+stated: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "458", quote: "simulator_ab2.Solve();"}
+described_from: bagchi2025
+equation: >-
+  per time step dt: each node of the cell, collagen and substrate meshes moves by dt times its net force
+  (spring forces of its mesh, the cell-collagen and collagen-substrate links in x only, the protrusive force
+  +-Fp on a leader node whose protrusion flag is on) divided by its damping (Chaste's ComputeForcesIncludingDamping);
+  a leader node's protrusion switches on when its x displacement in one step is at most stop_disp; after a
+  protrusion the leader node attaches to the nearest collagen node (UpdateAdhesions1); cell springs divide at
+  a threshold length (Chaste framework, not released); in the Haptotaxis version a link force acts only when
+  the collagen node's binding probability is at least a fresh rand()/RAND_MAX.
+inputs:
+  Fp:   {quantity: force_code, unit: dimensionless}
+  kl:   {quantity: stiffness_code, unit: dimensionless}
+  ks:   {quantity: stiffness_code, unit: dimensionless}
+  kcl:  {quantity: stiffness_code, unit: dimensionless}
+  kls:  {quantity: stiffness_code, unit: dimensionless}
+  eta_l: {quantity: damping_code, unit: dimensionless}
+  eta_s: {quantity: damping_code, unit: dimensionless}
+  n:    {quantity: n_cell_springs, unit: dimensionless}
+outputs:
+  t_rest: {quantity: simulated_time, unit: hour}
+settings: {dt_h: 0.0002, t_end_h: 20, n_steps: 10000, stop_disp: 1.0e-5}
+stochastic: false
+runnable: false
+not_runnable_reason: >-
+  C++ on the Chaste framework, which the release leaves out (about 400 MB): the methods that set the
+  variable cell stiffness and damping (Eqs 11-12), the threshold division and its re-meshing (Eq 10),
+  the durotaxis gradient (Eq 14), the haptotaxis binding probabilities (Eq 13), the node damping in
+  ComputeForcesIncludingDamping and the time loop's step control are in Chaste classes the authors modified
+  (MutableVertexMesh, CellsGenerator, Node, AbstractCellBasedSimulation) and are not in the release, so the
+  simulation cannot be ported faithfully. As shipped, all three drivers also stop at exit(0) before any
+  force is added or Solve() is called (q_exit_before_solve).

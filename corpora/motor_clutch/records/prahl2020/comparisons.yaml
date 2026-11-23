@@ -1,0 +1,65 @@
+# Hydrodynamic drag (Eqns. S9-S10)
+- {id: cmp_dg, purpose: reproduction, computed: dg_pred, printed: dg_printed}
+- {id: cmp_fdrag, purpose: reproduction, computed: Fdrag_pred, printed: Fdrag_printed}
+- {id: cmp_fdrag_fig3b, purpose: reproduction, computed: Fdrag_fig3b_pred, printed: Fdrag_printed,
+   note: "Eqn. S10 with the velocity as Fig. 3B prints it (um/min) instead of the um/s printed before Eqn. S10"}
+- {id: cmp_area, purpose: reproduction, computed: A_pred, printed: A_channel}
+# Table S1 constraints and the 10-fold reduction
+- {id: cmp_motor_cap, purpose: consistency, computed: nmotor_module_pred, printed: nmotor_module}
+- {id: cmp_clutch_cap, purpose: consistency, computed: nclutch_module_pred, printed: nclutch_module}
+- {id: cmp_kon, purpose: consistency, computed: kon_pred, printed: kon}
+- {id: cmp_fold, purpose: reproduction, computed: nclutch_75_pred, printed: nclutch_75}
+- {id: cmp_ksub_text_table, purpose: consistency, computed: ksub_table, printed: ksub_text}
+# unit conversions and derived values the paper prints
+- {id: cmp_vexp_nm_s, purpose: consistency, computed: v_exp, printed: v_exp_nm_s}
+- {id: cmp_S_nm_s, purpose: consistency, computed: S_prw, printed: S_prw_nm_s}
+- {id: cmp_imaging_min, purpose: consistency, computed: t_imaging_h, printed: t_imaging_min}
+- {id: cmp_imaging_log, purpose: consistency, computed: t_imaging_min, printed: log_t_imaging}
+- {id: cmp_persistence, purpose: consistency, computed: logP_mean, printed: P_1258}
+- {id: cmp_tumor_rate, purpose: reproduction, computed: tumor_rate_pred, printed: tumor_rate_printed}
+# simulation against experiment, as the paper sets them side by side (p. 1714, abstract)
+- {id: cmp_v_sim_exp, purpose: validation, computed: v_sim, printed: v_exp,
+   note: "1D CMS (psi_pol = 0.9, n = 60) against n = 403 cells; both mean +- SE of Eq. 2 fits; the simulation is not rerun here"}
+- {id: cmp_v_sim_approx, purpose: consistency, computed: v_sim, printed: v_sim_approx,
+   note: "the Discussion's 'mean cell migration speeds close to ~0.5 um per min' against the simulated mean of Fig. 3D; approximate, so no verdict"}
+- {id: cmp_mu_sim_exp, purpose: validation, computed: mu_sim, printed: mu_exp,
+   note: "1D CMS (psi_pol = 0.9, n = 60) against n = 403 cells; the paper itself calls the difference a discrepancy"}
+# added by the audit
+- {id: cmp_fdrag_main, purpose: consistency, computed: Fdrag_pred, printed: Fdrag_main,
+   note: "Eqn. S10 (with the 0.51 um/s printed before it) against the main text's '~6.5 pN'; approximate, so no verdict; the main text gives a magnitude, Eqn. S10 a signed force"}
+
+# ---- figure pass: histogram totals against the printed sample sizes ----
+- {id: cmp_n_fig3a, purpose: consistency, computed: n_fig3a, printed: n_cells_exp, note: "sum of the bar heights read from Fig. 3A"}
+- {id: cmp_n_fig3b, purpose: consistency, computed: n_fig3b, printed: n_cells_exp, note: "sum of the bar heights read from Fig. 3B"}
+- {id: cmp_n_fig3c, purpose: consistency, computed: n_fig3c, printed: n_sims_60, note: "sum of the bar heights read from Fig. 3C"}
+- {id: cmp_n_fig3d, purpose: consistency, computed: n_fig3d, printed: n_sims_60, note: "sum of the bar heights read from Fig. 3D"}
+- {id: cmp_n_figs4a, purpose: consistency, computed: n_figs4a, printed: n_cells_exp, note: "sum of the bar heights read from Fig. S4A"}
+- {id: cmp_n_figs4b, purpose: consistency, computed: n_figs4b, printed: n_cells_exp, note: "sum of the bar heights read from Fig. S4B"}
+# ---- figure pass: binned histogram means against the printed means (binning error up to half a bin) ----
+- {id: cmp_mean_fig3a, purpose: approximation, computed: mu_mean_fig3a, printed: mu_exp, note: "binned mean of Fig. 3A (bins 2 um^2/min wide) against the printed mean of the fits"}
+- {id: cmp_mean_fig3b, purpose: approximation, computed: v_mean_fig3b, printed: v_exp, note: "binned mean of Fig. 3B (bins 0.25 um/min wide)"}
+- {id: cmp_mean_fig3c, purpose: approximation, computed: mu_mean_fig3c, printed: mu_sim, note: "binned mean of Fig. 3C (bins 2 um^2/min wide; values above 24 are lumped into the last bar or off the axis)"}
+- {id: cmp_mean_fig3d, purpose: approximation, computed: v_mean_fig3d, printed: v_sim, note: "binned mean of Fig. 3D (bins 0.25 um/min wide)"}
+- {id: cmp_mean_figs4a, purpose: approximation, computed: S_mean_figs4a, printed: S_prw, note: "binned mean of Fig. S4A (13 bins over 0-12 um/min)"}
+- {id: cmp_mean_figs4b, purpose: approximation, computed: logP_mean_figs4b, printed: logP_mean, note: "binned mean of log10 P from Fig. S4B (bins 0.5 wide)"}
+- {id: cmp_mean_figs5b, purpose: approximation, computed: eb1_mean_figs5b, printed: eb1_mean, note: "binned mean of the EB1 frequency histogram (bins 25 nm/s wide)"}
+# ---- figure pass: the base-condition simulation in each figure against the printed Fig. 3 means ----
+- {id: cmp_mu_base_fig4a, purpose: consistency, computed: mu_base_fig4a, printed: mu_sim, note: "Fig. 4A at nclutch = 750 (the base set) against the Fig. 3C mean; the paper does not say whether these are the same 60 runs"}
+- {id: cmp_v_base_fig4b, purpose: consistency, computed: v_base_fig4b, printed: v_sim, note: "Fig. 4B at nclutch = 750"}
+- {id: cmp_mu_base_fig5a, purpose: consistency, computed: mu_base_fig5a, printed: mu_sim, note: "Fig. 5A at nmotor = 1000"}
+- {id: cmp_v_base_fig5b, purpose: consistency, computed: v_base_fig5b, printed: v_sim, note: "Fig. 5B at nmotor = 1000"}
+- {id: cmp_mu_base_fig6c, purpose: consistency, computed: mu_base_fig6c, printed: mu_sim, note: "Fig. 6C reference parameter set"}
+- {id: cmp_v_base_fig6d, purpose: consistency, computed: v_base_fig6d, printed: v_sim, note: "Fig. 6D reference parameter set"}
+- {id: cmp_mu_base_fig7c, purpose: consistency, computed: mu_base_fig7c, printed: mu_sim, note: "Fig. 7C reference parameter set (knuc,0 = 1 /s)"}
+- {id: cmp_v_base_fig7d, purpose: consistency, computed: v_base_fig7d, printed: v_sim, note: "Fig. 7D reference parameter set"}
+- {id: cmp_mu_base_figs1a, purpose: consistency, computed: mu_base_figs1a, printed: mu_sim, note: "Fig. S1A, psi_pol = 0.9 (question q_figs_n_sims)"}
+- {id: cmp_v_base_figs1b, purpose: consistency, computed: v_base_figs1b, printed: v_sim, note: "Fig. S1B, psi_pol = 0.9"}
+- {id: cmp_mu_base_figs3a, purpose: consistency, computed: mu_base_figs3a, printed: mu_sim, note: "Fig. S3A, ksub = 10^3 pN/nm (the base set)"}
+- {id: cmp_v_base_figs3b, purpose: consistency, computed: v_base_figs3b, printed: v_sim, note: "Fig. S3B, ksub = 10^3 pN/nm"}
+# ---- figure pass: Fig. 2G ----
+- {id: cmp_eq2_mean_exp, purpose: approximation, computed: msd_eq2_exp_pred, printed: fig2g_exp,
+   note: "Eq. 2 with the mean fitted mu and v against the measured mean MSD (question q_fig2g_eq2_mean)"}
+- {id: cmp_eq2_mean_sim, purpose: approximation, computed: msd_eq2_sim_pred, printed: fig2g_psi09,
+   note: "Eq. 2 with the mean fitted mu and v of the simulations against the simulated mean MSD (psi_pol = 0.9)"}
+- {id: val_fig2g_sim_exp, purpose: validation, computed: fig2g_psi09_late, printed: fig2g_exp,
+   note: "1D CMS (psi_pol = 0.9, n = 60) mean MSD against the measured mean MSD (n = 403), at lags 110-170 min where both are read; the paper calls them consistent (p. 1713)"}

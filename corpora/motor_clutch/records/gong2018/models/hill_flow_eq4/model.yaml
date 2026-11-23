@@ -1,0 +1,17 @@
+id: hill_flow_eq4
+name: retrograde flow speed from the substrate force, the Hill relation (Eq. 4)
+role: model
+stated: {page: 2, quote: "the substrate force can be related to the", where: "Eq. 4 (main text p. 2, 'through the Hill relation (15)')"}
+equation: "Vf = vu · (1 - Fs/(Nm Fm))"
+inputs:
+  vu: {quantity: unloaded_flow_velocity, unit: nm/s}
+  Fs: {quantity: substrate_force, unit: pN}
+  Nm: {quantity: motor_number, unit: dimensionless}
+  Fm: {quantity: motor_stall_force, unit: pN}
+outputs:
+  Vf: {quantity: retrograde_flow_speed, unit: nm/s}
+settings: {}
+stochastic: false
+# A helper model for the relator: Eq. 4 is one step inside mean_field_sls (Eqs. S6-S7), which prints no
+# flow speed of its own. liu2025 says its linear force-velocity relation (Eq. 7) follows previous studies
+# including this paper (its ref. 14), and this model lets that statement be tested.

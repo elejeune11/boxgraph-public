@@ -1,0 +1,27 @@
+id: coarse_grained_fa_ecm
+name: axisymmetric coarse-grained FA band - integrin layer - ECM model giving the effective modulus (Eq. 2)
+role: model
+stated: {page: 2, printed_page: "E4550", quote: "The effective modulus of the FA–ECM complex (i.e., the modulus sensed", where: "Eq. 2"}
+equation: >-
+  E*FA = sigma / eps_r^FA = E*(E_ECM, rFA, n); with d sigma_p/dr = - d sigma_ECM/dr = tau_i(r),
+  tau_i = ki phi_i [u_p(r) - u_ECM(r)], u_ECM(0) = u_ECM(rECM) = 0, sigma_p(rc - rFA) = sigma, sigma_p(rc) = 0,
+  phi_i = phi_f from Eq. 1 (SI, Governing Equations)
+inputs:
+  Ep: {quantity: plaque_modulus, unit: kPa}
+  E_ECM: {quantity: ecm_modulus, unit: kPa}
+  ki: {quantity: integrin_stiffness, unit: pN/nm}
+  phi0: {quantity: initial_ligand_density, unit: m^-2}
+  h: {quantity: plaque_thickness, unit: um}
+  rc: {quantity: cell_radius, unit: um}
+  rECM: {quantity: ecm_radius, unit: um}
+  rFA: {quantity: fa_band_size, unit: um}
+  n: {quantity: recruitment_index, unit: dimensionless}
+  sigma: {quantity: contractile_stress, unit: kPa}
+outputs:
+  Efa: {quantity: fa_ecm_effective_modulus, unit: kPa}
+runnable: false
+not_runnable_reason: >-
+  Solved in COMSOL 5.1 with no code released. The constitutive relations of the plaque and ECM in the
+  axisymmetric setting (plane stress or a 3D body, the ECM thickness, Poisson's ratios), the plaque's
+  connection beyond the band, the Eq. 1 parameters sigma_c and the unit of n, and how the self-consistent loop
+  with Eq. S2 is iterated are not given, so Fig. 4A and 4C cannot be recomputed.

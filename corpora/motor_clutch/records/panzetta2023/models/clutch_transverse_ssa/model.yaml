@@ -1,0 +1,31 @@
+id: clutch_transverse_ssa
+name: modified motor-clutch model with an orthogonal substrate spring under transverse residual strain, Gillespie simulation
+role: model
+stated: {page: 3, printed_page: "3", quote: "when the force F0 is applied transversally, the equilibrium equation is", where: "Eqs. 2-4, 7-12"}
+equation: >-
+  as clutch_axial_ssa, with the force balance F0 + sum_i Fc,i = Fs (Eq. 7), F0 = ks^eps0 eps0 l + ks x0
+  (Eq. 8), eps0 = sqrt(l^2 + x0^2)/l - 1 (Eq. 9); here Fs is Eq. 6 evaluated at the total horizontal
+  displacement x0 + xs with vertical distance l, and the motor load in Eq. 10 is sum_i Fc,i (reader's
+  reading, q_transverse_fs and q_transverse_load)
+inputs:
+  nc:   {quantity: clutch_number, unit: dimensionless}
+  nm:   {quantity: motor_number, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: clutch_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  ke:   {quantity: orthogonal_spring_stiffness, unit: pN/nm}
+  l:    {quantity: orthogonal_spring_rest_length, unit: nm}
+  eps0: {quantity: residual_strain, unit: dimensionless}
+outputs:
+  v_retro:  {quantity: retrograde_flow_rate, unit: nm/s, description: "time average of vf over the run"}
+  n_eng:    {quantity: engaged_clutch_number, unit: dimensionless}
+  F_clutch: {quantity: clutch_force_total, unit: pN}
+  x_sub:    {quantity: substrate_position, unit: nm, description: "time average of xs, measured from P1'"}
+  t_cycle:  {quantity: cycle_time, unit: s}
+settings: {n_events: 100000, seed: 1, average: time}
+stochastic: true
+built_from: [clutch_axial_ssa]

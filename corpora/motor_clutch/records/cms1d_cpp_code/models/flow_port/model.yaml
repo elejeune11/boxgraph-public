@@ -1,0 +1,20 @@
+# Port to Python (our code) of the module force-velocity law, Cell1DPublish.cpp line 405. The load is the
+# module force mforce_mag (line 590: k_eff (|sub_ref - cell_pos| - xceff), the force of the springs in
+# series), which by the module force balance (prahl2020 Eqn. S5) equals ksub times the substrate
+# extension. The code multiplies the motor number by nmFactor (lines 184-199) and clips the speed at 0.
+id: flow_port
+name: "the code's retrograde flow speed of a module (Cell1DPublish.cpp line 405, Python port)"
+role: model
+stated: {file: Cell1DPublish.cpp, lines: "405", quote: "module->filament_vel_ = max(0.0, v_unloaded_ * (1 - module->mforce_mag/(double(module->n_motors_)*nmFactor * motor_stall_force_)));"}
+described_from: prahl2020
+equation: "filament_vel_ = max(0, v_unloaded_ (1 - mforce_mag / (n_motors_ nmFactor motor_stall_force_)))"
+inputs:
+  vu:       {quantity: unloaded_motor_velocity, unit: nm/s}
+  F:        {quantity: module_force, unit: pN}
+  nm:       {quantity: n_motors_module, unit: dimensionless}
+  nmFactor: {quantity: motor_number_factor, unit: dimensionless}
+  Fm:       {quantity: motor_stall_force, unit: pN}
+outputs:
+  vflow: {quantity: retrograde_flow_rate, unit: nm/s}
+settings: {}
+stochastic: false

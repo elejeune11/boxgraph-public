@@ -1,0 +1,351 @@
+# ---- Table I scales and dimensionless parameters --------------------------------------------------
+- id: run_scales
+  model: char_scales
+  inputs: {wd0: wd0, Gamma_kT: Gamma_kT}
+  outputs: {l0: l0_pred, tau: tau_pred, v0: v0_pred, f_kT: f_kT_pred}
+- id: run_nondim
+  model: nondim
+  inputs: {wa: wa, wd0: wd0, kon: kon, koff: koff0, fs: fs, fd: fd, Fb: Fb, km: km, kc: kc, Gamma_kT: Gamma_kT, kT: kT_added}
+  outputs: {w: w_nd, kon_nd: kon_nd, koff_nd: koff_nd, fs_nd: fs_nd, fd_nd: fd_nd, Fb_nd: Fb_nd, km_nd: km_nd, kc_nd: kc_nd}
+- id: run_ks_soft
+  model: nondim_stiffness
+  inputs: {ks: ks_soft_added, wd0: wd0, Gamma_kT: Gamma_kT, kT: kT_added}
+  outputs: {ks_nd: ks_soft_nd}
+- id: run_ks_stiff
+  model: nondim_stiffness
+  inputs: {ks: ks_stiff, wd0: wd0, Gamma_kT: Gamma_kT, kT: kT_added}
+  outputs: {ks_nd: ks_stiff_nd}
+
+# ---- fixed point and saddle node, unloaded, soft substrate --------------------------------------------
+- id: run_fixed_Nc10
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, Nc: Nc_fig6b}
+  outputs: {nm0: nm0_Nc10, nc0: nc0_Nc10, y0: y0_Nc10, xs0: xs0_Nc10, xo0: xo0_Nc10, xc0: xc0_Nc10}
+- id: run_saddle_F0
+  model: saddle_node
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, load: loadfrac_F0}
+  outputs: {Nc_min: Ncmin_F0, nc_bif: ncbif_F0}
+
+# ---- stability boundaries of Fig. 2(a) at Nc = 10 (ks = kc, gamma = Gamma, F = 0) -----------------------
+- id: run_hopf_Nc10
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig6b}
+  outputs: {vu_hopf: vu_hopf_Nc10, vu_unstable: vu_U_Nc10}
+- id: run_hopf_corr_Nc10
+  model: stability_boundaries_corrected
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig6b}
+  outputs: {vu_hopf: vu_hopf_corr_Nc10, vu_unstable: vu_U_corr_Nc10}
+- id: run_hopf_Nc10_g2
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2d, Nc: Nc_fig6b}
+  outputs: {vu_hopf: vu_hopf_Nc10_g2, vu_unstable: vu_U_Nc10_g2}
+  note: gamma = 2 Gamma as in Fig. 2(d), on the soft substrate ks = kc (Fig. 2(d) itself is on ks = nc0 kc); shows where the printed and corrected J55 differ.
+- id: run_hopf_corr_Nc10_g2
+  model: stability_boundaries_corrected
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2d, Nc: Nc_fig6b}
+  outputs: {vu_hopf: vu_hopf_corr_Nc10_g2, vu_unstable: vu_U_corr_Nc10_g2}
+
+# ---- determinant of the Jacobian at (Nc, v~u) = (10, 1.7), gamma = 2 Gamma: Eq. 20, A3 as printed, Eq. 18 --
+- id: run_det_eq20
+  model: det_eq20
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2d, Nc: Nc_fig6b, vu: vu_fig6b}
+  outputs: {det: det_eq20_pt}
+- id: run_det_A3
+  model: det_A3
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2d, Nc: Nc_fig6b, vu: vu_fig6b}
+  outputs: {det: det_A3_pt}
+- id: run_det_eq18
+  model: det_eq18
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2d, Nc: Nc_fig6b, vu: vu_fig6b}
+  outputs: {det: det_eq18_pt}
+
+# ---- limit cycle (Fig. 11)----------------------------------------------------------------------------
+- id: run_limit_Nc5
+  model: limit_cycle
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_5, vu: vu_limitcycle_added, tau: tau_pred}
+  outputs: {freq: freq_Nc5, amp: amp_Nc5}
+  note: tau is 1/wd0 as computed, not the rounded 0.0029 s of Table I (the paper does not say which it used).
+
+# ==== figure readings (second pass, generated from figures/) ====
+- id: run_load_half
+  model: load_of_fraction
+  inputs: {w: w_nd, Nm: Nm, fs: fs_nd, fd: fd_nd, load: loadfrac_half}
+  outputs: {F: F_half_nd}
+- id: run_fig2a_hopf
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a}
+  sweep: {Nc: dat_fig2a_hopf}
+  outputs: {vu_hopf: pred_fig2a_hopf}
+- id: run_fig2a_usu
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a}
+  sweep: {Nc: dat_fig2a_usu}
+  outputs: {vu_unstable: pred_fig2a_usu}
+- id: run_fig2b_hopf
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2b}
+  sweep: {Nc: dat_fig2b_hopf}
+  outputs: {vu_hopf: pred_fig2b_hopf}
+- id: run_fig2b_hopf_corr
+  model: stability_boundaries_corrected
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2b}
+  sweep: {Nc: dat_fig2b_hopf}
+  outputs: {vu_hopf: pred_fig2b_hopf_corr}
+- id: run_fig2b_usu
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2b}
+  sweep: {Nc: dat_fig2b_usu}
+  outputs: {vu_unstable: pred_fig2b_usu}
+- id: run_fig2b_usu_corr
+  model: stability_boundaries_corrected
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2b}
+  sweep: {Nc: dat_fig2b_usu}
+  outputs: {vu_unstable: pred_fig2b_usu_corr}
+- id: run_fig2c_hopf
+  model: stability_matched
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, F: F_unloaded, g: g_fig2a}
+  sweep: {Nc: dat_fig2c_hopf}
+  outputs: {vu_hopf: pred_fig2c_hopf}
+- id: run_fig2c_usu
+  model: stability_matched
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, F: F_unloaded, g: g_fig2a}
+  sweep: {Nc: dat_fig2c_usu}
+  outputs: {vu_unstable: pred_fig2c_usu}
+- id: run_fig2d_hopf
+  model: stability_matched
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, F: F_unloaded, g: g_fig2d}
+  sweep: {Nc: dat_fig2d_hopf}
+  outputs: {vu_hopf: pred_fig2d_hopf}
+- id: run_fig2d_usu
+  model: stability_matched
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, F: F_unloaded, g: g_fig2d}
+  sweep: {Nc: dat_fig2d_usu}
+  outputs: {vu_unstable: pred_fig2d_usu}
+- id: run_fig2e_hopf
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_stiff_nd, F: F_unloaded, g: g_fig2a}
+  sweep: {Nc: dat_fig2e_hopf}
+  outputs: {vu_hopf: pred_fig2e_hopf}
+- id: run_fig2e_usu
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_stiff_nd, F: F_unloaded, g: g_fig2a}
+  sweep: {Nc: dat_fig2e_usu}
+  outputs: {vu_unstable: pred_fig2e_usu}
+- id: run_fig2f_hopf
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_stiff_nd, F: F_unloaded, g: g_fig2d}
+  sweep: {Nc: dat_fig2f_hopf}
+  outputs: {vu_hopf: pred_fig2f_hopf}
+- id: run_fig2f_hopf_corr
+  model: stability_boundaries_corrected
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_stiff_nd, F: F_unloaded, g: g_fig2d}
+  sweep: {Nc: dat_fig2f_hopf}
+  outputs: {vu_hopf: pred_fig2f_hopf_corr}
+- id: run_fig2f_usu
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_stiff_nd, F: F_unloaded, g: g_fig2d}
+  sweep: {Nc: dat_fig2f_usu}
+  outputs: {vu_unstable: pred_fig2f_usu}
+- id: run_fig2f_usu_corr
+  model: stability_boundaries_corrected
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_stiff_nd, F: F_unloaded, g: g_fig2d}
+  sweep: {Nc: dat_fig2f_usu}
+  outputs: {vu_unstable: pred_fig2f_usu_corr}
+- id: run_fig8a_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Nc: dat_fig8a_Nc20}
+  outputs: {nc0: pred_fig8a_Nc20}
+- id: run_fig8b_Nc10
+  model: fixed_point
+  inputs: {w: w_nd, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Nm: dat_fig8b_Nc10}
+  outputs: {nc0: pred_fig8b_Nc10}
+- id: run_fig8b_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Nm: dat_fig8b_Nc20}
+  outputs: {nc0: pred_fig8b_Nc20}
+- id: run_fig8c_Nc10
+  model: fixed_point
+  inputs: {Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {w: dat_fig8c_Nc10}
+  outputs: {nc0: pred_fig8c_Nc10}
+- id: run_fig8c_Nc20
+  model: fixed_point
+  inputs: {Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {w: dat_fig8c_Nc20}
+  outputs: {nc0: pred_fig8c_Nc20}
+- id: run_fig8e_Nc10
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Fb: dat_fig8e_Nc10}
+  outputs: {nc0: pred_fig8e_Nc10}
+- id: run_fig8e_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Fb: dat_fig8e_Nc20}
+  outputs: {nc0: pred_fig8e_Nc20}
+- id: run_fig8f_Nc10
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fd: dat_fig8f_Nc10}
+  outputs: {nc0: pred_fig8f_Nc10}
+- id: run_fig8f_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig8_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fd: dat_fig8f_Nc20}
+  outputs: {nc0: pred_fig8f_Nc20}
+- id: run_fig9a_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Nc: dat_fig9a_Nc20}
+  outputs: {xo0: pred_fig9a_Nc20}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9b_Nc10
+  model: fixed_point
+  inputs: {w: w_nd, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Nm: dat_fig9b_Nc10}
+  outputs: {xo0: pred_fig9b_Nc10}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9b_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Nm: dat_fig9b_Nc20}
+  outputs: {xo0: pred_fig9b_Nc20}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9c_Nc10
+  model: fixed_point
+  inputs: {Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {w: dat_fig9c_Nc10}
+  outputs: {xo0: pred_fig9c_Nc10}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9c_Nc20
+  model: fixed_point
+  inputs: {Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {w: dat_fig9c_Nc20}
+  outputs: {xo0: pred_fig9c_Nc20}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9e_Nc10
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Fb: dat_fig9e_Nc10}
+  outputs: {xo0: pred_fig9e_Nc10}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9e_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {Fb: dat_fig9e_Nc20}
+  outputs: {xo0: pred_fig9e_Nc20}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9f_Nc10
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fd: dat_fig9f_Nc10}
+  outputs: {xo0: pred_fig9f_Nc10}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig9f_Nc20
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig9_20, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fd: dat_fig9f_Nc20}
+  outputs: {xo0: pred_fig9f_Nc20}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig13a_hopf
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_half_nd, g: g_fig2a}
+  sweep: {Nc: dat_fig13a_hopf}
+  outputs: {vu_hopf: pred_fig13a_hopf}
+- id: run_fig13a_usu
+  model: stability_boundaries
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_half_nd, g: g_fig2a}
+  sweep: {Nc: dat_fig13a_usu}
+  outputs: {vu_unstable: pred_fig13a_usu}
+- id: run_fig12_points
+  model: saddle_locus
+  inputs: {kon: kon_nd, koff: koff_nd}
+  sweep: {Nc: dat_fig12_points}
+  outputs: {nc_bif: pred_fig12_points}
+- id: run_fig11c_Nc5
+  model: limit_cycle
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_5, tau: tau_pred}
+  sweep: {vu: dat_fig11c_Nc5}
+  outputs: {freq: pred_fig11c_Nc5}
+  note: "Fig. 2(a) conditions (ks = kc, gamma = Gamma, F = 0), as the Fig. 11 caption says."
+- id: run_fig11c_Nc10
+  model: limit_cycle
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_10, tau: tau_pred}
+  sweep: {vu: dat_fig11c_Nc10}
+  outputs: {freq: pred_fig11c_Nc10}
+  note: "Fig. 2(a) conditions (ks = kc, gamma = Gamma, F = 0), as the Fig. 11 caption says."
+- id: run_fig11c_Nc15
+  model: limit_cycle
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_15, tau: tau_pred}
+  sweep: {vu: dat_fig11c_Nc15}
+  outputs: {freq: pred_fig11c_Nc15}
+  note: "Fig. 2(a) conditions (ks = kc, gamma = Gamma, F = 0), as the Fig. 11 caption says."
+- id: run_fig11d_Nc5
+  model: limit_cycle
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_5, tau: tau_pred}
+  sweep: {vu: dat_fig11d_Nc5}
+  outputs: {amp: pred_fig11d_Nc5}
+  note: "Fig. 2(a) conditions (ks = kc, gamma = Gamma, F = 0), as the Fig. 11 caption says."
+- id: run_fig11d_Nc5_ptp
+  model: limit_cycle_ptp
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_5, tau: tau_pred}
+  sweep: {vu: dat_fig11d_Nc5}
+  outputs: {amp: pred_fig11d_Nc5_ptp}
+- id: run_fig11d_Nc10
+  model: limit_cycle
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_10, tau: tau_pred}
+  sweep: {vu: dat_fig11d_Nc10}
+  outputs: {amp: pred_fig11d_Nc10}
+  note: "Fig. 2(a) conditions (ks = kc, gamma = Gamma, F = 0), as the Fig. 11 caption says."
+- id: run_fig11d_Nc10_ptp
+  model: limit_cycle_ptp
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_10, tau: tau_pred}
+  sweep: {vu: dat_fig11d_Nc10}
+  outputs: {amp: pred_fig11d_Nc10_ptp}
+- id: run_fig11d_Nc15
+  model: limit_cycle
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_15, tau: tau_pred}
+  sweep: {vu: dat_fig11d_Nc15}
+  outputs: {amp: pred_fig11d_Nc15}
+  note: "Fig. 2(a) conditions (ks = kc, gamma = Gamma, F = 0), as the Fig. 11 caption says."
+- id: run_fig11d_Nc15_ptp
+  model: limit_cycle_ptp
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fs: fs_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, ks: ks_soft_nd, F: F_unloaded, g: g_fig2a, Nc: Nc_fig11_15, tau: tau_pred}
+  sweep: {vu: dat_fig11d_Nc15}
+  outputs: {amp: pred_fig11d_Nc15_ptp}
+- id: run_fig10a
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fs: dat_fig10a}
+  outputs: {nm0: pred_fig10a}
+- id: run_fig10b
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fs: dat_fig10b}
+  outputs: {nc0: pred_fig10b}
+- id: run_fig10c
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fs: dat_fig10c}
+  outputs: {xo0: pred_fig10c}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig10d
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fs: dat_fig10d}
+  outputs: {y0: pred_fig10d}
+- id: run_fig10e
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fs: dat_fig10e}
+  outputs: {xs0: pred_fig10e}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."
+- id: run_fig10f
+  model: fixed_point
+  inputs: {w: w_nd, Nm: Nm, kon: kon_nd, koff: koff_nd, fd: fd_nd, Fb: Fb_nd, km: km_nd, kc: kc_nd, Nc: Nc_fig10, ks: ks_soft_nd, F: F_unloaded}
+  sweep: {fs: dat_fig10f}
+  outputs: {xc0: pred_fig10f}
+  note: "ks = kc (soft substrate, as Fig. 2(a)); the figure does not state it (q_ks_figs8to10)."

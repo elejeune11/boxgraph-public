@@ -1,0 +1,62 @@
+# Port to Python (our code) of talin_WT_model.m: lines 21-95 (grid and parameters), 248-360 (Fc for
+# each E and v by the Runge-Kutta march, with tabulate_clutch_force_and_energy.m,
+# force_vs_extension_clutch_v2.m and zero_delta_force_function.m), 471-486 (zero contour and traction)
+# and 537-648 (engaged clutches and mean tension per state at the contour).
+# Notes (the schema has no notes field for a model): the force table is found by bisection and
+# snapped to the code's 0.001 pN force grid by the code's own |error| criterion (the code scans all
+# 300000 forces); csaps(x, y, 0.1) is scipy make_smoothing_spline with lam = 9, the same objective;
+# the contour is taken along v at the requested E. unfolded_pct (the unfolded share of engaged talin
+# clutches) is formed by us from the code's two engaged numbers (line 644), which figure 8 plots.
+# Not ported: the loading-rate statistics (lines 646-648) and the plots.
+id: talin_wt_port
+name: "steady state of the talin WT clutch model, talin_WT_model.m (Python port)"
+role: model
+stated: {file: talin_WT_model.m, lines: "3-4", quote: "This is the main function of the talin WT model"}
+described_from: liu2025
+equation: >-
+  dp/dl = A(l) p / v with A = [[-koff_u - kf, ku], [kf, -koff_f - ku]] (row 1 unfolded), ku = ku0 exp(F_f/Fu),
+  kf = ku exp((G_u - G_f)/kT), p(0) Boltzmann; C = kon/(kon int p + v); Fc = Nc int F.p C / max(1 - alpha int p_u C, 0.01);
+  F_f, F_u from an FJC of (12 + 3 state) domains of b = 5 nm, a WLC linker L, Lp, and the substrate spring k's, smoothed;
+  Fm = Fst Nm (1 - v/v0); Fc = Fm; P = Fm/(pi a_2^2)
+inputs:
+  E:          {quantity: youngs_modulus, unit: Pa}
+  a_1:        {quantity: adhesion_site_size, unit: nm}
+  a_2:        {quantity: adhesion_complex_size, unit: nm}
+  v0:         {quantity: motor_free_speed, unit: nm/s}
+  Fst:        {quantity: motor_stall_force, unit: pN}
+  sigma_m:    {quantity: myosin_density, unit: 1/um**2}
+  sigma_c:    {quantity: clutch_site_density, unit: 1/um**2}
+  kon:        {quantity: clutch_assembly_rate, unit: 1/s}
+  k_off_1:    {quantity: zero_load_off_rate, unit: 1/s}
+  k_off_2:    {quantity: zero_load_off_rate, unit: 1/s}
+  F_d_1:      {quantity: dissociation_force, unit: pN}
+  F_d_2:      {quantity: dissociation_force, unit: pN}
+  kB:         {quantity: boltzmann_constant, unit: J/K}
+  T:          {quantity: temperature, unit: K}
+  ku0:        {quantity: unfolding_rate_zero_load, unit: 1/s}
+  kf0:        {quantity: refolding_rate_zero_load, unit: 1/s}
+  x_u:        {quantity: unfolding_distance, unit: nm}
+  Lp:         {quantity: persistence_length, unit: nm}
+  L:          {quantity: linker_contour_length, unit: nm}
+  Ng:         {quantity: talin_domain_number, unit: dimensionless}
+  N_integrin: {quantity: integrin_domain_number, unit: dimensionless}
+  b:          {quantity: globular_domain_size, unit: nm}
+  alpha:      {quantity: sites_per_unfolded_clutch, unit: dimensionless}
+outputs:
+  P:            {quantity: traction_stress, unit: Pa, description: "z_zero_contour, lines 483-486"}
+  v:            {quantity: actin_flow_speed, unit: nm/s, description: "Actin_flow_zero_contour, line 524"}
+  F_f:          {quantity: folded_clutch_tension, unit: pN, description: "F_average_zero_contour(2, :), line 645"}
+  F_u:          {quantity: unfolded_clutch_tension, unit: pN, description: "F_average_zero_contour(1, :), line 645"}
+  n_f:          {quantity: engaged_clutch_density, unit: 1/um**2, description: "Clutches_on_density_zero_contour(2, :), line 669"}
+  n_u:          {quantity: engaged_clutch_density, unit: 1/um**2, description: "Clutches_on_density_zero_contour(1, :), line 669"}
+  unfolded_pct: {quantity: unfolded_clutch_share, unit: percent, description: "100 n_u/(n_u + n_f), ours from line 644"}
+settings:
+  n_steps: 100     # line 21
+  v_min: 1         # line 24
+  v_span: 300      # line 23
+  E_min: 100       # line 47
+  E_max: 1000000   # line 46
+  ext_per_v: 200   # line 254: extension step v/200
+  csaps_p: 0.1     # tabulate_clutch_force_and_energy.m line 89
+  branch: strong
+stochastic: false

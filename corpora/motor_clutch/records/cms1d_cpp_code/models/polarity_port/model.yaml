@@ -1,0 +1,15 @@
+# Port to Python (our code) of the direction of a new module, Cell1DPublish.cpp lines 472-481: a module
+# points forward (theta = 0, +x) when a uniform random number is below (Polar+1)/2. The port returns that
+# probability, which is prahl2020's psi_pol.
+id: polarity_port
+name: "the code's probability that a new module points in +x (Cell1DPublish.cpp line 474, Python port)"
+role: model
+stated: {file: Cell1DPublish.cpp, lines: "474", quote: "double polar = (Polar+1.0)/2.0;"}
+described_from: prahl2020
+equation: "polar = (Polar + 1)/2; theta = 0 (forward) if rr < polar, else pi"
+inputs:
+  Polar: {quantity: polarity_parameter, unit: dimensionless}
+outputs:
+  psi: {quantity: polarity_factor, unit: dimensionless}
+settings: {}
+stochastic: false

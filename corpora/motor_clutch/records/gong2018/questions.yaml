@@ -336,3 +336,54 @@
     Comparing the flow would need a new output (Vf) of mean_field_elastic, which this job may not add.
     In the other direction, see bangasser2013/q_xval_gong2018_none.
   citation: {page: 1, quote: "motor-clutch model (15–17) was developed, which predicted a", where: text}
+# cross-record validation against prahl2020 (2026-11-19): none added
+- id: q_xval_prahl2020_none
+  kind: unstated_model
+  about: [mean_field_elastic, mean_field_sls, mean_field_maxwell2, mean_field_sls_taus, bell_off_rate, lifetime_timescale]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    prahl2020, which this paper predates and does not cite (prahl2020 cites this paper, its ref. 43,
+    only in a list of works that described its parameter values, p. 4 there). prahl2020 measures U251
+    glioma cells migrating in rigid PDMS microchannels: the drift velocity and motility coefficient of
+    Eq. 2 fits (v_exp, mu_exp, Figs. 3A-B, 4C-D, 5C-D, 6A-B, 7A-B), the mean MSD vs lag (Fig. 2G), EB1
+    microtubule growth speeds (Fig. S5B) and cell length and nucleus position (Fig. S5C-D). None is a
+    quantity a model here outputs: the mean-field models give the spreading speed Vs of a cell edge on a
+    soft (visco)elastic substrate (Eq. 6), not a whole-cell 1D migration drift velocity or a random
+    motility coefficient, and their Table S1 parameters are for fibroblasts/MSCs, not U251 cells;
+    bell_off_rate gives a clutch off-rate and prahl2020 measures no bond kinetics. The equality of shape
+    between bell_off_rate and prahl2020/slip_bond_s1 is a model-model relation, for the job that relates
+    models across papers, not a validation. In the other direction, see prahl2020/q_xval_gong2018_none.
+  citation: {page: 18, quote: "The spreading speed is extracted from measured spreading area", where: "Fig. S7 caption"}
+# cross-record validation against liu2025 (2026-11-21): none added
+- id: q_xval_liu2025_none
+  kind: unstated_model
+  about: [bell_off_rate, mean_field_elastic, mean_field_sls, mean_field_maxwell2, mean_field_sls_taus, 'liu2025/koff_data_figS4', 'liu2025/P_WT_data_fig2c', 'liu2025/v_WT_data_fig2d']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    liu2025, which postdates this paper (liu2025 cites it as its ref. 14, only among earlier clutch
+    models). The pairing's shared shape, bell_off_rate and liu2025/koff_eq4 (an off-rate from a force
+    and a rate), is a relation between models, not a validation. The one liu2025 measurement of that
+    shape is the integrin a5b1-fibronectin off-rate vs force of its Fig. S4 (koff_data_figS4,
+    digitized from elosegui2016), a catch bond. bell_off_rate is this paper's off-rate of a lumped
+    clutch ("integrins, talin, vinculin", p. 8) with the generic Table S1 roff0 = 0.1 s^-1 (from
+    Bangasser & Odde) and a mean-field Fb = 1.3 pN (2 pN in KMC); neither paper states roff0 or Fb for
+    the a5b1-FN bond, so a run would not be on the measurement's own bond, and a monotonic slip law
+    cannot represent the catch regime it would be judged on (as for elosegui2016's bond data,
+    q_xval_elosegui2016_none). liu2025's other measurements are MEF cell tractions (Pa) and actin
+    retrograde flows (Figs. 2c,d, 3a,b, 4c,d, Extended Data Figs. 4, 5, mostly from elosegui2016),
+    myosin-stack densities (Fig. 3e), a force loading rate (Fig. 4f) and talin extensions (Fig. 4g):
+    the mean-field models here output a spreading speed Vs = Vp - Vf, a cycle duration and a mean
+    clutch force Fa, not a flow or a traction stress, with Table S1 parameters not stated for MEFs.
+    In the other direction, see liu2025/q_xval_gong2018_none.
+  citation: {page: 2, quote: "Using a Bell model (27), the dissociation rate", where: text}
+- id: q_xval_alonsomatilla2023_none
+  kind: choice
+  about: [mean_field_elastic, mean_field_sls, bell_off_rate]
+  text: >-
+    No validation against alonsomatilla2023 is entered: that paper (which cites this one as ref. 37)
+    prints no measurement; every value it plots is a model result (alonsomatilla2023/figures.md), so no
+    model here has anything there to be validated against. bell_off_rate has the shape of
+    alonsomatilla2023/clutch_off_rate_bell, but neither paper measures a loaded off rate. In the other
+    direction, no alonsomatilla2023 model outputs a spreading area, a spreading speed or a gel
+    relaxation stiffness, the quantities measured here (alonsomatilla2023/q_xval_gong2018_none).
+  citation: {page: 2, quote: "Using a Bell model (27), the dissociation rate", where: text}

@@ -1,0 +1,245 @@
+# Differences from prahl2020 are findings about the code, not errors of the paper: the code is a later
+# re-implementation (header dates 2021/02/05 and 2022/04/20; the paper says its simulations ran in MATLAB).
+- id: q_relation_to_paper
+  kind: reading
+  about: [cms1d_sim]
+  text: >-
+    Neither the code nor prahl2020 says how they are related. The code was received with the paper (folder
+    Confined_migration_paper), but its headers are dated 2021/02/05 (modulePublish.cpp) and 2022/04/20
+    (Cell1DPublish.cpp), after the paper (2020), and the paper says "Simulations were run in Matlab" (p. S3).
+    So the code cannot be the software behind the paper's printed results; it is checked here as a later
+    implementation of the same model, value by value and rule by rule.
+  citation: {file: Cell1DPublish.cpp, lines: "1-3", quote: "// 2022/04/20"}
+- id: q_ksub
+  kind: unexplained_difference
+  about: [ksub_code]
+  text: >-
+    The code sets the substrate spring of every module and of the cell body to ksub_cell = 1 (pN/nm by its
+    use), where prahl2020 sets ksub = 1000 pN/nm for PDMS (p. 1712; Table S1 prints 10^3) and also tries
+    10^6 pN/nm (Fig. S3). 1 pN/nm is a compliant substrate, three orders of magnitude softer than any value
+    the paper simulates. The build's cited check (ksub_code against prahl2020/ksub_text) shows it.
+  citation: {file: Cell1DPublish.cpp, lines: "43", quote: "ksub_cell = 1;"}
+- id: q_polarity
+  kind: unexplained_difference
+  about: [polar_code, cmp_polarity, polarity_port]
+  text: >-
+    The code parametrizes the polarity as Polar in [-1, 1], a new module pointing +x with probability
+    (Polar+1)/2 (line 474), and sets Polar = 0: an unpolarized cell (psi_pol = 0.5). prahl2020's base set
+    uses psi_pol = 0.9 (Table S1, Fig. 3), which in the code would be Polar = 0.8. psi_pol = 0.5 is one of
+    the paper's conditions (Figs. 2G, S1), so the code's default is that case, not the base set.
+  citation: {file: Cell1DPublish.cpp, lines: "30", quote: "Polar = 0;"}
+- id: q_initial_state
+  kind: unexplained_difference
+  about: [n_modules_initial, cms1d_sim]
+  text: >-
+    prahl2020: "Simulation initial conditions included two modules oriented in the +x direction and one
+    module oriented in the -x direction (each module of length Lcell) and all clutches unbound" (p. S3). The
+    code starts with n_modules_ = 4, n_modules_/2 = 2 at theta = 0 and 2 at theta = pi (lines 78-97), a
+    symmetric start, and each new module starts with its first clutch engaged (modulePublish.cpp lines
+    61-63: clutch_state[0] = 1, engNum = 1). The four initial modules each get the per-module maxima (100
+    motors, 75 clutches; lines 82 and 92), not the allocation rule of BirthNewModule, so they hold 400
+    motors and 300 clutches between them. The effect of the start is reduced by discarding the first hour,
+    in both.
+  citation: {file: modulePublish.cpp, lines: "61-63", quote: "clutch_state[0] = 1;"}
+- id: q_aflow_ratio
+  kind: unstated_model
+  about: [aflow_ratio_code, cms1d_sim]
+  text: >-
+    A hidden factor not in prahl2020: aflow_ratio = 0.2 (line 25). Each step, a module's substrate and
+    reference positions and its F-actin length move back by only aflow_ratio times the retrograde flow
+    distance (lines 415-417, 423-425), while the engaged clutches' extensions grow by the full flow distance
+    (lines 432-435). In prahl2020 F-actin flows back at vflow and depolymerizes as it passes the motor (p.
+    S2), with no such factor. The factor changes how fast modules shorten and so how long they live; the
+    paper's results do not include it.
+  citation: {file: Cell1DPublish.cpp, lines: "25", quote: "aflow_ratio = 0.2;"}
+- id: q_motor_schedule
+  kind: unstated_model
+  about: [polyvary_code, polypow_code, motor_schedule_control, motor_factor_floor_code, flow_port]
+  text: >-
+    A hidden, time-varying factor on the motor number, not in prahl2020: with PolyVary = 1 (line 27) the
+    motor number in the force-velocity law is multiplied by nmFactor = 1 + (factor - 1) PolyPow, PolyPow = 3,
+    floored at 0.1 (lines 184-198), where factor follows a table over 0-7 h labelled "control" (line 186;
+    e.g. 1.31 from 5.5 to 6 h, so nmFactor = 1.93). Two other tables are commented out, labelled "C646"
+    (a p300 acetyltransferase inhibitor) and "SMIFH2" (a formin inhibitor), drugs prahl2020 does not use.
+    The tables look like measured time courses from another study, imposed on the motors. Despite its name
+    (Poly...), the factor acts on the motors (line 405), not on polymerization; PolyFactor = 1 (line 28)
+    leaves polymerization unchanged. No source for the tables is given.
+  citation: {file: Cell1DPublish.cpp, lines: "186-188", quote: "//            double factor_arr[] = {1, 1.21, 1.12, 1.31, 1.2, 1.3, 0.96, 1.46, 1.28, 1.15, 1.7, 1.31, 1};//C646"}
+- id: q_group_factor
+  kind: unstated_model
+  about: [clutch_input_code, cms1d_sim]
+  text: >-
+    The code multiplies the clutch stiffness in every effective spring by G_factor = clutch_input /
+    clutch_pool_ (lines 53-55, "group clutches"; used at lines 515 and 537), a scaling not in prahl2020.
+    Both are 750 here, so G_factor = 1 and it has no effect at this setting; changing clutch_pool_ alone
+    (as prahl2020 does to vary nclutch, Fig. 4) would make it differ from 1.
+  citation: {file: Cell1DPublish.cpp, lines: "55", quote: "G_factor = clutch_input/clutch_pool_;"}
+- id: q_ksum_cap
+  kind: numerics
+  about: [ksum_cap_code, cms1d_sim]
+  text: >-
+    A hidden numerical cut-off: the total event rate is capped at 10^6 /s before the time step is drawn
+    (line 260), so when the sum of rates exceeds it (very large clutch forces make exp(|F|/Fb) huge) time
+    advances faster than kinetic Monte Carlo would. prahl2020 does not mention it.
+  citation: {file: Cell1DPublish.cpp, lines: "260", quote: "if (k_sum>1e6) k_sum = 1e6;"}
+- id: q_flow_clip
+  kind: unstated_model
+  about: [flow_port, offrate_port, rel_flow_s2, rel_offrate_s1]
+  text: >-
+    Two details of the module rules that prahl2020's equations do not have. The flow speed is clipped at
+    zero above stall (max(0.0, ...), line 405), so a module loaded past nmotor Fmotor never flows forward;
+    Eqn. S2 as printed would give a negative speed. And the off-rate uses the magnitude of the clutch force
+    (mag(force_vec), lines 578 and 618), so a compressed clutch unbinds as fast as a stretched one; Eqn. S1
+    is written for the tension Fclutch,i. The relations to Eqns. S1 and S2 are tested only below stall and
+    for tension, where they agree.
+  citation: {file: Cell1DPublish.cpp, lines: "405", quote: "module->filament_vel_ = max(0.0, v_unloaded_"}
+- id: q_new_module_length
+  kind: reading
+  about: [length_code, cms1d_sim]
+  text: >-
+    A new module's length is min(free_actin_, length_) (line 455), so when less than Lcell of G-actin is
+    free a shorter module is born; prahl2020 says new modules have initial length Lcell (p. S2). Births need
+    free actin, and the birth rate falls as (free/total)^4, so this case is rare but possible.
+  citation: {file: Cell1DPublish.cpp, lines: "455", quote: "double lmod = min(free_actin_, length_);"}
+- id: q_actin_pool_unit
+  kind: reading
+  about: [Atotal_code]
+  text: >-
+    Cell1DPublish.h line 62 gives total_actin_pool_ "in nM" (a concentration), but the code uses it as a
+    length: it subtracts module lengths in nm from it (lines 48-49, 378-395). Read as 100000 nm = 100 um, it
+    is prahl2020's Atotal = 100 um (Table S1). The comment is wrong, not the value.
+  citation: {file: Cell1DPublish.h, lines: "62", quote: "double total_actin_pool_;  /// in nM"}
+- id: q_comments
+  kind: reading
+  about: [sampling_code, discard_code]
+  text: >-
+    The sampling interval is written 5*60.0 s (line 156), the paper's 5 min (p. S3), but the comments say
+    "truncate time = 10min" (line 156), "analyze data every 10min" (line 216) and "10*60s" (line 247). The
+    code does what the paper says; the comments are stale.
+  citation: {file: Cell1DPublish.cpp, lines: "156", quote: "double trunc_time = 5*60.0; //truncate time = 10min"}
+- id: q_duration_seed
+  kind: choice
+  about: [duration_code, seed_code, cms1d_sim]
+  text: >-
+    The code runs 6 h of simulated time (line 44; the paper: "5-7 hours") with a fixed seed randSeed = 1
+    (line 23; the paper: "a unique, randomly generated seed for each run"). As given, every run of the code
+    is the same trajectory; replicates need the seed changed, which the missing driver (config.h, the
+    constructor arguments of Cell1DPublish.h line 23) may do. The jump filter (1000 nm in a 1 s recording
+    interval, lines 203-213), the discarded first hour (line 153) and the 5 min sampling agree with the paper.
+  citation: {file: Cell1DPublish.cpp, lines: "23", quote: "randSeed = 1;"}
+- id: q_no_analysis
+  kind: unstated_model
+  about: [cms1d_sim]
+  text: >-
+    The code does not compute the paper's results. Record() is empty (lines 253-254), and the arrays filled
+    every 5 min (data_cell_pos, data_traction, data_aflow, ... lines 216-249) are local to Simulate() and never
+    written out or analysed; data_msd, data_msd_sem and data_rmc are declared and never filled. There is no
+    MSD, no fit of Eq. 2, and no velocity or motility coefficient, so v_sim and mu_sim (prahl2020 Fig. 3C-D)
+    cannot be reproduced from it even if it were built. The analysis must live in code not shipped.
+  citation: {file: Cell1DPublish.cpp, lines: "253-254", quote: "void Cell1D::Record() {"}
+- id: q_sim_not_run
+  kind: choice
+  about: [cms1d_sim, offrate_port, flow_port, poly_port, nucleation_port, module_alloc_port, polarity_port]
+  text: >-
+    The whole simulator is not ported. Besides q_no_analysis, one 6 h run is of order 10^7 kinetic Monte
+    Carlo events with a force balance each, far beyond the build's budget in Python, and the paper averages
+    36-60 runs per condition. The record ports instead the module-level rules the simulator is built from
+    (off-rate, flow speed, polymerization, nucleation, module allocation, polarity), checks them against
+    prahl2020's Eqns. S1-S3 and S8 as relations, and the allocation and polarity against Table S1.
+  citation: {file: Cell1DPublish.cpp, lines: "147-148", quote: "double run_time = duration_ * 3600; // s"}
+- id: q_does_not_compile
+  kind: possible_error
+  about: [cms1d_sim, kcap_code]
+  text: >-
+    The code does not compile as given, besides the headers it includes and does not ship (Cell1D.h,
+    module.h, u_dx0_1max50.h, utils.h, config.h, rand.h, Eigen): line 70 has a stray parenthesis
+    ("cap_rate_ = 0.001);"); Cell1DPublish.cpp defines Cell1D::Cell1D() and InitFile() with no arguments,
+    while Cell1DPublish.h declares Cell1D(std::string ofolder, int prefix, int postfix, Config& config) and
+    InitFile(std::string ofolder); the .cpp builds objects of class Module while the shipped header declares
+    modulePublish; unboundN and killN are used (lines 361, 389) and declared nowhere shipped. The files look
+    like a cleaned-up copy of a working program, not the program itself. The value 0.001 is clear.
+  citation: {file: Cell1DPublish.cpp, lines: "70", quote: "cap_rate_ = 0.001);"}
+- id: q_module_numbering
+  kind: possible_error
+  about: [cms1d_sim]
+  text: >-
+    In Init the second loop (the -x modules) sets modules_[i]->moduleN with i from 0 (line 95), overwriting
+    the numbers of the first two modules instead of numbering modules_[number + i]. moduleN is only a label
+    and enters no rate or force, so it does not change the dynamics.
+  citation: {file: Cell1DPublish.cpp, lines: "95", quote: "modules_[i]->moduleN = moduleNcell;"}
+- id: q_powers_of_ten
+  kind: reading
+  about: [nmotor_code, koff_code, kcap_code, kcell_code]
+  text: >-
+    Four Table S1 values are printed as bare powers of ten (nmotor 10^3, koff 10^-1, kcap 10^-3, kcell
+    10^4), which get no verdict, so the build's cited check of the code's 1000, 0.1, 0.001 and 10000 against
+    them is shown without one. Read as numbers they are equal. ksub is linked to the main text's "1000"
+    rather than Table S1's 10^3 so that it gets a verdict.
+  citation: {file: Cell1DPublish.cpp, lines: "50", quote: "motor_pool_ = 1000;"}
+
+# ==== cross-record validation with cms_code (2026-11-19): none added ===========================
+- id: q_xval_cms_code_none
+  kind: unstated_model
+  about: [flow_port, offrate_port, poly_port, nucleation_port, module_alloc_port, polarity_port, cms1d_sim]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against cms_code, and no model of
+    cms_code against this record. cms_code is the released MATLAB CMS v1.0 of bangasser2017 (cited here as
+    ref-bangasser2017): all its data are parameters set by its shell scripts (origin reported), with no
+    figure readings and no measured values, so there is nothing measured for flow_port, offrate_port or the
+    other ports to predict. In the other direction this record holds no measurement either (all reported,
+    plus psi_pol_p20 copied from prahl2020 as fitted). flow_port here and cms_code/flow_port share the same
+    rule, v = vu (1 - F/(nm Fm)) clipped at 0; that is a relation between two implementations, not a test
+    against data. Measured speeds, motility coefficients and flows belong to the papers' records
+    (prahl2020, bangasser2017).
+  citation: {file: Cell1DPublish.cpp, lines: "405", quote: "module->filament_vel_ = max(0.0, v_unloaded_"}
+
+# ==== cross-record validation with prahl2020 (2026-11-19): none added ==========================
+- id: q_xval_prahl2020_none
+  kind: unstated_model
+  about: [cms1d_sim, flow_port, offrate_port, poly_port, nucleation_port, module_alloc_port, polarity_port]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against prahl2020's measurements.
+    prahl2020 measures U251 migration in 1D confining channels: drift velocity and motility coefficient
+    (v_exp, mu_exp; Figs. 3A-B, 4C-D, 5C-D, 6A-B, 7A-B under cRGD, Y-27632, latrunculin A and MTA), the mean
+    MSD curve (fig2g_exp), EB1 microtubule growth speeds (eb1_mean, Fig. S5B), cell length and nucleus
+    position (Fig. S5C-D). The only model here whose output is a migration quantity is cms1d_sim, and it is
+    not runnable (q_sim_not_run) and computes no MSD, velocity or motility coefficient even as code
+    (q_no_analysis); its output port is the cell position over time, which prahl2020 reports only as
+    single random trajectories (Figs. 1B, 2D, not read). Its default settings are also not the measured
+    condition: ksub 1 pN/nm against PDMS at 1000 (q_ksub), psi_pol 0.5 (q_polarity), and a hidden motor
+    schedule (q_motor_schedule). The runnable ports give one module's retrograde flow (flow_port, the same
+    shape as prahl2020's Eqn. S2 inside cms_1d), a clutch off-rate, a polymerization speed, a module birth
+    rate, motor and clutch counts and a polarity probability; prahl2020 measures none of these (no
+    retrograde flow, traction, adhesion lifetime or module count; the EB1 speeds are microtubule, not
+    F-actin, growth). In the other direction, this record holds no measurement (all reported, plus
+    psi_pol_p20 copied from prahl2020 as fitted), so prahl2020's models have nothing here to predict; see
+    prahl2020/q_xval_cms1d_cpp_code_none. The agreement of the ports with Eqns. S1-S3 and S8 is a relation
+    between models (relations.yaml), not a validation.
+  citation: {file: Cell1DPublish.cpp, lines: "253-254", quote: "void Cell1D::Record() {"}
+
+# ==== cross-record validation with bangasser2017 (2026-11-19): none added ======================
+- id: q_xval_bangasser2017_none
+  kind: unstated_input
+  about: [flow_port, cms1d_sim, offrate_port, poly_port, nucleation_port, module_alloc_port, polarity_port]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2017's measurements.
+    bangasser2017 measures U251 glioma cells (and redraws ECFN data) on 2D polyacrylamide gels: random
+    motility coefficient, cell area and aspect ratio, retrograde actin flow and traction strain energy
+    against gel Young's modulus, with and without blebbistatin and cyclo(RGDfV) (Figs. 2c-e, 3c-f, 4a-e,
+    bar insets, Supp. Figs. 2E, 4C-I), and MSD curves (Supp. Fig. 2E). (1) flow_port has the same shape as
+    bangasser2017/cms's motor law (velocity from force and velocity; relation to motor_velocity_eq2 in
+    relations.yaml), and its output, retrograde_flow_rate, is the quantity of the measured flows
+    (fig3c_u251_pts, fig4a_*_pts, figs4c_bars_pts). But those flows are indexed by gel Young's modulus, and
+    flow_port needs the load on one module (module_force) and its motor number, neither of which
+    bangasser2017 measures or states for its cells: it measures a whole-cell traction strain energy (pJ), not
+    a module force, and gives no conversion from modulus to a spring constant. Supplying the force would be
+    an added input that decides the predicted flow by itself, so the comparison would test the added value,
+    not the model. (2) cms1d_sim, the only model with a migration output, is not runnable and computes no
+    motility coefficient or MSD (q_sim_not_run, q_no_analysis); it is also a 1D channel simulator, set here
+    to ksub 1 pN/nm, psi_pol 0.5 and a hidden motor schedule (q_ksub, q_polarity, q_motor_schedule), not the
+    2D gels of the measurements. (3) The other ports give an off-rate, a polymerization speed, a birth rate,
+    module motor and clutch counts and a polarity probability, none of which bangasser2017 measures. In the
+    other direction, this record holds no measurement (all reported, plus psi_pol_p20 copied from prahl2020
+    as fitted), so bangasser2017's models have nothing here to predict; see
+    bangasser2017/q_xval_cms1d_cpp_code_none.
+  citation: {file: Cell1DPublish.cpp, lines: "405", quote: "module->filament_vel_ = max(0.0, v_unloaded_"}

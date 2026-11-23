@@ -1,0 +1,562 @@
+- id: q_drag_velocity_units
+  kind: possible_error
+  about: [v_cell_drag, v_exp, Fdrag_printed, cmp_fdrag, cmp_fdrag_fig3b]
+  text: >-
+    Eqn. S10 is evaluated with "the mean velocity obtained from experiments (vcell = 0.51 um s-1; Figure 3B)",
+    but Fig. 3B and the main text give the mean velocity as 0.51 um min-1 (8.5 nm/s). With um/s, Eqn. S10
+    reproduces the printed Fdrag = -6.5 pN; with the Fig. 3B value it gives about -0.11 pN, 60 times smaller.
+    The printed velocity unit looks like a slip; it does not weaken the conclusion that drag is negligible
+    (it strengthens it), but the main text's "on the order of 6.5 pN" rests on it.
+  citation: {page: 21, printed_page: "S8", quote: "0.51 μm s-1; Figure 3B) and assuming the same", where: "text before Eqn. S10"}
+- id: q_drag_area
+  kind: reading
+  about: [A_channel, b_square, run_fdrag]
+  text: >-
+    Eqn. S10 uses "the same cross-sectional area as before". This record takes the printed 60 um^2; the
+    7.5 um square used for Eqn. S9 has 56.25 um^2 and would give -6.1 pN instead of -6.5 pN. The printed
+    -6.5 pN follows from 60 um^2. The 7.5 um square side is itself not the square root of 60 um^2 (7.75 um).
+  citation: {page: 21, printed_page: "S8", quote: "assuming the same cross-sectional area as before", where: "text before Eqn. S10"}
+- id: q_cms_not_runnable
+  kind: unstated_model
+  about: [cms_1d, v_sim, mu_sim]
+  text: >-
+    The 1D CMS is stated by its rate laws and force balances (Eqns. S1-S8) and Table S1, but the algorithm is
+    referred to ref. S1 (Bangasser et al. 2017): the order of events in a step, the share of motors and
+    clutches given to a new module, how bound clutches move with F-actin flow, and the filter on
+    displacements. The MATLAB code is not released with the paper; the later C++ simulator (cms1d_cpp_code)
+    postdates it. The simulated motility coefficients and velocities (Figs. 1-7, S1, S3) are therefore
+    recorded without a run, and the CMS drug predictions (Figs. 4A-B, 5A-B, 6C-D, 7C-D) are not checked.
+  citation: {page: 16, printed_page: "S3", quote: "The order of events in each step of the model algorithm is", where: "Simulation implementation and analysis"}
+- id: q_cms_numerics
+  kind: numerics
+  about: [cms_1d, v_sim, mu_sim]
+  text: >-
+    Every simulated result rests on 36-60 kinetic Monte Carlo runs of 5-7 h simulated time each, with the
+    first hour dropped and displacements faster than 1 um/s filtered out; no sensitivity to the run length,
+    the discarded hour, the sampling interval or the filter is reported, and the run length varies between
+    runs ("5-7 hours").
+  citation: {page: 16, printed_page: "S3", quote: "Individual runs represent data collected over 5-7 hours of simulated time", where: "Simulation implementation and analysis"}
+- id: q_n_sims_psi
+  kind: possible_error
+  about: [cms_1d]
+  text: >-
+    The numbers of simulations per polarity value disagree between legends: Fig. 2G gives n = 60 for
+    psi_pol = 0.9, 36 for 0.83 and 40 for 0.5; Fig. S1, for "psi_pol = 0.5, 0.83, or 0.9", gives n = 60, 36, 40
+    (the reverse pairing of 0.5 and 0.9); Fig. 1B gives n = 36 for each condition (psi_pol = 0.5-0.9).
+  citation: {page: 24, printed_page: "S11", quote: "where ψpol = 0.5, 0.83, or 0.9, n = 60, 36, 40 simulations", where: "Fig. S1 legend"}
+- id: q_table_s2_labels
+  kind: possible_error
+  about: [cms_1d]
+  text: >-
+    Table S2 is "Related to Figure 4 and Figure 5", but its parts are headed "Figure 6A" to "Figure 6F", and
+    its motor-number parts list nmotor = 100, 500, 750, while the Fig. 5 legend gives nmotor = 100, 500 and
+    1000. Which simulations the p-values belong to is ambiguous.
+  citation: {page: 23, printed_page: "S10", quote: "Related to Figure 4 and Figure 5", where: Table S2}
+- id: q_v_sim_similar
+  kind: overstated_claim
+  about: [cmp_v_sim_exp, v_sim, v_exp]
+  text: >-
+    The abstract says the simulations "predicted similar migration velocities": v_sim = 0.37 +- 0.04 um/min
+    against v_exp = 0.51 +- 0.02 um/min (mean +- SE). The difference, 0.14 um/min, is about three combined
+    standard errors; the paper gives no test of it. The motility coefficients differ 4.5-fold, which the paper
+    acknowledges and attributes to short-timescale reversals in the simulations.
+  citation: {page: 1, printed_page: "1709", quote: "simulations predicted similar migration velocities", where: Abstract}
+- id: q_prw_speed_agrees
+  kind: overstated_claim
+  about: [v_exp, S_prw]
+  text: >-
+    The text says the Eq. 2 mean velocity (0.51 +- 0.02 um/min) "agrees with the speeds obtained using the PRW
+    model (Fig. S4)", which are S = 0.74 +- 0.05 um/min. The two are different quantities (a drift velocity
+    and a PRW speed), so no comparison is entered; as numbers they differ by about 45%.
+  citation: {page: 6, printed_page: "1714", quote: "agrees with the speeds obtained using the PRW model", where: text}
+- id: q_tumor_rate
+  kind: unexplained_difference
+  about: [cmp_tumor_rate, tumor_rate_printed, v_sim_approx]
+  text: >-
+    "~0.5 um per min" is said to correspond to "a tumor growth rate of 25 cm per year". 0.5 um/min over a
+    365-day year is 26.3 cm; 0.51 um/min (the measured mean) gives 26.8 cm. The printed 25 is close but
+    outside its last digit; the paper may have rounded down deliberately, which it does not say.
+  citation: {page: 9, printed_page: "1717", quote: "rate of 25 cm per year1, within the range of tumor growth", where: Discussion}
+- id: q_persistence_mean
+  kind: reading
+  about: [cmp_persistence, logP_mean, P_1258]
+  text: >-
+    The main text calls 1258 min the "mean persistence time" from individual fits; Fig. S4B shows it is 10 to
+    the mean of log10 P (a geometric mean), 10^3.1. 10^3.1 is 1259 min, not 1258; the paper presumably used an
+    unrounded mean log (about 3.0997). The printed 3.1 +- 0.25 spans 708 to 2239 min.
+  citation: {page: 27, printed_page: "S14", quote: "corresponding to 1258 minutes", where: "Fig. S4B legend"}
+- id: q_msd_n
+  kind: unstated_input
+  about: [msd_prw_eq1, msd_drift_eq2]
+  text: >-
+    Eqs. 1 and 2 contain a factor n that the paper does not define; it is presumably the number of spatial
+    dimensions (1 for the channels). The individual trajectories and MSD curves the equations were fitted to
+    are not published, so the fitted means (mu, v, S, P) cannot be re-derived and the fit models have no runs.
+  citation: {page: 6, printed_page: "1714", quote: "The PRW model relates MSD", where: "Eq. 1"}
+- id: q_modulus_to_spring
+  kind: unstated_model
+  about: [ksub_table, ksub_text]
+  text: >-
+    ksub = 1000 pN/nm is "set to reflect the rigid modulus of elastomer materials (E = 1000 kPa)", and
+    kcell = 10^4 pN/nm is "consistent with" E ~ 10^4 kPa, but no conversion from a modulus to a spring constant
+    is given (the numbers suggest 1 kPa per pN/nm, which would need a length of 1 um). The chan2008 record
+    has its own stiffness-modulus relation (chan2008/ksub_eq13) that a later job could compare.
+  citation: {page: 4, printed_page: "1712", quote: "to reflect the rigid modulus of elastomer materials", where: text}
+- id: q_params_vs_2d
+  kind: reading
+  about: [nmotor, nmotor_module, Fmotor, vmotor, nclutch, nclutch_module, Fbond, kclutch, kon, koff, kcap, knuc0, vactin_max, Atotal, kcell, Lcell, Lmin, nclutch_cell, ksub_table, psi_pol]
+  text: >-
+    "Calibrated to a 2D motor-clutch model": every Table S1 value except ksub and psi_pol equals the base
+    (first) value of bangasser2017 Supplementary Table 2 (Nm 1,000; Nc 750; Atot 100 um; vp 200 nm/s; kmod
+    1 s^-1; kcap 0.001 s^-1; lin 5 um; lmin 0.1 um; kcell 10,000 pN/nm; nc,cell 10; nm* 100; Fm 2 pN; vm
+    120 nm/s; nc* 75; kon 1 s^-1; koff 0.1 s^-1; kc 0.8 pN/nm; Fb 2 pN). The 2D CMS's substrate spring is
+    variable; here it is fixed for PDMS. psi_pol = 0.9 is the one parameter set to the channel data, by eye
+    (p. 1718). Nothing else is re-calibrated. To be linked to bangasser2017's data when that record has them.
+  citation: {page: 22, printed_page: "S9", quote: "Adjustable, estimated in (1)", where: "Table S1, Source column"}
+- id: q_figures_unread
+  kind: reading
+  about: [cms_1d, v_exp, mu_exp]
+  text: >-
+    The figures were not digitised: the figure rendering and checking commands were not available to this
+    reading job. Figs. 1C, 2F-G, 3A-D, 4A-D, 5A-D, 6A-D, 7A-D, S1, S3, S4 and S5B-D hold measured and simulated
+    values (with SEM or SD error bars) that a later figure pass should read; see figures.md. In particular the
+    stated peak of the simulated motility and velocity at nclutch = 75 (Fig. 4A-B) and the experimental peak
+    at 0.1-0.3 uM cRGD (Fig. 4C-D) are recorded only as text.
+  citation: {page: 7, printed_page: "1715", quote: "the largest value of either quantity was obtained", where: text}
+# ---- added by the audit ----
+- id: q_glass_modulus
+  kind: possible_error
+  about: [q_modulus_to_spring]
+  text: >-
+    The modulus of the glass bottom is printed twice with different powers of ten: "E = ~10^7 kPa" in the
+    Discussion (p. 1718) and "E ~ 10^6 kPa" in the Supplemental Notes (p. S7). Neither feeds a model here; the
+    source notes had quoted only the 10^7.
+  citation: {page: 20, printed_page: "S7", quote: "and glass (E ~ 106 kPa) and thus", where: "Supplemental Notes"}
+- id: q_clutch_timescale
+  kind: overstated_claim
+  about: [kon, koff, Fbond, slip_bond_s1]
+  text: >-
+    The Discussion says clutch "binding and unbinding events occur on the ~10^-1-10^-3 s timescale" (p. 1717)
+    and the Supplemental Notes say "milliseconds" (p. S7), which justifies treating F-actin and clutches as
+    elastic. With Table S1, the unloaded mean binding time is 1/kon = 1 s and the unloaded bound lifetime is
+    1/koff = 10 s; by Eqn. S1 a clutch lifetime reaches 0.1 s only above Fclutch = Fbond ln(100) = 9.2 pN and
+    1 ms only above 18.4 pN. The stated timescale is 1-4 orders of magnitude shorter than the base parameters
+    give at low load.
+  citation: {page: 9, printed_page: "1717", quote: "binding and unbinding events occur on the", where: Discussion}
+- id: q_eqn_s6_index
+  kind: possible_error
+  about: [cms_1d]
+  text: >-
+    Eqn. S6, the force on the cell-body clutches, sums over i = 1 to nclutch,j (the clutch number of module j),
+    though the text says the ensemble under the cell body has nclutch,cell clutches. The upper limit looks
+    copied from Eqn. S5; cms_1d is not runnable, so no run depends on it.
+  citation: {page: 15, printed_page: "S2", quote: "represents the force from extension of the cell", where: "Eqn. S6"}
+- id: q_params_vs_2d_now_checkable
+  kind: reading
+  about: [q_params_vs_2d, nmotor, nclutch, nmotor_module, nclutch_module, kcell, Lmin]
+  text: >-
+    The audit checked q_params_vs_2d against the bangasser2017 record, which now holds Supplementary Table 2
+    (bangasser2017/data.yaml: Nm_low, Nc_low, Atot, vp_star, kmod_star, kcap, lin, lmin, kcell, nccell_low,
+    nm_star_low, Fm, vm_star, nc_star_low, kon, koff_star, kc, Fb): every Table S1 value except ksub and psi_pol
+    equals the first (low) value there, as the first reader stated. The source notes' "bangasser2017's record
+    has no data yet" is out of date; a cross-record link could now be made by a later job. One difference in
+    the stated rules, not the values: the 2D CMS starts with three equally spaced modules (bangasser2017,
+    step 1), the 1D CMS with two +x modules and one -x module (p. S3).
+  citation: {page: 22, printed_page: "S9", quote: "Adjustable, estimated in (1)", where: "Table S1, Source column"}
+# ---- added by the figure pass ----
+- id: q_figures_read
+  kind: reading
+  about: [q_figures_unread, fig4a_mu_nclutch, fig4b_v_nclutch, fig4c_mu_rgd, fig4d_v_rgd]
+  text: >-
+    The figure pass read Figs. 2G, 3A-D, 4A-D, 5A-D, 6A-D, 7A-D, S1A-C, S3A-B, S4A-B and S5B-D with calibrated
+    readings (figures.md), which answers most of q_figures_unread. The stated peaks are now values: Fig. 4A-B
+    is largest at nclutch = 75 (motility about 17.1, velocity about 0.96 um/min, against 7.27 and 0.37 at 750),
+    and Fig. 4C-D at 0.1 uM cRGD for motility (about 2.68) and at 0.1-0.3 uM for velocity (about 0.81 at both),
+    as the text says. Fig. 2F stays unread (figures.md).
+  citation: {page: 7, printed_page: "1715", quote: "the largest value of either quantity was obtained", where: text}
+- id: q_base_runs_shared
+  kind: reading
+  about: [q_n_sims_psi, mu_sim, v_sim, figs1a_mu_psi, figs1b_v_psi, cmp_mu_base_figs1a, cmp_v_base_figs1b]
+  text: >-
+    The base-parameter simulation (nmotor 1000, nclutch 750, psi_pol 0.9, ksub 10^3 pN/nm, knuc,0 1 /s) is plotted
+    in Figs. 3C-D, 4A-B (nclutch 750), 5A-B (nmotor 1000), 6C-D, 7C-D, S1A-B (psi_pol 0.9) and S3A-B (ksub 10^3):
+    every one of these reads 7.27 um^2/min with SEM bar 6.47-8.07 and 0.372 um/min with SEM bar 0.333-0.412,
+    the printed mu_sim = 7.27 +- 0.80 and v_sim = 0.37 +- 0.04 of n = 60 runs. The figures thus reuse one set of
+    runs, and the psi_pol = 0.9 group of Fig. S1 is that n = 60 set. This supports the Fig. 2G pairing in
+    q_n_sims_psi (psi_pol 0.9 with n = 60) and makes the Fig. S1 legend's order (0.5, 0.83, 0.9 with n = 60,
+    36, 40) the likelier slip; it does not settle Fig. 1B's "n = 36 for each condition".
+  citation: {page: 24, printed_page: "S11", quote: "where ψpol = 0.5, 0.83, or 0.9, n = 60, 36, 40 simulations", where: "Fig. S1 legend"}
+- id: q_fig2f_legend
+  kind: possible_error
+  about: [fig2g_exp]
+  text: >-
+    Fig. 2F's caption says the experiment is shown as filled circles and the 1D CMS as open diamonds; the
+    legend drawn inside the panel labels the open diamonds "Experiment" and the filled circles "1D CMS
+    (psi_pol = 0.9)". One of the two is swapped. Fig. 2F is not read (figures.md), so no value depends on it.
+  citation: {page: 5, printed_page: "1713", quote: "for a representative experiment (filled circles", where: "Fig. 2F legend"}
+- id: q_fig2g_sim_vs_exp
+  kind: overstated_claim
+  about: [val_fig2g_sim_exp, fig2g_psi09_late, fig2g_exp]
+  text: >-
+    The text calls the mean MSD "consistent with the 1D CMS predictions (psi_pol = 0.9; Fig. 2, F and G)". Read
+    from Fig. 2G, the simulated mean MSD lies 15-25% below the measured one at lags 110-170 min (about 9.1 x 10^3
+    against 12.1 x 10^3 um^2 at 170 min), and from about 150 min on the SEM bars no longer overlap. The curves
+    have the same shape and agree within their bars below about 100 min.
+  citation: {page: 5, printed_page: "1713", quote: "Mean displacement and MSD were also consis", where: text}
+- id: q_fig2g_eq2_mean
+  kind: reading
+  about: [cmp_eq2_mean_exp, cmp_eq2_mean_sim, msd_drift_eq2, mu_exp, v_exp]
+  text: >-
+    Eq. 2 with the mean fitted mu and v (and n = 1, added) gives about 8.1 x 10^3 um^2 at 170 min against the
+    12.1 x 10^3 read from Fig. 2G for the cells, and 6.4 x 10^3 against 9.1 x 10^3 for the simulations. The
+    mean MSD over cells is 2n<mu>t + <v^2>t^2, and <v^2> exceeds <v>^2 by the variance of v across cells (wide,
+    Fig. 3B), so Eq. 2 with mean parameters must fall short; the paper's explanation of the agreement ("the
+    quadratic velocity term dominates", p. 1714) holds for the shape, not the size.
+  citation: {page: 6, printed_page: "1714", quote: "because the quadratic velocity term dominates the", where: text}
+- id: q_figs4a_mean
+  kind: unexplained_difference
+  about: [cmp_mean_figs4a, S_prw, figs4a_S_hist]
+  text: >-
+    The binned mean of the Fig. S4A histogram of PRW speeds is about 1.05 um/min (13 bins over 0-12 um/min,
+    209 + 169 cells in the first two), against S = 0.74 +- 0.05 um/min "(mean +- SEM)" in the same legend. With
+    bins 0.92 um/min wide the raw mean can lie anywhere between about 0.68 and 1.6, so 0.74 is possible only if
+    most speeds sit near the lower edges of their bins. The main text says S came from "fitting a pooled control
+    data set", which would make it a different number from the mean of the individual fits shown.
+  citation: {page: 27, printed_page: "S14", quote: "S = 0.74 ± 0.05 μm min-1 or S = 12.3", where: "Fig. S4A legend"}
+- id: q_fig3a_total
+  kind: reading
+  about: [cmp_n_fig3a, fig3a_mu_exp_hist]
+  text: >-
+    The bars read from Fig. 3A add up to about 399 cells, not 403. Bins at 16, 18 and 24 um^2/min carry bars of
+    about one cell, lower than two axis-line widths, which the reading takes as zero (with an interval up to
+    about two cells). The shortfall is a limit of the reading, not a finding about the paper. Fig. 3B and S4A-B
+    add up to 402-403.
+  citation: {page: 6, printed_page: "1714", quote: "obtained for n ¼ 403 cells", where: "Fig. 3A legend"}
+# cross-record validation against bell1978 (2026-11-19): none added
+- id: q_xval_bell1978_none
+  kind: choice
+  about: [slip_bond_s1, nucleation_s8, ref-64]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978. bell1978 plots no measured data: its only figure with values, Fig. 8, is a model
+    curve. Its only entries with origin measured are force_adhesive ("~ 1" dyne per cell,
+    approximate, from its ref. 52) and the inhibiting sugar concentrations c_sugar_low and
+    c_sugar_high (0.001 and 0.01 M, from its ref. 49). No model here outputs a whole-cell adhesive
+    force or a sugar concentration. slip_bond_s1 is described from bell1978 and gives a clutch off
+    rate under tension, but bell1978 measures no off rate. nucleation_s8 has the same shape as
+    bell1978/loaded_reverse_rate (a rate from a length and a rate), but it describes actin
+    nucleation, not bonds, and no bell1978 measurement is a rate. This paper cites bell1978 only
+    for the slip-bond form (Supporting ref. 6). In the other direction, see bell1978
+    q_xval_prahl2020_none.
+  citation: {page: 14, printed_page: "S1", quote: "scales with force by a single exponential (6), also known as a slip bond", where: "Eqn. S1"}
+# cross-record validation against chaudhuri2015 (2026-11-19): none added
+- id: q_xval_chaudhuri2015_none
+  kind: choice
+  about: [cms_1d, slip_bond_s1, force_velocity_s2, ref-44]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chaudhuri2015. This paper cites chaudhuri2015 (ref. 44) only among the works that describe the
+    motor-clutch parameter values and their constraints ("previously described by both our previous
+    work and that of several other labs (6,7,9,40-44)", p. 4), never for its data. chaudhuri2015
+    measures alginate gel mechanics (initial Young's moduli, stress relaxation, G' and G''), spread
+    areas of cells on elastic and stress-relaxing gels, the fractions of cells with stress fibres,
+    attached or proliferating, and nuclear YAP ratios. The models here give 1D migration drift
+    velocity and motility coefficient (cms_1d, not runnable), clutch off rates (slip_bond_s1),
+    retrograde flow rates (force_velocity_s2), actin polymerization and nucleation rates, and MSD fits
+    and histogram statistics of this paper's own tracks. None of them gives a spread area, a gel
+    modulus or a cell fraction, and chaudhuri2015 measures no off rate or flow rate. The 1D CMS also
+    has no viscoelastic substrate (Discussion, p. 9), so it could not address the stress-relaxation
+    conditions of those measurements. In the other direction, see chaudhuri2015
+    q_xval_prahl2020_none.
+  citation: {page: 4, printed_page: "1712", where: text, quote: "previous work and that of several other labs"}
+# cross-record validation against craig2015 (2026-11-19): none added
+- id: q_xval_craig2015_none
+  kind: unstated_model
+  about: [cms_1d, force_velocity_s2, slip_bond_s1, polymerization_s3, nucleation_s8, ref-38]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    craig2015. This paper cites craig2015 (ref. 38) only for the suggestion that polymerization and
+    myosin motors can both drive F-actin retrograde flow (p. 4), never for its data. craig2015's
+    measurements with values are the U2OS lamellar flow speed and total traction force under
+    Y-27632 (supp. fig. 1(a)-(c), from its ref. 31), Ptk1 flow speeds printed only as "~20" and "~2"
+    nm/s (no verdict possible), and Ptk1 paxillin and myosin intensity profiles (Fig. 2(d)).
+    cms_1d (whole-cell drift velocity, motility coefficient) is not runnable and gives no flow or
+    traction. force_velocity_s2 gives a module's retrograde flow from its substrate spring force
+    and its motor count; applied to supp. fig. 1(c) it would need the number of engaged motors per
+    Y-27632 condition (and the split of a whole-cell force into module forces), which neither paper
+    states and which Y-27632 changes, so any value would be fitted point by point, not predicted.
+    At a fixed motor count it predicts flow falling with load, while the measured flow rises with
+    force as myosin activity rises: the measurement varies the motor drive, which is an input
+    here, not an output. No model here gives an intensity profile. In the other direction, see
+    craig2015 q_xval_prahl2020_none.
+  citation: {page: 4, printed_page: "1712", where: text, quote: "grade flow in the motor-clutch model, as previously sug"}
+# cross-record validation against elosegui2014 (2026-11-19): none added
+- id: q_xval_elosegui2014_none
+  kind: choice
+  about: [cms_1d, force_velocity_s2, slip_bond_s1, kon_from_koff, ref-41]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2014. This paper cites elosegui2014 (ref. 41) only among the works that describe the
+    motor-clutch parameter values and their constraints ("previously described by both our previous
+    work and that of several other labs (6,7,9,40-44)", p. 4), never for its data. elosegui2014's
+    measurements are myoblast and MEF traction, actin flow speed and integrin density on 2D
+    fibronectin gels of 0.25-29 kPa (Figs. 1b-c, 4d-l), SPR binding curves of a5b1 and avb6 to FN
+    (Fig. 2a), membrane integrin densities (Fig. 2b), bead detachment times and integrin recruitment
+    (Figs. 2c, e, g). cms_1d gives the 1D drift velocity and motility coefficient of U251 cells in
+    channels and is not runnable; it has no traction, flow or integrin-density output, one integrin
+    type and no reinforcement. force_velocity_s2 gives a module's retrograde flow from its substrate
+    spring force and engaged motor count: applied to Figs. 4e, 4h, 4k it would need per-module forces
+    and motor counts for myoblasts on each gel, which neither paper states, so any value would be
+    fitted, not predicted. slip_bond_s1 and kon_from_koff give clutch rates from this paper's own
+    Table S1 values; elosegui2014's SPR koff is unloaded, an input of a slip bond, not a prediction
+    of one. No model here gives an SPR response, a membrane density, a detachment time or a
+    recruitment index. In the other direction, see elosegui2014 q_xval_prahl2020_none.
+  citation: {page: 4, printed_page: "1712", where: text, quote: "previous work and that of several other labs"}
+- id: q_xval_elosegui2016_none
+  kind: unstated_model
+  about: [cms_1d, force_velocity_s2, slip_bond_s1, kon_from_koff, vmotor]
+  text: >-
+    Cross-validation against elosegui2016 (ref. 7 and Supporting ref. S19) found no measurement of
+    elosegui2016 that a model here predicts. The paper cites it only among the sources of its parameter
+    values ("previous work and that of several other labs (6,7,9,40-44)", p. 4) and for the unloaded
+    myosin speed ("~100 nm s-1 observed in other cells (5, 19)", Table S1), never as data its model
+    explains. elosegui2016 measured, in mouse embryonic fibroblasts on fibronectin-coated polyacrylamide
+    gels of varying rigidity (up to 29.45 kPa): cell tractions (Figs. 1a, 3d, 4, 6), actin rearward flow (Fig. 3e), adhesion
+    lengths of vinculin, b3 integrin and pFAK (Figs. 1c, 2a, 2c), YAP nuclear/cytosolic ratios (Fig. 1e),
+    the a5b1-fibronectin bond lifetime under force (Fig. 3a) and a threshold rigidity (~5 kPa).
+    cms_1d gives the 1D drift velocity and motility coefficient of U251 glioma cells in stiff channels,
+    has no traction or flow output and is not runnable. force_velocity_s2 gives a module's flow from its
+    substrate spring extension and engaged motor count, neither of which elosegui2016 states for its
+    cells on any gel, so a value would be fitted, not predicted (with zero load it returns vmotor, an
+    input, not a prediction). slip_bond_s1 gives a loaded off-rate from this paper's Fbond, a slip bond:
+    Fig. 3a of elosegui2016 is a lifetime (a different quantity) of a catch bond, which a slip bond
+    cannot produce, and neither paper says the one describes the other. No model here gives a traction,
+    an adhesion length or a YAP ratio. In the other direction, see elosegui2016 q_xval_prahl2020_none.
+  citation: {page: 4, printed_page: "1712", where: text, quote: "previous work and that of several other labs"}
+# cross-record validation against gardel2008 (2026-11-19): none added
+- id: q_xval_gardel2008_none
+  kind: unstated_model
+  about: [cms_1d, force_velocity_s2, drag_force_s10, Fdrag_main, v_exp_nm_s, ref-37]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    gardel2008. This paper cites gardel2008 (ref. 37) twice, never as data its model explains: for
+    the suggestion that polymerization and myosin can both drive F-actin retrograde flow (p. 4), and
+    for traction forces of adherent cells being orders of magnitude above the ~6.5 pN drag force
+    (p. 10). gardel2008 measures, in PtK1 cells on polyacrylamide gels of ~1500-5400 Pa shear modulus, local traction
+    stress (Pa) and F-actin speed per grid point, region and condition (Figs. 1 D-G, 2 B, 3 D-F, 4 C-D,
+    5 E-G, S2 D, S3 E-F), and the F-actin speed at maximal traction (8-12 nm/s, ~8 nm/s, 12.7 ± 3 nm/s).
+    cms_1d gives the 1D drift velocity and motility coefficient of U251 cells in rigid channels, has
+    no traction or flow output and is not runnable. force_velocity_s2 gives a module's flow from its
+    substrate spring extension and engaged motor count: gardel2008 states neither, and its loads are
+    stresses on gel patches, not module spring forces (the split of a stress into module forces
+    needs an area and a module count that neither paper gives), so a value would be fitted, not
+    predicted; at a fixed motor count it also gives only the inverse (slip) branch, not the biphasic
+    relation measured. The p. 10 statement compares drag_force (Fdrag_main, a force) with traction
+    forces that gardel2008 reports only as stresses, so it is a qualitative order-of-magnitude claim
+    with no model run to check. The measured cell speed v_exp_nm_s (8.5 nm/s) lies in gardel2008's
+    8-10 nm/s threshold range only by coincidence of number: it is a whole-cell migration speed, not
+    an F-actin speed at maximal traction, and the two quantities are not mapped. In the other
+    direction, see gardel2008 q_xval_prahl2020_none.
+  citation: {page: 10, printed_page: "1718", where: text, quote: "or traction forces produced by adherent cells"}
+# ==== cross-record validation with gong2018 (2026-11-19): none added ===========================
+- id: q_xval_gong2018_none
+  kind: unstated_model
+  about: [cms_1d, slip_bond_s1, force_velocity_s2, polymerization_s3, nucleation_s8, drag_force_s10]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    gong2018. The paper cites gong2018 (ref. 43) once, among works that previously described the
+    values of its parameters and their constraints (p. 4); it does not say its model explains, fits or
+    predicts any gong2018 data. gong2018 measures cell spreading areas of 3T3 fibroblasts, MSCs and
+    U2OS cells on elastic and stress-relaxing gels (Figs. 4D, 5D, 6D, S5A), spreading speeds extracted
+    from those areas (Fig. S7) and gel relaxation stiffness (Figs. 4B, 5B, S6A). cms_1d outputs a 1D
+    drift velocity and motility coefficient in a channel, not a spreading area or spreading speed, has
+    no viscoelastic substrate, and is not runnable; the runnable module laws (slip_bond_s1,
+    force_velocity_s2, polymerization_s3, nucleation_s8) and drag_force_s10 output a loaded off-rate, a
+    module flow, a polymerization speed, a nucleation rate and a drag force, none of which gong2018
+    measures (its off-rates and flows are model quantities, not data). slip_bond_s1 has the shape of
+    gong2018/bell_off_rate, but that is a model-model relation, not a measurement. In the other
+    direction, see gong2018/q_xval_prahl2020_none.
+  citation: {page: 4, printed_page: "1712", where: text, quote: "previous work and that of several other labs"}
+# cross-record validation against chan2008 (2026-11-19): none added
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [force_velocity_s2, slip_bond_s1, cms_1d]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chan2008. The paper cites chan2008 (refs. 6 and S5) only as the source of its module laws: the
+    linear force-velocity relationship (Eqn. S2), the force-dependent off-rate (Eqn. S1, p. 4) and rigid
+    F-actin with elastic clutches (Supplemental Notes); it never says its model explains, fits or
+    predicts chan2008 data. chan2008 measures F-actin retrograde flow in embryonic chick neuron
+    filopodia on 260 Pa-57 kPa gels (Fig. 3C-D, S8C), bead step sizes and failure frequencies
+    (Figs. S4, S5), peak filopodial force and the contact-bead distance. cms_1d outputs a cell drift
+    velocity and motility coefficient in a rigid channel and is not runnable. force_velocity_s2 has the
+    shape of chan2008/force_velocity_eq3 and outputs a module flow, but it needs the instantaneous
+    substrate extension and module motor number at the moment of the flow, which chan2008 does not
+    measure together with any flow value (its flows are run averages, its 110 pN force a peak), so the
+    law cannot be run on a measurement's own conditions; the relation is model to model. slip_bond_s1
+    outputs a loaded off-rate, which chan2008 does not measure. In the other direction, see
+    chan2008/q_xval_prahl2020_none.
+  citation: {page: 4, where: text, quote: "the load by a linear force-velocity relationship"}
+# cross-record validation against bangasser2013 (2026-11-19): none added
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [slip_bond_s1, force_velocity_s2, cms_1d, ref-40, ref-S20]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013. The paper cites bangasser2013 (ref. 40, Supporting ref. S20) for the motor-clutch
+    model itself (p. 3), as a source of parameter values and constraints (p. 4; Table S1, clutch
+    number and clutch stiffness "(20)"), and for the stiffness-sensitivity limit of U251 cells
+    (p. 10); it never says its model explains, fits or predicts bangasser2013's data. The measured
+    entries of bangasser2013 are all redrawn from other works: Kong et al.'s integrin-fibronectin
+    bond lifetimes (tau_kong_fig7c), Chan and Odde's neuron retrograde flow against gel modulus
+    (v_figS1b_measured), normalized migration of four cell types against stiffness (Fig. 1A) and
+    normalized traction of three (Fig. 1B). slip_bond_s1 has the shape of
+    bangasser2013/catch_slip_eq9 (a rate from a force and a rate), but it outputs a loaded off rate,
+    not a lifetime (a different quantity), and it is a slip bond with this paper's own U251 Table S1
+    koff and Fbond: Kong's lifetimes are a catch bond of a5b1 on FNIII7-10 that rises then falls with
+    force, which a single exponential cannot give, and neither paper says the one describes the
+    other; the shared shape is a model-model relation. force_velocity_s2 gives a module's flow from
+    its spring extension and engaged motor count, which Chan and Odde's run-averaged flows do not
+    state, so a value would be fitted, not predicted (and the curve is indexed by Young's modulus,
+    not a spring constant). cms_1d (drift velocity and motility coefficient in rigid channels) is not
+    runnable and has no traction output; the Fig. 1A migration data are normalized curves against
+    substrate stiffness for other cell types on 2D gels, not 1D confined migration. In the other
+    direction, see bangasser2013/q_xval_prahl2020_none.
+  citation: {page: 3, where: text, quote: "of the motor-clutch model (6,40)"}
+# cross-record validation against cms_code (2026-11-19): none added
+- id: q_xval_cms_code_none
+  kind: unstated_model
+  about: [cms_1d, force_velocity_s2, slip_bond_s1, polymerization_s3, nucleation_s8, ref-9, ref-S1]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against cms_code, and no model of
+    cms_code against this record's measurements. cms_code is the released MATLAB code of the 2D CMS of
+    ref. 9 (Bangasser et al. 2017), which the paper names as the model it modifies ("In the previous 2D
+    CMS (9)", p. 4) and to which its parameters are calibrated; but every datum of cms_code is a
+    parameter set by the code (origin reported), with no measurement and no shipped simulation output,
+    so this record's models have nothing there to predict: agreement of this record's Eqns. S1-S3 and S8
+    with cms_code's ports (off_rate_port, flow_port, polyrate_port, kmod_port) and of Table S1 with the
+    code's parameters is a relation between models and a parameter carry-over, not a validation. In the
+    other direction, this record's measurements are U251 migration in 1D confining channels: drift
+    velocity and motility coefficient (v_exp, mu_exp, Figs. 3A-B, 4C-D, 5C-D, 6A-B, 7A-B), the MSD curve
+    (fig2g_exp), EB1 microtubule growth speeds (eb1_mean, Fig. S5B), cell length and nucleus position
+    (Fig. S5C-D). The only cms_code model that outputs a cell-migration quantity is cms2d_code (a 2D
+    random motility coefficient and mean module flow), which is not runnable (cms_code/q_not_run) and is
+    a 2D unconfined simulator with uniform-angle module nucleation, not the 1D channel geometry with
+    polarity psi_pol that these measurements belong to; the paper itself built cms_1d because of that
+    difference. The runnable ports output one module's flow, a clutch off-rate, a polymerization speed, a
+    module birth rate, a series stiffness or motor and clutch counts, none of which this paper measures
+    (no retrograde flow, traction or adhesion lifetime is measured here). In the other direction, see
+    cms_code/q_xval_prahl2020_none.
+  citation: {page: 4, where: text, quote: "In the previous 2D CMS (9), new modules were generated"}
+# cross-record validation against cms1d_cpp_code (2026-11-19): none added
+- id: q_xval_cms1d_cpp_code_none
+  kind: unstated_model
+  about: [cms_1d, force_velocity_s2, slip_bond_s1, polymerization_s3, nucleation_s8]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against cms1d_cpp_code, and no model
+    of cms1d_cpp_code against this record's measurements. cms1d_cpp_code is a later C++ implementation of
+    this paper's 1D CMS (headers dated 2021-2022; this paper's simulations were run in MATLAB, p. S3). Every
+    datum there is a parameter set by the code (origin reported, plus psi_pol copied from here), with no
+    measurement and no simulation output (its Record() is empty), so this record's models have nothing
+    there to predict; the agreement of Table S1 and Eqns. S1-S3, S8 with the code's values and ports is a
+    parameter carry-over and a relation between models, not a validation. In the other direction, this
+    record's measurements (v_exp, mu_exp, the Fig. 3-7 drug series, fig2g_exp, eb1_mean, Fig. S5C-D) are
+    migration speeds, motility coefficients, MSD, microtubule growth, cell length and nucleus position;
+    the only code model with a migration output (cms1d_sim) is not runnable and computes none of them, and
+    the runnable ports give module-level rates this paper does not measure. See
+    cms1d_cpp_code/q_xval_prahl2020_none.
+  citation: {page: 16, where: text, quote: "were run in Matlab"}
+# cross-record validation against bangasser2013b (2026-11-19): none added
+- id: q_xval_bangasser2013b_none
+  kind: unstated_model
+  about: [cms_1d, force_velocity_s2, slip_bond_s1, kon_from_koff, ref-71, ref-S22]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013b, and no model of bangasser2013b against a measurement here. The paper cites
+    Bangasser and Odde 2013 (ref. 71 = Supporting ref. S22) once, for a parameter rule: kon is a
+    "Theoretical estimate, 10*koff (22)" in Table S1 (p. 22), entered as the relation
+    rel_b13b_eq31_rates_same_as_kon_from_koff. It never says its model explains, fits or predicts that
+    paper's data. bangasser2013b's only measured data are the software run times of its Fig. 6(b)
+    (fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal, computation time in s); no model here outputs a
+    computation time. In the other direction, this record's measurements are U251 migration in 1D
+    confining channels (v_exp, mu_exp, fig2g_exp, the drug series of Figs. 3A-B, 4C-D, 5C-D, 6A-B,
+    7A-B), EB1 growth speeds (eb1_mean, figs5b_eb1_hist) and cell length and nucleus position (Fig.
+    S5C-D). bangasser2013b's models output one motor-clutch system's load-and-fail cycle time, cycle-mean
+    F-actin flow, bound fraction, clutch off-rate, traction, optimal substrate spring constant and the
+    motor number for traction: none is a cell migration speed, motility coefficient, MSD, microtubule
+    speed or cell size, and this paper measures no retrograde flow, traction or adhesion lifetime. The
+    shared shape of clutch_ensemble_cycle and cms_1d (velocity from force, rate, stiffness, velocity) is a
+    model-model relation (not entered: see relations.yaml), and cms_1d is not runnable
+    (q_cms_not_runnable). See bangasser2013b/q_xval_prahl2020_none.
+  citation: {page: 22, printed_page: "S9", where: "Table S1", quote: "Theoretical estimate, 10*koff (22)"}
+# cross-record validation against bangasser2017 (2026-11-19): none added
+- id: q_xval_bangasser2017_none
+  kind: unstated_model
+  about: [cms_1d, force_velocity_s2, msd_drift_eq2, msd_prw_eq1, ref-9, 'bangasser2017/fig2c_u251_pts', 'bangasser2017/fig3c_u251_pts', 'bangasser2017/figs2e_msd_4kPa_pts']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2017 (ref. 9 = Supporting ref. S1). The paper takes its parameters from that paper's 2D
+    CMS ("motor-clutch parameters for glioma cells measured on 2D unconfined substrates (9,10)", p. 10)
+    and cites its U251 results only as trends its 1D simulations agree with: cRGD reduces traction and
+    migration "consistent with 2D CMS predictions (9)" (p. 7), and the clutch optimum is "Consistent with
+    2D simulations" (p. 7). It never runs a model on bangasser2017's measured conditions. Those
+    measurements are U251 and ECFN cells on 2D polyacrylamide gels against Young's modulus (kPa): random
+    motility coefficient (Figs. 2c, 4e), cell area and aspect ratio (Figs. 2d,e, 4c,d), actin retrograde
+    flow (Figs. 3c, 4a, Supplementary Fig. 4C), traction strain energy (Figs. 3e,f, 4b, Supplementary Fig.
+    4D-I) and MSD curves (Supplementary Fig. 2E). cms_1d, the only model here that outputs a migration
+    quantity, is not runnable (q_cms_not_runnable) and models a 1D channel with polarity psi_pol, not an
+    unconfined 2D gel. force_velocity_s2 gives one module's flow from its substrate spring extension and
+    motor count, neither of which bangasser2017 measures for its cells, and no stated mapping takes a gel
+    modulus to ksub. msd_drift_eq2 and msd_prw_eq1 are fits: their mu, v, S and P for 2D gels are not
+    stated by either paper, and taking them from bangasser2017's own motility coefficients (which that
+    paper computed from the same MSD curves by its Eq. 12) would test nothing; Eq. 2 with n = 2, v = 0 is
+    Eq. 12 (relations.yaml). In the other direction, see bangasser2017/q_xval_prahl2020_none.
+  citation: {page: 10, printed_page: "1718", where: text, quote: "motor-clutch parameters for glioma cells measured on 2D"}
+# cross-record validation against bagchi2025 (2026-11-21): none added
+- id: q_xval_bagchi2025_none
+  kind: unstated_model
+  about: [cms_1d, slip_bond_s1, force_velocity_s2, polymerization_s3, nucleation_s8, msd_drift_eq2, msd_prw_eq1, tumor_growth_rate]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bagchi2025, a later paper (2025) that neither cites this one nor is cited by it. bagchi2025 measures
+    MCF10A epithelial cell clusters expanding on aligned and random collagen fibres over soft
+    polyacrylamide: AF/RF speed ratios (v_ratio_af_rf_*), box plots of cluster speed, persistence,
+    density, strain energy and cell area, velocity and stress correlation functions, the four-point
+    susceptibility, strain-rate and monolayer-stress profiles, division counts and collagen fibre
+    angle and FTIR spectra (Figs 1-4, S1-S3). cms_1d, the only model here with a migration output, is
+    not runnable (q_cms_not_runnable) and models one confined cell in a rigid 1D channel, not a
+    collective monolayer on a fibrous gel; it has no fibre alignment, cell-cell or ligand-connectivity
+    input. The module rate laws (Eqns. S1-S3, S8) output clutch off-rates, flow, polymerization speed
+    and nucleation rate, none of which bagchi2025 measures. msd_drift_eq2 and msd_prw_eq1 are fits
+    whose parameters for those monolayers neither paper states, and bagchi2025 plots no MSD curve.
+    tumor_growth_rate equates a tumour expansion rate with a single-cell drift velocity, and
+    bagchi2025 reports no tumour growth. For the other direction see bagchi2025/q_xval_prahl2020_none.
+  citation: {page: 10, printed_page: "1718", where: text, quote: "motor-clutch parameters for glioma cells measured on 2D"}
+# cross-record validation against mekhdjian2017 (2026-11-23): none added
+- id: q_xval_mekhdjian2017_none
+  kind: unstated_model
+  about: [cms_1d, drag_force_s10, slip_bond_s1, force_velocity_s2, polymerization_s3, nucleation_s8, msd_drift_eq2, msd_prw_eq1, nmotor, ref-S17, 'mekhdjian2017/T_5e_ctrl', 'mekhdjian2017/F_5e_ctrl', 'mekhdjian2017/F_4b', 'mekhdjian2017/transit_2b', 'mekhdjian2017/lifetime_7b', 'mekhdjian2017/mts_sensor_6d']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of mekhdjian2017
+    (main ref. 30 = Supporting ref. S17). The paper uses its traction forces twice, both times as an order of
+    magnitude and not as something a model here predicts: the drag force of Eqn. S10 (~6.5 pN) is "much
+    smaller than cellular traction force estimates (17)" (p. S8) and "orders of magnitude smaller than ...
+    traction forces produced by adherent cells (30,37)" (p. 10), an inequality between a drag force and a
+    traction force, which are different quantities; and Table S1 says ~10^2-10^5 motors are "required for nN
+    total traction force (17)", a range behind the choice nmotor = 10^3, not a run (the CMS is not runnable,
+    q_cms_not_runnable). The p. 10 sentence that earlier studies "inferred relationships between biophysical
+    measurements in 2D substrates and confined migration behaviors (30,31)" names no measurement to predict.
+    mekhdjian2017 measures MCF10A cells: traction stress, total force and spread area on polyacrylamide gels
+    (Figs. 4b,d, 5e, S3c, S5), invasion into 3D collagen (Figs. 1d, 9e-f), transit times and passage through
+    constrictions (Fig. 2b,d), cell and nuclear mechanics (Fig. 3), MTS tension-sensor forces (Fig. 6d,f),
+    adhesion lifetime, length, composition and axial position (Fig. 7, S6-S8), and patient data (Figs. 9g-h,
+    S10). cms_1d would be the only candidate for the constriction transit times, but it is not runnable,
+    outputs a drift velocity and motility coefficient (not a transit time) and is set for U251 cells in
+    straight channels. The module rate laws (Eqns. S1-S3, S8) output a clutch off-rate, a module flow, a
+    polymerization speed and a nucleation rate; mekhdjian2017 measures none (its adhesion lifetimes are of
+    whole adhesions, in minutes, not bond off-rates, and its sensor forces are forces, not rates).
+    force_velocity_s2 needs a module's substrate extension and motor number, which mekhdjian2017 does not
+    measure. msd_drift_eq2 and msd_prw_eq1 are fits; mekhdjian2017 plots no MSD. The same-shape pair
+    slip_bond_s1 and mekhdjian2017/bell_off_rate is a relation between models, left to the relations job.
+    In the other direction, see mekhdjian2017/q_xval_prahl2020_none.
+  citation: {page: 10, printed_page: "1718", where: text, quote: "or traction forces produced by adherent cells"}

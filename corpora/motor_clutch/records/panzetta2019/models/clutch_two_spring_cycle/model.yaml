@@ -1,0 +1,30 @@
+id: clutch_two_spring_cycle
+name: modified clutch-ensemble ODEs with the substrate as two orthogonal springs (Eqs. 3-12), over one load-and-fail cycle
+role: model
+stated: {page: 6, printed_page: "22009", quote: "were solved simultaneously using the MATALB ODE solver", where: "Methods, Eqs. 3-13; text p. 6"}
+equation: >-
+  dPb/dt = (1 - Pb) kon - Pb <k*off>  [3];  <Fc> = kc(<xc> - xs)  [4];  F0 + nc<Fc> = Fs  [5];
+  F0 = ks x0 + ks (sqrt(l^2 + x0^2) - l)/sqrt(l^2 + x0^2) x0  [6];
+  Fs = ks xs + ks (sqrt(l^2 + xs^2) - l)/sqrt(l^2 + xs^2) xs  [7];
+  <xc> = (ks + nc kc)/(nc kc) xs - ks/(nc kc) x0 + ks/(nc kc) (1 - l/sqrt(l^2 + xs^2)) xs - ks/(nc kc) (1 - l/sqrt(l^2 + x0^2)) x0  [8];
+  vf = vu (1 - (Fs - F0)/(nm Fm)) = vu {1 - ks/(nm Fm) [2(xs - x0) + l (x0/sqrt(l^2 + x0^2) - xs/sqrt(l^2 + xs^2))]}  [10];
+  <k*off> = (1 - Pb) koff + Pb koff (1 - <Fc>/(r Pb Fb))^-r  [11];
+  d<xc>/dt = (1 - Pb) dxs/dt + Pb vf  [12]
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  r:    {quantity: gamma_shape_parameter, unit: dimensionless}
+  x0:   {quantity: substrate_prestretch, unit: nm}
+  l:    {quantity: orthogonal_spring_length, unit: nm}
+outputs:
+  t_cycle: {quantity: load_fail_cycle_time, unit: s, description: "time at which r Pb Fb - <Fc> falls to g_fail (the abrupt failure)"}
+  v_mean:  {quantity: cycle_mean_flow_rate, unit: nm/s, description: "vf averaged over [0, t_cycle] (the reader's reading of 'actin flowrate'; q_flow_definition)"}
+settings: {rtol: 1.0e-8, atol: 1.0e-12, g_fail: 1.0e-3, t_max: 1.0e5}
+stochastic: false

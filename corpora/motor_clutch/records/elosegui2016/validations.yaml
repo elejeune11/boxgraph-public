@@ -46,3 +46,55 @@
   basis: >
     The same model as val_traction_myo_ctrl_2014; its actin_flow output is the actin rearward speed the
     elosegui2014 clutch model drew through these points (Fig. 4e, 'Lines indicate model predictions').
+# ==== against owen2017's measured actin speed relative to adhesions, 3D fibrin (2026-11-22) =====
+# clutch_talin_sim with the MEF set of Supplementary Table 1 (fitted to this paper's MEF tractions and flows on
+# 2D polyacrylamide) gives the time-averaged actin flow over load-and-fail cycles. owen2017 measures the speed of
+# alpha-actinin-1 relative to the zyxin plaque it flows out of, for fibroblasts in 3D fibrin (Table 1 row 5),
+# and states an observed stress-fibre elongation rate of 0-3 nm/s. Nothing of owen2017 entered the MEF set, so
+# these are tests of a 2D-calibrated model in 3D; the substrate modulus is added (E_owen_fibrin_added).
+# Other measurements considered: q_xval_owen2017_unused.
+- id: val_relspeed_owen2017_table1
+  model: clutch_talin_sim
+  inputs: {E: E_owen_fibrin_added, nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  output: actin_flow
+  against: owen2017/t1_diff_velocity
+  purpose: validation
+  quantities: {owen2017/actin_adhesion_relative_speed: actin_retrograde_flow}
+  conditions_ok: >-
+    The model's actin_flow is the time average of the actin speed against the fixed far end of the substrate
+    spring; the clutch end of that spring moves back and forth over load-and-fail cycles with no net drift, so
+    over a long average it equals the slip of actin past the adhesion. owen2017's value is the mean magnitude
+    of the actin velocity relative to its zyxin plaque (|v_zyx - v_actn|) from positions 10 ± 1 min apart, the
+    same slip. The measured speeds are unsigned and both directions occur (owen2017
+    q_no_continuous_rearward_flow); the model's flow is rearward only, so it is compared as a speed. Cell type
+    (fibroblasts vs MEFs), matrix (3D fibrin vs fibronectin-coated polyacrylamide) and substrate spring all
+    differ from the conditions the MEF set was fitted to (q_val_owen2017_transfer).
+  basis: >-
+    owen2017 cites this paper for actin velocities "measured at the periphery of cells adhering to soft
+    substrates (Chan and Odde, 2008; Elosegui-Artola et al., 2016)" (owen2017 p. 9), against which it reads its
+    own slow speeds, and takes its clutch-model κ from this paper (Supp. p. 6). Its clutch model (eqn. 13)
+    computes this measured quantity, "the rate of slippage of α-actinin-1 relative to adhesions" (owen2017
+    p. 8). This model's actin_flow is that slip for a talin-reinforced clutch.
+- id: val_relspeed_owen2017_range
+  model: clutch_talin_sim
+  inputs: {E: E_owen_fibrin_added, nf: nf_table, kont: kont_table, dint: dint_table, nm: nm_table, Fm: Fm_table, vu: vu_table, kc: kc_table, ra: ra_table, dadd: dadd_table, FR: FR_table,
+           koff_scale: koff_scale_note, koff_a: koff_a_added, koff_b: koff_b_added, koff_c: koff_c_added,
+           koff_d: koff_d_added, koff_g: koff_g_added, koff_fend: koff_fend_added, ksub_factor: ksub_factor_added,
+           ln_kunf0: ln_kunf0_added, kunf_b: kunf_b_added, ln_kfold0: ln_kfold0_added, kfold_b: kfold_b_added,
+           kvin: kvin_added}
+  output: actin_flow
+  against: owen2017/v_elongation_observed
+  purpose: validation
+  quantities: {owen2017/actin_adhesion_relative_speed: actin_retrograde_flow}
+  conditions_ok: >-
+    As val_relspeed_owen2017_table1. The measurement is a range, "0-3 nm s-1", for owen2017's study and
+    previous work (Endlich et al. 2007), not a summary statistic; the model's single mean flow is judged
+    against it as an interval.
+  basis: >-
+    owen2017 judges its own clutch model against this range ("in good agreement with the observed rate of
+    stress fiber elongation (0-3 nm s-1) in our study", Supp. p. 6); this model gives the same velocity of
+    actin relative to the adhesion.

@@ -1,0 +1,26 @@
+# Port to Python (our code) of the block of the drivers that computes the extremes of the two normalised
+# Gaussians over the cell nodes: C lines 223-258 (D lines 227-259, H lines 242-274, the same code with
+# s = ND_stdev in place of ND_stdev_dc). uv = (cell_nodes/2)+1 is an integer division of an unsigned
+# (36 -> 19), and node_index+1-uv runs from -18 to 18 for 37 nodes. The second Gaussian (k_s1, line 250)
+# takes its exponent's width from s1 = ND_stdev_tdl but its prefactor 1/(s sqrt(2 pi)) from s, the damping
+# width; the port keeps that as written (question q_prefactor_s). The drivers pass max_ND, min_ND to
+# SetVariableDampingConstant (line 422) and max_ND1, min_ND1 to GenerateBasicRandom_ab (line 315), whose
+# code is not in the release (q_framework_missing); the S2 and S3 Tables' delta_eta and delta_eps have the
+# values of min_ND and min_ND1.
+id: driver_profile_extremes
+name: "extremes of the drivers' normalised Gaussians over the cell nodes (driver lines 223-258, Python port)"
+role: model
+stated: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "250", quote: "double k_s1 = 1*(1/(s*sqrt(2*M_PI)))*exp(-(pow(((node_index1+1-uv1)/s1),2.0))/2);"}
+described_from: bagchi2025
+equation: "k_s = (1/(s sqrt(2 pi))) exp(-((i+1-uv)/s)^2/2); k_s1 = (1/(s sqrt(2 pi))) exp(-((i+1-uv)/s1)^2/2), i = 0..cell_nodes, uv = (cell_nodes/2)+1; max_ND, min_ND over k_s; max_ND1, min_ND1 over k_s1"
+inputs:
+  n:  {quantity: n_cell_springs, unit: dimensionless, description: "cell_nodes"}
+  s:  {quantity: profile_width, unit: dimensionless, description: "ND_stdev_dc (C) or ND_stdev (D, H)"}
+  s1: {quantity: profile_width, unit: dimensionless, description: "ND_stdev_tdl"}
+outputs:
+  max_ND:  {quantity: profile_peak, unit: dimensionless}
+  min_ND:  {quantity: profile_shift, unit: dimensionless}
+  max_ND1: {quantity: profile_peak, unit: dimensionless}
+  min_ND1: {quantity: profile_shift, unit: dimensionless}
+settings: {}
+stochastic: false

@@ -1,0 +1,324 @@
+- id: rel_C10_from_eq9
+  kind: reduces_to
+  a: liu2025/fc_v_eq9
+  b: liu2025/fc_v_C10
+  mapping: {v: v, kon: kon, k0off: k0off, xt: xt, kT: kT, k: k}
+  limit: {k0offp: "0", ly: "oo"}
+  regime:
+    v: [1, 100]
+    kon: [0.005, 0.3]
+    k0off: [0.01, 1]
+    k0offp: [0.01, 1]
+    xt: [0.5, 1.5]
+    xtp: [-0.2, -0.05]
+    kT: [4.1, 4.3]
+    k: [0.05, 2]
+    ly: [100, 1000]
+  provenance: stated
+  citation: {page: 42, quote: "In the special case of slip-bonds", where: "Appendix C, Eqs. C4-C10"}
+  assumptions: ["linear springs (Eq. 5): no cap ly", "slip bond: k0'off = 0 in Eq. 4"]
+- id: rel_A13_A11
+  kind: same_as
+  a: liu2025/Ie_A11
+  b: liu2025/Ie_A13
+  mapping: {ec: ec}
+  regime: {ec: [0.01, 0.98]}
+  provenance: stated
+  citation: {page: 38, quote: "Substituting Eq. (A12) into Eq. (A11), one can finally arrive", where: "Eqs. A11-A13"}
+
+# Relations to Bangasser, Fan, Odde 2013 (Cell Mol Bioeng; record bangasser2013b), checked 2026-11-21.
+# This paper does not cite bangasser2013b (its ref. 11 is the Biophys J paper, record bangasser2013), so
+# no relation to it is stated and cited.yaml has no link to it. Units pN, nm, s on both sides.
+- id: rel_koff_eq4_slip_reduces_to_b13b_eq5
+  kind: reduces_to
+  a: liu2025/koff_eq4
+  b: bangasser2013b/clutch_offrate_eq5
+  mapping: {koff: "k0off", Fc: "F", Fb: "kT/xt"}
+  output_map: {koff_i: koff}
+  limit: {k0offp: "0"}
+  regime:
+    k0off: [0.01, 1]
+    k0offp: [0.01, 1]
+    xt: [0.5, 1.5]
+    xtp: [-0.2, -0.05]
+    kT: [4.1, 4.3]
+    F: [0, 20]
+  provenance: proposed
+  reason: >-
+    The paper's slip-bond special case, k0'off = 0 in Eq. 4 (SI Appendix C, p. 42: "In the special
+    case of slip-bonds"), leaves koff = k0off exp(xt F/kBT), which is bangasser2013b's Bell off-rate
+    Eq. 5, koff exp(Fc/Fb), with the rupture force Fb = kBT/xt. This is the off-rate ingredient by which
+    the paper's clutch model meets the classic motor-clutch model.
+  assumptions:
+    - "Liu's zero-load rate k0off of the slip term stands for Bangasser's unloaded off-rate koff, and the tension of an engaged clutch F for the clutch force Fc,i (correspondences of quantities, not merged)"
+    - "F >= 0 (tension), so |F| = F in Eq. 4"
+# No relation is entered between steady_linear (or fc_v_eq9) and bangasser2013b/clutch_ensemble_cycle,
+# although both give a flow speed from motor force, rates and stiffnesses. steady_linear is the
+# stationary distribution pon(l) of asynchronously loaded clutches at a constant flow v (Eqs. 8-9), each
+# clutch in series with its own local substrate spring; clutch_ensemble_cycle is the ensemble mean over
+# one synchronous load-and-fail cycle on one shared substrate spring, with a gamma closure (Eq. 19), and
+# its mean extension <xc> has no stationary state while the flow is non-zero. No limit takes one to the
+# other: the shared spring cannot be switched off in bangasser2013b (κs -> oo still loads all clutches
+# together), and this paper contrasts its steady state with "the load-and-fail and frictional slippage
+# mechanisms" (p. 17) rather than reducing to them. Their outputs (a steady-state speed against a
+# cycle-mean speed) are also different quantities. The optimum of bangasser2013b (optimum_eq30,
+# clutch_ensemble_optimum) has no counterpart among this paper's models, which output traction at one
+# Young's modulus, not the stiffness that maximizes it.
+
+# Relations to Chan & Odde 2008 (record chan2008; ref. 7 = SI ref. [7]), checked 2026-11-21.
+# The paper cites Chan for the linear force-velocity relation of the motors (p. 21, Eq. 7), for steady
+# retrograde flow (p. 21) and for v0 = 120 nm/s (Table T1, "[7, 10, 22, 23]"; that datum names no single
+# source, so cited.yaml has no link). A helper model force_velocity_eq7 (Eq. 7 alone) was added to test
+# the stated relation. Signs: Chan prints vu, Fm, xsub, Fclutch and Fb negative (retrograde = -x); both
+# laws are unchanged when those are flipped together, so the regimes are in positive values.
+- id: rel_chan_eq3_same_as_force_velocity_eq7
+  kind: same_as
+  a: chan2008/force_velocity_eq3
+  b: liu2025/force_velocity_eq7
+  mapping: {v0: "vu", Fm: "ksub*xsub", Nm: "nm", Fst: "Fm"}
+  output_map: {v: vfilament}
+  regime: {vu: [50, 200], ksub: [0.1, 100], xsub: [0, 50], nm: [10, 200], Fm: [1, 3]}
+  provenance: stated
+  citation: {page: 21, quote: "Following previous studies7,11,12,13,14, the resisting effect of such a", where: "Eq. 7; ref. 7 = Chan and Odde 2008"}
+  assumptions:
+    - "Chan's load on the motors, the substrate spring force κsub xsub, is Liu's motor force Fm = Fc (total tension of the engaged clutches); Chan's nm motors of stall force Fm are Liu's Nm motors of stall force Fst"
+    - "Chan's filament velocity vfilament is Liu's retrograde actin flow v, in positive (retrograde) values"
+- id: rel_koff_eq4_slip_reduces_to_chan_eq1
+  kind: reduces_to
+  a: liu2025/koff_eq4
+  b: chan2008/off_rate_eq1
+  mapping: {koff: "k0off", Fclutch: "F", Fb: "kT/xt"}
+  output_map: {koff_star: koff}
+  limit: {k0offp: "0"}
+  regime:
+    k0off: [0.01, 1]
+    k0offp: [0.01, 1]
+    xt: [0.5, 1.5]
+    xtp: [-0.2, -0.05]
+    kT: [4.1, 4.3]
+    F: [0, 20]
+  provenance: proposed
+  reason: >-
+    The paper's slip-bond special case, k0'off = 0 in Eq. 4 (SI Appendix C, p. 42: "In the special
+    case of slip-bonds"), leaves koff = k0off exp(xt F/kBT), which is Chan's Bell off-rate Eq. 1,
+    koff* = koff exp(Fclutch/Fb), with Fb = kBT/xt. Liu does not cite Chan for its off-rate (Eq. 4 is
+    fitted to ref. 10's catch-bond data), so the relation is proposed, not stated.
+  assumptions:
+    - "Liu's zero-load rate k0off of the slip term stands for Chan's unloaded off-rate koff, and the tension F of an engaged clutch for Chan's Fclutch (correspondences of quantities, not merged)"
+    - "F >= 0 (tension), so |F| = F in Eq. 4; Chan prints Fclutch and Fb both negative, which leaves their ratio unchanged"
+# No relation is entered between liu2025/steady_linear and chan2008/motor_clutch. Chan's model is a
+# Monte Carlo of clutches loaded together through one shared substrate spring (load-and-fail); Liu's is the
+# stationary master-equation distribution at constant flow with a local spring per clutch and no shared
+# spring in the force balance. Liu contrasts its steady state with load-and-fail (p. 17) rather than
+# reducing to it, and no limit of either makes it the other. chan2008/cerruti_force_eq11 and steady_linear
+# share only port dimensions: Eq. 11 infers a point force from two bead displacements, which no Liu model
+# does. Chan's κsub = πEδ/(1+ν) (Eq. 13) and Liu's k's = 4πrE/9 (Eq. 1, inside steady_linear) are both
+# modulus times length; that is a form too plain to relate, and Liu does not cite Chan for Eq. 1.
+
+# Relations to Elosegui-Artola et al. 2014 (record elosegui2014; ref. 12), checked 2026-11-21: none entered.
+# Liu cites ref. 12 only as one of the earlier molecular-clutch models: in a list of applications (p. 1),
+# for stiff clutches of 1-1,000 pN/nm (p. 2, p. 15; Extended Data Table 1, p. 78: "> 8000" pN/s and
+# "1000" pN/nm for [12]), and among "previous studies7,11,12,13,14" for the linear force-velocity relation
+# Eq. 7 (p. 21). Elosegui's only clutch model, integrin_clutch_sim, is not runnable (its equations and
+# parameters are in an SI that is blank in that record's copy) and its readable text states neither a
+# force-velocity law nor a clutch stiffness, so there is no port-level model to map Eq. 7 or
+# steady_linear onto; the stiffness Liu attributes to ref. 12 cannot be checked from that record. The other
+# elosegui2014 models (kont/koff/kon_eff ratios, density_fold) are arithmetic on Elosegui's SPR and
+# density data, which no Liu model uses. Liu's catch-bond inputs (k0off, k0'off, xt, x't, sc, R_FA) and
+# Fig. 3 data come from ref. 13 / SI ref. [10] (record elosegui2016), not from ref. 12, so cited.yaml has
+# no link to elosegui2014 either.
+
+# Relations to Elosegui-Artola et al. 2016 (record elosegui2016; ref. 13 = SI ref. [10]), checked 2026-11-21:
+# none entered. Liu uses ref. 13 for data and parameters (traction and flow of MEF WT and talin-depleted cells,
+# Figs. 2c,d, 3a,b, Extended Data Fig. 5; the catch-bond rates it refits as Eq. 4, Fig. S4; σc and R, Table T1;
+# these are linked in cited.yaml) and cites it among the "existing molecular-clutch models7,11,12,13,14"
+# whose linear clutch springs (~1-1,000 pN/nm, p. 2; 1000 pN/nm for [13] in Extended Data Table 1, p. 78,
+# which is elosegui2016's kc = 1 nN/nm) and force-loading rates (> 8000 pN/s) it argues against. It states no
+# mapping, reduction or derivation from Elosegui's model. None is proposed either:
+# - clutch_no_talin_sim (and clutch_talin_sim) is a fixed-step Monte Carlo of clutches loaded together through
+#   one shared substrate spring, ksub = c E ra (load-and-fail); steady_linear (and its talin and cusp variants)
+#   is the stationary master-equation distribution pon(l) at a constant flow, with a local substrate spring
+#   per clutch, k's = 4 pi r E / 9, in series with the clutch, and no shared spring in the force balance. No
+#   limit of either makes it the other (Liu contrasts its steady state with "the load-and-fail scenario",
+#   p. 17), as recorded above for chan2008 and bangasser2013b. Both describe talin-depleted cells and are fitted
+#   to the same data, which makes them rival accounts of one data set, not two charts of one model.
+# - cusp_sigma_m shares only port dimensions with clutch_no_talin_sim: it outputs the myosin density and the
+#   Young's modulus at the cusp of Eq. 8's saddle-node points, which Elosegui's simulation does not define.
+# - Liu's force_velocity_eq7 ("Following previous studies7,11,12,13,14", p. 21) and Eq. 4 have counterparts
+#   only inside Elosegui's simulations (its motor law and its three-term catch bond); elosegui2016 has no
+#   stand-alone motor or off-rate model to relate them to, and Liu's Eq. 4 is its own fit to Elosegui's
+#   lifetimes, not Elosegui's catch-bond law. Liu's talin_wt (not runnable) unfolds R3 by a Bell slip bond,
+#   ku = ku0 exp(F/Fu) (Eq. F3), as Elosegui's talin_unfolding_time does (one exponential fitted to ref. 25's
+#   unfolding times); a single exponential is a form too plain to relate, Liu takes ku0 and Fu from ref. 18,
+#   not ref. 13, and its rate law is not a model of its own in the record.
+
+# Relations to Gong et al. 2018 (record gong2018; ref. 14, printed with year 2017), checked 2026-11-21.
+# Liu cites ref. 14 in lists of earlier molecular-clutch models (pp. 1, 2, 15, 19), for its stiff clutch
+# (Extended Data Table 1, p. 78, an image: "> 100 [14]" pN/s and "5 [14]" pN/nm; those values are not data
+# in this record, so cited.yaml has no link to gong2018) and for the linear force-velocity relation Eq. 7
+# (p. 21). SI "[14]" is a different work (Kumar et al.). A helper model gong2018/hill_flow_eq4 (Gong's Eq. 4
+# alone, a step inside mean_field_sls) was added to test the Eq. 7 statement. Units pN, nm, s on both sides.
+- id: rel_gong_eq4_same_as_force_velocity_eq7
+  kind: same_as
+  a: gong2018/hill_flow_eq4
+  b: liu2025/force_velocity_eq7
+  mapping: {v0: "vu", Fm: "Fs", Nm: "Nm", Fst: "Fm"}
+  output_map: {v: Vf}
+  regime: {vu: [50, 200], Fs: [0, 200], Nm: [10, 200], Fm: [1, 3]}
+  provenance: stated
+  citation: {page: 21, quote: "Following previous studies7,11,12,13,14, the resisting effect of such a", where: "Eq. 7; ref. 14 = Gong et al."}
+  assumptions:
+    - "Gong's load on the motors, the substrate force Fs, is Liu's motor force Fm = Fc (total tension of the engaged clutches); Gong's Nm motors of stall force Fm are Liu's Nm motors of stall force Fst; Gong's retrograde flow Vf is Liu's v (correspondences of quantities, not merged)"
+    - "Gong credits Eq. 4 to ref. 15 (Chan & Odde), as Liu also cites; the matching relation to chan2008 is entered above"
+- id: rel_koff_eq4_slip_reduces_to_gong_bell
+  kind: reduces_to
+  a: liu2025/koff_eq4
+  b: gong2018/bell_off_rate
+  mapping: {roff0: "k0off", Fc: "F", Fb: "kT/xt"}
+  output_map: {roff: koff}
+  limit: {k0offp: "0"}
+  regime:
+    k0off: [0.01, 1]
+    k0offp: [0.01, 1]
+    xt: [0.5, 1.5]
+    xtp: [-0.2, -0.05]
+    kT: [4.1, 4.3]
+    F: [0, 20]
+  provenance: proposed
+  reason: >-
+    The paper's slip-bond special case, k0'off = 0 in Eq. 4 (SI Appendix C, p. 42: "In the special
+    case of slip-bonds"), leaves koff = k0off exp(xt F/kBT), which is Gong's Bell off-rate
+    roff = roff0 exp(Fc/Fb) with the characteristic breakage force Fb = kBT/xt. Liu does not cite Gong
+    for its off-rate (Eq. 4 is fitted to ref. 10's catch-bond data), so the relation is proposed.
+  assumptions:
+    - "Liu's zero-load rate k0off of the slip term stands for Gong's roff0, and the tension F of an engaged clutch for Gong's clutch force Fc (correspondences of quantities, not merged)"
+    - "F >= 0 (tension), so |F| = F in Eq. 4"
+# No relation is entered between steady_linear (or its talin and cusp variants) and gong2018/mean_field_sls or
+# mean_field_elastic. Gong's models are mean-field load-and-fail ODEs of one ensemble clutch on one shared
+# (elastic or viscoelastic) substrate spring, integrated over ten cycles with reinforcement; Liu's are the
+# stationary distribution pon(l) at constant flow, with a local spring per clutch and no shared spring in the
+# force balance. Liu contrasts its steady state with load-and-fail (p. 17) and names combining its model with
+# the viscoelastic models of refs. 10, 14, 16-18 as future work (p. 19), so no limit or tolerance is stated
+# or founded. Gong's boussinesq_eq_s9 (4 pi R E/(7(1+nu)(1-0.86 nu))) and Liu's k's = 4 pi r E/9 (Eq. 1) are
+# both modulus times length; Liu does not cite Gong for Eq. 1, and that form is too plain to relate.
+
+# Relations to Bangasser, Rosenfeld & Odde 2013 (Biophys J; record bangasser2013; ref. 11), checked 2026-11-21.
+# Liu cites ref. 11 only in lists of earlier molecular-clutch models (p. 1), for stiff clutches of 1-1,000 pN/nm
+# (pp. 2, 15; Extended Data Table 1, p. 78, an image whose values are not data in this record) and for the linear
+# force-velocity relation Eq. 7 (p. 21). No Liu datum names ref. 11, so cited.yaml has no link to bangasser2013.
+# Bangasser gives the force-velocity law in words only (Supporting Material step 5, inside motor_clutch_ssa); a
+# helper model bangasser2013/force_velocity_step5 was added to test the Eq. 7 statement. Units pN, nm, s.
+- id: rel_b13_step5_same_as_force_velocity_eq7
+  kind: same_as
+  a: bangasser2013/force_velocity_step5
+  b: liu2025/force_velocity_eq7
+  mapping: {v0: "vu", Fm: "ksub*xsub", Nm: "nm", Fst: "Fm"}
+  output_map: {v: v_f}
+  regime: {vu: [50, 200], ksub: [0.1, 100], xsub: [0, 50], nm: [10, 200], Fm: [1, 3]}
+  provenance: stated
+  citation: {page: 21, quote: "Following previous studies7,11,12,13,14, the resisting effect of such a", where: "Eq. 7; ref. 11 = Bangasser et al. 2013"}
+  assumptions:
+    - "Bangasser's load on the motors, the substrate spring force κsub x_sub, is Liu's motor force Fm = Fc (total tension of the engaged clutches); Bangasser's nm motors of stall force Fm are Liu's Nm motors of stall force Fst; Bangasser's F-actin flow v_f is Liu's retrograde flow v (correspondences of quantities, not merged)"
+    - "Bangasser credits the law to its ref. 1 (Chan and Odde); the matching relation to chan2008 is entered above"
+- id: rel_koff_eq4_same_as_b13_catch_slip_eq9
+  kind: same_as
+  a: liu2025/koff_eq4
+  b: bangasser2013/catch_slip_eq9
+  mapping: {koff: "k0off", Fb: "kT/xt", koffc: "k0offp", Fc: "-kT/xtp", F: "F"}
+  output_map: {koff_star: koff}
+  regime:
+    k0off: [0.00001, 1]
+    k0offp: [0.01, 1]
+    xt: [0.5, 1.5]
+    xtp: [-0.2, -0.05]
+    kT: [4.1, 4.3]
+    F: [0, 40]
+  provenance: proposed
+  reason: >-
+    Both papers write the integrin-ligand catch bond as one bond with two force-dependent pathways, a sum of two
+    exponentials in the force: Liu's Eq. 4, k0off exp(xt F/kBT) + k0'off exp(x't F/kBT), and Bangasser's Eq. 9,
+    koff exp(Fi/Fb) + koff,c exp(-Fi/Fc). With Fb = kBT/xt and Fc = -kBT/x't (x't < 0, the catch pathway, as
+    Liu's fitted x't = -0.11 nm) the two are one law. Liu does not cite Bangasser for Eq. 4 (it fits Eq. 4 to
+    ref. 13's data and cites ref. 67 for catch bonds), so the relation is proposed. Liu's slip-bond limit
+    (k0'off = 0) of this law is related to the Bell off-rates of chan2008, bangasser2013b and gong2018 above.
+  assumptions:
+    - "Liu's zero-load rates k0off, k0'off are Bangasser's koff and koff,c, and the tension F of an engaged clutch is Bangasser's force Fi on one clutch (correspondences of quantities, not merged)"
+    - "F >= 0 (tension), so |F| = F in Eq. 4; x't < 0 so that Bangasser's Fc is positive"
+    - "the relation joins the rate laws; Bangasser fits Eq. 9 to Kong's lifetimes (ref. 32 there), Liu fits Eq. 4 to Elosegui-Artola's rates, and the fitted values differ"
+# No other relation is entered. steady_linear (and its talin and cusp variants) against motor_clutch_ssa: as for
+# chan2008 above, Bangasser's SSA loads clutches together through one shared substrate spring (load-and-fail),
+# Liu's is the stationary master-equation distribution at constant flow with a local spring per clutch; Liu
+# contrasts the two (p. 17) and no limit makes one the other. Bangasser's optimal_stiffness and its scaling and
+# sensitivity models (nc_multiplier_eq5, scale_*_eq5, sensitivity_eq3, range_eq2, sr_eq4, nc_limits) concern the
+# stiffness that maximizes traction in the SSA, which no Liu model outputs. binding_time_eq10 (mean time for nc
+# clutches to bind) has no Liu counterpart: Liu's kon enters only through the steady-state distribution.
+
+# Relations to Kong et al. 2009 (record kong2009; ref. 67), checked 2026-11-21: none entered.
+# Liu cites ref. 67 once (Methods, p. 20), qualitatively: integrin-ECM bonds "exhibit catch-bond behaviour ...
+# in the range 0-30 pN and force-induced bond dissociation at higher forces67", as the reason for the two-term
+# off-rate Eq. 4. The fit of Eq. 4 and its parameters (k0off, k0'off, xt, x't; Table T1, p. 55; Fig. S4, p. 52)
+# are to data "digitalized from ref. [10]" (elosegui2016), not from Kong, so no Liu datum names kong2009 and
+# cited.yaml has no link to it. Kong's two models state no catch-bond law: survival_first_order (ln N = ln N0 - k t)
+# reads one off-rate from a lifetime distribution, which no Liu model does; series_bonds (rates of two bonds in
+# series add) has the same sum-of-rates form as Eq. 4, but Eq. 4's terms are two force-dependent pathways of one
+# integrin-fibronectin bond, not two bonds in series, Liu does not say so, and a sum of two rates is a form too
+# plain to relate. Kong's measured lifetimes against force (e.g. lt_FN_a5b1Fc_CaMg) could test Eq. 4 against
+# independent data, but that is a validation run, not a relation between models.
+
+# Relations to Alonso-Matilla, Provenzano & Odde 2023 (record alonsomatilla2023; ref. 49), checked 2026-11-21.
+# Liu cites ref. 49 once (Discussion, p. 17): with the substrate as one spring for its global deformation,
+# "it can be theoretically shown that for soft molecular clutches, the system will lose its ability to sense
+# substrate rigidity and will always reach the same steady state ... regardless of the substrate stiffness ...49".
+# That is a claim about ref. 49's own model (its mean field, Eqs. 3-4, has a steady state with a stationary
+# substrate, in which the substrate stiffness drops out: rigid_steady_state, Eqs. S31-S36), not a mapping onto a
+# Liu model; it is not entered (a test of mean_field against rigid_steady_state as K -> oo is a relation inside
+# alonsomatilla2023, and mean_field takes about a minute per run on stiff substrates). No Liu datum names ref. 49,
+# so cited.yaml has no link to alonsomatilla2023 (Liu's k0off, xt etc. are its own fit to elosegui2016's data;
+# alonsomatilla2023's Delta = 2.4 nm and kB T = 4.114 pN nm are not Liu's values). alonsomatilla2023 is the earlier
+# paper and does not cite Liu.
+# Proposed below: the off-rate laws, as for chan2008, bangasser2013b and gong2018 above.
+# Not entered:
+# - alonsomatilla2023/rigid_steady_state and liu2025/steady_linear. On a rigid substrate (E -> oo, so k -> kc),
+#   with slip bonds only (k0'off -> 0) and no cap (ly -> oo), Liu's Eqs. 8-9 are the same balance as Eqs. S31-S36:
+#   clutches bind unstretched at kon per free site, stretch at the flow speed, unbind at k0off exp(xt kc l/kBT),
+#   and the motors' linear force-velocity law balances the total clutch tension. Liu's bound fraction int pon dl =
+#   kon Z/(v + kon Z) is S35's n_b* = tau beta*/(tau beta* + v_e*). Under F = sm Fst xt/(sc kBT),
+#   tau = kon/k0off, omega = v0 kc xt/(kBT k0off), their outputs should agree as P = sc (kBT/xt) T* and
+#   v = (kBT k0off/(xt kc)) v_e*. But every Alonso-Matilla output is dimensionless and every Liu output
+#   carries a unit (Pa, nm/s, 1/um^2, pN), so no output pair can be compared without a helper model. A helper
+#   is allowed only for a stated relation, and no paper states this one. A scales_as test would fail on the
+#   unit prefactors in sc, kBT, xt, k0off and kc, not on the physics. The correspondence is recorded here for
+#   a later job that may add the dimensional form.
+# - alonsomatilla2023/bell_rupture_force (Fb = kB T / Delta) and fc_v_C10. They share only the input shape
+#   (an energy and a length). Eq. C10's prefactor Nc/(beta xt) is the same ratio, but its output is the traction
+#   per clutch site at a given flow, a different quantity from a characteristic rupture force. Liu's Eq. 4
+#   uses that ratio as the Bell rupture force, kBT/xt, and that is the mapping of the relation below.
+# - kopt_eq6 and the other optimum models. Liu outputs traction at one Young's modulus, not the stiffness that
+#   maximizes it (as for bangasser2013b above). mean_field / mean_field_dimensional against steady_linear: one
+#   shared global substrate spring (load-and-fail cycles, time-averaged traction in pN) against a local spring per
+#   clutch at a stationary flow (a traction stress in Pa). These are the different mechanisms Liu contrasts on
+#   p. 17, and no limit makes one the other except the rigid one above.
+- id: rel_koff_eq4_slip_reduces_to_alonso_bell
+  kind: reduces_to
+  a: liu2025/koff_eq4
+  b: alonsomatilla2023/clutch_off_rate_bell
+  mapping: {koff: "k0off", Fc: "F", Fb: "kT/xt"}
+  output_map: {koff_load: koff}
+  limit: {k0offp: "0"}
+  regime:
+    k0off: [0.01, 1]
+    k0offp: [0.01, 1]
+    xt: [0.5, 1.5]
+    xtp: [-0.2, -0.05]
+    kT: [4.1, 4.3]
+    F: [0, 20]
+  provenance: proposed
+  reason: >-
+    The paper's slip-bond special case, k0'off = 0 in Eq. 4 (SI Appendix C, p. 42: "In the special
+    case of slip-bonds"), leaves koff = k0off exp(xt |F|/kBT). That is Alonso-Matilla's Bell law for the clutch
+    off-rate, k_off^load = k_off e^{|Fc|/Fb} (p. 2, ref. 52 there), with Fb = kBT/xt. Alonso-Matilla itself takes
+    Fb = kB T / Delta, Delta from a fit of Bell's model (SI legend C). Liu cites ref. 49 only for a steady-state
+    claim (p. 17), not for its off-rate, so the relation is proposed.
+  assumptions:
+    - "Liu's zero-load rate k0off of the slip term stands for Alonso-Matilla's unloaded off-rate k_off, Liu's tension F of an engaged clutch for the clutch force Fc, and Liu's xt for Alonso-Matilla's transition distance Delta (correspondences of quantities, not merged)"
+    - "F >= 0 (tension), so |F| = F in both laws"

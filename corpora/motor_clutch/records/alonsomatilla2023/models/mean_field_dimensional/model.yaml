@@ -1,0 +1,20 @@
+id: mean_field_dimensional
+name: time-averaged traction force of the mean-field model in dimensional parameters (SI Table 2 notes)
+role: model
+stated: {page: 21, quote: "the developed model predicts traction forces within the range", where: "SI Table 2 notes; Eqs. 3-4"}
+equation: "T = nc Fb T*(F, tau, omega, K), T* the time average of Eqs. 3-4, with the groups of Table 2"
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/um}
+outputs:
+  T: {quantity: traction_force, unit: pN}
+settings: {step: 1.0, h: 0.00125, cfl: 0.003, dt_max: 0.0006, dt_min: 1.0e-6, w_min: 1.0e-12, t_end_min: 5.0, load_times: 10.0, avg_from: 0.25}
+built_from: [mean_field]
+stochastic: false

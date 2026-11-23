@@ -1,0 +1,16 @@
+id: force_velocity_eq7
+name: linear force-velocity relation of the myosin II motors (Eq. 7)
+role: model
+stated: {page: 21, quote: "is approximated by a linear force–velocity relation", where: "Eq. 7"}
+equation: "v(t) = v0 [1 - Fm(t)/(Nm Fst)]"
+# A helper model: Eq. 7 is one ingredient of steady_linear (where Nm = sigma_m S), written out so that the
+# paper's statement that it follows previous studies (ref. 7 = chan2008, refs 11-14) can be tested.
+inputs:
+  v0:  {quantity: motor_free_speed, unit: nm/s}
+  Fm:  {quantity: motor_load_force, unit: pN}
+  Nm:  {quantity: myosin_number, unit: dimensionless}
+  Fst: {quantity: motor_stall_force, unit: pN}
+outputs:
+  v: {quantity: actin_flow_speed, unit: nm/s}
+settings: {}
+stochastic: false

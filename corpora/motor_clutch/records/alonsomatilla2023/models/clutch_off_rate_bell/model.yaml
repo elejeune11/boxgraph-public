@@ -1,0 +1,15 @@
+# Helper model for the relation to bell1978 (ref. 52): the paper states this law in the text (p. 2)
+# and uses it inside mean_field (Eq. S1, p. 21), where it has no standalone model.
+id: clutch_off_rate_bell
+name: loaded clutch dissociation rate, Bell's law (p. 2)
+role: model
+stated: {page: 2, printed_page: "3370", quote: "force according to Bell’s law kload", where: "Materials and Methods, second paragraph"}
+equation: "k_off^load = k_off e^{|F_c|/F_b}"
+inputs:
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fc:   {quantity: clutch_force, unit: pN}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+outputs:
+  koff_load: {quantity: clutch_off_rate_loaded, unit: 1/s}
+settings: {}
+stochastic: false

@@ -1,0 +1,19 @@
+id: force_velocity_step5
+name: linear force-velocity relation of the motors (Supporting Material algorithm, step 5)
+role: model
+stated: {page: 14, quote: "Calculate F-actin retrograde flow rate based on the current substrate deformation using as", where: "Supporting Material, Model Simulation Algorithm, step 5"}
+equation: "v_f = vu (1 - κsub x_sub/(nm Fm))"
+# A helper model: step 5 is one ingredient of motor_clutch_ssa, written out (in the form motor_clutch_ssa
+# uses, after ref. 1 = Chan and Odde) so that liu2025's statement that its Eq. 7 follows ref. 11 (this
+# paper) can be tested. The paper gives the law in words only; signs positive (retrograde positive).
+inputs:
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  ksub: {quantity: substrate_stiffness, unit: pN/nm}
+  xsub: {quantity: substrate_displacement, unit: nm}
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+outputs:
+  v_f: {quantity: factin_flow_speed, unit: nm/s}
+settings: {}
+stochastic: false
+from_words: true

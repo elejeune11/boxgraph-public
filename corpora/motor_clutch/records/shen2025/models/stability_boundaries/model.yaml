@@ -1,0 +1,26 @@
+id: stability_boundaries
+name: Hopf (SS/US) and US/U boundaries in v~u at fixed Nc, from the eigenvalues of the printed Jacobian (A3) and Table II
+role: model
+stated: {page: 6, printed_page: "014417-6", quote: "The stability at each point is determined by calculating the eigenvalues of the Jacobian matrix", where: "Fig. 2 caption; Eq. A3; Table II"}
+equation: >-
+  J (A3) at the stable fixed point of Eqs. 9-15, with J55 = -(Gamma/gamma) nc0 k~c - k~s as printed;
+  states by Table II: S five real negative; SS a complex pair with negative real part; US a complex pair with
+  positive real part; U real positive eigenvalues. v~u0(Nc): alpha = 0 on the upper boundary of US (p. 11).
+inputs:
+  w: {quantity: motor_rate_ratio_nd, unit: dimensionless}
+  Nm: {quantity: n_motors_total, unit: dimensionless}
+  kon: {quantity: clutch_on_rate_nd, unit: dimensionless}
+  koff: {quantity: clutch_off_rate_nd, unit: dimensionless}
+  fs: {quantity: stall_force_nd, unit: dimensionless}
+  fd: {quantity: detachment_force_nd, unit: dimensionless}
+  Fb: {quantity: rupture_force_nd, unit: dimensionless}
+  km: {quantity: motor_stiffness_nd, unit: dimensionless}
+  kc: {quantity: clutch_stiffness_nd, unit: dimensionless}
+  ks: {quantity: substrate_stiffness_nd, unit: dimensionless}
+  F: {quantity: external_load_nd, unit: dimensionless}
+  g: {quantity: friction_ratio, unit: dimensionless, description: "gamma/Gamma"}
+  Nc: {quantity: n_clutches_total, unit: dimensionless}
+outputs:
+  vu_hopf: {quantity: motor_velocity_nd, unit: dimensionless, description: "upper boundary of US, v~u0(Nc)"}
+  vu_unstable: {quantity: motor_velocity_nd, unit: dimensionless, description: "boundary between US and U"}
+settings: {vu_max: 15.0, vu_min: 0.001, n_grid: 3000, tol: 1.0e-6}

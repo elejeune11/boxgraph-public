@@ -1,0 +1,267 @@
+# ---- SI parameter estimates ----
+- id: run_area
+  model: cylinder_count
+  inputs: {l: l_prot, d: d_prot}
+  outputs: {A: A_prot_pred}
+- id: run_nm
+  model: motor_count
+  inputs: {rho: rho_myo, A: A_prot_pred}
+  outputs: {n: nm_pred}
+- id: run_nc
+  model: clutch_count
+  inputs: {rho: rho_c, A: A_prot_pred}
+  outputs: {n: nc_pred}
+- id: run_Fb
+  model: bell_rupture_force
+  inputs: {kT: kT_si, delta: delta_bell}
+  outputs: {Fb: Fb_pred}
+- id: run_ks_lo
+  model: stiffness_from_modulus
+  inputs: {d: d_fa, E: E_lo}
+  outputs: {ks: ks_lo_pred}
+- id: run_ks_hi
+  model: stiffness_from_modulus
+  inputs: {d: d_fa, E: E_hi}
+  outputs: {ks: ks_hi_pred}
+
+# ---- Table 2 from the SI Table 2 parameter set ----
+- id: run_groups_s2
+  model: dimensionless_groups
+  inputs: {nm: nm_s2, Fm: Fm_s2, nc: nc_s2, Fb: Fb_s2, kon: kon_s2, koff: koff_s2, vu: vu_s2, kc: kc_s2, Fth: Fth_s2}
+  outputs: {F: F_pred_s2, tau: tau_pred_s2, omega: omega_pred_s2, Delta: Delta_pred_s2}
+- id: run_K_lo_s2
+  model: dimensionless_stiffness
+  inputs: {ks: ks_lo_si, nc: nc_s2, kc: kc_s2}
+  outputs: {K: K_lo_pred_s2}
+- id: run_K_hi_s2
+  model: dimensionless_stiffness
+  inputs: {ks: ks_hi_si, nc: nc_s2, kc: kc_s2}
+  outputs: {K: K_hi_pred_s2}
+
+# ---- traction and optimum for the SI Table 2 parameter set ----
+- id: run_mf_rigid_s2
+  model: mean_field_dimensional
+  inputs: {nm: nm_s2, Fm: Fm_s2, vu: vu_s2, nc: nc_s2, kon: kon_s2, koff: koff_s2, Fb: Fb_s2, kc: kc_s2, ks: ks_hi_si}
+  outputs: {T: T_stiff_end_s2_pred}
+  note: "kappa_s at the stiff end of the stated range, 3.5 x 10^4 pN/um (100 kPa)"
+- id: run_mf_opt_s2
+  model: mean_field_optimum
+  inputs: {nm: nm_s2, Fm: Fm_s2, vu: vu_s2, nc: nc_s2, kon: kon_s2, koff: koff_s2, Fb: Fb_s2, kc: kc_s2}
+  outputs: {ks_opt: ks_opt_mf_s2, T_max: T_max_mf_s2}
+- id: run_E_mf_s2
+  model: modulus_from_stiffness
+  inputs: {d: d_fa, ks: ks_opt_mf_s2}
+  outputs: {E: E_opt_mf_s2}
+- id: run_kopt_eq6_s2
+  model: kopt_eq6
+  inputs: {C2: C2_eq6, C3: C3_eq6, nc: nc_s2, Fb: Fb_s2, kon: kon_s2, vu: vu_s2, koff: koff_s2, nm: nm_s2, Fm: Fm_s2}
+  outputs: {ks_opt: ks_opt_eq6_s2}
+- id: run_E_eq6_s2
+  model: modulus_from_stiffness
+  inputs: {d: d_fa, ks: ks_opt_eq6_s2}
+  outputs: {E: E_opt_eq6_s2}
+
+# ---- figures ----
+- id: run_fig1b_F1
+  model: mean_field
+  inputs: {F: F1_fig1b, tau: tau_fig1b, omega: omega_fig1b}
+  sweep: {K: T_fig1b_F1}
+  outputs: {T: T_fig1b_F1_pred}
+- id: run_fig1b_F10
+  model: mean_field
+  inputs: {F: F10_fig1b, tau: tau_fig1b, omega: omega_fig1b}
+  sweep: {K: T_fig1b_F10}
+  outputs: {T: T_fig1b_F10_pred}
+- id: run_fig2f_tau10
+  model: kopt_eq6_dimensionless
+  inputs: {C2: C2_eq6, C3: C3_eq6, tau: tau10_fig2f, F: F_fig2f}
+  sweep: {omega: Kopt_fig2f_tau10}
+  outputs: {Kopt: Kopt_fig2f_tau10_pred}
+- id: run_fig4a_tau50
+  model: rigid_steady_state
+  inputs: {tau: tau50_fig4, omega: omega100_fig4}
+  sweep: {F: T_fig4a_tau50}
+  outputs: {T: T_fig4a_tau50_pred}
+- id: run_fig4a_tau5
+  model: rigid_steady_state
+  inputs: {tau: tau5_fig4, omega: omega100_fig4}
+  sweep: {F: T_fig4a_tau5}
+  outputs: {T: T_fig4a_tau5_pred}
+- id: run_fig4b_tau50
+  model: rigid_steady_state
+  inputs: {tau: tau50_fig4, omega: omega1000_fig4}
+  sweep: {F: T_fig4b_tau50}
+  outputs: {T: T_fig4b_tau50_pred}
+- id: run_fig4a_nb_tau20
+  model: rigid_steady_state
+  inputs: {tau: tau20_fig4, omega: omega100_fig4}
+  sweep: {F: nb_fig4a_tau20}
+  outputs: {nb: nb_fig4a_tau20_pred}
+- id: run_fig5b_tau100
+  model: rigid_high_motor
+  inputs: {tau: tau100_fig5}
+  sweep: {omega: T_fig5b_tau100}
+  outputs: {T: T_fig5b_tau100_pred}
+- id: run_fig5b_tau10
+  model: rigid_high_motor
+  inputs: {tau: tau10_fig5}
+  sweep: {omega: T_fig5b_tau10}
+  outputs: {T: T_fig5b_tau10_pred}
+- id: run_fig5c_tau100
+  model: rigid_high_motor
+  inputs: {tau: tau100_fig5}
+  sweep: {omega: nb_fig5c_tau100}
+  outputs: {nb: nb_fig5c_tau100_pred}
+
+# ---- added in audit: the stalled-regime claim T* = F (p. 5, Fig. 1(B)) and Eq. 5 ----
+- id: run_stall_F025_soft
+  model: mean_field
+  inputs: {F: F025_fig1b, tau: tau_fig1b, omega: omega_fig1b, K: K_soft_added}
+  outputs: {T: T_stall_F025_soft_pred}
+- id: run_stall_F025_stiff
+  model: mean_field
+  inputs: {F: F025_fig1b, tau: tau_fig1b, omega: omega_fig1b, K: K_stiff_added}
+  outputs: {T: T_stall_F025_stiff_pred}
+- id: run_stall_F05_soft
+  model: mean_field
+  inputs: {F: F05_fig1b, tau: tau_fig1b, omega: omega_fig1b, K: K_soft_added}
+  outputs: {T: T_stall_F05_soft_pred}
+- id: run_stall_F05_stiff
+  model: mean_field
+  inputs: {F: F05_fig1b, tau: tau_fig1b, omega: omega_fig1b, K: K_stiff_added}
+  outputs: {T: T_stall_F05_stiff_pred}
+  note: "about 3 minutes: the solver follows the slipping branch, v_e* near 2700, with steps cfl/(F v_e*)"
+- id: run_stall_F05_rigid_low
+  model: rigid_steady_state
+  inputs: {F: F05_fig1b, tau: tau_fig1b, omega: omega_fig1b}
+  settings: {n_scan: 400, root: smallest_ve}
+  outputs: {T: T_stall_F05_rigid_low_pred}
+- id: run_stall_F05_rigid_high
+  model: rigid_steady_state
+  inputs: {F: F05_fig1b, tau: tau_fig1b, omega: omega_fig1b}
+  settings: {n_scan: 400, root: largest_ve}
+  outputs: {T: T_stall_F05_rigid_high_pred}
+- id: run_eq5_tau10
+  model: critical_activity_eq5
+  inputs: {C1: C1_eq5, tau: tau_fig1b}
+  outputs: {Fcrit: Fcrit_eq5_tau10_pred}
+- id: run_kopt_s11_s2
+  model: kopt_s11
+  inputs: {C2: C2_eq6, nc: nc_s2, Fb: Fb_s2, kon: kon_s2, vu: vu_s2}
+  outputs: {ks_opt: ks_opt_s11_s2}
+  note: "the motor-dominated limit of Eq. 6 for the SI Table 2 set; no printed value to compare, kept for the relation to Eq. 6 and for cross-paper relations"
+
+# ---- second figure pass ----
+- id: run_fig2c_eq5_line
+  model: critical_activity_eq5
+  inputs: {C1: C1_eq5}
+  sweep: {tau: Fcrit_fig2c_eq5_line}
+  outputs: {Fcrit: Fcrit_fig2c_eq5_line_pred}
+- id: run_fig2c_eq5_w200
+  model: critical_activity_eq5
+  inputs: {C1: C1_eq5}
+  sweep: {tau: Fcrit_fig2c_soft_w200}
+  outputs: {Fcrit: Fcrit_fig2c_soft_w200_pred}
+- id: run_fig2c_eq5_w2000
+  model: critical_activity_eq5
+  inputs: {C1: C1_eq5}
+  sweep: {tau: Fcrit_fig2c_soft_w2000}
+  outputs: {Fcrit: Fcrit_fig2c_soft_w2000_pred}
+- id: run_fig2f_eq6_mf
+  model: kopt_eq6_dimensionless
+  inputs: {C2: C2_eq6, C3: C3_eq6, tau: tau10_fig2f, F: F_fig2f}
+  sweep: {omega: Kopt_fig2f_mf_tau10}
+  outputs: {Kopt: Kopt_fig2f_mf_tau10_pred}
+- id: run_fig2f_eq6_st
+  model: kopt_eq6_dimensionless
+  inputs: {C2: C2_eq6, C3: C3_eq6, tau: tau10_fig2f, F: F_fig2f}
+  sweep: {omega: Kopt_fig2f_st_tau10}
+  outputs: {Kopt: Kopt_fig2f_st_tau10_pred}
+- id: run_fig4b_tau20
+  model: rigid_steady_state
+  inputs: {tau: tau20_fig4, omega: omega1000_fig4}
+  sweep: {F: T_fig4b_tau20}
+  outputs: {T: T_fig4b_tau20_pred}
+- id: run_fig4b_nb_tau50
+  model: rigid_steady_state
+  inputs: {tau: tau50_fig4, omega: omega1000_fig4}
+  sweep: {F: nb_fig4b_tau50}
+  outputs: {nb: nb_fig4b_tau50_pred}
+- id: run_figs3_F1_tau10
+  model: kopt_eq6_dimensionless
+  inputs: {C2: C2_eq6, C3: C3_eq6, tau: tau10_fig2f, F: F1_figs3}
+  sweep: {omega: Kopt_figs3_F1_tau10}
+  outputs: {Kopt: Kopt_figs3_F1_tau10_pred}
+- id: run_figs3_F10_tau10
+  model: kopt_eq6_dimensionless
+  inputs: {C2: C2_eq6, C3: C3_eq6, tau: tau10_fig2f, F: F10_figs3}
+  sweep: {omega: Kopt_figs3_F10_tau10}
+  outputs: {Kopt: Kopt_figs3_F10_tau10_pred}
+- id: run_fig5a_tau1
+  model: rigid_optimum_activity
+  inputs: {tau: tau1_fig5a}
+  sweep: {omega: Fopt_fig5a_tau1}
+  outputs: {Fopt: Fopt_fig5a_tau1_pred}
+- id: run_fig5a_tau5
+  model: rigid_optimum_activity
+  inputs: {tau: tau5_fig5a}
+  sweep: {omega: Fopt_fig5a_tau5}
+  outputs: {Fopt: Fopt_fig5a_tau5_pred}
+- id: run_fig5a_tau10
+  model: rigid_optimum_activity
+  inputs: {tau: tau10_fig5a}
+  sweep: {omega: Fopt_fig5a_tau10}
+  outputs: {Fopt: Fopt_fig5a_tau10_pred}
+- id: run_fig5a_tau20
+  model: rigid_optimum_activity
+  inputs: {tau: tau20_fig5a}
+  sweep: {omega: Fopt_fig5a_tau20}
+  outputs: {Fopt: Fopt_fig5a_tau20_pred}
+- id: run_fig5b_inset
+  model: high_motor_optimum_omega
+  inputs: {}
+  sweep: {tau: omega_opt_fig5b_inset}
+  outputs: {omega_opt: omega_opt_fig5b_inset_pred}
+- id: run_fig3b_rigid_tau10
+  model: rigid_clutch_scan
+  inputs: {F: F_fig3, tau: tau10_fig3, omega_prime: omega_prime_fig3}
+  sweep: {beta_c: T_fig3b_tau10}
+  outputs: {T: T_fig3b_tau10_rigid}
+- id: run_fig3b_rigid_tau5
+  model: rigid_clutch_scan
+  inputs: {F: F_fig3, tau: tau5_fig3, omega_prime: omega_prime_fig3}
+  sweep: {beta_c: T_fig3b_tau5}
+  outputs: {T: T_fig3b_tau5_rigid}
+- id: run_fig3d_rigid_F2
+  model: rigid_clutch_scan
+  inputs: {F: F2_fig3d, tau: tau10_fig3, omega_prime: omega_prime_fig3}
+  sweep: {beta_c: T_fig3d_F2}
+  outputs: {T: T_fig3d_F2_rigid}
+- id: run_fig3d_rigid_F5
+  model: rigid_clutch_scan
+  inputs: {F: F5_fig3d, tau: tau10_fig3, omega_prime: omega_prime_fig3}
+  sweep: {beta_c: T_fig3d_F5}
+  outputs: {T: T_fig3d_F5_rigid}
+- id: run_figs1b_F025
+  model: mean_field
+  inputs: {F: F025_figs1, tau: tau_figs1, omega: omega_figs1}
+  sweep: {K: nb_figs1b_F025}
+  outputs: {nb: nb_figs1b_F025_pred}
+- id: run_figs1b_F05
+  model: mean_field
+  inputs: {F: F05_figs1, tau: tau_figs1, omega: omega_figs1}
+  sweep: {K: nb_figs1b_F05}
+  outputs: {nb: nb_figs1b_F05_pred}
+  note: "slow (minutes per point): on stiff substrates the solver follows the slipping branch (q_stall_bistable)"
+- id: run_figs4r_rigid_tau10
+  model: rigid_clutch_scan
+  inputs: {F: F_figs4, tau: tau10_fig3, omega_prime: omega_prime_figs4}
+  sweep: {beta_c: nb_figs4r_tau10}
+  outputs: {nb: nb_figs4r_tau10_rigid}
+  note: "tau from the Fig. 3(B) legend datum; Fig. S4 has the same legend (tau = 1, 2, 5, 10)"
+- id: run_figs4r_rigid_tau5
+  model: rigid_clutch_scan
+  inputs: {F: F_figs4, tau: tau5_fig3, omega_prime: omega_prime_figs4}
+  sweep: {beta_c: nb_figs4r_tau5}
+  outputs: {nb: nb_figs4r_tau5_rigid}
+  note: "tau from the Fig. 3(B) legend datum; Fig. S4 has the same legend (tau = 1, 2, 5, 10)"

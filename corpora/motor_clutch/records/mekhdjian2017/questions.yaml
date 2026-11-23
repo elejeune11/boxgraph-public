@@ -1,0 +1,407 @@
+- id: q_radhesion
+  kind: unstated_input
+  about: [r_adh_added, motor_clutch_reinforced]
+  text: >-
+    The adhesion radius radhesion of Eqs. 4-5 sets both the stiffness axis (κsubstrate = 4π radhesion E / 9) and
+    the stress (Fsubstrate/π radhesion^2) of every model figure, but no value is printed. The record uses 550 nm,
+    inferred from the Fig. S4c plateau (≈ 315 Pa ≈ nm Fm/π r^2 for nm Fm = 300 pN); with it the simulated Fig. 5c
+    curves match the printed ones in level and in the position of their maxima, which supports the inference but
+    does not replace a printed value.
+  citation: {page: 24, quote: "We assume that the cell-substrate contact area is a circle radius", where: "above Eq. 4"}
+- id: q_actin_balance
+  kind: unstated_input
+  about: [spread_area_pss, Atot_added, vpoly_added]
+  text: >-
+    The spread-area rules (Eqs. 6-9) need [Actin]Total, vpolymerization and Lactin; none is printed. Eq. 8 also
+    mixes dimensions: [G-actin] is a length (nm) but v/Lactin is a rate, so ∂[G-actin]/∂t is not a length per time
+    unless Lactin is a pure number. The record uses the steady state (vedge = 0) on the time-averaged flow, with
+    [Actin]Total = 25 µm inferred from the Fig. S4d plateau and vpolymerization = 200 nm/s from the same laboratory's
+    later simulator; the area comparisons test the shape of the curves, not printed inputs.
+  citation: {page: 25, quote: "constrained vprotrusion by an actin mass balance", where: "Eqs. 7-8"}
+- id: q_nm_fig5_vs_s4
+  kind: possible_error
+  about: [nm_s4, nm_low_5c, A_s4d_k0, A_s4e_none, A_5d_low, cmp_fig_A_5d_s4d]
+  text: >-
+    Fig. S4b lists nm = 150 and nc = 150 for the reinforcement simulations, while the Fig. 5c-d cell without
+    reinforcement is labelled nm = 250, nc = 150. Fig. S4e's black line ('No reinforcement') is the same curve as
+    Fig. 5c-d's solid line, but Fig. S4d's black line (kadd = 0) lies about 20-30% higher in area than either at
+    low stiffness. The model run with nm = 150 reproduces the S4d black line and with nm = 250 the Fig. 5d/S4e one,
+    so the figures appear to use two motor numbers for the 'no reinforcement' cell; which one Fig. S4e's orange
+    line (labelled 12 pN, otherwise S4c's kadd = 1 /s) used is not said.
+- id: q_eopt_10kpa
+  kind: overstated_claim
+  about: [E_opt_text, E_opt_fig, T_5c_high]
+  text: >-
+    The text puts the optimum stiffness of the TGFβ-treated (nm = nc = 500) simulated cell at '∼10 kPa', but the
+    dashed line of Fig. 5c peaks near 1-2 kPa and has fallen to about a third of its peak by 10 kPa. The figure,
+    the reader's runs and the text disagree by about an order of magnitude; the '~' gives the printed value no
+    verdict, so the difference is stated here.
+  citation: {page: 6, printed_page: "1472", quote: "beyond an optimum stiffness (here ∼10 kPa for TGFβ-treated", where: text}
+- id: q_total_force_product
+  kind: unexplained_difference
+  about: [cmp_F_ctrl, cmp_F_tgf, F_5e_ctrl, F_5e_tgf]
+  text: >-
+    The Fig. 5 legend says total force is average traction stress times spread area, yet the plotted mean total
+    forces (in nN) are about 2-3 times the product of the plotted mean stress and mean area (e.g. Ctrl, 1.1 kPa:
+    ≈ 114 Pa x ≈ 650 µm^2 ≈ 74 nN against ≈ 240 nN plotted). A mean of per-cell products can exceed the product of
+    means only through a strong stress-area correlation; a unit or scaling difference in the total-force panel is
+    another possibility. Not resolved from the paper.
+  citation: {page: 7, printed_page: "1473", quote: "total force was quantified by multiplying average traction stress by the spread area", where: "Fig. 5 legend"}
+- id: q_kadd001_strength
+  kind: unexplained_difference
+  about: [cmp_T_s4c_k001, cmp_A_s4d_k001, run_s4_k001]
+  text: >-
+    With kadd = 0.01 /s the printed curves (Fig. S4c-d, solid green) rise again above ≈ 10 kPa, to ≈ 120 Pa at
+    50 kPa; the reader's run of Eqs. 10-12 with the S4b parameters adds few clutches at high stiffness (few clutches
+    exceed 12 pN while the load is shared) and stays near the kadd = 0 line. How nthreshold is counted (force or
+    extension, engaged clutches only), whether runs continue from one stiffness to the next, and over which part of
+    the run traction is averaged are not stated and could each explain the difference.
+- id: q_no_steady_state
+  kind: numerics
+  about: [motor_clutch_reinforced, run_s4_k001, run_s4_k01, run_s4_k1, t_sim_text]
+  text: >-
+    With reinforcement the model has no clutch removal and 'does not achieve a true steady state' (p. 29), so a
+    time average depends on the run length (10^6 events, ≈ 10,000 s) and on the averaging window, neither of which
+    is defined beyond the event count. The reader averages over the whole run, transient included; at kadd = 1 /s
+    this keeps the plateau below the ≈ 315 Pa (stall) level the paper's curves reach.
+  citation: {page: 29, quote: "it does not achieve a true steady state", where: "Supplement: Model implementation"}
+- id: q_events_short
+  kind: choice
+  about: [run_5c_low, run_5c_high, run_s4_k0, run_val_ctrl, run_val_tgf, ref_events]
+  text: >-
+    Runs without reinforcement use 2 x 10^5 events per stiffness (two seeds) instead of the paper's 10^6, to keep
+    the build affordable; that model is stationary, and ref_events checks the traction at 2x and 4x the count.
+    Runs with reinforcement use the paper's 10^6.
+- id: q_fthresh5_inputs
+  kind: unstated_input
+  about: [Fthresh_5]
+  text: >-
+    The 5 pN threshold of Fig. S4e (blue lines) gives similar behaviour only 'provided other clutch parameters
+    and/or the addition rate (kadd) are also adjusted'; the adjusted values are not given, so the blue lines are not
+    run (and not read).
+  citation: {page: 27, quote: "provided other clutch parameters and/or the addition rate", where: text}
+- id: q_validation_regime
+  kind: unexplained_difference
+  about: [val_T_ctrl, val_T_tgf, val_A_ctrl, val_A_tgf]
+  text: >-
+    The paper compares the model with the MCF10A gels of Fig. 5e only qualitatively ('consistent with'): simulated
+    traction of the untreated cell falls with stiffness above ≈ 0.5 kPa, while measured Ctrl stress is flat or rises
+    at 13.8 kPa; the paper itself notes that low signal on stiff gels kept it from confirming the biphasic trend
+    (p. 26). The validation comparisons put numbers on this; their outcome rests on the added radhesion.
+  citation: {page: 26, quote: "unable to confirm whether the transformed cells show a distinct biphasic trend", where: "Supplement: Addition of a kinetic rate for clutch reinforcement"}
+- id: q_mts_stiffness
+  kind: unstated_input
+  about: [motor_clutch_reinforced, kadd_1, Fthresh_s4]
+  text: >-
+    The main text (p. 8) uses the molecular-tension-sensor surfaces as a test of the reinforcement model: they are
+    'effectively much stiffer than PA gels', TGFβ-treated cells there show lower traction and smaller spread area
+    than on 13.8-kPa gels (Fig. S5), and the paper concludes the data are inconsistent with a model relying
+    entirely on force-feedback reinforcement (Fig. S4c-d) but consistent with more motors and clutches (Fig. 5c-d).
+    No effective modulus is given for the MTS surface, so neither model can be run at it, and the conclusion
+    cannot be checked in the record. It is a qualitative argument from the shapes of the model curves (the
+    reinforced curves plateau, the Fig. 5c-d curves fall beyond their optimum).
+  citation: {page: 8, printed_page: "1474", quote: "the MTS substrates are effectively much stiffer than PA gels", where: text}
+# ---- Added by the second figure pass (2026-11-22) ----------------------------------------------------
+- id: q_s3c_product
+  kind: unexplained_difference
+  about: [A_s3c, T_s3c, F_s3c, F_5e_ctrl, F_5e_tgf, F_s5_ctrl, F_s5_tgf]
+  text: >-
+    Bears on q_total_force_product. In Fig. S3c (MCF10A with control or high α5 integrin, a gel of unstated
+    stiffness) the plotted mean total traction force is close to the plotted mean stress times the plotted mean
+    area (as read: about 936 µm^2 x 75 Pa ≈ 70 nN against 72 nN plotted; 1640 µm^2 x 121 Pa ≈ 198 nN against
+    171 nN), whereas in Fig. 5e, replotted unchanged in Fig. S5, the plotted total forces are 2-3 times that
+    product. The same laboratory's own panels thus follow the legend's 'stress times area' in one figure and not in
+    the other, which makes a scaling or unit difference in the Fig. 5e/S5 force panels more likely than a
+    stress-area correlation; the paper does not say. The product is not computed in the record for Fig. S3c because
+    its bars are indexed by condition, not by gel modulus.
+  citation: {page: 33, where: "Fig. S3c", quote: "Traction forces, MCF 1OA"}
+- id: q_mts_readings
+  kind: unstated_input
+  about: [A_s5_mts, F_s5_mts, A_s5_tgf, F_s5_tgf]
+  text: >-
+    The MTS-coverslip bars of Fig. S5 are now read (A_s5_mts, F_s5_mts): for TGFβ-treated cells both spread area
+    and total force on the MTS surface lie well below the 13.8-kPa gel values, which is the observation the paper
+    uses against the reinforcement model (q_mts_stiffness). They still cannot be compared with any model run,
+    because the MTS surface has no stated modulus; a later record that gives one could use these data.
+  citation: {page: 35, where: "Fig. S5", quote: "Figure S5"}
+
+# ==== cross-record validation with alonsomatilla2023 (2026-11-22): none added ====================
+- id: q_xval_alonsomatilla2023_none
+  kind: unstated_model
+  about: [bell_off_rate, motor_clutch_reinforced, traction_optimum, modulus_eq5]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    alonsomatilla2023, because that record holds none: every value it plots is a mean-field, analytical or
+    stochastic model result (alonsomatilla2023/figures.md: "The paper has no measurements"), and its data
+    of origin measured are absent. This paper (2017) predates it and does not cite it. In the other
+    direction, alonsomatilla2023 cites this paper only for parameters (Fth range, Table 1; the modulus
+    conversion, SI legend E), and none of its models outputs a quantity measured here (cell-averaged
+    traction stress, total cell force, spread area, sensor force, adhesion or invasion measures); see
+    alonsomatilla2023/q_xval_mekhdjian2017_none. bell_off_rate and alonsomatilla2023/clutch_off_rate_bell
+    share Bell's law, which is a relation between models, not a shared measurement.
+  citation: {page: 24, quote: "scales with clutch extension according to a single exponential Bell", where: "Supplemental Materials"}
+
+# ==== cross-record validation with bangasser2013 (2026-11-22): none added ========================
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [motor_clutch_reinforced, bell_off_rate, modulus_eq5, traction_optimum]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement held by
+    bangasser2013. This paper takes that one's model rules and per-molecule parameters (p. 24: "We
+    modified an existing 'motor-clutch' model") and cites it for the optimum-stiffness behaviour (p. 6),
+    but never says its model, with its MCF10A sets, predicts a number bangasser2013 shows. The measured
+    data held by bangasser2013 are all other papers' data redrawn: (1) Chan and Odde's neuron retrograde
+    flow against Young's modulus (bangasser2013/v_figS1b_measured, Fig. S1B). motor_clutch_reinforced
+    outputs v_retro and takes E, so a sweep is possible in units, but every set this paper gives (nm = 250,
+    nc = 150 untreated; nm = nc = 500 TGFβ; nm = nc = 150 with reinforcement) is for MCF10A epithelial
+    cells, not chick forebrain neuron filopodia, and its added radhesion was inferred from MCF10A plateaus
+    (q_radhesion); a neuron run would need bangasser2013's own fitted base set and a filopodial adhesion
+    radius neither paper gives, i.e. bangasser2013's fit to chan2008 again (already entered there as
+    val_flow_chan_260Pa / val_flow_chan_57kPa, fit_quality) behind an invented conversion. (2) Kong et
+    al.'s integrin lifetimes (bangasser2013/tau_kong_fig7c, a bond lifetime in s): bell_off_rate gives an
+    off rate, a different quantity, and is a slip law with Chan-Odde parameters never fitted to or meant
+    for Kong's catch bond. (3) The normalized migration and normalized traction of other cell types
+    (Fig. 1A-B): no model here outputs a normalized quantity, and these cells (U87, smooth muscle,
+    neutrophils, NIH/3T3, neurons, T24, BAEC) have no parameter set here; at most a trend would be
+    predicted. In the other direction, see bangasser2013/q_xval_mekhdjian2017_none.
+  citation: {page: 24, quote: "We modified an existing motor-clutch model of cell traction forces", where: "Supplemental Materials"}
+
+# ==== cross-record validation with bangasser2013b (2026-11-22): none added ======================
+- id: q_xval_bangasser2013b_none
+  kind: unstated_model
+  about: [motor_clutch_reinforced, bell_off_rate, modulus_eq5, spread_area_pss, total_force_product, traction_optimum]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2013b's measurements.
+    The pairing rested on a citation that is not to that record: this paper's "Bangasser et al., 2013"
+    (ref-bangasser2013) is Bangasser, Rosenfeld and Odde, Biophys J 105:581 (the bangasser2013 record), not
+    Bangasser and Odde, Cell Mol Bioeng 6:449 (bangasser2013b), which the reference list does not contain.
+    bangasser2013b is a modelling paper; its only measured data are the run times of its own ODE solver and
+    of 1 and 100 Monte Carlo runs (bangasser2013b/fig6b_*_cal, computation_time in s). No model here outputs
+    a computation time, so there is nothing to run. That motor_clutch_reinforced and
+    bangasser2013b/clutch_ensemble_cycle share a shape (velocity from force, rate and stiffness) makes them
+    a pair for the job relating models, not a model and a measurement. In the other direction, see
+    bangasser2013b/q_xval_mekhdjian2017_none.
+  citation: {page: 24, quote: "We modified an existing motor-clutch model of cell traction forces", where: "Supplemental Materials"}
+
+# ==== cross-record validation with bangasser2017 (2026-11-22): none added ========================
+- id: q_xval_bangasser2017_none
+  kind: unstated_input
+  about: [motor_clutch_reinforced, spread_area_pss, total_force_product, traction_optimum, bell_off_rate, modulus_eq5]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of bangasser2017.
+    Neither paper cites the other: this one's "Bangasser et al., 2013" is bangasser2013, and the record
+    states no relation to bangasser2017 (source notes). bangasser2017 measures U251 glioma cells (and redraws
+    Chan and Odde's ECFN neuron data) on PA gels of 0.7-200 kPa: actin retrograde flow (Figs. 3c, 4a,
+    Supp. Fig. 4C), traction strain energy and scaled strain energy (Figs. 3e-f, 4b, Supp. Fig. 4D-I), cell
+    area, aspect ratio, random motility coefficient and MSD curves (Figs. 2, 4, Supp. Fig. 2E). Only
+    retrograde flow is an output here (motor_clutch_reinforced v_retro, swept over E) in the measured
+    quantity. But every parameter set this paper gives is for MCF10A cells (nm = 250, nc = 150; nm = nc =
+    500; nm = nc = 150 with reinforcement), and radhesion (r_adh_added), which turns a modulus into the
+    model's spring constant, was inferred from MCF10A plateaus (q_radhesion). A U251 run would need motor
+    and clutch numbers and an adhesion radius that neither paper gives for one U251 adhesion: bangasser2017
+    gives whole-cell pools and module maxima for its own CMS, and no conversion from spring constant to
+    modulus (bangasser2017/q_stiffness_mapping). Running it with those numbers would be bangasser2017's
+    module stand-in (bangasser2017/module_ssa) again, with this record's MCF10A radius added, so it would
+    test the added inputs rather than this paper's model. Strain energy (pJ), cell area of U251 (this
+    model's area rests on MCF10A-inferred actin totals, q_actin_balance), aspect ratio and motility are not
+    outputs here, or only after inputs added for the other cell type. In the other direction, see
+    bangasser2017/q_xval_mekhdjian2017_none.
+  citation: {page: 24, quote: "We assume that the cell-substrate contact area is a circle radius", where: "above Eq. 4"}
+- id: q_xval_bell1978_none
+  kind: reading
+  about: [motor_clutch_reinforced, bell_off_rate, total_force_product, spread_area_pss, traction_optimum, modulus_eq5]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978. This paper cites bell1978 only for the form of the clutch off rate inside its model
+    (bell_off_rate, p. 24); it does not say its model explains or predicts any of Bell's numbers.
+    bell1978 is a theory paper with three data of origin measured, all quoted from other works:
+    force_adhesive (about 1 dyne to separate a cell, from its ref. 52, printed "~", so no verdict)
+    and the free-sugar concentrations c_sugar_low and c_sugar_high (0.001 and 0.01 M, from its
+    ref. 49). Its Fig. 8 readings are model curves (origin predicted). None is an output here:
+    motor_clutch_reinforced gives the time-averaged traction of one adhesion pulled by myosin on an
+    elastic gel (T, F_sub), its retrograde flow and clutch numbers, not the force needed to pull two
+    cells apart, which would need the bond number and contact area of a cell-cell junction that
+    neither paper states; bell_off_rate gives a loaded off rate, which bell1978 does not measure;
+    the other models are processing of this paper's own curves. No model here takes a sugar
+    concentration. The shared shape of motor_clutch_reinforced with bell1978/detach_time_eq17 (a
+    time from a force, a length and a rate) relates two models, not a measured quantity. In the
+    other direction, see bell1978 q_xval_mekhdjian2017_none.
+  citation: {page: 24, quote: "exponential Bell's law model (Bell, 1978) and a characteristic bond force", where: "Supplemental Materials"}
+
+# ==== cross-record validation with chan2008 (2026-11-22): none added ============================
+- id: q_xval_chan2008_none
+  kind: unstated_input
+  about: [motor_clutch_reinforced, bell_off_rate, modulus_eq5, spread_area_pss, total_force_product, traction_optimum]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of chan2008.
+    This paper modifies Chan and Odde's model (Supplement p. 24) and cites it for the optimum-stiffness
+    behaviour (p. 6), but never says its model, with its MCF10A sets, predicts a number Chan and Odde
+    measured. chan2008's measurements are of chick forebrain neuron filopodia: retrograde flow on 260 Pa to
+    57 kPa gels (chan2008 Figs. 3C-D, S8C), the Cerruti peak force and force-to-bead distance (Fig. S10D),
+    and histograms of flow, displacements, steps, failures and radial deviation. motor_clutch_reinforced
+    outputs v_retro and takes E, so a sweep over Chan's moduli is possible in units, but every set here
+    (nm = 250, nc = 150 untreated; nm = nc = 500 TGFβ; nm = nc = 150 with reinforcement) is for MCF10A
+    cells, and radhesion (r_adh_added), which turns E into the model's spring by Eq. 5, was inferred from
+    MCF10A plateaus (q_radhesion). A neuron run would need chan2008's own Table S1 set, whose nc, kon and Δ
+    were fitted to these very flows, plus a filopodial adhesion radius neither paper gives: that is Chan's
+    fit again behind an added conversion (chan2008 already holds it as reproduction and fit_quality
+    entries), not a test of this paper's model. F_sub is the time-averaged force on one adhesion, not the
+    peak force of a filopodium from two bead displacements; whole-cell spread area, traction stress and
+    total force are not measured by chan2008; bell_off_rate gives a loaded off rate, which chan2008 does
+    not measure. The shared port shape of motor_clutch_reinforced with chan2008/cerruti_force_eq11 (a force
+    from a length and a modulus) relates two models, not a measurement (relations.yaml says why it is not
+    entered). In the other direction, see chan2008/q_xval_mekhdjian2017_none.
+  citation: {page: 24, quote: "We modified an existing motor-clutch model of cell traction forces generated by neuron", where: "Supplemental Materials"}
+
+# ==== cross-record validation with chaudhuri2015 (2026-11-22): none added =======================
+- id: q_xval_chaudhuri2015_none
+  kind: unstated_model
+  about: [spread_area_pss, motor_clutch_reinforced, bell_off_rate]
+  text: >-
+    No model here is validated against chaudhuri2015's measurements. This paper cites chaudhuri2015
+    for two things only: protrusion minus retrograde flow as a proxy for spread area (p. 6), and the
+    disk area A = π rcell^2 (Supplement p. 25). It does not say that its model explains or predicts any
+    chaudhuri2015 measurement. Most of chaudhuri2015's measurements are gel properties: stress
+    relaxation, G′ and G″, AFM moduli. None of these is an output of a model here. The other measurements
+    are YAP ratios, cell fractions and the spread areas of U2OS cells (Figs. 3b-c, 4b, Supp. Fig. 5) and
+    3T3 fibroblasts (Supp. Fig. 4) on RGD-alginate. Of these, only the spread areas on the elastic gels
+    are a quantity a model here gives (spread_area_pss, on the flow of motor_clutch_reinforced). That
+    test is not made, for three reasons. (1) Every parameter set here is for MCF10A cells, and
+    radhesion and [Actin]Total (r_adh_added, Atot_added) were inferred from this paper's own MCF10A
+    plateaus. A U2OS or 3T3 run would rest on an inferred actin pool for another cell type, so it would
+    test the additions rather than the model. (2) chaudhuri2015 sets ligand density as RGD concentration
+    (150-1,500 uM), and no model here has a ligand-density input. (3) The area model needs a flow curve
+    run at chaudhuri2015's moduli (1.4, 3.4, 9 kPa). The measured bars are indexed by condition, not by
+    modulus, so no curve here can be compared with them point by point. bell_off_rate gives a loaded
+    clutch off rate, which neither paper measures. Fig. 7b's adhesion lifetime is the lifetime of a whole
+    focal adhesion, in minutes. In the other direction, see chaudhuri2015/q_xval_mekhdjian2017_none.
+  citation: {page: 25, quote: "as was previously employed by Chaudhuri et al.", where: "Supplemental Materials, Eq. 6 paragraph"}
+
+# ==== cross-record validation with elosegui2014 (2026-11-22): none added =========================
+- id: q_xval_elosegui2014_none
+  kind: unstated_input
+  about: [motor_clutch_reinforced, spread_area_pss, total_force_product, traction_optimum, bell_off_rate, modulus_eq5, ref-elosegui2014]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of elosegui2014.
+    This paper cites it four times, all about models or in words: its reinforced model is "similar to
+    recently proposed models" (p. 6), its 1D-to-2D conversion follows their stochastic simulations (p. 24),
+    its reinforcement is based on their integrin recruitment (p. 26), and "many cell types remain well spread
+    and generate large traction forces even on stiff substrates" (p. 6), a trend the paper does not quantify
+    for those cells or fit. It never says its model, with its MCF10A sets, predicts a number elosegui2014
+    measured. elosegui2014 measures breast myoepithelial cells (myo ctrl, myo b6, with and without
+    integrin-blocking antibodies) on fibronectin-coated gels of 0.25-29 kPa. Two of its measurements are
+    outputs here in the same quantity and units, and the gel modulus is the model's E port: the average cell
+    traction stress in Pa (Figs. 1b-c, 4d, 4g, 4j; T of motor_clutch_reinforced, Eq. 4) and the actin
+    rearward flow in nm/s (Figs. 4e, 4h, 4k; v_retro). The test is still not made, because no input that sets
+    the cell is known for those cells. Every set here is for MCF10A cells (nm = 250, nc = 150 untreated;
+    nm = nc = 500 TGFβ; nm = nc = 150 with kadd, Fthreshold, nclutch,max), and radhesion (r_adh_added) and the
+    reinforcement plateau were inferred from MCF10A curves (q_radhesion). elosegui2014's own motor, clutch,
+    density and rate values are in its Supplementary Table 1, which renders blank (elosegui2014/q_si_unreadable),
+    and its clutch is two competing integrin types with a catch bond, where this model has one slip-bond
+    clutch type. A run would need nm, nc, kon, koff, Fb, kadd, Fthreshold, nclutch,max and radhesion added for
+    myoepithelial cells, so it would test the additions, not this paper's model. The integrin densities
+    (a.u.), membrane densities, SPR sensorgrams, bead detachment times and bead recruitment are outputs of no
+    model here (nc_mean is a clutch count, not a fluorescence density in arbitrary units). In the other
+    direction, see elosegui2014/q_xval_mekhdjian2017_none.
+  citation: {page: 6, printed_page: "1472", quote: "By contrast, many cell types remain well spread and", where: text}
+
+# ==== cross-record validation with elosegui2016 (2026-11-22): none added =========================
+- id: q_xval_elosegui2016_none
+  kind: unstated_input
+  about: [motor_clutch_reinforced, spread_area_pss, total_force_product, traction_optimum, bell_off_rate, modulus_eq5, ref-elosegui2016]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of elosegui2016.
+    This paper cites it only for models and in words. Its reinforced model is "similar to recently proposed
+    models" (p. 6), and it is "modified from previous iterations" (p. 14). The 1D-to-2D stress conversion
+    follows their simulations (pp. 17, 24). Reinforcement by "transmitting force to talin, prompting it to
+    unfold" (p. 26) is cited as the mechanism its kadd rule leaves unnamed. Varying kadd is "a possible
+    explanation for why some cell types appear to reinforce adhesions, while others do not" (p. 29). That
+    last one is a trend the paper does not quantify for elosegui2016's cells and does not fit. It never says
+    its model, with its MCF10A sets, predicts a number elosegui2016 measured.
+    Two of elosegui2016's measurements are outputs here, in the same quantity and units, at gel moduli that
+    are this model's E port: the MEF cell traction in Pa (Figs. 1a, 3d, 4a, 4e, 5a, 5e, 6a-i, S2, S5a; T of
+    motor_clutch_reinforced, Eq. 4) and the actin rearward flow in nm/s (Fig. 3e; v_retro). The MEF spread
+    area (Fig. S4a) would come from spread_area_pss. The test is still not made, because none of this
+    model's inputs that set the cell is known for MEFs. Every set here is for MCF10A cells (nm = 250,
+    nc = 150 untreated; nm = nc = 500 TGFβ; nm = nc = 150 with kadd, Fthreshold and nclutch,max).
+    radhesion (r_adh_added) and [Actin]Total (Atot_added) were inferred from MCF10A plateaus. elosegui2016's
+    own MEF values (Supplementary Table 1) belong to a different clutch: a number of fibronectin molecules,
+    an integrin density and intrinsic binding rate, and a two-exponential catch bond with talin unfolding.
+    This model has a clutch count, kon and a single Bell slip bond, so those values do not map onto its
+    ports quantity for quantity. A run would need nm, nc, kon, koff, Fb, kadd, Fthreshold, nclutch,max,
+    radhesion and [Actin]Total added for MEFs, and would then test the additions, not this paper's model.
+    The other measurements (adhesion lengths, YAP ratios, pMLC/MLC, integrin and fibronectin staining
+    densities in a.u., attached-cell percentages, the fibronectin-integrin bond lifetimes of Fig. 3a) are
+    outputs of no model here. bell_off_rate gives a loaded off rate, not a measured bond lifetime, and its
+    slip law is not the catch bond those lifetimes show. The shape match of modulus_eq5 with
+    elosegui2016/clutch_no_talin_sim (a modulus from a length and a stiffness) is a relation between
+    models, for the job that relates models across papers. In the other direction, see
+    elosegui2016/q_xval_mekhdjian2017_none.
+  citation: {page: 26, quote: "or by transmitting force to talin, prompting it to", where: "Supplemental Materials"}
+
+# ==== cross-record validation with odde_code (2026-11-22): none added ============================
+- id: q_xval_odde_code_none
+  kind: choice
+  about: [motor_clutch_reinforced, bell_off_rate, modulus_eq5, spread_area_pss, total_force_product, traction_optimum]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against odde_code. That record is the
+    Odde lab's MATLAB motor-clutch scripts, a software record. It holds only the code's parameter values and
+    the papers' predicted curves copied in (origin reported and predicted). It holds no measurement, so
+    nothing there can test this paper's models. Running motor_clutch_reinforced against odde_code's
+    simulated curves would compare two models, not a model with data. That belongs to the relations job,
+    as does the shared shape of bell_off_rate and odde_code/mc_event_port (a rate from a force and a rate).
+    In the other direction, no output of the code's ports is a quantity this paper measures at conditions
+    the ports can be run at. The ports have no flow data to match, and their force is a 1D module force in
+    pN, not a stress in Pa or a cell force in nN. Their stiffness input is a spring constant, not a gel
+    modulus. See odde_code/q_xval_mekhdjian2017_none.
+  citation: {page: 24, quote: "We modified an existing motor-clutch model of cell traction forces", where: "Supplemental Materials"}
+
+# ==== cross-record validation with owen2017 (2026-11-22) =========================================
+- id: q_xval_owen2017_unused
+  kind: choice
+  about: [motor_clutch_reinforced, E_owen_fibrin_added, r_adh_added, nm_low_5c, nc_low_5c, nm_high_5c, nc_high_5c, bell_off_rate, spread_area_pss, total_force_product, traction_optimum, modulus_eq5]
+  text: >-
+    (Cross-record validation.) motor_clutch_reinforced is judged against owen2017's speed of actin relative
+    to its adhesion (Table 1 row 5, 58 ± 3.1 nm/min, and the stated 0-3 nm/s elongation rate), which owen2017
+    says is "consistent with variants of the molecular clutch model" including this paper's (owen2017 p. 10).
+    Three choices are open. (1) The cell: no set here is for fibroblasts, so the model runs with both Fig. 5b
+    cells (untreated nm = 250, nc = 150; TGFβ nm = nc = 500), without reinforcement (kadd = 0, as in Fig. 5);
+    the S4b set with reinforcement (nm = nc = 150, kadd 0.01-1 /s) is not run, since its kadd range is a sweep
+    the paper does not tie to any one cell. (2) The substrate: owen2017 measures no local stiffness; the gel
+    modulus is added (E_owen_fibrin_added, the bulk 270 Pa, with 0.2-50 kPa alternatives) and turned into a
+    spring by Eq. 5 with owen2017's printed r = 0.5 um instead of this record's MCF10A-inferred 550 nm. (3) The
+    measured quantity: the model's flow is relative to the substrate anchor, so it meets the actin-adhesion
+    relative speed (row 5), as chan2008, bangasser2013 and elosegui2016 do with the same measurement. Not used:
+    the lab-frame α-actinin-1, paxillin, zyxin and fibrin speeds (Table 1, Table S1), which would need a moving
+    substrate frame; paxillin-fibrin slip (row 10), adhesion sliding on the matrix, which the model has no
+    element for; the speed difference |v_zyx| - |v_actn| (row 6), not a speed of actin past the adhesion;
+    fibrin displacement and strain profiles (Fig. 2, S2), angles, rose plots, correlations and pair counts,
+    which need a 3D matrix or directions the model lacks; and the rheology (Fig. S10) and localization error
+    (Fig. S9B), not cell mechanics. owen2017 measures no traction stress, cell force or spread area, so T,
+    F_sub, spread_area_pss, total_force_product and traction_optimum have nothing to meet; bell_off_rate gives
+    an off rate, which owen2017 does not measure; modulus_eq5 needs a spring constant owen2017 measures for no
+    adhesion. Tuning nm and nc to owen2017's slow speeds would be a fit made here, so it is not entered.
+  citation: {page: 24, quote: "We modified an existing motor-clutch model of cell traction forces", where: "Supplemental Materials"}
+
+# ==== cross-record validation with prahl2020 (2026-11-23): none added ===========================
+- id: q_xval_prahl2020_none
+  kind: choice
+  about: [motor_clutch_reinforced, bell_off_rate, modulus_eq5, spread_area_pss, total_force_product, traction_optimum, 'prahl2020/v_exp', 'prahl2020/mu_exp', 'prahl2020/fig2g_exp', 'prahl2020/eb1_mean']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of prahl2020, a
+    later paper (2020) from the same lab that cites this one (main ref. 30, Supporting ref. S17) only for the
+    size of cell traction forces, not for any model result. prahl2020 measures U251 glioma cells migrating in
+    PDMS microchannels: the drift velocity and motility coefficient of the cell body (v_exp, mu_exp, Figs. 3A-B,
+    4C-D, 5C-D, 6A-B, 7A-B), the MSD of nucleus positions against time lag (Fig. 2G), EB1 microtubule growth
+    speeds (Fig. S5B), and cell length and nucleus position in the channel (Figs. S5C-D). No output of this
+    record's models is one of these quantities. motor_clutch_reinforced gives the traction stress, the substrate
+    force, the engaged clutches and the F-actin retrograde flow of one adhesion on a gel; it has no cell body,
+    no leading and trailing ends and no polarity, so it gives no cell displacement, and its retrograde flow
+    (actin relative to the clutch anchor) is not the cell's drift velocity along the channel. spread_area_pss
+    gives a spread area on a 2D gel, which a cell in a 12 x 5 um channel does not have. total_force_product
+    and traction_optimum process traction curves; prahl2020 measures no traction (the PDMS and glass are too
+    stiff, prahl2020 p. 10). bell_off_rate gives a clutch off-rate, and modulus_eq5 a gel modulus from a spring
+    constant; prahl2020 measures neither. The shared shape of bell_off_rate and prahl2020/slip_bond_s1 (a rate
+    from a force and a rate; same Bell form) is a relation between models for the relations job, not a
+    validation. In the other direction, see prahl2020/q_xval_mekhdjian2017_none.
+  citation: {page: 24, quote: "We modified an existing motor-clutch model of cell traction forces", where: "Supplemental Materials"}

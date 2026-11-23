@@ -1,0 +1,28 @@
+id: module_optimum
+name: stiffness of minimal flow and of maximal traction of one CMS module (module_ssa on a κs grid)
+role: model
+stated: {page: 2, printed_page: "2", quote: "consistent with the results for the simpler", where: "Results, Cell migration simulator (p. 2); Fig. 1c-d legend (p. 3)"}
+equation: >-
+  module_ssa on a log-spaced grid of κs; the minimum of the time-averaged flow and the maximum of
+  the time-averaged traction each located by a parabola in log10 κs through the extreme grid point
+  and its two neighbours (reader's choice: the paper reads its optima off Fig. 1c-d)
+inputs:
+  nm:   {quantity: n_motors_module_max, unit: dimensionless, description: "the stand-in module holds the module maximum n*m"}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vm:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches_module_max, unit: dimensionless, description: "the stand-in module holds the module maximum n*c"}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+outputs:
+  ks_flow_min: {quantity: stiffness_of_flow_minimum, unit: pN/nm}
+  ks_trac_max: {quantity: stiffness_of_traction_maximum, unit: pN/nm}
+  v_min:       {quantity: retrograde_flow_rate, unit: nm/s, description: "lowest flow on the grid"}
+  F_max:       {quantity: traction_force_magnitude, unit: pN, description: "highest traction on the grid"}
+settings: {ks_min: 0.01, ks_max: 1000.0, per_decade: 2, t_total: 1000.0, seed: 1}
+stochastic: true
+built_from: [module_ssa]
+reconstructed: >-
+  As module_ssa: one module stands in for the whole-cell simulator, which is not run here. The
+  optima of the paper are those of the whole cell (Fig. 1c-d).

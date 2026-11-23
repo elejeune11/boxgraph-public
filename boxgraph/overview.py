@@ -52,7 +52,7 @@ def _fmt(v) -> str | None:
     if v is None:
         return None
     if isinstance(v, (list, tuple)):
-        vals = [_fmt(x) for x in v[:6]]
+        vals = ["—" if x is None else _fmt(x) for x in v[:6]]
         return "[" + ", ".join(vals) + (", …" if len(v) > 6 else "") + "]"
     if isinstance(v, float):
         return f"{v:.4g}"

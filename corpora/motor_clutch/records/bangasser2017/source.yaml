@@ -1,0 +1,69 @@
+id: bangasser2017
+kind: article
+title: Shifting the optimal stiffness for cell migration
+authors: [Benjamin L. Bangasser, Ghaidan A. Shamsan, Clarence E. Chan, Kwaku N. Opoku, Erkan Tüzel, Benjamin W. Schlichtmann, Jesse A. Kasim, Benjamin J. Fuller, Brannon R. McCullough, Steven S. Rosenfeld, David J. Odde]
+year: 2017
+venue: Nature Communications 8, 15313 (with Supplementary Information)
+doi: 10.1038/ncomms15313
+file: corpus/motor_clutch/2017_Bangasser.pdf
+page_range: [1, 22]
+pages: {1: "1", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "10"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-19"}
+notes: >
+  PDF pp. 1-10 are the article (journal pp. 1-10); pp. 11-22 the Supplementary Information
+  (Tables 1-4 on pp. 11-14, figure legends on pp. 15-21, references p. 22), without page labels.
+  In scope: the cell migration simulator (CMS) and its module rules, its parameter set
+  (Supplementary Table 2, all 19 rows, checked on the page image), and the printed numbers that
+  can be recomputed from other printed numbers.
+  The CMS itself (model cms) is entered from the Methods but marked not runnable (q_cms_not_run):
+  its simulated time is not printed, a call at 750-7,500 clutches over hours is far beyond a build,
+  and its 2D force balance is given in words. Its released MATLAB code is the record cms_code.
+  Instead: (1) the module rules Eqs. 1, 2, 3, 7, 8, 9 and actin conservation are separate models;
+  Eqs. 3/7/8/9 are run at the initial state of algorithm step 1 (no printed results to compare).
+  Eq. 1 is related (stated) to Bell (bell1978), Chan and Odde's Eq. 1 (chan2008) and the slip term
+  of bangasser2013's Eq. 9: the CMS module off-rate is the corpus's motor-clutch off-rate. Eq. 2
+  is the same linear force-velocity law as chan2008/bangasser2013 (inside their simulation models,
+  so no separate relation). Parameters against bangasser2013's base set: same Fm, vm*, koff*, Fb,
+  κc (0.8 pN/nm); kon is 1 s^-1 here (0.3 there), and the module maxima are 100/75 and 1,000/750
+  (50/50 there). (2) A single module with the module maxima stands in for the cell
+  (module_ssa, module_optimum, reconstructed; q_module_standin), testing the claim that the
+  whole-cell optimum shift is consistent with the one-protrusion motor-clutch model. With seed 1 its
+  flow minimum (= traction maximum, which coincide for one module by Eq. 2) is about 0.7 pN/nm for
+  the low set and about 7 pN/nm for the high set: the same tenfold shift as Fig. 1c (~0.1 -> ~1)
+  but one decade stiffer; its maximal traction rises about 11-fold (Fig. 1d: ~10-fold). The paper's
+  optima are approximate ("around", "~"), so these carry no verdict. In the whole cell the traction
+  maximum stays at ~0.1 for both sets while the flow minimum shifts, which one module cannot show.
+  Checks with verdicts: Fig. 1 legend and Supplementary Fig. 5 parameter values against
+  Supplementary Table 2 (consistent); the one-tenth rule nc* = Nc/10 of Supplementary Fig. 5
+  against Table 2's 75 and 750 (consistent); ΔEopt = 2-fold of Fig. 4f against the text's optima
+  "near 50" and "near 20 kPa" (2.5, at the edge of the printed precision); PIV window lengths from
+  pixel counts (reproduction, with an added pixel size 6.45 µm/40; the printed lengths imply about
+  0.163 µm, q_pixel_size); gel thickness from volume and coverslip (reconstructed flat disc: 35 µm
+  against 40-100 µm, 611 µm against 700-1,000 µm; q_gel_thickness).
+  Findings: the Fig. 1f legend swaps the low and high motility peaks relative to the panel and the
+  text (q_fig1f_swapped); text and Fig. 1d legend disagree on whether the traction optimum shifts
+  (q_fig1d_traction_optimum); Fig. 3e legend says 700 kPa where the text and Fig. 3d say 700 Pa
+  (q_strain_energy_700); the measured aspect-ratio optimum is ~20-100 kPa in the text but ~9 kPa
+  in the Fig. 2e legend (q_aspect_ratio_optimum); Eq. 10 prints the lower summation limit i = i
+  (q_eq10_index); no conversion from spring constant to Young's modulus is given, so the
+  Discussion's "within ~25% of experiment" cannot be checked (q_stiffness_mapping).
+  Figure pass (2026-11-19; figures.yaml, figures.md, q_figure_pass): the first pass read no figure
+  (q_eye_only_figures). Now 64 calibrated readings by the record's own code (figures/_kit.py) cover
+  the simulated curves (Figs. 1c-g, Supplementary Fig. 5) and the measured motility, area, aspect
+  ratio, actin flow, strain energy and MSD data with their s.e.m. bars (Figs. 2-4, Supplementary
+  Figs. 2E, 4C-I), including the bar insets of Fig. 4. With them the composite metrics of Figs. 1g
+  and 4f are recomputed from the paper's own metric panels (composite_metric_sim/_exp), the
+  log-Gaussian optima refitted (amplitude fixed at 1, q_gauss_amplitude) and the printed
+  ΔKsub,opt = 4-fold and ΔEopt = 2-fold compared; Eq. 12 is applied to the averaged MSD curves and
+  compared with Fig. 2c (cmp_rmc_msd, q_rmc_msd); data plotted twice (Figs. 2c-e and 3c, 3f against
+  the untreated series of Fig. 4) are compared for consistency; the one-module stand-in is swept over
+  Fig. 1c's spring constants (approximation). The readings settle several earlier questions
+  (q_figures_settle) and raise new ones (q_supp4_pa_axis, q_supp4d_ecfn_x, q_fig3f_right_axis,
+  q_supp2e_key). Left out (figures.md): drawings, images, kymographs, trajectories, the heat map and
+  mRNA histogram of Supplementary Fig. 3, the grey noise points of Supplementary Fig. 4D-E, the
+  crossing red and blue traces of Supplementary Fig. 5C-D and two ECFN points lying on the fit curve
+  of Fig. 4f. Also left out, as feeding no model: Supplementary Table 1 (mRNA), Tables 3-4
+  (observation counts, P values), Eqs. 13-15 (Hertz indentation and strain energy: no inputs per
+  measurement are printed), the "~400 times" strain-energy ratio (its bars are read, fig3e_bars, but
+  no model computes the ratio), drug doses,
+  culture and imaging settings.

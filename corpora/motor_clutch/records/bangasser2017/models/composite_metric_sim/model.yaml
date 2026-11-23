@@ -1,0 +1,17 @@
+id: composite_metric_sim
+name: composite metric of the simulated cell (Methods, Composite metrics; Fig. 1g)
+role: processing
+stated: {page: 9, printed_page: "9", quote: "each data set was scaled such that the minimum value was zero", where: "Methods, Composite metrics"}
+equation: >-
+  each metric scaled so that its minimum is 0 and its maximum 1 (actin flow reflected about the x axis
+  first); the scaled sets averaged at each stiffness and the averages scaled again to span 0 to 1
+inputs:
+  flow:     {quantity: retrograde_flow_rate, unit: nm/s, curve: {quantity: substrate_stiffness, unit: pN/nm}}
+  traction: {quantity: traction_force_magnitude, unit: pN, curve: {quantity: substrate_stiffness, unit: pN/nm}}
+  aspect:   {quantity: cell_aspect_ratio, unit: dimensionless, curve: {quantity: substrate_stiffness, unit: pN/nm}}
+  rmc:      {quantity: random_motility_coefficient, unit: um^2/min, curve: {quantity: substrate_stiffness, unit: pN/nm}}
+outputs:
+  C: {quantity: composite_metric, unit: dimensionless, curve: {quantity: substrate_stiffness, unit: pN/nm}}
+settings: {}
+stochastic: false
+from_words: true

@@ -1,0 +1,415 @@
+# Relations this paper states about its models. mapping: b's input symbol -> expression in a's
+# input symbols, numbers in each model's port units (1 dyne = 1e7 pN; 1 eV/nm = 160.2176634 pN).
+- id: rel_eq1_bell
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: bangasser2017/off_rate_eq1
+  mapping: {koff: "k_minus", Fc: "1e7*f", Fb: "160.2176634*kT/gamma"}
+  regime: {k_minus: [1.0e-4, 10], gamma: [0.1, 1], f: [1.0e-7, 1.0e-5], kT: [0.0257, 0.0267]}
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "that depends on the clutch force, Fc,i, according to the Bell model19", where: "Eq. 1"}
+  assumptions:
+    - "Bangasser's characteristic rupture force Fb is Bell's kT/gamma, and the force on one clutch is Bell's force per closed bond"
+- id: rel_eq1_chan
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: bangasser2017/off_rate_eq1
+  mapping: {koff: "koff", Fc: "Fclutch", Fb: "Fb"}
+  regime: {koff: [0.01, 10], Fclutch: [0, 20], Fb: [1, 10]}
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods, citing refs 7 (Chan and Odde) and 14"}
+  assumptions:
+    - "in positive forces; Chan's Table S1 prints Fclutch and Fb both negative, which leaves their ratio unchanged"
+- id: rel_bangasser2013_catch_slip_to_eq1
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: bangasser2017/off_rate_eq1
+  mapping: {koff: "koff", Fc: "F", Fb: "Fb"}
+  output_map: {koff_i: koff_star}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.01, 1], Fb: [1, 10], koffc: [0.001, 1], Fc: [1, 10]}
+  tolerance: 1.0e-5
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods, citing refs 7 and 14 (Bangasser et al. 2013)"}
+  assumptions:
+    - "ref. 14's off-rate is the catch-slip Eq. 9; this paper uses only its slip (Bell) term, which is Eq. 9 with no catch term (koffc -> 0)"
+# Not entered: the whole-cell simulator (cms) against bangasser2013/motor_clutch_ssa or
+# chan2008/motor_clutch. The paper states that each module follows the rules of refs 7 and 14, but
+# cms is not runnable here, so a relation could not be tested. The reader's single-module stand-in
+# (module_ssa) is the paper's Eqs. 1, 2 and 4 with the direct Gillespie method; bangasser2013's
+# motor_clutch_ssa is the same scheme with the first-reaction method; they are related below.
+# One output per relation (approximated_by); each model runs at its own settings and seed.
+- id: rel_bangasser2013_ssa_approx_module_flow
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "Fm", vm: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub"}
+  output_map: {v_flow: v_retro}
+  regime: {nm: [80, 120], Fm: [1.6, 2.4], vu: [100, 140], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods, citing refs 7 and 14 (Bangasser et al. 2013)"}
+  assumptions:
+    - "the paper's statement is about the modules of the whole-cell simulator (cms); module_ssa is the reader's one-module stand-in for it (reconstructed), with the module maxima n*m and n*c and a fixed cell body"
+    - "both are exact stochastic simulations of one clutch scheme, differing in method (first-reaction against direct Gillespie), in run length (1000 s against 500 s), in seed stream, and in the order of the update: bangasser2013's record executes the event before advancing the engaged clutches by flow x time, bangasser2017's advances them first, so a clutch just bound is stretched over the preceding interval in the former only"
+    - "regime: +-20% around Supplementary Table 2's module set (n*m = 100, n*c = 75, kon = 1 1/s, koff = 0.1 1/s, Fb = Fm = 2 pN, v*m = 120 nm/s, κc = 0.8 pN/nm), over the substrate stiffness range 0.01-100 pN/nm"
+    - "tolerance 0.1 (added): allows for the noise of one seeded run of each; seed-to-seed scatter is about 1-2% at the base set"
+  # Relator's check (base set): seeds 1-4 give 75.4-75.9 against 80.7-82.7 nm/s at κs = 0.01 pN/nm and
+  # 54.7-55.2 against 61.4-62.9 nm/s at 1 pN/nm, so a systematic ~8-14% difference, larger than the noise;
+  # the update order above is the likely cause, not tested. The relation test gives not_verified (max
+  # 0.157 flow, 0.230 traction), while bangasser2013/motor_clutch_ssa agrees with the lab's released
+  # MATLAB (odde_code/mc_event_port) within 1% (flow) and 4% (traction): the gap is in this record's
+  # stand-in module, whose update order follows this paper's printed algorithm steps.
+- id: rel_bangasser2013_ssa_approx_module_traction
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "Fm", vm: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub"}
+  output_map: {F_trac: F_mean}
+  regime: {nm: [80, 120], Fm: [1.6, 2.4], vu: [100, 140], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods, citing refs 7 and 14 (Bangasser et al. 2013)"}
+  assumptions:
+    - "as rel_bangasser2013_ssa_approx_module_flow, for the time-averaged traction κs xs (both positive magnitudes)"
+# Not entered: bangasser2013/optimal_stiffness against bangasser2017/module_optimum. The paper says the
+# whole-cell optimum shifts "consistent with the results for the simpler motor–clutch model that only
+# modelled one protrusion14" (p. 2), but that is the cms, which is not run; the two reader-built optimum
+# searches use different κs grids (0.001-100 at 4 per decade against 0.01-1000 at 2 per decade), so their
+# difference would mostly measure grid resolution, and 40 samples of a 21-point sweep of 1000 s runs
+# (about 25 s each) exceed the model run time limit. The module-level relations above test the same rules.
+# Values: no datum of this record names ref-14 as its from_source, so cited.yaml has nothing to link.
+
+# Relations to Bangasser and Odde 2013 (ref. 15, record bangasser2013b). This paper cites ref. 15 twice,
+# both for its result, not its models: "the optimal stiffness can be readily shifted by coordinately
+# changing the numbers of motors and clutches14,15" and the shift of the optimum "to higher
+# stiffness14,15" (p. 2). The module rules are attributed to refs 7 and 14 only (p. 7). So no relation
+# is stated; the two below are proposed. Units pN, nm, s on both sides; both count retrograde motion
+# and force positive.
+- id: rel_b13b_eq5_same_as_eq1
+  kind: same_as
+  a: bangasser2013b/clutch_offrate_eq5
+  b: bangasser2017/off_rate_eq1
+  mapping: {koff: "koff", Fc: "Fc", Fb: "Fb"}
+  output_map: {koff_i: koff_i}
+  regime: {koff: [0.001, 10], Fc: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers call their clutch off-rate the Bell model (ref. 15 Eq. 5, p. 2; this paper's Eq. 1,
+    p. 7) and print the same exponential koff exp(Fc,i/Fb) in the same symbols and units. A
+    correspondence of quantities: ref. 15's mean_clutch_off_rate output is the loaded off-rate of
+    one clutch, as here.
+- id: rel_module_ssa_flow_approximated_by_b13b_ode
+  kind: approximated_by
+  a: bangasser2017/module_ssa
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vm", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks", r: "2"}
+  output_map: {v_mean: v_flow}
+  regime: {nm: [75, 75], Fm: [2, 2], vm: [120, 120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ks: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    Ref. 15's clutch-ensemble ODEs (Eqs. 8-12 with the gamma closure Eq. 19) are a mean-field
+    description of the stochastic motor-clutch model, which it says shows "good agreement with the MC
+    simulations for many clutches" (ref. 15, p. 5). This paper's module follows those stochastic
+    rules (p. 7: Eqs. 1, 2, 4, simulated by Gillespie's method), so the ODE is proposed to approximate
+    the module's mean retrograde flow as it approximates ref. 15's own MC.
+  assumptions:
+    - "module_ssa is this record's one-module stand-in for the whole-cell simulator (reconstructed: fixed cell body, no polymerization or module turnover)"
+    - "pinned at the conditions where ref. 15 compares ODE with MC (its Fig. 2: Chan and Odde's base set, κsub = 0.1 pN/nm, r = 2), as in bangasser2013b's own relations to the MC"
+    - "the module's time-averaged flow over 500 s and the ODE's flow averaged over one load-and-fail cycle both stand for the mean retrograde flow (a correspondence of quantities: retrograde_flow_rate and cycle_mean_flow_rate)"
+    - "tolerance 0.25 is the relator's choice, as in bangasser2013b's relations to the MC"
+  # Relator's check (2026-11-19): module_ssa gives 94.5 and 95.3 nm/s (seeds 1, 2) against the ODE's
+  # 50.9 nm/s, so not_verified (max relative error 0.46). At the same point the same ODE is within 8%
+  # of bangasser2013/motor_clutch_ssa (bangasser2013b/rel_ssa_flow_approximated_by_ode, verified), so
+  # the gap is in this record's stand-in module, not in ref. 15's ODE. It is larger here (κc = 5 pN/nm)
+  # than at Supplementary Table 2's κc = 0.8 pN/nm (8-14%, rel_bangasser2013_ssa_approx_module_flow),
+  # consistent with the update order noted there (engaged clutches advanced before the event), whose
+  # effect grows with clutch stiffness; not tested.
+# Not entered: bangasser2013b/clutch_ensemble_optimum or optimum_eq30 against module_optimum or cms.
+# The p. 2 statement (optimum shifted by coordinately changing motors and clutches, refs 14, 15) is
+# about the whole-cell simulator, which is not run; module_optimum (21 module_ssa runs of 1000 s) at
+# two (nm, nc) points exceeds the relation test's time limit, as noted above for ref. 14; and the
+# ODE optimum (r = 3) is itself a closure approximation that ref. 15 says is "shifted slightly higher"
+# than the MC. No relation is entered for motor_velocity_eq2: ref. 15 writes the same linear
+# force-velocity law only inside its ODEs, with no model of its own for it.
+
+# Relations to Bell 1978 (ref. 19, record bell1978), reviewed 2026-11-19. The paper cites ref. 19
+# once, for Eq. 1 ("according to the Bell model19", p. 7); that is rel_eq1_bell above, against
+# Bell's loaded reverse rate k_ exp(γf/kT) (p. 623), the rate form of Bell's law. Not entered:
+# - bell1978/lifetime_eq16 against off_rate_eq1: the same law as a lifetime, tau = 1/k; it adds
+#   nothing to rel_eq1_bell and its output (a lifetime) is not the same quantity as an off-rate.
+# - bell1978/peak_inertial_force against cms: the shared shape (force from a length and a rate) is
+#   a coincidence of dimensions; Bell's model is the inertial force on a cell on a shaken fiber
+#   (p. 624), which no part of the migration simulator describes, and cms is not runnable.
+# Values: no datum here names ref-19 as its from_source (Fb and k*off come from Supplementary
+# Table 2), so cited.yaml has nothing to link to bell1978.
+
+# Relations to Chan and Odde 2008 (ref. 7, record chan2008), reviewed 2026-11-19. The paper says the
+# simulator "is based on the motor-clutch model of cellular force transmission7" and that each module
+# follows "rules as previously described7,14" (p. 7). Eq. 1 against Chan's Eq. 1 is rel_eq1_chan above.
+# Eq. 2 is Chan's linear force-velocity law (SOM Eqs. 3-4), and module_ssa (the reader's one-module
+# stand-in for the cms) runs the same rules as Chan's Monte Carlo; both are entered below as stated.
+# Not entered: chan2008/motor_clutch or motor_clutch_E against cms, since cms is not runnable; Chan's
+# Eq. 13 (κsub from E) has no counterpart here (this paper reports moduli, not κs, for its gels).
+- id: rel_eq2_chan_force_velocity
+  kind: same_as
+  a: chan2008/force_velocity_eq3
+  b: bangasser2017/motor_velocity_eq2
+  mapping: {vm: "vu", ks: "ksub", xs: "xsub", nm: "nm", Fm: "Fm"}
+  regime: {vu: [10, 1000], ksub: [0.01, 100], xsub: [0, 100], nm: [1, 1000], Fm: [0.5, 10]}
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods, Eq. 2, citing refs 7 (Chan and Odde) and 14"}
+  assumptions:
+    - "in positive (retrograde) values; Chan prints vu, Fm and xsub negative, which leaves Eq. 3 unchanged when all three are flipped, and its vfilament is then the retrograde F-actin speed, Bangasser's vm,j"
+    - "Chan's whole-filopodium motor number nm stands for the module's nm,j, and Chan's substrate position xsub for the module's substrate displacement xs,j (both measured from the unloaded substrate)"
+# Chan's Monte Carlo (fixed dt = 5 ms, 300 s, signed inputs) against the module stand-in (direct
+# Gillespie, 500 s, positive inputs). One output per relation; each model runs at its own settings and seed.
+- id: rel_chan_mc_approx_module_flow
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "-Fm", vm: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ks: "ksub"}
+  output_map: {v_flow: v_retro}
+  regime: {nm: [80, 120], Fm: [-2.4, -1.6], vu: [-144, -96], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [-2.4, -1.6], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods, citing refs 7 (Chan and Odde) and 14"}
+  assumptions:
+    - "the paper's statement is about the modules of the whole-cell simulator (cms); module_ssa is the reader's one-module stand-in for it (reconstructed), with the module maxima n*m and n*c and a fixed cell body"
+    - "Chan's model takes vu, Fm and Fb negative (its Table S1 convention) and reports v_retro and F_mean as positive magnitudes; module_ssa takes them positive, hence the minus signs in the mapping"
+    - "both are stochastic simulations of one clutch scheme, differing in method (fixed-step Monte Carlo at dt = 5 ms against direct Gillespie), run length (300 s against 500 s), seed stream and update order"
+    - "regime: +-20% around Supplementary Table 2's module set (n*m = 100, n*c = 75, kon = 1 1/s, koff = 0.1 1/s, Fb = Fm = 2 pN, v*m = 120 nm/s, κc = 0.8 pN/nm), over κs 0.01-100 pN/nm"
+    - "tolerance 0.1 (added): allows for the noise of one seeded run of each, as in rel_bangasser2013_ssa_approx_module_flow"
+- id: rel_chan_mc_approx_module_traction
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "-Fm", vm: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ks: "ksub"}
+  output_map: {F_trac: F_mean}
+  regime: {nm: [80, 120], Fm: [-2.4, -1.6], vu: [-144, -96], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [-2.4, -1.6], kc: [0.64, 0.96], ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods, citing refs 7 (Chan and Odde) and 14"}
+  assumptions:
+    - "as rel_chan_mc_approx_module_flow; Chan's F_mean (time average of -κsub xsub) and the module's F_trac (time average of κs xs) both stand for the mean traction force on the substrate"
+  # Relator's check (2026-11-19): not_verified for flow (max relative error 0.187) and traction (0.101),
+  # the same pattern as rel_bangasser2013_ssa_approx_module_*: the gap sits in this record's stand-in
+  # module (update order, see there), not shown to be in the paper's simulator.
+
+# Relations to Chaudhuri et al. 2015 (ref. 10, record chaudhuri2015), reviewed 2026-11-19. The paper
+# cites ref. 10 once, in a list of applications: "the motor–clutch-based modelling was used to study the
+# effect of substrate stress relaxation on cell spreading, collective cell durotaxis and ex vivo cell
+# migration as a function of adhesion molecule expression10–12" (p. 2). That says Chaudhuri used the
+# motor-clutch model, not that any model here is Chaudhuri's; the module rules are attributed to refs 7
+# and 14 only (p. 7). So no relation is stated; the two below are proposed, at the level of the rate
+# laws both papers take from the same lineage (Chan and Odde). Units pN, nm, s on both sides; both
+# papers print forces and velocities positive.
+- id: rel_chaudhuri_bell_off_rate_same_as_eq1
+  kind: same_as
+  a: chaudhuri2015/bell_off_rate
+  b: bangasser2017/off_rate_eq1
+  mapping: {koff: "koff", Fc: "Fclutch", Fb: "Frup"}
+  output_map: {koff_i: koff_star}
+  regime: {koff: [0.001, 10], Fclutch: [0, 20], Frup: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers compute the loaded clutch off-rate with the Bell model, both citing Bell (Chaudhuri
+    sref-5, Supp. Note 1, p. 11; this paper ref. 19, Eq. 1, p. 7): Chaudhuri's k*off = koff e^(Fclutch/Frup)
+    and this paper's koff,i = k*off exp(Fc,i/Fb) are the same exponential law, 1/s and pN on both sides.
+  assumptions:
+    - "Chaudhuri's rupture force Frup and this paper's characteristic rupture force Fb are the same parameter of the same law (2 pN in both parameter tables), and Fclutch and Fc,i are the force on one clutch (correspondences of quantities, not merged)"
+    - "the symbols are swapped between papers: Chaudhuri's unloaded rate is koff and loaded k*off, this paper's unloaded rate is k*off and loaded koff,i; the mapping follows the meanings, not the letters"
+- id: rel_eq2_same_as_chaudhuri_retrograde_flow
+  kind: same_as
+  a: bangasser2017/motor_velocity_eq2
+  b: chaudhuri2015/retrograde_flow_eq1
+  mapping: {vu: "vm", F_sum: "ks*xs", Fstall: "nm*Fm"}
+  output_map: {v_retrograde: vm_j}
+  regime: {vm: [10, 1000], ks: [0.01, 100], xs: [0, 100], nm: [1, 1000], Fm: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both are the linear force-velocity law for myosin-driven F-actin retrograde flow taken from Chan and
+    Odde: Chaudhuri's Supp. Eq. 1, v_retrograde = vu (1 - sum_clutch Fclutch / Fstall), and this paper's
+    Eq. 2, vm,j = v*m (1 - κs xs,j / (nm,j Fm)). By this paper's force balance (Eq. 4) the substrate force
+    κs xs,j equals the summed clutch force of the module, and Chan and Odde's Fstall = nm Fm (their
+    Eq. 4) makes the module's stall force nm,j Fm.
+  assumptions:
+    - "Chaudhuri's total clutch force sum Fclutch corresponds to this paper's substrate force κs xs,j (equal by Eq. 4 of this paper; in Chaudhuri's no-lattice model each clutch pulls its own substrate spring, and the sum of their forces is the same total)"
+    - "Chaudhuri's stall force Fstall (150 pN, a single parameter in Supp. Table 2) stands for nm,j Fm here (200 pN for the module set of Supplementary Table 2); correspondences of quantities, not merged"
+    - "Chaudhuri's v_spread = vu - v_retrograde has no counterpart in Eq. 2, so only v_retrograde is related"
+# Not entered: chaudhuri2015/clutch_springs_nolattice against bangasser2017/cms or module_ssa, although
+# all take motor, clutch and stiffness parameters to a velocity (the shape that paired these papers).
+# (1) The outputs are different quantities: Chaudhuri's v_spread = vu - v_retrograde, a spreading speed,
+# against this paper's mean retrograde flow (cms v_flow, module_ssa v_retro); output_map cannot convert
+# one into the other, since v_spread depends on vu, which is an input, not an output. (2) The substrates
+# differ: Chaudhuri gives each clutch its own substrate spring in series, while a module here loads all
+# its clutches on one shared substrate spring (Eq. 4). (3) Neither paper states a limit or closure taking
+# one to the other, and cms is not runnable. chaudhuri2015/lattice_spreading is not runnable either.
+# Values: no datum of this record names ref-10 as its from_source (the module parameters come from
+# Supplementary Table 2), so cited.yaml has nothing to link to chaudhuri2015; chaudhuri2015 (earlier)
+# does not cite this paper.
+- id: rel_cms_implemented_as_cms2d_code
+  kind: same_as
+  a: bangasser2017/cms
+  b: cms_code/cms2d_code
+  mapping: {mpool: "Nm", cpool: "Nc", totact: "Atot*1000", maxpoly: "vp_max", kmod0: "kmod_max", kcap: "kcap",
+            lcell: "lin*1000", lmin: "lmin*1000", Kcell: "kcell", nc: "nc_cell", Fm: "Fm", vu: "vm",
+            kon: "kon", koff: "koff", Kc: "kc", Fb: "Fb", Ksub: "ks"}
+  output_map: {rgflow: v_flow}
+  regime: {Nm: [1000, 10000], Nc: [750, 7500], Atot: [50, 200], vp_max: [100, 300], kmod_max: [0.5, 2],
+           kcap: [0.0005, 0.002], lin: [2, 10], lmin: [0.05, 0.2], kcell: [1000, 10000], nc_cell: [5, 20],
+           nm_max: [100, 1000], Fm: [1, 3], vm: [60, 240], nc_max: [75, 750], kon: [0.5, 2], koff: [0.05, 0.2],
+           kc: [0.4, 1.6], Fb: [1, 4], ks: [0.01, 100]}
+  provenance: stated
+  citation: {page: 7, printed_page: "7", quote: "The model was implemented using a direct Gillespie", where: "Methods, Simulator implementation; Code availability (p. 9): 'All codes will be available on our laboratory website'"}
+  assumptions:
+    - "the released MATLAB CMS v1.0 (cms_code, reference code-cms) is the implementation the Methods describe; its readme gives the parameters 'from Table S2' of this paper"
+    - "the code's nm,max and nc,max are not inputs but one tenth of the pools (cms_code/module_max_port), so nm_max and nc_max have no counterpart in the mapping; the paper's Supplementary Table 2 values equal that rule (rel_max_rule)"
+    - "the code's rgflow (mean over 15-min samples of the mean module flow) is the paper's mean module flow v_flow (Fig. 1c)"
+    - "both models are unrunnable here, so this relation cannot be tested as a whole; its rules are tested one by one in cms_code/relations.yaml (Eqs. 1, 2, 3, 7, 8 and the one-tenth rule), where the code clips the flow at zero beyond stall and rounds Eq. 8 up (q_flow_clip, q_assign_rounding), and the shells set kcell 1000 pN/nm against Supplementary Table 2's 10,000 (q_kcell)"
+
+# Relations to Elosegui-Artola et al. 2014 (ref. 8, record elosegui2014), reviewed 2026-11-19. The paper
+# cites ref. 8 once, in a list: "a model of cellular force transmission based on the motor–clutch
+# hypothesis6 that naturally predicts biphasic stiffness dependence as an outcome of the model7–9" (p. 2).
+# That places Elosegui's model in the same family; it does not say that any model here is Elosegui's. The
+# module rules are attributed to refs 7 and 14 only (p. 7). So no relation is stated, and none is proposed:
+# - elosegui2014/integrin_clutch_sim against cms or module_ssa: Elosegui's clutches are FN-integrin bonds
+#   of two competing types with a catch-bond off-rate (ref. 12's curve) and force-triggered reinforcement of
+#   integrin density; the modules here have one clutch type with the Bell slip bond (Eq. 1) and no
+#   reinforcement. Elosegui says the same qualitative results follow with slip bonds (elosegui2014 p. 4),
+#   but no limit is printed that takes one model to the other, the substrate is a Young's modulus (kPa)
+#   there and a spring constant (pN/nm) here, and neither integrin_clutch_sim nor cms is runnable, so a
+#   relation could not be tested. Both already relate to the common ancestors (chan2008, bangasser2013).
+# - elosegui2014's kon_eff_ratio, kont_ratio, koff_ratio and density_fold: ratios of SPR-measured integrin
+#   rates and densities, with no counterpart among this paper's models.
+# Values: no datum of this record names ref-8 as its from_source, so cited.yaml has nothing to link to
+# elosegui2014; elosegui2014 (earlier) does not cite this paper.
+
+# Relations to Elosegui-Artola et al. 2016 (ref. 9, record elosegui2016), reviewed 2026-11-19. The paper
+# cites ref. 9 once, in the same list as ref. 8: "naturally predicts biphasic stiffness dependence as an
+# outcome of the model7–9" (p. 2). The module rules are attributed to refs 7 and 14 only (p. 7), so no
+# relation is stated. One is proposed below, at the module level. Not entered:
+# - cms against clutch_no_talin_sim (the shape that paired these papers): cms is not runnable, and its
+#   outputs (whole-cell mean module flow, summed traction in pN) differ in scope from one clutch module's
+#   flow and traction stress (Pa).
+# - anything against clutch_talin_sim, talin_unfolding_time, unfold_refold_crossing or
+#   threshold_sensitivity: talin unfolding, vinculin binding and integrin recruitment have no counterpart
+#   here (Supplementary Table 1 lists talin mRNA levels in U251 cells, not a model).
+# - off_rate_eq1 against Elosegui's catch bond: Elosegui has no separate off-rate model, and a sum of
+#   exponentials with a low-force term is not Bell's law except in the reduction used below.
+# Values: no datum of this record names ref-9 as its from_source, so cited.yaml has nothing to link to
+# elosegui2016; elosegui2016 (earlier) does not cite this paper.
+- id: rel_module_ssa_flow_approximated_by_elosegui2016_no_talin
+  kind: approximated_by
+  a: bangasser2017/module_ssa
+  b: elosegui2016/clutch_no_talin_sim
+  mapping:
+    nm: "nm"
+    Fm: "Fm"
+    vu: "vm"
+    nf: "nc"
+    kont: "kon"
+    dint: "1"
+    kc: "kc/1000"
+    E: "ks"
+    ra: "1000"
+    ksub_factor: "1"
+    koff_scale: "1"
+    koff_a: "koff"
+    koff_b: "1/Fb"
+    koff_c: "0"
+    koff_d: "0"
+    koff_g: "0"
+    koff_fend: "1"
+  output_map: {actin_flow: v_flow}
+  regime: {nm: [80, 120], Fm: [1.6, 2.4], vm: [100, 140], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.64, 0.96], ks: [0.01, 100]}
+  tolerance: 0.15
+  provenance: proposed
+  reason: >-
+    This paper places ref. 9 among the motor-clutch models that predict biphasic stiffness dependence
+    (p. 2), and each of its modules follows the motor-clutch rules (p. 7: Bell off-rate Eq. 1, linear
+    force-velocity Eq. 2, force balance Eq. 4). Elosegui-Artola et al.'s simulation without talin
+    unfolding is the same stochastic motor-clutch scheme ("we recapitulate the fundamental prediction of
+    the clutch model", elosegui2016 p. 4) with a catch-bond off-rate and kon = kont dint, ksub = c E ra.
+    With the catch bond reduced to its first exponential (koff_c = koff_g = 0, koff_b = 1/Fb), dint = 1,
+    c = 1 and ra = 1000 nm (so that ksub in pN/nm equals E in kPa), both compute the mean retrograde flow
+    of one module by different stochastic schemes (direct Gillespie for 500 s against fixed 5 ms steps
+    for 100 s), so their mean flows should agree approximately.
+  assumptions:
+    - "module_ssa is this record's one-module stand-in for the whole-cell simulator (reconstructed: fixed cell body, module maxima n*m and n*c, no polymerization or turnover)"
+    - "the catch bond is restricted to a single Bell exponential; with Elosegui's printed catch-bond parameters the two models differ by design"
+    - "kc: module_ssa in pN/nm, Elosegui in nN/nm (hence /1000); Elosegui's binding rate per free fibronectin is kont dint, so dint = 1 1/um^2 makes kont (um^2/s) numerically kon (1/s)"
+    - "regime: +-20% around Supplementary Table 2's module set (n*m = 100, n*c = 75, kon = 1 1/s, koff = 0.1 1/s, Fb = Fm = 2 pN, v*m = 120 nm/s, κc = 0.8 pN/nm), over κs 0.01-100 pN/nm; a 5 ms step then loads a clutch by about κc v dt ~ 0.5 pN, small against Fb"
+    - "tolerance 0.15 (added, as in elosegui2016/rel_bangasser_ssa_approximated_by_no_talin): the scatter of single seeded runs, not stated by either paper"
+    - "only the flow is compared: Elosegui's traction is a stress (Pa) over the adhesion area, module_ssa's a force (pN)"
+  # Relator's check (2026-11-19), seed 1 at the base set: module_ssa 82.7, 72.5, 62.9, 85.2, 86.4 nm/s against
+  # Elosegui (Bell-reduced) 90.3, 69.8, 54.3, 82.9, 83.8 nm/s at κs = 0.01, 0.1, 1, 10, 100 pN/nm; Elosegui's
+  # flows change by under 3% at dt = 0.625 ms, so the gap is not its time step. The test over the regime gives
+  # not_verified (max relative error 0.517). module_ssa sits ~14% above at κs = 1 pN/nm, as against
+  # bangasser2013/motor_clutch_ssa (rel_bangasser2013_ssa_approx_module_flow), while Elosegui's model agrees
+  # with that SSA within 0.15 (elosegui2016/rel_bangasser_ssa_approximated_by_no_talin, verified): the gap is
+  # in this record's stand-in module (update order, see above), not shown to be in either paper's simulator.
+
+# Relations to the Odde lab's released motor-clutch scripts (record odde_code: motorclutch1_1.m and
+# motorclutch2_3.m, event stepping, ported as odde_code/mc_event_port), reviewed 2026-11-19. This paper
+# does not cite those scripts: its code reference is the CMS (code-cms, record cms_code), and its module
+# rules are attributed to refs 7 and 14 (p. 7), whose code odde_code is. So no relation is stated; the two
+# below are proposed, at the module level. Not entered:
+# - cms against mc_event_port (the shape that paired these records): cms is not runnable, and its outputs
+#   are whole-cell (mean module flow over all modules, traction summed over modules and cell body).
+# - module_optimum against optimum_port: the grids differ (0.01-1000 at 2 per decade against
+#   logspace(-2,2,10)), so the difference would mostly measure grid resolution, and module_optimum's 21
+#   runs of 1000 s exceed the relation test's time limit (as noted above for bangasser2013).
+# - off_rate_eq1 or motor_velocity_eq2 against mc_event_port: the code has no separate rate-law model;
+#   its off-rate with gain = 0 is Eq. 1, already related to chan2008 and bangasser2013b above.
+# Values: no datum of either record names the other as its from_source (odde_code, 2010, predates this
+# paper; this paper's module set is Supplementary Table 2), so neither cited.yaml has anything to link.
+- id: rel_odde_code_event_port_approx_module_flow
+  kind: approximated_by
+  a: odde_code/mc_event_port
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "-Fm", vm: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "Kc", ks: "Ksub"}
+  output_map: {v_flow: v_retro}
+  regime: {nm: [80, 120], Fm: [-2.4, -1.6], vu: [-144, -96], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [-2.4, -1.6], Kc: [0.64, 0.96], gain: [0, 0], Ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    Each module of this paper's simulator follows the motor-clutch rules of refs 7 and 14 (p. 7: Bell
+    off-rate Eq. 1, linear force-velocity Eq. 2, force balance Eq. 4, Gillespie stepping), and odde_code is
+    the same lab's released event-stepping implementation of those rules (its header: "Reduplicate the Chan
+    Motor-Clutch model with event stepping"). With the code's gain term at 0 both simulate one clutch scheme
+    exactly in the stochastic sense, so their mean retrograde flows should agree within run-to-run noise.
+  assumptions:
+    - "module_ssa is this record's one-module stand-in for the whole-cell simulator (reconstructed: fixed cell body, module maxima n*m and n*c, no polymerization or turnover)"
+    - "the code takes vu, Fm and Fb negative (retrograde negative) and reports retro and -avtrac as positive magnitudes; module_ssa takes them positive, hence the minus signs in the mapping"
+    - "gain = 0 (the code's own value) makes the code's off-rate koff exp(Fc/Fb), Eq. 1"
+    - "both are exact stochastic simulations differing in method (first-reaction event stepping against direct Gillespie), run length (1e5 events against 500 s), seed stream and update order (the code executes the event before advancing the engaged clutches by vf dt, so a clutch just bound is stretched over the preceding interval; module_ssa advances them first)"
+    - "regime: +-20% around Supplementary Table 2's module set (n*m = 100, n*c = 75, kon = 1 1/s, koff = 0.1 1/s, Fb = Fm = 2 pN, v*m = 120 nm/s, κc = 0.8 pN/nm), over κs 0.01-100 pN/nm (the code's own logspace(-2,2) sweep)"
+    - "tolerance 0.1 (added): allows for the noise of one seeded run of each, as in rel_bangasser2013_ssa_approx_module_flow"
+- id: rel_odde_code_event_port_approx_module_traction
+  kind: approximated_by
+  a: odde_code/mc_event_port
+  b: bangasser2017/module_ssa
+  mapping: {nm: "nm", Fm: "-Fm", vm: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "Kc", ks: "Ksub"}
+  output_map: {F_trac: F_trac}
+  regime: {nm: [80, 120], Fm: [-2.4, -1.6], vu: [-144, -96], nc: [60, 90], kon: [0.8, 1.2], koff: [0.08, 0.12],
+           Fb: [-2.4, -1.6], Kc: [0.64, 0.96], gain: [0, 0], Ksub: [0.01, 100]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    As rel_odde_code_event_port_approx_module_flow, for the time-averaged traction: the code's -avtrac (time
+    average of -Ksub xsub) and the module's time average of κs xs are both the mean traction on the substrate
+    as a positive magnitude.
+  assumptions:
+    - "as rel_odde_code_event_port_approx_module_flow"
+  # Relator's check (2026-11-19): not_verified for flow (max relative error 0.183) and traction (0.184).
+  # The same pattern as rel_bangasser2013_ssa_approx_module_* and rel_chan_mc_approx_module_*: the lab's
+  # code agrees with bangasser2013/motor_clutch_ssa within a few per cent (noted above), so the gap sits in
+  # this record's stand-in module (update order), not shown to be in the paper's simulator.

@@ -1,0 +1,62 @@
+# 1D CMS parameters (Table S1) and module variables (Eqns. S1-S8)
+- {id: n_motors_cell, name: number of myosin II motors per cell, dimension: dimensionless, description: "nmotor"}
+- {id: n_motors_module_max, name: maximum number of myosin II motors in one module, dimension: dimensionless, description: "nmotor,module"}
+- {id: n_motors_module, name: number of myosin II motors in a given module, dimension: dimensionless, description: "nmotor,j in Eqn. S2"}
+- {id: motor_stall_force, name: stall force of one myosin II motor, dimension: "[force]", description: "Fmotor"}
+- {id: unloaded_motor_velocity, name: unloaded myosin II sliding velocity on F-actin, dimension: "[length]/[time]", description: "vmotor"}
+- {id: n_clutches_cell, name: number of clutches per cell, dimension: dimensionless, description: "nclutch"}
+- {id: n_clutches_module_max, name: maximum number of clutches in one module, dimension: dimensionless, description: "nclutch,module"}
+- {id: n_clutches_cell_body, name: number of clutches under the cell body, dimension: dimensionless, description: "nclutch,cell"}
+- {id: bond_rupture_force, name: characteristic slip-bond rupture force of a clutch, dimension: "[force]", description: "Fbond"}
+- {id: clutch_stiffness, name: spring constant of one clutch, dimension: "[force]/[length]", description: "κclutch"}
+- {id: clutch_on_rate, name: pseudo-first-order clutch binding rate, dimension: "1/[time]", description: "kon"}
+- {id: clutch_off_rate_unloaded, name: unloaded clutch dissociation rate, dimension: "1/[time]", description: "koff"}
+- {id: clutch_off_rate_loaded, name: dissociation rate of a clutch under tension, dimension: "1/[time]", description: "koff,i in Eqn. S1"}
+- {id: clutch_tension, name: tension on one clutch, dimension: "[force]", description: "Fclutch,i"}
+- {id: substrate_stiffness, name: spring constant of the substrate under a module, dimension: "[force]/[length]", description: "κsub"}
+- {id: substrate_spring_extension, name: extension of the substrate spring of a module, dimension: "[length]", description: "Δxsub,j"}
+- {id: retrograde_flow_rate, name: F-actin retrograde flow speed in a module, dimension: "[length]/[time]", description: "vflow"}
+- {id: capping_rate, name: first-order module capping rate, dimension: "1/[time]", description: "kcap"}
+- {id: nucleation_rate_max, name: basal (maximal) module nucleation rate, dimension: "1/[time]", description: "knuc,0"}
+- {id: nucleation_rate, name: module nucleation rate at the current G-actin pool, dimension: "1/[time]", description: "knuc"}
+- {id: actin_polymerization_velocity_max, name: maximal actin polymerization speed, dimension: "[length]/[time]", description: "vactin,max"}
+- {id: actin_polymerization_velocity, name: actin polymerization speed at the current G-actin pool, dimension: "[length]/[time]", description: "vactin"}
+- {id: total_actin_length, name: "total actin available for protrusions, as a filament length", dimension: "[length]", description: "Atotal"}
+- {id: g_actin_pool_length, name: "soluble G-actin pool, as a filament length", dimension: "[length]", description: "AG"}
+- {id: cell_spring_stiffness, name: spring constant of the nucleo-cytoskeletal cell spring, dimension: "[force]/[length]", description: "κcell"}
+- {id: initial_module_length, name: initial F-actin length of a new module, dimension: "[length]", description: "Lcell"}
+- {id: minimum_module_length, name: F-actin length below which a module is removed, dimension: "[length]", description: "Lmin"}
+- {id: polarity_factor, name: probability that a new module points in the +x direction, dimension: dimensionless, description: "ψpol"}
+- {id: pool_fraction, name: fraction of the cell's pool allowed in one module, dimension: dimensionless, description: "the 0.1 of Table S1's constraints"}
+- {id: on_off_rate_ratio, name: ratio of the clutch on-rate to the unloaded off-rate, dimension: dimensionless, description: "the 10 of kon = 10*koff"}
+- {id: fold_reduction, name: factor by which a parameter is reduced from its base value, dimension: dimensionless}
+# migration measures (Eqs. 1-2)
+- {id: drift_velocity, name: "drift velocity of a cell: the quadratic term v of the MSD fit, Eq. 2", dimension: "[length]/[time]"}
+- {id: motility_coefficient, name: "motility coefficient: the linear term mu of the MSD fit, Eq. 2", dimension: "[length]**2/[time]"}
+- {id: prw_speed, name: "cell speed S of the persistent random walk fit, Eq. 1", dimension: "[length]/[time]"}
+- {id: persistence_time, name: "persistence time P of the persistent random walk fit, Eq. 1", dimension: "[time]"}
+- {id: mean_squared_displacement, name: mean-squared displacement of the cell, dimension: "[length]**2"}
+- {id: time_lag, name: time lag of the MSD, dimension: "[time]"}
+- {id: spatial_dimensions, name: number of spatial dimensions of the walk, dimension: dimensionless, description: "n in Eqs. 1-2"}
+- {id: imaging_duration, name: maximal duration of a time-lapse imaging window, dimension: "[time]"}
+- {id: tumor_expansion_rate, name: radial growth rate of a tumour, dimension: "[length]/[time]"}
+# hydrodynamic drag estimate (Supplemental Notes, Eqns. S9-S10)
+- {id: channel_width, name: width of a microchannel, dimension: "[length]"}
+- {id: channel_height, name: height of a microchannel, dimension: "[length]"}
+- {id: channel_cross_section, name: cross-sectional area of a microchannel, dimension: "[length]**2"}
+- {id: channel_square_side, name: side b of the square channel that approximates the cross-section, dimension: "[length]"}
+- {id: channel_length, name: total length of a channel, dimension: "[length]"}
+- {id: medium_viscosity, name: dynamic viscosity of the medium, dimension: "[mass]/[length]/[time]"}
+- {id: drag_coefficient, name: "hydrodynamic drag coefficient dg of a cell in a channel, per area and velocity", dimension: "[mass]/[length]**2/[time]"}
+- {id: drag_force, name: hydrodynamic drag force on a cell moving in a channel, dimension: "[force]"}
+# figure readings (figures.yaml)
+- {id: condition_index, name: position of a categorical condition along a figure's x axis, dimension: dimensionless, description: "1 for the first group from the left, 2 for the next, ...; what each index is is in the reading's `what`"}
+- {id: n_in_bin, name: number of cells or simulated trajectories in one histogram bin, dimension: dimensionless}
+- {id: fraction_in_bin, name: fraction of the measurements in one histogram bin, dimension: dimensionless}
+- {id: sample_count, name: number of cells or simulated trajectories in a sample, dimension: dimensionless}
+- {id: rgd_concentration, name: concentration of cyclo-RGD peptide in the medium, dimension: "[substance]/[length]**3"}
+- {id: n_modules, name: mean number of modules of a simulated cell, dimension: dimensionless}
+- {id: log10_persistence_time, name: "log10 of the PRW persistence time P in minutes (the x axis of Fig. S4B)", dimension: dimensionless}
+- {id: microtubule_growth_speed, name: growth speed of microtubule plus ends (EB1 comets), dimension: "[length]/[time]"}
+- {id: cell_length, name: length of a cell along the channel, dimension: "[length]"}
+- {id: nucleus_position, name: "position of the nucleus along the cell, 0 at the rear and 1 at the front", dimension: dimensionless}

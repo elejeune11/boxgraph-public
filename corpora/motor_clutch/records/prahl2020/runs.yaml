@@ -1,0 +1,79 @@
+# Hydrodynamic drag estimate (Supplemental Notes)
+- id: run_dg
+  model: drag_coefficient_s9
+  inputs: {mu: mu_water, L: L_channel, b: b_square}
+  outputs: {dg: dg_pred}
+- id: run_fdrag
+  model: drag_force_s10
+  inputs: {dg: dg_pred, A: A_channel, vcell: v_cell_drag}
+  outputs: {Fdrag: Fdrag_pred}
+  note: "dg as calculated by Eqn. S9 (the text: 'Using the value of dg calculated by Eqn. S9'); vcell as printed before Eqn. S10, 0.51 um/s"
+- id: run_fdrag_fig3b
+  model: drag_force_s10
+  inputs: {dg: dg_pred, A: A_channel, vcell: v_exp}
+  outputs: {Fdrag: Fdrag_fig3b_pred}
+  note: "the same, with the Fig. 3B mean velocity the text says it uses, as printed there (0.51 um/min)"
+- id: run_area
+  model: channel_area
+  inputs: {w: w_channel, h: h_channel}
+  outputs: {A: A_pred}
+# Table S1 constraints
+- id: run_motor_cap
+  model: module_motor_cap
+  inputs: {f: frac_motor_module, nmotor: nmotor}
+  outputs: {nmotor_module: nmotor_module_pred}
+- id: run_clutch_cap
+  model: module_clutch_cap
+  inputs: {f: frac_clutch_module, nclutch: nclutch}
+  outputs: {nclutch_module: nclutch_module_pred}
+- id: run_kon
+  model: kon_from_koff
+  inputs: {r: kon_koff_ratio, koff: koff}
+  outputs: {kon: kon_pred}
+# the 10-fold clutch reduction of Fig. 4
+- id: run_fold
+  model: fold_reduction
+  inputs: {nclutch: nclutch, fold: fold_10}
+  outputs: {nclutch_reduced: nclutch_75_pred}
+# tumour growth rate (Discussion)
+- id: run_tumor_rate
+  model: tumor_growth_rate
+  inputs: {v: v_sim_approx}
+  outputs: {rate: tumor_rate_pred}
+
+# ---- figure pass: histogram totals and binned means (Figs. 3, S4, S5B) ----
+- {id: run_hist_fig3a, model: hist_stats_mu, inputs: {h: fig3a_mu_exp_hist}, outputs: {n: n_fig3a, mean: mu_mean_fig3a}}
+- {id: run_hist_fig3b, model: hist_stats_v, inputs: {h: fig3b_v_exp_hist}, outputs: {n: n_fig3b, mean: v_mean_fig3b}}
+- {id: run_hist_fig3c, model: hist_stats_mu, inputs: {h: fig3c_mu_sim_hist}, outputs: {n: n_fig3c, mean: mu_mean_fig3c}}
+- {id: run_hist_fig3d, model: hist_stats_v, inputs: {h: fig3d_v_sim_hist}, outputs: {n: n_fig3d, mean: v_mean_fig3d}}
+- {id: run_hist_figs4a, model: hist_stats_S, inputs: {h: figs4a_S_hist}, outputs: {n: n_figs4a, mean: S_mean_figs4a}}
+- {id: run_hist_figs4b, model: hist_stats_logP, inputs: {h: figs4b_logP_hist}, outputs: {n: n_figs4b, mean: logP_mean_figs4b}}
+- {id: run_hist_figs5b, model: hist_mean_eb1, inputs: {h: figs5b_eb1_hist}, outputs: {mean: eb1_mean_figs5b}}
+
+# ---- figure pass: the base condition (nmotor 1000, nclutch 750, psi_pol 0.9, Table S1) picked out of each figure ----
+- {id: run_pick_mu_fig4a, model: pick_mu_nclutch, inputs: {c: fig4a_mu_nclutch}, settings: {at: 750}, outputs: {y: mu_base_fig4a}}
+- {id: run_pick_v_fig4b, model: pick_v_nclutch, inputs: {c: fig4b_v_nclutch}, settings: {at: 750}, outputs: {y: v_base_fig4b}}
+- {id: run_pick_mu_fig5a, model: pick_mu_nmotor, inputs: {c: fig5a_mu_nmotor}, settings: {at: 1000}, outputs: {y: mu_base_fig5a}}
+- {id: run_pick_v_fig5b, model: pick_v_nmotor, inputs: {c: fig5b_v_nmotor}, settings: {at: 1000}, outputs: {y: v_base_fig5b}}
+- {id: run_pick_mu_fig6c, model: pick_mu, inputs: {c: fig6c_mu_actin_sim}, settings: {at: 1}, outputs: {y: mu_base_fig6c}}
+- {id: run_pick_v_fig6d, model: pick_v, inputs: {c: fig6d_v_actin_sim}, settings: {at: 1}, outputs: {y: v_base_fig6d}}
+- {id: run_pick_mu_fig7c, model: pick_mu, inputs: {c: fig7c_mu_knuc_sim}, settings: {at: 1}, outputs: {y: mu_base_fig7c}}
+- {id: run_pick_v_fig7d, model: pick_v, inputs: {c: fig7d_v_knuc_sim}, settings: {at: 1}, outputs: {y: v_base_fig7d}}
+- {id: run_pick_mu_figs1a, model: pick_mu, inputs: {c: figs1a_mu_psi}, settings: {at: 1}, outputs: {y: mu_base_figs1a}}
+- {id: run_pick_v_figs1b, model: pick_v, inputs: {c: figs1b_v_psi}, settings: {at: 1}, outputs: {y: v_base_figs1b}}
+- {id: run_pick_mu_figs3a, model: pick_mu, inputs: {c: figs3a_mu_ksub}, settings: {at: 1}, outputs: {y: mu_base_figs3a}}
+- {id: run_pick_v_figs3b, model: pick_v, inputs: {c: figs3b_v_ksub}, settings: {at: 1}, outputs: {y: v_base_figs3b}}
+
+# ---- figure pass: Eq. 2 with the mean fitted parameters against the mean MSD curves of Fig. 2G ----
+- id: run_eq2_mean_exp
+  model: msd_drift_eq2
+  inputs: {n: n_dim_added, mu: mu_exp, v: v_exp}
+  sweep: {t: fig2g_exp}
+  outputs: {msd: msd_eq2_exp_pred}
+  note: "Eq. 2 evaluated with the mean mu and mean v of the 403 cells; the mean of v^2 t^2 over cells exceeds (mean v)^2 t^2 by var(v) t^2, so this is an approximation of the mean MSD"
+- id: run_eq2_mean_sim
+  model: msd_drift_eq2
+  inputs: {n: n_dim_added, mu: mu_sim, v: v_sim}
+  sweep: {t: fig2g_psi09}
+  outputs: {msd: msd_eq2_sim_pred}
+  note: "the same with the mean mu and v of the 60 simulated trajectories (psi_pol = 0.9)"

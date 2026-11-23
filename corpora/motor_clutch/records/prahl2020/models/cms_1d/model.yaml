@@ -1,0 +1,49 @@
+id: cms_1d
+name: 1D cell migration simulator (Supporting Methods, Eqns. S1-S8, Table S1)
+role: model
+stated: {page: 14, printed_page: "S1", quote: "we modified the CMS to model cell migration in a single spatial dimension", where: "Supporting Methods, Eqns. S1-S8"}
+equation: >-
+  Protrusion modules, each a motor-clutch model: slip-bond clutches koff,i = koff exp(Fclutch,i/Fbond) (S1);
+  retrograde flow vflow = vmotor (1 - κsub Δxsub,j/(Fmotor nmotor,j)) (S2); polymerization vactin =
+  vactin,max (AG/Atotal) (S3); actin mass balance Atotal = AG + Σ AF,j (S4); force balance per module
+  Fmodule,j = κcell Δxcell,j = κclutch Σ Δxclutch,i = κsub Δxsub,j (S5); cell-body clutches
+  Fcell = κclutch Σ Δxclutch,i = κsub Δxsub,cell (S6); Fcell + Σ Fmodule,j = 0 (S7); modules capped at kcap,
+  nucleated at knuc = knuc,0 (AG/Atotal)^4 (S8) in +x with probability ψpol, removed below Lmin; kinetic
+  Monte Carlo event selection; xcell sampled every 5 min, first hour dropped, Eq. 2 fitted to the first half
+  of the MSD
+built_from: [slip_bond_s1, force_velocity_s2, polymerization_s3, nucleation_s8]
+described_from: bangasser2017
+inputs:
+  nmotor:        {quantity: n_motors_cell, unit: dimensionless}
+  nmotor_module: {quantity: n_motors_module_max, unit: dimensionless}
+  Fmotor:        {quantity: motor_stall_force, unit: pN}
+  vmotor:        {quantity: unloaded_motor_velocity, unit: nm/s}
+  nclutch:       {quantity: n_clutches_cell, unit: dimensionless}
+  nclutch_module: {quantity: n_clutches_module_max, unit: dimensionless}
+  Fbond:         {quantity: bond_rupture_force, unit: pN}
+  kclutch:       {quantity: clutch_stiffness, unit: pN/nm}
+  kon:           {quantity: clutch_on_rate, unit: 1/s}
+  koff:          {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  ksub:          {quantity: substrate_stiffness, unit: pN/nm}
+  kcap:          {quantity: capping_rate, unit: 1/s}
+  knuc0:         {quantity: nucleation_rate_max, unit: 1/s}
+  vactin_max:    {quantity: actin_polymerization_velocity_max, unit: nm/s}
+  Atotal:        {quantity: total_actin_length, unit: um}
+  kcell:         {quantity: cell_spring_stiffness, unit: pN/nm}
+  Lcell:         {quantity: initial_module_length, unit: um}
+  Lmin:          {quantity: minimum_module_length, unit: nm}
+  nclutch_cell:  {quantity: n_clutches_cell_body, unit: dimensionless}
+  psi_pol:       {quantity: polarity_factor, unit: dimensionless}
+outputs:
+  mu: {quantity: motility_coefficient, unit: um^2/min}
+  v:  {quantity: drift_velocity, unit: um/min}
+settings: {t_sim_h: "5-7", sample_interval_min: 5, discard_h: 1, n_runs: 60, seed: "a unique random seed per run, not printed"}
+stochastic: true
+runnable: false
+not_runnable_reason: >-
+  The paper gives the rate laws and force balances (Eqns. S1-S8) but defers the algorithm to its ref. S1
+  (Bangasser et al. 2017): the order of events in a step, how motors and clutches are assigned to a new
+  module ("as a fraction of the available pool"), how bound clutches and F-actin move between events, and
+  the displacement filter. The MATLAB code was not released with the paper. One run is 5-7 h of simulated
+  time with 1000 motors and 750 clutches under kinetic Monte Carlo, and each printed mean averages 36-60
+  runs, far beyond a one-minute run; the results are recorded without a run.

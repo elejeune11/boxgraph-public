@@ -1,0 +1,59 @@
+# ---- discrete fibre network (DFN) ----
+- {id: fiber_youngs_modulus, name: Young's modulus of one fibre, dimension: "[pressure]"}
+- {id: fiber_poisson_ratio, name: Poisson's ratio of one fibre, dimension: dimensionless}
+- {id: fiber_radius, name: radius of one fibre's circular cross-section, dimension: "[length]"}
+- {id: normalized_fiber_density, name: fibre (= integrin) density under the cell over its initial value, dimension: dimensionless,
+   description: "phi_f/phi_0 of Eq. 1; the paper sets phi_i = phi_f, so it is also the normalized ligand density phi_i/phi_0 of Fig. S4"}
+- {id: contraction_per_perimeter, name: cell contraction force per unit cell perimeter, dimension: "[force]/[length]",
+   description: "the x axis of Fig. 3B"}
+# ---- coarse-grained FA-ECM model ----
+- {id: plaque_modulus, name: Young's modulus of the FA plaque (Ep), dimension: "[pressure]"}
+- {id: ecm_modulus, name: Young's modulus of the ECM (E_ECM), dimension: "[pressure]"}
+- {id: integrin_stiffness, name: in-plane stiffness of one integrin (ki), dimension: "[force]/[length]"}
+- {id: out_of_plane_stiffness_ratio, name: out-of-plane over in-plane integrin stiffness, dimension: dimensionless}
+- {id: initial_ligand_density, name: initial ligand density per area (phi_0), dimension: "1/[length]**2"}
+- {id: cell_radius, name: cell radius (rc), dimension: "[length]"}
+- {id: ecm_radius, name: radius of the ECM disk (rECM), dimension: "[length]"}
+- {id: recruitment_index, name: fibre recruitment index n of Eq. 1, dimension: dimensionless,
+   description: "printed without a unit (n = 0, 2, 4, 8); in Eq. 1 n multiplies a stress, so it carries an unstated inverse-stress unit"}
+- {id: fa_band_size, name: width of the focal adhesion band (rFA), dimension: "[length]"}
+- {id: fa_ecm_effective_modulus, name: effective modulus of the FA-ECM complex sensed by the cell (E*FA), dimension: "[pressure]"}
+# ---- actomyosin contractility (Eqs. S1, S2) ----
+- {id: nucleus_modulus, name: effective modulus of the nucleus (En), dimension: "[pressure]"}
+- {id: cytoskeleton_stiffness, name: passive stiffness of the stress fibres (K), dimension: "[pressure]"}
+- {id: baseline_contractility, name: baseline myosin motor (force dipole) density rho0, dimension: "[pressure]"}
+- {id: coupling_as_printed, name: chemo-mechanical coupling parameter (alpha or beta) with the unit Table S1 prints, dimension: "[pressure]",
+   description: "Table S1 gives alpha and beta in Pa"}
+- {id: coupling_parameter, name: chemo-mechanical coupling parameter (alpha or beta) in the unit Eq. S1 needs, dimension: "1/[pressure]",
+   description: "alpha*K - 1 in Eq. S1 is dimensionless only if alpha is an inverse stress"}
+- {id: series_modulus, name: series modulus of nucleus and FA-ECM complex (Keff), dimension: "[pressure]"}
+- {id: contractile_stress, name: actomyosin contractile stress (sigma), dimension: "[pressure]"}
+# ---- FA growth (Eqs. 3, 4) ----
+- {id: plaque_thickness, name: thickness of the FA plaque (h), dimension: "[length]"}
+- {id: plaque_energy_per_area, name: free energy per unit area for adding plaque without load (Delta mu_0), dimension: "[energy]/[length]**2"}
+- {id: recruited_segment_size, name: radial size of one recruited plaque segment (Delta r), dimension: "[length]"}
+- {id: steady_growth_stress, name: actomyosin stress at which the FA growth flux vanishes (sigma*), dimension: "[pressure]"}
+- {id: stable_fa_band_size, name: stable focal adhesion band size (r_st), dimension: "[length]"}
+- {id: normalized_fa_size, name: FA size over the FA size on the stiff fibrous ECM, dimension: dimensionless}
+- {id: fa_area, name: average focal adhesion area, dimension: "[length]**2"}
+# ---- figure axes (calibrated figure readings) ----
+- {id: substrate_condition, name: position of a substrate on the bar charts of Fig. 5D and Fig. S7, dimension: dimensionless,
+   description: "1 hydrogel soft, 2 hydrogel stiff, 3 fibrous ECM soft, 4 fibrous ECM stiff (a category, not a measured value)"}
+- {id: network_condition, name: position of a fibre network on the box plot of Fig. 3D, dimension: dimensionless,
+   description: "1 soft, 2 stiff, 3 soft-weld (a category, not a measured value)"}
+- {id: fiber_recruitment_au, name: measured fibre recruitment under a cell in arbitrary units (Fig. 3D), dimension: dimensionless}
+- {id: normalized_position_in_fa, name: position along the FA over its length (x/L), dimension: dimensionless,
+   description: "Fig. 4B labels 0 'Proximal' and 1 'Distal'; Fig. S5A puts the loaded edge at x/L = 1"}
+- {id: normalized_integrin_force, name: integrin force over its largest value along the FA, dimension: dimensionless}
+- {id: normalized_position_shear_lag, name: position along the 1D FA over the shear lag length (x/Lc), dimension: dimensionless}
+- {id: normalized_displacement, name: displacement over the largest displacement (Fig. S5B), dimension: dimensionless}
+- {id: normalized_effective_stiffness_1d, name: effective stiffness of the 1D FA-ECM complex over the plaque stiffness (keff/kp), dimension: dimensionless}
+# ---- 1D shear-lag model (SI) ----
+- {id: ligand_density_1d, name: ligands per unit length in the 1D FA model (phi_i = 1/dc), dimension: "1/[length]"}
+- {id: shear_lag_length, name: shear lag length Lc, dimension: "[length]"}
+- {id: plaque_stiffness_1d, name: stiffness of the FA plaque in the 1D model (kp), dimension: "[force]/[length]",
+   description: "the printed Lc is a length only if kp, ks and kc share one dimension"}
+- {id: ecm_stiffness_1d, name: stiffness of the ECM in the 1D model (ks), dimension: "[force]/[length]"}
+- {id: clutch_stiffness_1d, name: stiffness of the integrin clutches in the 1D model (kc), dimension: "[force]/[length]"}
+- {id: fa_length_1d, name: FA size L in the 1D model, dimension: "[length]"}
+- {id: effective_stiffness_1d, name: effective stiffness of the 1D FA-ECM complex (keff), dimension: "[force]/[length]"}

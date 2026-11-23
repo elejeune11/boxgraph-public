@@ -1,0 +1,1040 @@
+# Model curves of Fig. 9 (p. 8) and Fig. S13 (p. 23), read by the record's own code (figures/).
+# Both figures are raster images of Excel charts without tick marks; see figures/_fig.py.
+# Each series is read only over the x range it covers. The fig9r_*_at_s13 readings read the Fig. 9
+# (right) curves at the x positions of the Fig. S13 (right) series of the same colour, so that the
+# two figures can be compared point by point.
+- id: figS13l_all
+  page: 23
+  where: "Fig. S13 (left)"
+  what: "the canonical model's actin flow against the substrate spring constant; the blue, purple and green markers (three x0) lie on one curve and are read together"
+  dpi: 1200
+  crop: [1250, 1280, 4900, 4800]
+  x: {quantity: substrate_stiffness, unit: pN/nm, scale: log10}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/figS13l_all.py
+  at: ["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80", "85", "90", "100"]
+- id: figS13r_blue
+  page: 23
+  where: "Fig. S13 (right)"
+  what: "the modified model's blue (round) markers, the smallest of the three x0"
+  dpi: 1200
+  crop: &s13r [5000, 1280, 8800, 4800]
+  x: {quantity: substrate_stiffness, unit: pN/nm, scale: log10}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/figS13r_blue.py
+  at: &at_blue ["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80", "85", "90"]
+- id: figS13r_purple
+  page: 23
+  where: "Fig. S13 (right)"
+  what: "the modified model's purple (square) markers, the middle x0"
+  dpi: 1200
+  crop: *s13r
+  x: {quantity: substrate_stiffness, unit: pN/nm, scale: log10}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/figS13r_purple.py
+  at: &at_purple ["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75"]
+- id: figS13r_green
+  page: 23
+  where: "Fig. S13 (right)"
+  what: "the modified model's green (diamond) markers, the largest x0"
+  dpi: 1200
+  crop: *s13r
+  x: {quantity: substrate_stiffness, unit: pN/nm, scale: log10}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/figS13r_green.py
+  at: &at_green ["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65"]
+- id: fig9r_blue
+  page: 8
+  where: "Fig. 9 (right)"
+  what: "the blue line (lowest; the tail of the arrow labelled x0)"
+  dpi: 1200
+  crop: &f9r [2720, 750, 4900, 2700]
+  x: {quantity: substrate_stiffness, unit: pN/nm}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9r_blue.py
+  at: &ks_lin ["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80", "85", "90", "100", "120", "140", "160", "180", "195"]
+- id: fig9r_purple
+  page: 8
+  where: "Fig. 9 (right)"
+  what: "the purple line (middle)"
+  dpi: 1200
+  crop: *f9r
+  x: {quantity: substrate_stiffness, unit: pN/nm}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9r_purple.py
+  at: *ks_lin
+- id: fig9r_green
+  page: 8
+  where: "Fig. 9 (right)"
+  what: "the green line (highest; the head of the arrow labelled x0)"
+  dpi: 1200
+  crop: *f9r
+  x: {quantity: substrate_stiffness, unit: pN/nm}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9r_green.py
+  at: *ks_lin
+- id: fig9r_blue_at_s13
+  page: 8
+  where: "Fig. 9 (right)"
+  what: "the blue line, read at the x positions of the blue series of Fig. S13 (right)"
+  dpi: 1200
+  crop: *f9r
+  x: {quantity: substrate_stiffness, unit: pN/nm}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9r_blue.py
+  at: *at_blue
+- id: fig9r_purple_at_s13
+  page: 8
+  where: "Fig. 9 (right)"
+  what: "the purple line, read at the x positions of the purple series of Fig. S13 (right)"
+  dpi: 1200
+  crop: *f9r
+  x: {quantity: substrate_stiffness, unit: pN/nm}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9r_purple.py
+  at: *at_purple
+- id: fig9r_green_at_s13
+  page: 8
+  where: "Fig. 9 (right)"
+  what: "the green line, read at the x positions of the green series of Fig. S13 (right)"
+  dpi: 1200
+  crop: *f9r
+  x: {quantity: substrate_stiffness, unit: pN/nm}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9r_green.py
+  at: *at_green
+- id: fig9l_blue
+  page: 8
+  where: "Fig. 9 (left)"
+  what: "the blue line (lowest)"
+  dpi: 1200
+  crop: &f9l [600, 750, 2680, 2700]
+  x: {quantity: n_clutches, unit: dimensionless}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9l_blue.py
+  at: &nc_at ["400", "500", "600", "800", "1000", "1200", "1500", "2000", "2500", "3000", "3500"]
+- id: fig9l_purple
+  page: 8
+  where: "Fig. 9 (left)"
+  what: "the purple line (middle)"
+  dpi: 1200
+  crop: *f9l
+  x: {quantity: n_clutches, unit: dimensionless}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9l_purple.py
+  at: *nc_at
+- id: fig9l_green
+  page: 8
+  where: "Fig. 9 (left)"
+  what: "the green line (highest)"
+  dpi: 1200
+  crop: *f9l
+  x: {quantity: n_clutches, unit: dimensionless}
+  y: {quantity: cycle_mean_flow_rate, unit: nm/s}
+  mode: code
+  code: figures/fig9l_green.py
+  at: *nc_at
+# Measured data (second figure pass): MSD curves, bar charts with their error bars and histograms
+# of Figs. 2-7 and S3-S10, read by figures/_exp.py (see its docstring).
+- id: f2_a2_balb_0
+  page: 3
+  where: "Fig. 2 A.2 (left)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); BALB/3T3, cells cultured on stretched PDMS devices"
+  dpi: 1200
+  crop: [4200, 1480, 6600, 2960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_a2_balb_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_a2_balb_6
+  page: 3
+  where: "Fig. 2 A.2 (left)"
+  what: "MSD against time lag, the purple line (6% deformation, by the legend); BALB/3T3, cells cultured on stretched PDMS devices"
+  dpi: 1200
+  crop: [4200, 1480, 6600, 2960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_a2_balb_6.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_a2_balb_9
+  page: 3
+  where: "Fig. 2 A.2 (left)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); BALB/3T3, cells cultured on stretched PDMS devices"
+  dpi: 1200
+  crop: [4200, 1480, 6600, 2960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_a2_balb_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_a2_mc3t3_0
+  page: 3
+  where: "Fig. 2 A.2 (right)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); MC3T3, cells cultured on stretched PDMS devices"
+  dpi: 1200
+  crop: [6760, 1480, 9300, 2960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_a2_mc3t3_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_a2_mc3t3_6
+  page: 3
+  where: "Fig. 2 A.2 (right)"
+  what: "MSD against time lag, the purple line (6% deformation, by the legend); MC3T3, cells cultured on stretched PDMS devices"
+  dpi: 1200
+  crop: [6760, 1480, 9300, 2960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_a2_mc3t3_6.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_a2_mc3t3_9
+  page: 3
+  where: "Fig. 2 A.2 (right)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); MC3T3, cells cultured on stretched PDMS devices"
+  dpi: 1200
+  crop: [6760, 1480, 9300, 2960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_a2_mc3t3_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b2_balb_0
+  page: 3
+  where: "Fig. 2 B.2 (top)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); BALB/3T3, immediately after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [4200, 3880, 6600, 5360]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b2_balb_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b2_balb_6
+  page: 3
+  where: "Fig. 2 B.2 (top)"
+  what: "MSD against time lag, the purple line (6% deformation, by the legend); BALB/3T3, immediately after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [4200, 3880, 6600, 5360]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b2_balb_6.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b2_balb_9
+  page: 3
+  where: "Fig. 2 B.2 (top)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); BALB/3T3, immediately after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [4200, 3880, 6600, 5360]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b2_balb_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b3_balb_0
+  page: 3
+  where: "Fig. 2 B.3 (top)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); BALB/3T3, 2 h after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [6760, 3880, 9300, 5360]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b3_balb_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b3_balb_6
+  page: 3
+  where: "Fig. 2 B.3 (top)"
+  what: "MSD against time lag, the purple line (6% deformation, by the legend); BALB/3T3, 2 h after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [6760, 3880, 9300, 5360]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b3_balb_6.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b3_balb_9
+  page: 3
+  where: "Fig. 2 B.3 (top)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); BALB/3T3, 2 h after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [6760, 3880, 9300, 5360]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b3_balb_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b2_mc3t3_0
+  page: 3
+  where: "Fig. 2 B.2 (bottom)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); MC3T3, immediately after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [4200, 5480, 6600, 6960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b2_mc3t3_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b2_mc3t3_6
+  page: 3
+  where: "Fig. 2 B.2 (bottom)"
+  what: "MSD against time lag, the purple line (6% deformation, by the legend); MC3T3, immediately after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [4200, 5480, 6600, 6960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b2_mc3t3_6.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b2_mc3t3_9
+  page: 3
+  where: "Fig. 2 B.2 (bottom)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); MC3T3, immediately after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [4200, 5480, 6600, 6960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b2_mc3t3_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b3_mc3t3_0
+  page: 3
+  where: "Fig. 2 B.3 (bottom)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); MC3T3, 2 h after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [6760, 5480, 9300, 6960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b3_mc3t3_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b3_mc3t3_6
+  page: 3
+  where: "Fig. 2 B.3 (bottom)"
+  what: "MSD against time lag, the purple line (6% deformation, by the legend); MC3T3, 2 h after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [6760, 5480, 9300, 6960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b3_mc3t3_6.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f2_b3_mc3t3_9
+  page: 3
+  where: "Fig. 2 B.3 (bottom)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); MC3T3, 2 h after stretching the PDMS device with the cells"
+  dpi: 1200
+  crop: [6760, 5480, 9300, 6960]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f2_b3_mc3t3_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_a_balb_0
+  page: 5
+  where: "Fig. 4A (left)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); BALB/3T3, cells cultured on stretched PU devices"
+  dpi: 1200
+  crop: [840, 1140, 2680, 2400]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_a_balb_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_a_balb_9
+  page: 5
+  where: "Fig. 4A (left)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); BALB/3T3, cells cultured on stretched PU devices"
+  dpi: 1200
+  crop: [840, 1140, 2680, 2400]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_a_balb_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_a_mc3t3_0
+  page: 5
+  where: "Fig. 4A (right)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); MC3T3, cells cultured on stretched PU devices"
+  dpi: 1200
+  crop: [3000, 1140, 4800, 2400]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_a_mc3t3_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_a_mc3t3_9
+  page: 5
+  where: "Fig. 4A (right)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); MC3T3, cells cultured on stretched PU devices"
+  dpi: 1200
+  crop: [3000, 1140, 4800, 2400]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_a_mc3t3_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b1_balb_0
+  page: 5
+  where: "Fig. 4 B.1 (top)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); BALB/3T3, immediately after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [840, 2920, 2680, 4120]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b1_balb_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b1_balb_9
+  page: 5
+  where: "Fig. 4 B.1 (top)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); BALB/3T3, immediately after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [840, 2920, 2680, 4120]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b1_balb_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b2_balb_0
+  page: 5
+  where: "Fig. 4 B.2 (top)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); BALB/3T3, 2 h after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [3000, 2920, 4800, 4120]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b2_balb_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b2_balb_9
+  page: 5
+  where: "Fig. 4 B.2 (top)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); BALB/3T3, 2 h after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [3000, 2920, 4800, 4120]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b2_balb_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b1_mc3t3_0
+  page: 5
+  where: "Fig. 4 B.1 (bottom)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); MC3T3, immediately after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [840, 4300, 2680, 5480]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b1_mc3t3_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b1_mc3t3_9
+  page: 5
+  where: "Fig. 4 B.1 (bottom)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); MC3T3, immediately after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [840, 4300, 2680, 5480]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b1_mc3t3_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b2_mc3t3_0
+  page: 5
+  where: "Fig. 4 B.2 (bottom)"
+  what: "MSD against time lag, the blue line (0% deformation, by the legend); MC3T3, 2 h after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [3000, 4300, 4800, 5480]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b2_mc3t3_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f4_b2_mc3t3_9
+  page: 5
+  where: "Fig. 4 B.2 (bottom)"
+  what: "MSD against time lag, the green line (9% deformation, by the legend); MC3T3, 2 h after stretching the PU device with the cells"
+  dpi: 1200
+  crop: [3000, 4300, 4800, 5480]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f4_b2_mc3t3_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f5_0
+  page: 6
+  where: "Fig. 5 (right)"
+  what: "MSD against time lag of BALB/3T3 on PDMS, the blue line: 0% (control)"
+  dpi: 1600
+  crop: [7627, 1440, 10027, 2827]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f5_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f5_6
+  page: 6
+  where: "Fig. 5 (right)"
+  what: "MSD against time lag of BALB/3T3 on PDMS, the purple line: 6%"
+  dpi: 1600
+  crop: [7627, 1440, 10027, 2827]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f5_6.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f5_9
+  page: 6
+  where: "Fig. 5 (right)"
+  what: "MSD against time lag of BALB/3T3 on PDMS, the green line: 9% in a single step, acquired immediately after"
+  dpi: 1600
+  crop: [7627, 1440, 10027, 2827]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f5_9.py
+  at: ["0.2", "0.7", "1", "1.5", "2", "3", "4"]   # at 0.15, 0.3 and 0.5 s the red line hides it
+- id: f5_6to9
+  page: 6
+  where: "Fig. 5 (right)"
+  what: "MSD against time lag of BALB/3T3 on PDMS, the red line: 6% then 9% (two steps), acquired 4 h after the first"
+  dpi: 1600
+  crop: [7627, 1440, 10027, 2827]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/f5_6to9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: s4_msd_0
+  page: 15
+  where: "Fig. S4 (left)"
+  what: "MSD against time lag of MC3T3 on polyacrylamide (30 kPa) with collagen I on PDMS, the blue line (0%)"
+  dpi: 600
+  crop: [600, 900, 2973, 2564]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/s4_msd_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: s4_msd_9
+  page: 15
+  where: "Fig. S4 (left)"
+  what: "MSD against time lag of MC3T3 on polyacrylamide (30 kPa) with collagen I on PDMS, the green line (9%)"
+  dpi: 600
+  crop: [600, 900, 2973, 2564]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/s4_msd_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: s5_msd_0
+  page: 16
+  where: "Fig. S5 (left)"
+  what: "MSD against time lag of MC3T3 on PDMS functionalized with RGD, serum free, the blue line (0%)"
+  dpi: 600
+  crop: [600, 928, 2973, 2564]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/s5_msd_0.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: s5_msd_9
+  page: 16
+  where: "Fig. S5 (left)"
+  what: "MSD against time lag of MC3T3 on PDMS functionalized with RGD, serum free, the green line (9%)"
+  dpi: 600
+  crop: [600, 928, 2973, 2564]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/s5_msd_9.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: s6_0
+  page: 17
+  where: "Fig. S6"
+  what: "MSD against time lag of BALB/3T3 on PDMS, the blue line: 0%"
+  dpi: 600
+  crop: [545, 518, 4146, 2619]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/s6_0.py
+  at: ["0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]   # below 0.3 s the red line hides it
+- id: s6_3post
+  page: 17
+  where: "Fig. S6"
+  what: "MSD against time lag of BALB/3T3 on PDMS, the orange line: 3% post deformation"
+  dpi: 600
+  crop: [545, 518, 4146, 2619]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/s6_3post.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "2", "3", "4"]   # at 1.5 s the red line hides it
+- id: s6_3_2h
+  page: 17
+  where: "Fig. S6"
+  what: "MSD against time lag of BALB/3T3 on PDMS, the red line: 3% 2 h after deformation"
+  dpi: 600
+  crop: [545, 518, 4146, 2619]
+  x: {quantity: time_lag, unit: s, scale: log10}
+  y: {quantity: tracer_msd, unit: um^2, scale: log10}
+  mode: code
+  code: figures/s6_3_2h.py
+  at: ["0.15", "0.2", "0.3", "0.5", "0.7", "1", "1.5", "2", "3", "4"]
+- id: f3a_balb
+  page: 4
+  where: "Fig. 3A (left)"
+  what: "MSD at 1 s of BALB/3T3 on PDMS, seven bars: 1 0%; 2-4 6% (on stretched devices, post stretching, 2 h after stretching); 5-7 9% (the same three)"
+  dpi: 1200
+  crop: [4968, 7426, 6989, 9227]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_msd, unit: um^2}
+  mode: code
+  code: figures/f3a_balb.py
+  at: ["1", "2", "3", "4", "5", "6", "7"]
+  error_bars: sem
+  error_bars_citation: {page: 4, printed_page: "22007", quote: "sented as mean ± SEM, n > 100 for all studied cases"}
+- id: f3a_mc3t3
+  page: 4
+  where: "Fig. 3A (right)"
+  what: "MSD at 1 s of MC3T3 on PDMS, seven bars: 1 0%; 2-4 6% (on stretched devices, post stretching, 2 h after stretching); 5-7 9% (the same three)"
+  dpi: 1200
+  crop: [6989, 7426, 9064, 9227]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_msd, unit: um^2}
+  mode: code
+  code: figures/f3a_mc3t3.py
+  at: ["1", "2", "3", "4", "5", "6", "7"]
+  error_bars: sem
+  error_bars_citation: {page: 4, printed_page: "22007", quote: "sented as mean ± SEM, n > 100 for all studied cases"}
+- id: f3b_balb
+  page: 4
+  where: "Fig. 3B (left)"
+  what: "MSD at 1 s of BALB/3T3 on PU, four bars: 1 0%; 2-4 9% (on stretched devices, post stretching, 2 h after stretching)"
+  dpi: 1200
+  crop: [4968, 9600, 6279, 11430]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_msd, unit: um^2}
+  mode: code
+  code: figures/f3b_balb.py
+  at: ["1", "2", "3", "4"]
+  error_bars: sem
+  error_bars_citation: {page: 4, printed_page: "22007", quote: "sented as mean ± SEM, n > 100 for all studied cases"}
+- id: f3b_mc3t3
+  page: 4
+  where: "Fig. 3B (right)"
+  what: "MSD at 1 s of MC3T3 on PU, four bars: 1 0%; 2-4 9% (on stretched devices, post stretching, 2 h after stretching)"
+  dpi: 1200
+  crop: [6279, 9600, 7644, 11430]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_msd, unit: um^2}
+  mode: code
+  code: figures/f3b_mc3t3.py
+  at: ["1", "2", "3", "4"]
+  error_bars: sem
+  error_bars_citation: {page: 4, printed_page: "22007", quote: "sented as mean ± SEM, n > 100 for all studied cases"}
+- id: f6g
+  page: 6
+  where: "Fig. 6G"
+  what: "cell spreading area of BALB/3T3 on PDMS, three bars: 1 0%, 2 6%, 3 9% PDMS deformation, 2 h after"
+  dpi: 1200
+  crop: [2350, 8150, 3944, 9716]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_spreading_area, unit: um^2}
+  mode: code
+  code: figures/f6g.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 6, printed_page: "22009", quote: "Data were presented as mean ± SEM"}
+- id: f6h
+  page: 6
+  where: "Fig. 6H"
+  what: "cell shape factor of BALB/3T3 on PDMS, three bars: 1 0%, 2 6%, 3 9% PDMS deformation, 2 h after"
+  dpi: 1200
+  crop: [4110, 8150, 5670, 9716]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_shape_factor, unit: dimensionless}
+  mode: code
+  code: figures/f6h.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 6, printed_page: "22009", quote: "Data were presented as mean ± SEM"}
+- id: f6i
+  page: 6
+  where: "Fig. 6I"
+  what: "nucleus area of BALB/3T3 on PDMS, three bars: 1 0%, 2 6%, 3 9% PDMS deformation, 2 h after"
+  dpi: 1200
+  crop: [5870, 8150, 7500, 9716]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: nucleus_area, unit: um^2}
+  mode: code
+  code: figures/f6i.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 6, printed_page: "22009", quote: "Data were presented as mean ± SEM"}
+- id: f6j
+  page: 6
+  where: "Fig. 6J"
+  what: "cell spreading area of MC3T3 on PDMS, three bars: 1 0%, 2 6%, 3 9% PDMS deformation, 2 h after"
+  dpi: 1200
+  crop: [2350, 9845, 3944, 11480]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_spreading_area, unit: um^2}
+  mode: code
+  code: figures/f6j.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 6, printed_page: "22009", quote: "Data were presented as mean ± SEM"}
+- id: f6k
+  page: 6
+  where: "Fig. 6K"
+  what: "cell shape factor of MC3T3 on PDMS, three bars: 1 0%, 2 6%, 3 9% PDMS deformation, 2 h after"
+  dpi: 1200
+  crop: [4110, 9845, 5670, 11480]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_shape_factor, unit: dimensionless}
+  mode: code
+  code: figures/f6k.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 6, printed_page: "22009", quote: "Data were presented as mean ± SEM"}
+- id: f6l
+  page: 6
+  where: "Fig. 6L"
+  what: "nucleus area of MC3T3 on PDMS, three bars: 1 0%, 2 6%, 3 9% PDMS deformation, 2 h after"
+  dpi: 1200
+  crop: [5870, 9845, 7500, 11480]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: nucleus_area, unit: um^2}
+  mode: code
+  code: figures/f6l.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 6, printed_page: "22009", quote: "Data were presented as mean ± SEM"}
+- id: f7e
+  page: 7
+  where: "Fig. 7E"
+  what: "cell spreading area of BALB/3T3 on PU, two bars: 1 0%, 2 9% PU deformation, 2 h after"
+  dpi: 1200
+  crop: [2362, 3520, 4095, 5200]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_spreading_area, unit: um^2}
+  mode: code
+  code: figures/f7e.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 7, printed_page: "22010", quote: "Data are presented as mean ± SEM"}
+- id: f7f
+  page: 7
+  where: "Fig. 7F"
+  what: "cell shape factor of BALB/3T3 on PU, two bars: 1 0%, 2 9% PU deformation, 2 h after"
+  dpi: 1200
+  crop: [4095, 3520, 5733, 5200]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_shape_factor, unit: dimensionless}
+  mode: code
+  code: figures/f7f.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 7, printed_page: "22010", quote: "Data are presented as mean ± SEM"}
+- id: f7g
+  page: 7
+  where: "Fig. 7G"
+  what: "nucleus area of BALB/3T3 on PU, two bars: 1 0%, 2 9% PU deformation, 2 h after"
+  dpi: 1200
+  crop: [5788, 3520, 7600, 5200]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: nucleus_area, unit: um^2}
+  mode: code
+  code: figures/f7g.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 7, printed_page: "22010", quote: "Data are presented as mean ± SEM"}
+- id: f7h
+  page: 7
+  where: "Fig. 7H"
+  what: "cell spreading area of MC3T3 on PU, two bars: 1 0%, 2 9% PU deformation, 2 h after"
+  dpi: 1200
+  crop: [2362, 5242, 4095, 6989]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_spreading_area, unit: um^2}
+  mode: code
+  code: figures/f7h.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 7, printed_page: "22010", quote: "Data are presented as mean ± SEM"}
+- id: f7i
+  page: 7
+  where: "Fig. 7I"
+  what: "cell shape factor of MC3T3 on PU, two bars: 1 0%, 2 9% PU deformation, 2 h after"
+  dpi: 1200
+  crop: [4095, 5242, 5733, 6989]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_shape_factor, unit: dimensionless}
+  mode: code
+  code: figures/f7i.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 7, printed_page: "22010", quote: "Data are presented as mean ± SEM"}
+- id: f7j
+  page: 7
+  where: "Fig. 7J"
+  what: "nucleus area of MC3T3 on PU, two bars: 1 0%, 2 9% PU deformation, 2 h after"
+  dpi: 1200
+  crop: [5788, 5242, 7600, 6989]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: nucleus_area, unit: um^2}
+  mode: code
+  code: figures/f7j.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 7, printed_page: "22010", quote: "Data are presented as mean ± SEM"}
+- id: s3a_balb
+  page: 13
+  where: "Fig. S3A (left)"
+  what: "radius of gyration of particle trajectories in BALB/3T3 on PDMS, seven bars: 1 0%; 2-4 6% (on deformed devices, post deformation, 2 h after deformation); 5-7 9% (the same three)"
+  dpi: 600
+  crop: [655, 764, 2591, 2264]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_radius_of_gyration, unit: um}
+  mode: code
+  code: figures/s3a_balb.py
+  at: ["1", "2", "3", "4", "5", "6", "7"]
+  error_bars: sem
+  error_bars_citation: {page: 9, printed_page: "22012", quote: "Data are reported as mean ± SEM. Statistical comparisons"}
+- id: s3a_mc3t3
+  page: 13
+  where: "Fig. S3A (right)"
+  what: "radius of gyration in MC3T3 on PDMS, seven bars: 1 0%; 2-4 6% (on deformed devices, post deformation, 2 h after deformation); 5-7 9% (the same three)"
+  dpi: 600
+  crop: [2673, 955, 4575, 2264]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_radius_of_gyration, unit: um}
+  mode: code
+  code: figures/s3a_mc3t3.py
+  at: ["1", "2", "3", "4", "5", "6", "7"]
+  error_bars: sem
+  error_bars_citation: {page: 9, printed_page: "22012", quote: "Data are reported as mean ± SEM. Statistical comparisons"}
+- id: s3b_balb
+  page: 13
+  where: "Fig. S3B (left)"
+  what: "radius of gyration in BALB/3T3 on PU, four bars: 1 0%; 2-4 9% (on deformed devices, post deformation, 2 h after deformation)"
+  dpi: 600
+  crop: [575, 2482, 2591, 3819]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_radius_of_gyration, unit: um}
+  mode: code
+  code: figures/s3b_balb.py
+  at: ["1", "2", "3", "4"]
+  error_bars: sem
+  error_bars_citation: {page: 9, printed_page: "22012", quote: "Data are reported as mean ± SEM. Statistical comparisons"}
+- id: s3b_mc3t3
+  page: 13
+  where: "Fig. S3B (right)"
+  what: "radius of gyration in MC3T3 on PU, four bars: 1 0%; 2-4 9% (on deformed devices, post deformation, 2 h after deformation)"
+  dpi: 600
+  crop: [2673, 2482, 4446, 3819]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_radius_of_gyration, unit: um}
+  mode: code
+  code: figures/s3b_mc3t3.py
+  at: ["1", "2", "3", "4"]
+  error_bars: sem
+  error_bars_citation: {page: 9, printed_page: "22012", quote: "Data are reported as mean ± SEM. Statistical comparisons"}
+- id: s4_bar
+  page: 15
+  where: "Fig. S4 (right)"
+  what: "MSD at 1 s of MC3T3 on collagen-coated polyacrylamide: 1 0%, 2 9%"
+  dpi: 600
+  crop: [2990, 900, 4364, 2455]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_msd, unit: um^2}
+  mode: code
+  code: figures/s4_bar.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 9, printed_page: "22012", quote: "Data are reported as mean ± SEM. Statistical comparisons"}
+- id: s5_bar
+  page: 16
+  where: "Fig. S5 (right)"
+  what: "MSD at 1 s of MC3T3 on RGD-functionalized PDMS, serum free: 1 0%, 2 9%"
+  dpi: 600
+  crop: [2990, 928, 4364, 2428]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: tracer_msd, unit: um^2}
+  mode: code
+  code: figures/s5_bar.py
+  at: ["1", "2"]
+  error_bars: sem
+  error_bars_citation: {page: 9, printed_page: "22012", quote: "Data are reported as mean ± SEM. Statistical comparisons"}
+- id: s7_spread
+  page: 18
+  where: "Fig. S7 (left)"
+  what: "spreading area of MC3T3 on PDMS: 1 0%, 2 9% (on deformed devices), 3 9% (2 h after deformation, hatched)"
+  dpi: 600
+  crop: [982, 1609, 2455, 2864]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_spreading_area, unit: um^2}
+  mode: code
+  code: figures/s7_spread.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 18, quote: "Data were presented as mean ± S.E.M"}
+- id: s7_nuclei
+  page: 18
+  where: "Fig. S7 (right)"
+  what: "nuclei area of MC3T3 on PDMS: 1 0%, 2 9% (on deformed devices), 3 9% (2 h after deformation, hatched)"
+  dpi: 600
+  crop: [2510, 1609, 3983, 2864]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: nucleus_area, unit: um^2}
+  mode: code
+  code: figures/s7_nuclei.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 18, quote: "Data were presented as mean ± S.E.M"}
+- id: s8_spread
+  page: 19
+  where: "Fig. S8 (left)"
+  what: "spreading area of MC3T3 on PU: 1 0%, 2 9% (on deformed devices), 3 9% (2 h after deformation, hatched)"
+  dpi: 600
+  crop: [982, 1609, 2455, 2864]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_spreading_area, unit: um^2}
+  mode: code
+  code: figures/s8_spread.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 19, quote: "Data were presented as mean ± S.E.M"}
+- id: s8_nuclei
+  page: 19
+  where: "Fig. S8 (right)"
+  what: "nuclei area of MC3T3 on PU: 1 0%, 2 9% (on deformed devices), 3 9% (2 h after deformation, hatched)"
+  dpi: 600
+  crop: [2510, 1609, 3983, 2864]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: nucleus_area, unit: um^2}
+  mode: code
+  code: figures/s8_nuclei.py
+  at: ["1", "2", "3"]
+  error_bars: sem
+  error_bars_citation: {page: 19, quote: "Data were presented as mean ± S.E.M"}
+- id: s10_afm
+  page: 21
+  where: "Fig. S10"
+  what: "AFM Young's modulus of cells on PDMS: 1 BALB/3T3 0%, 2 MC3T3 0%, 3 BALB/3T3 9%, 4 MC3T3 9% (by the legend: solid BALB/3T3, hatched MC3T3)"
+  dpi: 600
+  crop: [491, 873, 3710, 3601]
+  x: {quantity: condition_index, unit: dimensionless}
+  y: {quantity: cell_youngs_modulus, unit: Pa}
+  mode: code
+  code: figures/s10_afm.py
+  at: ["1", "2", "3", "4"]
+  error_bars: sem
+  error_bars_citation: {page: 9, printed_page: "22012", quote: "Data are reported as mean ± SEM. Statistical comparisons"}
+- id: s9a_0
+  page: 20
+  where: "Fig. S9A (left)"
+  what: "histogram of cell orientation (count per 30 degree bin, read at the bin centres), MC3T3 on PDMS, unstretched (blue)"
+  dpi: 1200
+  crop: [873, 1527, 3491, 3982]
+  x: {quantity: cell_orientation, unit: deg}
+  y: {quantity: cell_count, unit: dimensionless}
+  mode: code
+  code: figures/s9a_0.py
+  at: ["-75", "-45", "-15", "15", "45", "75"]
+- id: s9a_9pre
+  page: 20
+  where: "Fig. S9A (middle)"
+  what: "histogram of cell orientation (count per 30 degree bin, read at the bin centres), MC3T3 on PDMS stretched 9% before culture (green)"
+  dpi: 1200
+  crop: [3600, 1527, 6328, 3982]
+  x: {quantity: cell_orientation, unit: deg}
+  y: {quantity: cell_count, unit: dimensionless}
+  mode: code
+  code: figures/s9a_9pre.py
+  at: ["-75", "-45", "-15", "15", "45", "75"]
+- id: s9a_9post
+  page: 20
+  where: "Fig. S9A (right)"
+  what: "histogram of cell orientation (count per 30 degree bin, read at the bin centres), MC3T3 on PDMS stretched 9% with the cells, 2 h after (patterned green)"
+  dpi: 1200
+  crop: [6437, 1527, 8946, 3982]
+  x: {quantity: cell_orientation, unit: deg}
+  y: {quantity: cell_count, unit: dimensionless}
+  mode: code
+  code: figures/s9a_9post.py
+  at: ["-75", "-45", "-15", "15", "45", "75"]
+- id: s9b_0
+  page: 20
+  where: "Fig. S9B (left)"
+  what: "histogram of cell orientation (count per 30 degree bin, read at the bin centres), MC3T3 on PU, unstretched (blue)"
+  dpi: 1200
+  crop: [873, 4528, 3491, 6928]
+  x: {quantity: cell_orientation, unit: deg}
+  y: {quantity: cell_count, unit: dimensionless}
+  mode: code
+  code: figures/s9b_0.py
+  at: ["-75", "-45", "-15", "15", "45", "75"]
+- id: s9b_9pre
+  page: 20
+  where: "Fig. S9B (middle)"
+  what: "histogram of cell orientation (count per 30 degree bin, read at the bin centres), MC3T3 on PU stretched 9% before culture (green)"
+  dpi: 1200
+  crop: [3600, 4528, 6328, 6928]
+  x: {quantity: cell_orientation, unit: deg}
+  y: {quantity: cell_count, unit: dimensionless}
+  mode: code
+  code: figures/s9b_9pre.py
+  at: ["-75", "-45", "-15", "15", "45", "75"]
+- id: s9b_9post
+  page: 20
+  where: "Fig. S9B (right)"
+  what: "histogram of cell orientation (count per 30 degree bin, read at the bin centres), MC3T3 on PU stretched 9% with the cells, 2 h after (patterned green)"
+  dpi: 1200
+  crop: [6437, 4528, 8946, 6928]
+  x: {quantity: cell_orientation, unit: deg}
+  y: {quantity: cell_count, unit: dimensionless}
+  mode: code
+  code: figures/s9b_9post.py
+  at: ["-75", "-45", "-15", "15", "45", "75"]
+- id: s1_pdms_fit
+  page: 11
+  where: "Fig. S1 (left)"
+  what: "tensile stress against strain of PDMS, the red line (the linear fit, legend y = 930.32x); the measured curve under it is not visible"
+  dpi: 600
+  crop: [545, 845, 2400, 2510]
+  x: {quantity: substrate_tensile_strain, unit: dimensionless}
+  y: {quantity: substrate_tensile_stress, unit: kPa}
+  mode: code
+  code: figures/s1_pdms_fit.py
+  at: ["0.05", "0.1", "0.15", "0.2", "0.25", "0.3", "0.35", "0.4", "0.45"]
+- id: s1_pu_fit
+  page: 11
+  where: "Fig. S1 (right)"
+  what: "shear stress against shear strain of PU on log-log axes, the red line (legend y = 185.07x)"
+  dpi: 600
+  crop: [2455, 845, 4364, 2510]
+  x: {quantity: substrate_shear_strain, unit: dimensionless, scale: log10}
+  y: {quantity: substrate_shear_stress, unit: kPa, scale: log10}
+  mode: code
+  code: figures/s1_pu_fit.py
+  at: ["0.002", "0.005", "0.01", "0.02", "0.05", "0.1", "0.2"]

@@ -1,0 +1,297 @@
+- id: q_params_unstated
+  kind: unstated_input
+  about: [clutch_two_spring_cycle, clutch_canonical_cycle, nm_added, nc_added, Fm_added, vu_added, kon_added, koff_added, Fb_added, kc_added, r_added, l_added, x0_blue_added, x0_purple_added, x0_green_added, ks_fig9l_added]
+  text: >-
+    The paper prints no value for any input of its clutch model: not nm, nc, Fm, vu, kon, koff, Fb, kc or
+    r, not the rest length l of the orthogonal spring, not the three x0 of Figs. 9 and S13, nor the substrate
+    stiffness at which Fig. 9 (left) varies nc. The MATLAB code is not released. Every model curve in the
+    record is therefore run on added inputs (ref. 42's base set, with n, l and x0 chosen by the reader), and
+    its comparisons with Figs. 9 and S13 test the model's shape at those inputs, not the paper's own runs.
+  citation: {page: 6, printed_page: "22009", quote: "for different values of ks, nc, and x0", where: text}
+- id: q_flow_definition
+  kind: unstated_model
+  about: [clutch_two_spring_cycle, clutch_canonical_cycle, figS13l_flow, fig9r_blue_flow]
+  text: >-
+    Figs. 9 and S13 plot an "actin flowrate" from the ODE solution, but the paper does not say how one flow
+    is taken from a time-dependent solution (a mean over a load-and-fail cycle, over a fixed time, or a
+    final value). The record takes vf averaged over one cycle, ending at the abrupt failure, as the bangasser2013b
+    record does for ref. 42's Fig. 4, whose phrase "optimum stiffness (characterized by the minimum actin
+    flow rate)" these figures repeat.
+  citation: {page: 8, printed_page: "22011", quote: "The optimum number of clutches (characterized by the minimum", where: "Fig. 9 legend"}
+- id: q_initial_state
+  kind: choice
+  about: [clutch_two_spring_cycle, clutch_canonical_cycle]
+  text: >-
+    Appendix 1 states the start of the canonical form: xs and <xc> equal (x0) and the clutch force null. The
+    initial fraction of bound clutches is not stated; the record starts with Pb = 0, as ref. 42's ODEs do, and
+    starts the modified model at xs = <xc> = x0 likewise.
+  citation: {page: 24, quote: "At the starting point, when substrate position", where: "SI Appendix 1"}
+- id: q_eq13
+  kind: possible_error
+  about: [clutch_two_spring_cycle]
+  text: >-
+    Eq. 13, which the text says is Eq. 12 combined with Eqs. 8 and 10, has dxs/dt on both sides: as printed
+    it reads dxs/dt = Pb vu [1 - ks/(nm Fm)(2xs - 2x0 + x0 l/sqrt(l^2 + x0^2) - xs l/sqrt(l^2 + xs^2))] /
+    (1 - Pb) dxs/dt + Pb vf, which is no explicit ODE (and, read as a quotient of velocities, has the wrong
+    dimension). The record does not run Eq. 13; it runs Eqs. 3-12, combining Eq. 12 with Eq. 8 to give
+    dxs/dt = Pb vf / (Pb + (dFs/dxs)/(nc kc)). In the limit l -> infinity this is the canonical s.6
+    (rel_two_spring_reduces_to_canonical).
+  citation: {page: 9, printed_page: "22012", quote: "By using Eqs. 8 and 10, Eq.", where: "Eq. 13"}
+- id: q_eq11_ref
+  kind: possible_error
+  about: [clutch_two_spring_cycle, clutch_canonical_cycle]
+  text: >-
+    Eq. 11, the mean off-rate (1 - Pb) koff + Pb koff (1 - <Fc>/(r Pb Fb))^-r, is attributed to ref. 39
+    (Dupont et al., "Role of YAP/TAZ in mechanotransduction"), which has no clutch model; the expression is
+    Eq. 19 of ref. 42 (Bangasser and Odde 2013). The equation itself is entered as printed.
+  citation: {page: 9, printed_page: "22012", quote: "The equation used for the average clutch off-rate is the following (39)", where: "Eq. 11"}
+- id: q_figS13_caption
+  kind: possible_error
+  about: [figS13l_flow, rel_canonical_same_as_bangasser2013b]
+  text: >-
+    The legend of Fig. S13 says the optimum stiffness "is independent on the substrate spring constant in
+    the canonical form", but the panel plots flow against the substrate spring constant for three x0; what
+    it shows is that the canonical optimum does not depend on x0. In s.4-s.6, x0 enters only through
+    <xc> - x0, so the canonical flow is independent of x0 exactly (tested by rel_canonical_same_as_bangasser2013b
+    across x0 = 0-1000 nm, and by the x0 alternatives of run_s13l).
+  citation: {page: 23, quote: "is independent on the substrate spring constant in the canonical form of the clutch model", where: "Fig. S13 legend"}
+- id: q_fig9_panels
+  kind: possible_error
+  about: [fig9l_blue_flow, fig9r_blue_flow]
+  text: >-
+    The text (p. 7) places the shift of the optimum stiffness in "Fig. 9, Left" and that of the optimum number
+    of clutches in "Fig. 9, Right"; in the figure and its legend it is the other way round (left: number of
+    clutches; right: spring constant).
+  citation: {page: 7, printed_page: "22010", quote: "increases (Fig. 9, Left), or, from another point of view, the opti", where: text}
+- id: q_fig9_arrows
+  kind: reading
+  about: [fig9l_blue_flow, fig9l_purple_flow, fig9l_green_flow]
+  text: >-
+    In Fig. 9 (right) the arrow labelled x0 points from the blue to the green curve; in Fig. 9 (left) it points
+    from the green curve down past the blue one. The legend says the optimum number of clutches shifts to
+    higher values as x0 increases, and the green curve's minimum lies at more clutches than the blue one's, so
+    the record reads blue as the smallest and green as the largest x0 in both panels, as in Fig. S13; the
+    left arrow's direction then does not match the colours.
+  citation: {page: 8, printed_page: "22011", quote: "shifts to higher values when x0 increases (Left)", where: "Fig. 9"}
+- id: q_fig9_vs_S13
+  kind: unexplained_difference
+  about: [cmp_f9r_vs_s13r_blue, cmp_f9r_vs_s13r_purple, cmp_f9r_vs_s13r_green]
+  text: >-
+    Fig. 9 (right) and Fig. S13 (right) both plot the modified model's actin flow against ks for three
+    increasing x0 in blue, purple and green, with minima at similar stiffnesses, but the curves differ: in
+    Fig. 9 the blue minimum is lower and the rise towards stiff substrates is slower than in Fig. S13. The
+    paper does not say whether the two figures use the same inputs; if they do, they disagree.
+  citation: {page: 23, quote: "whereas it shifts to lower values when", where: "Fig. S13 legend; Fig. 9 legend p. 8"}
+- id: q_shift_bound
+  kind: unexplained_difference
+  about: [figS13r_green_flow, figS13l_flow, rel_two_spring_large_x0_reduces_to_canonical_2ks, rel_two_spring_approximated_by_tangent_stiffness]
+  text: >-
+    From Eq. 7 the substrate's tangent stiffness lies between ks and 2 ks for any x0 and xs, and at x0 >> l the
+    modified model is the canonical model at 2 ks (rel_two_spring_large_x0_reduces_to_canonical_2ks). So at
+    inputs shared with the canonical curve, prestrain can lower the optimum stiffness by at most about a factor
+    of 2 and cannot change the depth of the minimum at large x0. In Fig. S13 the green minimum (right) lies
+    at less than half the canonical optimum (left), and the three minima differ in depth. Either the two
+    panels use different inputs (unstated) or they do not follow from Eqs. 3-12 as printed.
+  citation: {page: 23, quote: "Blue, purple and green curves relate to increasing values of", where: "Fig. S13"}
+- id: q_strain_energy
+  kind: overstated_claim
+  about: [clutch_two_spring_cycle, rel_two_spring_approximated_by_tangent_stiffness, rel_two_spring_large_x0_reduces_to_canonical_2ks]
+  text: >-
+    The title claim is that mechanosensing is regulated by strain energy rather than stiffness, and the
+    modified model is offered as its basis ("the orthogonal spring is the element able to take memory of
+    the strain energy", p. 6). The model has no strain-energy term: x0 enters Eqs. 3-12 only through Fs - F0,
+    the substrate's force-displacement curve around x0, whose slope ks (2 - l^3/(l^2 + x0^2)^(3/2)) rises
+    with x0. The record tests that the modified model's flow is the canonical model's at that tangent
+    stiffness (rel_two_spring_approximated_by_tangent_stiffness, and exactly so at x0 >> l). Within the
+    model, then, prestrain acts as a stiffening of the substrate's tangent stiffness (as the paper itself
+    says of Fig. 9 on p. 7, "an additional stiffness"); the model does not separate strain energy from that
+    stiffness, since both rise together with x0.
+  citation: {page: 6, printed_page: "22009", quote: "In this model the orthogonal spring is the ele", where: text}
+- id: q_x0_strain
+  kind: unstated_input
+  about: [x0_blue_added, x0_purple_added, x0_green_added, l_added]
+  text: >-
+    In the model x0 is a displacement (a length, Eqs. 6-8) of a molecular-scale spring; the experiments
+    impose substrate strains of 6% and 9% on a 15 mm window. The paper gives no conversion from strain to x0
+    or l, and does not say which x0 the curves of Figs. 9 and S13 stand for, so the model cannot be compared
+    with the measured strains.
+  citation: {page: 6, printed_page: "22009", quote: "represents the deformation applied to the substrate", where: text}
+- id: q_isotropy
+  kind: reading
+  about: [clutch_two_spring_cycle]
+  text: >-
+    The paper sets the two springs equal ("the same value was chosen for the elastic constants of the 2
+    springs", p. 6), so Eqs. 6-8 and 10 use one ks; the record does the same. A different constant for the
+    orthogonal spring would scale only its term.
+  citation: {page: 6, printed_page: "22009", quote: "then the same value was chosen for the elastic constants", where: text}
+# Added by the audit (audit.md).
+- id: q_eq_crossrefs
+  kind: possible_error
+  about: [clutch_two_spring_cycle, clutch_canonical_cycle]
+  text: >-
+    Three equation cross-references in the model's derivation do not point where the algebra goes. (1) Eq. 10
+    is introduced with "Then, Eq. 7 becomes", and s.5 with "the equation 7 becomes" (SI p. 24). What is
+    rewritten is the force-velocity relation Eq. 9 (vf = vu(1 - Fs/(nm Fm))) with Fs replaced by Fs - F0,
+    not the substrate force Eq. 7. (2) Eq. 8 is said to come from "Combining Eqs. 3-5". It follows from Eqs.
+    4, 5, 6 and 7; Eq. 3, the Pb ODE, takes no part. (3) Eq. 9 is called "the Hill equation (42)", but it is
+    linear in Fs. None of these changes a model: the record enters Eqs. 8, 10 and s.5 as printed, and they
+    agree with Eqs. 4-7 and 9 as the record's algebra checks (model.py comments).
+  citation: {page: 9, printed_page: "22012", quote: "of motor clutches. Then, Eq. 7 becomes", where: "text before Eq. 10"}
+- id: q_fig9_vs_S13_direction
+  kind: reading
+  about: [q_fig9_vs_S13, cmp_f9r_vs_s13r_blue, cmp_f9r_vs_s13r_purple, cmp_f9r_vs_s13r_green]
+  text: >-
+    The auditor disagrees with part of the wording of q_fig9_vs_S13 ("the rise towards stiff substrates is
+    slower [in Fig. 9] than in Fig. S13"). Judging by eye from the page images (not a figure reading), the
+    Fig. 9 (right) curves reach about 40-60 nm/s at ks = 80-100 pN/nm and about 100 nm/s at 200 pN/nm, while the
+    Fig. S13 (right) curves stay below 22 nm/s up to their last point near 90 pN/nm. Fig. S13 looks steeper only
+    because its x axis is logarithmic. In flow per unit stiffness, Fig. 9 rises faster, and its values on the stiff
+    side are several times those of Fig. S13. Both readings agree that the two figures differ. The
+    cmp_f9r_vs_s13r_* comparisons, made from the figure readings, are the measure; this question only flags the wording.
+  citation: {page: 23, quote: "Blue, purple and green curves relate to increasing values of", where: "Fig. S13 (right); Fig. 9 (right) p. 8"}
+# Questions raised by the figure readings of the measured data (second figure pass, figures.md)
+- id: q_fig3a_vs_fig2a2_balb6
+  kind: unexplained_difference
+  about: [f3a_balb_bars, f2_a2_balb_6_msd, f2_a2_balb_0_msd, f5_6_msd]
+  text: >-
+    Fig. 3A (left) plots the MSD at a time lag of 1 s of the conditions whose full MSD curves are in Fig. 2, so
+    each bar should equal its curve at 1 s. Read side by side (f3a_balb_bars, f3a_mc3t3_bars against the Fig. 2
+    readings at x = 1), thirteen of the fourteen pairs agree within the reading intervals. The exception is
+    BALB/3T3 at 6% on stretched devices (bar 2 of f3a_balb): the purple curve of Fig. 2 A.2 (left) at 1 s, and the
+    identical purple curve of Fig. 5, lie above the bar's whole SEM interval. The text on p. 2 (about 1.2-fold for
+    6%) sides with the curve; the bar would give about 1.5-fold. The paper does not say which is right.
+  citation: {page: 2, printed_page: "22005", quote: "plitude of MSDs decreased, resulting about 1.2/1.5-fold (6%", where: text}
+- id: q_fold_changes
+  kind: unexplained_difference
+  about: [f2_a2_balb_0_msd, f2_a2_balb_9_msd, f3a_balb_bars, f2_a2_mc3t3_0_msd, f2_a2_mc3t3_9_msd]
+  text: >-
+    The p. 2 text gives the MSD decrease of cells cultured on stretched PDMS (Fig. 2 A.2) as about 1.2/1.5-fold
+    at 6% and 1.7/1.8-fold at 9% (BALB/3T3 / MC3T3, the order of the figure panels), at all time lags. The
+    readings of the Fig. 2 A.2 curves at 1 s agree with three of these four, but for BALB/3T3 at 9% they (and the
+    matching Fig. 3A bar) give about 2-fold rather than 1.7, and the ratio of the BALB/3T3 curves varies with the
+    time lag (about 1.5 at the shortest and longest lags read, about 2 near 1 s), so a single fold change does not
+    hold at all lags. The p. 4 ratios (1.5/1.3 and
+    2.5/2.1, for Figs. 2 and 3) do not say which of the three time points (on stretched devices, post
+    stretching, 2 h after) they refer to. Computed ratios are not recorded: the figure readings are.
+  citation: {page: 2, printed_page: "22005", quote: "deformation, see Table 1 for statistical information) and 1.7/1.8-", where: text}
+- id: q_fig5_condition
+  kind: reading
+  about: [f5_9_msd, f2_a2_balb_9_msd, f2_b2_balb_9_msd, f5_0_msd, f5_6_msd]
+  text: >-
+    The Fig. 5 caption says the green curve (9% in a single shot) was acquired immediately after the deformation,
+    the condition of Fig. 2 B.2 (cells stretched with their substrate). Read point by point, the Fig. 5 green
+    curve coincides with the green curve of Fig. 2 A.2 (left), cells cultured on a pre-stretched device, and lies
+    above the B.2 green curve at every readable time lag; the blue and purple curves of Fig. 5 likewise coincide
+    with those of Fig. 2 A.2 (left). Either the caption names the wrong condition or the A.2 curves were
+    re-plotted. The caption does not say what the purple (6%) curve of Fig. 5 is.
+  citation: {page: 6, printed_page: "22009", quote: "formation administered in a single shot (green curve acquired immediately after the deformation)", where: "Fig. 5 caption"}
+- id: q_s7_caption_vs_legend
+  kind: reading
+  about: [s7_spread_bars, s7_nuclei_bars, s8_spread_bars, s8_nuclei_bars]
+  text: >-
+    The Fig. S7 and S8 legends call the hatched bars "2 h after deformation"; the captions call the third
+    condition cells deformed at 9% together with their substrate, without a time. The readings take the legend's
+    wording; the two describe the same bars only if those cells were imaged 2 h after the stretch, as in Figs. 6 and 7.
+  citation: {page: 18, quote: "the deformation at 9% together with cells (right)", where: "Fig. S7 caption and legend"}
+
+# ==== cross-record validation with panzetta2023 (2026-11-21): none added =========================
+- id: q_xval_panzetta2023_none
+  kind: choice
+  about: [clutch_canonical_cycle, clutch_two_spring_cycle, s1_shear_fit, s1_tensile_fit, youngs_from_shear]
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against panzetta2023
+    and entered none, because panzetta2023 has no measurement. It is a simulation paper: its data are
+    Table 1's parameters (reported), its own simulation results and figure readings (predicted) and
+    arithmetic on them (derived). The clutch ODEs here and its Gillespie model (clutch_axial_ssa) have
+    the same shape, but a model's results set against another model's results are a relation between
+    models, not a validation. The other direction is in panzetta2023's q_xval_panzetta2019_none.
+  citation: {none: "the absence of measurements is a property of the other record, panzetta2023"}
+
+# ==== cross-record validation with bangasser2013b (2026-11-21): none added =======================
+- id: q_xval_bangasser2013b_none
+  kind: choice
+  about: [clutch_canonical_cycle, clutch_two_spring_cycle, s1_shear_fit, s1_tensile_fit, youngs_from_shear]
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against bangasser2013b's
+    measurements and entered none. bangasser2013b (ref. 42 here) is a theory paper: its only measured
+    data are the run times of its own software (fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal, Fig. 6(b)),
+    which no model here predicts. Its other data are Chan and Odde's base parameters (reported) and its
+    own ODE and Monte Carlo results (predicted). clutch_canonical_cycle and
+    bangasser2013b/clutch_ensemble_cycle have the same shape, but one model's results set against
+    another's are a relation between models, for the job that relates models across papers, not a
+    validation. The other direction is in bangasser2013b/q_xval_panzetta2019_none.
+  citation: {page: 9, quote: "demonstrated that the average dynamics of a motor-clutch model is able to", where: text}
+
+# ==== cross-record validation with chan2008 (2026-11-21): none added =============================
+- id: q_xval_chan2008_none
+  kind: unstated_input
+  about: [clutch_canonical_cycle, clutch_two_spring_cycle, s1_shear_fit, s1_tensile_fit, youngs_from_shear, 'chan2008/v_fig3c_260', 'chan2008/v_fig3c_57k', 'chan2008/v_stiff_text', 'chan2008/v_fig3d_exp_sem', 'chan2008/T_max_fig']
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against chan2008's
+    measurements and entered none. This paper cites chan2008 (ref. 26) only in a list of clutch-model
+    works used "to shed light on the basis of the cell mechanosensing mechanism (26-29)" and never
+    compares its model with chan2008's data. The only chan2008 measurement a model here could give is
+    filopodial retrograde flow (Fig. 3C means, Fig. 3D, the ~110 nm/s of the text, Fig. S8C), from
+    clutch_canonical_cycle at x0 = 0. But chan2008 measures that flow against the gels' Young's modulus,
+    and the models here take a substrate spring constant ks in pN/nm. Neither paper states ks for those
+    gels. Chan's Eq. 13 turns a modulus into ks only through the fitted length Δ = 277 nm, whose place in
+    Eq. 13 is itself open (chan2008/q_eq13_delta). Entering ks per gel would mean writing a number the
+    reader computed, and a modulus and a spring constant are not one quantity. Even with ks given, the
+    run would be fit quality, not a test: the base set here (ref. 42's, added) is Chan's Table S1, whose
+    nc and kon were tuned to these flows. Also, v_mean is a mean over one load-and-fail cycle
+    (q_flow_definition), whereas Chan's flow is a mean over many filopodia. No model here outputs a
+    force, so chan2008's peak filopodial force (T_max) is out of reach, as are its bead distance δ and
+    its step, failure and histogram data. The load-and-fail periods of "~10 to 100 s" that t_cycle
+    could meet are not recorded as a datum (chan2008/q_cycle_time). The stress-strain fits and
+    youngs_from_shear describe this paper's PDMS and PU only. In the other direction, see
+    chan2008/q_xval_panzetta2019_none.
+  citation: {page: 1, quote: "also used to shed light on the basis of the", where: text}
+
+# ==== cross-record validation with bangasser2013 (2026-11-21): none added ========================
+- id: q_xval_bangasser2013_none
+  kind: unstated_input
+  about: [clutch_canonical_cycle, clutch_two_spring_cycle, s1_shear_fit, s1_tensile_fit, youngs_from_shear, 'bangasser2013/v_figS1b_measured', 'bangasser2013/tau_kong_fig7c', 'bangasser2013/migration_fig1a_u87', 'bangasser2013/traction_fig1b_neuron']
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against
+    bangasser2013's measurements and entered none. This paper cites bangasser2013 (ref. 27) only as a
+    formulation of the canonical clutch model ("as extensively explained in other contexts (27, 29)",
+    p. 5; "in agreement with the previous formulation of the model (27, 29)", p. 7) and never sets its
+    model against bangasser2013's data. bangasser2013's measured data are all other papers' points
+    that it redraws: (1) Chan and Odde's neuron retrograde flows against gel Young's modulus (Fig. S1B,
+    v_figS1b_measured) — clutch_canonical_cycle at x0 = 0 gives a flow, but on a spring constant ks in
+    pN/nm that neither paper states for those gels, and with the base set here (added, ref. 42's =
+    Chan's Table S1, tuned to these flows) it would be a fit, not a test (as q_xval_chan2008_none);
+    v_mean is also a one-cycle mean (q_flow_definition). (2) Kong et al.'s integrin lifetimes at a
+    clamped force (Fig. 7C, tau_kong_fig7c): no model here outputs a single bond's lifetime; t_cycle
+    is the whole ensemble's load-and-fail period, a different quantity despite the shared shape
+    (time from force and rate) with bangasser2013/catch_slip_eq9, and Eq. 11's slip off-rate is an
+    ensemble mean with an unstated r. (3) Normalized migration (Fig. 1A) and normalized traction
+    (Fig. 1B) against modulus: no model here outputs a migration measure or a force. The stress-strain
+    fits and youngs_from_shear describe this paper's PDMS and PU only. In the other direction, see
+    bangasser2013/q_xval_panzetta2019_none.
+  citation: {page: 5, printed_page: "22008", quote: "The model, as extensively explained in other contexts", where: text}
+
+# ==== cross-record validation with elosegui2016 (2026-11-21): none added =========================
+- id: q_xval_elosegui2016_none
+  kind: unstated_input
+  about: [clutch_canonical_cycle, clutch_two_spring_cycle, s1_shear_fit, s1_tensile_fit, youngs_from_shear, 'elosegui2016/fig3e_control_data', 'elosegui2016/fig3e_shrna_data', 'elosegui2016/fig3d_control_data', 'elosegui2016/fig3d_shrna_data']
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against elosegui2016's
+    measurements and entered none. This paper cites elosegui2016 (ref. 29) only as a formulation of the
+    clutch model ("as extensively explained in other contexts (27, 29)", p. 5; "in agreement with the
+    previous formulation of the model (27, 29)", p. 7). It never compares its model with elosegui2016's
+    data. The only elosegui2016 measurement a model here could give is the actin retrograde flow of
+    control and talin 2 shRNA MEFs against rigidity (Fig. 3e, fig3e_control_data, fig3e_shrna_data), from
+    clutch_canonical_cycle at x0 = 0. Three things block it. (1) elosegui2016 indexes that flow by the
+    gels' Young's modulus in kPa, but the models here take a substrate spring constant ks in pN/nm.
+    elosegui2016 converts a modulus to ksub only through its own added geometry factor and adhesion radius
+    (elosegui2016/ksub_factor_added). Entering a ks per gel would mean writing a number the reader
+    computed, and a modulus and a spring constant are not one quantity. (2) The inputs here are ref. 42's
+    neuron base set (added, q_params_unstated), with Eq. 11's slip-bond mean off-rate. elosegui2016's MEF
+    clutch has a catch bond (sum of two exponentials) and different nm, nf and kc, so no MEF parameter set
+    fits Eq. 11's inputs (r, Fb) without inventing them. (3) v_mean is a mean over one load-and-fail
+    cycle (q_flow_definition), while the Fig. 3e flows are means over cells. No model here outputs a
+    force or traction, so Fig. 3d and the other tractions, adhesion lengths, YAP ratios and bond
+    lifetimes of elosegui2016 are out of reach. The stress-strain fits and youngs_from_shear describe this
+    paper's PDMS and PU only. In the other direction, see elosegui2016/q_xval_panzetta2019_none.
+  citation: {page: 7, printed_page: "22010", quote: "with the previous formulation of the model (27, 29)", where: text}

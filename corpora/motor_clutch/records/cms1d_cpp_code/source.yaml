@@ -1,0 +1,56 @@
+id: cms1d_cpp_code
+kind: software
+title: "1D cell migration simulator in C++ (Cell1DPublish.cpp/.h, modulePublish.cpp/.h, Odde lab)"
+authors: [Jay Hou]
+year: 2022
+venue: received with Prahl et al. 2020 (Biophys. J. 118:1709-1720), in a folder named Confined_migration_paper
+file: corpus/motor_clutch/code/cms1d_cpp_code
+version: "sha256:c507adc136bd3453c92c244602526f09e8fefe313e0935c070655f4615cd84e2"
+licence: none stated
+language: cpp
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "read_code-1", date: "2026-11-19"}
+notes: >
+  What the code is. Four C++ files: Cell1DPublish.cpp/.h (class Cell1D: InitFile sets the parameters,
+  Init builds the starting modules, Simulate runs the time loop, Update does one kinetic Monte Carlo step:
+  event selection, TransportAndPolymerize, PrepareForForceBalance, a 1D GSL root solve of the force
+  balance, UpdatePositionsAndForces) and modulePublish.cpp/.h (one motor-clutch module). Headers by J. Hou,
+  University of Minnesota, dated 2021/02/05 and 2022/04/20. There is no main(), no licence and no output:
+  Record() is empty and the sampled positions are never written. It includes headers it does not ship
+  (Cell1D.h, module.h, u_dx0_1max50.h, utils.h, config.h, rand.h, Eigen) and would not compile as given
+  (a stray parenthesis on line 70, a constructor that does not match its header, class Module against the
+  shipped modulePublish); it was not built (q_does_not_compile).
+
+  Relation to the paper. Received with prahl2020 but written after it; the paper says its simulations ran
+  in MATLAB. Neither says how they relate (q_relation_to_paper). The record reads the code as a later
+  implementation of prahl2020's 1D CMS and checks it against Table S1 and the Supporting Methods.
+
+  Parameters (data.yaml, each with file and line). Equal to prahl2020's Table S1, and linked to it for the
+  build's cited check: nmotor 1000, nclutch 750, nclutch,cell 10, Fmotor 2 pN, vmotor 120 nm/s, Fbond 2 pN,
+  kclutch 0.8 pN/nm, kon 1 /s, koff 0.1 /s, kcap 0.001 /s, knuc,0 1 /s, vactin,max 200 nm/s, Atotal 100000
+  nm (= 100 um; the header's "in nM" is a wrong comment, q_actin_pool_unit), kcell 10000 pN/nm, Lcell 5000
+  nm, Lmin 100 nm. Four of these are printed in Table S1 as bare powers of ten and get no verdict
+  (q_powers_of_ten). The analysis settings agree with the paper's words: first hour discarded, 5 min
+  sampling (the comments say 10 min, q_comments), jumps above 1 um/s filtered; 6 h of simulated time is
+  inside the paper's 5-7 h.
+
+  Differences from the paper (findings about the code, not errors of the paper). (1) Substrate stiffness
+  ksub = 1 pN/nm against 1000 pN/nm (q_ksub). (2) Polarity Polar = 0, i.e. psi_pol = 0.5 against the base
+  0.9 (cmp_polarity, q_polarity). (3) Start: 4 modules, 2 each way, each with one clutch engaged and the
+  full per-module share, against 2 + 1 modules with all clutches unbound (q_initial_state). (4) Hidden
+  factors and cut-offs not in the paper: aflow_ratio = 0.2 on how far modules move back with the flow
+  (q_aflow_ratio); a time-varying motor-number factor from a "control" table with gain 3, with commented-out
+  C646 and SMIFH2 tables, drugs the paper does not use (q_motor_schedule); a clutch-stiffness group factor
+  (1 here, q_group_factor); a cap of 10^6 /s on the total event rate (q_ksum_cap); a zero clip on the flow
+  speed and |F| in the off-rate (q_flow_clip); a new module shorter than Lcell when little actin is free
+  (q_new_module_length); a fixed seed 1 against the paper's unique seed per run (q_duration_seed).
+
+  Models. C++ cannot run here. The module rules are ported line by line to Python: off-rate (lines 578,
+  618), flow speed (405), polymerization (411), nucleation (100, 628), module allocation (57-58, 466-470)
+  and polarity (474). Proposed relations test the first four as the same as prahl2020's Eqns. S1, S2, S3
+  and S8 (below stall and for tension, where the code's clip and |F| do not act). The allocation port
+  reproduces Table S1's per-module maxima, 100 motors and 75 clutches (cmp_nmotor_module,
+  cmp_nclutch_module). The polarity port gives 0.5 at the code's setting, which does not match the 0.9 of
+  the paper's base set (cmp_polarity). The whole simulator (cms1d_sim) is recorded but not ported or run:
+  one 6 h run is of order 10^7 events, and the code computes no MSD, velocity or motility coefficient, so
+  prahl2020's v_sim and mu_sim cannot be reproduced from it (q_no_analysis, q_sim_not_run). No code was
+  copied into the record.

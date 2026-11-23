@@ -1,0 +1,80 @@
+# Relations this paper states between its own models.
+- id: rel_s2_to_sigma_max
+  kind: reduces_to
+  a: cao2017/contractility_s2
+  b: cao2017/sigma_max_s2
+  mapping: {rho0: "rho0", alpha: "alpha", beta: "beta"}
+  output_map: {sigma_max: sigma}
+  limit: {Keff: "oo"}
+  regime: {K: [0.5, 2], rho0: [0.1, 1], alpha: [1.0e-3, 2.0e-3], beta: [2.5e-3, 4.0e-3], Keff: [1, 100]}
+  provenance: stated
+  citation: {page: 8, quote: "mum level of contractility [σ max = βρ0 =ðβ − αÞ] is achieved when", where: "SI text below Eq. S2"}
+  assumptions:
+    - "K beta > 1 in the regime (K in kPa, beta per Pa), so that Eq. S2 is positive and increasing in Keff"
+# Bangasser et al. 2013 (record bangasser2013): no relation entered. Cao's reference list (p. 7) does not
+# cite it, and neither paper relates a model of one to a model of the other. Cao's models are continuum and
+# quasi-static: a shear-lag FA-ECM stiffness (keff_1d, Eq. 2), a chemomechanical contractility law (Eq. S2)
+# and an FA growth flux (Eq. 4). They have no motors, clutch binding kinetics or retrograde flow. Bangasser's
+# models are the stochastic motor-clutch SSA and the clutch bond and parameter-scaling laws around it.
+# Their only shared ingredient is a clutch spring. Cao's per-length clutch stiffness kc (keff_1d) has no
+# output on Bangasser's side to map onto: Bangasser's k_ens = kc x mean engaged clutches is a time average
+# of a stochastic run, not a series-spring stiffness. A Cao keff_1d -> chan2008/bangasser single-spring limit
+# would be this paper's substrate-spring relation to chan2008 (not this pair). No value is taken from one
+# paper by the other, so cited.yaml gets no link.
+# Bell 1978 (record bell1978, ref-30): no relation entered. Cao cites Bell once (p. 6), for the qualitative
+# point that "mechanical straining accelerates the dissociation of weak cross-links (30)", and says its model
+# applies to networks "with interfiber bonds that follow a Bell-like breaking behavior". No Cao model uses
+# Bell's law: the DFN (dfn_network, p. 2) removes a cross-link when "the transmitted strain energy exceeded a
+# threshold value", a deterministic energy criterion with no force-dependent lifetime or rate, and it is not
+# runnable; Eq. 1 (fiber_recruitment_eq1) is a phenomenological erf of stress. So no Cao output maps onto
+# bell1978/lifetime_eq16 or its rupture-force models. The shape match bell1978/laplace_pressure (P = 2 gamma/R)
+# with coarse_grained_fa_ecm is spurious: the latter is a not-runnable COMSOL shear-lag solution for an
+# effective FA-ECM modulus, not a pressure from a surface tension and a radius. Cao takes no value from Bell,
+# so cited.yaml gets no link.
+# Chan & Odde 2008 (record chan2008, ref-9): no relation entered. Cao cites ref. 9 only for a timescale, to
+# justify treating integrins as linear springs: "the timescale for integrin binding dynamics [i.e., a few
+# seconds (9, 20)]" (p. 2) and "binding/unbinding occurs within seconds (9, 20)" (p. 2; again p. 8). It
+# states no relation between its models and Chan's. The shape match keff_1d (stiffness from a length and
+# stiffnesses) with chan2008/motor_clutch_E (or ksub_eq13) is spurious. ksub_eq13 is a Cerruti point-load
+# spring from a Young's modulus, and keff_1d has no modulus input. motor_clutch_E's outputs are a retrograde
+# flow, forces and that ksub, and keff_1d's ks is not a function of a modulus. The proposed relation the
+# batch asks to test (a limit of Cao's substrate that returns Chan's single linear spring in series with the
+# clutches, 1/(1/ksub + 1/(nc kc))) does not exist, checked symbolically with keff_1d's code formulas:
+# L -> 0 gives keff/L -> kc phi (clutches in parallel, the ECM drops out); kp -> oo gives
+# sqrt(kc ks) tanh(L phi sqrt(kc/ks)) (shear lag, ECM distributed along the adhesion); L -> oo gives 0. No
+# limit leaves ks in series with the clutch ensemble, so neither a reduces_to nor an approximated_by relation
+# is proposed. Cao's integrin stiffness (ki = 5 pN/nm) is taken from ref. 41, not from Chan; Chan's clutch
+# stiffness (kc_S1, 5 pN/nm) is "Estimated from Fisher" too, a shared source, not a value passed between
+# the two papers. Cao takes no value from Chan, so cited.yaml gets no link.
+# Chaudhuri et al. 2015 (record chaudhuri2015, ref-17): no relation entered. Cao cites ref. 17 twice, both
+# for experimental observations and not for a model: cells "cultured on soft viscoelastic substrates" spread
+# as on stiffer elastic ones (p. 1), and "the influences of time-dependent matrix properties [such as
+# viscoelasticity (17) ...] on cell behaviors have drawn lots of attention" (p. 6). Cao states no relation
+# between its models and Chaudhuri's. Chaudhuri's models are a stochastic motor-clutch simulation (Bell off
+# rate, linear force-velocity retrograde flow, clutch springs on a Burgers viscoelastic lattice or on
+# independent springs). Cao's are quasi-static and time-independent: a shear-lag FA-ECM stiffness
+# (keff_1d), a contractility law (Eq. S2), an FA growth flux (Eq. 4) and an erf fibre recruitment (Eq. 1);
+# they have no motors, binding kinetics, retrograde flow or substrate relaxation time. No Cao output maps
+# onto a Chaudhuri output (spreading speed, retrograde flow, loaded off rate, Burgers creep), and no
+# substrate limit links them: the elastic limit of Chaudhuri's Burgers substrate (dashpots -> oo) gives its
+# own single spring per clutch, while no limit of keff_1d leaves the ECM spring in series with the clutches
+# (see the Chan entry above). Cao takes no value from Chaudhuri, so cited.yaml gets no link.
+# Elosegui-Artola et al. 2016 (record elosegui2016, ref-20): no relation entered. Cao cites ref. 20 only for
+# kinetics and to justify treating integrins as quasi-static springs: integrin binding takes "a few seconds
+# (9, 20)" (p. 2; again p. 8), "it was reported (20) that the α5β1- and αvβ3-mediated catch bonds are
+# responsible for force transmission" and "talin unfolds instantaneously if force exceeds a threshold (∼5 pN)
+# (20)" (p. 8). From these timescales Cao assumes the integrins are always at steady state, with "the effective
+# density in the quasi-static limit". It states no relation between any of its models and Elosegui's. Cao's
+# models are quasi-static continuum ones: shear-lag FA-ECM stiffness (keff_1d), contractility (Eq. S2), FA growth
+# flux (Eq. 4), fibre recruitment (Eq. 1). None of them has a catch-bond off rate, talin unfolding, motors or
+# retrograde flow. Elosegui's models are the stochastic clutch simulations (with or without talin unfolding),
+# the threshold rigidity sensitivity built on them, and talin unfolding and refolding rate laws.
+# No Cao output (an effective modulus or stiffness, a stress, a fibre density) maps onto an Elosegui output
+# (traction, actin flow, threshold rigidity, unfolding time or force). The proposed match of
+# coarse_grained_fa_ecm with clutch_no_talin_sim is spurious: one is a not-runnable COMSOL shear-lag solution
+# for an effective modulus, the other a time-averaged stochastic traction and flow, and they share no output.
+# Cao's integrin "density in the quasi-static limit ... determined by the balance between bond on and off
+# rates" is never written as a function of force or rates, so no Elosegui catch-bond steady state can be
+# mapped onto it. No single-spring limit is proposed either, for the reason given in the Chan entry above.
+# Cao records no datum from ref. 20: its ~5 pN talin threshold is a remark in the text and not a model input,
+# so cited.yaml gets no link.

@@ -1,0 +1,15 @@
+id: required_efa
+name: FA-ECM effective modulus at which Eq. S2 gives the zero-growth stress of Eq. 4
+role: model
+stated: {page: 3, printed_page: "E4551", quote: "how the laws for plaque incorporation (Eq. 4), actomyosin force generation, and effective modulus", where: "text below Eq. 4"}
+equation: "sigma(Keff) of Eq. S2 = sigma* = Delta mu_0/Delta r, Keff = 1/(1/En + 1/E*FA), solved for E*FA"
+built_from: [contractility_s2, steady_stress_eq4]
+inputs:
+  sigma_star: {quantity: steady_growth_stress, unit: kPa}
+  En: {quantity: nucleus_modulus, unit: kPa}
+  K: {quantity: cytoskeleton_stiffness, unit: kPa}
+  rho0: {quantity: baseline_contractility, unit: kPa}
+  alpha: {quantity: coupling_parameter, unit: 1/Pa}
+  beta: {quantity: coupling_parameter, unit: 1/Pa}
+outputs:
+  Efa_req: {quantity: fa_ecm_effective_modulus, unit: kPa}

@@ -1,0 +1,49 @@
+id: cms_code
+kind: software
+title: "Cell Migration Simulator (CMS) v1.0 (MATLAB: cms2Dv1_0.m, cms2D_shell.m, cms2D_par_shell.m, analyzeCMSoutputv1_0.m)"
+authors: [Benjamin Bangasser, Ghaidan Shamsan, Brian Castle]
+year: 2017
+venue: MATLAB code released with Bangasser et al., Nature Communications 8, 15313 (2017), Odde lab, University of Minnesota
+file: corpus/motor_clutch/code/cms_code
+version: "sha256:577c85df94ac94be01a30c164a60c5a3ef40c9b19b19314933cf52ae6b1b270f"
+licence: none stated
+language: matlab
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "read_code-1", date: "2026-11-19"}
+notes: >
+  The MATLAB code of the cell migration simulator (CMS v1.0) released with Bangasser et al. 2017
+  (bangasser2017). Five files: cms2Dv1_0.m, the simulator, a function of every parameter (Bangasser,
+  19 July 2014; inputs and outputs, progress and plots reworked by Castle, Sept 2017);
+  analyzeCMSoutputv1_0.m, the analysis (MSD and random motility coefficient, traction, flow, module
+  number and length, cell shape); cms2D_shell.m and cms2D_par_shell.m, the entry points, scripts that
+  set the parameters (lines 5-30, identical in both) and loop over cells, the second in parallel; and a
+  readme (.docx) with the parameter table 'from Table S2' of the paper. No licence is stated; the header
+  asks users to cite the paper and say whether the code was modified. Year 2017 is that of v1.0.
+  MATLAB is not run here. Every parameter of the shells and the constants inside the simulator and the
+  analysis are recorded with file and line; each one the paper prints is linked (from_datum) to
+  bangasser2017's Supplementary Table 2 (low set) or its algorithm step (1), so the build checks it.
+  The rules a check needs are ported to Python one by one (module_max_port lines 39-40, kmod_port 171,
+  off_rate_port 175/181, flow_port 200-202, polyrate_port 207/371, module_assign_port 229-245,
+  keff_port 315) and related (proposed) to the paper's Eqs. 1, 2, 3, 7, 8 and the one-tenth rule of
+  Supplementary Fig. 5. The whole simulator (cms2d_code) is entered but not ported: its run at the
+  shell's settings is hours per cell, and the paper prints its results only as approximate optima
+  ('~0.1', '~1', '~10' pN/nm), which carry no verdict (q_not_run). No code was copied into the record.
+  Reproduced: all shell parameters but one equal Supplementary Table 2's low set (Nm 1,000, Nc 750,
+  Atot 100 µm, v*p 200 nm/s, k*mod 1/s, kcap 0.001/s, lin 5 µm, lmin 0.1 µm, nc,cell 10, Fm 2 pN, v*m
+  120 nm/s, kon 1/s, k*off 0.1/s, κc 0.8 pN/nm, Fb 2 pN) and three initial modules; the code's
+  one-tenth rule gives Table 2's n*m and n*c for both the low and the high set (cmp_maxm_*, cmp_maxc_*);
+  the code's off-rate, flow (below stall), polymerization and module birth rate are the paper's
+  Eqs. 1, 2, 3 and 7 (rel_offrate_eq1, rel_flow_eq2, rel_poly_eq3, rel_kmod_eq7); the analysis
+  settings (15-min samples, first hour discarded, 1 µm/s jump cut-off, 10 µm cell circle) match the
+  Methods' words.
+  Differences from the paper: the cell spring constant is 1000 pN/nm in both shells, 10,000 in
+  Supplementary Table 2 and the readme (q_kcell); n*m and n*c are not parameters but one tenth of the
+  pools (q_module_max_rule); new modules get ceil(Eq. 8) and at least one motor and clutch
+  (q_assign_rounding, rel_assign_eq8 measures the gap); the flow is clipped at zero beyond stall
+  (q_flow_clip); the simulated time (10 h) and cell count (50) are the code's, not printed in the paper,
+  and differ from the readme's 5-9 h and 20-50 (q_durr); the MSD fit weights by sem^-1/2, not by the
+  inverse uncertainty, with bounds on D (q_msd_fit); the shape analysis does not add 10 µm to the
+  modules, uses a 65.2 nm mask pixel and only the final state, though the plots say 'Average'
+  (q_shape_analysis); jumps are stitched out of the trajectory (q_jump_filter); a newborn module's flow
+  is the literal 120 (q_hardcoded_vf); the cell-body clutches share the module clutch parameters
+  (q_cellbody); the shells hold only the low set at Ksub = 100 pN/nm (q_shell_sets); the random stream is
+  seeded from the clock (q_seed). Not checked: whether the code reproduces Fig. 1c-g.

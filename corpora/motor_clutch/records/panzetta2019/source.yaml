@@ -1,0 +1,51 @@
+id: panzetta2019
+kind: article
+title: Cell mechanosensing is regulated by substrate strain energy rather than stiffness
+authors: [Valeria Panzetta, Sabato Fusco, Paolo A. Netti]
+year: 2019
+venue: PNAS 116(44), 22004-22013 (with SI Appendix)
+doi: 10.1073/pnas.1904660116
+file: corpus/motor_clutch/2019_Panzetta.pdf
+page_range: [1, 24]
+pages: {1: "22004", 2: "22005", 3: "22006", 4: "22007", 5: "22008", 6: "22009", 7: "22010", 8: "22011", 9: "22012", 10: "22013"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-21"}
+notes: >
+  PDF pp. 1-10 are the article (pp. 22004-22013; Methods and the clutch model's Eqs. 3-13 on p. 9);
+  pp. 11-24 the SI Appendix without printed page labels (Figs. S1-S13, then Appendix 1, the canonical
+  form, p. 24). In scope is the clutch model, the paper's only quantitative model. Two models: the
+  canonical form of Appendix 1 (Eqs. 3, 4, 11, s.1-s.6: ref. 42's clutch-ensemble ODEs with the substrate
+  held at an initial deformation x0) and the modified model of the Methods (Eqs. 3-12: the substrate as
+  two equal springs, one orthogonal to the clutch axis, rest length l). Both are integrated over one
+  load-and-fail cycle (LSODA in place of ode15s) and give the cycle-mean actin flow.
+  The paper prints no model input and no model number: its results are the curves of Fig. 9 and Fig.
+  S13, read here by code (figures.md). Every input is added: ref. 42's base set, r = 3, and nm = nc, l,
+  the three x0 and the stiffness of Fig. 9 (left) chosen by the reader (q_params_unstated, q_x0_strain).
+  All ten curve comparisons come out not reproduced at those inputs. That says the curves cannot be
+  rebuilt without the paper's inputs, not that the paper is wrong. Fig. 9 (right) and Fig. S13 (right),
+  which plot the same quantity for three x0 in the same colours, disagree with each other
+  (cmp_f9r_vs_s13r_*, q_fig9_vs_S13). The ODE results are refined over solver tolerance and failure
+  threshold and belong to the model.
+  Findings on the printed equations: Eq. 13 cannot be integrated as printed (dxs/dt on both sides;
+  q_eq13), so the model runs Eqs. 3-12. Eq. 11 is cited to a YAP/TAZ paper (ref. 39) rather than to
+  ref. 42 (q_eq11_ref). The text swaps the panels of Fig. 9 (q_fig9_panels), and the Fig. S13 legend says
+  "spring constant" where the panel shows independence from x0 (q_figS13_caption).
+  Strain energy against stiffness, tested within the paper's own model (relations.yaml): the canonical
+  form is exactly ref. 42's ODEs for any x0 (rel_canonical_same_as_bangasser2013b, so x0 has no effect
+  there, as Fig. S13 left shows). The modified model reduces to the canonical one as l grows, and at
+  x0 >> l it is the canonical model on a substrate of 2 ks. At any x0 it is approximated, within 10%
+  (about 1% near the optimum), by the canonical model at the substrate's tangent stiffness ks(2 -
+  l^3/(l^2 + x0^2)^(3/2)). Within the model, prestrain therefore acts as a stiffening of the substrate's
+  tangent stiffness, bounded by a factor 2. It is not a separate strain-energy effect
+  (q_strain_energy), and that bound sits badly with the size of the shift in Fig. S13 (q_shift_bound).
+  The paper itself calls the effect "an additional stiffness" (p. 7).
+  Measured data (second figure pass, figures.md): every plot of data is now read by code
+  (figures/_exp.py). That covers the MSD curves of Figs. 2, 4, 5, S4-S6, the bar charts with their SEM
+  bars of Figs. 3, 6, 7, S3-S5, S7, S8 and S10, and the orientation histograms of Fig. S9, as measured data
+  for models of other papers. No model of this record predicts them: the clutch model's output is actin
+  flow, and the paper gives no conversion from strain to x0. Fig. S1's fit lines are read and checked
+  against their printed equations. The printed moduli (930.32 and 930 kPa, 1 MPa for PDMS, 185.07 kPa
+  shear and 0.6 MPa for PU) are recorded and compared; PU's 0.6 MPa goes through a reconstructed
+  E = 2(1 + nu)G step. The readings raise q_fig3a_vs_fig2a2_balb6, q_fold_changes, q_fig5_condition
+  and q_s7_caption_vs_legend.
+  Still left out: Tables 1, 2, S1 and S2 (P values only), the micrographs, and Eqs. 1-2 (the MSD and
+  radius of gyration definitions, used only on data).

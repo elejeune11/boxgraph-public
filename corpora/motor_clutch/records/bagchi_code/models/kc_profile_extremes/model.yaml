@@ -1,0 +1,22 @@
+# Reconstructed (our stand-in): the drivers pass cell_nodes, stdev_cell_spring_constant and ND_factor_kcell
+# to p_mesh_ab1->SetVariableSpringConstant (C line 403), a method of Chaste's MutableVertexMesh that the
+# release does not contain. This model assumes it uses the same normalised Gaussian over the cell nodes as
+# the drivers' own block (lines 223-238), with width stdev_cell_spring_constant, and gives its extremes, to
+# test whether the S2/S3 Tables' omega_k and delta_k are those extremes, as delta_eta and delta_eps are.
+id: kc_profile_extremes
+name: "extremes of a normalised Gaussian of width stdev_cell_spring_constant over the cell nodes (reconstructed)"
+role: model
+stated: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "403", quote: "p_mesh_ab1->SetVariableSpringConstant(cell_nodes, stdev_cell_spring_constant, ND_factor_kcell);"}
+described_from: bagchi2025
+reconstructed: >-
+  SetVariableSpringConstant, which computes the cell stiffness profile (Eq 11), is in Chaste's MutableVertexMesh,
+  which the release leaves out; the Gaussian is taken from the drivers' own lines 223-238.
+equation: "k = (1/(sigma sqrt(2 pi))) exp(-((i+1-uv)/sigma)^2/2), i = 0..cell_nodes, uv = (cell_nodes/2)+1; omega = max k, delta = min k"
+inputs:
+  n:     {quantity: n_cell_springs, unit: dimensionless, description: "cell_nodes"}
+  sigma: {quantity: profile_width, unit: dimensionless, description: "stdev_cell_spring_constant"}
+outputs:
+  omega: {quantity: profile_peak, unit: dimensionless}
+  delta: {quantity: profile_shift, unit: dimensionless}
+settings: {}
+stochastic: false

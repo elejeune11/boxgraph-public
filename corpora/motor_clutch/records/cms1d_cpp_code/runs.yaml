@@ -1,0 +1,12 @@
+# The per-module maxima and the first new module's share, from the code's own pools (lines 50-58, 466-470)
+- id: run_alloc
+  model: module_alloc_port
+  inputs: {motor_pool: nmotor_code, clutch_pool: nclutch_code, motor_divisor: motor_divisor_code,
+           clutch_divisor: clutch_divisor_code, active_motors: active_zero, active_clutches: active_clutch_zero}
+  outputs: {nm_max: nm_max_code, nc_max: nc_max_code, nm_new: nm_new_code, nc_new: nc_new_code}
+  note: "with no module holding motors or clutches, a new module gets the maximum"
+# The probability of a forward module at the code's setting Polar = 0 (line 30)
+- id: run_polarity
+  model: polarity_port
+  inputs: {Polar: polar_code}
+  outputs: {psi: psi_code}

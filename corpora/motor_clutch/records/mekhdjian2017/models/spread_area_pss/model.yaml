@@ -1,0 +1,24 @@
+id: spread_area_pss
+name: simulated cell spread area from the actin mass balance at pseudo-steady state (Supplemental Eqs. 6-9)
+role: model
+stated: {page: 25, quote: "An expression for the edge velocity of a point along the cell radius", where: "Eqs. 6-9 (pp. 25-26)"}
+equation: >-
+  vedge = vprotrusion - vretrograde (Eq. 6); A = π rcell^2 at vedge = 0; [Actin]Total = [G-actin] + [F-actin]
+  (Eq. 7, lengths in nm); rcell = F-actin length + Lnucleus; ∂[G-actin]/∂t = vretrograde/Lactin - vprotrusion/Lactin
+  (Eq. 8); vprotrusion = vpolymerization [G-actin]/[Actin]Total (Eq. 9)
+inputs:
+  v:     {quantity: retrograde_flow_rate, unit: nm/s, curve: {quantity: substrate_modulus, unit: kPa}}
+  Atot:  {quantity: total_actin, unit: nm}
+  vpoly: {quantity: max_polymerization_velocity, unit: nm/s}
+  Lnuc:  {quantity: nucleus_radius, unit: nm}
+outputs:
+  A:     {quantity: cell_spread_area, unit: um^2, curve: {quantity: substrate_modulus, unit: kPa}}
+settings: {}
+from_words: true
+built_from: [motor_clutch_reinforced]
+reconstructed: >-
+  The paper integrates the actin balance event by event (Eq. 8) and averages the radius over the run, but
+  Eq. 8 divides velocities by an Lactin that is never given (and makes ∂[G-actin]/∂t a rate when [G-actin] is a
+  length), and [Actin]Total and vpolymerization are not printed. The reader uses the steady state of Eqs. 6, 7 and
+  9 (vedge = 0, the paper's own "pseudo-steady-state") on the run's time-averaged retrograde flow, which needs
+  neither Lactin nor the event-by-event history.

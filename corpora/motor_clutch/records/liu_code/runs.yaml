@@ -1,0 +1,94 @@
+# ---- Linear_KD_WT_model.m as written: the linear KD set ------------------------------------------
+- id: run_lkd_fig2c
+  model: linear_port
+  inputs: &lkd {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lkd, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: P_KD_fig2c_paper}
+  outputs: {P: P_lkd_fig2c_port}
+- id: run_lkd_fig2d
+  model: linear_port
+  inputs: *lkd
+  sweep: {E: v_KD_fig2d_paper}
+  outputs: {v: v_lkd_fig2d_port}
+- id: run_lkd_ed5a_sm71
+  model: linear_port
+  inputs: *lkd
+  sweep: {E: P_KD_sm71_ed5a_paper}
+  outputs: {P: P_lkd_sm71_port}
+# the code's KD set with the blebbistatin densities the paper prints (no file sets them)
+- id: run_lkd_ed5a_sm43
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_KD_bleb15_paper, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: P_KD_sm43_ed5a_paper}
+  outputs: {P: P_lkd_sm43_port}
+- id: run_lkd_ed5a_sm26_upper
+  model: linear_port
+  inputs: &lkd26 {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_KD_bleb50_paper, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  settings: {branch: strong}
+  sweep: {E: P_KD_sm26_upper_ed5a_paper}
+  outputs: {P: P_lkd_sm26_upper_port}
+- id: run_lkd_ed5a_sm26_lower
+  model: linear_port
+  inputs: *lkd26
+  settings: {branch: weak}
+  sweep: {E: P_KD_sm26_lower_ed5a_paper}
+  outputs: {P: P_lkd_sm26_lower_port}
+- id: run_lkd_ed5a_sm26_unstable
+  model: linear_port
+  inputs: *lkd26
+  settings: {branch: unstable}
+  sweep: {E: P_KD_sm26_unstable_ed5a_paper}
+  outputs: {P: P_lkd_sm26_unstable_port}
+
+# ---- Linear_KD_WT_model.m with the WT set of its trailing comments --------------------------------
+- id: run_lwt_fig2c
+  model: linear_port
+  inputs: &lwt {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lwt, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: P_WT_fig2c_paper}
+  outputs: {P: P_lwt_fig2c_port}
+- id: run_lwt_fig2d
+  model: linear_port
+  inputs: *lwt
+  sweep: {E: v_WT_fig2d_paper}
+  outputs: {v: v_lwt_fig2d_port}
+- id: run_lwt_ed5b_sm85
+  model: linear_port
+  inputs: *lwt
+  sweep: {E: P_WT_sm85_ed5b_paper}
+  outputs: {P: P_lwt_sm85_port}
+- id: run_lwt_ed5b_sm41
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_WT_bleb15_paper, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: P_WT_sm41_ed5b_paper}
+  outputs: {P: P_lwt_sm41_port}
+- id: run_lwt_ed5b_sm24
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_WT_bleb50_paper, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: P_WT_sm24_ed5b_paper}
+  outputs: {P: P_lwt_sm24_port}
+
+# ---- talin_WT_model.m as written ------------------------------------------------------------------
+- id: run_tw_Emax
+  model: talin_wt_port
+  inputs: &tw {E: Emax_tw, a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_tw}
+  outputs: {F_f: Ff_tw_Emax_port, F_u: Fu_tw_Emax_port, unfolded_pct: unfolded_tw_Emax_port, P: P_tw_Emax_port}
+  note: "the stiffest substrate of the code's grid, 10^6 Pa (line 46), as the 'rigid substrates' of p. 6 and the plateau of Fig. S1"
+- id: run_tw_alpha2_Emax
+  model: talin_wt_port
+  inputs: {E: Emax_tw, a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_T1_paper}
+  outputs: {F_f: Ff_tw_alpha2_port, F_u: Fu_tw_alpha2_port, unfolded_pct: unfolded_tw_alpha2_port}
+  note: "the code's model with Table T1's alpha = 2 in place of the code's 100 (q_alpha)"
+- id: run_tw_fig2c
+  model: talin_wt_port
+  inputs: {a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_tw}
+  sweep: {E: P_WT_fig2c_paper}
+  outputs: {P: P_tw_fig2c_port}
+- id: run_tw_fig2d
+  model: talin_wt_port
+  inputs: {a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_tw}
+  sweep: {E: v_WT_fig2d_paper}
+  outputs: {v: v_tw_fig2d_port}
+
+# ---- the code's constants in the paper's form ---------------------------------------------------
+- {id: run_xt_code, model: xt_from_Fd, inputs: {kB: kB_tw, T: T_tw, Fd: Fd2_tw}, outputs: {xt: xt_code}}
+- {id: run_xtp_code, model: xt_from_Fd, inputs: {kB: kB_tw, T: T_tw, Fd: Fd1_tw}, outputs: {xt: xtp_code}}
+- {id: run_Fu_tw, model: Fu_from_xu, inputs: {kB: kB_tw, T: T_tw, x_u: xu_tw}, outputs: {Fu: Fu_tw_code}}

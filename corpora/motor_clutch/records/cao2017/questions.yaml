@@ -1,0 +1,321 @@
+- id: q_dfn_not_runnable
+  kind: unstated_model
+  about: [dfn_network]
+  text: >-
+    The discrete fibre network simulations (Fig. 3, Fig. S1) cannot be rerun: the network size, fibre length,
+    cross-linking distance, pore size, the strain-energy thresholds of the cross-links of each network in
+    Fig. 3B, the load steps and the solver are not given, and no code is released (the method is referred to
+    refs. 14 and 15). Only the fibre modulus, Poisson's ratio and radius are printed. Fig. 3B therefore cannot
+    be checked against its model.
+  citation: {page: 2, printed_page: "E4550", quote: "Following our earlier work on active biopolymer networks", where: "Materials and Methods"}
+- id: q_coarse_not_runnable
+  kind: unstated_model
+  about: [coarse_grained_fa_ecm]
+  text: >-
+    The effective modulus E*FA(E_ECM, rFA, n) of Eq. 2 comes from an axisymmetric finite element model in
+    COMSOL 5.1. The governing equations and boundary conditions are given (SI p. 8-9), but not the constitutive
+    setting of the plaque and ECM (plane stress or 3D, ECM thickness, Poisson's ratios), sigma_c and the unit
+    of n in Eq. 1, nor how the self-consistent loop between Eq. 1, Eq. 2 and Eq. S2 is iterated. Fig. 4A, 4C,
+    Fig. S4 and Fig. 5 cannot be recomputed from the paper; the record instead checks the step from the
+    printed E*FA curves (Fig. 4A) to the stable sizes (Fig. 5A) with stable_size_chain.
+  citation: {page: 2, printed_page: "E4550", quote: "in the finite element method package (COMSOL", where: "text above Eq. 2"}
+- id: q_alpha_beta_unit
+  kind: possible_error
+  about: [alpha_printed, beta_printed, alpha_per_Pa, beta_per_Pa]
+  text: >-
+    Table S1 gives alpha and beta in Pa (~1.91 x 10^-3 Pa, ~2.77 x 10^-3 Pa). In Eq. S1, rho = beta rho0/(beta -
+    alpha) + (alpha K - 1)/(beta - alpha) eps, the term alpha K - 1 is dimensionless only if alpha is an inverse
+    stress. The record reads the printed numbers as per Pa (added alpha_per_Pa, beta_per_Pa); with K = 1 kPa this
+    gives K beta - 1 = 1.77 > 0 and a positive, increasing sigma(Keff). Read per kPa instead, K beta - 1 < 0 and
+    Eq. S2 gives a negative stress.
+  citation: {page: 12, quote: "Chemo-mechanical coupling ∼2.77 × 10−3 Pa Shenoy et al", where: "Table S1"}
+- id: q_En_range
+  kind: unstated_input
+  about: [En_range, En_mid, run_rst_E75, run_rst_E125, run_Efa_required]
+  text: >-
+    The nucleus modulus is given only as ~5-10 kPa, and the value used for Figs. 4-5 is not stated. The stable
+    size is very sensitive to it: with Table S1's other values sigma* = Delta mu_0/Delta r = 1 kPa, and Eq. S2
+    needs Keff of about 3.4 kPa to reach it, i.e. E*FA of about 10.4 kPa for En = 5 kPa (above the whole Fig. 4A
+    7.5 kPa curve, so no stable FA) but about 5.1 kPa for En = 10 kPa (stable size near 10 um). The record
+    takes 7.5 kPa (E*FA of about 6.1 kPa) and runs the two ends as alternatives.
+- id: q_eq1_sigma_c_n
+  kind: unstated_input
+  about: [fiber_recruitment_eq1, coarse_grained_fa_ecm]
+  text: >-
+    Eq. 1 needs the threshold stress sigma_c, which is never given a value, and n(sigma - sigma_c) inside erf is
+    dimensionless only if n carries an inverse-stress unit, but n is printed as a pure number (n = 0, 2, 4, 8)
+    with no unit. The figures' values of n cannot be turned into a recruitment curve without both.
+  citation: {page: 2, printed_page: "E4550", quote: "initial fiber density, σ c corresponds to the threshold stress for", where: "text below Eq. 1"}
+- id: q_eq1_ecm_dependence
+  kind: unstated_model
+  about: [fiber_recruitment_eq1]
+  text: >-
+    As printed, Eq. 1 makes the fibre density depend on the contractile stress alone, and by Eq. S2 the stress
+    rises with the effective modulus, which rises with E_ECM (Fig. 4A). Yet Fig. S4 shows the ligand density
+    falling from 6 to 1 as E_ECM rises from 0 to 20 kPa, and the text says cross-links rupture more easily in a
+    softer ECM. How E_ECM enters fibre recruitment (through sigma_c, n, or the deformation of the network) is
+    not stated, so Fig. S4 cannot be obtained from Eq. 1 and Eq. S2 as printed.
+  citation: {page: 5, printed_page: "E4553", quote: "cross-links are ruptured more easily in a softer ECM due to", where: text}
+- id: q_eq1_fit_fig3b
+  kind: unstated_input
+  about: [fiber_recruitment_eq1]
+  text: >-
+    The text says the DFN densities of Fig. 3B "can be well fitted" by Eq. 1, but gives no fitted n or sigma_c.
+    Fig. 3B plots against contraction per perimeter (uN/um), not the stress of Eq. 1, and its densities reach
+    only about 1.3, while Eq. 1 with its printed factor 5 saturates at 6 (as Fig. S4 does). The fit can be
+    checked only once Fig. 3B is digitized, and only if the fit is far from saturation.
+  citation: {page: 3, printed_page: "E4551", quote: "force can be well fitted by the phenomenological relationship", where: "Results, Fig. 3B"}
+- id: q_fig5_three_indices
+  kind: possible_error
+  about: [rst_fig5a_n0_E75_eye]
+  text: >-
+    The Fig. 5A legend says the stable size is plotted "at three different fiber recruitment indices", but the
+    panel shows four curves, n = 0, 2, 4 and 8.
+  citation: {page: 5, printed_page: "E4553", quote: "plotted as a function of the ECM modulus at three different fiber recruitment", where: "Fig. 5 legend"}
+- id: q_fig5_red_curve
+  kind: reading
+  about: [rst_fig5a_n0_E75_eye]
+  text: >-
+    The text refers to "the cases without fiber recruitment (solid red curve in Fig. 5A)", but in the panel's
+    legend red is n = 8 and the no-recruitment curve (n = 0) is blue; later the text calls the red and magenta
+    curves the nonmonotonic ones, which fits the legend. The record follows the legend.
+  citation: {page: 5, printed_page: "E4553", quote: "compared with the cases without fiber recruitment (solid red curve", where: text}
+- id: q_n4_validated
+  kind: overstated_claim
+  about: [nfa_model_fib_soft, nfa_exp_fib_soft]
+  text: >-
+    The text says the weaker nonmonotonicity at n = 4 (Fig. 5A) "has been validated by our experiments (16)".
+    The experiments compare two fibrous networks and two hydrogels (Fig. 5D, Fig. S7); they do not measure n or
+    the size against modulus at several n, so they can at most be consistent with it.
+  citation: {page: 5, printed_page: "E4553", quote: "which has been validated by our experiments", where: text}
+- id: q_s7_inputs
+  kind: unstated_input
+  about: [nfa_model_gel_soft, nfa_model_gel_stiff, nfa_model_fib_soft, cmp_s7_gel_soft, cmp_s7_gel_stiff, cmp_s7_fib_soft]
+  text: >-
+    For Fig. S7 the moduli and ligand densities given to the model are not stated: the two fibrous ECMs are
+    chosen so that "the variations of ligand density are comparable to experimental measurements", i.e. the
+    soft/stiff ligand density ratio is taken from baker2015's data, and the two hydrogels have equal ligand
+    density but unstated moduli. The model's fibrous-soft bar is therefore partly set by the data it is
+    compared with; only the ordering and the hydrogel bars are predictions. The model's FA band size is a
+    width while the measurement (Fig. 5D) is an area per adhesion; the paper assumes they are proportional.
+    Both series are normalized by their stiff fibrous ECM value, so that bar is 1 in both by construction.
+  citation: {page: 9, quote: "and ligand density. We chose two fibrous ECMs", where: "SI, Quantitative Comparison"}
+- id: q_fig4a_fig4c
+  kind: reading
+  about: [cmp_fig4a_fig4c, Efa_fig4a_E75_eye_at4c, Efa_fig4c_n0_eye]
+  text: >-
+    Fig. 4A's 7.5 kPa curve and Fig. 4C's n = 0 curve are both the no-recruitment E*FA at E_ECM = 7.5 kPa,
+    but read by eye their peaks differ (about 8.4 against 7.6 kPa) and so do their tails. A calibrated reading
+    of both panels is needed to tell whether they differ.
+- id: q_eye_reads
+  kind: reading
+  about: [Efa_fig4a_E75_eye, Efa_fig4a_E125_eye, rst_fig5a_n0_E75_eye, rst_fig5a_n0_E125_eye, nfa_exp_gel_soft, fa_area_gel_soft]
+  text: >-
+    The figure values in this record (Figs. 4A, 4C, 5A, 5D, S7) were read by eye from the page images and get
+    no verdict; they set up the runs and comparisons until calibrated readings replace them.
+- id: q_eq3_misreference
+  kind: possible_error
+  about: [contractility_s2]
+  text: >-
+    The text says "a stiff FA-ECM complex induces a higher level of cell contractility (Eq. 3)", but Eq. 3 is
+    the free energy of adding a plaque segment; the stiffness dependence of contractility is Eq. S2 (SI p. 8).
+    The reference appears to point to the wrong equation.
+  citation: {page: 4, printed_page: "E4552", quote: "complex induces a higher level of cell contractility", where: text}
+- id: q_keff_1d_unrun
+  kind: unstated_input
+  about: [keff_1d, L_figS5F, Lc_low_density]
+  text: >-
+    The printed 1D keff (keff_1d) is entered but not run: kp, ks and kc are not given. Two printed facts
+    constrain them: Lc = 0.436 um at 1 per um fixes (1/kc)/(1/ks + 1/kp), and Fig. S5F (keff/kp against
+    ligand density for L = 0.1 um) depends then on ks/kp alone. Once Fig. S5F is digitized, its peak position
+    and height give two numbers for one unknown ratio, so whether Fig. S5F follows from the printed formulas
+    with the printed Lc can be tested. Fig. S5E (Lc against density) can be swept through shear_lag_length.
+    For small L/Lc the printed keff tends to kc phi_i L (all integrins in parallel), as the text describes.
+  citation: {page: 9, quote: "effective stiffness, keff , of a FA whose size is 0.1 μm varies with", where: "SI text"}
+- id: q_1d_stiffnesses
+  kind: unstated_input
+  about: [shear_lag_length]
+  text: >-
+    The 1D model's keff and Lc use the plaque, integrin and ECM stiffnesses kp, kc, ks, which are not given
+    (the model is from ref. 24). Only the ratio of the two printed Lc values can be checked (Lc scales as
+    1/phi_i in the printed formula); Fig. S5F (keff/kp against ligand density for L = 0.1 um) cannot be
+    recomputed without the stiffness ratios.
+  citation: {page: 9, quote: "and kp, kc, and ks are the stiffnesses of the plaque, integrin", where: "SI text"}
+# ---- from the calibrated figure readings (figures.md) ----
+- id: q_fig4a_fig4c_calibrated
+  kind: reading
+  about: [cmp_fig4a_fig4c_calibrated, q_fig4a_fig4c, Efa_fig4a_E75, Efa_fig4c_n0]
+  text: >-
+    Read with calibrated code at the same 24 FA sizes, the Fig. 4A curve for 7.5 kPa and the Fig. 4C curve for
+    n = 0 agree within the reading intervals everywhere (cmp_fig4a_fig4c_calibrated). The difference the eye
+    readings showed (q_fig4a_fig4c) came from reading by eye: both peaks are near 7.8-7.9 kPa, not 8.4 and 7.6.
+- id: q_rst_calibrated_En
+  kind: unexplained_difference
+  about: [cmp_rst_fig5a_calibrated, run_rst_fig4a_calibrated, En_mid, En_range, rst_fig5a_n0_at4a]
+  text: >-
+    From the calibrated Fig. 4A curves, Eq. S2 and the zero-growth condition of Eq. 4, the stable sizes at
+    7.5 and 12.5 kPa without recruitment come out below the calibrated Fig. 5A values when the nucleus modulus
+    is the middle of Table S1's range (7.5 kPa): not reproduced at both moduli. The result rises with En, and
+    trying values across the printed range, a nucleus modulus near its upper part (about 9 kPa) brings both close
+    to Fig. 5A, while 5 kPa gives no stable FA at all. So Fig. 5A is consistent with the printed chain only for an
+    unstated En near the top of the 5-10 kPa range (with alpha and beta read per Pa); the paper does not say
+    which value it used.
+- id: q_figS7_hydrogel_stiff
+  kind: unexplained_difference
+  about: [cmp_figS7_model_vs_exp, nfa_model_figS7, nfa_exp_figS7]
+  text: >-
+    In the calibrated Fig. S7 readings, the model's bars for hydrogel soft and fibrous soft lie inside the
+    experimental error bars, but the model's bar for the stiff hydrogel is 1, equal to the stiff fibrous ECM, while
+    the measured stiff hydrogel bar lies above 1 with its error bar entirely above 1 (verdict close). The text
+    calls the comparison consistent; the hydrogel moduli given to the model are not stated (q_s7_inputs), so it
+    cannot be told whether another choice would raise the model's bar.
+  citation: {page: 12, quote: "Quantitative comparison between experimental results (16) and model predictions", where: "Fig. S7"}
+# ---- cross-paper validation against baker2015 (ref. 16) ----
+- id: q_no_validation_baker2015
+  kind: unstated_model
+  about: [coarse_grained_fa_ecm, stable_size_vs_modulus, stable_size_chain, normalize_by_reference, nfa_model_figS7, q_s7_inputs, q_coarse_not_runnable]
+  text: >-
+    No cross-paper validation against baker2015's measurements could be entered. The model that cao2017 says
+    predicts baker2015's average FA sizes (Fig. 5f there; Fig. 5D and Fig. S7 here) is the COMSOL coarse-grained
+    FA-ECM model, which cannot be run (q_coarse_not_runnable); its predicted bars exist only as the figure reading
+    nfa_model_figS7, already compared with the re-plotted data in cmp_figS7_model_vs_exp. The runnable parts do not
+    give baker2015's quantity on baker2015's conditions: stable_size_vs_modulus / stable_size_chain give a stable FA
+    band width (um) without recruitment, and only on the printed E*FA curves of 2.5, 7.5 and 12.5 kPa, whereas
+    baker2015 measures an average area per adhesion (um^2) on hydrogels of 290 Pa and 19.1 kPa and on fibre
+    networks of 2.8 and 55 kPa (network modulus, not the ECM modulus of the continuum model); the paper takes width
+    and area as proportional with no constant. normalize_by_reference is processing, not a prediction. The fibrous
+    inputs of Fig. S7 were also chosen so that their ligand-density contrast matches baker2015's measurements, so a
+    rerun on them would be partly a fit (fit_quality), not a test. baker2015's fibre recruitment (Fig. 5k) is not
+    predicted by any runnable model either (dfn_network, q_dfn_not_runnable; Eq. 1 needs sigma_c and the unit of n,
+    q_eq1_sigma_c_n).
+  citation: {page: 9, quote: "whose moduli are different, and the variations of ligand density", where: "SI, Quantitative Comparison"}
+# ---- cross-record validation with bangasser2013 (2026-11-21): none added ----
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [contractility_s2, sigma_max_s2, steady_stress_eq4, stable_size_vs_modulus, stable_size_chain, keff_1d, shear_lag_length, fiber_recruitment_eq1]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013. This paper does not cite it and nowhere says its model explains a measurement there.
+    bangasser2013's measurements are: normalized cell migration and normalized cell traction against
+    substrate Young's modulus for other papers' cell types (Fig. 1A-B), Chan and Odde's neuron
+    retrograde flows (Fig. S1B) and Kong et al.'s integrin-fibronectin bond lifetimes (Fig. 7C). The
+    runnable models here give an FA-ECM effective modulus, a contractile stress in kPa (Eq. S2, its
+    Keff limit, Eq. 4), a stable FA band width, a shear-lag length and fibre recruitment: no migration,
+    no flow and no bond lifetime. The contractile stress is the closest, but bangasser2013's traction
+    is a force per cell normalized to its maximum for each cell type, and Eq. S2 rises monotonically
+    with Keff toward sigma_max, so normalizing it would only compare the shape of a monotonic curve
+    with the measured ones (which bangasser2013 plots as biphasic for some cell types), a trend; its inputs (K, rho0, alpha, beta, the
+    nucleus modulus and E*FA on those gels) would all be added for cells neither paper studies. For the
+    other direction see bangasser2013/q_xval_cao2017_none.
+  citation: {none: "neither paper states that a model of this record predicts a measurement of bangasser2013"}
+# ---- cross-record validation with bell1978 (2026-11-21): none added ----
+- id: q_xval_bell1978_none
+  kind: unstated_model
+  about: [contractility_s2, sigma_max_s2, steady_stress_eq4, stable_size_vs_modulus, stable_size_chain, coarse_grained_fa_ecm, fiber_recruitment_eq1, keff_1d, shear_lag_length]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978. This paper cites it (ref. 30) only in its Discussion, for strain speeding the
+    dissociation of weak cross-links and for interfibre bonds "that follow a Bell-like breaking
+    behavior" (p. 6); no Bell-type bond rate or lifetime enters any model here, and the paper does not
+    say its model predicts a value of Bell's. bell1978's measured data are three values taken from
+    other works: a total force of about 1 dyne needed to detach an adherent cell (force_adhesive,
+    printed "~ 1", from its ref. 52), and the inhibiting sugar concentrations 0.001 and 0.01 M
+    (c_sugar_low, c_sugar_high, from its ref. 49), which are conditions, not outputs of any model.
+    The models here give an FA-ECM effective modulus, a contractile stress in kPa, a stable FA band
+    width, a shear-lag length, a fibre density ratio and normalized FA sizes: none gives a
+    detachment force of a whole cell, and turning a contractile stress into one would need an
+    adhesion area and a detachment criterion that neither paper states. A stress per area times an
+    area (the shape shared with bell1978/laplace_pressure, a pressure from a tension and a length) is
+    a shared form, left to the job that relates models across papers, not a shared measured
+    quantity; and "~ 1" is approximate, which gets no verdict. For the other direction see
+    bell1978/q_xval_cao2017_none.
+  citation: {page: 6, printed_page: "E4554", quote: "with interfiber bonds that follow a Bell-like breaking behavior", where: text}
+# ---- cross-record validation with chan2008 (2026-11-21): none added ----
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [keff_1d, shear_lag_length, contractility_s2, sigma_max_s2, steady_stress_eq4, stable_size_vs_modulus, stable_size_chain, coarse_grained_fa_ecm, fiber_recruitment_eq1, dfn_network]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chan2008. This paper cites it (ref. 9) only for a timescale, "a few seconds (9, 20)" for integrin
+    binding (p. 2; again "within seconds (9, 20)", pp. 2 and 8), to justify quasi-static linear
+    integrin springs; it does not say that any of its models explains or predicts a value of Chan's,
+    and that timescale is not a model input or output here. chan2008's measurements are neuronal
+    filopodia retrograde flow against gel modulus (Fig. 3C histograms, Fig. 3D means with SEM, Fig.
+    S8C), bead strains and reference RMS (Fig. 4D), filopodial tension on two gels (Fig. 4E), bead
+    step-size histograms and failure frequencies (Fig. S4, S5), and tracking-error checks (Fig. S11D,
+    S12E). The runnable models here give a 1D FA-ECM effective stiffness and shear-lag length
+    (keff_1d, shear_lag_length), a contractile stress in kPa (Eq. S2, its Keff limit, Eq. 4), a stable
+    FA band width and a fibre recruitment (Eq. 1): no flow, no filopodial force, no bead
+    displacement. The nearest, keff_1d, shares only its shape (a stiffness from a length and
+    stiffnesses) with chan2008/motor_clutch_E; it outputs a series stiffness of plaque, clutches and
+    ECM, and Chan measures no stiffness (its ksub is an Eq. 13 spring computed from the gel modulus,
+    not a measurement). A contractile stress in kPa against the Fig. 4E tension (a force per
+    filopodium) would need an adhesion area and a filopodium geometry neither paper states. For the
+    other direction see chan2008/q_xval_cao2017_none.
+  citation: {page: 2, printed_page: "E4550", quote: "because the timescale for integrin binding dynamics [i.e., a few seconds (9,", where: text}
+- id: q_xval_chaudhuri2015_none
+  kind: unstated_model
+  about: [contractility_s2, sigma_max_s2, steady_stress_eq4, stable_size_vs_modulus, stable_size_chain, coarse_grained_fa_ecm, fiber_recruitment_eq1, keff_1d, shear_lag_length, normalize_fa_size, dfn_network]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chaudhuri2015, and none of chaudhuri2015's models against this record's measurements. This paper
+    cites chaudhuri2015 (ref. 17) only as background: cells spread more on stress-relaxing than on
+    elastic gels (p. 1), and time-dependent matrix properties have drawn attention (p. 6). It claims no
+    fit or prediction of chaudhuri2015's data, and its model is elastic (stress relaxation is named as
+    future work, p. 6). The outputs here are FA band size, normalized FA size, contractile stress,
+    E*FA, Lc and keff; chaudhuri2015 measures cell spread area, stress fibre, attachment, YAP and
+    proliferation fractions, AFM moduli and gel rheology, and no FA size, so no model here gives a
+    quantity it measures. In the other direction, chaudhuri2015's runnable models give spreading speed,
+    retrograde flow and a clutch off rate, while this record's measurements (baker2015's, through
+    Fig. 3D, 5D and S7) are fibre recruitment, FA area and normalized FA size; its spread-area model
+    (lattice_spreading) is not runnable. See also chaudhuri2015/q_xval_cao2017_none.
+  citation: {page: 1, printed_page: "E4549", quote: "spreading of cells cultured on soft viscoelastic", where: text}
+- id: q_xval_elosegui2016_none
+  kind: unstated_model
+  about: [stable_size_vs_modulus, stable_size_chain, coarse_grained_fa_ecm, normalize_fa_size, normalize_by_reference, contractility_s2, keff_1d, 'elosegui2016/fig1c_control', 'elosegui2016/clutch_no_talin_sim']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    elosegui2016. This paper cites elosegui2016 (ref. 20) only for timescales and a threshold: integrin
+    catch bonds and talin unfolding act within seconds and talin unfolds above about 5 pN (SI p. 8). It
+    claims no fit or prediction of elosegui2016's data. The nearest candidate is the no-recruitment (n = 0)
+    stable FA band size, which the paper says increases monotonically with the modulus of a hydrogel that
+    cannot be remodeled (p. 5), against elosegui2016's vinculin, beta3 and pFAK adhesion lengths on
+    polyacrylamide gels (Figs. 1c, 2a, 2c, 4c, 5c). It is not used: (1) the paper's statement is a trend,
+    and the size here is the width of an adhesion band along the rim of a circular cell of this paper's
+    geometry (rc, rECM, h of Table S1), not the length of single adhesions in MEFs; neither paper states
+    one as a measure of the other; (2) stable_size_vs_modulus is runnable only at the two ECM moduli whose
+    E*FA curves the paper prints (Fig. 4A, 7.5 and 12.5 kPa), while elosegui2016's gels are about 0.6,
+    2.4, 4.7, 11.3, 14.6 and 29 kPa; coarse_grained_fa_ecm, which would give E*FA at other moduli, is not
+    runnable; (3) the normalized size (Fig. S7) is normalized by the stiff fibrous ECM, which
+    elosegui2016 has no counterpart of. Its other outputs (contractile stress, E*FA, Lc, keff) are not
+    measured there. The shape match of coarse_grained_fa_ecm with elosegui2016/clutch_no_talin_sim (a
+    pressure from a length, a pressure and a stiffness) is a shape only: one gives an effective modulus
+    of an adhesion complex, the other a cell traction. In the other direction see
+    elosegui2016/q_xval_cao2017_none.
+  citation: {page: 8, printed_page: "SI 1 of 5", quote: "was reported (20) that the α5 β1- and αv β3-mediated catch bonds", where: text}
+# ---- cross-record validation with owen2017 (2026-11-22): none added ----
+- id: q_xval_owen2017_none
+  kind: unstated_model
+  about: [coarse_grained_fa_ecm, contractility_s2, sigma_max_s2, steady_stress_eq4, required_efa, stable_size_vs_modulus, stable_size_chain, fiber_recruitment_eq1, keff_1d, shear_lag_length, normalize_fa_size, normalize_by_reference, dfn_network, 'owen2017/modulus_from_stiffness']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of owen2017, and
+    no model of owen2017 against this record's measurements. Neither paper cites the other, and neither
+    says its model explains a value of the other. owen2017's measurements are speeds of paxillin, zyxin,
+    alpha-actinin-1 and fibrin and their differences (Table 1, Table S1, the text, the histograms of Figs.
+    3B-C, 4A, 5B, S14), fibrin displacements and strains at the cell surface (Figs. 2D-H, S2), velocity
+    angles and correlations (Figs. 3G, 4B-F, 5C, S11, S12, S14D), localization errors (Fig. S9B), the
+    elongation-rate range 0-3 nm/s, and the bulk fibrin rheology (G = 90 Pa, E ~200 and ~300 Pa, Fig.
+    S10). The runnable models here give a contractile stress in kPa (Eq. S2, its Keff limit, Eq. 4), the
+    E*FA that Eq. S2 needs at the zero-growth stress, a stable FA band width, a fibre density ratio (Eq.
+    1), a 1D FA-ECM effective stiffness and shear-lag length, and normalized FA sizes: no speed, no
+    displacement, no angle and no gel modulus. The fibrin modulus would be an input (an ECM modulus), not
+    an output, and only for coarse_grained_fa_ecm, which is not runnable (q_coarse_not_runnable);
+    stable_size_vs_modulus runs only at 7.5 and 12.5 kPa, far from fibrin's few hundred Pa, and owen2017
+    measures no FA size to meet it. The shape shared by coarse_grained_fa_ecm and
+    owen2017/modulus_from_stiffness (a modulus from a length and a stiffness) is a shape only: both outputs
+    (E*FA here, a node's equivalent Young's modulus there) are model predictions in both papers, measured
+    in neither, so there is nothing measured to validate either against; relating the two forms is left
+    to the job that relates models across papers. This record's own measurements are baker2015's (Figs.
+    3D, 5D, S7; cited.yaml), for which owen2017 has no model (owen2017/q_no_validation_baker2015). For the
+    other direction see owen2017/q_xval_cao2017_none.
+  citation: {none: "neither paper cites the other or states that its model predicts a measurement of the other"}

@@ -1,0 +1,20 @@
+# Port (our code) of cms2Dv1_0.m lines 229-240: motors given to a newborn module.
+#   totm = sum over existing modules of mc(i).nm            (lines 229-234)
+#   if totm<mpool, mc(nummod).nm=ceil(maxm*(1-totm/mpool)); else mc(nummod).nm=1; end   (lines 236-240)
+# Lines 241-245 do the same for clutches with totc, cpool, maxc; one port serves both (the motor
+# names are kept). mpool - totm is the paper's free pool nm,free. The rounding up (ceil) and the floor
+# of one motor when the pool is used up are not in the paper's Eq. 8 (q_assign_rounding). The three
+# modules of the initial state are given maxm each (lines 80-85), not by this rule.
+id: module_assign_port
+name: "motors (or clutches) assigned to a new module from the pool (cms2Dv1_0.m lines 229-245, Python port)"
+role: model
+stated: {file: cms2Dv1_0.m, lines: "237", quote: "mc(nummod).nm=ceil(maxm*(1-totm/mpool));"}
+equation: "nm = ceil(maxm*(1-totm/mpool)) if totm < mpool, else 1"
+inputs:
+  maxm:  {quantity: n_motors_module_max, unit: dimensionless}
+  totm:  {quantity: n_motors_in_modules, unit: dimensionless}
+  mpool: {quantity: n_motors_total, unit: dimensionless}
+outputs:
+  nm: {quantity: n_motors_module, unit: dimensionless}
+settings: {}
+stochastic: false

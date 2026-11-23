@@ -1,0 +1,25 @@
+id: stability_matched
+name: Hopf (SS/US) and US/U boundaries in v~u at fixed Nc on the matched substrate ks = nc0 kc (Fig. 2(c,d))
+role: model
+stated: {page: 8, printed_page: "014417-8", quote: "which we define as a \"matched substrate.\"", where: "Sec. III C; Fig. 2(c,d)"}
+equation: >-
+  as stability_boundaries (A3 as printed, Table II), with k~s = nc0 k~c, nc0 the stable fixed point of Eq. 14
+  at the same Nc
+built_from: [stability_boundaries, fixed_point]
+inputs:
+  w: {quantity: motor_rate_ratio_nd, unit: dimensionless}
+  Nm: {quantity: n_motors_total, unit: dimensionless}
+  kon: {quantity: clutch_on_rate_nd, unit: dimensionless}
+  koff: {quantity: clutch_off_rate_nd, unit: dimensionless}
+  fs: {quantity: stall_force_nd, unit: dimensionless}
+  fd: {quantity: detachment_force_nd, unit: dimensionless}
+  Fb: {quantity: rupture_force_nd, unit: dimensionless}
+  km: {quantity: motor_stiffness_nd, unit: dimensionless}
+  kc: {quantity: clutch_stiffness_nd, unit: dimensionless}
+  F: {quantity: external_load_nd, unit: dimensionless}
+  g: {quantity: friction_ratio, unit: dimensionless, description: "gamma/Gamma"}
+  Nc: {quantity: n_clutches_total, unit: dimensionless}
+outputs:
+  vu_hopf: {quantity: motor_velocity_nd, unit: dimensionless, description: "upper boundary of US, v~u0(Nc)"}
+  vu_unstable: {quantity: motor_velocity_nd, unit: dimensionless, description: "boundary between US and U"}
+settings: {vu_max: 15.0, vu_min: 0.001, n_grid: 3000, tol: 1.0e-6}

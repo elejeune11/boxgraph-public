@@ -1,0 +1,18 @@
+# WT2_model.m lines 263-391: the talin WT Runge-Kutta march extended by a third state (non-talin
+# clutches, linear spring with yield point, force_with_yield_point.m), boundary vector
+# p_0_on = k_on_vector / k_on (lines 263-269), and alpha applied to the unfolded talin state.
+id: wt2_model
+name: "steady state of the WT-2 model (two clutch types), WT2_model.m (not ported)"
+role: model
+stated: {file: WT2_model.m, lines: "3-4", quote: "This is the main function of the WT-2 model"}
+described_from: liu2025
+equation: "as talin_wt_port with a third, linear state: A(3,3) = -koff(F_1(l)), F_1 = k1 min(l, l_yield_1); kon split kon_2 kf0/(kf0+ku0), kon_2 ku0/(kf0+ku0), kon_1"
+inputs:
+  E: {quantity: youngs_modulus, unit: Pa}
+outputs:
+  P: {quantity: traction_stress, unit: Pa}
+runnable: false
+not_runnable_reason: >-
+  not ported: no result of the WT-2 model (Extended Data Fig. 2, Supplementary Fig. S1c,d) is recorded
+  in liu2025's record to check it against; its parameters are recorded (data *_wt2)
+stochastic: false

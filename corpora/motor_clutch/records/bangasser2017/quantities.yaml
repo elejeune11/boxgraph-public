@@ -1,0 +1,69 @@
+# ---- CMS parameters (Supplementary Table 2) ------------------------------------------------
+- {id: n_motors_total, name: total number of myosin motors in the cell, dimension: dimensionless, description: "Nm (nm,tot in Eq. 8)"}
+- {id: n_clutches_total, name: total number of clutches in the cell, dimension: dimensionless, description: "Nc (nc,tot in Eq. 9)"}
+- {id: total_actin, name: total actin of the cell counted as protrusion length, dimension: "[length]", description: "Atot (AT in Eqs. 3, 7)"}
+- {id: max_polymerization_velocity, name: maximum F-actin polymerization velocity, dimension: "[length]/[time]", description: "v*p"}
+- {id: max_module_birth_rate, name: maximum rate of module creation, dimension: "1/[time]", description: "k*mod"}
+- {id: module_capping_rate, name: rate at which a module is capped, dimension: "1/[time]", description: "kcap"}
+- {id: initial_module_length, name: length of a newly created module, dimension: "[length]", description: "lin"}
+- {id: min_module_length, name: length below which a module is destroyed, dimension: "[length]", description: "lmin"}
+- {id: cell_spring_constant, name: spring constant of the cell spring joining a module's motors to the cell body, dimension: "[force]/[length]", description: "κcell"}
+- {id: n_cell_body_clutches, name: number of clutches on the central cell body, dimension: dimensionless, description: "nc,cell"}
+- {id: n_motors_module_max, name: maximum number of motors in one module, dimension: dimensionless, description: "n*m"}
+- {id: motor_stall_force, name: stall force of one myosin motor, dimension: "[force]", description: "Fm"}
+- {id: unloaded_motor_velocity, name: unloaded velocity of the motors, dimension: "[length]/[time]", description: "v*m"}
+- {id: n_clutches_module_max, name: maximum number of clutches in one module, dimension: dimensionless, description: "n*c"}
+- {id: clutch_on_rate, name: on-rate of clutch binding, dimension: "1/[time]", description: "kon"}
+- {id: clutch_off_rate_unloaded, name: unloaded off-rate of a clutch, dimension: "1/[time]", description: "k*off"}
+- {id: clutch_stiffness, name: spring constant of one clutch, dimension: "[force]/[length]", description: "κc"}
+- {id: bond_rupture_force, name: characteristic clutch rupture force, dimension: "[force]", description: "Fb"}
+- {id: substrate_stiffness, name: spring constant of the compliant substrate, dimension: "[force]/[length]", description: "κs; the x axis of Fig. 1c-g and Supplementary Fig. 5"}
+# ---- module-level variables (Eqs. 1-9) -----------------------------------------------------
+- {id: clutch_force, name: tension on one engaged clutch, dimension: "[force]", description: "Fc,i"}
+- {id: clutch_off_rate_loaded, name: off-rate of a clutch under tension, dimension: "1/[time]", description: "koff,i"}
+- {id: substrate_displacement, name: displacement of a module's substrate spring, dimension: "[length]", description: "xs,j"}
+- {id: n_motors_module, name: number of motors in one module, dimension: dimensionless, description: "nm,j"}
+- {id: n_clutches_module, name: number of clutches in one module, dimension: dimensionless, description: "nc,j"}
+- {id: n_motors_free, name: number of motors in the free pool, dimension: dimensionless, description: "nm,free"}
+- {id: n_clutches_free, name: number of clutches in the free pool, dimension: dimensionless, description: "nc,free"}
+- {id: motor_retraction_velocity, name: rate at which the motors of a module retract its F-actin, dimension: "[length]/[time]", description: "vm,j (Eq. 2)"}
+- {id: g_actin_amount, name: G-actin in the pool counted as protrusion length, dimension: "[length]", description: "AG"}
+- {id: polymerization_velocity, name: F-actin polymerization speed of a module, dimension: "[length]/[time]", description: "vp (Eq. 3)"}
+- {id: module_birth_rate, name: rate of module creation, dimension: "1/[time]", description: "kmod (Eq. 7)"}
+- {id: n_modules, name: number of motor-clutch modules in the cell, dimension: dimensionless}
+# ---- simulator and experimental outputs ----------------------------------------------------
+- {id: retrograde_flow_rate, name: F-actin retrograde flow rate, dimension: "[length]/[time]", description: "simulated: mean of the module flows (Fig. 1c); measured: kymographs (Figs. 3c, 4a)"}
+- {id: traction_force_magnitude, name: summed traction force magnitude of a simulated cell (or module), dimension: "[force]", description: "Fig. 1d"}
+- {id: cell_aspect_ratio, name: aspect ratio of the cell shape, dimension: dimensionless, description: "Figs. 1e, 2e, 4d"}
+- {id: random_motility_coefficient, name: random motility coefficient of 2D cell migration, dimension: "[length]**2/[time]", description: "μ (Eq. 12); Figs. 1f, 2c, 4e"}
+- {id: mean_squared_displacement, name: mean squared displacement of the cell centre, dimension: "[length]**2", description: "<r^2> (Eq. 12)"}
+- {id: time_interval, name: time interval of a displacement, dimension: "[time]", description: "t in Eq. 12"}
+- {id: stiffness_of_flow_minimum, name: substrate spring constant at which the retrograde flow is minimal, dimension: "[force]/[length]", description: "Fig. 1c legend"}
+- {id: stiffness_of_traction_maximum, name: substrate spring constant at which the traction force is maximal, dimension: "[force]/[length]", description: "Fig. 1d legend"}
+- {id: stiffness_of_motility_maximum, name: substrate spring constant at which the simulated random motility coefficient peaks, dimension: "[force]/[length]", description: "Fig. 1f legend"}
+- {id: stiffness_of_aspect_maximum, name: substrate spring constant at which the simulated aspect ratio peaks, dimension: "[force]/[length]", description: "Fig. 1e legend"}
+- {id: composite_optimum_shift_fold, name: fold shift of the optimum spring constant of the fitted composite metric between the low and high cases, dimension: dimensionless, description: "ΔKsub,opt (Fig. 1g)"}
+- {id: traction_fold, name: ratio of the maximal traction of the high case to that of the low case, dimension: dimensionless, description: "Fig. 1d legend"}
+- {id: optimal_substrate_modulus, name: Young's modulus at the optimum of a cell type's composite metric, dimension: "[pressure]", description: "Fig. 4f and text p. 5"}
+- {id: optimum_shift_fold, name: fold shift between the optimal Young's moduli of untreated and drug-treated U251 cells, dimension: dimensionless, description: "ΔEopt (Fig. 4f)"}
+- {id: substrate_modulus, name: Young's modulus of the polyacrylamide gel, dimension: "[pressure]"}
+- {id: settling_time, name: simulated time after which the CMS outputs reach steady state, dimension: "[time]", description: "Supplementary Fig. 5"}
+- {id: discarded_time, name: initial simulated time excluded from the analysis, dimension: "[time]"}
+- {id: sampling_interval, name: interval between recorded cell positions, dimension: "[time]"}
+# ---- gel preparation and traction imaging (Methods) ----------------------------------------
+- {id: gel_volume, name: volume of prepolymer pipetted for one gel, dimension: "[length]**3"}
+- {id: coverslip_diameter, name: diameter of the coverslip laid on the prepolymer, dimension: "[length]"}
+- {id: gel_thickness, name: thickness of the polyacrylamide gel, dimension: "[length]"}
+- {id: pixel_count, name: a length in camera pixels, dimension: dimensionless}
+- {id: pixel_size, name: length on the sample of one camera pixel at 40x, dimension: "[length]"}
+- {id: image_length, name: a length on the sample (PIV window or lattice spacing), dimension: "[length]"}
+- {id: cell_type_optimal_modulus, name: "Young's modulus at the stiffness optimum the text gives for a cell type: flow minimum, traction or motility maximum", dimension: "[pressure]", description: "text p. 3: ~1 kPa for ECFNs, ~100 kPa for U251 (audit)"}
+- {id: cell_type_optimum_fold, name: fold difference between the stiffness optima of two cell types, dimension: dimensionless, description: "text p. 3: ~100-fold, U251 against ECFN (audit)"}
+# ---- added by the figure pass (2026-11-19) -------------------------------------------------
+- {id: cell_area, name: projected area of a cell, dimension: "[length]**2", description: "Figs. 2d, 4c"}
+- {id: traction_strain_energy, name: traction strain energy of a cell (Fourier transform traction cytometry), dimension: "[energy]", description: "Figs. 3e-f, 4b; Supplementary Fig. 4D-F (Eq. 15)"}
+- {id: scaled_strain_energy, name: traction strain energy multiplied by the substrate Young's modulus, dimension: "[energy]*[pressure]", description: "Supplementary Fig. 4G-I (pJ*kPa)"}
+- {id: composite_metric, name: composite metric pooling scaled migration metrics, dimension: dimensionless, description: "Figs. 1g, 4f (Methods, Composite metrics)"}
+- {id: stiffness_of_composite_optimum, name: substrate spring constant at the peak of the log-Gaussian fitted to a composite metric, dimension: "[force]/[length]", description: "Fig. 1g"}
+- {id: category_index, name: position of a bar in a bar chart counted from the left, dimension: dimensionless, description: "categorical x axis of a bar chart; the reading's `what` names the categories"}
+- {id: simulated_time, name: simulated time since the start of a CMS run, dimension: "[time]", description: "Supplementary Fig. 5A-D"}

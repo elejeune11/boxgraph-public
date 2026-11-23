@@ -1,0 +1,24 @@
+# The code writes its mechanical parameters in its own units, which it never states (the only unit in
+# a comment is "hr" for the time step). Those values get *_code quantities, dimensionless. The paper's
+# values copied into this record for comparison get the physical quantities.
+- {id: stiffness_code, name: a spring stiffness in the code's units, dimension: dimensionless, description: "stiffness of a cell, collagen (ligand), substrate or link spring as written in the drivers; no unit is stated"}
+- {id: damping_code, name: a damping constant in the code's units, dimension: dimensionless, description: "damping constant of a cell, collagen or substrate node as written in the drivers; no unit is stated"}
+- {id: force_code, name: a force in the code's units, dimension: dimensionless, description: "the protrusive force on a leader node as written in the drivers; no unit is stated"}
+- {id: length_code, name: a length in the code's units, dimension: dimensionless, description: "rest lengths, node spacing and displacements in the mesh's coordinates (Chaste's cell-diameter-like length unit); no unit is stated"}
+- {id: threshold_division_length, name: threshold division length of a cell spring (code), dimension: dimensionless, description: "max_threshold_division_length and constant_threshold_division_length: the code calls it a length, in the units of the cell rest length 0.5"}
+- {id: spring_stiffness, name: spring stiffness, dimension: "[force]/[length]", description: "a spring stiffness of the chain in nN/um, as in the S1 Table (which spring is in the datum id)"}
+- {id: damping_constant, name: damping constant, dimension: "[mass]/[time]", description: "a node damping constant of the chain in nN um-1 s, as in the S1 Table (which node is in the datum id)"}
+- {id: n_cell_springs, name: number of cell springs, dimension: dimensionless, description: "cell_nodes in the drivers: 'actual nodes of cell are (cell_nodes+1)'"}
+- {id: n_mesh_elements, name: number of elements of a collagen or substrate mesh, dimension: dimensionless, description: "the first argument of StraightVertexMeshGenerator_ab3 for the collagen (ligand) or substrate mesh"}
+- {id: n_subdivisions, name: subdivisions of the collagen and substrate spacing, dimension: dimensionless, description: "numsubnode: 'number of division between 0.5 lenth of substrate/collagen mesh'"}
+- {id: fibre_connectivity, name: number of collagen nodes joined in a short fibre, dimension: dimensionless, description: "short_fiber_connectivity, used when islongcollagen is false (disconnected ligands)"}
+- {id: nodes_removed, name: collagen nodes removed between short fibres, dimension: dimensionless, description: "num_nodes_removed"}
+- {id: profile_width, name: width of a Gaussian profile, dimension: dimensionless, description: "the standard deviation, in nodes, of a normal profile over the cell nodes (sigma in Eqs 10-12)"}
+- {id: profile_peak, name: largest value of a normalised Gaussian over the cell nodes, dimension: dimensionless, description: "max over the nodes of exp(-z^2/2)/(s sqrt(2 pi)) (max_ND in the drivers); the S2/S3 Tables' omega_k has this value"}
+- {id: profile_shift, name: smallest value of a normalised Gaussian over the cell nodes, dimension: dimensionless, description: "min over the nodes of exp(-z^2/2)/(s sqrt(2 pi)) (min_ND, min_ND1 in the drivers); delta_k, delta_eps, delta_eta of the S2/S3 Tables"}
+- {id: eps_profile_gain, name: gain of the threshold-division profile, dimension: dimensionless, description: "ND_factor_tdl; gamma_epsilon in Eq 10"}
+- {id: time_step, name: time step, dimension: "[time]", description: "time_step passed to SetDt; the comment gives its unit as hours"}
+- {id: simulated_time, name: simulated time, dimension: "[time]", description: "simulation_time passed to SetEndTime"}
+- {id: n_time_steps, name: number of time steps, dimension: dimensionless, description: "num_time_steps passed to SetNumTimeSteps"}
+- {id: binding_probability, name: collagen node binding probability, dimension: dimensionless, description: "rho_l: probability that a collagen node binds the leader cell node (haptotaxis)"}
+- {id: option_switch, name: an on/off switch of the code, dimension: dimensionless, description: "a bool of the drivers, recorded as 1 (true) or 0 (false)"}

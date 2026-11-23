@@ -1,0 +1,142 @@
+# linear KD (Table T1) and linear WT (Table T1, ly added) steady states over E, at the figures' E
+- id: run_KD_fig2c
+  model: steady_linear
+  inputs: &KD {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  sweep: {E: P_KD_fig2c}
+  outputs: {P: P_KD_fig2c_pred}
+- id: run_KD_fig2d
+  model: steady_linear
+  inputs: *KD
+  sweep: {E: v_KD_fig2d}
+  outputs: {v: v_KD_fig2d_pred}
+- id: run_WT_fig2c
+  model: steady_linear
+  inputs: &WT {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: P_WT_fig2c}
+  outputs: {P: P_WT_fig2c_pred}
+- id: run_WT_fig2d
+  model: steady_linear
+  inputs: *WT
+  sweep: {E: v_WT_fig2d}
+  outputs: {v: v_WT_fig2d_pred}
+- id: run_KD_sm71_ed5a
+  model: steady_linear
+  inputs: *KD
+  sweep: {E: P_KD_sm71_ed5a}
+  outputs: {P: P_KD_sm71_pred}
+- id: run_KD_sm43_ed5a
+  model: steady_linear
+  inputs: {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD_bleb15, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  sweep: {E: P_KD_sm43_ed5a}
+  outputs: {P: P_KD_sm43_pred}
+- id: run_KD_sm26_upper_ed5a
+  model: steady_linear
+  inputs: &KD26 {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD_bleb50, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  settings: {branch: strong}
+  sweep: {E: P_KD_sm26_upper_ed5a}
+  outputs: {P: P_KD_sm26_upper_pred}
+- id: run_KD_sm26_lower_ed5a
+  model: steady_linear
+  inputs: *KD26
+  settings: {branch: weak}
+  sweep: {E: P_KD_sm26_lower_ed5a}
+  outputs: {P: P_KD_sm26_lower_pred}
+- id: run_KD_sm26_unstable_ed5a
+  model: steady_linear
+  inputs: *KD26
+  settings: {branch: unstable}
+  sweep: {E: P_KD_sm26_unstable_ed5a}
+  outputs: {P: P_KD_sm26_unstable_pred}
+- id: run_WT_sm85_ed5b
+  model: steady_linear
+  inputs: *WT
+  sweep: {E: P_WT_sm85_ed5b}
+  outputs: {P: P_WT_sm85_pred}
+- id: run_WT_sm41_ed5b
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT_bleb15, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: P_WT_sm41_ed5b}
+  outputs: {P: P_WT_sm41_pred}
+- id: run_WT_sm24_ed5b
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT_bleb50, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: P_WT_sm24_ed5b}
+  outputs: {P: P_WT_sm24_pred}
+# cusp of the linear KD model
+- id: run_cusp_KD
+  model: cusp_sigma_m
+  inputs: {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, sm_fit: sm_KD}
+  outputs: {sm_cusp: sm_cusp_pred, E_cusp: E_cusp_pred, ratio: bistab_ratio_pred}
+# force-loading-rate estimate
+- id: run_rate_folded
+  model: loading_rate_text
+  inputs: {F1: F_5pN, F2: F_10pN, dx: dx_folded, v: v_rigid_talin}
+  outputs: {rate: rate_folded_pred}
+- id: run_rate_vinculin
+  model: loading_rate_text
+  inputs: {F1: F_5pN, F2: F_10pN, dx: dx_vinculin, v: v_rigid_talin}
+  outputs: {rate: rate_vinculin_pred}
+# ratio of the fitted untreated and 15 uM blebbistatin KD densities (added in the audit)
+- id: run_ratio_fitted_KD
+  model: density_ratio
+  inputs: {sm_a: sm_KD, sm_b: sm_KD_bleb15}
+  outputs: {ratio: bistab_ratio_fitted}
+# Table T3: rod + linker average elasticity (reconstructed WLC estimate; added in the audit)
+- id: run_talin_linker_wlc
+  model: talin_linker_wlc
+  inputs: {k_rod: k_talin_rod, L: L_linker, Lp: Lp_chain, F: F_range_10pN, kT: kT_310K}
+  outputs: {k_avg: k_talin_rod_linker_pred}
+# Appendix A
+- id: run_Ie_A11_circle
+  model: Ie_A11
+  inputs: {ec: ec_circle}
+  outputs: {Ie: Ie_A11_circle_pred}
+- id: run_Ie_A13_circle
+  model: Ie_A13
+  inputs: {ec: ec_circle}
+  outputs: {Ie: Ie_A13_circle_pred}
+# ---- second figure pass: the fitted models at the measured points' E (Fig. 2c,d; Extended Data Fig. 5)
+- {id: run_WT_data_fig2c, model: steady_linear, inputs: *WT, sweep: {E: P_WT_data_fig2c}, outputs: {P: P_WT_at_data_fig2c}}
+- {id: run_KD_data_fig2c, model: steady_linear, inputs: *KD, sweep: {E: P_KD_data_fig2c}, outputs: {P: P_KD_at_data_fig2c}}
+- {id: run_WT_data_fig2d, model: steady_linear, inputs: *WT, sweep: {E: v_WT_data_fig2d}, outputs: {v: v_WT_at_data_fig2d}}
+- {id: run_KD_data_fig2d, model: steady_linear, inputs: *KD, sweep: {E: v_KD_data_fig2d}, outputs: {v: v_KD_at_data_fig2d}}
+- {id: run_KD_data_0uM_ed5a, model: steady_linear, inputs: *KD, sweep: {E: P_KD_data_0uM_ed5a}, outputs: {P: P_KD_at_data_0uM}}
+- id: run_KD_data_15uM_ed5a
+  model: steady_linear
+  inputs: {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_KD_bleb15, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD, R: R_FA, S: S_FA}
+  sweep: {E: P_KD_data_15uM_ed5a}
+  outputs: {P: P_KD_at_data_15uM}
+- {id: run_KD_data_50uM_ed5a, model: steady_linear, inputs: *KD26, settings: {branch: strong}, sweep: {E: P_KD_data_50uM_ed5a}, outputs: {P: P_KD_at_data_50uM}}
+- {id: run_WT_data_0uM_ed5b, model: steady_linear, inputs: *WT, sweep: {E: P_WT_data_0uM_ed5b}, outputs: {P: P_WT_at_data_0uM}}
+- id: run_WT_data_15uM_ed5b
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT_bleb15, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: P_WT_data_15uM_ed5b}
+  outputs: {P: P_WT_at_data_15uM}
+- id: run_WT_data_50uM_ed5b
+  model: steady_linear
+  inputs: {kon: kon_WT, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sm: sm_WT_bleb50, sc: sc, kc: kc_WT, r: r_WT, ly: ly_WT, R: R_FA, S: S_FA}
+  sweep: {E: P_WT_data_50uM_ed5b}
+  outputs: {P: P_WT_at_data_50uM}
+# ---- Fig. S1(a,b): engaged-clutch density and mean tension of the linear models
+- {id: run_KD_figS1a, model: steady_linear, inputs: *KD, sweep: {E: non_KD_figS1a}, outputs: {n_on: non_KD_figS1a_pred}}
+- {id: run_WT_figS1a, model: steady_linear, inputs: *WT, sweep: {E: non_WT_figS1a}, outputs: {n_on: non_WT_figS1a_pred}}
+- {id: run_KD_figS1b, model: steady_linear, inputs: *KD, sweep: {E: F1_KD_figS1b}, outputs: {F1: F1_KD_figS1b_pred}}
+- {id: run_WT_figS1b, model: steady_linear, inputs: *WT, sweep: {E: F1_WT_figS1b}, outputs: {F1: F1_WT_figS1b_pred}}
+# ---- Extended Data Figs. 6, 7: steady plateaus of the master-equation time courses (same steady state)
+- {id: run_WT_ed6a, model: steady_linear, inputs: *WT, sweep: {E: P_WT_ed6a}, outputs: {P: P_WT_ed6a_pred}}
+- {id: run_WT_ed6b, model: steady_linear, inputs: *WT, sweep: {E: v_WT_ed6b}, outputs: {v: v_WT_ed6b_pred}}
+- {id: run_WT_ed6d, model: steady_linear, inputs: *WT, sweep: {E: xs_WT_ed6d}, outputs: {xs: xs_WT_ed6d_pred}}
+- {id: run_KD_ed7a, model: steady_linear, inputs: *KD, sweep: {E: P_KD_ed7a}, outputs: {P: P_KD_ed7a_pred}}
+- {id: run_KD_ed7b, model: steady_linear, inputs: *KD, sweep: {E: v_KD_ed7b}, outputs: {v: v_KD_ed7b_pred}}
+- {id: run_KD_ed7d, model: steady_linear, inputs: *KD, sweep: {E: xs_KD_ed7d}, outputs: {xs: xs_KD_ed7d_pred}}
+# ---- Fig. S4: Eq. 4 with the Table T1 catch-bond parameters
+- {id: run_koff_figS4_curve, model: koff_eq4, inputs: &KOFF {k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K}, sweep: {F: koff_fit_figS4}, outputs: {koff: koff_fit_figS4_pred}}
+- {id: run_koff_figS4_data, model: koff_eq4, inputs: *KOFF, sweep: {F: koff_data_figS4}, outputs: {koff: koff_data_figS4_pred}}
+# ---- Fig. 5(c): the saddle-node boundaries of the linear KD model
+- id: run_sn1_fig5c
+  model: saddle_nodes_sigma_m
+  inputs: &SN {kon: kon_KD, k0off: k0off, k0offp: k0offp, xt: xt, xtp: xtp, kT: kT_310K, v0: v0, Fst: Fst, sc: sc, kc: kc_KD, r: r_KD, ly: ly_KD}
+  sweep: {E: sm_sn1_fig5c}
+  outputs: {sm_upper: sm_sn1_fig5c_pred}
+- {id: run_sn2_fig5c, model: saddle_nodes_sigma_m, inputs: *SN, sweep: {E: sm_sn2_fig5c}, outputs: {sm_lower: sm_sn2_fig5c_pred}}

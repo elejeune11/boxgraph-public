@@ -1,0 +1,199 @@
+# Relations this paper states between its own models. Ports are in the models' units (all dimensionless).
+- id: rel_det_eq20_is_det_A3
+  kind: same_as
+  a: shen2025/det_A3
+  b: shen2025/det_eq20
+  mapping: {w: "w", Nm: "Nm", kon: "kon", koff: "koff", fs: "fs", fd: "fd", Fb: "Fb", km: "km", kc: "kc", ks: "ks", F: "F", g: "g", Nc: "Nc", vu: "vu"}
+  output_map: {det: det}
+  regime: {w: [0.05, 0.8], Nm: [50, 150], kon: [0.002, 0.004], koff: [0.0002, 0.0004], fs: [1.5, 3.0], fd: [0.8, 1.5], Fb: [2.0, 3.5],
+           km: [0.2, 0.3], kc: [0.02, 0.03], ks: [0.02, 1.0], F: [0.0, 0.5], g: [1.0, 100.0], Nc: [10, 20], vu: [0.5, 15]}
+  tolerance: 1.0e-6
+  provenance: stated
+  citation: {page: 5, printed_page: "014417-5", quote: "The determinant of the Jacobian matrix J has been computed as follows", where: "Eq. 20, of the J of Eq. A3"}
+  assumptions:
+    - "both at the stable fixed point (larger root of Eq. 15)"
+- id: rel_A3_is_jacobian_of_eq18
+  kind: same_as
+  a: shen2025/det_eq18
+  b: shen2025/det_A3
+  mapping: {w: "w", Nm: "Nm", kon: "kon", koff: "koff", fs: "fs", fd: "fd", Fb: "Fb", km: "km", kc: "kc", ks: "ks", F: "F", g: "g", Nc: "Nc", vu: "vu"}
+  output_map: {det: det}
+  regime: {w: [0.05, 0.8], Nm: [50, 150], kon: [0.002, 0.004], koff: [0.0002, 0.0004], fs: [1.5, 3.0], fd: [0.8, 1.5], Fb: [2.0, 3.5],
+           km: [0.2, 0.3], kc: [0.02, 0.03], ks: [0.02, 1.0], F: [0.0, 0.5], g: [1.0, 100.0], Nc: [10, 20], vu: [0.5, 15]}
+  tolerance: 1.0e-4
+  provenance: stated
+  citation: {page: 14, printed_page: "014417-14", quote: "We compute the Jacobian matrix about the fixed points of the system", where: "Eq. A3, of Eq. A1"}
+  assumptions:
+    - "compared through the determinant; det_eq18 differentiates Eq. 18 by central finite differences (tolerance 1e-4 covers their error)"
+    - "the regime includes gamma != Gamma (Fig. 2(b,d,f), Fig. 7), where the printed J55 differs (q_A3_J55)"
+# Relation to bell1978 (ref-39), stated for the clutch off-rate inside Eq. 2.
+# Bell's f is in dyne (1 dyne = 1e7 pN); his kT/gamma in eV/nm is Shen's Fb (1 eV/nm = 160.2176634 pN).
+- id: rel_koff_is_bell
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: shen2025/clutch_off_rate
+  mapping: {koff0: "k_minus", flc: "1e7*f", Fb: "160.2176634*kT/gamma"}
+  output_map: {koff: k_minus_F}
+  regime: {k_minus: [0.01, 10], gamma: [0.1, 2], f: [0, 2.0e-6], kT: [0.024, 0.0275]}
+  provenance: stated
+  citation: {page: 3, printed_page: "014417-3", quote: "tially, according to Bell's model [39]", where: "text before Eq. 2"}
+  assumptions:
+    - "Shen's characteristic rupture force Fb stands for Bell's kT/gamma; Shen's mean clutch tension flc for Bell's force per closed bond F/Nb"
+
+# Relations to Bangasser and Odde 2013 (ref. 25, record bangasser2013b). This paper cites ref. 25 once,
+# with ref. 8, for the "stick-slip type of dynamics within the motor-clutch paradigm [8,25]" (p. 2); it
+# states no relation between its models and ref. 25's. Units 1/s and pN on both sides.
+- id: rel_koff_same_as_bangasser2013b_eq5
+  kind: same_as
+  a: bangasser2013b/clutch_offrate_eq5
+  b: shen2025/clutch_off_rate
+  mapping: {koff0: "koff", flc: "Fc", Fb: "Fb"}
+  output_map: {koff: koff_i}
+  regime: {koff: [0.001, 10], Fc: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers load the clutch off-rate by Bell's law, citing Bell (1978): ref. 25's Eq. 5,
+    k*off,i = koff exp(Fc,i/Fb), and this paper's koff0 exp(flc/Fb) inside Eq. 2 (p. 3). They are the
+    same exponential in the same quantities and units.
+  assumptions:
+    - "this paper's mean clutch tension flc stands for ref. 25's force on one bound clutch Fc,i (a correspondence of quantities); this paper's mean-field Eq. 2 applies the law to the mean tension, as ref. 25's single-clutch Eqs. 1-7 do clutch by clutch, not as its ensemble Eq. 19 (a gamma closure)"
+# No other relation is entered (checked 2026-11-21). This paper's five-dimensional system (Eqs. 1-6)
+# lets motors bind and unbind (Eq. 1), gives the substrate and actin friction, and adds an external load;
+# its fixed point holds the motors at stall (y~0 = f~s/k~m) with no actin flow. Ref. 25's ensemble ODEs
+# (Eqs. 8-12, 19) hold nm motors always engaged, have no friction, and output a load-and-fail cycle,
+# which has no fixed point. No model of either record outputs a quantity the other does in a stated or
+# evident common limit, so no reduces_to or approximated_by is proposed. No value in data.yaml names
+# ref. 25 as its source, so cited.yaml has no link to bangasser2013b.
+
+# Elosegui-Artola et al. 2016 (ref. 16, record elosegui2016): no relation entered (checked 2026-11-21).
+# This paper cites ref. 16 twice, for clutches "converting the retrograde actin flow into forward cellular
+# motion [16]" (p. 1) and for the biphasic stiffness dependence found by "A majority of theoretical studies [16]"
+# (p. 8); it states no relation between its models and ref. 16's. Ref. 16's models are a Monte Carlo clutch
+# simulation with a catch-bond off-rate and talin unfolding (outputs: run-averaged traction in Pa and actin flow),
+# and slip-bond fits for talin unfolding/refolding; this paper's deterministic five-dimensional system holds the
+# motors at stall at its fixed point (no actin flow) and has no catch bond or talin. Ref. 16 has no stand-alone
+# clutch off-rate model to set beside clutch_off_rate (its off-rate lives inside the simulation, and its only
+# stand-alone exponential is the talin unfolding time, a different quantity output as 1/k), so no same_as,
+# reduces_to or approximated_by is proposed. No value in data.yaml names ref. 16 as its source.
+
+# Relations to Chan and Odde 2008 (ref. 8, record chan2008). This paper cites ref. 8 for stick-slip dynamics
+# (p. 2, "[8,25]"), for the stochastic model with the motors' force-velocity relation and load-and-fail (p. 2), for
+# constant stress-fibre forces (p. 2, "[8,26]"), for stiffness sensing (p. 2, "[8,31,32]"), for its piecewise linear
+# force-velocity relation (p. 2, "[8,33]") and for kon and koff0 (Table I, p. 4). The force-velocity relation is the one
+# model relation it states; this paper records it only inside Eq. 4 (dimensionless), so a helper model
+# shen2025/motor_force_velocity (p. 2, dimensional) was added to test it. Units nm/s and pN on both sides.
+- id: rel_force_velocity_chan
+  kind: same_as
+  a: chan2008/force_velocity_eq3
+  b: shen2025/motor_force_velocity
+  mapping: {vu: "vu", fl: "ksub*xsub/nm", fs: "Fm", vb: "0"}
+  output_map: {vm: vfilament}
+  regime: {vu: [50, 200], ksub: [0.1, 10], xsub: [0, 10], nm: [50, 200], Fm: [2, 3]}
+  provenance: stated
+  citation: {page: 2, printed_page: "014417-2", quote: "force-velocity relationship [8,33], formulated as", where: "vm(fl), after Eq. 1; ref. 8 = Chan and Odde 2008"}
+  assumptions:
+    - "the same law on its linear branch 0 < fl <= fs only: the regime keeps the per-motor load ksub xsub/nm at or below Fm, so this paper's back velocity vb (fl > fs) never enters and is mapped to 0; Chan's Eq. 3 has no such branch"
+    - "Chan's nm motors share the substrate spring force ksub xsub and stall together at Fstall = nm Fm (Eq. 4); this paper's per-motor load fl (= km y, the mean motor extension) stands for Chan's ksub xsub/nm and its fs for Chan's single-motor stall force Fm (a correspondence of quantities)"
+    - "regime in positive values; Chan prints vu, Fm and xsub negative (retrograde = -x), which leaves vu (1 - ksub xsub/(nm Fm)) the same up to the sign of the velocity"
+- id: rel_koff_same_as_chan_eq1
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: shen2025/clutch_off_rate
+  mapping: {koff0: "koff", flc: "Fclutch", Fb: "Fb"}
+  output_map: {koff: koff_star}
+  regime: {koff: [0.001, 10], Fclutch: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers load the clutch off-rate by Bell's law, citing Bell (1978): ref. 8's Eq. 1,
+    koff* = koff exp(Fclutch/Fb), and this paper's koff0 exp(flc/Fb) inside Eq. 2 (p. 3). This paper takes
+    koff0 from ref. 8 (Table I) but cites Bell, not ref. 8, for the law itself, so the relation is proposed.
+  assumptions:
+    - "this paper's mean clutch tension flc stands for Chan's tension on one engaged clutch Fclutch (a correspondence of quantities); this paper's mean-field Eq. 2 applies the law to the mean tension, Chan's simulation clutch by clutch"
+    - "regime in positive forces; Chan's Table S1 prints Fclutch and Fb both negative, which leaves their ratio unchanged"
+# No other relation is entered (checked 2026-11-21). Chan's motor_clutch (and motor_clutch_E) is a stochastic
+# simulation of nm always-engaged motors against nc clutches, with no friction, no motor binding and no external
+# load, whose outputs are run averages of a load-and-fail cycle (mean traction, retrograde flow); this paper's
+# deterministic five-dimensional system lets motors bind (Eq. 1), adds actin and substrate friction and a load F, and
+# its fixed point holds the motors at stall with no actin flow. The paper does not say its system derives from ref. 8
+# (it names Ghosh et al. [33,34] as the source of its framework, p. 2), and no stated or evident limit takes one
+# model's outputs to the other's, so no reduces_to, derived_from or approximated_by is proposed. Chan's ksub_eq13 and
+# cerruti_force_eq11 (substrate stiffness from Young's modulus) have no counterpart here: this paper takes ks directly.
+
+# Relations to Bangasser, Rosenfeld and Odde 2013 (ref. 27, record bangasser2013). This paper cites ref. 27 twice:
+# among models that "did not take into account the role of myosin contractility and the attachment-detachment
+# dynamics [27]" (p. 2), and as the source of Fb = 6.25 pN (Table I, p. 4). It states no relation between its
+# models and ref. 27's. Units 1/s, pN, nm and nm/s on both sides; both records sign velocities positive.
+- id: rel_bangasser_catch_slip_reduces_to_koff
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: shen2025/clutch_off_rate
+  mapping: {koff0: "koff", flc: "F", Fb: "Fb"}
+  output_map: {koff: koff_star}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.01, 1], Fb: [1, 10], koffc: [0.001, 1], Fc: [1, 10]}
+  # the numeric limit stops at koffc ~ 1e-8 1/s, leaving a relative residual up to koffc/koff ~ 1e-6
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    Ref. 27's Eq. 9 is a catch-slip off-rate whose first term, koff exp(Fi/Fb), it calls identical to the
+    Bell model (p. 3); this paper's koff0 exp(flc/Fb) inside Eq. 2 (p. 3) is that Bell term, citing Bell (1978),
+    and takes Fb from ref. 27. With no catch term (koffc -> 0), Eq. 9 is this paper's off-rate.
+  assumptions:
+    - "this paper's mean clutch tension flc stands for ref. 27's force Fi on one clutch (a correspondence of quantities); this paper's mean-field Eq. 2 applies the law to the mean tension, ref. 27's simulation clutch by clutch"
+- id: rel_bangasser_force_velocity_same_as
+  kind: same_as
+  a: bangasser2013/force_velocity_step5
+  b: shen2025/motor_force_velocity
+  mapping: {vu: "vu", fl: "ksub*xsub/nm", fs: "Fm", vb: "0"}
+  output_map: {vm: v_f}
+  regime: {vu: [50, 200], ksub: [0.1, 10], xsub: [0, 10], nm: [50, 200], Fm: [2, 3]}
+  provenance: proposed
+  reason: >-
+    Ref. 27's step 5 (Supporting Material) gives the F-actin flow from the linear motor force-velocity law
+    vu (1 - ksub xsub/(nm Fm)), after Chan and Odde; this paper's vm(fl) = vu (1 - fl/fs) on 0 < fl <= fs
+    (p. 2) is the same law, cited to refs. 8 and 33, not to ref. 27, so the relation is proposed.
+  assumptions:
+    - "the same law on its linear branch 0 < fl <= fs only: the regime keeps the per-motor load ksub xsub/nm at or below Fm, so this paper's back velocity vb (fl > fs) never enters and is mapped to 0"
+    - "ref. 27's nm motors share the substrate force ksub xsub; this paper's per-motor load fl stands for ksub xsub/nm and its fs for ref. 27's single-motor stall force Fm (a correspondence of quantities)"
+# No other relation is entered (checked 2026-11-21). Ref. 27's motor_clutch_ssa is a stochastic Gillespie
+# simulation of nm always-engaged motors against nc clutches, with no friction, no motor binding and no external
+# load, whose outputs are run averages of a load-and-fail cycle; its optimal_stiffness, sensitivity_eq3, sr_eq4,
+# nc_multiplier_eq5 and scale_*_eq5 are the scaling laws of that simulation's optimum. This paper's fixed point
+# holds the motors at stall with no actin flow, and the paper names no limit in which its steady state or
+# stability boundaries give ref. 27's optimum or flows, so no reduces_to or approximated_by is proposed.
+# Ref. 27's binding_time_eq10 (first-passage binding of nc clutches) and nc_limits have no counterpart here.
+# Not linked in cited.yaml: Table I's Fb = 6.25 pN, source [27]. Ref. 27 prints Fb = 2 pN (Table 1; Table S1,
+# Fig. 7A; Fig. S1C) and the fitted Fb = 8 pN (Table S1, Fig. 7C); 6.25 pN appears nowhere in the record
+# (checked against its text), so the value stays unlinked.
+
+# Relations to Alonso-Matilla, Provenzano and Odde 2023 (record alonsomatilla2023), checked 2026-11-21. This paper
+# does not cite it (its reference list, pp. 14-15, has no Alonso-Matilla), so whatever is entered is proposed.
+# Units 1/s and pN on both sides.
+- id: rel_alonsomatilla_koff_same_as
+  kind: same_as
+  a: alonsomatilla2023/clutch_off_rate_bell
+  b: shen2025/clutch_off_rate
+  mapping: {koff0: "koff", flc: "Fc", Fb: "Fb"}
+  output_map: {koff: koff_load}
+  regime: {koff: [0.001, 10], Fc: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers load the clutch off-rate by Bell's law: Alonso-Matilla's k_off^load = k_off e^{|F_c|/F_b}
+    (p. 2) and this paper's koff0 exp(flc/Fb) inside Eq. 2 (p. 3), each citing Bell (1978). Neither cites the
+    other, so the relation is proposed.
+  assumptions:
+    - "this paper's mean clutch tension flc stands for Alonso-Matilla's force Fc on one clutch (a correspondence of quantities); this paper applies the law to the mean tension of all engaged clutches, Alonso-Matilla to each clutch extension in the distribution P_b"
+    - "the same law for non-negative tension only: Alonso-Matilla takes |Fc|, so a compressed clutch also unbinds faster, while this paper's exp(flc/Fb) slows unbinding under compression; the regime keeps Fc >= 0"
+# No other relation is entered. Alonso-Matilla's mean_field (and mean_field_dimensional, rigid_steady_state and the
+# optima built on them) is a population balance over clutch extensions, with always-engaged motors, no friction and
+# no external load, whose outputs are time-averaged traction and bound fraction of a load-and-fail or steadily
+# slipping state. This paper's five-dimensional system tracks one mean clutch extension, lets motors bind (Eq. 1),
+# adds actin and substrate friction and a load F, and its fixed point holds the motors at stall with no actin
+# flow; no stated or evident limit takes one model's outputs to the other's. The nearest pair is Alonso-Matilla's
+# critical activity, Eq. 5 (F < 0.4 tau/(tau + 1), the border of the stalled regime on soft substrates, from
+# matching the time to stall with the clutch lifetime), and this paper's saddle-node point (the largest stall force
+# per clutch for which a stalled fixed point exists, Eqs. 16-17): one is a dynamic criterion fitted to simulations,
+# the other an existence condition, so they are different quantities and no approximated_by is proposed. Alonso-
+# Matilla's motor force-velocity law is used only inside its mean-field model, with no standalone model to relate
+# to motor_force_velocity. Values: no datum in either record names the other as its source, so cited.yaml has
+# nothing to link.

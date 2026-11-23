@@ -1,0 +1,36 @@
+- id: ref_t_module_opt_low
+  run: run_module_opt_low
+  setting: t_total
+  factors: [1, 2]
+  mode: multiply
+  output: ks_flow_min
+  tolerance: "30%"
+  tolerance_basis: "added: the grid has two points per decade (a factor of 3.16); 30% is well inside one grid step, and the printed optima are only approximate"
+  tolerance_added: true
+- id: ref_t_module_opt_high
+  run: run_module_opt_high
+  setting: t_total
+  factors: [1, 2]
+  mode: multiply
+  output: ks_flow_min
+  tolerance: "30%"
+  tolerance_basis: "added: as ref_t_module_opt_low"
+  tolerance_added: true
+- id: ref_grid_module_opt_low
+  run: run_module_opt_low
+  setting: per_decade
+  factors: [1, 2]
+  mode: multiply
+  output: ks_flow_min
+  tolerance: "30%"
+  tolerance_basis: "added: as ref_t_module_opt_low; the located minimum should not depend on the grid spacing by more than this"
+  tolerance_added: true
+- id: ref_t_module_ks10_low
+  run: run_module_ks10_low
+  setting: t_total
+  factors: [1, 2, 4]
+  mode: multiply
+  output: v_flow
+  tolerance: "2%"
+  tolerance_basis: "added: a time average of the flow that has settled moves by less than 2% when the run is doubled"
+  tolerance_added: true

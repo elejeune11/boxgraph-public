@@ -1,0 +1,17 @@
+id: rmc_eq12_msd_set
+name: random motility coefficients from three averaged MSD curves by Eq. 12 (Supplementary Fig. 2E against Fig. 2c)
+role: processing
+stated: {page: 7, printed_page: "7", quote: "can be calculated from the slope of hr2i versus t", where: "Eq. 12 and the Simulation analysis text"}
+equation: "μ = <r^2>/(4t), slope of a line through the origin fitted to the first half of <r^2> versus t; one μ per substrate"
+inputs:
+  msd_a: {quantity: mean_squared_displacement, unit: um^2, curve: {quantity: time_interval, unit: min}}
+  msd_b: {quantity: mean_squared_displacement, unit: um^2, curve: {quantity: time_interval, unit: min}}
+  msd_c: {quantity: mean_squared_displacement, unit: um^2, curve: {quantity: time_interval, unit: min}}
+  E_a:   {quantity: substrate_modulus, unit: kPa}
+  E_b:   {quantity: substrate_modulus, unit: kPa}
+  E_c:   {quantity: substrate_modulus, unit: kPa}
+outputs:
+  mu: {quantity: random_motility_coefficient, unit: um^2/min, curve: {quantity: substrate_modulus, unit: kPa}}
+settings: {first_fraction: 0.5}
+stochastic: false
+built_from: [rmc_eq12]

@@ -90,11 +90,12 @@
 
 ## The motor-clutch corpus
 
-`corpora/motor_clutch/`. Thirteen papers, two releases of code (the Odde lab's, for Chan 2008 and
-Bangasser 2013, and Andreu 2021's) and one of source data (Andreu 2021):
-sixteen sources, read, audited and related by agents, every job validated.
-Everything after the first three papers was added through the pipeline end to
-end, and the last nine sources as one unattended batch in two waves:
+`corpora/motor_clutch/`. Twenty-five papers, six releases of code (the Odde lab's, for Chan 2008 and
+Bangasser 2013; Andreu 2021's; Bangasser 2017's CMS v1.0; a later C++ 1D simulator received
+with Prahl 2020; Liu 2025's MATLAB programs; and Bagchi 2025's C++ files for Chaste) and one of
+source data (Andreu 2021): thirty-two sources, read, audited and related by agents, every job validated.
+Everything after the first three papers was added through the pipeline end to end; nine sources as
+one unattended batch in two waves, four more as batch 3, six as batch 4, four as batch 5 and two as batch 6:
 
 | Paper | Models | Data | Comparisons | Figure readings | Open questions |
 |---|---|---|---|---|---|
@@ -114,6 +115,22 @@ end, and the last nine sources as one unattended batch in two waves:
 | Elosegui-Artola et al. 2014 | 5 | 54 | 21 | 42 | 23 |
 | Chaudhuri et al. 2015 | 5 | 85 | 13 | 53 | 27 |
 | Gong et al. 2018 | 11 | 96 | 27 | 48 | 31 |
+| Bangasser et al. 2017 | 23 | 129 | 39 | 64 | 38 |
+| Bangasser 2017, released code (CMS v1.0, MATLAB) | 8 | 37 | 4 | 0 | 17 |
+| Prahl et al. 2020 | 26 | 88 | 47 | 35 | 38 |
+| A later 1D simulator in C++ (Odde lab, received with Prahl 2020) | 7 | 42 | 3 | 0 | 21 |
+| Panzetta et al. 2019 | 5 | 94 | 18 | 89 | 24 |
+| Panzetta et al. 2023 | 13 | 90 | 56 | 47 | 22 |
+| Alonso-Matilla et al. 2023 | 21 | 113 | 58 | 36 | 34 |
+| Shen et al. 2025 | 17 | 127 | 58 | 93 | 27 |
+| Liu et al. 2025 | 13 | 118 | 44 | 60 | 28 |
+| Liu 2025, released code (MATLAB) | 6 | 114 | 27 | 0 | 21 |
+| Baker et al. 2015 | 4 | 111 | 32 | 54 | 19 |
+| Cao et al. 2017 | 13 | 72 | 15 | 29 | 25 |
+| Bagchi et al. 2025 | 10 | 165 | 45 | 90 | 29 |
+| Bagchi 2025, released code (C++ for Chaste) | 5 | 83 | 25 | 0 | 18 |
+| Mekhdjian et al. 2017 | 6 | 103 | 39 | 70 | 25 |
+| Owen et al. 2017 | 19 | 133 | 37 | 64 | 40 |
 
 Model counts include the helper models the relation job added. "Data" counts
 printed, measured and read values; earlier figure readings are kept but no
@@ -170,6 +187,128 @@ than the set fitted to Chan; a person should check. Craig 2015 against Gardel
 2008 is not a test (Craig's parameters were chosen to match Gardel's cells) and
 cannot be checked as a fit (per-cell scales are not printed): an open question
 in Craig's record.
+
+**Batch 3** (2026-11-19: Bangasser 2017 with its released CMS v1.0 code, Prahl
+2020 with a C++ 1D simulator received with it): all 58 jobs passed, $92.42 as
+recorded (reads $3-7, audits about $1.5, digitize $15-18, relation and
+validation jobs $0.4-2), plus a few stopped calls not priced; about three and a
+half hours at concurrency 7. Neither simulator can run here (MATLAB, C++, and
+hours per simulated cell), so the records port their rules one by one and test
+those against the papers' equations. Every rule of both codes (off-rate,
+force-velocity, polymerization, nucleation, module allocation) is the same as
+the papers' equations, and the slip-bond family now spans ten models. What
+does not agree:
+
+- **Prahl 2020:** the drag force (-6.5 pN) follows only from a cell speed in
+  um/s; the measured 0.51 um/min gives -0.11 pN. The simulated speed (0.37 ±
+  0.04 um/min) is called similar to the measured 0.51 ± 0.02; the motility
+  coefficients differ 4.5-fold. Every parameter but the substrate spring and
+  the polarity equals Bangasser 2017's base set. Legends disagree on the
+  number of runs and swap the symbols of Fig. 2F.
+- **Bangasser 2017:** the Fig. 1f legend swaps the low and high optima; the
+  stated proportional shift of the optimum with motor-clutch numbers holds for
+  one metric of the simulator (1x, 4x or 10x across metrics). Its single module
+  is said to follow Chan 2008 and Bangasser 2013; ported, it differs from both by
+  10-23% (stated relation, not verified), consistent with a different update order.
+- **CMS v1.0 code:** sets the cell spring to 1,000 pN/nm where the paper and the
+  readme print 10,000; fixes the module maxima at a tenth of the pools; weights
+  the MSD fit by sem^-1/2, not as the paper says.
+- **C++ 1D code:** postdates the paper, which says its simulations were run in
+  MATLAB; does not compile as shipped and does not compute the paper's results
+  (Record() is empty); has a hidden factor 0.2 on module retraction, a
+  time-varying motor multiplier from unlabelled tables, a substrate spring of 1
+  pN/nm (the paper's is 1000), and an unpolarized default (the paper's 0.9).
+
+
+**Batch 4** (2026-11-21: Panzetta 2019 and 2023, Alonso-Matilla 2023, Shen 2025,
+Liu 2025 with its MATLAB programs): all 94 jobs passed at the first attempt,
+$204.51 as recorded (reads $1.7-14, audits $1-2.4, digitize $12-22, 39
+relation jobs $37.10, 39 validation jobs $34.41), plus stopped calls not
+priced. The machine restarted three times during the run; each time the run
+was started again and resumed. What does not agree (not yet reviewed by a person):
+
+- **Panzetta 2019:** prints no model inputs, so every curve of Figs. 9 and S13
+  is run on inputs the reader added; none reproduces. Eq. 13 has dx_s/dt on
+  both sides, and Eq. 11 is credited to a paper with no clutch model.
+- **Panzetta 2023:** with Table 1 as printed, the record's model puts the
+  soft-substrate optimum beyond the printed grid (near 320 clutches, against
+  40) and the stiff one near 570 (against 445); the cause is not found
+  (q_soft_optimum). Every flow curve misses. The "factor of 10" is 11.1, the
+  printed 3% and "1 clutch" for the same increase disagree, and the Fig. 8
+  colours look swapped.
+- **Alonso-Matilla 2023:** Table 1's clutch and motor numbers (470, 550) follow
+  from the printed densities as 487 and 566; the SI formula for n_c has the
+  wrong units. The dashed "analytical" line of Fig. 2C has C1 = 0.30, not the
+  printed 0.4. The optimal stiffness 2.7 computes as 3.19.
+- **Shen 2025:** the characteristic force is printed 2.3033 kBT/nm; it is
+  0.5591 kBT/nm, or 2.3033 pN. One entry of the Jacobian (A3) and Eq. 7 drop a
+  factor Gamma/gamma, refuting the stated equality of A3 with the Jacobian of
+  Eq. 18 at all 40 test points; Table II contradicts the text.
+- **Liu 2025 and its code:** the code's alpha is 100 and 200 where the paper
+  prints 2. Fitted to Elosegui-Artola 2016's traction and flow, the talin
+  knockdown model is close and the wild-type model is not reproduced, in both
+  the paper's record and the code's. The code's own fits miss Liu's Figs. 2c-d
+  and Extended Data Fig. 5. Three results depend on added inputs (kBT at 310 K,
+  the adhesion size, ly).
+
+
+**Batch 5** (2026-11-21: fibrous matrices and collective migration; Baker 2015,
+Cao 2017, Bagchi 2025 with its C++ files): all 38 jobs passed at the first
+attempt, $85.70 as recorded (reads $2.6-7.6, audits $1.2-1.9, digitize
+$13-17, 14 relation jobs $7.05, 14 validation jobs $10.59); about two hours.
+Bagchi's code is kept without the Chaste framework (400 MB), so it is read,
+not built. What does not agree (not yet reviewed by a person):
+
+- **Cao 2017 against Baker 2015:** the planned cross-paper test could not be
+  entered. The model Cao says predicts Baker's adhesion sizes is a COMSOL model
+  that cannot be run; its bars exist only as a figure reading. Table S1 gives
+  alpha and beta in Pa where Eq. S1 needs an inverse stress; the stable sizes
+  of Fig. 5A at 7.5 and 12.5 kPa come out low unless the nucleus modulus is
+  near the top of its printed range.
+- **Baker 2015:** the printed membrane equation for indentation gives forces 20
+  to 300 times smaller than Supp. Fig. 2k plots; the Methods and Fig. 2c
+  disagree on the stiff gel's light dose; the DexMA concentration is g/ml in
+  one place and mg/ml in another.
+- **Bagchi 2025:** the cell spring profile of Eq. 11 with the tabulated
+  parameters is about 81 times the plotted one (Figs. 8k, 9a), and the damping
+  profile rises about nine times more than plotted; Eq. 11 gives a negative
+  spring at the centre for the disconnected set; Eq. 13 as printed gives
+  negative probabilities; one table entry is 10^-711. Results and Methods
+  disagree on gel stiffness and alignment time.
+- **Bagchi's code:** every driver exits before the simulation starts (an
+  exit(0) left in for plotting), so as released it simulates nothing. The
+  spring factor is 100 where the tables print 1,000 and 10,000; two versions
+  run 5 cell nodes where the paper plots 36.
+
+**Batch 6** (2026-11-22: the first 3D measurements; Mekhdjian 2017, Owen
+2017): all 50 jobs passed at the first attempt, $81.76 as recorded (reads
+$1.4-5.7, audits $1.4-1.7, digitize $12-18, 22 relation jobs $19.04, 22
+validation jobs $23.14); a usage limit paused it twice. What does not agree
+(not yet reviewed by a person):
+
+- **2D clutch models against Owen's 3D speeds:** the clutch models of Chan
+  2008, Bangasser 2013 (both), Elosegui-Artola 2016 and Mekhdjian 2017, run
+  with their own parameters at the fibrin gel's bulk stiffness, give actin
+  moving past its adhesion at 50-95 nm/s. Owen measures 58 ± 3.1 nm/min
+  (about 1 nm/s) and an elongation rate of 0-3 nm/s: all 13 validations miss,
+  by 20 to 90 times. None of those parameter sets is for fibroblasts in fibrin,
+  so this says the 2D calibrations do not carry over, not that the mechanism
+  fails; Owen's own reading is many more clutches per motor.
+- **Owen 2017:** its own one-spring clutch model (eqn. 13) gives 1.7 nm/s,
+  inside the 0-3 nm/s range but with generic inputs and a free force
+  sensitivity, so it tests only the order of magnitude; its 220 nm/s case
+  passes through a pole (negative bound clutches). The printed bending ratio
+  κ ≈ 2.4 x 10^-6 does not follow from the printed inputs (about 1,700 times
+  off); the fibre-network simulation cannot be rerun; the clutch model uses
+  1 pN/nm while the network gives nodes up to about 24 nN/um. The claim of no
+  continuous rearward flow rests on direction plots, not a tested number.
+- **Mekhdjian 2017:** the adhesion radius that sets every model axis is not
+  printed (550 nm inferred); the reinforced curves of Fig. S4c come out
+  lower than plotted with the stated inputs; the text puts the TGFβ optimum at
+  about 10 kPa where Fig. 5c peaks near 1-2 kPa; plotted total forces are 2-3
+  times stress times area, against the legend; Eq. 8 mixes a length with a
+  rate. Its model could not be tested against Chan's or Bangasser's data:
+  every parameter set is for MCF10A cells.
 
 Findings:
 

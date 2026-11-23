@@ -1,0 +1,212 @@
+- id: q_figures_not_read
+  kind: reading
+  about: [network_soft, network_stiff, fibre_soft, fibre_stiff, gel_soft_text, rgd_fold_soft, prolif_ratio_networks]
+  text: >
+    The measured data of this paper are plotted (Figs. 1c-e, 2c, 3b, 3d, 4d, 5c-f, 5h, 5i, 5k, 5l; Supp. Figs. 2e,
+    2k, 3c, 6b-c, 7, 8a, 9, 10a) and were not read in this pass, because the figure-rendering commands were not
+    permitted for this job. They should be read in a second pass: Fig. 5c-f (cell area, total FA area, number of FAs,
+    average FA size on soft and stiff gels and networks) is what cao2017 compares its model with, and Supp. Fig. 2k
+    is what membrane_indentation needs as input.
+- id: q_membrane_inputs_plotted
+  kind: unstated_input
+  about: [membrane_indentation, network_soft, network_stiff]
+  text: >
+    The membrane equation turns indentation force and depth into the network moduli (2.8 kPa soft, 55 kPa stiff;
+    Fig. 1d), but force and depth appear only in Supp. Fig. 2k, and the paper does not say over which depth range,
+    or how (a fit of F against delta^3, or one point), the modulus was taken from each curve. Seen on the page image,
+    the force in Supp. Fig. 2k rises about linearly with depth up to 200 um, while the printed equation gives
+    F proportional to delta^3; once Supp. Fig. 2k is read this should be tested by running the model on the plotted
+    depths with the printed moduli.
+  citation: {page: 12, quote: "Force response as a function of indentation depth of networks", where: Supp. Fig. 2k}
+- id: q_membrane_r_diameter
+  kind: possible_error
+  about: [membrane_ro, membrane_ri, membrane_indentation]
+  text: >
+    The Methods call ro "the membrane diameter (1 mm)" and ri "the indentor diameter (0.25 mm)", but the wells are
+    2 mm in diameter and the indentor cylinders 500 um in diameter (same page), so the printed values are radii, as
+    the symbols r suggest. The record uses the printed values. Taking the words literally (halving both values to get
+    radii) would change the force the equation gives for a given modulus, so the word matters to anyone who reuses it.
+  citation: {page: 8, quote: "where t is the membrane thickness (20 µm), ro is the membrane diameter (1 mm)", where: Methods}
+- id: q_gel_range
+  kind: unexplained_difference
+  about: [gel_soft_text, gel_modulus_range_min]
+  text: >
+    The text says photocrosslinking "yielded hydrogels with moduli between 450 Pa and 45 kPa" (p. 2, Fig. 1e), yet the
+    soft hydrogel used throughout is 290 Pa (pp. 3, 4, 5, 16), below the lower end of that range. Either the range
+    refers only to the doses plotted in Fig. 1e, or one of the two values is misprinted.
+  citation: {page: 2, quote: "yielded hydrogels with moduli between 450 Pa and 45 kPa", where: text}
+- id: q_bending_unstated
+  kind: unstated_model
+  about: [fibre_soft, fibre_stiff, fibre_modulus_range_min, fibre_modulus_range_max]
+  text: >
+    Single-fibre moduli come from AFM three-point bending "using known equations for a cylindrical rod undergoing
+    three-point bending with fixed boundaries", with a 200 um span, a 0.06 N/m cantilever and a population mean
+    fibre diameter. The equation and the mean diameters of the soft and stiff fibres (Supp. Fig. 9 histograms) are not
+    printed, so 140 MPa and 3.1 GPa cannot be recomputed.
+  citation: {page: 8, quote: "using known equations for a cylindrical rod", where: Methods}
+- id: q_hertz_unstated
+  kind: unstated_model
+  about: [gel_soft_text, gel_stiff_text]
+  text: >
+    Hydrogel moduli come from fitting AFM force-indentation curves to Hertz contact with a spherical indentor
+    (Poisson ratio 0.5); the curves and the probe radius used in the fit are not shown, so the moduli cannot be
+    recomputed.
+  citation: {page: 8, quote: "spherical indentor on an elastic half-space, assuming a Poisson ratio of 0.5", where: Methods}
+- id: q_gel_stiff_dose
+  kind: possible_error
+  about: [gel_time_stiff, gel_time_intermediate, uv_gel_stiff_fig2c, uv_intensity_gel, gel_stiff_text]
+  text: >
+    The Methods give 100 mW cm-2 with polymerization times of 7.5 s (soft), 30 s (intermediate-stiffness) and 60 s
+    in argon (stiff), i.e. 750, 3,000 and 6,000 mJ cm-2, but Fig. 2c labels the hydrogel constructs "Soft (750 mJ)"
+    and "Stiff (3,000 mJ)". Either the Fig. 2c "stiff" gel is the Methods' intermediate gel, or one of the times or
+    labels is misprinted. Which dose gives the 19.1 kPa stiff gel of Figs. 3 and 5 is therefore not determined
+    (Fig. 1e shows hydrogels at 3,000 and 18,000 mJ cm-2, neither at 6,000).
+  citation: {page: 8, quote: "Stiff hydrogels were polymerized for 60 s", where: "Methods, DexMA hydrogel preparation"}
+- id: q_gel_range_dose
+  kind: reading
+  about: [q_gel_range, gel_soft_text, gel_modulus_range_min, uv_gel_soft_fig2c]
+  text: >
+    Second reader on q_gel_range: the soft hydrogel is made with 750 mJ cm-2 (Methods 7.5 s at 100 mW cm-2; Fig. 2c
+    "Soft (750 mJ)"), below the lowest dose plotted in Fig. 1e (1,000 mJ cm-2), so a 290 Pa soft gel below the
+    450 Pa lower end of the Fig. 1e range need not be a misprint; the range quoted on p. 2 seems to describe only the
+    doses of Fig. 1e. q_gel_range is left as the first reader wrote it.
+  citation: {page: 8, quote: "Polymerization times were 7.5 s for soft and", where: Methods}
+- id: q_membrane_magnitude
+  kind: unexplained_difference
+  about: [membrane_indentation, network_stiff, membrane_t, membrane_ro, membrane_ri]
+  text: >
+    Order-of-magnitude check, not a verdict (the plotted forces are read by eye here and must be read properly from
+    Supp. Fig. 2k by the figure job): with the printed parameters (t = 20 um, ro = 1 mm, ri = 0.25 mm, nu = 0.5) and
+    E = 55 kPa, the printed equation gives F of about 0.01 mN at a depth of 100 um, while Supp. Fig. 2k shows forces
+    of the order of 0.5 mN near 100 um for the 6,000 mJ networks, and an about linear, not cubic, rise with depth.
+    Halving ro and ri (the "diameter" wording, q_membrane_r_diameter) raises F only about fourfold. Once Supp. Fig. 2k
+    is read, run membrane_indentation on its depths with network_soft and network_stiff and compare.
+  citation: {page: 12, quote: "Force response as a function of indentation depth of networks", where: Supp. Fig. 2k}
+- id: q_dexma_conc_units
+  kind: possible_error
+  about: [q_figures_not_read]
+  text: >
+    The DexMA concentration for electrospinning is printed as 0.3-0.6 g ml-1 (Methods p. 8; Fig. 1b axis label
+    "[DexMA] (g ml-1)", p. 2) but as 0.3-0.6 mg/ml in the Supp. Fig. 7 caption (p. 17) and 0.5 mg/ml in the Supp.
+    Fig. 9 caption (p. 18), a factor of 1,000 apart. No datum in the record depends on it; it matters to anyone
+    reproducing the fibres or reading Supp. Figs. 7 and 9.
+  citation: {page: 17, quote: "0.6, 0.5, 0.4, and 0.3 mg/ml", where: Supp. Fig. 7 caption}
+- id: q_uv_units
+  kind: reading
+  about: [uv_fibre_stiff, uv_fibre_soft]
+  text: >
+    The UV doses are labelled "mJ" in Fig. 2c and Supp. Fig. 2k but "mJ cm-2" on the axes of Fig. 1c-e; the record
+    takes them as mJ/cm^2. Which doses give the 140 MPa and 3.1 GPa fibres of Fig. 3 is not said in the text; Fig. 2c
+    labels soft and stiff fibre constructs 0 and 6,000 mJ.
+  citation: {page: 3, quote: "Stiff (6,000 mJ) Soft (0 mJ)", where: Fig. 2c}
+# Added in the figure pass
+- id: q_membrane_s2k
+  kind: unexplained_difference
+  about: [membrane_indentation, cmp_membrane_s2k_soft, cmp_membrane_s2k_stiff, figs2k_0_data, figs2k_6000_data, network_soft, network_stiff]
+  text: >
+    With Supp. Fig. 2k now read, the printed membrane equation with the printed parameters (t = 20 um, ro = 1 mm,
+    ri = 0.25 mm, nu = 0.5) and the printed network moduli gives, at the plotted depths, forces 20 to 300 times
+    smaller than those plotted: about 0.0002-0.003 mN against 0.04-0.09 mN for the 0 mJ (2.8 kPa) network, and
+    0.0001-0.04 mN against 0.09-1.18 mN for the 6,000 mJ (55 kPa) network. The equation's force rises as the cube
+    of the depth, while the plotted forces rise about linearly (6,000 mJ: about 0.008 mN per um from 24 to
+    162 um). So the printed moduli do not follow from the printed equation and the plotted curves; halving ro and
+    ri (q_membrane_r_diameter) does not close a gap of this size. Either the equation, a parameter or a unit
+    (for example t, or the force axis) is misprinted, or the moduli were obtained another way. This answers the
+    order-of-magnitude check of q_membrane_magnitude with calibrated readings.
+  citation: {page: 12, quote: "Force response as a function of indentation depth of networks", where: Supp. Fig. 2k}
+- id: q_fig1c_range_min
+  kind: unexplained_difference
+  about: [fibre_modulus_range_min, fibre_modulus_min_table, fig1c_1000_data, cmp_fig1c_min, fibre_soft]
+  text: >
+    The text gives single-fibre moduli "tunable between 140 MPa and 10 GPa (Fig. 1c)", but the lowest bar of
+    Fig. 1c (1,000 mJ cm-2) reads about 0.40 GPa (397 MPa), almost three times 140 MPa; the upper end (10 GPa at
+    50,000 mJ cm-2) agrees. 140 MPa is the soft fibre of Fig. 3, which Fig. 2c labels 0 mJ, a dose Fig. 1c does
+    not plot. So the range quoted for Fig. 1c seems to include an uncrosslinked fibre that the figure does not
+    show, or the lowest bar or the 140 MPa is misprinted.
+  citation: {page: 2, quote: "tunable between 140 MPa and 10 GPa", where: text}
+- id: q_fig1e_stiff_gel
+  kind: unexplained_difference
+  about: [gel_stiff_text, gel_stiff_table, fig1e_3000_data, cmp_fig1e_stiff_gel, q_gel_stiff_dose, uv_gel_stiff_fig2c]
+  text: >
+    Bears on q_gel_stiff_dose. Fig. 1e's 3,000 mJ cm-2 hydrogel reads 22.9 kPa (error bar about ±1.4 kPa), not the
+    19.1 kPa of the stiff hydrogel used in Figs 3-5. So if Fig. 2c's "Stiff (3,000 mJ)" label were the dose of the
+    19.1 kPa gel, Fig. 1e would disagree with it by about 20%; the Methods' 6,000 mJ cm-2 (60 s at 100 mW cm-2) for
+    the stiff gel is a dose Fig. 1e does not plot (between its 3,000 and 18,000 mJ cm-2 bars, 22.9 and 45.3 kPa,
+    both above 19.1 kPa). The figure therefore makes the 3,000 mJ label of the 19.1 kPa gel less likely, but does
+    not settle which dose gives 19.1 kPa (argon during the 60 s exposure may also change the modulus).
+  citation: {page: 2, quote: "determined by AFM spherical probe nanoindentation", where: Fig. 1e}
+- id: q_small_bar_resolution
+  kind: reading
+  about: [cmp_fig1d_networks, cmp_fig1e_min, fig1d_0_6000_data, fig1e_1000_data]
+  text: >
+    The "not reproduced" verdicts of the 0 mJ bar of Fig. 1d (read 2.58 kPa against the printed 2.8 kPa) and of the
+    1,000 mJ bar of Fig. 1e (431.7 Pa against 450 Pa) are differences of under one pixel at 1200 dpi (about 0.25 kPa
+    and 43 Pa per pixel on those axes): these bars are a few pixels tall on axes running to 200 and 60 kPa, so the
+    figures cannot resolve the printed values to their printed precision. Read as consistent within the figures'
+    resolution, not as a disagreement; the reading intervals (2.29-2.86 kPa; 0.34-0.52 kPa) contain the printed values.
+  citation: {page: 2, quote: "DexMA fibre networks measured by cylindrical indentation", where: Fig. 1d}
+- id: q_no_validation_cao2017
+  kind: choice
+  about: [fig5f_data, fig5k_median_data, histogram_moments, membrane_indentation, soft_stiff_ratio, uv_dose_exposure]
+  text: >-
+    Paired with cao2017 (which cites this paper as ref. 16 and models its FA sizes and fibre recruitment), no
+    validation was entered in either direction. This record's models are processing steps on its own data (fibre
+    diameter moments, membrane indentation, a soft/stiff ratio, UV dose); cao2017's measured data are this paper's
+    Fig. 5f and 5k re-plotted, and none of these models gives those quantities. In the other direction, cao2017's
+    model of FA size cannot be run and its runnable steps do not give an FA area on these conditions; see cao2017's
+    q_no_validation_baker2015.
+  citation: {page: 5, quote: "surfaces (Fig. 5a,d–f). Focal adhesion kinase (FAK) plays a", where: text}
+# cross-record validation against chan2008 (2026-11-21): none added
+- id: q_xval_chan2008_none
+  kind: choice
+  about: [membrane_indentation, histogram_moments, soft_stiff_ratio, uv_dose_exposure, figs6b_gel_data, figs2k_0_data]
+  text: >-
+    (Cross-record validation.) No validation was entered in either direction with chan2008 (ref. 39). This
+    paper cites it only in words: the cyclic bead motions on soft hydrogels are "suggestive of 'load-and-fail'
+    dynamics described previously39" (p. 4; Supp. Fig. 6c traces, not read), and ref. 39 is named among works
+    on catch-bond dynamics and integrin engagement (p. 5). No value of chan2008 is compared with a value here.
+    This record's models do not predict chan2008's measurements: membrane_indentation gives the force on an
+    indentor pressing a suspended membrane, and chan2008 measures no indentation (its measurements are
+    retrograde flow rates, bead step and failure statistics, peak filopodial force and the force-to-bead
+    distance on PA gels); histogram_moments, soft_stiff_ratio and uv_dose_exposure are processing of this
+    paper's own fibre diameters, proliferation bars and UV doses. membrane_indentation and
+    chan2008/cerruti_force_eq11 share a shape (a force from a modulus, lengths and a Poisson ratio), but they
+    solve different problems (a membrane under a cylinder; a point force on a half-space inferred from two
+    marker beads) and that shape relates no measurement. In the other direction, see chan2008/q_xval_baker2015_none.
+  citation: {page: 4, quote: "underwent cyclic motions, suggestive of ‘load-and-fail’ dynamics", where: text}
+# ---- added by the cross-record validation job (baker2015 + chaudhuri2015) ---------------------------
+- id: q_xval_chaudhuri2015_none
+  kind: choice
+  about: [membrane_indentation, histogram_moments, soft_stiff_ratio, uv_dose_exposure, fig3b_fibre_data, fig5c_data, fig5f_data]
+  text: >-
+    (Cross-record validation.) No validation was entered in either direction with chaudhuri2015 (ref. 47).
+    This paper cites it once, in words, as recent work showing a role for substrate stress relaxation in
+    cell spreading that "further illustrates this need" for materials capturing native ECM mechanics
+    (p. 5); it claims no model of either paper explains the other's data and compares no value. This
+    record's models are processing of its own measurements: membrane_indentation (force on an indentor
+    pressing a suspended fibre network; chaudhuri2015 characterizes its alginate gels by compression and
+    rheology, not membrane indentation), histogram_moments (fibre-diameter histograms; chaudhuri2015 has
+    no fibres), uv_dose_exposure (UV-crosslinked DexMA; chaudhuri2015's gels are ionically crosslinked
+    alginate) and soft_stiff_ratio (a ratio of two of this paper's own bars, not a model of a measured
+    quantity). In the other direction, see chaudhuri2015/q_xval_baker2015_none.
+  citation: {page: 5, quote: "a role for substrate stress relaxation in cell spreading", where: text}
+# ---- added by the cross-record validation job (baker2015 + elosegui2014) ----------------------------
+- id: q_xval_elosegui2014_none
+  kind: choice
+  about: [membrane_indentation, histogram_moments, soft_stiff_ratio, uv_dose_exposure, fig5c_data, fig5f_data]
+  text: >-
+    (Cross-record validation.) No validation was entered in either direction with elosegui2014 (ref. 50).
+    This paper cites it twice, in words, in its outlook (p. 5): as work on "integrin clustering and focal
+    adhesion assembly at the nanoscale" and as a model of intracellular dynamics ("integrin engagement")
+    to be coupled with fibrous-ECM theory in future. It does not say that elosegui2014's model explains
+    any of its measurements and compares no value with it. This record's models are processing of its
+    own data (membrane indentation of its fibre networks, fibre-diameter histogram moments, a soft/stiff
+    ratio of its proliferation bars, UV dose of its DexMA gels); elosegui2014 measures none of these
+    (its measurements are traction on fibronectin-coated polyacrylamide gels, SPR sensorgrams, integrin
+    densities, bead detachment times and integrin recruitment of myoepithelial cells). In the other
+    direction, elosegui2014's integrin-FN clutch model is not runnable (elosegui2014/q_si_unreadable);
+    even if it were, it outputs traction, actin flow and adhesion integrin density, none of which this
+    paper measures (it measures spread area, FA number and size, pFAK, proliferation and fibre
+    recruitment of hMSCs), and its parameters are for myoepithelial cells on FN, not hMSCs on RGD-coupled
+    DexMA. See elosegui2014/q_xval_baker2015_none.
+  citation: {page: 5, quote: "and focal adhesion assembly at the nanoscale21,50 and through", where: text}

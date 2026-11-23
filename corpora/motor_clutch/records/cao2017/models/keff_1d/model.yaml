@@ -1,0 +1,16 @@
+id: keff_1d
+name: effective stiffness of the 1D FA-ECM shear-lag model (SI, from ref. 24)
+role: model
+stated: {page: 9, quote: "ϕi = 1=dc, where dc is the integrin spacing. The effective stiffness", where: "SI, equations for keff and Lc"}
+equation: >-
+  keff = sqrt(kp ks kc) (kp + ks)^(3/2) sinh(L/Lc) / [ (kp^2 + ks^2) cosh(L/Lc) + kp ks (2 + (L/Lc) sinh(L/Lc)) ],
+  Lc = (1/phi_i) sqrt[ (1/kc) * 1/(1/ks + 1/kp) ]
+described_from: ref-24
+inputs:
+  kp: {quantity: plaque_stiffness_1d, unit: pN/nm}
+  ks: {quantity: ecm_stiffness_1d, unit: pN/nm}
+  kc: {quantity: clutch_stiffness_1d, unit: pN/nm}
+  L: {quantity: fa_length_1d, unit: um}
+  phi: {quantity: ligand_density_1d, unit: 1/um}
+outputs:
+  keff: {quantity: effective_stiffness_1d, unit: pN/nm}

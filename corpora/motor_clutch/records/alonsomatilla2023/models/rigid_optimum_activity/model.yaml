@@ -1,0 +1,15 @@
+id: rigid_optimum_activity
+name: myosin activity of maximal traction on a rigid substrate (Fig. 5(A), from Eqs. S31-S36)
+role: model
+stated: {page: 10, printed_page: "3378", quote: "Optimum myosin activity parameter for maximum traction force on rigid substrates", where: "Fig. 5(A) caption"}
+equation: "F_opt(tau, omega) = argmax over F of T*(F, tau, omega), T* the rigid-substrate steady state S31-S36"
+from_words: true
+inputs:
+  tau:   {quantity: clutch_kinetic_parameter, unit: dimensionless}
+  omega: {quantity: dimensionless_motor_velocity, unit: dimensionless}
+outputs:
+  Fopt: {quantity: optimal_myosin_activity, unit: dimensionless}
+  Tmax: {quantity: dimensionless_traction, unit: dimensionless}
+settings: {F_min: 0.02, F_max: 8.0, n_grid: 160, n_scan: 400, xatol: 0.0001}
+built_from: [rigid_steady_state]
+stochastic: false

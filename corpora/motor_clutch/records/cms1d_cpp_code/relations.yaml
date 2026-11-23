@@ -1,0 +1,349 @@
+# The code does not say what it implements; it was received with prahl2020, and its module rules are
+# proposed here as the same as prahl2020's Supporting Methods equations. mapping: b's input symbol ->
+# expression in a's input symbols, each in its own port's units (the code in nm, prahl2020's actin pools in um).
+- id: rel_offrate_s1
+  kind: same_as
+  a: cms1d_cpp_code/offrate_port
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "koff", Fclutch: "F", Fbond: "Fb"}
+  output_map: {koff_i: koff_i}
+  regime: {koff: [0.01, 10], F: [0, 20], Fb: [1, 10]}
+  provenance: proposed
+  reason: >-
+    The code was received with prahl2020 and computes an engaged clutch's off-rate (lines 578, 618) from
+    the parameters of Table S1 that prahl2020 puts in Eqn. S1.
+  assumptions:
+    - "the code takes the magnitude of the clutch force (mag(force_vec)); prahl2020's Fclutch,i is the tension, taken positive here, so the two agree for tension; a compressed clutch would also unbind faster in the code"
+- id: rel_flow_s2
+  kind: same_as
+  a: cms1d_cpp_code/flow_port
+  b: prahl2020/force_velocity_s2
+  mapping: {vmotor: "vu", ksub: "1", dxsub: "F", Fmotor: "Fm", nmotor_j: "nm*nmFactor"}
+  output_map: {vflow: vflow}
+  regime: {vu: [50, 200], F: [0, 20], nm: [10, 100], nmFactor: [1, 1], Fm: [1, 3]}
+  provenance: proposed
+  reason: >-
+    The code's flow speed (line 405) is prahl2020's Eqn. S2 with the module force in place of
+    ksub Δxsub,j, which the module force balance (Eqn. S5) makes equal.
+  assumptions:
+    - "ksub Δxsub,j = mforce_mag by Eqn. S5; mapped as ksub = 1 pN/nm and Δxsub,j = F/(1 pN/nm)"
+    - "nmFactor = 1: the code's time-varying factor on the motor number (lines 184-199) is not in prahl2020 (question q_motor_schedule)"
+    - "regime below the stall force (F < nm Fm): the code clips the speed at zero above it (max(0.0, ...)); Eqn. S2 as printed would give a negative speed (question q_flow_clip)"
+- id: rel_poly_s3
+  kind: same_as
+  a: cms1d_cpp_code/poly_port
+  b: prahl2020/polymerization_s3
+  mapping: {vactin_max: "vmax*PolyFactor", AG: "AG/1000", Atotal: "Atotal/1000"}
+  output_map: {vactin: vactin}
+  regime: {vmax: [50, 300], PolyFactor: [1, 1], AG: [1000, 100000], Atotal: [100000, 200000]}
+  provenance: proposed
+  reason: "The code's polymerization distance per dt (line 411) uses prahl2020's Eqn. S3 parameters vactin,max, AG and Atotal."
+  assumptions:
+    - "PolyFactor = 1, as the code sets it (line 28); prahl2020 has no such factor"
+    - "the code holds actin pools as lengths in nm, prahl2020 in um"
+- id: rel_nucleation_s8
+  kind: same_as
+  a: cms1d_cpp_code/nucleation_port
+  b: prahl2020/nucleation_s8
+  mapping: {knuc0: "knuc0", AG: "AG/1000", Atotal: "Atotal/1000"}
+  output_map: {knuc: knuc}
+  regime: {knuc0: [0.1, 10], AG: [1000, 100000], Atotal: [100000, 200000]}
+  provenance: proposed
+  reason: "The code's module birth rate (lines 100, 628) uses prahl2020's Eqn. S8 parameters knuc,0, AG and Atotal."
+  assumptions:
+    - "the code holds actin pools as lengths in nm, prahl2020 in um"
+# Table S1's per-module maxima ("0.1*nmotor (1)", "0.1*nclutch (1)") against the code's int(pool/10.0) (lines 57-58).
+# The code truncates to an integer, Table S1 does not: approximated_by, exact when the pool is a multiple of 10.
+- id: rel_motor_cap_s1_alloc
+  kind: approximated_by
+  a: prahl2020/module_motor_cap
+  b: cms1d_cpp_code/module_alloc_port
+  mapping: {motor_pool: "nmotor", clutch_pool: "750", motor_divisor: "1/f", clutch_divisor: "10", active_motors: "0", active_clutches: "0"}
+  output_map: {nm_max: nmotor_module}
+  regime: {f: [0.1, 0.1], nmotor: [1000, 10000]}
+  tolerance: 0.01
+  provenance: proposed
+  reason: >-
+    Table S1 sets a module's maximum motors to 0.1 nmotor; the code, received with prahl2020, sets
+    max_module_motors_ = int(motor_pool_/10.0) (line 57): the same one-tenth rule, truncated to an integer.
+  assumptions:
+    - "the code's divisor 10.0 is Table S1's fraction 0.1 inverted; f is held at the printed 0.1"
+    - "clutch_pool, clutch_divisor and the active counts do not enter nm_max; they are set to the base values and zero"
+    - "tolerance 0.01 (added): truncation loses less than one motor in a maximum of at least 100 (nmotor of at least 1000)"
+- id: rel_clutch_cap_s1_alloc
+  kind: approximated_by
+  a: prahl2020/module_clutch_cap
+  b: cms1d_cpp_code/module_alloc_port
+  mapping: {motor_pool: "1000", clutch_pool: "nclutch", motor_divisor: "10", clutch_divisor: "1/f", active_motors: "0", active_clutches: "0"}
+  output_map: {nc_max: nclutch_module}
+  regime: {f: [0.1, 0.1], nclutch: [750, 7500]}
+  tolerance: 0.014
+  provenance: proposed
+  reason: >-
+    Table S1 sets a module's maximum clutches to 0.1 nclutch; the code sets max_module_clutches_ =
+    int(clutch_pool_/10.0) (line 58): the same one-tenth rule, truncated to an integer.
+  assumptions:
+    - "the code's divisor 10.0 is Table S1's fraction 0.1 inverted; f is held at the printed 0.1"
+    - "motor_pool, motor_divisor and the active counts do not enter nc_max; they are set to the base values and zero"
+    - "tolerance 0.014 (added): truncation loses less than one clutch in a maximum of at least 75 (nclutch of at least 750)"
+# The whole simulator. The code reads as a later implementation of prahl2020's 1D CMS (described_from: prahl2020),
+# but neither the code nor the paper says so (q_relation_to_paper), and neither model runs (cms_1d defers its
+# algorithm to ref. S1; cms1d_sim is not ported), so the steps cannot be applied: the relation is unverifiable and
+# its steps list what the code adds to or changes in the paper's Supporting Methods.
+- id: rel_cms1d_sim_from_cms_1d
+  kind: derived_from
+  a: prahl2020/cms_1d
+  b: cms1d_cpp_code/cms1d_sim
+  mapping: {motor_pool: "nmotor", clutch_pool: "nclutch", clutch_input: "nclutch", n_clutches_cell: "nclutch_cell",
+            Fm: "Fmotor", vu: "vmotor", kon: "kon", koff: "koff", Fb: "Fbond", kc: "kclutch", ksub: "ksub",
+            cell_k: "kcell", kcap: "kcap", knuc0: "knuc0", maxpoly: "vactin_max", total_actin: "Atotal*1000",
+            length: "Lcell*1000", Lmin: "Lmin", Polar: "2*psi_pol - 1", PolyFactor: "1"}
+  steps:
+    - "implement Eqns. S1-S8 as module rules: off-rate koff exp(|F|/Fbond) (lines 578, 618), flow with a zero clip (405), polymerization (411), nucleation (100, 628)"
+    - "assign a new module ceil(max (1 - in use/pool)) motors and clutches, with max = int(pool/10) (lines 57-58, 466-470), for the paper's 'fraction of the available pool'"
+    - "point a new module +x when a uniform number is below (Polar+1)/2 (line 474), the paper's psi_pol"
+    - "add factors the paper does not state: aflow_ratio on the flow transport of modules (line 25), a time-varying motor-number factor nmFactor with gain PolyPow (lines 184-199), a clutch group factor clutch_input/clutch_pool (line 55), a cap of 10^6 /s on the total event rate"
+    - "start from 4 modules, two each way, with one clutch engaged each, instead of two +x and one -x with clutches unbound"
+  provenance: proposed
+  reason: >-
+    The code was received with prahl2020 in a folder for the confined-migration paper, uses Table S1's parameter
+    values (linked by from_datum in data.yaml) and implements Eqns. S1, S2, S3 and S8 term for term (rel_offrate_s1,
+    rel_flow_s2, rel_poly_s3, rel_nucleation_s8). It was written after the paper, which says its simulations ran in
+    MATLAB, so the code derives from the paper's model, not the reverse.
+  assumptions:
+    - "inputs of cms1d_sim with no counterpart in cms_1d (n_modules, aflow_ratio, PolyPow) are left out of the mapping; clutch_input = nclutch and PolyFactor = 1 give the code's group factor 1 and no extra polymerization factor"
+    - "nmotor_module and nclutch_module of cms_1d are computed in the code from the pools (int(pool/10)), not inputs (rel_motor_cap_s1_alloc, rel_clutch_cap_s1_alloc)"
+    - "the outputs differ: cms_1d gives mu and v from an MSD fit, cms1d_sim samples x_cell and writes nothing (q_no_analysis)"
+    - "the code holds actin lengths in nm, prahl2020 Atotal and Lcell in um"
+# Not entered: polarity_port has no model in prahl2020 (psi_pol is an input of cms_1d only). Not linked (cited.yaml):
+# every from_source: prahl2020 datum in data.yaml already names its from_datum.
+# Against the 2D MATLAB CMS v1.0 (cms_code, 2017). Neither code names the other, so every relation is
+# proposed: the module rules of this C++ 1D code are compared line by line with the MATLAB ports. Both hold
+# actin as lengths in nm; the MATLAB code tracks the F-actin in the modules (factin), this code the free
+# actin (free_actin_ = total - factin).
+- id: rel_offrate_cms2d
+  kind: same_as
+  a: cms_code/off_rate_port
+  b: cms1d_cpp_code/offrate_port
+  mapping: {koff: "koff", F: "Fc", Fb: "Fb"}
+  regime: {koff: [0.01, 1], Fc: [0.1, 20], Fb: [1, 5]}
+  provenance: proposed
+  reason: >-
+    Both codes give an engaged clutch's off-rate as koff exp(|F|/Fb) (cms2Dv1_0.m line 181, Cell1DPublish.cpp
+    line 618), with the clutch force taken as a magnitude (the norm of a 2D force in MATLAB, mag(force_vec) here).
+  assumptions:
+    - "the 2D code's Fc is the norm of a 2D force, this code's F a 1D force taken in magnitude; only the magnitude enters either rate"
+- id: rel_flow_cms2d
+  kind: same_as
+  a: cms_code/flow_port
+  b: cms1d_cpp_code/flow_port
+  mapping: {vu: "vu", F: "Ksub*sdisp", nm: "nm", nmFactor: "1", Fm: "Fm"}
+  regime: {vu: [50, 200], Ksub: [0.01, 10], sdisp: [0.01, 100], nm: [10, 1000], Fm: [1, 3]}
+  provenance: proposed
+  reason: >-
+    Both codes give a module's retrograde flow by the linear force-velocity law with a clip at zero
+    (cms2Dv1_0.m lines 200-202, Cell1DPublish.cpp line 405); the MATLAB load is Ksub sdisp, this code's the
+    module force mforce_mag, equal to it by the module force balance.
+  assumptions:
+    - "the module force mforce_mag (springs in series, line 590) is the substrate spring force Ksub sdisp of the 2D code, by the module force balance"
+    - "nmFactor = 1: this code's time-varying factor on the motor number (lines 184-199, q_motor_schedule) has no counterpart in the 2D code"
+    - "regime reaches beyond stall (Ksub sdisp up to 1000 pN against nm Fm down to 10 pN): both codes clip the speed at zero there, so the relation is tested across stall"
+- id: rel_poly_cms2d
+  kind: same_as
+  a: cms_code/polyrate_port
+  b: cms1d_cpp_code/poly_port
+  mapping: {vmax: "maxpoly", PolyFactor: "1", AG: "totact - factin", Atotal: "totact"}
+  regime: {maxpoly: [50, 500], factin: [1000, 90000], totact: [100000, 1000000]}
+  provenance: proposed
+  reason: >-
+    Both codes give an uncapped module's polymerization speed as the maximum speed times the free-actin
+    fraction (cms2Dv1_0.m line 371, maxpoly (1 - factin/totact); Cell1DPublish.cpp line 411, maxpoly_ PolyFactor
+    free_actin_/total_actin_pool_).
+  assumptions:
+    - "free_actin_ is total_actin_pool_ minus the F-actin in the modules, the 2D code's totact - factin"
+    - "PolyFactor = 1, as this code sets it (line 28); the 2D code has no such factor"
+- id: rel_nucleation_cms2d
+  kind: same_as
+  a: cms_code/kmod_port
+  b: cms1d_cpp_code/nucleation_port
+  mapping: {knuc0: "kmod0", AG: "totact - factin", Atotal: "totact"}
+  regime: {kmod0: [0.1, 10], factin: [1000, 90000], totact: [100000, 1000000]}
+  provenance: proposed
+  reason: >-
+    Both codes give the module birth rate as the maximum rate times the free-actin fraction to the fourth
+    power (cms2Dv1_0.m line 171, Cell1DPublish.cpp line 628).
+  assumptions:
+    - "free_actin_ is total_actin_pool_ minus the F-actin in the modules, the 2D code's totact - factin"
+- id: rel_assign_motors_cms2d
+  kind: same_as
+  a: cms1d_cpp_code/module_alloc_port
+  b: cms_code/module_assign_port
+  mapping: {maxm: "floor(motor_pool/motor_divisor)", totm: "active_motors", mpool: "motor_pool"}
+  output_map: {nm: nm_new}
+  regime: {motor_pool: [1000, 10000], clutch_pool: [750, 7500], motor_divisor: [10, 10], clutch_divisor: [10, 10], active_motors: [10, 990], active_clutches: [10, 740]}
+  provenance: proposed
+  reason: >-
+    Both codes give a new module ceil(max (1 - in use/pool)) motors, and one when the pool is used up
+    (cms2Dv1_0.m lines 236-240, Cell1DPublish.cpp lines 466-468): the same rule, rounding included, given
+    the same per-module maximum.
+  assumptions:
+    - "the per-module maximum is passed as this code computes it (int(pool/10), truncated); the 2D code's maximum is pool*0.1, not truncated, which rel_max_motors_cms2d measures"
+    - "active_motors (motors held by modules) is the 2D code's totm"
+- id: rel_assign_clutches_cms2d
+  kind: same_as
+  a: cms1d_cpp_code/module_alloc_port
+  b: cms_code/module_assign_port
+  mapping: {maxm: "floor(clutch_pool/clutch_divisor)", totm: "active_clutches", mpool: "clutch_pool"}
+  output_map: {nm: nc_new}
+  regime: {motor_pool: [1000, 10000], clutch_pool: [750, 7500], motor_divisor: [10, 10], clutch_divisor: [10, 10], active_motors: [10, 990], active_clutches: [10, 740]}
+  provenance: proposed
+  reason: >-
+    The 2D code assigns clutches by the motor rule with totc, cpool and maxc (cms2Dv1_0.m lines 241-245,
+    one port serves both); this code by lines 469-470. Same rule, rounding included.
+  assumptions:
+    - "the 2D port's motor names stand for clutches here (totm = totc, mpool = cpool, maxm = maxc)"
+    - "the per-module maximum is passed as this code computes it (int(pool/10)), as in rel_assign_motors_cms2d"
+- id: rel_max_motors_cms2d
+  kind: approximated_by
+  a: cms_code/module_max_port
+  b: cms1d_cpp_code/module_alloc_port
+  mapping: {motor_pool: "mpool", clutch_pool: "cpool", motor_divisor: "1/fm", clutch_divisor: "1/fc", active_motors: "0", active_clutches: "0"}
+  output_map: {nm_max: maxm}
+  regime: {mpool: [1000, 10000], cpool: [750, 7500], fm: [0.1, 0.1], fc: [0.1, 0.1]}
+  tolerance: 0.01
+  provenance: proposed
+  reason: >-
+    Both codes set a module's maximum motors to one tenth of the pool (cms2Dv1_0.m line 39, mpool*0.1;
+    Cell1DPublish.cpp line 57, int(motor_pool_/10.0)); this code truncates to an integer, the 2D code does not.
+  assumptions:
+    - "the two agree exactly when the pool is a multiple of 10, as at the base sets (1000 motors); elsewhere the truncation loses less than one motor"
+    - "tolerance 0.01 (added): less than one motor in a maximum of at least 100 (pools of at least 1000)"
+- id: rel_max_clutches_cms2d
+  kind: approximated_by
+  a: cms_code/module_max_port
+  b: cms1d_cpp_code/module_alloc_port
+  mapping: {motor_pool: "mpool", clutch_pool: "cpool", motor_divisor: "1/fm", clutch_divisor: "1/fc", active_motors: "0", active_clutches: "0"}
+  output_map: {nc_max: maxc}
+  regime: {mpool: [1000, 10000], cpool: [750, 7500], fm: [0.1, 0.1], fc: [0.1, 0.1]}
+  tolerance: 0.014
+  provenance: proposed
+  reason: >-
+    Both codes set a module's maximum clutches to one tenth of the pool (cms2Dv1_0.m line 40, cpool*0.1;
+    Cell1DPublish.cpp line 58, int(clutch_pool_/10.0)); this code truncates to an integer, the 2D code does not.
+  assumptions:
+    - "the two agree exactly when the pool is a multiple of 10, as at the base sets (750 clutches); elsewhere the truncation loses less than one clutch"
+    - "tolerance 0.014 (added): less than one clutch in a maximum of at least 75 (pools of at least 750)"
+# Against the printed module rules of the 2D CMS paper (bangasser2017, Methods p. 7, reviewed 2026-11-19).
+# The code names no paper (no comment mentions Bangasser, 2017 or the 2D simulator), and bangasser2017 is
+# earlier, so nothing is stated and every relation is proposed. The code's module rules are tested against
+# Eqs. 1, 2, 3, 7, 8 and 9 as printed. Units: the code holds actin as lengths in nm, bangasser2017 in um.
+- id: rel_offrate_b17_eq1
+  kind: same_as
+  a: bangasser2017/off_rate_eq1
+  b: cms1d_cpp_code/offrate_port
+  mapping: {koff: "koff", F: "Fc", Fb: "Fb"}
+  regime: {koff: [0.01, 10], Fc: [0, 20], Fb: [1, 10]}
+  provenance: proposed
+  reason: >-
+    The code's engaged-clutch off-rate, clutch_off_rate_ exp(mag(force_vec)/clutch_rupture_force_)
+    (lines 578, 618), is bangasser2017's Eq. 1, koff,i = k*off exp(Fc,i/Fb) (p. 7), with the same parameter
+    values (k*off = 0.1 /s, Fb = 2 pN in Supplementary Table 2 and in the code).
+  assumptions:
+    - "for clutch tension (Fc >= 0); the code takes the magnitude of the force, so a compressed clutch also unbinds faster, which Eq. 1 as printed does not say"
+    - "the code's clutch tension and the paper's clutch force Fc,i are the force on one clutch (a correspondence of quantities, not merged)"
+- id: rel_flow_b17_eq2
+  kind: same_as
+  a: bangasser2017/motor_velocity_eq2
+  b: cms1d_cpp_code/flow_port
+  mapping: {vu: "vm", F: "ks*xs", nm: "nm", nmFactor: "1", Fm: "Fm"}
+  regime: {vm: [50, 200], ks: [0.01, 10], xs: [0, 1], nm: [10, 1000], Fm: [1, 3]}
+  provenance: proposed
+  reason: >-
+    The code's retrograde flow speed of a module, v_unloaded_ (1 - mforce_mag/(n_motors_ nmFactor
+    motor_stall_force_)) (line 405), is bangasser2017's Eq. 2, vm,j = v*m (1 - κs xs,j/(nm,j Fm)) (p. 7):
+    the code's module force is κs xs,j by the module force balance (the paper's Eq. 4).
+  assumptions:
+    - "the module force mforce_mag (springs in series, line 590) is the substrate spring force κs xs,j, by the force balance Fj = κc Σxc,i = κs xs,j (Eq. 4)"
+    - "nmFactor = 1: the code's time-varying factor on the motor number (lines 184-199, q_motor_schedule) has no counterpart in the paper"
+    - "regime below stall (κs xs <= 10 pN <= nm Fm): the code clips the speed at zero above stall (max(0.0, ...)), while Eq. 2 as printed gives a negative speed there and the paper says nothing of a clip; above stall the two differ, not tested here"
+    - "the paper's vm,j (motor retraction rate of F-actin) and the code's filament_vel_ (retrograde flow) are both the module's retrograde F-actin speed (a correspondence of quantities)"
+- id: rel_poly_b17_eq3
+  kind: same_as
+  a: bangasser2017/polymerization_eq3
+  b: cms1d_cpp_code/poly_port
+  mapping: {vmax: "vp_max", PolyFactor: "1", AG: "1000*AG", Atotal: "1000*AT"}
+  regime: {vp_max: [50, 300], AG: [1, 90], AT: [100, 1000]}
+  provenance: proposed
+  reason: >-
+    The code's polymerization speed of an uncapped module, maxpoly_ PolyFactor free_actin_/total_actin_pool_
+    (line 411), is bangasser2017's Eq. 3, vp = v*p AG/AT (p. 7), with the same maximum (200 nm/s) and total
+    actin (100 um in Supplementary Table 2, 100000 nm in the code).
+  assumptions:
+    - "PolyFactor = 1, as the code sets it (line 28); the paper has no such factor"
+    - "the paper counts AG and AT as protrusion lengths in um, the code in nm (factor 1000)"
+- id: rel_nucleation_b17_eq7
+  kind: same_as
+  a: bangasser2017/module_birth_eq7
+  b: cms1d_cpp_code/nucleation_port
+  mapping: {knuc0: "kmod_max", AG: "1000*AG", Atotal: "1000*AT"}
+  regime: {kmod_max: [0.1, 10], AG: [1, 90], AT: [100, 1000]}
+  provenance: proposed
+  reason: >-
+    The code's module birth rate, (free_actin_/total_actin_pool_)^4 module_birth_rate_0 (lines 100, 628), is
+    bangasser2017's Eq. 7, kmod = k*mod (AG/AT)^4 (p. 7), with the same maximum rate (1 /s).
+  assumptions:
+    - "the paper counts AG and AT as protrusion lengths in um, the code in nm (factor 1000)"
+# Eqs. 8-9 give a new module n*m nm,free/nm,tot motors (and clutches alike), not rounded; the code gives
+# ceil(int(pool/10) (1 - active/pool)). With n*m = Nm/10 (both sets of Supplementary Table 2: 100 of 1000,
+# 1000 of 10000; 75 of 750, 750 of 7500) and the free count = pool - active, the two differ only by the
+# rounding up, which loses less than one motor or clutch: approximated_by. Pinned at the low set, where
+# pool/divisor is exact, and with at least half of the pool free, so the rounding error stays below 2-2.7%.
+- id: rel_motors_b17_eq8_alloc
+  kind: approximated_by
+  a: bangasser2017/module_motors_eq8
+  b: cms1d_cpp_code/module_alloc_port
+  mapping: {motor_pool: "nm_tot", clutch_pool: "750", motor_divisor: "nm_tot/nm_max", clutch_divisor: "10",
+            active_motors: "nm_tot - nm_free", active_clutches: "0"}
+  output_map: {nm_new: nm}
+  regime: {nm_max: [100, 100], nm_free: [500, 1000], nm_tot: [1000, 1000]}
+  tolerance: 0.02
+  provenance: proposed
+  reason: >-
+    The code's motors for a new module, ceil(max_module_motors_ (1 - active_motors_/motor_pool_)) with
+    max_module_motors_ = int(motor_pool_/10.0) (lines 57, 466-468), is bangasser2017's Eq. 8,
+    nm = n*m nm,free/nm,tot (p. 7), rounded up to an integer.
+  assumptions:
+    - "the code's motors held by modules (active_motors_) are the paper's nm,tot - nm,free"
+    - "the code computes the module maximum as int(pool/10); the paper takes n*m as a parameter, 0.1 Nm in both sets of Supplementary Table 2, so the divisor is mapped as nm,tot/n*m"
+    - "clutch_pool, clutch_divisor and active_clutches do not enter nm_new; they are set to the base values and zero"
+    - "tolerance 0.02 (added): rounding up adds less than one motor to at least 50 (half the pool free or more); when the pool is used up the code gives 1 motor and Eq. 8 gives 0, outside the regime"
+- id: rel_clutches_b17_eq9_alloc
+  kind: approximated_by
+  a: bangasser2017/module_clutches_eq9
+  b: cms1d_cpp_code/module_alloc_port
+  mapping: {motor_pool: "1000", clutch_pool: "nc_tot", motor_divisor: "10", clutch_divisor: "nc_tot/nc_max",
+            active_motors: "0", active_clutches: "nc_tot - nc_free"}
+  output_map: {nc_new: nc}
+  regime: {nc_max: [75, 75], nc_free: [375, 750], nc_tot: [750, 750]}
+  tolerance: 0.027
+  provenance: proposed
+  reason: >-
+    The code's clutches for a new module, ceil(max_module_clutches_ (1 - active_clutches_/clutch_pool_)) with
+    max_module_clutches_ = int(clutch_pool_/10.0) (lines 58, 469-470), is bangasser2017's Eq. 9,
+    nc = n*c nc,free/nc,tot (p. 7), rounded up to an integer.
+  assumptions:
+    - "the code's clutches held by modules (active_clutches_) are the paper's nc,tot - nc,free"
+    - "the paper's n*c is 0.1 Nc in both sets of Supplementary Table 2, so the divisor is mapped as nc,tot/n*c"
+    - "motor_pool, motor_divisor and active_motors do not enter nc_new; they are set to the base values and zero"
+    - "tolerance 0.027 (added): rounding up adds less than one clutch to at least 37.5 (half the pool free or more)"
+# Not entered against bangasser2017:
+# - cms1d_sim against bangasser2017/cms: a 1D simulator against the 2D one; neither runs here (cms is not
+#   runnable, cms1d_sim is not ported), the code names neither the 2D paper nor its code, and the 1D model it
+#   implements is prahl2020's (rel_cms1d_sim_from_cms_1d), which is where the 1D-from-2D calibration is stated.
+# - polarity_port: the 2D paper points each new module in a random direction in the plane; it has no
+#   polarity parameter or model to relate.
+# - the cell-body clutches (line 578, the same off-rate expression as line 618): the paper's Eq. 5 uses Eq. 1
+#   for them; covered by rel_offrate_b17_eq1.
+# Values: no datum of this record names bangasser2017 as its from_source (every parameter is linked to
+# prahl2020's Table S1), and this code is not bangasser2017's released code (that is cms_code), so cited.yaml
+# has nothing to link. bangasser2017 does not cite this later code.

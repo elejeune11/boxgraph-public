@@ -217,3 +217,73 @@
     nothing is there for bangasser2013's models to be validated against (bangasser2013
     q_xval_odde_code_none).
   citation: {file: motorclutch1_1.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}
+# ---- cross-record validation against bangasser2017 (2026-11-19): none added -------------------------
+- id: q_xval_bangasser2017_none
+  kind: choice
+  about: [mc_event_port, optimum_port, bangasser2017/fig3c_u251_pts, bangasser2017/fig3c_ecfn_pts, bangasser2017/fig4a_nodrug_pts, bangasser2017/fig4a_drugs_pts, bangasser2017/fig4a_bars_4kPa_pts, bangasser2017/fig4a_bars_100kPa_pts, bangasser2017/figs4c_bars_pts, bangasser2017/fig3f_u251_pts, bangasser2017/Eopt_u251_p3, bangasser2017/Eopt_ecfn_p3]
+  text: >-
+    No validation of the code's models against bangasser2017's measurements was entered. mc_event_port
+    has the shape of bangasser2017/cms (a flow from a force, rates and stiffnesses) and outputs a
+    retrograde flow in nm/s, the quantity of bangasser2017's measured actin flows; nothing else measured
+    there (random motility coefficient, cell area, aspect ratio, MSD) is an output of either port.
+    (1) U251 actin flow (fig3c_u251_pts, fig4a_nodrug_pts, fig4a_drugs_pts and the Fig. 4a and Supp.
+    Fig. 4C bars): every point is indexed by gel Young's modulus (kPa), the port by a spring constant
+    (pN/nm), and neither record gives the conversion (bangasser2017 q_stiffness_mapping); and no motor,
+    clutch or rate values are fitted to U251 cells: the paper states only that U251 cells have ~100-fold
+    more motors and clutches than ECFNs (p. 3), a trend. Supplementary Table 2's module maxima are the
+    whole-cell simulator's settings, and one module on a fixed cell body is a stand-in there
+    (bangasser2017 module_ssa, reconstructed, q_module_standin). The κsub of each gel would be an added
+    input resting on no statement in either paper, so a run would test the added mapping, not the model. The drug conditions (blebbistatin, cyclo(RGDfV)) have no stated effect on nm or nc.
+    (2) ECFN actin flow (fig3c_ecfn_pts) is Chan and Odde's data redrawn ("data taken from Chan and
+    Odde", Fig. 3 legend, p. 5), with x read from the image: the same means are already entered here as
+    fits against chan2008's own Fig. 3C (val_c08_v260, val_c08_v57k), with κsub from chan2008's Eq. 13
+    and fitted Δ, a third record's mapping. Entering the redrawn copy would count the same measurement
+    twice. (3) Traction strain energy (pJ; fig3e, fig3f, fig4b, Supp. Fig. 4) is not the port's mean
+    traction force (pN): it needs a substrate displacement field neither port computes. (4) The optimal
+    moduli (Eopt_u251_p3, Eopt_ecfn_p3, printed "~100" and "~1" kPa) are in kPa, approximate (no
+    verdict), and optimum_port gives an optimal spring constant. odde_code holds no measurements, so
+    nothing is there for bangasser2017's models to be validated against (bangasser2017
+    q_xval_odde_code_none).
+  citation: {file: motorclutch2_3.m, lines: "27", quote: "stiffness=logspace(-2,2,10); %define stiffness vector"}
+- id: q_xval_alonsomatilla2023_none
+  kind: choice
+  about: [mc_event_port, optimum_port]
+  text: >-
+    No cross-validation with alonsomatilla2023 in either direction, because neither record holds a
+    measurement. Every value that paper plots or prints is a result of its own models (mean-field,
+    analytical or stochastic; its figures.md: "The paper has no measurements"), so the ports here have no
+    measurement there to be validated against. A port run against alonsomatilla2023's model curves would
+    relate two models, which is a relations job, not a validation. This record holds only the code's
+    parameters and the papers' predicted results copied in, so alonsomatilla2023's models have nothing
+    here either (alonsomatilla2023/q_xval_odde_code_none).
+  citation: {none: "concerns the absence of measurements in both records, not a line of the code"}
+# ---- cross-record validation against mekhdjian2017 (2026-11-22): none added -------------------------
+- id: q_xval_mekhdjian2017_none
+  kind: choice
+  about: [mc_event_port, optimum_port, mekhdjian2017/T_5e_ctrl, mekhdjian2017/T_5e_tgf, mekhdjian2017/F_5e_ctrl, mekhdjian2017/F_5e_tgf, mekhdjian2017/A_5e_ctrl, mekhdjian2017/A_5e_tgf, mekhdjian2017/F_s5_ctrl, mekhdjian2017/F_s5_tgf, mekhdjian2017/mts_sensor_6d, mekhdjian2017/mts_sensor_6f, mekhdjian2017/lifetime_7b, mekhdjian2017/T_4d, mekhdjian2017/inv_area_1d]
+  text: >-
+    No validation of the code's models against mekhdjian2017's measurements was entered. mekhdjian2017
+    runs a motor-clutch model "modified from" Chan and Odde / Bangasser et al. (its Supplement p. 24),
+    which is this code's model plus reinforcement, but it never compares the code's output with its own
+    data. mekhdjian2017 does not cite or use this code. Its simulations are its own MATLAB direct Gillespie
+    runs (p. 28). The ports' outputs are a retrograde flow, a mean 1D substrate force in pN, a failure
+    frequency, a cycle time, engaged-clutch numbers, an ensemble stiffness and a mean clutch tension.
+    (1) mekhdjian2017 measures no retrograde flow. (2) Its traction measurements are a traction stress in
+    Pa (T_5e_*, T_4b, T_4d, T_s3c) and a whole-cell total force in nN (F_5e_*, F_s5_*, F_4b, F_4d, F_s3c).
+    Neither is the port's F_trac, the force of one module of nm motors and nc clutches. mekhdjian2017 turns
+    that force into a stress only through its own Eq. 4 and an adhesion radius it does not print
+    (mekhdjian2017 q_radhesion, an added value there). Its models do this, and are compared there
+    (val_A_s5_*, comparisons of Fig. 5c-e). This record has no such conversion. Its measurements are also
+    indexed by gel Young's modulus (kPa), and the port takes a spring constant (pN/nm), through the same
+    unprinted Eq. 5 radius. (3) The spread areas need the actin balance of mekhdjian2017's reconstructed
+    spread_area_pss, not in the code. (4) The tension-sensor forces per sensor (mts_sensor_6d, 6f; pN) are
+    medians over PyMT and Met1 cells on MTS coverslips. Those surfaces have no stated stiffness
+    (mekhdjian2017 q_mts_stiffness), and no motor or clutch number is given for these cells. A sensor's
+    force is also not the code's time-averaged tension of engaged clutches (Fc_mean). A run would test an
+    invented κsub, not the model. (5) Adhesion lifetimes (lifetime_7b, minutes) are focal-adhesion
+    lifetimes, not the code's load-and-fail cycle time, and neither paper relates the two. (6) Invasion
+    into 3D collagen, constriction transit, AFM, nuclear aspiration, protein positions and patient survival
+    are outputs of no model here. The shared shape of mekhdjian2017/bell_off_rate and mc_event_port (a rate
+    from a force and a rate) relates two models; it is left to the relations job. In the other direction,
+    see mekhdjian2017/q_xval_odde_code_none.
+  citation: {file: motorclutch1_1.m, lines: "5", quote: "Reduplicate the Chan Motor-Clutch model with event stepping"}

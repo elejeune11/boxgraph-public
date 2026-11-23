@@ -1,0 +1,16 @@
+id: rigid_clutch_scan
+name: rigid-substrate traction and bound fraction (Eqs. S31-S36) against the clutch stiffness parameter of Fig. 3 (omega = omega' beta_c)
+role: model
+stated: {page: 7, printed_page: "3375", quote: "kinetic parameter. Parameter values", where: "Fig. 3 caption; Eqs. S31-S36"}
+equation: "T*(beta_c) = T*_rigid(F, tau, omega' beta_c), the K -> oo limit of Fig. 3, where K = K'/beta_c"
+inputs:
+  F:           {quantity: myosin_activity, unit: dimensionless}
+  tau:         {quantity: clutch_kinetic_parameter, unit: dimensionless}
+  omega_prime: {quantity: reduced_motor_velocity, unit: dimensionless}
+  beta_c:      {quantity: clutch_stiffness_parameter, unit: dimensionless}
+outputs:
+  T:  {quantity: dimensionless_traction, unit: dimensionless}
+  nb: {quantity: fraction_bound_clutches, unit: dimensionless}
+settings: {n_scan: 400}
+built_from: [rigid_steady_state]
+stochastic: false

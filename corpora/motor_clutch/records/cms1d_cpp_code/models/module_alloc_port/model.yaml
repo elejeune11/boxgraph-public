@@ -1,0 +1,26 @@
+# Port to Python (our code) of how the code sizes modules: the per-module maxima, Cell1DPublish.cpp lines
+# 57-58, and the motors and clutches given to a newly nucleated module, lines 466-470 (BirthNewModule).
+# The four initial modules (Init, lines 82 and 92) get the maxima, not the allocation rule.
+id: module_alloc_port
+name: "the code's module motor and clutch allocation (Cell1DPublish.cpp lines 57-58 and 466-470, Python port)"
+role: model
+stated: {file: Cell1DPublish.cpp, lines: "57-58", quote: "max_module_motors_ = int(motor_pool_/10.0);"}
+described_from: prahl2020
+equation: >-
+  max_module_motors_ = int(motor_pool_/10.0); max_module_clutches_ = int(clutch_pool_/10.0);
+  nm = 1, nc = 1; if active_motors_ < motor_pool_: nm = ceil(max_module_motors_ (1 - active_motors_/motor_pool_));
+  if active_clutches_ < clutch_pool_: nc = ceil(max_module_clutches_ (1 - active_clutches_/clutch_pool_))
+inputs:
+  motor_pool:      {quantity: n_motors_cell, unit: dimensionless}
+  clutch_pool:     {quantity: n_clutches_cell, unit: dimensionless}
+  motor_divisor:   {quantity: pool_divisor, unit: dimensionless}
+  clutch_divisor:  {quantity: pool_divisor, unit: dimensionless}
+  active_motors:   {quantity: n_motors_active, unit: dimensionless}
+  active_clutches: {quantity: n_clutches_active, unit: dimensionless}
+outputs:
+  nm_max: {quantity: n_motors_module_max, unit: dimensionless}
+  nc_max: {quantity: n_clutches_module_max, unit: dimensionless}
+  nm_new: {quantity: n_motors_new_module, unit: dimensionless}
+  nc_new: {quantity: n_clutches_new_module, unit: dimensionless}
+settings: {}
+stochastic: false

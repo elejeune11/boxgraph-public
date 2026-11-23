@@ -1,0 +1,191 @@
+- id: q_framework_missing
+  kind: unstated_model
+  about: [chain_sim, kc_profile_extremes, stdev_kcell_C, nd_factor_kcell_C, max_threshold_length_C, kmin_duro_D, pbind_min_H]
+  text: >
+    The release keeps only the files the authors added (VertexAmrit/**, the *_ab drivers, MeshAttributes_ab).
+    The methods that implement the paper's Eqs 10-14 are called but not defined there:
+    SetVariableSpringConstant and SetVariableDampingConstant (Eqs 11, 12), GenerateBasicRandom_ab (the
+    threshold division, Eq 10), SetSpringConstantDurotaxis (Eq 14), SetBindingProbabilityHaptotaxis (Eq 13),
+    and the damping division of ComputeForcesIncludingDamping. They belong to Chaste classes the authors
+    modified (MutableVertexMesh, CellsGenerator, AbstractNumericalMethod) and left out. So the formulas of
+    Eqs 10-14 cannot be read in the code; only the parameters the drivers pass to them, and the drivers'
+    own Gaussian block (lines 223-258), can.
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "422", quote: "p_mesh_ab1->SetVariableDampingConstant(constant_cell_damping_constant, min_cell_damping_constant,variable_damping_constant, min_ND, max_ND, ND_stdev_dc, ND_factor_dc);"}
+- id: q_exit_before_solve
+  kind: possible_error
+  about: [chain_sim]
+  text: >
+    As released, every driver calls exit(0) after setting the meshes' parameters and before any force is
+    added or Solve() is called (C line 424, D line 437, H line 455, each "uncommented 10-20-22 for
+    plotting Kx, t_d_l, dc"). Run as the README says (ctest -R TestRunningVertexBasedSimulationTutorial_ab1),
+    none of the three versions simulates anything; the line must be commented out to produce the paper's
+    simulations. The README also names the test "Simulation" where the file says "Simulations".
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "424", quote: "exit(0);		//uncommented 10-20-22 for plotting Kx, t_d_l, dc"}
+- id: q_code_units
+  kind: unstated_input
+  about: [stiffness_unit_map, damping_unit_map, collagen_k_C, substrate_k_C, cell_collagen_link_k_C, substrate_collagen_link_k_C, protrusive_force_C, nd_factor_dc_D, cmp_kl_map, cmp_kcl_map, cmp_kls_map, cmp_eta_l_map, cmp_eta_c_map]
+  text: >
+    The code writes stiffnesses, dampings and the protrusive force without units (500, 1500, 2500, 1000;
+    2, 2, 5; 6750), and the paper states no conversion to the S1 Table's nN/um, nN um-1 s and nN. The
+    comparisons test the hypothesis of one factor per kind: the substrate spring's factor 6.17/500 maps the
+    collagen spring and both links onto the S1 Table, and the substrate damping's 0.22/2 maps the collagen
+    and cell damping, so the S1 Table is the code's set in other units. The protrusive force has no second
+    force to test a factor on (6750 against 3083 nN). Two consequences for the paper: (1) the S2/S3 Tables
+    mix units: gamma_eta (75, 20, 400) and gamma_k are the code's numbers in code units (nd_factor_dc_D =
+    75), while beta_eta (0.55, 0.28) is in nN um-1 s (the code has 5 and 2.51); this is the factor of
+    about 9 the paper record finds in Eq 12 (bagchi2025 q_eq12_scale) and, for stiffness, the factor of
+    about 81 (500/6.17) it finds in Eq 11 (bagchi2025 q_eq11_scale). (2) the factors also fix the code's
+    time and length units only together with the force unit, which neither source states; the code's
+    comment gives hours for the time step.
+- id: q_gamma_k
+  kind: unexplained_difference
+  about: [nd_factor_kcell_C, nd_factor_kcell_D]
+  text: >
+    The drivers pass ND_factor_kcell = 100 to SetVariableSpringConstant in all three versions (comments:
+    "//10", and "made it to 100 (10000000 - OG)"), while the S2 Table prints gamma_k = 1000 and the S3
+    Table 1000 (connected) and 10000 (disconnected). With SetVariableSpringConstant not released, whether
+    the method multiplies the factor further cannot be seen.
+- id: q_cell_spring_50
+  kind: unexplained_difference
+  about: [cell_k_D, cmp_kc_map_D]
+  text: >
+    D and H set a uniform cell spring stiffness of 50 (SetSpringConstant after SetVariableSpringConstant),
+    which the substrate factor maps to about one eighth of the S1 Table's 4.92 nN/um (0.8 times the
+    substrate's 6.17, i.e. 400 in code units). C comments both lines out ("commented 8-16-23"). Which of
+    the two calls sets the cell springs in D and H is decided in MutableVertexMesh, not released.
+- id: q_prefactor_s
+  kind: possible_error
+  about: [driver_profile_extremes, minND1_C_s10, minND1_D36, cmp_delta_eps_s2_D36, cmp_delta_eps_conn_C_s10]
+  text: >
+    In the drivers' second Gaussian (C line 250, D 251, H 266) the prefactor is 1/(s sqrt(2 pi)) with
+    s = ND_stdev_dc, the damping width, while the exponent uses s1 = ND_stdev_tdl; Eq 10 as printed has
+    1/(sigma_eps sqrt(2 pi)). The printed delta_eps of the S2 Table (6.11e-5) and of the S3 connected
+    column (1.02e-19) are reproduced only with this prefactor and s = 10 (cmp_delta_eps_s2_D36,
+    cmp_delta_eps_conn_C_s10); with the prefactor of Eq 10 they would be twice and about five times
+    larger. Either the code's line has s for s1, or Eq 10 does not state the normalisation the code uses.
+  citation: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "250", quote: "double k_s1 = 1*(1/(s*sqrt(2*M_PI)))*exp(-(pow(((node_index1+1-uv1)/s1),2.0))/2);"}
+- id: q_s3_columns
+  kind: unexplained_difference
+  about: [cmp_delta_eps_conn_C, cmp_delta_eps_conn_C_s10, cmp_delta_eps_disc_C, cmp_delta_eps_disc_D36, cmp_delta_eta_conn_C, cmp_delta_eta_disc_C]
+  text: >
+    In the drivers one s sets both the damping Gaussian (delta_eta) and the threshold Gaussian's prefactor
+    (delta_eps). The S3 Table's columns are not one setting of it: the connected delta_eta (1.75e-71) needs
+    s = 1, its sigma_eta, but its delta_eps (1.02e-19) needs s = 10; the disconnected delta_eta (3.97e-3)
+    needs s = 8, its sigma_eta, but its delta_eps (6.11e-5, the S2 value) needs s = 10. As shipped, C
+    (s = 1) gives 1.03e-18 for the connected delta_eps, ten times the printed 1.02e-19. The deltas may have
+    been copied from runs with different settings, or the printed exponent -19 is a misprint of -18.
+- id: q_control_mixed
+  kind: reading
+  about: [stdev_kcell_C, nd_stdev_dc_C, nd_factor_dc_C, nd_factor_tdl_C, nd_stdev_tdl_C, long_collagen_C]
+  text: >
+    The folder named Chaste_12_30_22_control holds the latest edits of the three (dated up to 9-6-23,
+    after the 8-14-23 and 9-5-23 folders). Its driver is set to the S3 Table's connected column for the
+    damping and threshold profiles (gamma_eta 20, sigma_eta 1, gamma_eps 0.8, sigma_eps 2) and connected
+    ligands (islongcollagen true), but to the disconnected column's sigma_k = 5; the disconnected values
+    (400, 8, 2.51, "OG is 5", and sigma_k 1 for connected) are only in comments. Several comments record
+    temporary changes ("changed it to 0.2 on 8-19-23", "changed it to 0 on 8-19-23", "changed it to 0.08",
+    "changed from 80 to 48 on 8-26-23") and say the values were put back, so which setting produced which
+    figure is not recorded in the code.
+- id: q_cell_nodes_4
+  kind: unexplained_difference
+  about: [cell_nodes_D, run_ext_D, cmp_delta_eta_s2_D, cmp_delta_eps_s2_D, collagen_elements_D, substrate_elements_D]
+  text: >
+    D and H set cell_nodes = 4 (five cell nodes; "// 36" in the comment) with 48 collagen and 60 substrate
+    elements, where C has 36, 80 and 96 ("made it to 4 (36 - OG) for haptotaxis control simulation
+    8-26-23"). The paper plots profiles over 36-37 cell nodes (Figs 8j-l, 9a-c) and its S2 Table's deltas
+    are the Gaussian 18 nodes from the centre; with 4 cell springs the drivers' extremes do not match them
+    (cmp_delta_eta_s2_D, cmp_delta_eps_s2_D), with the commented 36 they do. The D and H folders as shipped
+    are therefore not the setting of the S2 Table.
+- id: q_dt_steps
+  kind: numerics
+  about: [time_step_C, num_time_steps_C, simulation_time_C]
+  text: >
+    The drivers set time_step = 0.0002 (hours, by the comment "defaut is 0.002 hr"), num_time_steps =
+    10000 and simulation_time = 20. The comments say "max is equal to (simulation_time*500)" and "2 is
+    1000 timesteps", i.e. 500 steps per hour or 0.002 h per step, ten times the dt set; 10000 steps of
+    0.0002 h last 2 h, not 20 h. How Chaste reconciles SetDt, SetNumTimeSteps and SetEndTime is in classes
+    not released. The paper states no time step, and its migration runs last 24 hours (p. 29), not 20.
+- id: q_rest_criterion
+  kind: choice
+  about: [rest_disp_C, rest_disp_D]
+  text: >
+    The paper's step 1 applies the protrusive force "only if it is at equilibrium (at rest)" without a
+    criterion (bagchi2025 q_chain_not_runnable). The code's criterion is a leader-node x displacement in
+    one time step of at most 1e-5 (C) or 1e-4 (D, H, "added 8-13-23, value before was 0.00001") in mesh
+    units: a step-size-dependent threshold, and a tenfold difference between the versions.
+- id: q_threshold_length
+  kind: reading
+  about: [max_threshold_length_C, max_threshold_length_D, constant_threshold_length_C]
+  text: >
+    The code passes max_threshold_division_length = 0.675 (and an unused constant 0.95) to the threshold
+    division; the paper prints alpha_eps = 0.675 as a threshold division strain (Eq 10, S2/S3 Tables). In
+    the code's units the cell rest length is 0.5, so 0.675 as a length would be a strain of 0.35. The
+    method that uses the value is not released, so whether it is a length or a strain cannot be settled;
+    the cited value matches the paper's number.
+- id: q_tables_truncated
+  kind: reading
+  about: [cmp_omega_k_disc_C, cmp_omega_k_conn_C1, cmp_delta_k_conn_C1, cmp_delta_eta_s2_D36, cmp_delta_eps_s2_D36, cmp_kl_map, cmp_kls_map]
+  text: >
+    Where the code's numbers reproduce the tables, the printed digits are truncated rather than rounded:
+    0.398 and 0.079 for 0.3989 and 0.0798, 1.75e-71 for 1.76e-71, 6.11e-5 for 6.119e-5, and in the S1
+    Table 18.51 and 12.34 for 1500/81 and 1000/81. The comparisons come out reproduced because the build
+    allows the printed precision, but a reader of the tables should expect them to be low by up to one
+    unit of the last digit.
+- id: q_omega_k_s2
+  kind: unexplained_difference
+  about: [cmp_omega_k_s2_D36, cmp_delta_k_s2_D36, stdev_kcell_D]
+  text: >
+    The S2 Table's omega_k (0.398) and delta_k (1.75e-71) are the extremes of a unit-width Gaussian, like
+    the S3 connected column, but its sigma_k is 10, the value D and H pass (stdev_cell_spring_constant =
+    10). A width-10 Gaussian over the same nodes has extremes 0.0399 and 7.9e-3. Under the reconstructed
+    profile the S2 Table's omega_k and delta_k do not belong to its sigma_k, which agrees with the paper
+    record's finding that Eq 11 with the S2 set misses the shape of Fig 8k (bagchi2025 q_eq11_scale).
+- id: q_haptotaxis_rule
+  kind: unstated_model
+  about: [haptotaxis_H, pbind_min_H, pbind_max_H]
+  text: >
+    In H the cell-collagen link force acts only when the collagen node's binding probability is at least
+    a fresh rand()/RAND_MAX (CollagenCellLinkForce_ab.cpp lines 94-97), drawn at every force evaluation,
+    so a link that exists is switched on and off at random step by step rather than bound once, which the
+    paper's "limits the node binding capacity" does not describe. rand() is never seeded (srand(time(0))
+    is commented out, H line 149), so every run draws the same sequence. Eq 13's alpha appears nowhere in
+    the released code; only the bounds 0 and 1 of the probability are set.
+  citation: {file: Chaste_9_5_23_Haptotaxis/cell_based/test/VertexAmrit/population/forces/CollagenCellLinkForce_ab.cpp, lines: "94", quote: "double random_binding = (double) rand()/RAND_MAX;"}
+- id: q_durotaxis_kmin
+  kind: unexplained_difference
+  about: [kmin_duro_D, kmin_duro_H, cmp_kmin_map_H, cmp_kmax_map_D]
+  text: >
+    D, the version with durotaxis on, sets k_min = 350 and k_max = 1000. Mapped by the substrate factor,
+    k_max is Fig 11's 12.3 nN/um, but 350 maps to about 4.3 nN/um, which is none of the five k_min of
+    Fig 11k-l (0.06, 1.23, 3.08, 6.17, 9.26). H, with durotaxis off, carries k_min = 5, which maps to the
+    first, 0.06. Eq 14's x_max and form are in SetSpringConstantDurotaxis, not released.
+- id: q_sim_not_run
+  kind: unstated_model
+  about: [chain_sim]
+  text: >
+    The chain simulation is not ported: the Chaste classes it depends on are not in the release
+    (q_framework_missing), and the drivers stop before Solve() (q_exit_before_solve). The paper's simulated
+    results (rest after 6 and 21 min, speed and traction ratios, migration efficiencies) therefore remain
+    unchecked by the code as well as by the paper (bagchi2025 q_chain_not_runnable). What the released
+    files do settle for the paper's unstated rules: the clutch rule (after each protrusion the leader node
+    attaches to the nearest collagen node, measured in x, and keeps its rest length if the node is
+    unchanged; OffLatticeSimulation_ab1.cpp lines 474-525), forces between layers in x only, protrusion
+    at both end nodes, the rest criterion (q_rest_criterion), the meshes' sizes and the time step
+    (q_dt_steps).
+- id: q_no_cross_validation_bagchi2025
+  kind: unstated_model
+  about: [chain_sim, bagchi2025/v_ratio_af_rf_p5, bagchi2025/v_ratio_af_rf_s2a_p16, bagchi2025/v_ratio_af_rf_s3a_p16, bagchi2025/v_ratio_af_rf_s3a_p12]
+  text: >
+    No validation of this record's models against bagchi2025's measurements, and none the other way. This
+    record holds no measurements (it is software: every datum is a code parameter), so no bagchi2025 model
+    can be tested against it. Of bagchi2025's measurements (the AF/RF speed ratios 1.56, 1.33, 1.34 and the
+    measured panels of Figs 1, 2, 4 and S1-S3: strain rates, speeds, tractions, stresses, cell areas,
+    divisions, correlation functions, fibre-angle histograms), the paper compares only the speed and
+    traction ratios, the strain-rate wave order and chi_4 with its simulation (p. 16: "in experiments we
+    had observed that cells on AF travel 1.56–1.33 times faster"). The only model here that could produce
+    them is chain_sim, which is not runnable (q_sim_not_run), and its one declared output is a rest time,
+    which no measurement quantifies. The runnable models (stiffness_unit_map, damping_unit_map,
+    driver_profile_extremes, kc_profile_extremes) give parameter values and profile extremes, not measured
+    quantities. A comparison of the simulated connected/disconnected speed ratio with the measured AF/RF
+    ratio would also need connected ligand to stand for AF, a mapping the paper assumes.
+  citation: {none: "the statement quoted is on bagchi2025's p. 16, not in this record's code files"}

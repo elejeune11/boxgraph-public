@@ -1,0 +1,20 @@
+# solve_full_master_equation_main.m lines 91-232: explicit Euler integration of the time-dependent
+# master equation of talin clutches with vinculin (Appendix I, Eqs. I1-I2), with a growing NA area.
+id: master_equation
+name: "time-dependent master equation with vinculin, solve_full_master_equation_main.m (not ported)"
+role: model
+stated: {file: solve_full_master_equation_main.m, lines: "3", quote: "The program calculates the full dynamics of the molecular clutch system"}
+described_from: liu2025
+equation: >-
+  dN_on/dt = -(v - dx_s/dt) dN_on/dl + A(l) N_on + B N_off (upwind in l, explicit Euler in t);
+  v = v0 (1 - F_c/(N_m F_st)); dx_s/dt = (F_c - k_s x_s)/xi_s; N_total = N_0 + alpha N_v; S = N_total/sigma_c
+inputs:
+  E: {quantity: youngs_modulus, unit: Pa}
+outputs:
+  P: {quantity: traction_stress, unit: Pa}
+runnable: false
+not_runnable_reason: >-
+  not ported: at the code's settings (dt = 5e-5 s to 181 s, 180001 extension points) one run is
+  about 6.5e11 cell updates; and no result of it (Fig. 4, Extended Data Figs. 6-7) is recorded in
+  liu2025's record to check it against
+stochastic: false

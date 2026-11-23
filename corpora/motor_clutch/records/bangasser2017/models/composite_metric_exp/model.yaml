@@ -1,0 +1,20 @@
+id: composite_metric_exp
+name: composite metric of the measured U251 data (Methods, Composite metrics; Fig. 4f)
+role: processing
+stated: {page: 9, printed_page: "9", quote: "a composite metric was created to pool the data of random motility", where: "Methods, Composite metrics"}
+equation: >-
+  each of the five metrics scaled so that its minimum is 0 and its maximum 1 (actin flow reflected
+  about the x axis first); the scaled sets averaged at each modulus and the averages scaled again to
+  span 0 to 1
+inputs:
+  rmc:    {quantity: random_motility_coefficient, unit: um^2/min, curve: {quantity: substrate_modulus, unit: kPa}}
+  area:   {quantity: cell_area, unit: um^2, curve: {quantity: substrate_modulus, unit: kPa}}
+  aspect: {quantity: cell_aspect_ratio, unit: dimensionless, curve: {quantity: substrate_modulus, unit: kPa}}
+  flow:   {quantity: retrograde_flow_rate, unit: nm/s, curve: {quantity: substrate_modulus, unit: kPa}}
+  strain: {quantity: traction_strain_energy, unit: pJ, curve: {quantity: substrate_modulus, unit: kPa}}
+outputs:
+  C: {quantity: composite_metric, unit: dimensionless, curve: {quantity: substrate_modulus, unit: kPa}}
+settings: {}
+stochastic: false
+from_words: true
+built_from: [composite_metric_sim]

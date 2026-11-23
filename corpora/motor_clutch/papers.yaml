@@ -91,3 +91,164 @@
     motorclutch2_3.m sweeps substrate stiffness over several runs. Parameters differ from Chan and Odde''s
     published set in places (e.g. nm = nc = 50, Kc = 0.8 pN/nm, kon = 0.3 1/s in motorclutch2_3.m): record
     them as written and compare with each paper.'
+- id: bangasser2017
+  file: corpus/motor_clutch/2017_Bangasser.pdf
+  pages: [1, 22]
+  note: 'Bangasser et al. 2017, Nature Communications 8, 15313: Shifting the optimal stiffness for cell
+    migration. PDF pages 1-10 are the article and methods, pages 11-22 the Supplementary Information (Supplementary
+    Table 2 is the cell migration simulator parameter set). A 2D cell migration simulator (CMS) built
+    from motor-clutch modules, with U251 glioma migration on polyacrylamide gels. Its released MATLAB
+    code is the record cms_code.'
+  relate_with: [chan2008, bangasser2013, bangasser2013b, odde_code]
+- id: prahl2020
+  file: corpus/motor_clutch/2020_Prahl.pdf
+  pages: [1, 31]
+  note: 'Prahl et al. 2020, Biophysical Journal 118, 1709-1720: Predicting confined 1D cell migration
+    from parameters calibrated to a 2D motor-clutch model. PDF pages 1-12 are the article, pages 13-31
+    the Supporting Material (Supporting Methods for the 1D CMS, Table S1 the 1D CMS base parameters).
+    The paper''s simulations were coded in MATLAB; the C++ 1D simulator attached as cms1d_cpp_code is
+    a later re-implementation from the same lab.'
+  relate_with: [bangasser2017, chan2008, bangasser2013, bangasser2013b]
+- id: cms_code
+  kind: software
+  file: corpus/motor_clutch/code/cms_code
+  papers: [bangasser2017]
+  note: 'CMS v1.0, the released MATLAB cell migration simulator of Bangasser et al. 2017 (B. Bangasser
+    2014, modified by B. Castle 2017): cms2Dv1_0.m (the simulator, a function of every parameter), cms2D_shell.m
+    and cms2D_par_shell.m (scripts that set the parameters and call it), analyzeCMSoutputv1_0.m (the analysis
+    of its output) and a readme (.docx). MATLAB is not run here: record each parameter the shell scripts
+    set, with file and line, against Supplementary Table 2 of the paper, and port the parts needed for
+    a check to Python as the reader''s model.'
+- id: cms1d_cpp_code
+  kind: software
+  file: corpus/motor_clutch/code/cms1d_cpp_code
+  papers: [prahl2020]
+  note: 'A C++ 1D cell migration simulator from the Odde lab (Cell1DPublish.cpp/.h, modulePublish.cpp/.h;
+    header: J. Hou, University of Minnesota, 2022/04/20), received with Prahl et al. 2020 in a folder
+    named Confined_migration_paper. Prahl et al. say their simulations were coded in MATLAB, so this is
+    a later re-implementation whose relation to the paper is not stated: read its parameters with file
+    and line and compare them with Table S1 of prahl2020, and record any that differ. It includes headers
+    it does not ship (Cell1D.h, module.h, u_dx0_1max50.h), so it does not compile as given; do not try
+    to build it.'
+- id: panzetta2019
+  file: corpus/motor_clutch/2019_Panzetta.pdf
+  pages: [1, 24]
+  note: 'Panzetta, Fusco and Netti 2019, PNAS 116, 22004-22013: Cell mechanosensing is regulated by substrate
+    strain energy rather than stiffness. PDF pages 1-10 are the article and methods, pages 11-24 the SI
+    Appendix (figures S1-S11, then Appendix 1: the clutch model in canonical form). Cells on stretched
+    (prestrained) PDMS and PU substrates; a clutch model with the substrate as two orthogonal springs,
+    solved with MATLAB''s ODE solver (the code is not released).'
+  relate_with: [chan2008, bangasser2013, bangasser2013b, elosegui2016]
+- id: panzetta2023
+  file: corpus/motor_clutch/2023_Panzetta_with_SI.pdf
+  pages: [1, 13]
+  note: 'Panzetta, De Clemente, Russo, Fusco and Netti 2023, Mechanobiology in Medicine 1, 100025: Insight
+    to motor clutch model for sensing of ECM residual strain. PDF pages 1-10 are the article; pages 11-13
+    are its Supplementary Information, received as a Word file and converted to PDF here (so their layout
+    is not the publisher''s). Extends panzetta2019''s two-spring clutch model with a residual strain in
+    the perpendicular spring.'
+  relate_with: [panzetta2019, chan2008, bangasser2013b]
+- id: alonsomatilla2023
+  file: corpus/motor_clutch/2023_AlonsoMatilla.pdf
+  pages: [1, 50]
+  note: 'Alonso-Matilla, Provenzano and Odde 2023, Biophysical Journal 122: Optimal cell traction forces
+    in a generalized motor-clutch model. PDF pages 1-17 are the article, pages 18-50 the Supplemental
+    Information. A generalized motor-clutch model (nonlinear motor and clutch force-extension, mean-field
+    analysis) and the substrate stiffness that maximizes traction.'
+  relate_with: [chan2008, bangasser2013, bangasser2013b, bangasser2017, odde_code]
+- id: shen2025
+  file: corpus/motor_clutch/2025_Shen.pdf
+  pages: [1, 15]
+  note: 'Shen and Zhang 2025, Physical Review E 111, 014417: Factors influencing the stability of the
+    motor-clutch model on compliant substrates under external load. 15 pages, the article with its appendices.
+    A stability analysis of the motor-clutch model''s steady states.'
+  relate_with: [chan2008, bangasser2013, bangasser2013b, alonsomatilla2023]
+- id: liu2025
+  file: corpus/motor_clutch/2025_Liu.pdf
+  pages: [1, 79]
+  note: 'Liu et al. 2025, Nature Physics 21, 1431-1443 (open access, CC BY 4.0): Elastic properties of
+    force-transmitting linkages determine multistable mechanosensitive behaviour of cell adhesion. PDF
+    pages 1-34 are the article rebuilt from the publisher''s web page (not the journal layout: cite these
+    PDF pages, and do not expect the printed page numbers); pages 35-61 are the Supplementary Information
+    in the publisher''s layout (Appendices A-F); pages 62-79 are the Extended Data: Extended Data Figs. 1-8
+    printed from the publisher''s figure pages (two pages each, figure then legend, pages 62-77) and Extended
+    Data Tables 1 and 2 as images (pages 78 and 79; Table 2 holds the main fitting parameters). A semi-analytical
+    master-equation clutch model with nonlinear (talin) adaptor elasticity and local substrate deformation;
+    its MATLAB code is the record liu_code.'
+  relate_with: [chan2008, bangasser2013, elosegui2016, kong2009, andreu2021, alonsomatilla2023]
+- id: liu_code
+  kind: software
+  file: corpus/motor_clutch/code/liu_code
+  papers: [liu2025]
+  url: https://artem-efremov.org
+  note: 'MATLAB programs of Liu et al. 2025 (received as ''Molecular clutch Matlab programs''; the paper
+    says the main codes are on artem-efremov.org / artemefremovlab.com): talin_WT_model.m, WT2_model.m,
+    Linear_KD_WT_model.m and solve_full_master_equation_main.m (main programs, Runge-Kutta and master-equation
+    solutions) and five helper functions (clutch force-extension with unfolding talin domains, a spring
+    with a yield point, the catch-bond k_off integral). MATLAB is not run here: record each parameter
+    the programs set, with file and line, against the paper and its Supplementary Information, and port
+    the parts needed for a check to Python as the reader''s model.'
+- id: baker2015
+  file: corpus/motor_clutch/2015_Baker.pdf
+  pages: [1, 21]
+  note: 'Baker et al. 2015, Nature Materials 14, 1262-1268: Cell-mediated fibre recruitment drives extracellular
+    matrix mechanosensing in engineered fibrillar microenvironments. PDF pages 1-9 are the article and
+    methods, pages 10-21 the Supplementary Information (its link layer was malformed and was removed here
+    so the pages render; the content is unchanged). Mostly experimental: electrospun DexMA fibre networks
+    of tunable stiffness, cell spreading, focal adhesions and fibre recruitment, the measured counterpart
+    of cao2017''s model.'
+  relate_with: [chan2008, elosegui2014, chaudhuri2015]
+- id: cao2017
+  file: corpus/motor_clutch/2017_Cao.pdf
+  pages: [1, 12]
+  note: 'Cao et al. 2017, PNAS 114, E4549-E4555: Multiscale model predicts increasing focal adhesion size
+    with decreasing stiffness in fibrous matrices. PDF pages 1-7 are the article, pages 8-12 the Supporting
+    Information. A discrete fibre network model of fibre recruitment coupled to a focal adhesion and cell
+    contractility model, compared with baker2015''s experiments on fibrous matrices.'
+  relate_with: [baker2015, chan2008, bangasser2013, elosegui2016]
+- id: bagchi2025
+  file: corpus/motor_clutch/2025_Bagchi_with_SI.pdf
+  pages: [1, 47]
+  note: 'Bagchi et al. 2025, PLOS Computational Biology 21, e1012664: Fast yet force-effective mode of
+    supracellular collective cell migration due to extracellular force transmission (published from the
+    2022 bioRxiv preprint). PDF pages 1-38 are the article with its supporting-information captions; the
+    supporting files were joined here: pages 39-40 S1 Table (base simulation parameters; its symbol column
+    was lost in the conversion from Excel, use the names and values; the file of S1 Table References is
+    the same table and is not repeated), page 41 S2 Table, page 42 S3 Table, pages 43-47 S1-S5 Fig. A
+    vertex model of a cell monolayer with motor-clutch-like links to collagen fibres and the substrate
+    (springs and dampers in series), on aligned and random fibres; its code is the record bagchi_code.
+    Measured data are on Figshare (not included).'
+  relate_with: [chan2008, bangasser2013, bangasser2017, prahl2020]
+- id: bagchi_code
+  kind: software
+  file: corpus/motor_clutch/code/bagchi_code
+  papers: [bagchi2025]
+  url: https://doi.org/10.5281/zenodo.13984567
+  note: 'The paper''s own C++ code from ChasteSimulationVersions v1.1 (Zenodo 10.5281/zenodo.13984567,
+    licence CC BY 4.0 on Zenodo; LICENSE file Boost): only the files the authors added to Chaste are kept
+    (cell_based/test/VertexAmrit/** with forces, mesh generators and simulation classes, the *_ab test
+    drivers, MeshAttributes_ab), for three versions of the code: Chaste_12_30_22_control, Chaste_8_14_23_Durotaxis
+    and Chaste_9_5_23_Haptotaxis. The Chaste framework itself (about 400 MB) is left out, so the code
+    does not build here; do not try to build it. Record each parameter the test drivers and force classes
+    set (file and line) against S1-S3 Tables of bagchi2025, note differences between the three versions,
+    and port to Python only what a check needs (the reader''s model).'
+- id: mekhdjian2017
+  file: corpus/motor_clutch/2017_Mekhdjian.pdf
+  pages: [1, 40]
+  note: 'Mekhdjian et al. 2017, Molecular Biology of the Cell 28, 1467-1488: Integrin-mediated traction
+    force enhances paxillin molecular associations and adhesion dynamics that increase the invasiveness
+    of tumor cells into a three-dimensional extracellular matrix. PDF pages 1-22 are the article, pages
+    23-40 the Supplemental Materials (the modified motor-clutch model with force-dependent clutch reinforcement,
+    its parameters and Supplemental Figures). Mammary epithelial cells: traction on polyacrylamide gels,
+    invasion into 3D matrix, and motor-clutch simulations with increased motors and clutches.'
+  relate_with: [chan2008, bangasser2013, bangasser2013b, bangasser2017, prahl2020, elosegui2016, odde_code]
+- id: owen2017
+  file: corpus/motor_clutch/2017_Owen.pdf
+  pages: [1, 43]
+  note: 'Owen et al. 2017, Molecular Biology of the Cell 28, 1959-1974: A cytoskeletal clutch mediates
+    cellular force transmission in a soft, three-dimensional extracellular matrix. PDF pages 1-16 are
+    the article, pages 17-43 the Supplemental Material. Human foreskin fibroblasts in soft (about 200
+    Pa) 3D fibrin: velocities of actin, adhesion proteins and fibrin along protrusions, fibrin displacement
+    by digital volume correlation, and an analytical model with a 2D fibre-network simulation of point
+    loads giving the local effective stiffness. The first source in the corpus measured in 3D.'
+  relate_with: [chan2008, gardel2008, craig2015, elosegui2016, baker2015, cao2017, mekhdjian2017]

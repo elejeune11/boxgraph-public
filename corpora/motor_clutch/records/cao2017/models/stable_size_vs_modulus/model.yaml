@@ -1,0 +1,24 @@
+id: stable_size_vs_modulus
+name: stable FA band size at the ECM moduli of the printed E*FA curves (Fig. 4A -> Fig. 5A), Eq. S2 and Eq. 4 at J = 0
+role: model
+stated: {page: 3, printed_page: "E4551", quote: "Putting It All Together: Prediction of the Stable FA Size Based on Mechanical", where: "text and Fig. 4E"}
+equation: >-
+  as stable_size_chain: r_st is the largest rFA at which sigma(E*FA(rFA)) = Delta mu_0/Delta r, with sigma from
+  Eq. S2 and Keff = 1/(1/En + 1/E*FA); here E*FA(rFA) is the printed curve whose ECM modulus equals E
+from_words: true
+built_from: [stable_size_chain]
+inputs:
+  E: {quantity: ecm_modulus, unit: kPa, description: "the ECM modulus at which the stable size is wanted (swept over Fig. 5A's x positions)"}
+  Efa_a: {quantity: fa_ecm_effective_modulus, unit: kPa, curve: {quantity: fa_band_size, unit: um}}
+  E_a: {quantity: ecm_modulus, unit: kPa, description: "the ECM modulus of curve Efa_a, as its legend labels it"}
+  Efa_b: {quantity: fa_ecm_effective_modulus, unit: kPa, curve: {quantity: fa_band_size, unit: um}}
+  E_b: {quantity: ecm_modulus, unit: kPa}
+  En: {quantity: nucleus_modulus, unit: kPa}
+  K: {quantity: cytoskeleton_stiffness, unit: kPa}
+  rho0: {quantity: baseline_contractility, unit: kPa}
+  alpha: {quantity: coupling_parameter, unit: 1/Pa}
+  beta: {quantity: coupling_parameter, unit: 1/Pa}
+  dmu0: {quantity: plaque_energy_per_area, unit: J/m^2}
+  dr: {quantity: recruited_segment_size, unit: nm}
+outputs:
+  r_st: {quantity: stable_fa_band_size, unit: um}

@@ -1,0 +1,16 @@
+id: hist_mean_actin_adhesion_relative_speed
+name: mean of a plotted histogram of spooling speeds |v_zyx - v_actn| (binned, bin centres)
+role: processing
+stated: {none: "processing added by the reader: the paper gives the means (Table 1) and plots the distributions, but does not relate them"}
+equation: "mean = sum_i x_i n_i / sum_i n_i over the plotted bins"
+inputs:
+  n: {quantity: tracks_in_bin, unit: dimensionless, curve: {quantity: actin_adhesion_relative_speed, unit: nm/min}}
+outputs:
+  mean: {quantity: actin_adhesion_relative_speed, unit: nm/min}
+settings: {}
+stochastic: false
+reconstructed: >-
+  The paper computes its mean speeds from the tracks themselves (Statistics, p. 14), not from the
+  plotted histograms; this stand-in recovers a mean from the plot, which is binned and cut at the
+  axis limit (tracks faster than the last bin are not plotted), so a difference may come from the
+  plot and not from the paper's numbers.

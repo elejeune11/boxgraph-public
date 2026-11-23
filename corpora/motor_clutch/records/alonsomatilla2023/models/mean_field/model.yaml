@@ -1,0 +1,17 @@
+id: mean_field
+name: mean-field motor-clutch model, time-averaged traction (Eqs. 3-4)
+role: model
+stated: {page: 4, printed_page: "3372", quote: "With these scalings, the conservation equation (1) and dimensionless", where: "Eqs. 3-4"}
+equation: >-
+  dP_b*/dt* = tau (1 - n_b*) delta*(x_c*) - e^{F|x_c*|} P_b* - v_e* dP_b*/dx_c*;
+  v_e* = [ (omega K/F)(1 - l_b*) + int x_c* e^{F|x_c*|} P_b* dx_c* ] / (K + n_b*);  T* = F l_b*
+inputs:
+  F:     {quantity: myosin_activity, unit: dimensionless}
+  tau:   {quantity: clutch_kinetic_parameter, unit: dimensionless}
+  omega: {quantity: dimensionless_motor_velocity, unit: dimensionless}
+  K:     {quantity: dimensionless_substrate_stiffness, unit: dimensionless}
+outputs:
+  T:  {quantity: dimensionless_traction, unit: dimensionless}
+  nb: {quantity: fraction_bound_clutches, unit: dimensionless}
+settings: {step: 1.0, h: 0.00125, cfl: 0.003, dt_max: 0.0006, dt_min: 1.0e-6, w_min: 1.0e-12, t_end_min: 5.0, load_times: 10.0, avg_from: 0.25}
+stochastic: false

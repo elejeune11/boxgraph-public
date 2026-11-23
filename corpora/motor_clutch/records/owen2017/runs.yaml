@@ -1,0 +1,73 @@
+# ---- clutch model (Supp. p. 23), inputs as in the Fig. S17 caption and the text ----
+- id: run_eq13_m015
+  model: clutch_velocity_eq13
+  inputs: {Ftot: Ftot_1000, kon: kon_1, k0: k0_1, kappa: kappa_1, Ct: Ct_500, alpha_c: alpha_m015}
+  outputs: {v: v_eq13_m015, Cb: Cb_eq13_m015}
+- id: run_eq13_m06
+  model: clutch_velocity_eq13
+  inputs: {Ftot: Ftot_1000, kon: kon_1, k0: k0_1, kappa: kappa_1, Ct: Ct_500, alpha_c: alpha_m06}
+  outputs: {v: v_eq13_m06, Cb: Cb_eq13_m06}
+- id: run_eq13_p06
+  model: clutch_velocity_eq13
+  inputs: {Ftot: Ftot_1000, kon: kon_1, k0: k0_1, kappa: kappa_1, Ct: Ct_500, alpha_c: alpha_p06}
+  outputs: {v: v_eq13_p06, Cb: Cb_eq13_p06}
+- id: run_eq14_m015
+  model: clutch_velocity_eq14
+  inputs: {Ftot: Ftot_1000, k0: k0_1, kappa: kappa_1, Ct: Ct_500, alpha_c: alpha_m015}
+  outputs: {v: v_eq14_m015}
+  note: "the text says it applies 'values from the literature to eqn. 14' and then reports what 'equation 13 yields'; both are run"
+- id: run_eq14_m06
+  model: clutch_velocity_eq14
+  inputs: {Ftot: Ftot_1000, k0: k0_1, kappa: kappa_1, Ct: Ct_500, alpha_c: alpha_m06}
+  outputs: {v: v_eq14_m06}
+# ---- effective stiffness of a continuous substrate (Supp. p. 3) ----
+- id: run_cont_10k
+  model: continuum_stiffness
+  inputs: {E: E_cont_10k, r: r_adhesion, eta: eta_continuum_added}
+  outputs: {k: k_cont_pred}
+- id: run_E_node
+  model: modulus_from_stiffness
+  inputs: {k: k_node_max, r: r_adhesion, eta: eta_continuum_added}
+  outputs: {E: E_node_pred}
+  note: "r = 0.5 um and the Poisson ratio are those of the Supplemental Discussion example the text cites"
+# ---- bulk gel (Fig. S10) ----
+- id: run_E_from_G
+  model: youngs_from_shear
+  inputs: {G: G_90, nu: nu_gel}
+  outputs: {E: E_from_G_pred}
+# ---- network element stiffness ratio (Materials and Methods, p. 13) ----
+- id: run_kappa_main
+  model: bending_ratio_persistence
+  inputs: {Lp: Lp_fibrin, T: T_added, Ef: Ef_15MPa, d: d_fiber, l: l_crosslink}
+  outputs: {kappa: kappa_main_pred}
+- id: run_kappa_soft
+  model: bending_ratio_persistence
+  inputs: {Lp: Lp_fibrin, T: T_added, Ef: Ef_2MPa, d: d_fiber, l: l_crosslink}
+  outputs: {kappa: kappa_soft_pred}
+- id: run_kappa_rod
+  model: bending_ratio_rod
+  inputs: {Ef: Ef_14p5MPa, d: d_fiber, l: l_crosslink}
+  outputs: {kappa: kappa_rod_pred}
+# ---- figure readings (second pass) ----
+- id: run_eq13_figS17
+  model: clutch_velocity_eq13
+  inputs: {Ftot: Ftot_figS17, kon: kon_1, k0: k0_1, kappa: kappa_1_figS17, Ct: Ct_figS17}
+  sweep: {alpha_c: d_figS17_v}
+  outputs: {v: v_eq13_figS17_curve, Cb: Cb_eq13_figS17_curve}
+  note: "the inputs of the Fig. S17 caption, at the alpha_c positions read from the figure"
+- id: run_node_k24_fig6b
+  model: node_force_constant
+  inputs: {k: k_node_max}
+  sweep: {u: d_fig6b_steepest}
+  outputs: {F: F_node_k24_curve}
+  note: "the printed 'up to ~24 nN/um' as the slope of the steepest line of Fig. 6B"
+- {id: run_hmean_fig3b_pax, model: hist_mean_paxillin_speed, inputs: {n: d_fig3b_pax}, outputs: {mean: hmean_fig3b_pax}}
+- {id: run_hmean_fig3b_fib, model: hist_mean_fibrin_speed, inputs: {n: d_fig3b_fib}, outputs: {mean: hmean_fig3b_fib}}
+- {id: run_hmean_fig3c_slip, model: hist_mean_fibrin_paxillin_relative_speed, inputs: {n: d_fig3c_slip}, outputs: {mean: hmean_fig3c_slip}}
+- {id: run_hmean_fig4a_fib, model: hist_mean_fibrin_speed, inputs: {n: d_fig4a_fib}, outputs: {mean: hmean_fig4a_fib}}
+- {id: run_hmean_fig4a_actn, model: hist_mean_actinin_speed, inputs: {n: d_fig4a_actn}, outputs: {mean: hmean_fig4a_actn}}
+- {id: run_hmean_fig5b_pax, model: hist_mean_paxillin_speed, inputs: {n: d_fig5b_pax}, outputs: {mean: hmean_fig5b_pax}}
+- {id: run_hmean_figS14c_actn, model: hist_mean_actinin_speed, inputs: {n: d_figS14c_actn}, outputs: {mean: hmean_figS14c_actn}}
+- {id: run_hmean_figS14c_zyx, model: hist_mean_zyxin_speed, inputs: {n: d_figS14c_zyx}, outputs: {mean: hmean_figS14c_zyx}}
+- {id: run_hmean_figS14e_rel, model: hist_mean_actin_adhesion_relative_speed, inputs: {n: d_figS14e_rel}, outputs: {mean: hmean_figS14e_rel}}
+- {id: run_hmean_figS14e_diff, model: hist_mean_actin_adhesion_speed_difference, inputs: {n: d_figS14e_diff}, outputs: {mean: hmean_figS14e_diff}}

@@ -1,0 +1,286 @@
+- id: q_average
+  kind: unstated_model
+  about: [clutch_axial_ssa, clutch_transverse_ssa]
+  text: >-
+    The paper reports "average" retrograde flow, clutch numbers, forces and cycle times over 100 k events but
+    does not say whether averages are over time or over events. The record uses time averages (as
+    bangasser2013); an event average gives a much lower flow at small nc (about 68 nm/s at nc = 10 on the
+    stiff substrate, against about 107 nm/s in Figs. 4-5), so the time average is the reading consistent
+    with the figures.
+  citation: {page: 5, printed_page: "5", quote: "average values of retrograde actin ﬂow rate", where: text}
+- id: q_spline
+  kind: choice
+  about: [optimal_nc_axial, optimal_nc_transverse]
+  text: >-
+    The optimum is located on a cubic spline through the simulated points (p. 6), but whether the spline
+    is in nc or in log nc is not said, nor whether the nc values are rounded to integers. The record
+    uses log10 nc (the grid is log-spaced) and integer nc.
+  citation: {page: 6, printed_page: "6", quote: "cubic spline interpolation function to determine the optimum values of", where: text}
+- id: q_transverse_fs
+  kind: unstated_model
+  about: [clutch_transverse_ssa, optimal_nc_transverse]
+  text: >-
+    For the transverse strain, Eq. 7 balances F0 and the clutch forces against Fs, but Fs is printed only
+    for the axial case (Eq. 6). The record evaluates the two springs at the total horizontal displacement
+    x0 + xs with vertical distance l (P2 fixed), the only reading that makes the spring rotate as the
+    paper says it does (p. 7).
+  citation: {page: 3, printed_page: "3", quote: "when the force F0 is applied transversally, the equilibrium equation is", where: "Eq. 7"}
+- id: q_transverse_load
+  kind: unstated_model
+  about: [clutch_transverse_ssa]
+  text: >-
+    Eq. 10 loads the motors with Fs. In the transverse case Fs includes F0 (Eq. 7), which for l = 1000 nm
+    and strain 1 is about 2700 pN, more than the stall force nm Fm of any nc simulated (at most 2000 pN),
+    so the flow would be negative throughout. The record loads the motors with the summed clutch force,
+    which equals Fs in the axial case.
+  citation: {page: 3, printed_page: "3", quote: "The F-actin retrograde velocity is related to the force Fs by the Hill's", where: "Eq. 10"}
+- id: q_eq8
+  kind: possible_error
+  about: [clutch_transverse_ssa]
+  text: >-
+    Eq. 8 gives F0 = ks^eps0 eps0 l + ks x0, adding the full tension of the tilted orthogonal spring to a
+    horizontal force. The horizontal component of that tension would be ks^eps0 eps0 l x0/sqrt(l^2 + x0^2).
+    With the printed F0 the springs are not in balance at P1' before any clutch engages, so the substrate
+    rests a little further along (about 70 nm for strain 1 and ks = 1 pN/nm). The record keeps Eq. 8 as
+    printed; the extra offset changes the local substrate stiffness by well under 1%, so it should not
+    change the optimum appreciably.
+  citation: {page: 3, printed_page: "3", quote: "based on simple geometric considerations, it is possible to derive", where: "Eqs. 8-9"}
+- id: q_soft_optimum
+  kind: unexplained_difference
+  about: [cmp_ncopt_soft_0, cmp_inc_soft_01, cmp_inc_soft_3, cmp_dn_soft_01, cmp_ratio_sim, optimal_nc_axial]
+  text: >-
+    With Table 1 and nm = nc, the simulated flow on the soft substrate (ks = 0.1 pN/nm) decreases over the
+    whole printed grid (10 to 200), from about 110 nm/s at nc = 10 to about 87 nm/s at 200, and its minimum
+    lies beyond the grid (near nc = 320 with or without the orthogonal spring, in single runs). Fig. 5A
+    instead shows about 80 nm/s at nc = 10 and a minimum of about 73.5 nm/s at nc of about 40. With the
+    parameters as printed, the record's model does not reproduce the soft-substrate optimum, so the
+    soft-substrate increases cannot be reproduced either. Some parameter or ingredient of the paper's
+    soft-substrate runs is not printed or differs from Table 1. The record found nothing that would
+    explain it (the canonical model gives the same result).
+  citation: {page: 6, printed_page: "6", quote: "factor of 10 passing by 40 on the soft substrate", where: "text; Fig. 5A"}
+- id: q_stiff_optimum
+  kind: unexplained_difference
+  about: [cmp_ncopt_stiff_0, optimal_nc_axial]
+  text: >-
+    On the stiff substrate single runs of the record's model give an optimum near nc = 565-580 with a
+    minimum flow of about 76.7 nm/s, against 445 and about 74 nm/s in the paper (Figs. 4B, 5B). The curve
+    is flat near its minimum, so noise moves the optimum. The paper's own optima, 40 and 445, scale with
+    ks (as expected when nm = nc), which the stiff result roughly does and the soft result does not.
+  citation: {page: 6, printed_page: "6", quote: "to 445 on the", where: text}
+- id: q_factor_10
+  kind: overstated_claim
+  about: [cmp_ratio_printed]
+  text: >-
+    "Increased by a factor of 10" from 40 to 445 is a factor of 11.1; the statement is loose, not an
+    error of substance.
+  citation: {page: 6, printed_page: "6", quote: "the optimum number of clutches increased by a", where: text}
+- id: q_fig6_caption
+  kind: reading
+  about: [eps_3]
+  text: >-
+    The Fig. 6 caption lists the strains as "0, 0.1, 0.25, 0.5, 1, 2 and 31"; the axis and the text
+    (p. 5) show 3. The record takes 3.
+  citation: {page: 7, printed_page: "7", quote: "0.1, 0.25, 0.5, 1, 2 and 31) are", where: "Fig. 6 caption"}
+- id: q_events
+  kind: numerics
+  about: [optimal_nc_axial, optimal_nc_transverse, clutch_axial_ssa]
+  text: >-
+    The paper limits every simulation to 100 k events ("Monte Carlo runs equal to 100 k" in the captions,
+    1000 k in Fig. S2) and runs one simulation per nc; it gives no seed and no repeat. One run per nc leaves
+    noise in a flat minimum, so the optimum from one seed is uncertain by tens of clutches on the stiff
+    substrate. The build repeats each optimum over 5 seeds and refines the number of events.
+  citation: {page: 3, printed_page: "3", quote: "The number of simulated events has been limited 100 k for all", where: "Sec. 2.2"}
+- id: q_figures
+  kind: reading
+  about: [optimal_nc_axial]
+  text: >-
+    Figs. 2-9 and S2-S3 (flow against nc for each strain, optimal nc against strain, averages at the optimum)
+    were not read in this pass: page rendering for figure reading was not available to the reader. Fig. 6
+    (optimal nc against axial strain, both stiffnesses) and Fig. 7B (transverse) hold the values that would
+    test the intermediate strains (0.25, 0.5, 1, 2) and the threshold and saturation claims of Sec. 3.4.
+  citation: {page: 7, printed_page: "7", quote: "Optimal nc predicted by the modiﬁed version of motor clutch model", where: "Fig. 6"}
+# ---- added by the audit ---------------------------------------------------------------------------
+- id: q_s3_caption
+  kind: possible_error
+  about: [ldef_s3, lrest_s3_printed, ldef_eps1_s3_printed]
+  text: >-
+    The Fig. S3 caption (p. 13) says the "initial length" of the orthogonal spring at strain 1 is 1000 nm
+    (solid line) and 2000 nm (dashed line). The text (p. 7) says the extra simulation has a deformed length
+    of 1000 nm, so an undeformed (initial) length of 500 nm, and that the deformed lengths compared are
+    1000 and 2000 nm. With Eq. 1 the caption's 1000 and 2000 nm are the deformed lengths, not the initial
+    ones; the caption and the text disagree on which length was held at 1000 nm. The record follows the
+    text.
+  citation: {page: 13, quote: "initial length of the orthogonal spring associated to a residual strain equal to 1", where: "Fig. S3 caption"}
+- id: q_fig9_caption
+  kind: possible_error
+  about: [eps_01]
+  text: >-
+    The Fig. 9 caption (p. 8) announces 7 levels of residual strain but lists six, "0, 0.25, 0.5, 1, 2 and
+    3", leaving out 0.1; the figure's axes show all seven, 0.1 included. A slip in the caption.
+  citation: {page: 8, quote: "and 7 levels of residual strain", where: "Fig. 9 caption"}
+# ---- added by the figure pass ---------------------------------------------------------------------------
+- id: q_fig8_colours
+  kind: possible_error
+  about: [f8a_soft, f8a_stiff, f8b_soft, f8b_stiff, cmp_f8a_soft_caption, cmp_f8a_stiff_caption, cmp_f8a_grey_swapped, cmp_f8a_black_swapped]
+  text: >-
+    The Fig. 8 caption assigns the grey curve to ks = 0.1 pN/nm and the black one to ks = 1 pN/nm, as
+    in Fig. 6. Read from the page, the Fig. 8A black markers end near 2.02 at strain 3, which is the
+    Fig. 6 grey (ks = 0.1) optimum, about 81, divided by 40; the grey markers end near 1.69, the Fig. 6
+    black (ks = 1) optimum, about 750, divided by 445. The text (p. 9) also says the rate of change
+    approaches 0 at strain 1 on the stiff substrate, which in Fig. 8B is the grey curve. The colours of
+    Fig. 8 look swapped with respect to its caption; the comparisons cmp_f8a_* test both assignments.
+  citation: {page: 9, printed_page: "9", quote: "the rate of change approaches", where: "Sec. 3.4; Fig. 8 caption p. 8"}
+- id: q_fig_force_units
+  kind: possible_error
+  about: [f3b_canonical, f3b_modified, f3d_canonical, f3d_modified, f9b_soft, f9b_stiff]
+  text: >-
+    In Fig. 3 the substrate position (B) is plotted on an axis labelled [nN], a force unit; the record
+    reads it in nm, the unit of the substrate position in Fig. 2. Fig. 3D (traction force) and Fig. 9B
+    (clutch force) are labelled [nN], but with ks = 1 pN/nm the traction force of Fig. 3D, about -300
+    at nc = 400, equals the substrate position of Fig. 3B in nm times ks, i.e. about 300 pN, and the
+    paper's model works in pN (Table 1). The force axes are probably in pN. The figure values are
+    recorded in nN as printed and are not compared with the model, whose position and forces are
+    also positive in the retrograde direction while the figures plot them negative.
+  citation: {page: 5, printed_page: "5", quote: "and traction force (D), predicted by the canonical", where: "Fig. 3"}
+- id: q_fig6_soft_01
+  kind: unexplained_difference
+  about: [f6_soft, inc_soft_01_printed, dn_soft_01_printed]
+  text: >-
+    Read from Fig. 6, the soft-substrate (grey) optimum at strain 0.1 is about 40.8, an increase of
+    about 2 % over the printed 40 at no strain (the grey marker at 0 is hidden behind the black one and
+    is taken as the printed 40), where the text prints 3 % (p. 6) and an increase by 1 clutch (p. 9).
+    The difference is a fraction of a clutch and within what rounding of a spline minimum could give,
+    but the figure does not show the printed 3 %.
+  citation: {page: 6, printed_page: "6", quote: "the optimal nc exhibits an increase from 3 % to 103 % on", where: "text; Fig. 6"}
+- id: q_no_validation_bangasser2017
+  kind: choice
+  about: [clutch_axial_ssa, clutch_transverse_ssa, flow_nc_axial, flow_nc_transverse]
+  text: >-
+    Cross-validation against bangasser2017 (ref. 40) was looked for and none was entered. This paper
+    has no measurements of its own, so only its models could be judged against bangasser2017's data;
+    bangasser2017's own simulator (cms) is not runnable in its record. The paper says only that its
+    optimum "matches experimental observations reported to date [35,40]", a trend (an optimum exists)
+    that no number quantifies. The bangasser2017 measurements that this paper's simulation could
+    produce (actin retrograde flow of U251 and ECFN cells, Figs. 3c, 4a and the 4 and 100 kPa insets,
+    Supplementary Fig. 4C) are indexed by gel Young's modulus in kPa. This model takes a substrate
+    spring constant in pN/nm, and neither paper gives a conversion (bangasser2017's q_stiffness_mapping).
+    A run would also need clutch and motor numbers for one U251 or ECFN protrusion and the cells'
+    residual strain, and neither paper states these. Table 1 is a generic parameter set, not fitted to
+    those cells. With every such input added, a verdict would test the added inputs, not the model.
+    Strain energy, area, aspect ratio, motility and MSD are not outputs of this model. Revisit if a
+    record states a modulus-to-spring-constant mapping for these gels (Chan and Odde 2008, Eq. 13, is
+    one candidate) together with clutch and motor numbers per protrusion.
+  citation: {page: 5, printed_page: "5", quote: "maximal adhesion strength) and matches experimental observations", where: text}
+
+# ==== cross-record validation with cms_code (2026-11-21): none added =============================
+- id: q_xval_cms_code_none
+  kind: unstated_model
+  about: [clutch_axial_ssa, clutch_transverse_ssa, flow_nc_axial, flow_nc_transverse, optimal_nc_axial, optimal_nc_transverse]
+  text: >-
+    (Cross-record validation.) I looked for cross-validation against cms_code, the released simulator of
+    bangasser2017 (ref. 40), and entered none, because neither record holds a measurement. This
+    record's data are all parameters (reported), its model's own simulation outputs (predicted) or
+    arithmetic on them (derived). cms_code is software, and every one of its data is a parameter (origin
+    reported). clutch_axial_ssa and cms_code/cms2d_code have the same shape: both give a velocity from
+    forces, a length, rates, a stiffness and a velocity. That is a likeness of models, not a measurement
+    one can predict the other, so it belongs to a relation between models, not to a validation. The paper
+    cites ref. 40 only for the original model's account of stiffness-sensitive migration (p. 7). It never
+    says it used or compared with the CMS code. Revisit only if either record gains measured data.
+  citation: {page: 7, printed_page: "7", quote: "explanation of stiffness sensitive cell migration and the existence of a", where: text}
+
+# ==== cross-record validation with panzetta2019 (2026-11-21): none added =========================
+- id: q_xval_panzetta2019_none
+  kind: choice
+  about: [clutch_axial_ssa, clutch_transverse_ssa, flow_nc_axial, flow_nc_transverse, optimal_nc_axial, optimal_nc_transverse]
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against panzetta2019
+    (ref. 39) and entered none. Every panzetta2019 measurement is a quantity these models do not give.
+    They are tracer MSD curves and radius of gyration (Figs. 2, 4, 5, S4-S6), cell spreading area, shape
+    factor, nucleus area and cell count (Figs. 3, 6, 7, S3, S7-S10), cell Young's modulus, and the
+    PDMS/PU stress-strain curves and moduli (Fig. S1). The models' outputs are retrograde flow, engaged
+    clutch number, clutch force, substrate position, cycle time and the optimal nc. panzetta2019
+    measures no retrograde flow, traction or adhesion size. The paper links the two in words only: the
+    rise of the optimal nc by 1 at strain 0.1 on the soft substrate is "supporting the experimental
+    evidence of a threshold effect" (p. 9), and the optimal nc stands for FA dimension (p. 7). That is
+    a trend: no panzetta2019 number quantifies an optimal clutch number. A run would also need a
+    mapping from panzetta2019's 6 % and 9 % macroscopic substrate strains on PDMS (about 1 MPa) to
+    eps0, l and ks in pN/nm, and neither paper gives one (panzetta2019's q_x0_strain). panzetta2023
+    has no measurements, so panzetta2019's models have nothing here to be validated against either.
+  citation: {page: 9, printed_page: "9", quote: "an increase of the optimal nc by 1, supporting the experimental evidence", where: "Sec. 3.4"}
+
+# ==== cross-record validation with bangasser2013b (2026-11-21): none added =======================
+- id: q_xval_bangasser2013b_none
+  kind: choice
+  about: [clutch_axial_ssa, clutch_transverse_ssa, flow_nc_axial, flow_nc_transverse, optimal_nc_axial, optimal_nc_transverse]
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against
+    bangasser2013b (ref. 34) and entered none. This paper cites ref. 34 only as background for the
+    clutch model ("extended to describe cell-scale processes like cell migration [34]", and stiffness
+    sensing [34,36], p. 2), never as data it explains or fits. bangasser2013b is theory: its only data
+    of origin measured are the run times of its ODE and Monte Carlo software (Fig. 6(b),
+    fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal), and no model here outputs a computation time. Its
+    flows, clutch forces, cycle times and optima (Figs. 2, 4, S1, S2) are predictions of its own ODE and
+    Monte Carlo models, not measurements. clutch_axial_ssa has the same shape as
+    bangasser2013b/clutch_ensemble_cycle, but comparing two models' predictions is a relation between
+    models (reduces_to / same_as), not a validation, and belongs to the job that relates them. In the
+    other direction, this record has no measurements (no datum of origin measured), so bangasser2013b's
+    models have nothing here to be validated against.
+  citation: {page: 2, printed_page: "2", quote: "Then, it has was used to explain the mechanism by which cells sense", where: "Introduction"}
+
+# ==== cross-record validation with chan2008 (2026-11-21): none added =============================
+- id: q_xval_chan2008_none
+  kind: choice
+  about: [clutch_axial_ssa, clutch_transverse_ssa, flow_nc_axial, flow_nc_transverse, optimal_nc_axial, optimal_nc_transverse]
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against chan2008
+    (ref. 36) and entered none. The paper cites ref. 36 only for the clutch model's account of
+    stiffness sensing ("can explain the mechanism by which cells sense ECM stiffness [34,36]", p. 3;
+    also p. 2). It never says its model explains, fits or is compared with chan2008's data. Of
+    chan2008's measurements, only the retrograde flows (Fig. 3C means, Fig. 3D points with SEM,
+    Fig. S8C bars, the ~110 nm/s of the text) are a quantity these models output. The others are
+    flow and bead-displacement histograms, step-size histograms, failure frequencies, radial
+    deviations, surface tension, peak filopodial force and the contact-bead distance, which no model
+    here gives. The flows are not entered, for three reasons. (1) They are indexed by gel Young's
+    modulus (substrate_modulus, Pa), while the models take a substrate spring constant ks in pN/nm.
+    A sweep cannot cross the two quantities, and turning a modulus into ks needs chan2008's Eq. 13
+    and its unstated length (chan2008 q_eq13_delta, q_fig_same_curve), which is not a model of this
+    record. (2) The models run with this paper's Table 1 (kon 0.3 1/s, kc 0.8 pN/nm, vu 120 nm/s),
+    not chan2008's neuron set (kon 1 1/s, kc 5 pN/nm, nc = nm = 75, Table S1). No paper gives the
+    clutch number of an embryonic chick neuron filopodium under this paper's parameters, and nc
+    would decide the verdict. Running with chan2008's own Table S1 instead would repeat chan2008's
+    own fit (chan2008 val_fig3d_exp_sem, whose nc, kon and Δ were tuned to these flows), not test
+    this model. (3) With no residual strain and ks^eps0 = 0 the model is the canonical clutch
+    model, so whether it reproduces chan2008's model is a reduces_to / same_as relation between
+    models, for the job that relates them, not a validation. In the other direction this record has
+    no measurements (no datum of origin measured), so chan2008's models have nothing here to be
+    validated against. Revisit if a paper states ks and nc for chan2008's gels in this model's terms.
+  citation: {page: 3, printed_page: "3", quote: "The motor clutch model can explain the mechanism by which cells", where: text}
+
+# ==== cross-record validation with bangasser2013 (2026-11-21): none added ========================
+- id: q_xval_bangasser2013_none
+  kind: choice
+  about: [clutch_axial_ssa, clutch_transverse_ssa, flow_nc_axial, flow_nc_transverse, optimal_nc_axial, optimal_nc_transverse]
+  text: >-
+    (Cross-record validation.) I looked for validations of this record's models against bangasser2013
+    (ref. 35) and entered none. The paper builds on ref. 35 ("a modification to the classical clutch
+    model [35]", p. 2; Table 1 is its base set) and says only that its optimum "matches experimental
+    observations reported to date [35,40]" (p. 5): a trend (an optimum exists), quantified by no
+    number. bangasser2013's measurements, all redrawn from other works, are: (1) Kong et al.'s
+    integrin-fibronectin bond lifetimes against force (Fig. 7C, tau_kong_fig7c). No model here gives a
+    single bond's lifetime; the clutches here are slip bonds (Eq. 3) inside an ensemble simulation, and
+    the model's cycle_time is the ensemble's load-and-fail period, another quantity despite the shared
+    shape (time from force and rates) of catch_slip_eq9 and clutch_axial_ssa. (2) Chan and Odde's
+    neuron retrograde flows (Fig. S1B, v_figS1b_measured): a quantity clutch_axial_ssa gives, but
+    indexed by gel Young's modulus (substrate_modulus, kPa), while the model takes a spring constant
+    (substrate_stiffness, pN/nm); the two are different quantities of different dimension and cannot be
+    crossed in a sweep, and no model of either record converts one to the other (bangasser2013's
+    q_xval_chan2008_ksub, q_xval_chan2008_figS1b_positions). Were they converted, the run would be the
+    canonical model (ks^eps0 = 0, no residual strain) with Table 1, which is bangasser2013's base set
+    fitted to these same points: a repeat of that paper's fit and a reduces_to relation between
+    models, not a test of this paper's orthogonal spring. The same flows from chan2008 itself are
+    discussed in q_xval_chan2008_none. (3) Normalized migration (Fig. 1A) and normalized traction
+    (Fig. 1B) of eight cell types against modulus, from refs. 2, 4, 7, 10, 11, 12, 15: migration is not
+    an output here, and each cell type's clutch and motor numbers, its residual strain and the
+    modulus-to-ks conversion are unstated, so a verdict would test added inputs, not the model. In the
+    other direction this record has no measurements (bangasser2013/q_xval_panzetta2023_none).
+  citation: {page: 5, printed_page: "5", quote: "maximal adhesion strength) and matches experimental observations", where: text}

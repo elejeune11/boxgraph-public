@@ -1,0 +1,71 @@
+id: bagchi_code
+kind: software
+title: "ChasteSimulationVersions v1.1: the authors' additions to Chaste for the 1-D cell-ligand-substrate chain (control, Durotaxis and Haptotaxis versions)"
+authors: [Amrit Bagchi, Bapi Sarker, Jialiang Zhang, Marcus Foston, Amit Pathak]
+year: 2025
+venue: released with Bagchi et al. 2025, PLoS Comput Biol 21(1), e1012664 (Zenodo 10.5281/zenodo.13984567)
+doi: 10.5281/zenodo.13984567
+url: https://doi.org/10.5281/zenodo.13984567
+file: corpus/motor_clutch/code/bagchi_code
+version: "sha256:f61bfc8b8366e197bf07965a396c4c1550847abf4bccb112901d481550cb222f"
+licence: BSL-1.0
+language: cpp
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "read_code-1", date: "2026-11-21"}
+notes: >
+  What the code is. The C++ files the authors added to the Chaste framework (ChasteSimulationVersions v1.1,
+  Zenodo; Boost Software License 1.0, the LICENSE file), in three versions with the same file set:
+  Chaste_12_30_22_control (C), Chaste_8_14_23_Durotaxis (D) and Chaste_9_5_23_Haptotaxis (H). Each has the
+  driver TestRunningVertexBasedSimulationsTutorial_ab1.hpp (the entry point, run with ctest by the README;
+  _ab.hpp and tutorial/TestCellBasedDemoTutorial_amrit.hpp are earlier honeycomb tests not used for the
+  chain), OffLatticeSimulation_ab1 (time loop and clutch rule), ForwardEulerNumericalMethod_ab (forward Euler
+  and the rest criterion), the force classes (cell-collagen and collagen-substrate links, collagen and
+  substrate springs, intra-cell springs, protrusion), StraightVertexMeshGenerator_ab2/ab3 (the three 1-D
+  meshes) and MeshAttributes_ab. The Chaste framework is left out, so nothing builds or runs here. Despite
+  the folder names (vertex, honeycomb), the model is bagchi2025's 1-D chain. C, though dated 12-30-22 in its
+  name, holds the latest edits (to 9-6-23). D and H differ from C in the driver, the rest threshold and the
+  substrate force (variable spring per element); H adds a random binding check to the cell-collagen link.
+
+  What was checked. Every parameter the drivers set is in data.yaml with file and line, the D and H values
+  where they differ from C, and the values the authors left in comments where the paper's tables use them;
+  each is linked to the S1-S3 Tables or Fig 11 of bagchi2025 where the paper prints the same parameter.
+  The dimensionless ones agree with the tables (alpha_eps 0.675, gamma_eps 0.8 and 2, sigma_eps 2 and 5,
+  sigma_eta 1 and 10, sigma_k 5 and 10; 8, 400 and 1 only in comments). The mechanical ones are in unstated
+  code units, so the cited check cannot convert them; instead two reconstructed maps test whether one
+  factor turns them into the S1 Table: the substrate spring's 6.17/500 reproduces the ligand spring and
+  both links (18.51, 30.86, 12.34), Fig 11's k_max 12.3 (from 1000) and its first k_min 0.06 (from H's 5);
+  the substrate damping's 0.22/2 reproduces the ligand and cell damping (0.22, 0.55) and the disconnected
+  beta_eta 0.28 (from a commented 2.51). So the S1 Table is the code's parameter set rescaled, and the
+  S2/S3 Tables' gamma_eta and gamma_k are code-unit numbers beside a beta_eta in nN um-1 s, which explains
+  the factors of about 81 and 9 the paper record finds in Eqs 11 and 12 (q_code_units). Not reproduced: the
+  uniform cell spring 50 of D and H gives 0.62 against the S1 4.92 nN/um (q_cell_spring_50), and gamma_k is
+  100 in every version against 1000/10000 (q_gamma_k).
+
+  Models. The drivers' own block that computes the extremes of two normalised Gaussians over the cell nodes
+  (C lines 223-258) is ported line by line (driver_profile_extremes): its minima are the S2/S3 Tables'
+  delta_eta and delta_eps. With 36 cell springs and s = 10, s1 = 5 it reproduces the S2 Table's 7.89e-3 and
+  6.11e-5, but only with the commented 36: D and H as shipped have 4 cell springs and do not
+  (q_cell_nodes_4). The S3 disconnected delta_eta (3.97e-3, s = 8) is reproduced; the S3 connected
+  delta_eta is not, because the table prints 10^-711 (the code gives 1.76e-71). The connected delta_eps
+  1.02e-19 is reproduced only with s = 10 from a comment (C as shipped, s = 1, gives 1.03e-18), and the
+  disconnected 6.11e-5 only with s = 10 rather than the column's 8: the S3 columns are not one setting of
+  this block (q_s3_columns). The S2/S3 deltas of the threshold profile depend on a prefactor that uses the
+  damping width s instead of the threshold width (line 250), so Eq 10 as printed does not match how the
+  code normalises (q_prefactor_s). The stiffness profile is computed in a method not released; with the
+  same Gaussian (reconstructed, kc_profile_extremes) the S3 omega_k and delta_k are reproduced (sigma_k 5,
+  and 1 from a comment), the S2 Table's are not (they belong to a unit width, not its sigma_k 10;
+  q_omega_k_s2). The printed tables truncate rather than round (q_tables_truncated).
+
+  Not run, and differences from the paper. The chain simulation (chain_sim) is recorded but not ported:
+  Eqs 10-14, division, damping and the step control are in Chaste classes the release leaves out
+  (q_framework_missing), and all three drivers stop at exit(0) before Solve() (q_exit_before_solve). So
+  none of the paper's simulated results (rest times, speed and traction ratios, efficiencies) can be
+  checked from the code (q_sim_not_run). The code does settle several rules the paper leaves unstated: the
+  clutch rule, the rest criterion (a per-step displacement of 1e-5 in C, 1e-4 in D and H; q_rest_criterion),
+  the mesh sizes and the time step, whose comments disagree with its value (0.0002 h set, 0.002 h by the
+  comments, 10000 steps against 20 h; the paper runs 24 h; q_dt_steps). Other differences: the code calls
+  alpha_eps a length (q_threshold_length); the haptotaxis binding is a fresh unseeded rand() at every force
+  evaluation, and Eq 13's alpha is not in the released code (q_haptotaxis_rule); D's durotaxis k_min of 350
+  maps to none of Fig 11's k_min (q_durotaxis_kmin); and C mixes the connected and disconnected columns,
+  with the other column's values left in comments (q_control_mixed). The S1 Table's forces, stiffnesses
+  and dampings cannot be traced to the motor-clutch base sets: the code holds only its own code-unit
+  numbers, and the S1 references are missing from the paper (bagchi2025 q_s1_refs). No code was copied into the record.

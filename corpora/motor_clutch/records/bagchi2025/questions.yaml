@@ -1,0 +1,324 @@
+- id: q_chain_not_runnable
+  kind: unstated_model
+  about: [chain_eqs1_8, t_rest_conn, t_rest_disc, v_ratio_fig9, T_ratio_fig9, v_ratio_s4, T_ratio_s4]
+  text: >
+    The chain of Eqs 1-8 cannot be run from the paper: the time step, the numbers of nodes,
+    the rest criterion that gates protrusion, the clutch rule, the re-meshing after division
+    and the units of the integration are not given, and the force balances multiply
+    stiffnesses by strains (Eqs 3 and 6 even mix cell and ligand strains across a link), so
+    the meaning of a force is unclear. Every simulated number (rest after 6 vs 21 min,
+    speed and traction ratios, migration efficiencies of Figs 7, 8m and 10m) is therefore
+    unchecked here. The authors' code (record bagchi_code) is the place to settle it.
+  citation: {page: 27, quote: "For each incremental time step, the following algorithm is implemented"}
+- id: q_tables_no_units
+  kind: unstated_input
+  about: [gamma_k_s2, gamma_k_conn, gamma_k_disc, beta_eta_s2, gamma_eta_s2, beta_eta_conn, beta_eta_disc, gamma_eta_conn, gamma_eta_disc]
+  text: >
+    The S2 and S3 Tables print the parameters of Eqs 10-12 without units. The record takes
+    gamma_k in nN/um and beta_eta, gamma_eta in nN um-1 s, the units of the S1 Table and of
+    the plotted profiles (Figs 8k, 8l, 9a); the comparisons of Eqs 11 and 12 depend on this.
+- id: q_eq11_scale
+  kind: unexplained_difference
+  about: [cell_stiffness_eq11, cmp_eq11_s2_fig8k, cmp_eq11_conn_fig9a, cmp_eq11_disc_fig9a]
+  text: >
+    Eq 11 with the tabulated parameters gives k_c = gamma_k omega_k = 398 at the edges for
+    the S2 set and the S3 connected set and 790 for the S3 disconnected set, while Figs 8k
+    and 9a plot about 4.9 and 9.8 nN/um: one factor of about 1/81 (4.92/398, the S1 Table
+    k_c over gamma_k omega_k) maps both edges onto the plots, so the code may normalise the
+    profile by gamma_k omega_k and scale it by the S1 k_c, which the paper does not say.
+    Even with that factor, the S2 set (sigma_k = 10) gives a centre value only 8% below the
+    edge (358 vs 390), whereas Fig 8k falls from 4.8 to 1.0; the S2 sigma_k or omega_k may
+    be misprinted, or Fig 8k was drawn with other values.
+- id: q_eq12_scale
+  kind: unexplained_difference
+  about: [cell_damping_eq12, cmp_eq12_s2_fig8l, cmp_eq12_conn_fig9b, cmp_eq12_disc_fig9b]
+  text: >
+    Eq 12 with the tabulated parameters reproduces the edge values of the plotted damping
+    (beta_eta: 0.55 and 0.28, because delta_eta equals the Gaussian at the edge node), but
+    its rise to the centre is about nine times the plotted one in all three sets (S2: 2.40
+    vs 0.26; S3 connected 7.98 vs 0.88; disconnected 18.4 vs 2.0 nN um-1 s), as if gamma_eta
+    were divided by about 9 in the code. The paper does not state such a factor.
+- id: q_fig9b_unit
+  kind: possible_error
+  about: [fig9b_conn, fig9b_disc]
+  text: >
+    Fig 9b labels the damping constant "kg s^-1", while Fig 8l and the S1 Table use
+    nN um-1 s (= 10^-3 kg/s) for the same quantity with the same edge value (0.55). The
+    record keeps the printed unit, so the comparisons with Eq 12 carry this factor of 1000
+    on top of q_eq12_scale; the label is probably meant as nN um-1 s.
+  citation: {page: 18, where: "Fig 9b", quote: "comparing spatial variation in damping constant across the cell nodes"}
+- id: q_eq13_misprint
+  kind: possible_error
+  about: [binding_prob_eq13, binding_prob_eq13_shifted]
+  text: >
+    Eq 13 is printed as rho_l(x_c) = (tan^-(alpha(-x_c) + 1.5)/3): the 1.5 inside the
+    inverse tangent gives 0.33 at the centre and negative probabilities on the right,
+    which Fig 10k does not show. The variant (tan^-1(-alpha x_c) + 1.5)/3 is run beside it;
+    the "-1" of the inverse is also missing from the printed superscript.
+  citation: {page: 31, quote: "Spatial variation of ligand binding probability"}
+- id: q_delta_eta_711
+  kind: possible_error
+  about: [delta_eta_conn]
+  text: >
+    The S3 Table prints delta_eta (connected) as 1.75*10^-711, a number below any floating
+    point; delta_k in the same column is 1.75*10^-71, the Gaussian of unit width 18 nodes
+    from its centre, so -71 is probably meant. Either value is zero for the profile.
+- id: q_mu_unstated
+  kind: unstated_input
+  about: [mu_36, mu_37, n0_ligand, xmax_substrate]
+  text: >
+    The centres mu of Eqs 10-12, the origin of x_c in Eq 13 and x_max of Eq 14 are not
+    stated; they are taken from the plotted node ranges. The deltas of the tables agree with
+    a centre 18 nodes from the edge (e.g. S3 disconnected delta_k = 1.22e-4 is the sigma = 5
+    Gaussian at 18 nodes), which matches a 37-node chain better than the 36 plotted nodes.
+- id: q_gel_soft
+  kind: possible_error
+  about: [gel_E_soft_results, gel_E_soft_methods, cmp_gel_soft]
+  text: >
+    The softer gel of the "double negative" experiment (Fig 5, S3 Fig) is 0.6 kPa in the
+    Results (p. 12) but its recipe gives about 0.3 kPa in the Methods (p. 23).
+- id: q_align_time
+  kind: possible_error
+  about: [align_time_results, align_time_methods, cmp_align_time]
+  text: >
+    The collagen is aligned for 16 hours in the 11 T field according to the Results (p. 3,
+    and "from 16 hours" on p. 12, with 4 hours for the double negative), but for 2 hours in
+    the Methods (p. 23).
+- id: q_ratio_statements
+  kind: unexplained_difference
+  about: [v_ratio_s4, T_ratio_s4, v_ratio_fig9, T_ratio_fig9]
+  text: >
+    For the S4 Fig simulations the text gives "~1.7 times" faster and "~1.8 times" lower
+    traction (p. 16) but "twice as fast" and "two times lesser" (p. 30). Fig 9l, behind the
+    ~1.38 and ~2.42 of p. 19, is a stacked bar chart: the disconnected bar is drawn on top
+    of the connected one, so the plotted velocity totals (about 10.7 and 18.6 um/hr) must be
+    differenced (10.7/7.9 = 1.35; tractions 15.7 and 54.4 Pa give 38.7/15.7 = 2.46) to
+    match the text. The experimental speed ratio is printed as ~1.56 (p. 5), 1.34 (p. 12)
+    and as a range 1.33-1.56 (pp. 16, 30). All are approximate and get no verdict.
+- id: q_s1_refs
+  kind: unstated_input
+  about: [Fp_s1, kc_s1, kcl_s1]
+  text: >
+    The S1 Table cites references [1] and [2] for F_p, k_c and k_c-l, but its reference
+    list (S1 Table References) is not in the PDF, so these cannot be traced to the
+    motor-clutch base parameter sets (chan2008, bangasser2013/2017). Every S1 stiffness is
+    a simple multiple of 6.17 nN/um (k_c 0.8x, k_l 3x, k_c-l 5x, k_l-s 2x) and F_p = 500 x
+    6.17 nN um, which suggests dimensionless code values scaled by one stiffness unit.
+- id: q_ligand_stiffness_claim
+  kind: overstated_claim
+  about: [kl_s1, kls_s1, kcl_s1, chain_eqs1_8]
+  text: >
+    (audit) The explanation of the single contraction experiment (p. 28, around Eq 9) rests
+    on "k_ligand-ligand >> k_ligand-substrate; k_ligand-ligand >> k_cell-substrate", but the
+    S1 Table (p. 39) gives k_l = 18.51 nN/um against k_l-s = 12.34 (a factor 1.5) and
+    k_c-l = 30.86 nN/um (larger than k_l). With the printed parameters the ligand springs
+    are not much stiffer than the links, so the argument that the fibre barely deforms is
+    not supported by the paper's own values (unless the code uses other ones; see bagchi_code).
+  citation: {page: 28, quote: "connecting ligands are much stiffer than springs connecting ligand to substrate"}
+- id: q_s2_sigma_k
+  kind: possible_error
+  about: [sigma_k_s2, delta_k_s2, cmp_eq11_s2_fig8k]
+  text: >
+    (audit) Each delta in the S2/S3 Tables that can be traced equals the Gaussian of its own
+    sigma 18 nodes from the centre, so that the profile returns to its offset at the edge:
+    delta_k 1.22e-4 (sigma 5), delta_eta 7.89e-3 (sigma 10), 3.97e-3 (sigma 8), 1.75e-71
+    (sigma 1). The S2 delta_k is 1.75e-71, the sigma = 1 value, while the S2 sigma_k is
+    printed 10 (whose value would be 7.9e-3). Either the S2 sigma_k is a misprint for 1, or
+    delta_k was copied from the connected set. This bears on q_eq11_scale (the S2 shape
+    misses Fig 8k with sigma_k = 10). The delta_epsilon values do not follow the same rule:
+    6.11e-5 is half the sigma = 5 Gaussian at 18 nodes (gamma_eps = 2 in both sets), and the
+    connected 1.02e-19 is about a fifth of the sigma = 2 value (5.1e-19), so Eq 10 may be
+    coded as alpha + gamma delta - Gaussian rather than as printed; the difference is below
+    1e-3 in strain and does not change the comparisons.
+- id: q_eq11_negative
+  kind: possible_error
+  about: [cell_stiffness_eq11, gamma_k_disc, omega_k_disc, delta_k_disc, sigma_k_disc, cmp_eq11_disc_fig9a]
+  text: >
+    (audit) Eq 11 as printed with the S3 disconnected set gives a negative cell spring
+    stiffness at the centre: gamma_k (omega_k + delta_k - 1/(sigma_k sqrt(2 pi))) =
+    10000 (0.079 + 1.22e-4 - 0.0798) = -6.7 at the centre itself, and about -2.7 at nodes 18
+    and 19 for mu = 18.5. omega_k is close to 1/(sigma_k sqrt(2 pi)) in both S3 sets
+    (0.398 vs 0.3989; 0.079 vs 0.0798), i.e. the profile is meant to reach about zero, and
+    the three-digit rounding of omega_k makes it cross zero. Fig 9a shows the disconnected
+    curve dipping to near zero but not below.
+- id: q_net_elasticity
+  kind: overstated_claim
+  about: [cell_stiffness_eq11, fig9a_conn_read, fig9a_disc_read]
+  text: >
+    (audit) p. 32 says the net elasticity of the monolayer was kept "roughly" the same for
+    connected and disconnected ligands. With Eq 11 as printed (S3 Table, 36 nodes,
+    mu = 18.5) the summed stiffness is about 13300 vs 18500 (39% apart) and the series
+    stiffness of the disconnected chain is not defined (negative springs, q_eq11_negative);
+    from Fig 9a the disconnected edges (about 10 nN/um) are twice the connected (about 5).
+    "Roughly" gets no verdict; not compared.
+  citation: {page: 32, quote: "We have roughly tried to keep the net elasticity in the"}
+- id: q_fig11h_axis
+  kind: possible_error
+  about: [kmin_c1]
+  text: >
+    (audit) Fig 11h (uniformly soft substrate, k_s = 0.06 nN/um) labels its time axis
+    "Time (hr)" from 0 to 2000, while every other kymograph of Fig 11 runs 0 to 5 hr. The
+    axis is probably in another unit (minutes or time steps); the panel is a kymograph and
+    is not read.
+  citation: {page: 21, where: "Fig 11h", quote: "Simulated kymographs for (h) velocity, (i) traction and (j)"}
+- id: q_audit_s1_multiples
+  kind: reading
+  about: [q_s1_refs, Fp_s1, kc_s1]
+  text: >
+    (audit, disagreement with the wording of q_s1_refs) The S1 multiples of 6.17 are not
+    all exact: k_c = 4.92 is 0.797 x 6.17 (0.8 x 6.17 = 4.94), and F_p = 3083 nN (printed
+    in nN, not nN um) is 499.7 x 6.17 um. The pattern is suggestive but approximate. For
+    the motor-clutch base sets: the paper does cite Chan & Odde 2008 (ref. 48, pp. 8 and
+    30) but only for actomyosin contractility, never for a parameter; chan2008's clutch
+    stiffness 5 pN/nm (= 5 nN/um) is close to bagchi's cell spring k_c = 4.92 nN/um, not to
+    its clutch-like link k_c-l = 30.86 nN/um, and no provenance links them.
+- id: q_audit_speed_ratios
+  kind: reading
+  about: [q_ratio_statements]
+  text: >
+    (audit, disagreement with q_ratio_statements) The experimental 1.34 (p. 12) is not the
+    same ratio as ~1.56 (p. 5): it is for the "double negative" condition (0.6 kPa gel,
+    4 h alignment, S3 Fig), whereas 1.56 is for the base condition (S2 Fig); the range
+    1.33-1.56 on pp. 16 and 30 spans the two conditions. These statements agree with each
+    other; only the simulated S4 Fig ratios (~1.7/~1.8 on p. 16 vs "twice" on p. 30) differ,
+    now recorded as cmp_v_ratio_s4 and cmp_T_ratio_s4.
+- id: q_bars_stacked_or_overlaid
+  kind: reading
+  about: [fig9l_vel_read, fig9l_trac_read, figs4i_vel_read, figs4i_trac_read, stack_speed_ratio, stack_traction_ratio, q_ratio_statements]
+  text: >
+    (figure pass) Fig 9l and S4i Fig draw each bar in two colours, red (Connected Ligand) at
+    the foot and blue (Disconnected Ligand) above it, and do not say whether the blue segment
+    stands on the red one (stacked) or behind it (overlaid, both from zero). Both readings are
+    run (stack_speed_ratio, stack_traction_ratio) and compared with the printed ratios
+    (cmp_fig9l_*, cmp_s4i_*). Which reading agrees with the text settles how the bars are
+    meant, and the S4i comparisons with "twice" and "two times" (p. 30) carry verdicts where
+    ~1.7 and ~1.8 (p. 16) cannot.
+  citation: {page: 18, quote: "Plot comparing average velocity and traction between connected and disconnected condition"}
+- id: q_ratio_medians_or_means
+  kind: reading
+  about: [box_median_ratio, figs2a_median_read, figs3a_median_read, v_ratio_af_rf_s2a_p16, v_ratio_af_rf_s3a_p16, v_ratio_af_rf_s3a_p12]
+  text: >
+    (figure pass) The experimental speed ratios (1.56, 1.33, 1.34) are compared with the ratio
+    of the box-plot medians of S2a and S3a Figs, the only central values the plots show. The
+    text does not say whether its ratios are of medians or of means over the m tracks; a
+    difference between the two is not by itself an inconsistency.
+  citation: {page: 16, quote: "cells on AF travel 1.56–1.33 times faster (S2a and S3a Figs)"}
+- id: q_fig6h_axis_unit
+  kind: possible_error
+  about: [fig6h_vel_read]
+  text: >
+    (figure pass) Fig 6h labels its time axis "Time (sec)" (0-21), while Figs 6i-k and the
+    kymographs of Fig 6d-g use minutes over the same 0-21 range, and the text says the
+    connected mesh comes to rest "within 6 mins" (p. 28). The trace of Fig 6h relaxes to zero
+    within about 6 axis units after each protrusion, which matches the text if the unit is
+    minutes. The reading keeps the printed unit (s).
+  citation: {page: 15, quote: "evolution at the leading edge for connected ligand (h)"}
+- id: q_s2d_axis_label
+  kind: possible_error
+  about: [figs2d_median_read]
+  text: >
+    (figure pass) The y axis of S2d Fig is labelled 2.5, 3.0, 3.5, 4.0 and then "2.5" again at
+    the top tick, where 4.5 continues the even spacing. The reading is calibrated on the four
+    lower labels only.
+  citation: {page: 33, quote: "cellular density comparison for cells on AF and"}
+- id: q_si_caption_panels
+  kind: possible_error
+  about: [figs4l_conn_read, figs4l_disc_read, figs1e_uf_read]
+  text: >
+    (figure pass) The S4 Fig caption names the chi_4 plot "(k)", a letter it also gives the
+    disconnected strain-rate kymograph; the plot is panel (l) on the figure. The S1 Fig
+    caption calls panel (e) "RF", while the panel itself is titled "Uniform Fibers (UF)".
+  citation: {page: 34, quote: "ceptibility χ4 versus Δt between connected and disconnected ligand conditions"}
+- id: q_sim_figures_not_compared
+  kind: unstated_model
+  about: [fig6h_vel_read, fig6i_vel_read, fig6j_trac_read, fig6k_trac_read, fig7a_conn_read, fig7d_disc_read, fig8m_conn_read, fig9o_conn_read, fig10l_shift_read, fig10m_eff_read, fig11l_shift_read, figs4l_conn_read, figs5_conn_read, q_chain_not_runnable]
+  text: >
+    (figure pass) The simulated curves and points of Figs 6h-k, 7a-d, 8m, 9o, 10l-m, 11l,
+    S4l and S5 are now read with calibrated code, but no model in this record produces them:
+    the chain of Eqs 1-8 is not runnable from the paper (q_chain_not_runnable). They are kept
+    for a run of the authors' code (record bagchi_code). The x values of Fig 7a and 7c
+    (4.92 nN/um and 6.17 nN/um at the right-most or fourth point) can be checked against the
+    S1 Table base values once that code is run.
+  citation: {page: 15, quote: "Migration efficiency was measured for the initial 5 hours of migration for all data points"}
+
+# ==== cross-record validation with bangasser2013 (2026-11-21): none added =======================
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [chain_eqs1_8, threshold_strain_eq10, cell_stiffness_eq11, cell_damping_eq12, binding_prob_eq13, substrate_stiffness_eq14, q_chain_not_runnable]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2013's
+    measurements. This paper does not cite bangasser2013; it calls its chain "a novel motor-clutch
+    model" with clutch-like bonds after ref. 58 (p. 12) and cites Chan & Odde (ref. 48) for force
+    transmission, not for parameters. bangasser2013's measured data are re-plotted from other works:
+    normalized migration and normalized traction of several cell types against substrate Young's
+    modulus (Fig. 1A-B), chick neuron retrograde flow against stiffness (Fig. S1B, from chan2008) and
+    integrin-fibronectin bond lifetimes against force (Fig. 7C, from kong2009). The one model here
+    with a motor-clutch shape, chain_eqs1_8 (outputs: rest time, connected/disconnected speed and
+    traction ratios), is not runnable (q_chain_not_runnable), and its outputs are ratios between
+    ligand connectivities, a condition none of those measurements has. The closed forms (Eqs 10-14)
+    give node profiles of division strain, cell stiffness and damping, binding probability and
+    substrate spring stiffness along the chain, none of which bangasser2013 measures. For the other
+    direction see bangasser2013/q_xval_bagchi2025_none.
+  citation: {page: 12, quote: "we developed a novel motor-clutch model in which the cell monolayer is treated", where: text}
+
+# ==== cross-record validation with bangasser2017 (2026-11-21): none added ==========================
+- id: q_xval_bangasser2017_none
+  kind: unstated_model
+  about: [chain_eqs1_8, threshold_strain_eq10, cell_stiffness_eq11, cell_damping_eq12, binding_prob_eq13, binding_prob_eq13_shifted, substrate_stiffness_eq14, box_median_ratio, stack_speed_ratio, stack_traction_ratio, q_chain_not_runnable]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2017, and this paper does not cite it (its motor-clutch citations are refs 48 and 58).
+    bangasser2017 measures single U251 glioma cells and ECFNs on polyacrylamide gels of graded Young's
+    modulus: random motility coefficient, cell area, aspect ratio, actin retrograde flow, traction strain
+    energy and MSD curves (Figs 2-4, Supplementary Figs 2E, 4C-I), with and without blebbistatin and
+    cyclo(RGDfV). The one model here with a motor-clutch shape, chain_eqs1_8, is not runnable
+    (q_chain_not_runnable), and its outputs (rest time, connected/disconnected speed and traction
+    ratios) are ratios between ligand connectivities of a monolayer on collagen, a condition none of
+    those measurements has; it has no substrate Young's modulus input. The closed forms (Eqs 10-14) give
+    node profiles along the chain, none of which bangasser2017 measures. The processing models
+    (box_median_ratio, stack_speed_ratio, stack_traction_ratio) give AF/RF and connected/disconnected
+    ratios from this paper's own box plots and two-colour bars; bangasser2017 has neither condition, and
+    processing another paper's data is not a model test. For the other direction see
+    bangasser2017/q_xval_bagchi2025_none.
+  citation: {page: 12, quote: "we developed a novel motor-clutch model in which the cell monolayer is treated", where: text}
+# cross-record validation against chan2008 (2026-11-21): none added
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [chain_eqs1_8, threshold_strain_eq10, cell_stiffness_eq11, cell_damping_eq12, binding_prob_eq13, binding_prob_eq13_shifted, substrate_stiffness_eq14, box_median_ratio, stack_speed_ratio, stack_traction_ratio]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of chan2008,
+    although this paper cites it (ref. 48). chan2008 measures embryonic chick forebrain neuron filopodia on
+    polyacrylamide gels of graded modulus: F-actin retrograde flow, peak filopodial force, contact-bead
+    distances, flow and displacement histograms, failure frequency and step counts. The one model here with
+    a motor-clutch shape, chain_eqs1_8, is not runnable (q_chain_not_runnable), and its outputs (rest time,
+    connected/disconnected speed and traction ratios) are ratios between ligand connectivities of a
+    monolayer on collagen, a condition none of those measurements has; it has no substrate-modulus input.
+    The closed forms (Eqs 10-14) give node profiles along the chain (division strain, cell stiffness and
+    damping, ligand binding probability, substrate spring stiffness), none of which chan2008 measures. The
+    processing models (box_median_ratio, stack_speed_ratio, stack_traction_ratio) reduce this paper's own
+    box plots and bars; chan2008 has neither AF/RF nor connected/disconnected conditions, and processing
+    another paper's data is not a model test. This paper cites chan2008 only for the relay of force by
+    myosin on actin bundles (p. 8, and again p. 30), not for a model, a parameter or a data set it
+    compares with. For the other direction see chan2008/q_xval_bagchi2025_none.
+  citation: {page: 8, quote: "Since relay of force occurs via myosin net", where: text}
+# cross-record validation against prahl2020 (2026-11-21): none added
+- id: q_xval_prahl2020_none
+  kind: unstated_model
+  about: [chain_eqs1_8, threshold_strain_eq10, cell_stiffness_eq11, cell_damping_eq12, binding_prob_eq13, binding_prob_eq13_shifted, substrate_stiffness_eq14, box_median_ratio, stack_speed_ratio, stack_traction_ratio, q_chain_not_runnable]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    prahl2020, and this paper does not cite it (its motor-clutch citations are refs 48 and 58).
+    prahl2020 measures single U251 glioma cells migrating in 1D PDMS microchannels: drift velocity and
+    motility coefficient (v_exp, mu_exp and the drug and clutch series of Figs. 3-7), the MSD curve
+    (Fig. 2G), PRW speed and persistence histograms (Fig. S4), EB1 microtubule growth speeds (Fig. S5B)
+    and cell length and nucleus position (Fig. S5C-D). The one model here with a migration output,
+    chain_eqs1_8, is not runnable (q_chain_not_runnable), and its outputs (rest time,
+    connected/disconnected leading-edge speed and traction ratios) are ratios between ligand
+    connectivities of a monolayer chain on collagen, a condition no prahl2020 measurement has; it has
+    no confinement, channel or drug input. The closed forms (Eqs 10-14) give node profiles along the
+    chain (division strain, cell stiffness and damping, ligand binding probability, substrate spring
+    stiffness), none of which prahl2020 measures. The processing models (box_median_ratio,
+    stack_speed_ratio, stack_traction_ratio) reduce this paper's own box plots and bars to AF/RF and
+    connected/disconnected ratios; prahl2020 has neither condition, and processing another paper's
+    data is not a model test. For the other direction see prahl2020/q_xval_bagchi2025_none.
+  citation: {page: 12, quote: "we developed a novel motor-clutch model in which the cell monolayer is treated", where: text}

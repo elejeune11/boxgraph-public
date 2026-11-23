@@ -1,0 +1,510 @@
+# Relations this paper states about its models. Each 1D CMS module is "an instance of the motor-clutch
+# model (5)", Supporting ref. 5 = Chan and Odde 2008 (record chan2008), and its clutches unbind by the
+# slip bond of ref. 6 = Bell 1978. Chan's Eq. 1 already carries Bell's law (chan2008/rel_bell_off_rate).
+- id: rel_slip_bond_chan
+  kind: same_as
+  a: prahl2020/slip_bond_s1
+  b: chan2008/off_rate_eq1
+  mapping: {koff: "koff", Fclutch: "Fclutch", Fb: "Fbond"}
+  output_map: {koff_star: koff_i}
+  regime: {koff: [0.01, 10], Fclutch: [0, 20], Fbond: [1, 10]}
+  provenance: stated
+  citation: {page: 14, printed_page: "S1", quote: "each functioning as an instance of the motor-clutch", where: "Supporting Methods, before Eqn. S1"}
+  assumptions:
+    - "Prahl's characteristic bond force Fbond is Chan's Fb, and the force Fclutch,i on the ith clutch is Chan's clutch tension Fclutch"
+    - "regime in positive forces; Chan prints Fclutch and Fb both negative, which leaves their ratio unchanged"
+# Supporting ref. S6 = Bell 1978: Eqn. S1 is Bell's loaded reverse rate (p. 623) with Fbond = kT/gamma.
+- id: rel_slip_bond_bell
+  kind: same_as
+  a: bell1978/loaded_reverse_rate
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "k_minus", Fclutch: "f*1e7", Fbond: "kT*160.2176634/gamma"}
+  output_map: {koff_i: k_minus_F}
+  regime: {k_minus: [0.01, 10], gamma: [0.1, 2], f: [0, 2e-6], kT: [0.024, 0.028]}
+  provenance: stated
+  citation: {page: 14, printed_page: "S1", quote: "scales with force by a single exponential (6), also known as a slip bond", where: "Supporting Methods, before Eqn. S1"}
+  assumptions:
+    - "Bell's force per closed bond F/Nb is Prahl's force on one clutch Fclutch,i (1 dyne = 1e7 pN)"
+    - "Prahl's characteristic bond force Fbond stands for Bell's kT/gamma (eV/nm -> pN is 160.2176634)"
+    - "Bell's reverse rate k- of a membrane-bound bond is Prahl's unloaded clutch off-rate koff"
+# Not entered: nucleation_s8 shares only its shape (a rate from a rate and lengths) with bell1978/loaded_reverse_rate;
+# a fourth-power G-actin law has no mapping onto Bell's force exponential.
+# Not linked (cited.yaml): no Table S1 value is taken from Bell; Fbond and koff cite refs S21 and S23.
+#
+# Relations to chaudhuri2015 (ref. 44). This paper cites Chaudhuri only in a group of references for the
+# "values of these parameters and the constraints on their relationships" (p. 4, "(6,7,9,40-44)"); it names
+# no model of Chaudhuri's and takes no Table S1 value from it (no datum cites ref-44), so nothing is stated
+# and no value is linked in cited.yaml. The two relations below are proposed.
+- id: rel_chaudhuri_bell_off_rate_same_as_slip_bond
+  kind: same_as
+  a: chaudhuri2015/bell_off_rate
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "koff", Fclutch: "Fclutch", Fbond: "Frup"}
+  output_map: {koff_i: koff_star}
+  regime: {koff: [0.01, 10], Fclutch: [0, 20], Frup: [1, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers unbind a clutch by the Bell slip bond, both citing Bell 1978 (Chaudhuri sref-5, Prahl
+    ref. S6): Chaudhuri's k*off = koff e^(Fclutch/Frup) (Supp. Note 1) and Prahl's Eqn. S1,
+    koff,i = koff exp(Fclutch,i/Fbond), are the same exponential law of the force on one clutch over a
+    characteristic rupture force; units 1/s and pN on both sides.
+  assumptions:
+    - "Chaudhuri's rupture force per bond Frup and Prahl's characteristic bond force Fbond are the same parameter of the same law (both 2 pN in the papers' parameter tables), and both Fclutch are the force on one clutch (correspondences of quantities, not merged)"
+- id: rel_force_velocity_s2_same_as_chaudhuri_retrograde_flow
+  kind: same_as
+  a: prahl2020/force_velocity_s2
+  b: chaudhuri2015/retrograde_flow_eq1
+  mapping: {vu: "vmotor", F_sum: "ksub*dxsub", Fstall: "Fmotor*nmotor_j"}
+  output_map: {v_retrograde: vflow}
+  regime: {vmotor: [50, 200], ksub: [0.1, 100], dxsub: [0, 50], Fmotor: [1, 3], nmotor_j: [10, 200]}
+  provenance: proposed
+  reason: >-
+    Both are the linear force-velocity law of Chan and Odde's motor-clutch model (Prahl's Eqn. S2 is
+    described from chan2008; Chaudhuri builds on "the framework of a previous model by Chan and Odde"):
+    retrograde flow slows from the unloaded motor velocity in proportion to the load over the stall force
+    of the motors. Prahl writes the load as the substrate spring force ksub dxsub,j and the stall force as
+    Fmotor nmotor,j; Chaudhuri writes the summed clutch force and Fstall. Only the retrograde flow is
+    mapped; Chaudhuri's second output, v_spread = vu - v_retrograde, has no counterpart in Eqn. S2.
+  assumptions:
+    - "the substrate spring of a module carries the summed force of its engaged clutches (quasi-static force balance of the motor-clutch model), so ksub dxsub,j is Chaudhuri's sum of Fclutch; in Chaudhuri's lattice model each clutch pulls its own substrate spring, but Supp. Eq. 1 is written in the summed clutch force, which is the load in both"
+    - "Chaudhuri's stall force Fstall is the module's total motor stall force, Fmotor nmotor,j (Chan's Eq. 4); Chaudhuri's unloaded velocity vu is Prahl's vmotor"
+# Not entered: chaudhuri2015/clutch_springs_nolattice and prahl2020/cms_1d both simulate motor-clutch systems,
+# but cms_1d is not runnable, the outputs differ (a spreading speed against a cell migration speed), and
+# neither paper states a limit taking one to the other.
+# Eqn. S2 (force-velocity) is Chan's Eq. 3 with nmotor,j Fmotor as Chan's Fstall (Eq. 4). chan2008 recorded Eq. 3 only
+# inside its full simulation, so a helper model chan2008/force_velocity_eq3 (Eqs. 3-4) was added to test the statement.
+- id: rel_force_velocity_chan
+  kind: same_as
+  a: chan2008/force_velocity_eq3
+  b: prahl2020/force_velocity_s2
+  mapping: {vmotor: "vu", ksub: "ksub", dxsub: "xsub", Fmotor: "Fm", nmotor_j: "nm"}
+  output_map: {vflow: vfilament}
+  regime: {vu: [50, 200], ksub: [0.1, 100], xsub: [0, 50], nm: [10, 200], Fm: [1, 3]}
+  provenance: stated
+  citation: {page: 14, printed_page: "S1", quote: "slows from the myosin II motor unloaded velocity vmotor by a linear force-velocity relationship", where: "Supporting Methods, Eqn. S2; ref. 5 = Chan and Odde 2008"}
+  assumptions:
+    - "Chan's motor ensemble (nm motors of stall force Fm on one filopodial bundle) is Prahl's module ensemble (nmotor,j motors of stall force Fmotor); Chan's substrate position xsub is Prahl's substrate spring extension dxsub,j"
+    - "regime in positive values; Chan prints vu, Fm and xsub negative (retrograde = -x), which leaves vu (1 - ksub xsub/(nm Fm)) the same up to the sign of the velocity, so Chan's vfilament is Prahl's retrograde flow vflow in magnitude"
+# The 1D CMS module is stated to be Chan's motor-clutch model; the CMS adds to it actin polymerization, a G-actin pool,
+# module nucleation and capping, cell-body clutches and a cell spring. Neither model has a symbolic form and cms_1d is
+# not runnable, so the steps cannot be applied: the relation is entered with the paper's words as its evidence.
+- id: rel_cms_module_from_chan
+  kind: derived_from
+  a: chan2008/motor_clutch
+  b: prahl2020/cms_1d
+  mapping: {nmotor_module: "nm", Fmotor: "Fm", vmotor: "vu", nclutch_module: "nc", kon: "kon", koff: "koff",
+            Fbond: "Fb", kclutch: "kc", ksub: "ksub"}
+  steps:
+    - "each protrusion module j functions as an instance of the motor-clutch model, with nmotor,j motors and nclutch,j clutches drawn from cell pools"
+    - "modules extend by actin polymerization from a shared G-actin pool (Eqns. S3-S4), are nucleated at knuc (Eqn. S8) and capped at kcap"
+    - "modules are joined to a cell body (with its own clutches) by a cell spring, under the force balances Eqns. S5-S7"
+  provenance: stated
+  citation: {page: 14, printed_page: "S1", quote: "each functioning as an instance of the motor-clutch model", where: "Supporting Methods; ref. 5 = Chan and Odde 2008"}
+  assumptions:
+    - "the mapping covers only the module-level inputs both share; cms_1d's cell-level inputs (nmotor, nclutch, kcap, knuc0, vactin_max, Atotal, kcell, Lcell, Lmin, nclutch_cell, psi_pol) have no counterpart in chan2008, and its outputs (motility coefficient, drift velocity) none in chan2008's (flow, traction)"
+    - "Chan's signed vu, Fm, Fb are Prahl's positive vmotor, Fmotor, Fbond in magnitude"
+# Not linked (cited.yaml): no prahl2020 datum cites ref. 6 / S5 (Chan); Table S1's "~100 nm s-1 observed in other cells
+# (5, 19)" and vactin,max "(3, 5)" are an approximate comparison and an estimate citing several works, and chan2008
+# prints no vactin,max; chan2008 cites no prahl2020 value (it is earlier).
+# Not entered: the 1D CMS (cms_1d) is "modified from a previously described 2D CMS (9-12)"; bangasser2017's record has
+# no models yet, and cms_1d is not runnable, so a derived_from relation could not be tested.
+#
+# Relations to craig2015 (ref. 38). This paper cites Craig once, with Gardel 2008, for the idea that actin
+# polymerization and myosin II can both drive F-actin retrograde flow (p. 4, "as previously suggested (37,38)");
+# it names no model of Craig's and takes no Table S1 value from it (no datum cites ref-38), so nothing is
+# stated and nothing is linked in cited.yaml. None is proposed either:
+# - craig2015/hill_eq11 (V_LM = Vmax Ftot/(Fk + Ftot)) and force_velocity_s2 (vflow = vmotor (1 - load/stall))
+#   share only the form "a speed from a force": Craig's flow rises and saturates with the total traction set by
+#   myosin strength, Prahl's falls linearly with the load opposing the motors. For positive parameters the slopes
+#   have opposite signs, and no limit takes one to the other.
+# - Craig's adhesion clutch is a continuum friction (drag) on a viscous actin network, not discrete Bell clutches
+#   or a motor force-velocity law, so slip_bond_s1 and the Craig field models (clutch_fields, clutch_profile)
+#   share no rate law; cms_1d is not runnable and its outputs (motility coefficient, drift) have no Craig counterpart.
+#
+# Relations to elosegui2014 (ref. 41). This paper cites Elosegui-Artola 2014 only in the same group of references
+# for the "values of these parameters and the constraints on their relationships" (p. 4, "(6,7,9,40-44)"); it
+# names no model of Elosegui's, the Supporting references (S1-S23) do not include it, and no Table S1 value cites
+# ref-41, so nothing is stated and nothing is linked in cited.yaml. None is proposed either:
+# - elosegui2014/integrin_clutch_sim is not runnable (its equations are in an unreadable SI) and unbinds by a
+#   catch bond with two competing integrin types and reinforcement; slip_bond_s1 is a Bell slip bond, and the
+#   paper's statement that a slip bond gives the same qualitative results is not a mapping that could be tested.
+# - elosegui2014's runnable models (koff_ratio, kont_ratio, kon_eff_ratio, density_fold) are ratios of SPR binding
+#   constants and integrin densities between two integrin types; no model of this paper computes such a ratio.
+#   kon_from_koff (kon from koff and the ratio kon/koff) is also a product, but of a clutch's own rates, not a
+#   ratio between two bond types: a form too plain to mean anything, so not entered.
+#
+# Relations to elosegui2016 (ref. 7 = Supporting ref. S19). This paper cites Elosegui-Artola 2016 twice, both for
+# values: in the group "(6,7,9,40-44)" for the "values of these parameters and the constraints on their
+# relationships" (p. 4), and in Table S1 for vmotor, "Measured in (1); ~100 nm s-1 observed in other cells (5, 19)"
+# (p. 22). It names no model of Elosegui's and states no relation, so nothing is stated. Nothing is linked in
+# cited.yaml: Table S1's vmotor (120 nm/s) is taken from ref. S1, and the "~100 nm s-1" of refs. 5 and 19 is an
+# approximate comparison, not recorded as a datum (Elosegui prints 110 nm/s, Supplementary Table 1). None is proposed:
+# - elosegui2016/clutch_no_talin_sim and cms_1d both build on motor-clutch modules (motors with a linear force-velocity
+#   law, clutch springs, a substrate spring), but they differ in the off-rate (catch bond against Eqn. S1's slip bond),
+#   in kind (one adhesion at fixed position against many nucleating, capped modules with a cell body spring), and in
+#   outputs (traction and actin flow against motility coefficient and drift velocity, which have no counterpart);
+#   cms_1d is not runnable, so a relation could not be tested, and neither paper states a limit taking one to the other.
+#   Their module-level link runs through chan2008 and bangasser2013, already related to each (rel_slip_bond_chan here;
+#   rel_chan_clutch_slip_limit and rel_bangasser_ssa_approximated_by_no_talin in elosegui2016).
+# - elosegui2016/talin_unfolding_time is a single exponential in force like slip_bond_s1, but of talin unfolding, not
+#   of clutch unbinding, and it outputs a time: a shared exponential form only, so not entered.
+# - Prahl's 1D CMS has no talin unfolding or integrin recruitment, so clutch_talin_sim, unfold_refold_crossing and
+#   threshold_sensitivity have no counterpart.
+#
+# Relations to gardel2008 (ref. 37). This paper cites Gardel twice: with Craig (ref. 38) for the idea that actin
+# polymerization and myosin II can both drive F-actin retrograde flow (p. 4, "as previously suggested (37,38)"), and
+# with ref. 30 for the size of traction forces of adherent cells, against which the ~6.5 pN fluid drag is "orders of
+# magnitude smaller" (p. 10, "(30,37)"). Neither citation names a model of Gardel's, and the Supporting references
+# (S1-S23) do not include it. No Table S1 value or other datum cites ref-37, so nothing is stated and nothing is linked
+# in cited.yaml. None is proposed either:
+# - gardel2008/switch_speed_claim and switch_speed_by_condition are word claims: the F-actin speed at peak traction is
+#   one threshold Vc (8-10 nm/s). No model of this paper outputs the actin speed at peak traction. force_velocity_s2
+#   is a monotonic linear motor law with no traction maximum. cms_1d could in principle give a traction-flow curve, but
+#   it is not runnable and the paper reports no traction or flow speed from it, so a relation could not be tested.
+#
+# Relations to gong2018 (ref. 43). This paper cites Gong only in the group of references for the "values of these
+# parameters and the constraints on their relationships" (p. 4, "(6,7,9,40-44)"); it names no model of Gong's and
+# the Supporting references (S1-S23) do not include it. No Table S1 value or other datum cites ref-43, so nothing
+# is stated and nothing is linked in cited.yaml. One relation is proposed:
+- id: rel_gong_bell_off_rate_same_as_slip_bond
+  kind: same_as
+  a: gong2018/bell_off_rate
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "roff0", Fclutch: "Fc", Fbond: "Fb"}
+  output_map: {koff_i: roff}
+  regime: {roff0: [0.01, 10], Fc: [0, 20], Fb: [1, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers unbind a clutch by the Bell slip bond, both citing Bell 1978 (Gong ref. 27, p. 2; Prahl ref. S6):
+    Gong's roff,i = roff0 exp(Fc,i/Fb) and Prahl's Eqn. S1, koff,i = koff exp(Fclutch,i/Fbond), are the same
+    exponential law of the force on one clutch over a characteristic force; units 1/s and pN on both sides.
+  assumptions:
+    - "Gong's characteristic force Fb and Prahl's characteristic bond force Fbond are the same parameter of the same law, Gong's clutch force Fc,i and Prahl's Fclutch,i the force on one clutch, and roff0 and koff the unloaded off-rate (correspondences of quantities, not merged)"
+    - "gong2018/bell_off_rate is a helper model of a step inside Gong's mean-field ODE, where it is applied to the ensemble clutch force; Prahl applies it to each clutch of a stochastic module"
+# Not entered: gong2018's mean-field models (mean_field_sls, mean_field_elastic) against prahl2020/cms_1d: cms_1d
+# is not runnable, its outputs (migration speed, motility coefficient) have no counterpart in Gong's spreading speed,
+# FA lifetime and mean force, and Gong's substrate is viscoelastic and reinforcing while Prahl's is elastic.
+# Not entered: prahl2020/force_velocity_s2 has no counterpart model in gong2018 (Gong's Hill relation is a step inside
+# the ODE); gong2018/boussinesq_eq_s9, tbind_estimate and the timescale models have no counterpart in prahl2020.
+#
+# Relations to cms_code (the MATLAB CMS v1.0 released with Bangasser et al. 2017, ref. 9 = S1). This paper says its
+# 1D CMS "is modified from a previously described 2D CMS (9-12)" (p. 2) and that "the order of events ... is
+# previously described (1)" (p. S3), and that its simulations "were run in Matlab", but it cites the paper, not the
+# released code, and its own code is not released. Every relation to the code is therefore proposed. a is the code's
+# port, b this paper's model; the code's actin lengths are in nm, this paper's Atotal, AG and Lcell in um (factor 1000).
+# The code's factin (F-actin held in modules) is Atotal - AG by this paper's mass balance, Eqn. S4.
+- id: rel_cms_code_off_rate_same_as_slip_bond
+  kind: same_as
+  a: cms_code/off_rate_port
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "koff", Fclutch: "Fc", Fbond: "Fb"}
+  regime: {koff: [0.01, 10], Fc: [0, 20], Fb: [1, 10]}
+  provenance: proposed
+  reason: >-
+    The CMS code's clutch off-rate (cms2Dv1_0.m line 181, "off-rate increases with load according to Bell Model")
+    is koff exp(|Fc|/Fb); Eqn. S1 is koff,i = koff exp(Fclutch,i/Fbond), and the paper says its modules work "as
+    with previous versions" of the CMS (p. S1).
+  assumptions:
+    - "the code's Fc is the norm of a 2D clutch force, never negative; this paper's 1D Fclutch,i is taken in magnitude (regime in positive forces)"
+- id: rel_cms_code_flow_same_as_force_velocity_s2
+  kind: same_as
+  a: cms_code/flow_port
+  b: prahl2020/force_velocity_s2
+  mapping: {vmotor: "vu", ksub: "Ksub", dxsub: "sdisp", Fmotor: "Fm", nmotor_j: "nm"}
+  regime: {vu: [50, 200], Ksub: [0.01, 10], sdisp: [0.01, 0.9], nm: [10, 1000], Fm: [1, 3]}
+  provenance: proposed
+  reason: >-
+    The code's module flow (cms2Dv1_0.m lines 200-201) is vu (1 - Ksub sdisp/(nm Fm)), Eqn. S2's
+    vmotor (1 - ksub dxsub,j/(Fmotor nmotor,j)) term for term.
+  assumptions:
+    - "regime below stall (Ksub sdisp at most 9 pN against nm Fm at least 10 pN): the code clips the flow at zero beyond stall (line 202, cms_code q_flow_clip), Eqn. S2 prints no clip and gives a negative flow there"
+    - "the code's sdisp, the distance of the module's substrate point from its reference, is this paper's substrate spring extension dxsub,j"
+- id: rel_cms_code_polyrate_same_as_polymerization_s3
+  kind: same_as
+  a: cms_code/polyrate_port
+  b: prahl2020/polymerization_s3
+  mapping: {vactin_max: "maxpoly", AG: "(totact - factin)/1000", Atotal: "totact/1000"}
+  regime: {maxpoly: [50, 500], factin: [1000, 90000], totact: [100000, 1000000]}
+  provenance: proposed
+  reason: >-
+    The code's polymerization speed (cms2Dv1_0.m lines 207, 371) is maxpoly (1 - factin/totact), Eqn. S3's
+    vactin,max AG/Atotal with AG = Atotal - sum AF,j (Eqn. S4).
+  assumptions:
+    - "the code's factin (sum over modules of sdist - mdist) is this paper's sum of AF,j, so totact - factin is AG"
+    - "capped modules do not polymerize in either (code line 208; p. S2 'capped modules no longer extend')"
+- id: rel_cms_code_kmod_same_as_nucleation_s8
+  kind: same_as
+  a: cms_code/kmod_port
+  b: prahl2020/nucleation_s8
+  mapping: {knuc0: "kmod0", AG: "(totact - factin)/1000", Atotal: "totact/1000"}
+  regime: {kmod0: [0.1, 10], factin: [1000, 90000], totact: [100000, 1000000]}
+  provenance: proposed
+  reason: >-
+    The code's module birth rate (cms2Dv1_0.m line 171) is kmod0 (1 - factin/totact)^4, Eqn. S8's
+    knuc,0 (AG/Atotal)^4 with AG = Atotal - sum AF,j.
+  assumptions:
+    - "the code's factin is this paper's sum of AF,j (Eqn. S4)"
+    - "in the 2D code a new module takes a uniform random angle; in the 1D CMS it points +x with probability psi_pol. The rate is the same; only the direction rule differs"
+- id: rel_cms_code_max_rule_same_as_motor_cap
+  kind: same_as
+  a: cms_code/module_max_port
+  b: prahl2020/module_motor_cap
+  mapping: {f: "fm", nmotor: "mpool"}
+  output_map: {nmotor_module: maxm}
+  regime: {mpool: [10, 10000], cpool: [10, 10000], fm: [0.05, 0.2], fc: [0.05, 0.2]}
+  provenance: proposed
+  reason: >-
+    Table S1 gives the module motor maximum as "0.1*nmotor (1)"; the code sets maxm = mpool*0.1 (line 39).
+    A product, entered to show that the one-tenth rule of Table S1 is the code's.
+- id: rel_cms_code_max_rule_same_as_clutch_cap
+  kind: same_as
+  a: cms_code/module_max_port
+  b: prahl2020/module_clutch_cap
+  mapping: {f: "fc", nclutch: "cpool"}
+  output_map: {nclutch_module: maxc}
+  regime: {mpool: [10, 10000], cpool: [10, 10000], fm: [0.05, 0.2], fc: [0.05, 0.2]}
+  provenance: proposed
+  reason: >-
+    Table S1 gives the module clutch maximum as "0.1*nclutch (1)"; the code sets maxc = cpool*0.1 (line 40).
+    A product, entered to show that the one-tenth rule of Table S1 is the code's.
+- id: rel_cms1d_from_cms_code
+  kind: derived_from
+  a: cms_code/cms2d_code
+  b: prahl2020/cms_1d
+  mapping: {nmotor: "mpool", nmotor_module: "mpool/10", nclutch: "cpool", nclutch_module: "cpool/10", Fmotor: "Fm",
+            vmotor: "vu", Fbond: "Fb", kclutch: "Kc", kon: "kon", koff: "koff", ksub: "Ksub", kcap: "kcap",
+            knuc0: "kmod0", vactin_max: "maxpoly", Atotal: "totact/1000", kcell: "Kcell", Lcell: "lcell/1000",
+            Lmin: "lmin", nclutch_cell: "nc"}
+  steps:
+    - "restrict module nucleation from a uniform angle in the plane to +x (probability psi_pol) or -x (p. S3)"
+    - "solve the force balance for the cell position along x only (p. 2, 'we modified the CMS to solve for cell coordinates')"
+    - "initial state of two modules in +x and one in -x; sample xcell every 5 min (the code samples every 15 min), drop the first hour, fit Eq. 2 (with drift) to the first half of the MSD"
+  provenance: proposed
+  reason: >-
+    The paper says the 1D CMS "is modified from a previously described 2D CMS (9-12)" (p. 2), that "the order of
+    events in each step of the model algorithm is previously described (1)" and that it was run in Matlab (p. S3);
+    cms2d_code is the MATLAB 2D CMS released with ref. 9 = S1. The paper does not cite the code, so the relation is
+    proposed. Neither model runs (cms2d_code is not ported, cms_1d defers its algorithm), so the steps cannot be applied.
+  assumptions:
+    - "psi_pol has no counterpart in the 2D code (a uniform nucleation angle), and the outputs differ (rgflow against mu and v)"
+    - "nmotor,module and nclutch,module are the code's one-tenth rule (lines 39-40), as Table S1's '0.1*nmotor', '0.1*nclutch'"
+    - "Table S1's kcell is 10^4 pN/nm and the code's shells set 1000 pN/nm (cms_code q_kcell): the mapping relates the symbols, not the values"
+# Not entered: cms_code/module_assign_port (ceil(maxm (1 - totm/mpool))) has no model here: p. S2 says only that new
+# modules "are assigned motors and clutches as a fraction of the available pool". cms_code/keff_port (series cell
+# spring, clutches and substrate) is implied by Eqn. S5, which this record does not enter as a model.
+# Not linked (cited.yaml): Table S1 values cite ref. S1 (record bangasser2017), not the code; the links run through
+# bangasser2017, and cms_code does not cite this paper (it is earlier).
+#
+# Relations to bangasser2013 (ref. 40 = Supporting ref. S20). The paper says its modules follow "similar rules to
+# those described for previous iterations of the motor-clutch model (6,40)" (Fig. 1 legend, p. 3) and that eight of
+# its parameters "define the motor-clutch system properties (40)" (p. 4): the eight of Bangasser's Table 1 and
+# sensitivity analysis (nm, Fm, vu, nc, kon, koff, Fb, kc). Both models are stochastic simulations and cms_1d is not
+# runnable, so the steps cannot be applied: the relation stands on the paper's words.
+- id: rel_cms_module_from_bangasser_ssa
+  kind: derived_from
+  a: bangasser2013/motor_clutch_ssa
+  b: prahl2020/cms_1d
+  mapping: {nmotor_module: "nm", Fmotor: "Fm", vmotor: "vu", nclutch_module: "nc", kon: "kon", koff: "koff",
+            Fbond: "Fb", kclutch: "kc", ksub: "ksub"}
+  steps:
+    - "each protrusion module j is a motor-clutch system governed by similar rules to Bangasser's (slip-bond clutches, linear motor force-velocity, clutch and substrate springs), with nmotor,j motors and nclutch,j clutches drawn from cell pools"
+    - "modules extend by actin polymerization from a shared G-actin pool (Eqns. S3-S4), are nucleated at knuc (Eqn. S8) and capped at kcap"
+    - "modules are joined to a cell body (with its own clutches) by a cell spring, under the force balances Eqns. S5-S7"
+  provenance: stated
+  citation: {page: 3, quote: "governed by similar rules to those described for previous iterations of the motor-clutch model", where: "Fig. 1 legend; ref. 40 = Bangasser et al. 2013"}
+  assumptions:
+    - "the mapping covers only the eight motor-clutch parameters (p. 4, 'eight of which define the motor-clutch system properties (40)') and the substrate stiffness; cms_1d's cell-level inputs (nmotor, nclutch, kcap, knuc0, vactin_max, Atotal, kcell, Lcell, Lmin, nclutch_cell, psi_pol) have no counterpart in Bangasser's SSA, and its outputs (motility coefficient, drift velocity) none in the SSA's (flow, traction, engaged clutches)"
+    - "Bangasser's whole-system motor and clutch numbers nm, nc play the role of the per-module maxima nmotor,module, nclutch,module"
+- id: rel_catch_slip_eq9_to_slip_bond_s1
+  kind: reduces_to
+  a: bangasser2013/catch_slip_eq9
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "koff", Fclutch: "F", Fbond: "Fb"}
+  output_map: {koff_i: koff_star}
+  limit: {koffc: "0"}
+  regime: {F: [0, 20], koff: [0.01, 1], Fb: [1, 10], koffc: [0.001, 1], Fc: [1, 10]}
+  # the numeric limit stops at koffc ~ 1e-8 1/s, leaving a relative residual up to koffc/koff ~ 1e-6
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    Prahl's Eqn. S1 cites Bell (ref. S6) for the slip bond, not Bangasser, but says the modules follow the rules of
+    Bangasser's motor-clutch model (ref. 40). Bangasser's Eq. 9 is a catch-slip off-rate whose first term, koff
+    exp(Fi/Fb), "is identical to the Bell model" and is the off-rate of the rest of that study. With no catch term
+    (koffc -> 0), Eq. 9 is Eqn. S1 with Bangasser's Fi as Prahl's Fclutch,i and Fb as Fbond.
+  assumptions:
+    - "Bangasser's force Fi on one clutch is Prahl's Fclutch,i; Bangasser's rupture force Fb is Prahl's characteristic slip bond force Fbond (both 2 pN in the base sets); correspondences of quantities, not merged"
+# Not entered: bangasser2013/optimal_stiffness and nc_limits against prahl2020: Prahl cites ref. 40 for the stiffness
+# sensitivity limit of U251 cells (p. 10, "above the limit of stiffness sensitivity for U251 cells (9,40)") as a
+# claim, and no model of this paper outputs an optimal stiffness or a clutch-number limit. force_velocity_s2 is the
+# force-velocity step inside motor_clutch_ssa, which has no separate model in bangasser2013 (its link runs through
+# chan2008/force_velocity_eq3, rel_force_velocity_chan).
+#
+# Relations to bangasser2013b (ref. 71 = Supporting ref. S22). This paper cites Bangasser and Odde 2013 once, in the
+# Source column of Table S1 for kon: "Theoretical estimate, 10*koff (22)" (p. 22); ref. 71 is listed only among the
+# Supporting citations (p. 11, "References (64-73) appear in the Supporting Material"). That rule kon = 10 koff is the
+# one relation stated, entered below. One relation is proposed (the off-rate law).
+- id: rel_b13b_eq31_rates_same_as_kon_from_koff
+  kind: same_as
+  a: bangasser2013b/eq31_rates
+  b: prahl2020/kon_from_koff
+  mapping: {r: "q", koff: "ks/(C*q)"}
+  output_map: {kon: kon}
+  regime: {C: [0.5, 2], ks: [1, 1000], q: [2, 20]}
+  provenance: stated
+  citation: {page: 22, printed_page: "S9", quote: "Pseudo-first order association rate 1 s-1 Theoretical estimate, 10*koff (22)", where: "Table S1, Source column of kon; (22) = ref. S22 = Bangasser and Odde 2013"}
+  assumptions:
+    - "Bangasser and Odde state the rule as 'k = kon = 10koff' with Eq. 31 (p. 9); their eq31_rates gives koff = kon/q, so Prahl's kon = r koff with r = q and Bangasser's koff returns Bangasser's kon"
+    - "the relation tests only the shared rule kon = q koff; Eq. 31's optimum-stiffness part (kon = ks/C) enters only through the mapping of koff"
+- id: rel_b13b_eq5_same_as_slip_bond_s1
+  kind: same_as
+  a: bangasser2013b/clutch_offrate_eq5
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "koff", Fclutch: "Fc", Fbond: "Fb"}
+  output_map: {koff_i: koff_i}
+  regime: {koff: [0.001, 10], Fc: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Prahl's Eqn. S1 cites Bell (ref. S6) for the slip bond, not Bangasser and Odde, but both print the same
+    exponential koff exp(F/Fb) for the off-rate of one clutch under tension, with the unloaded off-rate and a
+    characteristic rupture force (2 pN in both base sets), in 1/s and pN on both sides.
+  assumptions:
+    - "Bangasser and Odde's Fc,i (clutch_force) is Prahl's Fclutch,i (clutch_tension), and their koff,i output (mean_clutch_off_rate, the loaded rate of one clutch) is Prahl's koff,i (clutch_off_rate_loaded): correspondences of quantities, not merged"
+# Not entered: clutch_ensemble_cycle (the master-equation ODE of one motor-clutch system, outputs cycle time and mean
+# flow) against cms_1d. Both rest on motor-clutch modules with the same rate laws, but Prahl never cites ref. 71 for
+# a model, cms_1d is not runnable, and its outputs (motility coefficient, drift velocity) have no counterpart in the
+# ODE's; the module-level link runs through bangasser2013/motor_clutch_ssa (rel_cms_module_from_bangasser_ssa), which
+# bangasser2013b's record relates to clutch_ensemble_cycle (rel_ssa_cycle_time_approximated_by_ode). force_velocity_s2
+# is the <vf> line inside clutch_ensemble_cycle, which has no separate model in bangasser2013b.
+#
+# Relations to bangasser2017 (ref. 9 = Supporting ref. S1), reviewed 2026-11-19. This supersedes the note above that
+# bangasser2017 "has no models yet". The paper says its 1D CMS "is modified from a previously described 2D CMS (9-12)"
+# (p. 2), that module nucleation follows the power law of ref. 9 (p. 4, "(9), described in Eq. S8"), and that the module
+# maxima are 0.1 of the pools "(1)" (Table S1). Those three are entered as stated. The slip bond (S1), force-velocity law
+# (S2) and polymerization (S3) are attributed to refs 6 and 5 (Bell, Chan) or to no one, so their identity with
+# bangasser2017's Eqs. 1-3 is proposed. Units: pN, nm, s, and actin lengths in um on both sides.
+- id: rel_cms1d_from_bangasser2017_cms
+  kind: derived_from
+  a: bangasser2017/cms
+  b: prahl2020/cms_1d
+  mapping: {nmotor: "Nm", nmotor_module: "nm_max", Fmotor: "Fm", vmotor: "vm", nclutch: "Nc", nclutch_module: "nc_max",
+            Fbond: "Fb", kclutch: "kc", kon: "kon", koff: "koff", ksub: "ks", kcap: "kcap", knuc0: "kmod_max",
+            vactin_max: "vp_max", Atotal: "Atot", kcell: "kcell", Lcell: "lin", Lmin: "lmin*1000",
+            nclutch_cell: "nc_cell", psi_pol: "0.5"}
+  output_map: {mu: mu}
+  steps:
+    - "restrict module nucleation from a uniformly distributed angle in the plane to +x (probability psi_pol) or -x (p. S3)"
+    - "solve the force balances (Eqns. S5-S7, the 2D Eqs. 4-6) for the cell position along x only"
+    - "start from two modules in +x and one in -x; sample xcell every 5 min (2D: 15 min), drop the first hour, fit Eq. 2 (2D: Eq. 12, mu = <r^2>/4t) to the first half of the MSD"
+  provenance: stated
+  citation: {page: 2, printed_page: "1710", quote: "The 1D CMS employed in this study is modified from a previously", where: "Materials and Methods; refs 9-12, ref. 9 = Bangasser et al. 2017"}
+  assumptions:
+    - "psi_pol = 0.5 ('an equal likelihood of module generation in the +x and -x directions', p. S3) is the 1D counterpart of the 2D CMS's uniform nucleation angle"
+    - "the 2D random motility coefficient (Eq. 12, <r^2> = 4 mu t) and the 1D motility coefficient (Eq. 2 with n = 1, <r^2> = 2 mu t + v^2 t^2) are both the diffusive coefficient of the cell body; the 1D drift velocity v has no 2D counterpart"
+    - "Lmin: 2D in um, 1D in nm (factor 1000); every other mapped input has the same unit on both sides"
+    - "neither model runs (cms is not run in bangasser2017's record; cms_1d defers its algorithm to ref. S1), so the steps cannot be applied: the relation stands on the paper's words"
+- id: rel_eq7_same_as_nucleation_s8
+  kind: same_as
+  a: bangasser2017/module_birth_eq7
+  b: prahl2020/nucleation_s8
+  mapping: {knuc0: "kmod_max", AG: "AG", Atotal: "AT"}
+  output_map: {knuc: kmod}
+  regime: {kmod_max: [0.1, 10], AG: [1, 100], AT: [100, 1000]}
+  provenance: stated
+  citation: {page: 4, printed_page: "1712", quote: "New modules are nucleated at a rate (knuc) that scales with AG by a power-law relationship (9)", where: "Results; ref. 9 = Bangasser et al. 2017; described in Eqn. S8"}
+  assumptions:
+    - "Prahl's maximum nucleation rate knuc,0 is Bangasser's maximum module birth rate k*mod (both 1 1/s in the base sets), and AG, Atotal are Bangasser's AG, AT (both in um of protrusion length): correspondences of quantities, not merged"
+- id: rel_clutch_max_rule_same_as_clutch_cap
+  kind: same_as
+  a: bangasser2017/clutch_max_rule
+  b: prahl2020/module_clutch_cap
+  mapping: {f: "1/10", nclutch: "Nc"}
+  output_map: {nclutch_module: nc_max}
+  regime: {Nc: [10, 10000]}
+  provenance: stated
+  citation: {page: 22, printed_page: "S9", quote: "Maximum number of clutch bonds per 75 Adjustable, 0.1*nclutch (1)", where: "Table S1, Source column of nclutch,module; (1) = ref. S1 = Bangasser et al. 2017"}
+  assumptions:
+    - "Bangasser's rule is stated for the adhesivity simulations of Supplementary Fig. 5 ('at 1/10 of the total clutches'); Table S1 attributes the same 0.1 to ref. S1. A product: a form too plain to mean much, entered because the paper cites it"
+    - "the motor rule '0.1*nmotor (1)' has no counterpart model in bangasser2017 (its Supplementary Table 2 gives n*m = Nm/10 only as numbers), so module_motor_cap is not related"
+- id: rel_eq1_same_as_slip_bond_s1
+  kind: same_as
+  a: bangasser2017/off_rate_eq1
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "koff", Fclutch: "Fc", Fbond: "Fb"}
+  output_map: {koff_i: koff_i}
+  regime: {koff: [0.001, 10], Fc: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Prahl's modules work "as with previous versions" of the CMS (p. S1, refs 1-3, ref. 1 = Bangasser et al. 2017), but
+    Eqn. S1 itself is attributed to Bell (ref. 6), not to ref. 9. Both print the same slip bond, koff exp(F/Fb), of the
+    force on one clutch over a characteristic rupture force (2 pN in both parameter tables), in 1/s and pN.
+  assumptions:
+    - "Bangasser's Fc,i (clutch_force) is Prahl's Fclutch,i (clutch_tension): a correspondence of quantities, not merged"
+- id: rel_eq2_same_as_force_velocity_s2
+  kind: same_as
+  a: bangasser2017/motor_velocity_eq2
+  b: prahl2020/force_velocity_s2
+  mapping: {vmotor: "vm", ksub: "ks", dxsub: "xs", Fmotor: "Fm", nmotor_j: "nm"}
+  output_map: {vflow: vm_j}
+  regime: {vm: [50, 200], ks: [0.1, 100], xs: [0, 50], nm: [10, 200], Fm: [1, 3]}
+  provenance: proposed
+  reason: >-
+    Prahl attributes Eqn. S2 to Chan and Odde (refs 5, 6), not to ref. 9, but it is Bangasser's Eq. 2 term for term:
+    vm,j = v*m (1 - κs xs,j/(nm,j Fm)) against vflow = vmotor (1 - κsub Δxsub,j/(Fmotor nmotor,j)), with the same
+    unloaded velocity (120 nm/s) and stall force (2 pN) in both base sets.
+  assumptions:
+    - "Bangasser's motor retraction velocity vm,j is Prahl's retrograde flow vflow of module j, and xs,j is Δxsub,j: correspondences of quantities, not merged"
+- id: rel_eq3_same_as_polymerization_s3
+  kind: same_as
+  a: bangasser2017/polymerization_eq3
+  b: prahl2020/polymerization_s3
+  mapping: {vactin_max: "vp_max", AG: "AG", Atotal: "AT"}
+  output_map: {vactin: vp}
+  regime: {vp_max: [50, 500], AG: [1, 100], AT: [100, 1000]}
+  provenance: proposed
+  reason: >-
+    Prahl gives Eqn. S3 without a citation, in the CMS it says is "modified from a previously described 2D CMS (9-12)";
+    it is Bangasser's Eq. 3, vp = v*p AG/AT, with the same maximum velocity (200 nm/s) and total actin (100 um).
+  assumptions:
+    - "Bangasser's v*p, AG, AT are Prahl's vactin,max, AG, Atotal (lengths in um on both sides): correspondences of quantities, not merged"
+# Not entered:
+# - prahl2020/module_motor_cap: bangasser2017 has no model of a motor maximum rule (see rel_clutch_max_rule_same_as_clutch_cap).
+# - bangasser2017/module_motors_eq8 and module_clutches_eq9: p. S2 says new modules "are assigned motors and clutches as
+#   a fraction of the available pool of each within the cell (1)", but this record has no model of that assignment.
+# - bangasser2017/rmc_eq12 against msd_drift_eq2: Prahl says the MSD is computed by "the overlap method (1, 9)" and fitted
+#   over its first half "(1)", but Eq. 12 is a fit taking an MSD curve to mu, while Eq. 2 takes mu, v and t to an MSD;
+#   no mapping takes one model's inputs to the other's. Eq. 2 with n = 2 and v = 0 gives Eq. 12's <r^2> = 4 mu t.
+# - optimal stiffness (module_optimum, gaussian_optimum_*, the fold models): no prahl2020 model outputs an optimum; Prahl
+#   cites ref. 9 for the claim that its 1000 pN/nm channels lie above U251's stiffness sensitivity (p. 10), not a model.
+# - module_ssa against cms_1d: cms_1d is not runnable; the module-level rules are related one by one above.
+#
+# Relations to mekhdjian2017 (main-text ref. 30 = Supporting ref. S17; relator, 2026-11-22). This paper cites Mekhdjian
+# et al. only for the size of cellular traction forces: Table S1's nmotor source, "~10^2-10^5 required for nN total
+# traction force (17)" (p. 22), the drag estimate "much smaller than cellular traction force estimates (17)" (p. 21),
+# and "traction forces produced by adherent cells (30,37)" and "relationships between biophysical measurements in 2D
+# substrates and confined migration behaviors (30,31)" (p. 10). None names a model of Mekhdjian's, so nothing is stated.
+# Nothing is linked in cited.yaml: no datum carries from_source ref-S17 (nmotor = 10^3 is "Adjustable"; the 10^2-10^5
+# range is a constraint, not a value Mekhdjian prints). One relation is proposed, the shared slip-bond rule.
+- id: rel_mekhdjian_bell_off_rate_same_as_slip_bond
+  kind: same_as
+  a: mekhdjian2017/bell_off_rate
+  b: prahl2020/slip_bond_s1
+  mapping: {koff: "koff", Fclutch: "Fclutch", Fbond: "Fb"}
+  output_map: {koff_i: koff_star}
+  regime: {koff: [0.001, 10], Fclutch: [0, 20], Fb: [0.5, 10]}
+  provenance: proposed
+  reason: >-
+    Both papers unbind each clutch by the Bell slip bond, both citing Bell 1978: Mekhdjian's Supplement (p. 24),
+    "a single exponential Bell's law" with a characteristic bond force Fbond, koff* = koff exp(Fclutch/Fbond), and
+    Prahl's Eqn. S1, koff,i = koff exp(Fclutch,i/Fbond). One law of the force on one clutch over a characteristic
+    bond force; units 1/s and pN on both sides.
+  assumptions:
+    - "Mekhdjian's clutch_force (κclutch times extension) and Prahl's clutch_tension Fclutch,i are the force on one engaged clutch, and both Fbond are bond_rupture_force (correspondences of quantities, not merged)"
+    - "regime (relator's): clutch forces up to 20 pN, characteristic forces 0.5-10 pN around both papers' 2 pN"
+# Not entered:
+# - mekhdjian2017/motor_clutch_reinforced against prahl2020/cms_1d: both build on Bangasser et al. 2013's clutch rules,
+#   but cms_1d is not runnable, its outputs (motility coefficient, drift velocity) have no counterpart in the reinforced
+#   model's (retrograde flow, traction), neither paper states a relation, and their module-level links run through
+#   bangasser2013/motor_clutch_ssa (rel_cms_module_from_bangasser_ssa here; rel_ssa_approx_reinforced_* in mekhdjian2017).
+# - prahl2020/force_velocity_s2, polymerization_s3, nucleation_s8: mekhdjian2017 has the motor force-velocity law only
+#   inside motor_clutch_reinforced, and its actin mass balance (spread_area_pss) processes a whole flow curve; no
+#   separate model to relate. modulus_eq5, total_force_product, traction_optimum have no counterpart in this paper.

@@ -1,0 +1,51 @@
+# ---- reproductions: the paper's own results from its own models and inputs ----
+- {id: cmp_v_eq13_m015, purpose: reproduction, computed: v_eq13_m015, printed: v_m015_printed}
+- {id: cmp_v_eq13_m06, purpose: reproduction, computed: v_eq13_m06, printed: v_m06_printed, note: "eqn. 13 alone gives a negative v here; the stated condition k0 > -αc Ftot/Ct (1 > 1.2 fails) sets v = 0"}
+- {id: cmp_v_eq13_p06, purpose: reproduction, computed: v_eq13_p06, printed: v_p06_printed, note: "αc = 0.6 lies beyond the pole of eqn. 13 at αc = kon Ct/Ftot = 0.5, where eqn. 11 gives Cb < 0 (q_slip_220_beyond_pole)"}
+- {id: cmp_v_eq14_m015, purpose: approximation, computed: v_eq14_m015, printed: v_m015_printed, note: "the text introduces the numbers as eqn. 14 applied to literature values but reports the eqn. 13 result (q_eq13_or_eq14)"}
+- {id: cmp_v_eq14_m06, purpose: approximation, computed: v_eq14_m06, printed: v_m06_printed}
+- {id: cmp_k_cont, purpose: reproduction, computed: k_cont_pred, printed: k_cont_printed, note: "depends on the added Poisson ratio (eta_continuum_added)"}
+- {id: cmp_E_node, purpose: reproduction, computed: E_node_pred, printed: E_node_printed, note: "the ~24 nN/um input and the ~50 kPa result are both approximate"}
+- {id: cmp_E_from_G, purpose: reproduction, computed: E_from_G_pred, printed: E_270}
+- {id: cmp_kappa_main, purpose: reproduction, computed: kappa_main_pred, printed: kappa_ratio_main, note: "κb = kB T Lp is the reader's reading of 'a lower bound on κb from the persistence length' (q_kappa_main)"}
+- {id: cmp_kappa_soft, purpose: reproduction, computed: kappa_soft_pred, printed: kappa_ratio_soft}
+- {id: cmp_kappa_rod, purpose: reproduction, computed: kappa_rod_pred, printed: kappa_ratio_rod, note: "q_kappa_rod"}
+# ---- validations: the clutch model against this study's measurements ----
+- {id: val_v_eq13_elongation_range, purpose: validation, computed: v_eq13_m015, printed: v_elongation_observed,
+   note: "the paper's own claim: 'These estimates are in good agreement with the observed rate of stress fiber elongation (0-3 nm s-1)'",
+   conditions_ok: "Ftot, Ct, kon, k0 and αc are literature-based 'reasonable values', not measured for these adhesions; the paper makes this comparison itself"}
+- {id: val_v_eq13_table1, purpose: validation, computed: v_eq13_m015, printed: t1_diff_velocity,
+   note: "the measured mean actin speed relative to zyxin plaques, 58 ± 3.1 nm/min (about 0.97 nm/s), is the quantity eqn. 13 gives",
+   conditions_ok: "model inputs are literature-based 'reasonable values'; the measurement is |v_zyx - v_actn| over 192 colocalized pairs in 7 cells, sampled at 10 ± 1 min. The condition velocity_lag_time is the measurement's, not the model's"}
+# ---- consistency: the same measurement printed twice ----
+- {id: cons_pax_fib, purpose: consistency, computed: txt_pax_fib, printed: t1_pax_fib}
+- {id: cons_fib_pax, purpose: consistency, computed: txt_fib_pax, printed: t1_fib_pax}
+- {id: cons_actn_fib, purpose: consistency, computed: txt_actn_fib, printed: t1_actn_fib}
+- {id: cons_fib_actn, purpose: consistency, computed: txt_fib_actn, printed: t1_fib_actn}
+- {id: cons_pax_coexp, purpose: consistency, computed: txt_pax_coexp, printed: t1_pax_coexp_actn}
+- {id: cons_actn_coexp_pax, purpose: consistency, computed: txt_actn_coexp_pax, printed: t1_actn_coexp_pax}
+- {id: cons_zyx_coexp, purpose: consistency, computed: txt_zyx_coexp, printed: t1_zyx_coexp}
+- {id: cons_actn_coexp_zyx, purpose: consistency, computed: txt_actn_coexp_zyx, printed: t1_actn_coexp_zyx}
+- {id: cons_diff_velocity, purpose: consistency, computed: txt_diff_velocity, printed: t1_diff_velocity}
+- {id: cons_zyx_all, purpose: consistency, computed: t1_zyx_coexp, printed: t1_zyx_all, note: "Table 1 prints the zyxin rows from the same 864 tracks of the same 7 cells with SE 1.5 and 1.4"}
+- {id: cons_pax_S1_T1, purpose: consistency, computed: s1_pax_speed_meas_10, printed: t1_pax_all,
+   note: "Table S1 'paxillin tracks, τ = 10±1 min, measured' against Table 1 'Paxillin, all experiments'; the Supplement says all reported velocities are raw measured velocities at τ = 10 ± 1 min",
+   conditions_ok: "same lag time; the sets of cells behind Table S1 are not stated"}
+# ---- figure readings (second pass) ----
+- {id: cmp_eq13_figS17, purpose: reproduction, computed: v_eq13_figS17_curve, printed: d_figS17_v,
+   note: "eqn. 13 with the caption's inputs against the plotted curve; for alpha_c <= -0.5 the model applies the stated v = 0 condition, while the plotted curve runs slightly below 0 (q_figS17_unclamped)"}
+- {id: cmp_node_k24_fig6b, purpose: consistency, computed: F_node_k24_curve, printed: d_fig6b_steepest,
+   note: "the printed 'up to ~24 nN/um' against the steepest line of Fig. 6B; the slope is approximate as printed"}
+- {id: cons_hmean_fig3b_pax, purpose: consistency, computed: hmean_fig3b_pax, printed: t1_pax_fib, note: "binned mean of Fig. 3B (cut at 200 nm/min) against Table 1 row 8"}
+- {id: cons_hmean_fig3b_fib, purpose: consistency, computed: hmean_fig3b_fib, printed: t1_fib_pax, note: "binned mean of Fig. 3B against Table 1 row 9"}
+- {id: cons_hmean_fig3c_slip, purpose: consistency, computed: hmean_fig3c_slip, printed: t1_fib_minus_pax, note: "binned mean of Fig. 3C (cut at 200 nm/min) against Table 1 row 10"}
+- {id: cons_hmean_fig4a_fib, purpose: consistency, computed: hmean_fig4a_fib, printed: t1_fib_actn, note: "binned mean of Fig. 4A against Table 1 row 12"}
+- {id: cons_hmean_fig4a_actn, purpose: consistency, computed: hmean_fig4a_actn, printed: t1_actn_fib, note: "binned mean of Fig. 4A (cut at 200 nm/min; the tail is visibly cut) against Table 1 row 11"}
+- {id: cons_hmean_fig5b_pax, purpose: consistency, computed: hmean_fig5b_pax, printed: t1_pax_coexp_actn, note: "binned mean of Fig. 5B (cut at 150 nm/min) against Table 1 row 1"}
+- {id: cons_hmean_figS14c_actn, purpose: consistency, computed: hmean_figS14c_actn, printed: t1_actn_coexp_zyx, note: "binned mean of Fig. S14C against Table 1 row 4"}
+- {id: cons_hmean_figS14c_zyx, purpose: consistency, computed: hmean_figS14c_zyx, printed: t1_zyx_coexp, note: "binned mean of Fig. S14C against Table 1 row 3"}
+- {id: cons_hmean_figS14e_rel, purpose: consistency, computed: hmean_figS14e_rel, printed: t1_diff_velocity, note: "binned mean of Fig. S14E (counts sum to the 192 pairs of Table 1) against Table 1 row 5 (q_spooling_hist_mean)"}
+- {id: cons_hmean_figS14e_diff, purpose: consistency, computed: hmean_figS14e_diff, printed: t1_diff_speed, note: "binned mean of Fig. S14E against Table 1 row 6; negative differences are not on the plotted axis (from 0)"}
+- {id: cons_actn_S1_T1, purpose: consistency, computed: s1_actn_speed_meas_10, printed: t1_actn_all,
+   note: "Table S1 'α-actinin-1 tracks, τ = 10±1 min, measured' against Table 1 'α-Actinin-1, all experiments'",
+   conditions_ok: "same lag time; the sets of cells behind Table S1 are not stated"}

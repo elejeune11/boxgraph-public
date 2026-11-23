@@ -1,0 +1,25 @@
+id: det_eq20
+name: determinant of the Jacobian at the stable fixed point, closed form as printed (Eq. 20)
+role: model
+stated: {page: 5, printed_page: "014417-5", quote: "The determinant of the Jacobian matrix J has been computed as follows", where: "Eq. 20"}
+equation: >-
+  |J| = -(v~u k~c k~m k~s)/(F~b f~s) exp(-F~/(nc0 F~b)) [exp(f~s/f~d) + w~]
+  x [k~off exp(nm0 f~s/(nc0 F~b)) (F~ + nc0 F~b - nm0 f~s) + exp(F~/(nc0 F~b)) nc0 F~b k~on]
+inputs: &ports
+  w: {quantity: motor_rate_ratio_nd, unit: dimensionless}
+  Nm: {quantity: n_motors_total, unit: dimensionless}
+  kon: {quantity: clutch_on_rate_nd, unit: dimensionless}
+  koff: {quantity: clutch_off_rate_nd, unit: dimensionless}
+  fs: {quantity: stall_force_nd, unit: dimensionless}
+  fd: {quantity: detachment_force_nd, unit: dimensionless}
+  Fb: {quantity: rupture_force_nd, unit: dimensionless}
+  km: {quantity: motor_stiffness_nd, unit: dimensionless}
+  kc: {quantity: clutch_stiffness_nd, unit: dimensionless}
+  ks: {quantity: substrate_stiffness_nd, unit: dimensionless}
+  F: {quantity: external_load_nd, unit: dimensionless}
+  g: {quantity: friction_ratio, unit: dimensionless, description: "gamma/Gamma (Eq. 20 has no gamma)"}
+  Nc: {quantity: n_clutches_total, unit: dimensionless}
+  vu: {quantity: motor_velocity_nd, unit: dimensionless}
+outputs:
+  det: {quantity: jacobian_determinant, unit: dimensionless}
+settings: {}

@@ -1,0 +1,48 @@
+id: liu_code
+kind: software
+title: "Molecular clutch Matlab programs of Liu et al. 2025 (talin WT, WT-2, linear KD/WT models and the full master equation)"
+authors: [Ping Liu, Qiuyu Wang, Xin Dai, Lingxuan Pei, Junfan Wang, Weiyi Zhao, Heath E. Johnson, Mingxi Yao, Artem K. Efremov]
+year: 2025
+venue: received as 'Molecular clutch Matlab programs'; liu2025 (Nat. Phys. 21, 1431-1443) says its main codes are on artem-efremov.org / artemefremovlab.com
+url: https://artemefremovlab.com
+file: corpus/motor_clutch/code/liu_code
+version: "sha256:d86094d5b5cecd4e84a3f4f934901b8ce504cbe5eef43d627a922a663befad6e"
+licence: none stated
+language: matlab
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "read_code-1", date: "2026-11-21"}
+notes: >
+  Nine MATLAB files, no licence or version stated. Four main scripts: Linear_KD_WT_model.m (linear KD
+  model as set; the linear WT values are in trailing comments), talin_WT_model.m and WT2_model.m
+  (steady states by a Runge-Kutta march in clutch extension on a 100 x 100 (v, E) grid, the roots
+  read off with MATLAB's contour), and solve_full_master_equation_main.m (explicit time integration of
+  the master equation with vinculin, Appendix I). Five helpers: talin force-extension (FJC + WLC +
+  substrate spring, solved on a force grid), its tabulation with smoothing and free energies, the
+  yield-point spring, and the closed-form catch-bond k_off integral. MATLAB cannot run here, so the
+  record ports the linear program (models/linear_port) and the talin WT program (models/talin_wt_port)
+  line by line to Python, plus two unit conversions of the code's constants into the paper's form.
+  WT2_model.m and the master-equation program are recorded (all their parameters, with lines) but not
+  ported: liu2025's record holds none of their results, and the master equation at the code's settings
+  is ~6.5e11 cell updates.
+  Reproduced: with the code's own values, the linear port reproduces every model curve of liu2025's
+  record: Fig. 2c,d (linear KD and linear WT traction and flow) and Extended Data Fig. 5a,b at all six
+  myosin densities, including both stable branches and the unstable branch at sigma_m = 26. The code's
+  F_d values with its kBT (1.38e-23 J/K x 310 K) give the printed x_t = 0.97 and x't = -0.11 nm, so
+  the temperature liu2025 left unstated is 310 K. The talin WT port, as the code sets it (alpha = 100),
+  gives 1.1% unfolded talin clutches, folded/unfolded tensions in the Fig. S1 plateau ranges (0.5-1.3,
+  3-12 pN) at the code's stiffest E, and traction and flow curves that follow the linear WT curve, as
+  the paper says.
+  Not reproduced, or only close: the main text's 0.7-1.3 pN folded-clutch tension, which is close
+  (the SI's 0.5-1.3 pN is met; q_tension_range); the talin flow against the linear WT curve is close.
+  With Table T1's alpha = 2 instead of the code's 100, the unfolded share is about 4%, not the
+  printed 1-2%: the paper's printed results come from the code's alpha, not Table T1's (q_alpha).
+  Differences from the paper: alpha is 100 (talin WT) and 200 (WT-2) in the code against 2 in Table T1;
+  kon(KD) 0.0051 against 0.005 s^-1; r(WT) 0.75 against 0.8 nm; r(talin, WT-2) 0.25 against 0.3 nm;
+  kon(non-talin) 0.0044 against 0.004 s^-1; Fu = kT/5.7 = 0.75 pN in talin_WT_model.m and the master
+  equation against 0.7 pN (WT2_model.m uses 0.7); the unfolded R3 domain is three more rigid FJC
+  domains, not a WLC as Appendix F says, and its 49.6 nm contour length is unused (q_R3_rigid,
+  resolving liu2025's q_talin_model); the linear WT ly is 1000 nm (Table T1: '> 300 nm'). Hidden
+  choices the paper does not print: rate caps at 100 /s, force cap at 100 pN, csaps smoothing (p = 0.1),
+  the extension cut-off at 20 v, a floor of 0.01 on 1 - alpha int p_u, and in the master equation a
+  fitted factor 1.6 on the vinculin-free off-rate, S_0 = 0.165 um^2 and xi_s = 1 pN s/nm. The ports
+  take the contour along v at each printed E instead of across the code's E grid (q_contour_vs_E).
+  No code was copied into the record.

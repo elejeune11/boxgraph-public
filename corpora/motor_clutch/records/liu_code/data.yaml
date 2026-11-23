@@ -1,0 +1,228 @@
+# ==== Linear_KD_WT_model.m: the linear KD set (active values, lines 17-41) ======================
+# Each line carries the WT value in a trailing comment ("%26; %0.75"); those are the *_lwt data below.
+- {id: a1_lkd, quantity: adhesion_site_size, unit: nm, origin: reported, printed: "26", citation: {file: Linear_KD_WT_model.m, lines: "17", quote: "a_1 = 26; %26; %0.75;"}, from_source: liu2025, from_datum: r_KD}
+- {id: a2_lin, quantity: adhesion_complex_size, unit: nm, origin: reported, printed: "1700", citation: {file: Linear_KD_WT_model.m, lines: "18", quote: "a_2 = 1700;"}, from_source: liu2025, from_datum: R_FA}
+- {id: v0_lin, quantity: motor_free_speed, unit: nm/s, origin: reported, printed: "120", citation: {file: Linear_KD_WT_model.m, lines: "20", quote: "myosin_unloaded_rate = 120;"}, from_source: liu2025, from_datum: v0}
+- {id: Fst_lin, quantity: motor_stall_force, unit: pN, origin: reported, printed: "2", citation: {file: Linear_KD_WT_model.m, lines: "21", quote: "myosin_stall_force = 2;"}, from_source: liu2025, from_datum: Fst}
+- {id: sm_lkd, quantity: myosin_density, unit: 1/um**2, origin: reported, printed: "71", citation: {file: Linear_KD_WT_model.m, lines: "22", quote: "myosin_density = 71; %71; %85;"}, from_source: liu2025, from_datum: sm_KD}
+- {id: sc_lin, quantity: clutch_site_density, unit: 1/um**2, origin: reported, printed: "300", citation: {file: Linear_KD_WT_model.m, lines: "24", quote: "clutches_density = 300; %300;"}, from_source: liu2025, from_datum: sc}
+- {id: kc_lkd, quantity: clutch_spring_constant, unit: pN/nm, origin: reported, printed: "1.6", citation: {file: Linear_KD_WT_model.m, lines: "25", quote: "clutches_stiffness = 1.6; %1.6; %0.05;"}, from_source: liu2025, from_datum: kc_KD}
+- {id: kon_lkd, quantity: clutch_assembly_rate, unit: 1/s, origin: reported, printed: "0.0051", citation: {file: Linear_KD_WT_model.m, lines: "27", quote: "k_on = 0.0051; %0.0051; %0.23;"}, from_source: liu2025, from_datum: kon_KD, note: "Table T1 prints 0.005 s^-1 (q_kon_KD)"}
+- {id: ly_lkd, quantity: linear_limit_extension, unit: nm, origin: reported, printed: "150", citation: {file: Linear_KD_WT_model.m, lines: "28", quote: "l_yield = 150; %150; %1000;"}, from_source: liu2025, from_datum: ly_KD}
+- {id: koff1_lin, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "0.3755", citation: {file: Linear_KD_WT_model.m, lines: "38", quote: "k_off_1 = 0.3755; %0.3755;"}, from_source: liu2025, from_datum: k0offp, note: "the code's k_off_1 (with the negative F_d,1) is the paper's k0'off (with x't < 0)"}
+- {id: koff2_lin, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "5.433 x 10^-5", citation: {file: Linear_KD_WT_model.m, lines: "39", quote: "k_off_2 = 5.433e-05; %5.433e-05;"}, from_source: liu2025, from_datum: k0off, note: "the code's k_off_2 is the paper's k0off (with x_t > 0)"}
+- {id: Fd1_lin, quantity: dissociation_force, unit: pN, origin: reported, printed: "-38.09", citation: {file: Linear_KD_WT_model.m, lines: "40", quote: "dissociation_force_1 = -38.09;"}, from_source: elosegui2016, note: "the paper gives x't = -0.11 nm instead; see cmp_xtp_code"}
+- {id: Fd2_lin, quantity: dissociation_force, unit: pN, origin: reported, printed: "4.411", citation: {file: Linear_KD_WT_model.m, lines: "41", quote: "dissociation_force_2 = 4.411;"}, from_source: elosegui2016, note: "the paper gives x_t = 0.97 nm instead; see cmp_xt_code"}
+# ---- the linear WT set, written only in the trailing comments of lines 17-28 ----------------------
+- {id: a1_lwt, quantity: adhesion_site_size, unit: nm, origin: reported, printed: "0.75", citation: {file: Linear_KD_WT_model.m, lines: "17", quote: "a_1 = 26; %26; %0.75;"}, from_source: liu2025, from_datum: r_WT, note: "the comment's value; Table T1 prints 0.8 nm (q_r_WT)"}
+- {id: sm_lwt, quantity: myosin_density, unit: 1/um**2, origin: reported, printed: "85", citation: {file: Linear_KD_WT_model.m, lines: "22", quote: "myosin_density = 71; %71; %85;"}, from_source: liu2025, from_datum: sm_WT, note: "the comment's value"}
+- {id: kc_lwt, quantity: clutch_spring_constant, unit: pN/nm, origin: reported, printed: "0.05", citation: {file: Linear_KD_WT_model.m, lines: "25", quote: "clutches_stiffness = 1.6; %1.6; %0.05;"}, from_source: liu2025, from_datum: kc_WT, note: "the comment's value"}
+- {id: kon_lwt, quantity: clutch_assembly_rate, unit: 1/s, origin: reported, printed: "0.23", citation: {file: Linear_KD_WT_model.m, lines: "27", quote: "k_on = 0.0051; %0.0051; %0.23;"}, from_source: liu2025, from_datum: kon_WT, note: "the comment's value"}
+- {id: ly_lwt, quantity: linear_limit_extension, unit: nm, origin: reported, printed: "1000", citation: {file: Linear_KD_WT_model.m, lines: "28", quote: "l_yield = 150; %150; %1000;"}, from_source: liu2025, from_datum: ly_WT_bound, note: "the comment's value; Table T1 prints only '> 300 nm' (settles liu2025's q_ly_WT)"}
+
+# ==== talin_WT_model.m (lines 29-95) ==============================================================
+# Table T1's talin WT column (liu2025 PDF p. 55) is not recorded as data in liu2025's record; where it
+# prints a value the note gives it, and from_source names the paper without a datum.
+- {id: kon_tw, quantity: clutch_assembly_rate, unit: 1/s, origin: reported, printed: "0.3", citation: {file: talin_WT_model.m, lines: "29", quote: "k_on = 0.3;"}, from_source: liu2025, note: "Table T1 talin WT: 0.3 s^-1"}
+- {id: koff1_tw, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "0.3755", citation: {file: talin_WT_model.m, lines: "32", quote: "k_off_1 = 0.3755;"}, from_source: liu2025, from_datum: k0offp}
+- {id: koff2_tw, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "5.433 x 10^-5", citation: {file: talin_WT_model.m, lines: "33", quote: "k_off_2 = 5.433e-05;"}, from_source: liu2025, from_datum: k0off}
+- {id: Fd1_tw, quantity: dissociation_force, unit: pN, origin: reported, printed: "-38.09", citation: {file: talin_WT_model.m, lines: "34", quote: "dissociation_force_1 = -38.09;"}, from_source: elosegui2016}
+- {id: Fd2_tw, quantity: dissociation_force, unit: pN, origin: reported, printed: "4.411", citation: {file: talin_WT_model.m, lines: "35", quote: "dissociation_force_2 = 4.411;"}, from_source: elosegui2016}
+- {id: v0_tw, quantity: motor_free_speed, unit: nm/s, origin: reported, printed: "120", citation: {file: talin_WT_model.m, lines: "37", quote: "myosin_unloaded_rate = 120;"}, from_source: liu2025, from_datum: v0}
+- {id: Fst_tw, quantity: motor_stall_force, unit: pN, origin: reported, printed: "2", citation: {file: talin_WT_model.m, lines: "38", quote: "myosin_stall_force = 2;"}, from_source: liu2025, from_datum: Fst}
+- {id: sm_tw, quantity: myosin_density, unit: 1/um**2, origin: reported, printed: "82", citation: {file: talin_WT_model.m, lines: "39", quote: "myosin_density = 82;"}, from_source: liu2025, note: "Table T1 talin WT: 82 um^-2"}
+- {id: sc_tw, quantity: clutch_site_density, unit: 1/um**2, origin: reported, printed: "300", citation: {file: talin_WT_model.m, lines: "41", quote: "clutches_density = 300;"}, from_source: liu2025, from_datum: sc}
+- {id: a1_tw, quantity: adhesion_site_size, unit: nm, origin: reported, printed: "0.6", citation: {file: talin_WT_model.m, lines: "43", quote: "a_1 = 0.6;"}, from_source: liu2025, note: "Table T1 talin WT: r = 0.6 nm"}
+- {id: a2_tw, quantity: adhesion_complex_size, unit: nm, origin: reported, printed: "1700", citation: {file: talin_WT_model.m, lines: "44", quote: "a_2 = 1700;"}, from_source: liu2025, from_datum: R_FA}
+- {id: Emax_tw, quantity: youngs_modulus, unit: Pa, origin: reported, printed: "10^6", citation: {file: talin_WT_model.m, lines: "46", quote: "Young_modulus_max = 10^6;"}, note: "the stiffest substrate of the code's grid (and of Supplementary Fig. S1)"}
+- {id: kB_tw, quantity: boltzmann_constant, unit: J/K, origin: reported, printed: "1.38 x 10^-23", citation: {file: talin_WT_model.m, lines: "75", quote: "kT = 1.38e-23 * 310 / 1e-21;"}}
+- {id: T_tw, quantity: temperature, unit: K, origin: reported, printed: "310", citation: {file: talin_WT_model.m, lines: "75", quote: "kT = 1.38e-23 * 310 / 1e-21;"}, note: "the paper states no temperature for the model (liu2025's q_kT); its added 310 K is the code's"}
+- {id: ku0_tw, quantity: unfolding_rate_zero_load, unit: 1/s, origin: reported, printed: "0.018", citation: {file: talin_WT_model.m, lines: "77", quote: "k_0_unfold = 0.018;"}, from_source: liu2025, note: "Table T1: ku0 = 0.018 s^-1 [18]"}
+- {id: kf0_tw, quantity: refolding_rate_zero_load, unit: 1/s, origin: reported, printed: "22.2", citation: {file: talin_WT_model.m, lines: "78", quote: "k_0_refold = 22.2;"}, from_source: liu2025, note: "Table T1: kf0 = 22.2 s^-1 [18]"}
+- {id: xu_tw, quantity: unfolding_distance, unit: nm, origin: reported, printed: "5.7", citation: {file: talin_WT_model.m, lines: "79", quote: "unfolding_force = kT / 5.7;"}, note: "the paper prints Fu = 0.7 pN, not a distance (cmp_Fu_tw)"}
+- {id: Lp_tw, quantity: persistence_length, unit: nm, origin: reported, printed: "1", citation: {file: talin_WT_model.m, lines: "87", quote: "L_p = 1;"}, from_source: liu2025, note: "Table T1: Lp = 1 nm [28]"}
+- {id: L_tw, quantity: linker_contour_length, unit: nm, origin: reported, printed: "37", citation: {file: talin_WT_model.m, lines: "88", quote: "linker_size = 37;"}, from_source: liu2025, note: "Table T1: L = 37 nm [27]"}
+- {id: LcR3_tw, quantity: unfolded_domain_contour_length, unit: nm, origin: reported, printed: "49.6", citation: {file: talin_WT_model.m, lines: "89", quote: "domain_contour_length = 49.6;"}, note: "passed to force_vs_extension_clutch_v2.m but not used there (q_R3_rigid)"}
+- {id: Ng_tw, quantity: talin_domain_number, unit: dimensionless, origin: reported, printed: "12", citation: {file: talin_WT_model.m, lines: "91", quote: "talin_globular_domain_number = 12;"}, from_source: liu2025, note: "Table T1: Ng = 12 [27]"}
+- {id: Nint_tw, quantity: integrin_domain_number, unit: dimensionless, origin: reported, printed: "0", citation: {file: talin_WT_model.m, lines: "92", quote: "integrin_globular_domain_number = 0;"}, note: "not in the paper"}
+- {id: b_tw, quantity: globular_domain_size, unit: nm, origin: reported, printed: "5", citation: {file: talin_WT_model.m, lines: "93", quote: "globular_domain_size = 5;"}, from_source: liu2025, note: "Table T1: b = 5 nm"}
+- {id: alpha_tw, quantity: sites_per_unfolded_clutch, unit: dimensionless, origin: reported, printed: "100", citation: {file: talin_WT_model.m, lines: "95", quote: "number_added_sites_per_unfolded_clutch = 100;"}, from_source: liu2025, note: "Table T1 prints alpha = 2 (q_alpha)"}
+
+# ==== WT2_model.m (lines 25-104): recorded, not ported (q_wt2_not_ported) =========================
+# Table T2 (liu2025 PDF p. 56) is not recorded as data in liu2025's record; notes give its values.
+- {id: kon1_wt2, quantity: clutch_assembly_rate, unit: 1/s, origin: reported, printed: "0.0044", citation: {file: WT2_model.m, lines: "25", quote: "k_on_1 = 0.0044;"}, from_source: liu2025, note: "Table T2 non-talin-based: 0.004 s^-1"}
+- {id: kon2_wt2, quantity: clutch_assembly_rate, unit: 1/s, origin: reported, printed: "0.091", citation: {file: WT2_model.m, lines: "26", quote: "k_on_2 = 0.091; %0.091;"}, from_source: liu2025, note: "Table T2 talin-based: 0.091 s^-1"}
+- {id: koff1_wt2, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "0.3755", citation: {file: WT2_model.m, lines: "29", quote: "k_off_1_non_talin = 0.3755; %0.3755;"}, from_source: liu2025, from_datum: k0offp, note: "lines 34-37 give the talin-based clutches the same four catch-bond values"}
+- {id: koff2_wt2, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "5.433 x 10^-5", citation: {file: WT2_model.m, lines: "30", quote: "k_off_2_non_talin = 5.433e-05; %5.433e-05;"}, from_source: liu2025, from_datum: k0off}
+- {id: Fd1_wt2, quantity: dissociation_force, unit: pN, origin: reported, printed: "-38.09", citation: {file: WT2_model.m, lines: "31", quote: "dissociation_force_1_non_talin = -38.09;"}}
+- {id: Fd2_wt2, quantity: dissociation_force, unit: pN, origin: reported, printed: "4.411", citation: {file: WT2_model.m, lines: "32", quote: "dissociation_force_2_non_talin = 4.411;"}}
+- {id: v0_wt2, quantity: motor_free_speed, unit: nm/s, origin: reported, printed: "120", citation: {file: WT2_model.m, lines: "39", quote: "myosin_unloaded_rate = 120;"}, from_source: liu2025, from_datum: v0}
+- {id: Fst_wt2, quantity: motor_stall_force, unit: pN, origin: reported, printed: "2", citation: {file: WT2_model.m, lines: "40", quote: "myosin_stall_force = 2;"}, from_source: liu2025, from_datum: Fst}
+- {id: sm_wt2, quantity: myosin_density, unit: 1/um**2, origin: reported, printed: "88", citation: {file: WT2_model.m, lines: "41", quote: "myosin_density = 88;"}, from_source: liu2025, note: "Table T2: 88 um^-2"}
+- {id: sc_wt2, quantity: clutch_site_density, unit: 1/um**2, origin: reported, printed: "300", citation: {file: WT2_model.m, lines: "43", quote: "clutches_density = 300; %300;"}, from_source: liu2025, from_datum: sc}
+- {id: kc1_wt2, quantity: clutch_spring_constant, unit: pN/nm, origin: reported, printed: "0.9", citation: {file: WT2_model.m, lines: "45", quote: "clutches_stiffness_1 = 0.9;"}, from_source: liu2025, note: "Table T2 non-talin-based: 0.9 pN/nm"}
+- {id: ly1_wt2, quantity: linear_limit_extension, unit: nm, origin: reported, printed: "160", citation: {file: WT2_model.m, lines: "46", quote: "l_yield_1 = 160;"}, from_source: liu2025, note: "Table T2 non-talin-based: 160 nm"}
+- {id: a11_wt2, quantity: adhesion_site_size, unit: nm, origin: reported, printed: "33", citation: {file: WT2_model.m, lines: "48", quote: "a_1_1 = 33;"}, from_source: liu2025, note: "Table T2 non-talin-based: 33 nm"}
+- {id: a12_wt2, quantity: adhesion_site_size, unit: nm, origin: reported, printed: "0.25", citation: {file: WT2_model.m, lines: "49", quote: "a_1_2 = 0.25;"}, from_source: liu2025, note: "Table T2 talin-based prints 0.3 nm (q_wt2_values)"}
+- {id: a2_wt2, quantity: adhesion_complex_size, unit: nm, origin: reported, printed: "1700", citation: {file: WT2_model.m, lines: "51", quote: "a_2 = 1700;"}, from_source: liu2025, from_datum: R_FA}
+- {id: ku0_wt2, quantity: unfolding_rate_zero_load, unit: 1/s, origin: reported, printed: "0.018", citation: {file: WT2_model.m, lines: "85", quote: "k_0_unfold = 0.018;"}, from_source: liu2025}
+- {id: kf0_wt2, quantity: refolding_rate_zero_load, unit: 1/s, origin: reported, printed: "22.2", citation: {file: WT2_model.m, lines: "86", quote: "k_0_refold = 22.2;"}, from_source: liu2025}
+- {id: Fu_wt2, quantity: unfolding_force, unit: pN, origin: reported, printed: "0.7", citation: {file: WT2_model.m, lines: "87", quote: "unfolding_force = 0.7;"}, from_source: liu2025, note: "Table T1: Fu = 0.7 pN; talin_WT_model.m and the master equation use kT / 5.7 instead (q_Fu)"}
+- {id: Lp_wt2, quantity: persistence_length, unit: nm, origin: reported, printed: "1", citation: {file: WT2_model.m, lines: "93", quote: "L_p = 1;"}, from_source: liu2025}
+- {id: L_wt2, quantity: linker_contour_length, unit: nm, origin: reported, printed: "37", citation: {file: WT2_model.m, lines: "94", quote: "linker_size = 37;"}, from_source: liu2025}
+- {id: LcR3_wt2, quantity: unfolded_domain_contour_length, unit: nm, origin: reported, printed: "49.6", citation: {file: WT2_model.m, lines: "95", quote: "domain_contour_length = 49.6;"}, note: "unused by force_vs_extension_clutch_v2.m (q_R3_rigid)"}
+- {id: Ng_wt2, quantity: talin_domain_number, unit: dimensionless, origin: reported, printed: "12", citation: {file: WT2_model.m, lines: "97", quote: "talin_globular_domain_number = 12;"}, from_source: liu2025}
+- {id: b_wt2, quantity: globular_domain_size, unit: nm, origin: reported, printed: "5", citation: {file: WT2_model.m, lines: "99", quote: "globular_domain_size = 5;"}, from_source: liu2025}
+- {id: alpha_wt2, quantity: sites_per_unfolded_clutch, unit: dimensionless, origin: reported, printed: "200", citation: {file: WT2_model.m, lines: "104", quote: "number_added_sites_per_unfolded_clutch = 200; %200;"}, from_source: liu2025, note: "Table T2 says the other parameters are Table T1's, alpha = 2 (q_alpha)"}
+
+# ==== solve_full_master_equation_main.m (lines 12-123): recorded, not ported (q_master_not_ported) ==
+- {id: a1_me, quantity: adhesion_site_size, unit: nm, origin: reported, printed: "0.6", citation: {file: solve_full_master_equation_main.m, lines: "16", quote: "a_1 = 0.6;"}, from_source: liu2025}
+- {id: v0_me, quantity: motor_free_speed, unit: nm/s, origin: reported, printed: "120", citation: {file: solve_full_master_equation_main.m, lines: "18", quote: "v_0 = 120;"}, from_source: liu2025, from_datum: v0}
+- {id: Fst_me, quantity: motor_stall_force, unit: pN, origin: reported, printed: "2", citation: {file: solve_full_master_equation_main.m, lines: "19", quote: "F_st = 2;"}, from_source: liu2025, from_datum: Fst}
+- {id: sm_me, quantity: myosin_density, unit: 1/um**2, origin: reported, printed: "82", citation: {file: solve_full_master_equation_main.m, lines: "20", quote: "sigma_m = 82; %68; %82;"}, from_source: liu2025, note: "a commented alternative is 68 um^-2, which the paper does not print"}
+- {id: sc_me, quantity: clutch_site_density, unit: 1/um**2, origin: reported, printed: "300", citation: {file: solve_full_master_equation_main.m, lines: "21", quote: "sigma_c = 300;"}, from_source: liu2025, from_datum: sc}
+- {id: S0_NA_me, quantity: adhesion_complex_area, unit: um**2, origin: reported, printed: "0.165", citation: {file: solve_full_master_equation_main.m, lines: "24", quote: "S_0 = 0.165;"}, note: "initial NA area (nascent_adhesion = true, line 12); not printed in the paper (q_master_hidden)"}
+- {id: S0_FA_me, quantity: adhesion_complex_area, unit: um**2, origin: reported, printed: "9.0", citation: {file: solve_full_master_equation_main.m, lines: "26", quote: "S_0 = 9.0;"}, note: "initial FA area, used only when nascent_adhesion is false"}
+- {id: kon_me, quantity: clutch_assembly_rate, unit: 1/s, origin: reported, printed: "0.3", citation: {file: solve_full_master_equation_main.m, lines: "29", quote: "k_on = 0.3;"}, from_source: liu2025}
+- {id: konv_me, quantity: vinculin_clutch_assembly_rate, unit: um**2/s, origin: reported, printed: "0.03", citation: {file: solve_full_master_equation_main.m, lines: "30", quote: "k_vinculin_on = 0.03;"}, from_source: liu2025, note: "Table T4: 0.03 um^2 s^-1"}
+- {id: konR3v_me, quantity: vinculin_binding_rate, unit: 1/s, origin: reported, printed: "5", citation: {file: solve_full_master_equation_main.m, lines: "31", quote: "k_vinculin_talin = 5; % 5; % 1;"}, from_source: liu2025, note: "Table T4: 5 s^-1 [32]; a commented alternative is 1"}
+- {id: koffR3v_me, quantity: vinculin_dissociation_rate, unit: 1/s, origin: reported, printed: "0.014", citation: {file: solve_full_master_equation_main.m, lines: "32", quote: "k_off_vinculin_talin = 0.014;"}, from_source: liu2025, note: "Table T4: 0.014 s^-1 [32]"}
+- {id: E_me, quantity: youngs_modulus, unit: Pa, origin: reported, printed: "1 x 10^6", citation: {file: solve_full_master_equation_main.m, lines: "34", quote: "Young_modulus = 1e+06;"}}
+- {id: xis_me, quantity: substrate_viscosity, unit: pN*s/nm, origin: reported, printed: "1", citation: {file: solve_full_master_equation_main.m, lines: "37", quote: "ksi_s = 1;"}}
+- {id: koff_factor_me, quantity: off_rate_factor, unit: dimensionless, origin: reported, printed: "1.6", citation: {file: solve_full_master_equation_main.m, lines: "40-41", quote: "k_off_1_talin = 1.6 * 0.3755;"}, note: "the off-rate increase of vinculin-free talin clutches the paper says was 'found by fitting' (p. 11) without giving it (q_master_hidden)"}
+- {id: koff1_me, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "0.3755", citation: {file: solve_full_master_equation_main.m, lines: "45", quote: "k_off_1_talin_vinculin = 0.3755;"}, from_source: liu2025, from_datum: k0offp, note: "vinculin-bound clutches; vinculin-free ones use 1.6 times this (lines 40-41)"}
+- {id: koff2_me, quantity: zero_load_off_rate, unit: 1/s, origin: reported, printed: "5.433 x 10^-5", citation: {file: solve_full_master_equation_main.m, lines: "46", quote: "k_off_2_talin_vinculin = 5.433e-05;"}, from_source: liu2025, from_datum: k0off}
+- {id: xu_me, quantity: unfolding_distance, unit: nm, origin: reported, printed: "5.7", citation: {file: solve_full_master_equation_main.m, lines: "65", quote: "unfolding_force = kT / 5.7;"}}
+- {id: alpha_me, quantity: sites_per_unfolded_clutch, unit: dimensionless, origin: reported, printed: "2.55", citation: {file: solve_full_master_equation_main.m, lines: "81", quote: "number_added_sites_per_unfolded_clutch = 2.55;"}, from_source: liu2025, note: "Table T4 footnote: alpha = 2.6"}
+- {id: lstep_me, quantity: extension_step, unit: nm, origin: reported, printed: "0.01", citation: {file: solve_full_master_equation_main.m, lines: "91", quote: "l_step = 0.01;"}}
+- {id: lmax_me, quantity: extension_max, unit: nm, origin: reported, printed: "1800", citation: {file: solve_full_master_equation_main.m, lines: "92", quote: "l = 0 : l_step : 1800;"}}
+- {id: dt_me, quantity: time_step, unit: s, origin: reported, printed: "0.00005", citation: {file: solve_full_master_equation_main.m, lines: "122", quote: "time_step = 0.00005;"}}
+- {id: tend_me, quantity: simulated_time, unit: s, origin: reported, printed: "181", citation: {file: solve_full_master_equation_main.m, lines: "123", quote: "time = 0 : time_step : 181;"}}
+
+# ==== copied from the paper's record liu2025 =====================================================
+- {id: xt_paper, quantity: transition_distance, unit: nm, origin: reported, printed: "0.97", citation: {none: "copied from the paper's record liu2025 (xt: Table T1, PDF p. 55)"}, from_source: liu2025, from_datum: xt}
+- {id: xtp_paper, quantity: transition_distance, unit: nm, origin: reported, printed: "-0.11", citation: {none: "copied from the paper's record liu2025 (xtp: Table T1, PDF p. 55)"}, from_source: liu2025, from_datum: xtp}
+- {id: sm_KD_bleb15_paper, quantity: myosin_density, unit: 1/um**2, origin: fitted, printed: "43", citation: {none: "copied from the paper's record liu2025 (sm_KD_bleb15: Extended Data Fig. 5a label, PDF p. 70)"}, from_source: liu2025, from_datum: sm_KD_bleb15, note: "no file of the code sets it"}
+- {id: sm_KD_bleb50_paper, quantity: myosin_density, unit: 1/um**2, origin: fitted, printed: "26", citation: {none: "copied from the paper's record liu2025 (sm_KD_bleb50: Extended Data Fig. 5a label, PDF p. 70)"}, from_source: liu2025, from_datum: sm_KD_bleb50}
+- {id: sm_WT_bleb15_paper, quantity: myosin_density, unit: 1/um**2, origin: fitted, printed: "41", citation: {none: "copied from the paper's record liu2025 (sm_WT_bleb15: Extended Data Fig. 5b label, PDF p. 70)"}, from_source: liu2025, from_datum: sm_WT_bleb15}
+- {id: sm_WT_bleb50_paper, quantity: myosin_density, unit: 1/um**2, origin: fitted, printed: "24", citation: {none: "copied from the paper's record liu2025 (sm_WT_bleb50: Extended Data Fig. 5b label, PDF p. 70)"}, from_source: liu2025, from_datum: sm_WT_bleb50}
+# Model curves of the paper, copied from liu2025's figure readings (value ± half the 95% reading
+# interval). Points at E = 1e11 Pa are left out: the code's grid ends at 1e10 Pa (line 30).
+- id: P_KD_fig2c_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_KD_fig2c: Fig. 2c, linear KD curve, PDF p. 5)"}
+  from_source: liu2025
+  from_datum: P_KD_fig2c
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["1000", "1500", "4000", "7000", "50000", "100000", "300000", "1000000"],
+          values: ["17.88 ± 4.20", "28.50 ± 7.01", "76.87 ± 9.73", "104.01 ± 3.98", "23.78 ± 3.91", "19.06 ± 3.76", "15.52 ± 3.69", "14.34 ± 2.36"]}
+- id: v_KD_fig2d_paper
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (v_KD_fig2d: Fig. 2d, linear KD curve, PDF p. 5)"}
+  from_source: liu2025
+  from_datum: v_KD_fig2d
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["200", "500", "1000", "1500", "7000", "50000", "100000", "300000", "1000000"],
+          values: ["116.93 ± 2.11", "112.61 ± 2.26", "104.35 ± 3.39", "97.27 ± 3.64", "31.98 ± 2.36", "98.84 ± 2.26", "103.56 ± 2.16", "106.71 ± 2.06", "107.89 ± 1.97"]}
+- id: P_WT_fig2c_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_WT_fig2c: Fig. 2c, linear WT curve, PDF p. 5)"}
+  from_source: liu2025
+  from_datum: P_WT_fig2c
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["200", "500", "1000", "1500", "7000", "20000", "50000", "100000", "300000", "1000000"],
+          values: ["6.08 ± 2.58", "15.52 ± 2.80", "29.68 ± 4.50", "40.29 ± 4.72", "100.47 ± 6.93", "131.15 ± 5.46", "144.13 ± 2.73", "150.03 ± 2.58", "153.57 ± 2.36", "155.93 ± 3.61"]}
+- id: v_WT_fig2d_paper
+  quantity: actin_flow_speed
+  unit: nm/s
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (v_WT_fig2d: Fig. 2d, linear WT curve, PDF p. 5)"}
+  from_source: liu2025
+  from_datum: v_WT_fig2d
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["200", "500", "1000", "1500", "7000", "20000", "50000", "100000", "300000", "1000000"],
+          values: ["114.97 ± 1.77", "108.67 ± 1.87", "99.23 ± 3.74", "93.73 ± 5.75", "50.46 ± 4.08", "28.44 ± 3.69", "17.42 ± 1.82", "13.49 ± 2.56", "11.13 ± 2.46", "9.56 ± 1.57"]}
+- id: P_KD_sm71_ed5a_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_KD_sm71_ed5a: Extended Data Fig. 5a, sigma_m = 71, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_KD_sm71_ed5a
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["200", "500", "1000", "2000", "5000", "8000", "30000", "100000", "300000", "1000000"],
+          values: ["3.20 ± 1.40", "8.80 ± 1.47", "18.93 ± 1.67", "40.27 ± 3.03", "94.67 ± 3.27", "103.73 ± 2.53", "30.13 ± 1.60", "18.67 ± 1.40", "14.93 ± 1.40", "13.87 ± 1.33"]}
+- id: P_KD_sm43_ed5a_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_KD_sm43_ed5a: Extended Data Fig. 5a, sigma_m = 43, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_KD_sm43_ed5a
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["2000", "5000", "8000", "10000", "50000", "100000", "300000", "1000000"],
+          values: ["37.33 ± 2.57", "67.73 ± 1.40", "72.53 ± 1.07", "72.00 ± 1.07", "27.73 ± 1.83", "20.80 ± 1.70", "16.53 ± 1.10", "14.93 ± 1.07"]}
+- id: P_KD_sm26_upper_ed5a_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_KD_sm26_upper_ed5a: Extended Data Fig. 5a, sigma_m = 26, upper branch, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_KD_sm26_upper_ed5a
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["1000", "2000", "5000", "30000", "100000", "300000", "1000000"],
+          values: ["17.07 ± 1.43", "32.00 ± 2.47", "44.80 ± 1.70", "49.60 ± 1.07", "50.67 ± 1.07", "50.67 ± 1.07", "50.67 ± 1.07"]}
+- id: P_KD_sm26_lower_ed5a_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_KD_sm26_lower_ed5a: Extended Data Fig. 5a, sigma_m = 26, lower branch, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_KD_sm26_lower_ed5a
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["200000", "300000", "500000", "1000000"],
+          values: ["23.47 ± 1.33", "20.80 ± 1.30", "19.20 ± 1.20", "18.13 ± 1.23"]}
+- id: P_KD_sm26_unstable_ed5a_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_KD_sm26_unstable_ed5a: Extended Data Fig. 5a, sigma_m = 26, dashed branch, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_KD_sm26_unstable_ed5a
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["200000", "300000", "500000", "700000", "1000000"],
+          values: ["36.53 ± 1.40", "38.93 ± 1.33", "40.27 ± 1.33", "40.53 ± 1.33", "40.80 ± 1.33"]}
+- id: P_WT_sm85_ed5b_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_WT_sm85_ed5b: Extended Data Fig. 5b, sigma_m = 85, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_WT_sm85_ed5b
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["200", "500", "20000", "50000", "100000", "300000", "800000"],
+          values: ["6.00 ± 2.95", "16.00 ± 2.25", "131.20 ± 2.35", "145.20 ± 2.15", "150.40 ± 2.05", "154.40 ± 2.00", "156.00 ± 2.05"]}
+- id: P_WT_sm41_ed5b_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_WT_sm41_ed5b: Extended Data Fig. 5b, sigma_m = 41, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_WT_sm41_ed5b
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["20000", "50000", "100000", "300000", "800000"],
+          values: ["70.80 ± 2.15", "75.20 ± 2.10", "76.80 ± 2.10", "77.60 ± 2.00", "78.00 ± 2.00"]}
+- id: P_WT_sm24_ed5b_paper
+  quantity: traction_stress
+  unit: Pa
+  origin: predicted
+  citation: {none: "copied from the paper's record liu2025 (P_WT_sm24_ed5b: Extended Data Fig. 5b, sigma_m = 24, PDF p. 70)"}
+  from_source: liu2025
+  from_datum: P_WT_sm24_ed5b
+  table: {index_quantity: youngs_modulus, index_unit: Pa, index: ["20000", "50000", "100000", "300000", "800000"],
+          values: ["43.60 ± 2.05", "45.20 ± 2.05", "45.60 ± 2.05", "46.00 ± 2.05", "46.40 ± 2.05"]}
+
+# ==== printed by the paper but not recorded as data in liu2025's record ==========================
+- {id: Fu_T1_paper, quantity: unfolding_force, unit: pN, origin: reported, printed: "0.7", citation: {none: "liu2025 SI Table T1 (PDF p. 55), row Fu: '0.7 pN [18]'; not a datum of liu2025's record"}, from_source: liu2025}
+- {id: alpha_T1_paper, quantity: sites_per_unfolded_clutch, unit: dimensionless, origin: reported, printed: "2", citation: {none: "liu2025 SI Table T1 (PDF p. 55), row alpha: '2'; not a datum of liu2025's record"}, from_source: liu2025}
+- {id: r_talin_T2_paper, quantity: adhesion_site_size, unit: nm, origin: fitted, printed: "0.3", citation: {none: "liu2025 SI Table T2 (PDF p. 56), r of talin-based clutches: '0.3 nm'; not a datum of liu2025's record"}, from_source: liu2025}
+- {id: kon_nontalin_T2_paper, quantity: clutch_assembly_rate, unit: 1/s, origin: fitted, printed: "0.004", citation: {none: "liu2025 SI Table T2 (PDF p. 56), kon of non-talin-based clutches: '0.004 s-1'; not a datum of liu2025's record"}, from_source: liu2025}
+- {id: Ff_main_paper, quantity: folded_clutch_tension, unit: pN, origin: predicted, printed: "0.7 to 1.3", citation: {none: "liu2025 main text, PDF p. 6: 'even at the highest substrate stiffness, most talin-based molecular clutches experienced relatively low tension in the range 0.7-1.3 pN (Supplementary Fig. 1b)'; not a datum of liu2025's record"}, from_source: liu2025}
+- {id: Ff_si_paper, quantity: folded_clutch_tension, unit: pN, origin: predicted, printed: "0.5 to 1.3", citation: {none: "liu2025 SI Fig. S1 caption, PDF p. 49: the tension 'reaches a plateau in 0.5 - 1.3 pN' for clutches with folded R3 above ~10 kPa; not a datum of liu2025's record"}, from_source: liu2025}
+- {id: Fu_si_paper, quantity: unfolded_clutch_tension, unit: pN, origin: predicted, printed: "3 to 12", citation: {none: "liu2025 SI Fig. S1 caption, PDF p. 49: '3 - 12 pN force range' for clutches with unfolded R3 above ~10 kPa; not a datum of liu2025's record"}, from_source: liu2025}
+- {id: unfolded_share_paper, quantity: unfolded_clutch_share, unit: percent, origin: predicted, printed: "1 to 2", citation: {none: "liu2025 main text PDF p. 6 ('only a small percentage (1-2%) of talin-based molecular clutches') and SI Fig. S1 caption, PDF p. 49 ('only 1%-2% of talin-based molecular clutches'), on rigid substrates; not a datum of liu2025's record"}, from_source: liu2025}

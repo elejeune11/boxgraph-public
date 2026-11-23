@@ -1,0 +1,266 @@
+- id: q_kcell
+  kind: unexplained_difference
+  about: [Kcell_code, kcell_b17, keff_port, run_keff_code_high, run_keff_paper_high]
+  text: >-
+    Both shells set Kcell = 1000 pN/nm (cms2D_shell.m and cms2D_par_shell.m line 13), while the paper's
+    Supplementary Table 2 prints κcell = 10,000 pN/nm and the code's own readme (Table 1, 'from Table S2')
+    lists Kcell = 10^4 pN/nm. Kcell enters only the series stiffness of each module (cms2Dv1_0.m line 315).
+    For the low set it matters little (75 engaged clutches give 60 pN/nm against 1000); for the high set
+    (up to 750 clutches, 600 pN/nm) the cell spring at 1000 pN/nm is comparable to the clutches and softens
+    a fully engaged module; runs run_keff_code_* and run_keff_paper_* give the series stiffness with each
+    value. Which value produced the paper's figures is not said.
+  citation: {file: cms2D_shell.m, lines: "13", quote: "Kcell=1000; %cell spring constant in pN/nm"}
+
+- id: q_module_max_rule
+  kind: unstated_model
+  about: [maxm_fraction_code, maxc_fraction_code, module_max_port, cmp_maxm_low, cmp_maxc_low, cmp_maxm_high, cmp_maxc_high]
+  text: >-
+    The code does not take the module maxima n*m and n*c as parameters: it fixes them at one tenth of the
+    pools (cms2Dv1_0.m lines 39-40, maxm=mpool*0.1, maxc=cpool*0.1), and the readme lists them as 'Nm*0.1'
+    and 'Nc*0.1'. Supplementary Table 2 lists n*m and n*c as separate parameters (100; 1,000 and 75; 750),
+    and the paper states the one-tenth rule only for the clutch sweep of Supplementary Fig. 5E-H. The
+    rule gives Table 2's values for both sets (cmp_maxm_*, cmp_maxc_*), so the paper's two sets are
+    consistent with it; but a user of the code cannot vary n*m or n*c apart from the pools, as Supplementary
+    Fig. 5E-H (Nc varied, n*m fixed at 100) needs only for clutches.
+  citation: {file: cms2Dv1_0.m, lines: "39-40", quote: "maxm=mpool*0.1; %maximum number of motors in a single module"}
+
+- id: q_durr
+  kind: unstated_input
+  about: [durr_code, cellnum_code, cms2d_code]
+  text: >-
+    The shells simulate durr = 10 h per cell and cellnum = 50 cells. The paper prints neither (bangasser2017
+    q_sim_length; Supplementary Table 3 gives 6-71 simulated cells per condition), and the readme gives
+    5-9 hrs and 20-50 cells. With texc = 60 min discarded and 15-min samples, 10 h gives 37 positions for
+    the MSD, of which the fit uses the first half of the lags. Which duration produced Figs. 1c-g is not
+    known; the shells may have been reset to a default after the paper's runs.
+  citation: {file: cms2D_shell.m, lines: "28", quote: "durr=10; %hours, total duration of sim"}
+
+- id: q_flow_clip
+  kind: unstated_model
+  about: [flow_port, rel_flow_eq2]
+  text: >-
+    The code sets a module's flow to zero when the substrate force exceeds the motors' stall force
+    (cms2Dv1_0.m line 202, 'if mc(i).vf<0; mc(i).vf=0; end'). The paper's Eq. 2 is printed without this
+    clip, which would give forward (negative) flow beyond stall. The relation rel_flow_eq2 is tested only
+    below stall, where the two agree.
+  citation: {file: cms2Dv1_0.m, lines: "202", quote: "if mc(i).vf<0; mc(i).vf=0; end"}
+
+- id: q_assign_rounding
+  kind: unstated_model
+  about: [module_assign_port, rel_assign_eq8]
+  text: >-
+    A newborn module gets ceil(maxm (1 - totm/mpool)) motors and ceil(maxc (1 - totc/cpool)) clutches,
+    and one of each when the pool is used up (cms2Dv1_0.m lines 236-245), so a module always has at least
+    one motor and one clutch even with an empty pool; the pools can then be overdrawn. Eq. 8-9 print no
+    rounding and no floor. The three initial modules get maxm and maxc each (lines 80-85), not Eq. 8-9,
+    which the paper's step (1) does not specify either. Motors and clutches of a destroyed module return
+    to the pool only implicitly: totm and totc are recounted over the modules alive at each birth.
+  citation: {file: cms2Dv1_0.m, lines: "237", quote: "mc(nummod).nm=ceil(maxm*(1-totm/mpool));"}
+
+- id: q_cellbody
+  kind: unstated_model
+  about: [nc_cell_code, kon_code, keff_port, cms2d_code]
+  text: >-
+    The cell-body clutches take the module clutches' kon, koff, Fb and Kc (cms2Dv1_0.m lines 73-77), their
+    number nc does not draw on cpool (shell line 14 comment), and their effective spring leaves out Kcell
+    (line 303), which agrees with the paper's Eq. 5. The paper does not print the cell-body clutch
+    parameters other than nc,cell. The shells hold nc = 10, the low set; the high set's 100 must be typed in.
+  citation: {file: cms2Dv1_0.m, lines: "303", quote: "cell.Keff=(1/(sum(cell.cstate)*cell.Kc)+1/Ksub)^-1;"}
+
+- id: q_shell_sets
+  kind: choice
+  about: [mpool_code, cpool_code, nc_cell_code, Ksub_code]
+  text: >-
+    The shells hold one parameter set: the low motor-clutch set (1,000 motors, 750 clutches, 10 cell-body
+    clutches) at one substrate (Ksub = 100 pN/nm). The high set and the substrate sweep of Figs. 1c-g
+    (0.01-100 pN/nm per the readme) need the shell edited and rerun per point; no sweep script is released.
+  citation: {file: cms2D_shell.m, lines: "23", quote: "Ksub= 100; %Substrate spring constant in pN/nm"}
+
+- id: q_hardcoded_vf
+  kind: possible_error
+  about: [vf_newmodule_code]
+  text: >-
+    A newborn module's flow is set to the literal 120 (cms2Dv1_0.m line 264) rather than to vu. It equals
+    vu in the shells, and the flow is recomputed at the next event before it moves any clutch (line 201),
+    so it can only enter a recorded mean flow (line 383) if a sample is taken right after a birth. With
+    another vu it would be wrong for that one sample.
+  citation: {file: cms2Dv1_0.m, lines: "264", quote: "mc(nummod).vf=120;"}
+
+- id: q_msd_fit
+  kind: unexplained_difference
+  about: [rmc_upper_code, cms2d_code]
+  text: >-
+    The paper fits a line through the origin to the first half of the MSD 'inversely weighted by the
+    uncertainty in each data point' (bangasser2017 p. 7). The code fits msd = 4 D t with weights
+    1./sqrt(sem) (analyzeCMSoutputv1_0.m line 66): MATLAB's fit weights the squared residuals, so the
+    weight is sem^-1/2, not the inverse variance sem^-2 nor 1/sem. D is bounded to [0, 1000] um^2/min and
+    the fit is skipped (D = NaN) with 5 or fewer MSD points (lines 61-73). The difference changes the
+    weights given to long lags and so the fitted motility coefficient; the paper's precision on μ is not
+    enough to say by how much without rerunning the simulator.
+  citation: {file: analyzeCMSoutputv1_0.m, lines: "66", quote: "wght = 1./sqrt(sem);"}
+
+- id: q_jump_filter
+  kind: reading
+  about: [jump_cutoff_code, tint_code]
+  text: >-
+    The paper says large cell-centre displacements 'of 1 µm s-1 were removed'. The code marks steps longer
+    than 1000*tint nm between 1-s outputs (analyzeCMSoutputv1_0.m line 23) and subtracts each such step
+    from all later positions (lines 25-27), so the trajectory is joined across the jump, before taking
+    the 15-min samples. The cut-off is 1 µm/s only at tint = 1 s.
+  citation: {file: analyzeCMSoutputv1_0.m, lines: "23", quote: "jump_mask = celldisp>(1000*tint);"}
+
+- id: q_shape_analysis
+  kind: unexplained_difference
+  about: [pix_code, nucr_code, cms2d_code]
+  text: >-
+    The paper builds the simulated cell shape from a 10 µm circle at the cell body, adds 10 µm to the
+    length of each module, and joins the module tips to the circle by tangent lines (bangasser2017 p. 7).
+    The code draws the 10 µm circle and tangents to each module's substrate position mc(i).xsub
+    (analyzeCMSoutputv1_0.m lines 92-96) without adding 10 µm to the module, on a mask of 65.2 nm pixels
+    (line 84, not in the paper), and only for the final state of the run (cellpos(:,end) and the final mc):
+    area and aspect ratio of a cell are one snapshot, though the shell labels them 'Average Cell Aspect
+    Ratio' and 'Average Cell Spread Area' (cms2D_shell.m lines 179, 184). modulel and csl (lines 79-80)
+    are likewise means over the modules of the final state only.
+  citation: {file: analyzeCMSoutputv1_0.m, lines: "95", quote: "tang = real(sqrt((polyx-cellpos(1,end)).^2+(polyy-cellpos(2,end)).^2-nucr.^2))+1;"}
+
+- id: q_not_run
+  kind: numerics
+  about: [cms2d_code]
+  text: >-
+    The whole simulator is not ported or run (cms2d_code, runnable false): one cell at the shell's
+    settings is 10 h of simulated time with an fsolve per event, and the readme reports about 10 h of
+    computing for 5 h simulated. The paper's simulator results (Figs. 1c-g, Supplementary Fig. 5) are
+    printed only as approximate optima ('~0.1', '~1', '~10' pN/nm) and plotted curves, which carry no
+    verdict. So the record checks the parameters and the module rules (ported one by one, related to the
+    paper's equations), not the simulated curves. Whether the released code reproduces Fig. 1 is open.
+
+- id: q_seed
+  kind: numerics
+  about: [cms2d_code]
+  text: >-
+    The random stream is seeded from the clock: rng('shuffle') in cms2D_shell.m line 46, and per worker
+    round(seed/labindex) in cms2D_par_shell.m lines 55-63. No run of the code can be repeated exactly.
+  citation: {file: cms2D_shell.m, lines: "46", quote: "rng('shuffle') %shuffle the random number generator"}
+
+# ==== cross-record validation with chan2008 (2026-11-19): none added ===========================
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [flow_port, off_rate_port, keff_port, kmod_port, polyrate_port, module_assign_port, module_max_port, cms2d_code]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of chan2008,
+    which the readme cites ('Chan and Odde, Science, 2008') for the motor-clutch module; neither the code
+    nor chan2008 says the code predicts chan2008's data. chan2008's measurements are retrograde flow means
+    and distributions against gel modulus (Fig. 3C-D, Fig. S8C, the '~110 nm/s' of the text), bead
+    displacement and step histograms (Fig. 4D, S4, S5A-C), adhesion failure frequencies (Fig. S5D), a
+    peak filopodial force and contact distance (Fig. S10D), scaled surface tension (Fig. 4E) and radial
+    deviations (Fig. S11D). The only port with a measured counterpart is flow_port (the linear
+    force-velocity law of chan2008/force_velocity_eq3), whose output is one module's flow at a given
+    substrate displacement sdisp. chan2008 measures flow averaged over filopodia and time, never paired
+    with a substrate displacement or a mean load; its only force is the peak traction <T> (T_max_fig), at
+    which no flow is measured, so a run there would predict an unmeasured flow, not the measured mean.
+    off_rate_port gives one clutch's off-rate at a known force; Fig. S5D counts failures of whole
+    adhesions per second, not a single-bond rate at a stated force. keff_port, kmod_port, polyrate_port,
+    module_assign_port and module_max_port output module stiffness, module birth rate, polymerization
+    speed and motor or clutch counts, none of which chan2008 measures. The whole simulator cms2d_code
+    would give a mean module flow at a substrate stiffness, but it is not runnable here (q_not_run), its
+    parameters are for U251 glioma cells, not chick forebrain neuron filopodia, and its stiffness input in
+    pN/nm exists for chan2008's gels only through the fitted Δ of chan2008's Eq. 13. In the other
+    direction, this record is software and none of its data is measured (chan2008/q_xval_cms_code_none).
+  citation: {file: cms2Dv1_0.m, lines: "201", quote: "%calculate actin filament velocity"}
+
+# ==== cross-record validation with cms1d_cpp_code (2026-11-19): none added ======================
+- id: q_xval_cms1d_cpp_code_none
+  kind: unstated_model
+  about: [flow_port, cms2d_code]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against cms1d_cpp_code, and none of
+    cms1d_cpp_code's models against this record. Both records are released software: every datum in either
+    is a parameter the code sets (origin reported; the one fitted value, psi_pol_p20, is copied from
+    prahl2020's Table S1), neither has a figure reading, and neither code ships results or an analysis of
+    measurements (cms1d_cpp_code/q_no_analysis). There is no measurement on either side for a model to
+    predict. The ports with the same shape (this record's flow_port and cms1d_cpp_code/flow_port, both the
+    linear force-velocity law clipped at zero) are two implementations of one rule; agreement between them
+    is a relation between models, not a validation against data. The measured migration of U251 cells that
+    cms2d_code is meant to predict lives in the paper's record (bangasser2017), not here.
+  citation: {file: cms2Dv1_0.m, lines: "201", quote: "%calculate actin filament velocity"}
+
+# ==== cross-record validation with prahl2020 (2026-11-19): none added ===========================
+- id: q_xval_prahl2020_none
+  kind: unstated_model
+  about: [cms2d_code, flow_port, off_rate_port, polyrate_port, kmod_port, keff_port, module_assign_port, module_max_port]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of prahl2020.
+    prahl2020 cites the paper of this code (its ref. 9, Bangasser et al. 2017) as the 2D CMS it modifies
+    into a 1D CMS, and calibrates its parameters to it; neither the code nor prahl2020 says the 2D code
+    predicts prahl2020's data. prahl2020 measures U251 migration in 1D confining channels: drift velocity
+    and motility coefficient from Eq. 2 fits (v_exp, mu_exp and the drug series of Figs. 3-7), the mean
+    MSD curve (fig2g_exp), EB1 microtubule growth speed (Fig. S5B), cell length and nucleus position
+    (Fig. S5C-D). The only model here with a migration output is cms2d_code, which is not runnable
+    (q_not_run), and which simulates unconfined 2D migration with modules at uniform random angles and
+    fits msd = 4 D t, not the channel-confined, polarity-biased motion with drift that prahl2020 fits
+    with its Eq. 2; prahl2020 built its 1D CMS because of that difference. The runnable ports output one
+    module's flow (flow_port, the shape shared with prahl2020/force_velocity_s2 and cms_1d's module law),
+    a loaded clutch off-rate, a polymerization speed, a module birth rate, a series stiffness and motor
+    or clutch counts; prahl2020 measures none of these (no retrograde flow, traction or bond lifetime),
+    so their agreement with prahl2020's Eqns. S1-S3 and S8 is a relation between models, not a
+    validation. In the other direction, this record has no measured data (prahl2020/q_xval_cms_code_none).
+  citation: {file: cms2Dv1_0.m, lines: "30", quote: "%% 2-D motor-clutch migration"}
+
+# ==== cross-record validation with bangasser2017 (2026-11-19): none added =======================
+- id: q_xval_bangasser2017_none
+  kind: unstated_model
+  about: [cms2d_code, flow_port, off_rate_port, keff_port, kmod_port, polyrate_port, module_assign_port, module_max_port]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2017, the paper this code implements. bangasser2017 measures U251 glioma cells (and shows
+    ECFN data of Chan and Odde 2008) against gel modulus in kPa: random motility coefficient (Fig. 2c,
+    4e and its 4 and 100 kPa drug bars), projected cell area (Fig. 2d, 4c), aspect ratio (Fig. 2e, 4d),
+    actin retrograde flow (Fig. 3c, 4a, Supplementary Fig. 4C), traction strain energy and scaled strain
+    energy (Fig. 3e-f, 4b, Supplementary Fig. 4D-I), MSD curves (Supplementary Fig. 2E) and the cell-type
+    optima (~1 and ~100 kPa, p. 3). The model here that outputs a cell-level quantity, cms2d_code (mean
+    module flow, and through its analysis motility, traction and shape), is not runnable (q_not_run), so
+    an entry against these data could not be checked. Even if run, its substrate input is a spring
+    constant in pN/nm; neither the code nor the paper maps a gel modulus in kPa to it (the paper compares
+    simulated and measured optima only as trends and fold shifts), so the measurement's own conditions
+    could not be given without an added mapping that would decide the verdict; and the drug conditions
+    (blebbistatin, cyclo(RGDfV)) have no stated motor or clutch numbers. The runnable ports output one
+    module's flow at a given substrate displacement (flow_port), one clutch's loaded off-rate, a module's
+    series stiffness, birth rate, polymerization speed, and motor or clutch counts; bangasser2017 measures
+    none of these (its flow is a cell average, never paired with a substrate displacement or a load), so
+    a comparison would test an unmeasured quantity. In the other direction, this record is software with
+    no measured data (all its data are parameters, origin reported), so no model of bangasser2017 can be
+    validated against it (bangasser2017/q_xval_cms_code_none).
+  citation: {file: cms2Dv1_0.m, lines: "30", quote: "%% 2-D motor-clutch migration"}
+
+# ==== cross-record validation with panzetta2023 (2026-11-21): none added =========================
+- id: q_xval_panzetta2023_none
+  kind: unstated_model
+  about: [cms2d_code, flow_port, off_rate_port, keff_port, kmod_port, polyrate_port, module_assign_port, module_max_port]
+  text: >-
+    (Cross-record validation.) I looked for cross-validation against panzetta2023 and entered none,
+    because neither record holds a measurement. This record is software and its data are all
+    parameters (origin reported). panzetta2023 is a simulation study: its data are parameters, its own
+    model's predictions (Figs. 3-9, S2, S3) and quantities derived from them, with no experimental data.
+    Its flow-against-nc and optimum curves are another model's output, not a measurement this code could
+    be judged against. cms2d_code looks like panzetta2023/clutch_axial_ssa (both give a velocity from
+    forces, a length, rates, a stiffness and a velocity), but that calls for a relation between the
+    models, not a validation. Also, cms2d_code is not runnable here (q_not_run). See
+    panzetta2023/q_xval_cms_code_none.
+  citation: {file: cms2Dv1_0.m, lines: "30", quote: "%% 2-D motor-clutch migration"}
+
+# ==== cross-record validation with alonsomatilla2023 (2026-11-21): none added ===================
+- id: q_xval_alonsomatilla2023_none
+  kind: unstated_model
+  about: [off_rate_port, cms2d_code, flow_port]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against alonsomatilla2023, and
+    none of its models is validated against this record, because neither holds a measurement. This
+    record is software, and its data are all parameters (origin reported). alonsomatilla2023 is a
+    theory paper: its data are parameters, fitted constants and its own model results (mean-field,
+    analytical and stochastic), and its figures.md says every plotted value is a model result. It
+    cites bangasser2017 (ref. 12), the paper this code was released with, but it never mentions
+    the code. off_rate_port and alonsomatilla2023/clutch_off_rate_bell have the same shape (Bell's
+    law on the clutch force magnitude), which calls for a relation between the models, not a
+    validation. cms2d_code is not runnable here anyway (q_not_run). See
+    alonsomatilla2023/q_xval_cms_code_none.
+  citation: {file: cms2Dv1_0.m, lines: "181", quote: "off-rate increases with load according to Bell Model"}

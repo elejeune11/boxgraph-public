@@ -1,0 +1,18 @@
+id: rigid_steady_state
+name: mean-field steady state on a rigid substrate (Eqs. S31-S36)
+role: model
+stated: {page: 33, quote: "We solve for vZE by numerically solving the nonlinear equation", where: "Eqs. S31-S36"}
+equation: >-
+  n_b* = tau beta*/(tau beta* + v_e*);  v_e*^2 + (tau beta* - omega/F) v_e* + (tau omega/F)(alpha* - beta*) = 0;
+  T* = F n_b* alpha*/beta*;  beta* = int_0^oo exp(-(e^{F x} - 1)/(F v_e*)) dx,
+  alpha* = int_0^oo x exp(-(e^{F x} - 1)/(F v_e*)) dx  (the zeroth and first moments of the steady density S24/S33)
+inputs:
+  F:     {quantity: myosin_activity, unit: dimensionless}
+  tau:   {quantity: clutch_kinetic_parameter, unit: dimensionless}
+  omega: {quantity: dimensionless_motor_velocity, unit: dimensionless}
+outputs:
+  T:  {quantity: dimensionless_traction, unit: dimensionless}
+  nb: {quantity: fraction_bound_clutches, unit: dimensionless}
+  ve: {quantity: dimensionless_clutch_extension_rate, unit: dimensionless}
+settings: {n_scan: 400, root: smallest_ve}
+stochastic: false

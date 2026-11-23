@@ -1,0 +1,46 @@
+# Quantity ids follow bangasser2017's where the code holds the same parameter.
+# ---- CMS parameters (cms2D_shell.m; Supplementary Table 2 of bangasser2017) --------------------
+- {id: n_motors_total, name: total number of myosin motors in the cell, dimension: dimensionless, description: "mpool (Nm)"}
+- {id: n_clutches_total, name: total number of clutches shared by the modules, dimension: dimensionless, description: "cpool (Nc)"}
+- {id: total_actin, name: total actin of the cell counted as protrusion length, dimension: "[length]", description: "totact (Atot)"}
+- {id: max_polymerization_velocity, name: maximum F-actin polymerization velocity, dimension: "[length]/[time]", description: "maxpoly (v*p)"}
+- {id: max_module_birth_rate, name: maximum rate of module creation, dimension: "1/[time]", description: "kmod0 (k*mod)"}
+- {id: module_capping_rate, name: rate at which a module is capped, dimension: "1/[time]", description: "kcap"}
+- {id: initial_module_length, name: length of a newly created module, dimension: "[length]", description: "lcell (lin)"}
+- {id: min_module_length, name: length below which a module is destroyed, dimension: "[length]", description: "lmin"}
+- {id: cell_spring_constant, name: spring constant of the cell spring joining a module's motors to the cell body, dimension: "[force]/[length]", description: "Kcell (κcell)"}
+- {id: n_cell_body_clutches, name: number of clutches on the central cell body, dimension: dimensionless, description: "nc (nc,cell)"}
+- {id: n_motors_module_max, name: maximum number of motors in one module, dimension: dimensionless, description: "maxm (n*m)"}
+- {id: n_clutches_module_max, name: maximum number of clutches in one module, dimension: dimensionless, description: "maxc (n*c)"}
+- {id: module_max_fraction, name: fraction of a pool that one module may hold at most, dimension: dimensionless, description: "the factor 0.1 in maxm=mpool*0.1 and maxc=cpool*0.1"}
+- {id: motor_stall_force, name: stall force of one myosin motor, dimension: "[force]", description: "Fm"}
+- {id: unloaded_motor_velocity, name: unloaded velocity of the motors, dimension: "[length]/[time]", description: "vu (v*m)"}
+- {id: clutch_on_rate, name: on-rate of clutch binding, dimension: "1/[time]", description: "kon"}
+- {id: clutch_off_rate_unloaded, name: unloaded off-rate of a clutch, dimension: "1/[time]", description: "koff (k*off)"}
+- {id: clutch_stiffness, name: spring constant of one clutch, dimension: "[force]/[length]", description: "Kc (κc)"}
+- {id: bond_rupture_force, name: characteristic clutch rupture force, dimension: "[force]", description: "Fb"}
+- {id: substrate_stiffness, name: spring constant of the compliant substrate, dimension: "[force]/[length]", description: "Ksub (κs)"}
+- {id: n_modules, name: number of motor-clutch modules in the cell, dimension: dimensionless, description: "nummod"}
+# ---- sampling and analysis settings (cms2D_shell.m, analyzeCMSoutputv1_0.m) ----------------------
+- {id: output_interval, name: interval at which the simulator records its state, dimension: "[time]", description: "tint"}
+- {id: analysis_interval, name: interval between the cell positions used for the MSD, dimension: "[time]", description: "tanalysis"}
+- {id: discarded_time, name: initial simulated time excluded from the analysis, dimension: "[time]", description: "texc"}
+- {id: simulated_duration, name: total simulated time of one cell, dimension: "[time]", description: "durr"}
+- {id: n_simulated_cells, name: number of cells simulated for one parameter set, dimension: dimensionless, description: "cellnum"}
+- {id: nucleus_radius, name: radius of the circle drawn for the cell body in the shape analysis, dimension: "[length]", description: "nucr"}
+- {id: jump_speed_cutoff, name: cell-centre displacement per unit time above which a step is removed from the trajectory, dimension: "[length]/[time]", description: "1000*tint nm per tint"}
+- {id: mask_pixel_size, name: pixel size of the mask on which the simulated cell shape is drawn, dimension: "[length]", description: "pix"}
+- {id: rmc_fit_upper_bound, name: upper bound of the motility coefficient in the MSD fit, dimension: "[length]**2/[time]", description: "'Upper',1000 in fit()"}
+- {id: new_module_initial_flow, name: retrograde flow assigned to a newly born module before its first update, dimension: "[length]/[time]", description: "mc(nummod).vf=120"}
+# ---- module-level variables of the ported rules ---------------------------------------------------
+- {id: f_actin_length, name: F-actin held in all modules counted as length, dimension: "[length]", description: "factin = sum of (sdist - mdist)"}
+- {id: n_motors_in_modules, name: motors already held by the existing modules, dimension: dimensionless, description: "totm"}
+- {id: n_motors_module, name: number of motors given to a new module, dimension: dimensionless, description: "mc(nummod).nm"}
+- {id: clutch_force, name: magnitude of the tension on one engaged clutch, dimension: "[force]", description: "norm of mc(i).Fc"}
+- {id: clutch_off_rate_loaded, name: off-rate of a clutch under tension, dimension: "1/[time]"}
+- {id: substrate_displacement, name: displacement of a module's substrate from its reference position, dimension: "[length]", description: "sdisp"}
+- {id: motor_retraction_velocity, name: F-actin retrograde flow of one module, dimension: "[length]/[time]", description: "vf"}
+- {id: polymerization_velocity, name: F-actin polymerization speed of an uncapped module, dimension: "[length]/[time]", description: "maxpoly*(1-factin/totact)"}
+- {id: module_birth_rate, name: rate of module creation, dimension: "1/[time]", description: "kmod"}
+- {id: n_engaged_clutches, name: number of engaged clutches in one module, dimension: dimensionless, description: "sum(mc(i).cstate)"}
+- {id: module_effective_stiffness, name: effective spring constant of a module's springs in series, dimension: "[force]/[length]", description: "mc(i).Keff"}

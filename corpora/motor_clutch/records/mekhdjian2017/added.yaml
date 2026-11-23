@@ -1,0 +1,52 @@
+# Inputs the simulations need that the paper does not print.
+- id: r_adh_added
+  quantity: adhesion_radius
+  unit: nm
+  printed: "550"
+  basis: >-
+    radhesion of Eqs. 4-5 is never given. The reader inferred it from the paper's own plateau: with strong
+    reinforcement (Fig. S4c, kadd = 1 /s) the traction stress levels off at about 315 Pa, which is the total motor
+    stall force of the S4b cell (nm Fm = 150 x 2 pN = 300 pN) over π radhesion^2 when radhesion ≈ 550 nm. This is
+    set from a printed result, so the S4c kadd = 1 plateau is not an independent test of it.
+  alternatives: ["1000"]
+  stands_for: radhesion in Eqs. 4 and 5
+- id: Atot_added
+  quantity: total_actin
+  unit: um
+  printed: "25"
+  basis: >-
+    [Actin]Total (Eq. 7) is not printed. At vretrograde → 0 the steady state of Eqs. 6-9 puts all actin in the
+    bundle, A = π([Actin]Total + Lnucleus)^2; the reinforced plateau of Fig. S4d (≈ 2780 µm^2) then gives
+    [Actin]Total ≈ 25 µm. Set from a printed result (the S4d kadd = 1 plateau is not an independent test of it).
+    The same laboratory's whole-cell simulator uses 100 µm (bangasser2017, Supplementary Table 2), the alternative.
+  alternatives: ["100"]
+  stands_for: "[Actin]Total in Eqs. 7 and 9"
+- id: vpoly_added
+  quantity: max_polymerization_velocity
+  unit: nm/s
+  printed: "200"
+  basis: >-
+    vpolymerization (Eq. 9) is not printed. 200 nm/s is the maximum polymerization velocity of the same
+    laboratory's cell migration simulator (bangasser2017 Supplementary Table 2, vp* = 200 nm/s), whose actin
+    balance Eqs. 7-9 follow.
+  alternatives: ["100"]
+  stands_for: vpolymerization in Eq. 9
+
+# ==== cross-validation against owen2017 (2026-11-22): the gel modulus at a fibrin adhesion =======
+# Used only by validations.yaml (val_relspeed_owen2017_*); no run of this record's own uses it.
+- id: E_owen_fibrin_added
+  quantity: substrate_modulus
+  unit: kPa
+  printed: "0.27"
+  basis: >-
+    Neither paper states the effective Young's modulus (this paper's Eq. 5 E) an adhesion pulls against in
+    owen2017's 3D fibrin gels. owen2017 prints the bulk gel's Young's modulus as 270 Pa, from its measured
+    shear modulus of 90 Pa with a Poisson ratio of 0.5 (owen2017 Fig. S10 caption, datum E_270), and uses
+    the bulk modulus in its own continuum estimate of an adhesion's stiffness (Supplemental Discussion).
+    With owen2017's r = 0.5 um, Eq. 5 turns 0.27 kPa into κsubstrate ≈ 0.19 pN/nm. Alternatives: the bulk
+    moduli without and with cells, "~200 and ~300 Pa" (owen2017 p. 8); and the equivalent moduli of the
+    stiffest fibre-network nodes, "~50 kPa" (owen2017 p. 8, Fig. 6B), a local stiffness the paper argues
+    the adhesions may feel, and an order of magnitude below it (5 kPa) since node stiffnesses differ by
+    an order of magnitude.
+  alternatives: ["0.2", "0.3", "5", "50"]
+  stands_for: "E of Eq. 5 at an adhesion of a fibroblast in owen2017's 3D fibrin gel"

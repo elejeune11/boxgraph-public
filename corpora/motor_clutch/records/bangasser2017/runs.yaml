@@ -1,0 +1,190 @@
+# ---- module rules at the initial state of the algorithm (step 1: three modules of length lin) ----
+- id: run_g_actin_init
+  model: g_actin_pool
+  inputs: {Atot: Atot, n: n_init_modules, lin: lin}
+  outputs: {AG: AG_init}
+- id: run_vp_init
+  model: polymerization_eq3
+  inputs: {vp_max: vp_star, AG: AG_init, AT: Atot}
+  outputs: {vp: vp_init}
+- id: run_kmod_init
+  model: module_birth_eq7
+  inputs: {kmod_max: kmod_star, AG: AG_init, AT: Atot}
+  outputs: {kmod: kmod_init}
+- id: run_nm_first_low
+  model: module_motors_eq8
+  inputs: {nm_max: nm_star_low, nm_free: nm_free_full_low, nm_tot: Nm_low}
+  outputs: {nm: nm_first_low}
+- id: run_nc_first_low
+  model: module_clutches_eq9
+  inputs: {nc_max: nc_star_low, nc_free: nc_free_full_low, nc_tot: Nc_low}
+  outputs: {nc: nc_first_low}
+
+# ---- the one-tenth rule of Supplementary Fig. 5 applied to the two sets of Supplementary Table 2 --
+- id: run_ncmax_rule_low
+  model: clutch_max_rule
+  inputs: {Nc: Nc_low}
+  outputs: {nc_max: ncmax_rule_low}
+- id: run_ncmax_rule_high
+  model: clutch_max_rule
+  inputs: {Nc: Nc_high}
+  outputs: {nc_max: ncmax_rule_high}
+
+# ---- one module standing in for the whole cell (reconstructed) ------------------------------------
+- id: run_module_ks10_low
+  model: module_ssa
+  inputs: {nm: nm_star_low, Fm: Fm, vm: vm_star, nc: nc_star_low, kon: kon, koff: koff_star, Fb: Fb, kc: kc, ks: ks_suppfig5}
+  outputs: {v_flow: module_vflow_ks10_low, F_trac: module_Ftrac_ks10_low}
+  note: "the low set's module maxima on the 10 pN/nm substrate of Supplementary Fig. 5E-H; no printed value to compare (the panels are only plotted)"
+- id: run_module_opt_low
+  model: module_optimum
+  inputs: {nm: nm_star_low, Fm: Fm, vm: vm_star, nc: nc_star_low, kon: kon, koff: koff_star, Fb: Fb, kc: kc}
+  outputs: {ks_flow_min: module_ksflow_low, ks_trac_max: module_kstrac_low, v_min: module_vmin_low, F_max: module_Fmax_low}
+  note: "reader's settings: 1000 s per grid point, 2 points per decade from 0.01 to 1000 pN/nm (the paper's simulated time is not printed)"
+- id: run_module_opt_high
+  model: module_optimum
+  inputs: {nm: nm_star_high, Fm: Fm, vm: vm_star, nc: nc_star_high, kon: kon, koff: koff_star, Fb: Fb, kc: kc}
+  settings: {t_total: 300.0}
+  outputs: {ks_flow_min: module_ksflow_high, ks_trac_max: module_kstrac_high, v_min: module_vmin_high, F_max: module_Fmax_high}
+  replicates: 3
+  note: "reader's settings: 300 s per grid point (ten times the events per second of the low set), 3 seeds, to keep the run affordable"
+- id: run_module_traction_fold
+  model: traction_fold
+  inputs: {F_high: module_Fmax_high, F_low: module_Fmax_low}
+  outputs: {fold: module_traction_fold}
+
+# ---- ratios of printed optima --------------------------------------------------------------------
+- id: run_Eopt_fold
+  model: modulus_optimum_fold
+  inputs: {E_a: Eopt_u251_text, E_b: Eopt_treated_text}
+  outputs: {fold: Eopt_fold_from_text}
+- id: run_celltype_fold_p3
+  model: cell_type_optimum_fold
+  inputs: {E_a: Eopt_u251_p3, E_b: Eopt_ecfn_p3}
+  outputs: {fold: celltype_fold_from_text}
+  note: "added by the audit"
+
+# ---- gel thickness from volume and coverslip (reconstructed) -------------------------------------
+- id: run_gel_thin
+  model: gel_thickness
+  inputs: {V: V_gel_thin, d: d_cover_thin}
+  outputs: {h: h_gel_thin_pred}
+- id: run_gel_thick
+  model: gel_thickness
+  inputs: {V: V_gel_thick, d: d_cover_thick}
+  outputs: {h: h_gel_thick_pred}
+
+# ---- PIV lengths from pixel counts ---------------------------------------------------------------
+- id: run_piv_coarse
+  model: piv_length
+  inputs: {npx: npx_coarse, pixel: pixel_size_40x}
+  outputs: {L: L_coarse_pred}
+- id: run_piv_search
+  model: piv_length
+  inputs: {npx: npx_search, pixel: pixel_size_40x}
+  outputs: {L: L_search_pred}
+- id: run_piv_fine
+  model: piv_length
+  inputs: {npx: npx_fine, pixel: pixel_size_40x}
+  outputs: {L: L_fine_pred}
+- id: run_piv_lattice
+  model: piv_length
+  inputs: {npx: npx_lattice, pixel: pixel_size_40x}
+  outputs: {L: L_lattice_pred}
+
+# ==== figure pass (2026-11-19): runs on calibrated figure readings ===============================
+# ---- Fig. 1g: the composite metric from the four simulated metrics of Fig. 1c-f, its log-Gaussian
+# ---- optimum, and the fold shift between the low and high sets (the panel's "ΔKsub,opt = 4-fold")
+- id: run_composite_sim_low
+  model: composite_metric_sim
+  inputs: {flow: fig1c_low_pts, traction: fig1d_low_pts, aspect: fig1e_low_pts, rmc: fig1f_low_pts}
+  outputs: {C: composite_sim_low}
+- id: run_composite_sim_high
+  model: composite_metric_sim
+  inputs: {flow: fig1c_high_pts, traction: fig1d_high_pts, aspect: fig1e_high_pts, rmc: fig1f_high_pts}
+  outputs: {C: composite_sim_high}
+- id: run_gauss_sim_low
+  model: gaussian_optimum_ks
+  inputs: {C: composite_sim_low}
+  outputs: {K_opt: Kopt_sim_low}
+- id: run_gauss_sim_high
+  model: gaussian_optimum_ks
+  inputs: {C: composite_sim_high}
+  outputs: {K_opt: Kopt_sim_high}
+- id: run_kfold_sim
+  model: stiffness_optimum_fold
+  inputs: {K_high: Kopt_sim_high, K_low: Kopt_sim_low}
+  outputs: {fold: kfold_sim}
+  note: "from the composite metric recomputed out of the Fig. 1c-f readings"
+- id: run_gauss_fig1g_low
+  model: gaussian_optimum_ks
+  inputs: {C: fig1g_low_pts}
+  outputs: {K_opt: Kopt_fig1g_low}
+- id: run_gauss_fig1g_high
+  model: gaussian_optimum_ks
+  inputs: {C: fig1g_high_pts}
+  outputs: {K_opt: Kopt_fig1g_high}
+- id: run_kfold_fig1g
+  model: stiffness_optimum_fold
+  inputs: {K_high: Kopt_fig1g_high, K_low: Kopt_fig1g_low}
+  outputs: {fold: kfold_fig1g}
+  note: "from the composite points as plotted in Fig. 1g"
+
+# ---- Fig. 4f: the composite metric of the measured U251 data (Fig. 4a-e scatter panels), its
+# ---- log-Gaussian optimum and the fold shift untreated / treated (the panel's "ΔEopt = 2-fold")
+- id: run_composite_exp_nodrug
+  model: composite_metric_exp
+  inputs: {rmc: fig4e_nodrug_pts, area: fig4c_nodrug_pts, aspect: fig4d_nodrug_pts, flow: fig4a_nodrug_pts, strain: fig4b_nodrug_pts}
+  outputs: {C: composite_exp_nodrug}
+- id: run_composite_exp_drugs
+  model: composite_metric_exp
+  inputs: {rmc: fig4e_drugs_pts, area: fig4c_drugs_pts, aspect: fig4d_drugs_pts, flow: fig4a_drugs_pts, strain: fig4b_drugs_pts}
+  outputs: {C: composite_exp_drugs}
+- id: run_gauss_exp_nodrug
+  model: gaussian_optimum_E
+  inputs: {C: composite_exp_nodrug}
+  outputs: {E_opt: Eopt_exp_nodrug}
+- id: run_gauss_exp_drugs
+  model: gaussian_optimum_E
+  inputs: {C: composite_exp_drugs}
+  outputs: {E_opt: Eopt_exp_drugs}
+- id: run_Efold_exp
+  model: modulus_optimum_fold
+  inputs: {E_a: Eopt_exp_nodrug, E_b: Eopt_exp_drugs}
+  outputs: {fold: Efold_exp}
+  note: "from the composite metric recomputed out of the Fig. 4a-e readings"
+- id: run_gauss_fig4f_nodrug
+  model: gaussian_optimum_E
+  inputs: {C: fig4f_nodrug_pts}
+  outputs: {E_opt: Eopt_fig4f_nodrug}
+- id: run_gauss_fig4f_drugs
+  model: gaussian_optimum_E
+  inputs: {C: fig4f_drugs_pts}
+  outputs: {E_opt: Eopt_fig4f_drugs}
+- id: run_Efold_fig4f
+  model: modulus_optimum_fold
+  inputs: {E_a: Eopt_fig4f_nodrug, E_b: Eopt_fig4f_drugs}
+  outputs: {fold: Efold_fig4f}
+  note: "from the composite points as plotted in Fig. 4f"
+
+# ---- Eq. 12 on the averaged MSD curves of Supplementary Fig. 2E, against the motility coefficients of Fig. 2c
+- id: run_rmc_msd
+  model: rmc_eq12_msd_set
+  inputs: {msd_a: figs2e_msd_4kPa_pts, msd_b: figs2e_msd_100kPa_pts, msd_c: figs2e_msd_200kPa_pts, E_a: E_msd_4p6, E_b: E_msd_100, E_c: E_msd_200}
+  outputs: {mu: mu_from_msd}
+  note: "the MSD values are the middles of the plotted s.e.m. bars, read every 15 min (15-390 min; the 4 kPa curve from 30 min)"
+
+# ---- the one-module stand-in swept over the spring constants of Fig. 1c (reconstructed; approximation)
+- id: run_module_sweep_low
+  model: module_ssa
+  inputs: {nm: nm_star_low, Fm: Fm, vm: vm_star, nc: nc_star_low, kon: kon, koff: koff_star, Fb: Fb, kc: kc}
+  sweep: {ks: fig1c_low_pts}
+  outputs: {v_flow: module_flow_curve_low, F_trac: module_trac_curve_low}
+  note: "one module with the low set's module maxima at each spring constant of Fig. 1c; reader's settings t_total 500 s, 5 seeds"
+- id: run_module_sweep_high
+  model: module_ssa
+  inputs: {nm: nm_star_high, Fm: Fm, vm: vm_star, nc: nc_star_high, kon: kon, koff: koff_star, Fb: Fb, kc: kc}
+  sweep: {ks: fig1c_high_pts}
+  settings: {t_total: 300.0}
+  outputs: {v_flow: module_flow_curve_high, F_trac: module_trac_curve_high}
+  note: "as run_module_sweep_low, high set; 300 s per point (ten times the event rate)"

@@ -1,0 +1,19 @@
+id: talin_linker_wlc
+name: average elasticity of the talin rod in series with its unstructured linker, WLC estimate (Table T3)
+role: model
+stated: {page: 57, quote: "estimated based on the WLC model", where: "Table T3, 'Talin 1, rod domain + talin unstructured linker'"}
+equation: "0.09 pN/nm (estimated based on the WLC model), from the rod's 0.12 pN/nm and the linker (L = 37 nm, Lp = 1 nm, Table T1) over 0-10 pN"
+from_words: true
+reconstructed: >
+  Table T3 says only 'estimated based on the WLC model'. The WLC formula (taken here as the Marko-Siggia
+  interpolation F Lp/kBT = 1/(4(1 - x/L)^2) - 1/4 + x/L) and how 'average elasticity over 0-10 pN' is
+  defined and combined (taken here as F / extension at F = 10 pN, rod and linker in series) are the
+  auditor's choices.
+inputs:
+  k_rod: {quantity: protein_average_stiffness, unit: pN/nm, description: "average elasticity of the talin rod over 0-10 pN"}
+  L: {quantity: wlc_contour_length, unit: nm}
+  Lp: {quantity: persistence_length, unit: nm}
+  F: {quantity: talin_tension, unit: pN, description: "upper end of the force range, 10 pN"}
+  kT: {quantity: thermal_energy, unit: pN*nm}
+outputs:
+  k_avg: {quantity: protein_average_stiffness, unit: pN/nm}

@@ -1,0 +1,16 @@
+id: histogram_moments
+name: mean and standard deviation of a fibre-diameter histogram (Supp. Figs 7 and 9)
+role: processing
+stated: {page: 17, printed_page: "8", quote: "Histograms showing the distribution of diameter across a population of fibers", where: Supp. Fig. 7 caption}
+equation: "mean = sum(d_i p_i) / sum(p_i); sd = sqrt(sum((d_i - mean)^2 p_i) / sum(p_i)), over the bins (d_i, p_i)"
+reconstructed: >
+  The paper prints each histogram's mean ± s.d. but not how they were computed (from the individual
+  diameters, or as the parameters of the fitted Gaussian). The moments of the plotted bins, at their
+  centres, stand in for the sample statistics; binning adds about (bin width)^2/12 to the variance.
+inputs:
+  p: {quantity: diameter_frequency, unit: percent, curve: {quantity: fibre_diameter, unit: um}}
+outputs:
+  mean: {quantity: fibre_diameter, unit: um}
+  sd: {quantity: fibre_diameter_sd, unit: um}
+settings: {}
+stochastic: false

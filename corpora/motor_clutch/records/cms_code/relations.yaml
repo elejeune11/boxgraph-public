@@ -1,0 +1,79 @@
+# The code's rules against the paper's equations (bangasser2017). The code does not say which line is
+# which equation, so every relation is proposed. Mapping: b's (the code's) input -> expression in a's
+# (the paper's) inputs, numbers in each model's own port units (the paper's actin lengths in um, the
+# code's in nm: factor 1000). factin, the F-actin in the modules, is AT - AG.
+- id: rel_kmod_eq7
+  kind: same_as
+  a: bangasser2017/module_birth_eq7
+  b: cms_code/kmod_port
+  mapping: {kmod0: "kmod_max", factin: "(AT - AG)*1000", totact: "AT*1000"}
+  regime: {kmod_max: [0.1, 10], AG: [1, 100], AT: [100, 1000]}
+  provenance: proposed
+  reason: "line 171 computes the module birth rate from the free-actin fraction to the fourth power, which is Eq. 7 with AG = AT - factin"
+  assumptions: ["factin (sum over modules of sdist - mdist) is the paper's AT - AG"]
+- id: rel_poly_eq3
+  kind: same_as
+  a: bangasser2017/polymerization_eq3
+  b: cms_code/polyrate_port
+  mapping: {maxpoly: "vp_max", factin: "(AT - AG)*1000", totact: "AT*1000"}
+  regime: {vp_max: [50, 500], AG: [1, 100], AT: [100, 1000]}
+  provenance: proposed
+  reason: "lines 207 and 371 give the polymerization speed as maxpoly times the free-actin fraction, which is Eq. 3"
+  assumptions: ["factin is the paper's AT - AG", "capped modules do not polymerize (line 208), as the paper's step 7 says"]
+- id: rel_offrate_eq1
+  kind: same_as
+  a: bangasser2017/off_rate_eq1
+  b: cms_code/off_rate_port
+  mapping: {koff: "koff", Fc: "Fc", Fb: "Fb"}
+  regime: {koff: [0.01, 1], Fc: [0.1, 20], Fb: [1, 5]}
+  provenance: proposed
+  reason: "line 181 is commented 'off-rate increases with load according to Bell Model', Eq. 1 of the paper"
+  assumptions: ["the code uses the norm of the 2D clutch force; the paper's Fc,i is taken as that magnitude"]
+- id: rel_flow_eq2
+  kind: same_as
+  a: bangasser2017/motor_velocity_eq2
+  b: cms_code/flow_port
+  mapping: {vu: "vm", Ksub: "ks", sdisp: "xs", nm: "nm", Fm: "Fm"}
+  regime: {vm: [50, 200], ks: [0.01, 10], xs: [0.01, 0.9], nm: [10, 1000], Fm: [1, 3]}
+  provenance: proposed
+  reason: "lines 200-201 compute the module flow by the linear force-velocity law of Eq. 2"
+  assumptions:
+    - "regime: ks xs < nm Fm throughout (at most 9 pN against at least 10 pN), where the code's clip at zero (line 202) does not act; beyond stall the code gives 0 and Eq. 2 a negative speed (q_flow_clip)"
+    - "the code's sdisp is the distance of the substrate from its reference position, the paper's xs,j"
+- id: rel_assign_eq8
+  kind: approximated_by
+  a: bangasser2017/module_motors_eq8
+  b: cms_code/module_assign_port
+  mapping: {maxm: "nm_max", totm: "nm_tot - nm_free", mpool: "nm_tot"}
+  regime: {nm_max: [10, 1000], nm_free: [10, 1000], nm_tot: [1000, 10000]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: "lines 236-245 assign a new module maxm (1 - totm/mpool) motors (and clutches likewise), Eq. 8 with nm,free = mpool - totm, rounded up to an integer"
+  assumptions:
+    - "totm, the motors held by existing modules, is nm,tot - nm,free"
+    - "the code rounds up (ceil) and gives one motor when the pool is used up; Eq. 8 prints no rounding, so the two differ by less than one motor, which is a large relative error when a module gets few (q_assign_rounding)"
+    - "tolerance 0.1 (added): a difference above 10% is the rounding acting on a small module, not agreement"
+- id: rel_max_rule
+  kind: same_as
+  a: bangasser2017/clutch_max_rule
+  b: cms_code/module_max_port
+  mapping: {mpool: "Nc", cpool: "Nc", fm: "1/10", fc: "1/10"}
+  output_map: {maxc: nc_max}
+  regime: {Nc: [10, 10000]}
+  provenance: proposed
+  reason: "line 40 sets maxc = cpool*0.1, the one-tenth rule the paper states for the clutch sweep of Supplementary Fig. 5E-H"
+  assumptions: ["mpool is set to Nc only to give the port an input; the motor output is not compared"]
+- id: rel_offrate_chan2008
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: cms_code/off_rate_port
+  mapping: {koff: "koff", Fc: "Fclutch", Fb: "Fb"}
+  regime: {koff: [0.01, 1], Fclutch: [0, 20], Fb: [1, 5]}
+  provenance: proposed
+  reason: >-
+    The code's readme cites Chan and Odde 2008 (ref-chan2008), and line 181, commented 'off-rate
+    increases with load according to Bell Model', computes koff exp(|Fc|/Fb), Chan's SOM Eq. 1
+    koff* = koff exp(Fclutch/Fb) with the clutch tension taken as the magnitude of the 2D clutch force.
+  assumptions:
+    - "regime in positive forces: the code's Fc is a norm, never negative; Chan's Table S1 prints Fclutch and Fb both negative, which leaves their ratio, and so the rate, unchanged"
+    - "Chan's clutch is one-dimensional; the code's is two-dimensional, and only the force's magnitude enters"

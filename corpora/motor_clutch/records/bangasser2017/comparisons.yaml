@@ -1,0 +1,86 @@
+# ---- parameter sets: Fig. 1 legend and Supplementary Fig. 5 legend against Supplementary Table 2 --
+- {id: cmp_Nm_low_fig1, purpose: consistency, computed: Nm_low_fig1, printed: Nm_low}
+- {id: cmp_Nc_low_fig1, purpose: consistency, computed: Nc_low_fig1, printed: Nc_low}
+- {id: cmp_Nm_high_fig1, purpose: consistency, computed: Nm_high_fig1, printed: Nm_high}
+- {id: cmp_Nc_high_fig1, purpose: consistency, computed: Nc_high_fig1, printed: Nc_high}
+- {id: cmp_Nm_suppfig5, purpose: consistency, computed: Nm_suppfig5, printed: Nm_low}
+- {id: cmp_nmstar_suppfig5, purpose: consistency, computed: nm_star_suppfig5, printed: nm_star_low}
+- id: cmp_ncmax_rule_low
+  purpose: consistency
+  computed: ncmax_rule_low
+  printed: nc_star_low
+  note: "the one-tenth rule is stated for the adhesivity runs of Supplementary Fig. 5E-H; here it is checked on the Table 2 sets"
+- id: cmp_ncmax_rule_high
+  purpose: consistency
+  computed: ncmax_rule_high
+  printed: nc_star_high
+  note: "as cmp_ncmax_rule_low, for the high set"
+
+# ---- one module against the whole-cell optima of Fig. 1c-d (stand-in; printed values approximate) -
+- {id: cmp_module_ksflow_low, purpose: approximation, computed: module_ksflow_low, printed: ks_flowmin_low_fig1c,
+   note: "one module with the module maxima against the whole simulated cell; the printed value is 'around 0.1', so no verdict"}
+- {id: cmp_module_ksflow_high, purpose: approximation, computed: module_ksflow_high, printed: ks_flowmin_high_fig1c,
+   note: "as cmp_module_ksflow_low, high set"}
+- {id: cmp_module_kstrac_low, purpose: approximation, computed: module_kstrac_low, printed: ks_tracmax_low_fig1d,
+   note: "the module's traction is the force on its one substrate spring; the cell's is the summed magnitude over modules and cell body"}
+- {id: cmp_module_kstrac_high, purpose: approximation, computed: module_kstrac_high, printed: ks_tracmax_high_fig1d,
+   note: "as cmp_module_kstrac_low, high set"}
+- {id: cmp_module_traction_fold, purpose: approximation, computed: module_traction_fold, printed: traction_fold_fig1d,
+   note: "ratio of the module's maximal tractions, high over low, against the cell's '~10-fold more force'"}
+
+# ---- composite optima: the fold shift of Fig. 4f against the optima the text gives --------------
+- {id: cmp_Eopt_fold, purpose: consistency, computed: Eopt_fold_from_text, printed: dEopt_fig4f,
+   note: "the text's optima are approximate ('near 50 kPa', 'near 20 kPa'); the panel's 2-fold comes from the fitted peaks"}
+
+- {id: cmp_celltype_fold_p3, purpose: consistency, computed: celltype_fold_from_text, printed: optimum_fold_p3,
+   note: "added by the audit; all three printed values are approximate ('~'), so no verdict is expected"}
+
+# ---- gel thickness (reconstructed flat disc) -----------------------------------------------------
+- {id: cmp_gel_thin, purpose: consistency, computed: h_gel_thin_pred, printed: h_gel_thin,
+   note: "the printed range is cited from ref. 7 (Chan and Odde) for this protocol"}
+- {id: cmp_gel_thick, purpose: consistency, computed: h_gel_thick_pred, printed: h_gel_thick}
+
+# ---- PIV window lengths from pixel counts -------------------------------------------------------
+- {id: cmp_piv_coarse, purpose: reproduction, computed: L_coarse_pred, printed: L_coarse}
+- {id: cmp_piv_search, purpose: reproduction, computed: L_search_pred, printed: L_search}
+- {id: cmp_piv_fine, purpose: reproduction, computed: L_fine_pred, printed: L_fine}
+- {id: cmp_piv_lattice, purpose: reproduction, computed: L_lattice_pred, printed: L_lattice}
+
+# ==== figure pass (2026-11-19) ====================================================================
+# ---- Fig. 1g: composite metric and its fitted optimum shift, from the paper's own simulated metrics
+- {id: cmp_composite_sim_low, purpose: reproduction, computed: composite_sim_low, printed: fig1g_low_pts,
+   note: "composite of the Fig. 1c-f readings (low set) against the composite points of Fig. 1g"}
+- {id: cmp_composite_sim_high, purpose: reproduction, computed: composite_sim_high, printed: fig1g_high_pts,
+   note: "as cmp_composite_sim_low, high set"}
+- {id: cmp_kfold_fig1g, purpose: reproduction, computed: kfold_fig1g, printed: dK_opt_fig1g,
+   note: "log-Gaussian fits (amplitude 1) to the Fig. 1g points as plotted; q_gauss_amplitude"}
+- {id: cmp_kfold_sim, purpose: reproduction, computed: kfold_sim, printed: dK_opt_fig1g,
+   note: "log-Gaussian fits to the composite recomputed from Fig. 1c-f"}
+# ---- Fig. 4f: composite metric and its fitted optimum shift, from the paper's own measurements
+- {id: cmp_composite_exp_nodrug, purpose: reproduction, computed: composite_exp_nodrug, printed: fig4f_nodrug_pts,
+   note: "composite of the Fig. 4a-e readings (untreated U251) against the blue points of Fig. 4f"}
+- {id: cmp_composite_exp_drugs, purpose: reproduction, computed: composite_exp_drugs, printed: fig4f_drugs_pts,
+   note: "as cmp_composite_exp_nodrug, U251 with both drugs (red points)"}
+- {id: cmp_Efold_fig4f, purpose: reproduction, computed: Efold_fig4f, printed: dEopt_fig4f,
+   note: "log-Gaussian fits (amplitude 1) to the Fig. 4f points as plotted"}
+- {id: cmp_Efold_exp, purpose: reproduction, computed: Efold_exp, printed: dEopt_fig4f,
+   note: "log-Gaussian fits to the composite recomputed from Fig. 4a-e"}
+- {id: cmp_Eopt_fig4f_nodrug, purpose: consistency, computed: Eopt_fig4f_nodrug, printed: Eopt_u251_text,
+   note: "fitted optimum of the plotted untreated composite against the text's 'near 50 kPa' (approximate: no verdict)"}
+- {id: cmp_Eopt_fig4f_drugs, purpose: consistency, computed: Eopt_fig4f_drugs, printed: Eopt_treated_text,
+   note: "fitted optimum of the plotted treated composite against the text's 'near 20 kPa' (approximate: no verdict)"}
+# ---- Eq. 12 on the MSD curves against the plotted motility coefficients
+- {id: cmp_rmc_msd, purpose: reproduction, computed: mu_from_msd, printed: fig2c_u251_msdx_pts,
+   note: "the MSD curves are the paper's averages over cells; Fig. 2c's coefficients are per-cell fits averaged (Eq. 12 is stated per cell), so equality is expected only approximately; q_rmc_msd"}
+# ---- the same measurements plotted twice (Fig. 2 or 3 against the untreated series of Fig. 4)
+- {id: cmp_rmc_fig2c_fig4e, purpose: consistency, computed: fig4e_nodrug_pts, printed: fig2c_u251_pts}
+- {id: cmp_area_fig2d_fig4c, purpose: consistency, computed: fig4c_nodrug_pts, printed: fig2d_u251_pts}
+- {id: cmp_aspect_fig2e_fig4d, purpose: consistency, computed: fig4d_nodrug_pts, printed: fig2e_u251_pts}
+- {id: cmp_flow_fig3c_fig4a, purpose: consistency, computed: fig4a_nodrug_pts, printed: fig3c_u251_pts}
+- {id: cmp_strain_fig3f_fig4b, purpose: consistency, computed: fig4b_nodrug_pts, printed: fig3f_u251_pts,
+   note: "Fig. 3f's right axis is unlabelled; pJ is taken from Fig. 3e (q_fig3f_right_axis)"}
+# ---- one module (reconstructed stand-in) against the whole-cell flow of Fig. 1c
+- {id: cmp_module_flow_low, purpose: approximation, computed: module_flow_curve_low, printed: fig1c_low_pts,
+   note: "one module with the module maxima against the mean module flow of the whole simulated cell (q_module_standin)"}
+- {id: cmp_module_flow_high, purpose: approximation, computed: module_flow_curve_high, printed: fig1c_high_pts,
+   note: "as cmp_module_flow_low, high set"}

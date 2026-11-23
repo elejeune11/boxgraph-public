@@ -1,0 +1,96 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units.
+# Bangasser et al. 2013 (record bangasser2013), checked 2026-11-21: no relation entered. This paper does
+# not cite Bangasser 2013 (its reference list has no Bangasser work; its motor-clutch citations are
+# ref. 58, Schaumann 2018, for the clutch-like cell-ECM bonds, and ref. 48, Chan & Odde 2008), and none of
+# its data names bangasser2013 as a source, so there is no stated relation and no cited.yaml link. None is
+# proposed either: chain_eqs1_8 is a deterministic overdamped spring-damper chain (cell, ligand and
+# substrate meshes, binding probability 1, clutches engaged at the nearest ligand node, no off-rate, no
+# motor force-velocity law) while motor_clutch_ssa is a stochastic clutch ensemble with Bell slip-bond
+# off-rates and a linear myosin force-velocity relation. Seven of the SSA's nine inputs (nm, Fm, vu, nc,
+# kon, koff, Fb) have no counterpart in the chain, their outputs differ (rest time and speed/traction
+# ratios against retrograde flow and mean traction), and chain_eqs1_8 does not run here, so any mapping
+# would be invented and the relation untestable. Their shared shape (a time from force and stiffness) is
+# not a relation. bangasser2013's other models (Eq. 2-5, 9, 10 scalings and the optimal-stiffness laws)
+# have no counterpart among this paper's models (Eqs 10-14 are spatial profiles of strain threshold, cell
+# stiffness, damping, binding probability and substrate stiffness).
+# Bangasser et al. 2017 (record bangasser2017), checked 2026-11-21: no relation entered. This paper does
+# not cite Bangasser 2017 (no Bangasser work in its reference list or text), no datum here names it as a
+# source, and bangasser2017 (the earlier paper) does not mention this one, so there is no stated relation
+# and no cited.yaml link. None is proposed: bangasser2017's cms and module_ssa are stochastic motor-clutch
+# simulators (Bell slip-bond off-rate Eq. 1, linear motor force-velocity Eq. 2, actin polymerization Eq. 3,
+# module birth and clutch/motor allocation Eqs. 7-9) with none of chain_eqs1_8's cell/ligand/substrate
+# spring-damper meshes, and chain_eqs1_8 does not run here, so any mapping would be invented and untestable.
+# Its closed forms have no counterpart either: off_rate_eq1, motor_velocity_eq2 and polymerization_eq3
+# have none among this paper's models; the gaussian_optimum_* fits are Gaussians in log10 stiffness over
+# composite data, while Eqs 10-11 here are Gaussian profiles over node index (a shared shape, not a
+# relation); substrate_stiffness_eq14 is a linear gradient over nodes with no counterpart; gel_thickness,
+# piv_length, rmc_eq12 and the fold/ratio models process other measurements.
+# Chan & Odde 2008 (record chan2008), checked 2026-11-21: no relation entered. This paper cites it (ref. 48)
+# twice, both times only for actomyosin contractility: "relay of force occurs via myosin network attached to
+# actin-bundles [47,48]" (p. 8) and "myosin proteins attached onto actin fibers cause contractile forces
+# within monolayer [48,83]" (p. 30). It never cites ref. 48 for its model, its clutch-like bonds (ref. 58)
+# or a parameter, and chan2008 (the earlier paper) does not mention it. So there is no stated relation, and
+# no datum here names chan2008 or ref-48 as a source, so there is no cited.yaml link (the S1 Table's sources
+# [1], [2] are missing from the PDF; q_s1_refs, q_audit_s1_multiples). None is proposed either. The batch
+# asks whether a limit of the substrate here returns chan2008's single linear substrate spring κsub. In
+# chain_eqs1_8 the substrate is a mesh of Kelvin-Voigt springs ks with dampers eta_s, linked to a ligand mesh
+# and a cell mesh. A single spring would need eta_s -> 0 and the mesh collapsed to one equivalent spring. That
+# is a re-meshing the paper does not define (no node counts, time step or strain-to-force rule), and
+# chain_eqs1_8 does not run here, so that reduces_to would be untestable. Its counterpart motor_clutch also
+# needs seven inputs (nm, Fm, vu, nc, kon, koff, Fb) with no counterpart in the chain: binding probability 1,
+# no off-rate law, no motor force-velocity law. And their outputs differ (rest time and speed/traction
+# ratios against retrograde flow and traction). substrate_stiffness_eq14 with kmin = kmax is a uniform
+# substrate spring stiffness, but chan2008 has no model whose output it could be: ksub_eq13 computes κsub
+# from E, δ and ν, and Eq 14 has no modulus. The closeness of chan2008's clutch stiffness 5 pN/nm to k_c
+# = 4.92 nN/um here is between different quantities (cell spring, not the clutch-like link k_c-l = 30.86),
+# and no provenance links them (q_audit_s1_multiples). It is not a relation.
+# Prahl et al. 2020 (record prahl2020), checked 2026-11-21: no relation entered. This paper does not cite
+# Prahl 2020 (no Prahl or Odde-lab glioma work in its reference list or text; its only Odde citation is ref.
+# 48, Chan & Odde 2008, for contractility), no datum here names it as a source (from_source is only s1-ref-1
+# and ref-33), and prahl2020 (the earlier paper) cannot mention this one. So there is no stated relation and
+# no cited.yaml link. None is proposed: prahl2020's slip_bond_s1, force_velocity_s2, polymerization_s3,
+# nucleation_s8, kon_from_koff and module caps feed a stochastic motor-clutch simulator (cms_1d), while
+# chain_eqs1_8 here has no off-rate law, no motor force-velocity law and binding probability 1, and does not
+# run here, so any mapping would be invented and untestable. Their drag models (drag_coefficient_s9,
+# drag_force_s10) act on a whole cell in a channel, not on the ligand/substrate dampers eta_l, eta_s. The
+# ratio and histogram processing models on both sides (box_median_ratio, stack_*_ratio; hist_*, pick_*,
+# fold_reduction) share only arithmetic on different measurements, which is not a relation.
+# Relations to the authors' released code (record bagchi_code), checked 2026-11-21.
+# The paper says its equations were implemented in C++ (p. 32) and that the code for its simulations is
+# on Zenodo 10.5281/zenodo.13984567 (p. 1), which is bagchi_code. So it states that the code's chain
+# simulation (bagchi_code/chain_sim) is its chain (chain_eqs1_8). Neither model runs here (the paper's
+# lacks the time step, node counts, rest criterion and clutch rule; the code's needs the Chaste framework
+# the release leaves out and stops at exit(0)), so the relation is unverifiable and the paper's words are
+# its evidence.
+# Not entered: the code's driver_profile_extremes and kc_profile_extremes against Eqs 10-12 here. They give
+# the extremes (max, min) of the bare normalised Gaussian over the nodes, which are the S2/S3 Tables'
+# delta_* and omega_k (data, linked through bagchi_code's from_datum and checked there), not a profile
+# eps_th(x), k_c(x) or eta_c(x); no mapping makes one model's output the other's. stiffness_unit_map and
+# damping_unit_map are unit conversions with no counterpart here.
+# Values: this record's from_source data cite s1-ref-1 (the S1 Table's missing references) and ref-33, not
+# the code; every code parameter that the paper prints is already linked from bagchi_code/data.yaml
+# (from_datum), and the paper reads no figure whose numbers the code holds, so there is no cited.yaml.
+- id: rel_chain_code_same
+  kind: same_as
+  a: bagchi2025/chain_eqs1_8
+  b: bagchi_code/chain_sim
+  mapping:
+    Fp: "Fp*6750/3083"
+    kl: "kl*500/6.17"
+    ks: "ks*500/6.17"
+    kcl: "kcl*500/6.17"
+    kls: "kls*500/6.17"
+    eta_l: "eta_l*2/0.22"
+    eta_s: "eta_s*2/0.22"
+    n: "36"
+  output_map: {t_rest: t_rest}
+  regime: {Fp: [2500, 3700], kc: [3.9, 5.9], eta_c: [0.44, 0.66], kl: [14.8, 22.2], eta_l: [0.18, 0.26],
+           ks: [4.9, 7.4], eta_s: [0.18, 0.26], kcl: [24.7, 37.0], kls: [9.9, 14.8]}
+  provenance: stated
+  citation: {page: 32, quote: "All equations were implemented in a C++ code developed by the author"}
+  assumptions:
+    - "the code is the one the Data Availability Statement names (p. 1: 'Codes used for generating simulations can be found at https://doi.org/10.5281/zenodo.13984567')"
+    - "code stiffness = S1 nN/um x 500/6.17 and code damping = S1 nN um-1 s x 2/0.22, the single factors bagchi_code's stiffness_unit_map and damping_unit_map find (they reproduce the ligand spring, both links, the ligand and cell damping)"
+    - "code force = S1 nN x 6750/3083, from the one protrusive force each source gives; no second force tests it (bagchi_code q_code_units)"
+    - "n = 36 cell springs, the control driver's cell_nodes (C line 211); D and H ship 4"
+    - "the paper's kc and eta_c are the code's Gaussian profiles (Eqs 11-12), which chain_sim takes inside the framework, not as inputs; and chain_sim's rest time in hours against the paper's in minutes is a unit, not a mapping"

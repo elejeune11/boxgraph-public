@@ -1,0 +1,14 @@
+# Port of talin_WT_model.m lines 75 and 79 (also solve_full_master_equation_main.m lines 61, 65):
+# unfolding_force = kT / 5.7 with kT = 1.38e-23 * 310 / 1e-21 pN nm.
+id: Fu_from_xu
+name: characteristic unfolding force of R3 as the code computes it
+role: processing
+stated: {file: talin_WT_model.m, lines: "79", quote: "unfolding_force = kT / 5.7;"}
+equation: "Fu = kB T / x_u"
+inputs:
+  kB:  {quantity: boltzmann_constant, unit: J/K}
+  T:   {quantity: temperature, unit: K}
+  x_u: {quantity: unfolding_distance, unit: nm}
+outputs:
+  Fu: {quantity: unfolding_force, unit: pN}
+stochastic: false

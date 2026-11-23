@@ -1,0 +1,19 @@
+# Reconstructed (our stand-in), as stiffness_unit_map: maps a code damping constant by the factor that turns
+# the code's substrate damping (2, C line 167) into the S1 Table's 0.22 nN um-1 s.
+id: damping_unit_map
+name: "a code damping constant in nN s/um by the substrate damping's factor (reconstructed)"
+role: processing
+stated: {file: Chaste_12_30_22_control/cell_based/test/VertexAmrit/TestRunningVertexBasedSimulationsTutorial_ab1.hpp, lines: "167", quote: "double substrate_damping_constant  = 2;"}
+described_from: bagchi2025
+reconstructed: >-
+  The code states no units and the paper no conversion from the code's values to its S1 Table; one
+  proportional factor, fixed by the substrate damping, is our hypothesis.
+equation: "eta = x eta_ref / x_ref"
+inputs:
+  x:       {quantity: damping_code, unit: dimensionless, description: "the code's damping constant to map"}
+  x_ref:   {quantity: damping_code, unit: dimensionless, description: "the code's substrate damping constant"}
+  eta_ref: {quantity: damping_constant, unit: nN*s/um, description: "the S1 Table's substrate damping constant"}
+outputs:
+  eta: {quantity: damping_constant, unit: nN*s/um}
+settings: {}
+stochastic: false

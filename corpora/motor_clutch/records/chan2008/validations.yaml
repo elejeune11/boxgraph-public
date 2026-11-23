@@ -23,3 +23,73 @@
     predictions of F-actin retrograde flow fit with our experimental measurements" (SOM p. 18). Fitted,
     not tested: Table S1 sets nc "to slow retrograde flow to experimentally observed levels" and kon "to
     match dynamics observed in this study", and Δ = 277 nm was fitted to these data.
+# ==== against bangasser2017's re-plotted ECFN retrograde flow (2026-11-19) =====================
+# bangasser2017 Fig. 3c plots this paper's neuron flow means again (gold, "ECFN; data taken from Chan
+# and Odde"), with s.e.m. bars, against Young's modulus. motor_clutch_E with this record's Table S1 set
+# predicts flow from modulus. The nc, kon and Δ of that set were tuned to these same measurements, so the
+# entry is fit_quality, as val_flow_bangasser_figS1b is for bangasser2013's re-plot of the same points.
+- id: val_flow_bangasser2017_fig3c
+  model: motor_clutch_E
+  inputs: {L: L_eq13_added, nu: nu_gel, nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1}
+  sweep: {E: bangasser2017/fig3c_ecfn_pts}
+  output: v_retro
+  against: bangasser2017/fig3c_ecfn_pts
+  purpose: fit_quality
+  quantities: {bangasser2017/substrate_modulus: substrate_modulus, bangasser2017/retrograde_flow_rate: retrograde_flow_rate}
+  conditions_ok: >-
+    The points are this paper's Fig. 3D neuron filopodia flows as bangasser2017 redraws them. The model
+    runs at the moduli where bangasser2017 places the points (x read from that figure); they land at
+    about 0.26, 0.73, 1.1, 1.3, 24 and 57 kPa, this paper's gel moduli, unlike bangasser2013's re-plot
+    (q_xval_bangasser2013_figS1b_positions). The error bars are s.e.m. in both papers.
+  basis: >-
+    bangasser2017 Fig. 3c legend: "ECFN; data taken from Chan and Odde" (bangasser2017 p. 5) and "ECFN
+    data were adapted from Chan and Odde. All error bars are s.e.m." These are the flow measurements this
+    paper's motor-clutch model was set against "to test how well our model predictions of F-actin
+    retrograde flow fit with our experimental measurements" (SOM p. 18). Fitted, not tested: Table S1
+    sets nc "to slow retrograde flow to experimentally observed levels" and kon "to match dynamics
+    observed in this study", and Δ = 277 nm was fitted to these data.
+# ==== against owen2017's measured actin speed relative to adhesions, 3D fibrin (2026-11-22) =====
+# motor_clutch with this record's Table S1 set (tuned to chick forebrain neuron filopodia on 2D
+# polyacrylamide) gives the time-averaged F-actin flow relative to the substrate anchor at a substrate
+# spring constant. owen2017 measures the speed of α-actinin-1 relative to the zyxin plaque it flows out
+# of, for fibroblasts in 3D fibrin (Table 1 row 5), and states an observed stress-fibre elongation rate
+# of 0-3 nm/s. Nothing of owen2017 entered Table S1, so these are tests of a 2D-calibrated model in 3D;
+# κsub is added (ksub_owen_fibrin_added). Other owen2017 measurements: see q_xval_owen2017_unused.
+- id: val_relspeed_owen2017_table1
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1, ksub: ksub_owen_fibrin_added}
+  output: v_retro
+  against: owen2017/t1_diff_velocity
+  purpose: validation
+  quantities: {owen2017/actin_adhesion_relative_speed: retrograde_flow_rate}
+  conditions_ok: >-
+    The model's v_retro is the time average of -vfilament, the actin flow relative to the clutches'
+    substrate anchor, over 300 s of load-and-fail cycles; owen2017's value is the mean magnitude of the
+    actin velocity relative to its adhesion (|v_zyx - v_actn|) from positions 10 ± 1 min apart, which
+    over that lag is the same slippage of actin past the adhesion. The measured speeds are unsigned and
+    both directions occur (owen2017 q_no_continuous_rearward_flow); the model's flow is rearward only, so
+    it is compared as a speed. The cells (human foreskin fibroblasts in 3D fibrin vs. neuron filopodia on
+    polyacrylamide), the motor and clutch numbers and the substrate spring all differ from Table S1's
+    tuning conditions; κsub is the added continuum estimate for the fibrin gel, with network-node
+    alternatives. The entry asks whether the 2D-calibrated model carries to the 3D measurement as it stands.
+  basis: >-
+    owen2017 builds its clutch model "Inspired by earlier theoretical work (Schwarz et al., 2006; Chan and
+    Odde, 2008; ...)" (owen2017 p. 8) "to calculate the rate of slippage of α-actinin-1 relative to
+    adhesions", the measured quantity here, and notes that "the maximal possible actin speed is limited by
+    the finite maximal rate of myosin contraction (Chan & Odde 2008)" (owen2017 Supp. p. 24), the element
+    this model adds to owen2017's eqn. 13. This model's output is that velocity of actin past the adhesion.
+- id: val_relspeed_owen2017_range
+  model: motor_clutch
+  inputs: {nm: nm_S1, Fm: Fm_S1, vu: vu_S1, nc: nc_S1, kon: kon_S1, koff: koff_S1, Fb: Fb_S1, kc: kc_S1, ksub: ksub_owen_fibrin_added}
+  output: v_retro
+  against: owen2017/v_elongation_observed
+  purpose: validation
+  quantities: {owen2017/actin_adhesion_relative_speed: retrograde_flow_rate}
+  conditions_ok: >-
+    As val_relspeed_owen2017_table1. The measurement is a range, "0-3 nm s-1", for owen2017's study and
+    previous work (Endlich et al. 2007), not a summary statistic; the model's single mean flow is judged
+    against it as an interval.
+  basis: >-
+    owen2017 judges its own clutch model (eqn. 13, inspired by this paper's, p. 8) against this range ("in
+    good agreement with the observed rate of stress fiber elongation (0-3 nm s-1) in our study", Supp. p. 6);
+    this model gives the same velocity of actin relative to the adhesion.

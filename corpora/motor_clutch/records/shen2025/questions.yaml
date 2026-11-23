@@ -1,0 +1,329 @@
+- id: q_f_unit
+  kind: possible_error
+  about: [f_printed, cmp_f]
+  text: >-
+    Table I prints the characteristic force as 2.3033 kB T/nm. Its definition f = (wd0 Gamma kB T)^1/2 (p. 3)
+    with wd0 = 350 /s and Gamma = 893e-6 kB T s/nm^2 gives f = 0.5591 kB T/nm. The printed number is f in pN
+    with kB T = 4.12 pN nm (0.5591 x 4.12 = 2.3033): the unit kB T/nm looks like a misprint for pN. The record
+    keeps the printed unit (cmp_f is not reproduced) and uses f in pN, through kT_added, to make the forces
+    and stiffnesses dimensionless.
+  citation: {page: 4, quote: "Characteristic force f 2.3033 kB T/nm", where: Table I}
+- id: q_kT
+  kind: unstated_input
+  about: [kT_added, run_nondim]
+  text: >-
+    The temperature (or kB T in pN nm) is not stated. It is needed to turn kc, km, fs, fd, Fb and ks into the
+    dimensionless k~c, k~m, f~s, f~d, F~b and k~s. The record takes kB T = 4.12 pN nm, the value that makes
+    Table I's f = 2.3033 consistent.
+- id: q_A3_J55
+  kind: possible_error
+  about: [stability_boundaries, det_A3, det_eq20, rel_A3_is_jacobian_of_eq18]
+  text: >-
+    The entry J55 of the Jacobian A3 is printed as -(Gamma/gamma) nc0 k~c - k~s. The derivative of the fifth
+    component of Eq. 18 / A1, (Gamma/gamma)[nc k~c (x~o - x~s) - k~s x~s], with respect to x~s is
+    -(Gamma/gamma)(nc0 k~c + k~s). Every other entry of A3 equals the derivative of A1 (checked symbolically).
+    The two forms agree only for gamma = Gamma (Fig. 2(a,c,e)); they differ for Fig. 2(b) (gamma = 100 Gamma),
+    2(d,f) (2 Gamma) and Fig. 7. Eq. 20 equals det(A3) as printed, which does not depend on gamma, while the
+    determinant of the true Jacobian is (Gamma/gamma) times Eq. 20; the sign, and so the paper's use of |J| to
+    tell the branches apart, is unaffected. The record keeps the printed A3 (stability_boundaries) and adds
+    the corrected variant (stability_boundaries_corrected). Whether the paper's diagrams for gamma != Gamma
+    used the printed or the correct entry is not known.
+  citation: {page: 14, quote: "We compute the Jacobian matrix about the fixed points of the system", where: Eq. A3}
+- id: q_vu0_close
+  kind: reading
+  about: [vu0_Nc10_caption, cmp_vu0_Nc10]
+  text: >-
+    The Fig. 6 caption places (Nc, v~u) = (10, 1.7) "close to the upper boundary of the US region in Fig. 2(a)".
+    The record compares 1.7 with the Hopf boundary v~u0(10) of the printed Jacobian on the Fig. 2(a)
+    conditions; 1.7 is a chosen point near the boundary, so its digits bound the boundary only loosely.
+  citation: {page: 9, quote: "positioning this point close to the upper boundary of the US region", where: "Fig. 6 caption"}
+- id: q_piecewise_dropped
+  kind: unstated_model
+  about: [limit_cycle, vb]
+  text: >-
+    The force-velocity relation of the motors is piecewise (p. 2: vu for fl <= 0, vu(1 - fl/fs) up to fs, vb
+    above fs), with vb = 0.2256 um/s in Table I, but the dimensionless system Eq. 6 uses vu(1 - k~m y~/f~s) for
+    every y~, and Eq. 1 uses |fl| where Eq. 6 has k~m y~. The fixed point and its Jacobian lie on the linear
+    branch, so the stability analysis is unaffected, but on a limit cycle y~ leaves [0, f~s/k~m] (the record's
+    run at Nc = 5, v~u = 1 reaches about 2.5 f~s/k~m). The limit_cycle model integrates Eq. 6 as printed;
+    whether Fig. 11 used the piecewise relation is not stated.
+  citation: {page: 4, quote: "We now proceed to render our dynamical equations into", where: Eq. 6}
+- id: q_amplitude_def
+  kind: unstated_model
+  about: [limit_cycle, amp_Nc5]
+  text: >-
+    Fig. 11(b,d) plots the "amplitude of y~" of the limit cycle without defining it (half the peak-to-peak
+    range, the peak-to-peak range, or the excursion above y~0). The limit_cycle model reports half the
+    peak-to-peak range; a comparison with Fig. 11(d) should test the other definitions too.
+- id: q_limit_cycle_numerics
+  kind: numerics
+  about: [limit_cycle, run_limit_Nc5]
+  text: >-
+    The paper gives no solver, initial state, integration time or method for the frequencies and amplitudes of
+    Fig. 11. The record starts at the fixed point with nc raised by 1%, discards 20000 dimensionless time units
+    (about 57 s) and measures over the next 20000; the refinements vary the tolerance and the transient.
+- id: q_tau_used
+  kind: choice
+  about: [run_limit_Nc5, tau_printed]
+  text: >-
+    Frequencies in Hz need tau. The record uses tau = 1/wd0 = 0.002857 s; Table I rounds it to 0.0029 s, which
+    would lower the frequencies by 1.5%. The paper does not say which it used.
+- id: q_ks_figs8to10
+  kind: unstated_input
+  about: [run_fixed_Nc10]
+  text: >-
+    Figs. 8-10 (fixed points against the parameters) and Fig. 11 do not state the substrate stiffness or
+    gamma/Gamma. Fig. 11 says it is taken from Fig. 2(a) (ks = kc, gamma = Gamma); the record uses the same for
+    Figs. 8-10 (nc0 does not depend on ks; x~o0 and x~s0 do).
+- id: q_figures_not_read
+  kind: reading
+  about: [fixed_point, saddle_node, stability_boundaries, limit_cycle]
+  text: >-
+    The model results of this paper are only plotted (Figs. 2, 5, 6, 7, 8-10, 11, 12, 13). Their calibrated
+    readings, and the comparisons of the record's runs with them, are left to the figure stage. Runs ready
+    for it: run_saddle_F0 (Fig. 12, j = 0: the record gives Nc,min = 0.98, nc0 = 0.52, consistent with the
+    first red point by eye), run_fixed_Nc10 (Figs. 8, 9), run_hopf_Nc10 (Fig. 2(a)), run_limit_Nc5 (Fig. 11).
+# ---- added by the audit ----------------------------------------------------------------------------
+- id: q_eq7_gamma_factor
+  kind: possible_error
+  about: [q_A3_J55]
+  text: >-
+    Eq. 7 (p. 4) prints dx~c/dtau = nm k~m y~ - (1 + Gamma/gamma) nc k~c x~c + k~s x~s - F~. With x~c = x~o - x~s
+    and the third and fifth lines of Eq. 6, the substrate term is (Gamma/gamma) k~s x~s; the printed form drops
+    Gamma/gamma from it. It is the same omission as in J55 of A3 (q_A3_J55): in both places Gamma/gamma
+    multiplies only the clutch term of the fifth equation. Two independent places with the same form suggest
+    the authors' working fifth equation may have been dx~s/dtau = (Gamma/gamma) nc k~c x~c - k~s x~s, so the
+    diagrams with gamma != Gamma (Fig. 2(b,d,f), Fig. 7) may have been computed with it. No model in the record
+    uses Eq. 7.
+  citation: {page: 4, quote: "we can derive the equation for the average exten- sion of the attached clutches", where: Eq. 7}
+- id: q_tableII_U_row
+  kind: possible_error
+  about: [stability_boundaries]
+  text: >-
+    Table II (p. 6) gives two combinations for U: 2 positive and 3 negative real eigenvalues, and 1 positive
+    and 4 negative. The text above it (p. 6, item 2) says "three real negative and two real positive" or "one
+    real negative and four real positive". The table's second row contradicts the text, and also contradicts
+    |J| < 0 on the stable branch (p. 5): one positive and four negative real eigenvalues give a positive
+    determinant, while one negative and four positive give a negative one. The text's version is the
+    consistent one. The record's classifier calls any real spectrum with a positive eigenvalue U, so it is
+    unaffected.
+  citation: {page: 6, quote: "alternatively, there is one real negative and four", where: "Sec. III B item (2); Table II"}
+- id: q_case2_trivial
+  kind: possible_error
+  about: [fixed_point, saddle_node, stability_boundaries]
+  text: >-
+    Case 2 (p. 5) states that for nm0 f~s - F~ <= 0 Eq. 15 "has only the trivial solution where Nc = nc0 = 0".
+    With A = nm0 f~s - F~ <= 0, g(nc0) of Eq. 16 rises monotonically from 0+ (the paper says so) to infinity,
+    so Eq. 15 has exactly one positive root for every Nc > 0 (for A = 0, nc0 = Nc/(1 + k~off0/k~on), x~c0 = 0).
+    Fig. 13(b) (p. 12) is drawn at F~ = nm0 f~s, i.e. A = 0, and shows S, SS, US and U regions with no N
+    region, which agrees with one fixed point existing, not with only the trivial one. The record's models
+    follow the text and raise an error for A <= 0, so they cannot reproduce Fig. 13(b) or Fig. 13(e,f) where
+    F~ >= nm0 f~s; whether to extend them is left to a later reader.
+  citation: {page: 5, quote: "has only the trivial solution where", where: "Case 2"}
+- id: q_amplitude_linear
+  kind: overstated_claim
+  about: [limit_cycle, amp_Nc5]
+  text: >-
+    Sec. III E (p. 11) and the conclusion (p. 13) say the amplitude of y~ is "proportional to v~u0(Nc) - v~u"
+    below the Hopf boundary, which the paper calls supercritical (p. 8). Near a supercritical Hopf point the
+    normal form gives an amplitude growing as the square root of the distance from the boundary, not linearly.
+    The claim may hold only as a description of Fig. 11(d) away from the boundary. Testable with limit_cycle
+    runs at several v~u just below run_hopf's v~u0 at one Nc, against the Fig. 11(d) reading; the audit did not
+    run them.
+  citation: {page: 11, quote: "the amplitude of ỹ is proportional to", where: "Sec. III E; Fig. 11(d)"}
+- id: q_ks_fig2a_choice
+  kind: reading
+  about: [ks_soft_added]
+  text: >-
+    The audit agrees that ks = kc on the soft substrate is stated (p. 8: "when the substrate stiffness ks = kc"),
+    so ks_soft_added could arguably be a reported datum citing p. 8 rather than an added input; its value
+    0.03144 pN/nm then follows from Table I. Left as the first reader entered it.
+  citation: {page: 8, quote: "when the substrate stiffness ks = kc and is found to", where: "Sec. III C"}
+# ---- added by the figure reading (second pass, 2026-11-21) -------------------------------------------
+- id: q_figures_read
+  kind: reading
+  about: [q_figures_not_read]
+  text: >-
+    The figure stage that q_figures_not_read left open is done: Figs. 2, 5, 6, 8-13 are read by calibrated
+    code (figures.yaml, figures.md), with runs and comparisons wherever a model in the record produces the
+    plotted quantity (Fig. 2 boundaries in v~u, Figs. 8-10 fixed points, Fig. 11(c,d) limit cycles, Fig. 12
+    saddle-node points, Fig. 13(a)). Boundaries in w~ (Figs. 5, 13(c-f)) and k~c (Fig. 6) are read but not run:
+    the record has no model that solves for a boundary in those parameters. Fig. 7 and the heat maps of
+    Fig. 11(a,b) are left out (figures.md).
+- id: q_fig2_settles_J55
+  kind: reading
+  about: [q_A3_J55, q_eq7_gamma_factor, cmp_fig2f_hopf, cmp_fig2f_hopf_corr, cmp_fig2b_hopf, cmp_fig2b_hopf_corr]
+  text: >-
+    The Fig. 2 readings settle which Jacobian the gamma != Gamma diagrams were computed with. The Hopf
+    boundary read from Fig. 2(f) (ks = 1 pN/nm, gamma = 2 Gamma) agrees at all eleven read positions with the
+    printed J55 (cmp_fig2f_hopf), and departs from the corrected J55 increasingly with Nc beyond Nc = 10
+    (cmp_fig2f_hopf_corr), well outside the reading's interval at Nc = 14-18. Fig. 2(b) (gamma = 100 Gamma,
+    soft substrate) cannot tell them apart: there the two forms give boundaries within the reading's
+    interval. So the paper's diagrams use A3 as printed, i.e. the fifth equation with Gamma/gamma on the
+    clutch term only, the form Eq. 7 also shows (q_eq7_gamma_factor); whether that is the model the authors
+    meant or a slip in their Jacobian, the published gamma != Gamma diagrams follow from it, not from Eq. 18.
+  citation: {page: 6, quote: "The stability at each point is determined by calculating the", where: "Fig. 2(b,f)"}
+- id: q_fig11_amplitude_ptp
+  kind: reading
+  about: [q_amplitude_def, cmp_fig11d_Nc5, cmp_fig11d_Nc5_ptp, limit_cycle, limit_cycle_ptp]
+  text: >-
+    Fig. 11(d) settles the amplitude definition of q_amplitude_def: the plotted amplitude of y~ is the
+    peak-to-peak range of y~ on the limit cycle. limit_cycle_ptp (max - min) reproduces all seventeen read
+    points of Nc = 5, 10, 15; limit_cycle (half the range) gives half of each read value. The frequencies
+    of Fig. 11(c) reproduce with tau = 1/wd0 (q_tau_used: the rounded 0.0029 s would move them by 1.5%,
+    about the width of the reading's interval, so the figure does not decide between the two).
+  citation: {page: 11, quote: "at fixed values of Nc = 5, 10, and 15. (d) Variation of amplitude", where: "Fig. 11(d) caption"}
+- id: q_amplitude_sqrt_printed
+  kind: reading
+  about: [q_amplitude_linear]
+  text: >-
+    The page image of p. 11 prints the amplitude as proportional to the square root of v~u0(Nc) - v~u (a
+    radical over the difference); the text layer drops the radical ("proportional to ṽu0 (Nc ) − ṽu"), which is
+    what q_amplitude_linear read. With the radical the claim is the normal-form result for a supercritical Hopf
+    point, and Fig. 11(d) shows the curves falling steeply to zero at the Hopf boundary, as a square root does.
+    q_amplitude_linear's concern rests on the text-layer reading.
+  citation: {page: 11, quote: "the amplitude of ỹ is proportional to", where: "Sec. III E"}
+- id: q_fig9_ks_kc
+  kind: reading
+  about: [q_ks_figs8to10, run_fig9a_Nc20, run_fig10c, run_fig10e]
+  text: >-
+    The quantities of Figs. 9 and 10 that depend on the substrate stiffness (x~o0, x~s0) reproduce at every read
+    point with ks = kc, the record's choice for q_ks_figs8to10; ks = 1 pN/nm would change x~s0 = (nm0 f~s - F~)/k~s
+    by the factor kc/ks = 0.031. The figures were therefore drawn on the soft substrate, though their captions do
+    not say so.
+  citation: {page: 10, quote: "The impact of variations in parameters on x̃o0 within the", where: "Figs. 9, 10"}
+- id: q_fig13b_fixed_point
+  kind: reading
+  about: [q_case2_trivial]
+  text: >-
+    Fig. 13(b) (F~ = nm0 f~s) has drawn SS/US, US/U and S/SS boundaries at every Nc read (fig13b_hopf, fig13b_usu,
+    fig13b_s_ss), within the reading's interval of those of Fig. 13(a) and Fig. 2(a). This supports
+    q_case2_trivial: a nontrivial fixed point exists at A = nm0 f~s - F~ = 0, against the text of Case 2. The
+    record's models raise there, so Fig. 13(b) is read but not run.
+  citation: {page: 12, quote: "The influence of external load F̃ on system stability", where: "Fig. 13(b)"}
+# cross-record validation against bell1978 (2026-11-21): none added
+- id: q_xval_bell1978_none
+  kind: reading
+  about: [clutch_off_rate, fixed_point, load_of_fraction]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978. This paper cites bell1978 (ref. 39) only for the exponential form of the clutch off rate
+    (Eq. 2), not for data. bell1978's measured data are the force needed to detach adherent cells,
+    "~ 1" dyne from its ref. 52 (bell1978/force_adhesive: approximate, so no verdict, and a force on a
+    whole cell under conditions bell1978 does not give, not the steady traction of a motor-clutch
+    ensemble with Table I parameters), and the free-sugar concentrations 0.001 and 0.01 M of its
+    ref. 49 (c_sugar_low, c_sugar_high: inputs to Bell's inhibition estimate, which no model here
+    takes or outputs). bell1978 measures no off rate, bond lifetime or force per bond that
+    clutch_off_rate would predict. In the other direction this record has no measured datum to test a
+    bell1978 model against: see bell1978 q_xval_shen2025_none.
+  citation: {page: 3, printed_page: "014417-3", quote: "engaged clutches increases the detachment rate koff exponen", where: "Eq. 2"}
+- id: q_xval_bangasser2013b_none
+  kind: reading
+  about: [motor_force_velocity, fixed_point, limit_cycle, stability_boundaries]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013b. This paper cites bangasser2013b (ref. 25) once, as background for the stick-slip
+    dynamics of the motor-clutch paradigm (p. 2). It does not cite it for data and compares none of
+    its results with that paper. bangasser2013b's only data of origin measured are the run times of
+    its ODE and Monte Carlo software on the authors' computer (Fig. 6(b): fig6b_ode_cal,
+    fig6b_mc1_cal, fig6b_mc100_cal). No model here outputs a computation time. Its other plotted
+    curves (retrograde flow, clutch force, failure times, optimal stiffness) are predictions of its
+    own ODE and Monte Carlo models. Setting them beside motor_force_velocity or fixed_point would
+    relate two models, not validate one against data; that is the work of the job relating models.
+    In the other direction this record has no measured datum at all (figures.md: every plot is a
+    model result); see bangasser2013b/q_xval_shen2025_none.
+  citation: {page: 2, printed_page: "014417-2", quote: "subsequently a stick-slip type of dynamics within the motor", where: text}
+# cross-record validation against chan2008 (2026-11-21): none added
+- id: q_xval_chan2008_none
+  kind: unstated_input
+  about: [motor_force_velocity, clutch_off_rate, fixed_point, limit_cycle, limit_cycle_ptp, 'chan2008/v_fig3c_260', 'chan2008/v_fig3c_57k', 'chan2008/v_fig3d_exp_sem', 'chan2008/T_max_text', 'chan2008/failures_figS5D']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    chan2008. This paper cites chan2008 (ref. 8) for the piecewise linear force-velocity law
+    (p. 2) and for kon = 1 s^-1 and k0off = 0.1 s^-1 (Table I), never for data, and compares none
+    of its results with chan2008's measurements. Considered and not used: (1) the retrograde flow
+    means (chan2008/v_fig3c_260, v_fig3c_57k, v_fig3d_exp_*, v_figS8C_*): fixed_point is a steady
+    state with dx~o/dτ~ = 0 and the motors at stall (Eq. 8, y~0 = f~s/k~m), so it predicts no flow,
+    and limit_cycle outputs a frequency and an amplitude, not a mean flow. (2) The peak filopodial
+    force (chan2008/T_max_text, T_max_fig): fixed_point gives a steady traction nm0 f~s - F~, not the
+    peak of a load-and-fail cycle, and with Table I motors (Nm = 100, fs = 4.96 pN, rates of ref. 40)
+    rather than chan2008's filopodial set (nm = 75, Fm = -2 pN, vu = -120 nm/s, Table S1).
+    (3) The failure frequency against stiffness (chan2008/failures_figS5D) beside limit_cycle's
+    oscillation frequency: running it at chan2008's gels would need Nc, v~u, γ and a substrate
+    spring k~s for each gel, none of which either paper states for these filopodia (the gel modulus
+    reaches a spring only through chan2008's Eq. 13 with its fitted Δ); limit_cycle is deterministic
+    and oscillates only inside its Hopf region, so every one of these inputs would be added and the
+    verdict would test them, not the model. (4) The motor law: chan2008 measures no motor velocity
+    under a known load for motor_force_velocity, and no off rate for clutch_off_rate. The shared
+    shape of motor_force_velocity and chan2008/force_velocity_eq3 relates two models, which is the
+    job relating models. In the other direction this record has no measured datum; see
+    chan2008/q_xval_shen2025_none.
+  citation: {page: 2, printed_page: "014417-2", quote: "transmission based on the motor-clutch hypothesis, presented", where: text}
+# cross-record validation against bangasser2013 (2026-11-21): none added
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [clutch_off_rate, fixed_point, limit_cycle, Fb, 'bangasser2013/tau_kong_fig7c', 'bangasser2013/v_figS1b_measured', 'bangasser2013/migration_fig1a_u87', 'bangasser2013/traction_fig1b_neuron']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bangasser2013. This paper cites bangasser2013 (ref. 27) for Fb = 6.25 pN (Table I, p. 4) and, in
+    the introduction (p. 2), as a model that "did not take into account the role of myosin
+    contractility"; it compares none of its results with bangasser2013's data, and its "biphasic
+    relationship" (p. 8) is attributed to theoretical studies (ref. 16), not to measurements.
+    Considered and not used: (1) Kong et al.'s integrin lifetimes redrawn in bangasser2013 Fig. 7C
+    (bangasser2013/tau_kong_fig7c, a mean bond lifetime against clamped force): clutch_off_rate has the
+    same shape as bangasser2013/catch_slip_eq9 (a rate from a force and rates), but it outputs a loaded
+    off rate, not a lifetime; mapping one to the other would cross two quantities that are reciprocal,
+    not the same. Its Bell slip law is also monotonic, so against catch-bond data it could only miss,
+    and its Fb (6.25 pN, from bangasser2013's slip-bond base set) and k0off (0.1 /s, from chan2008)
+    were not taken for this bond. (2) Chan and Odde's neuron retrograde flows against gel modulus
+    (bangasser2013/v_figS1b_measured): fixed_point is a steady state with the motors at stall and
+    dx~o/dτ = 0, so it predicts no mean flow, and limit_cycle gives a frequency and an amplitude; the
+    gel moduli would also need a conversion to k~s that neither paper states. (3) The normalized
+    migration and traction of Fig. 1A-B (bangasser2013/migration_fig1a_*, traction_fig1b_*): no model
+    here outputs a migration speed, and its steady traction nm0 f~s - F~ does not depend on the
+    substrate, so a normalized traction against stiffness is a quantity no model here gives (and the
+    cell types' parameters are not stated). In the other direction this record has no measured datum
+    (figures.md: every plot is a model result); see bangasser2013/q_xval_shen2025_none.
+  citation: {page: 4, printed_page: "014417-4", quote: "Clutch bond rupture force Fb 6.25 pN", where: Table I}
+# cross-record validation against alonsomatilla2023 (2026-11-21): none added
+- id: q_xval_alonsomatilla2023_none
+  kind: unstated_model
+  about: [clutch_off_rate, fixed_point, limit_cycle, stability_boundaries, 'alonsomatilla2023/clutch_off_rate_bell']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    alonsomatilla2023, and none of alonsomatilla2023's models against one here, because neither record
+    holds a measurement. alonsomatilla2023's data.yaml has no datum of origin measured; its values are
+    estimated, reported, derived, fitted (C1-C3 of Eqs. 5-6, fitted to its own numerical results, and the
+    Bell distance of SI legend C) or predicted, and its figures.md says "The paper has no measurements:
+    every plotted value is a model result". This record's figures are all model results as well
+    (figures.md). This paper does not cite alonsomatilla2023 (it is not among its references), so it
+    claims no agreement with that paper's results. The shared Bell law of clutch_off_rate and
+    alonsomatilla2023/clutch_off_rate_bell is a relation between models, left to the job relating models;
+    the reverse note is alonsomatilla2023/q_xval_shen2025_none.
+  citation: {page: 3, printed_page: "014417-3", quote: "engaged clutches increases the detachment rate koff exponen-", where: text}
+- id: q_xval_elosegui2016_none
+  kind: unstated_model
+  about: [motor_force_velocity, clutch_off_rate, fixed_point, limit_cycle, 'elosegui2016/fig3d_control_data', 'elosegui2016/fig3e_control_data', 'elosegui2016/fig3a_lifetime_data', 'elosegui2016/clutch_no_talin_sim']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of elosegui2016
+    (ref. 16), although this paper cites it. It cites it twice, for the clutch picture (p. 1, "converting
+    the retrograde actin flow into forward cellular motion [16]") and for a trend of theoretical studies
+    (p. 8, "A majority of theoretical studies [16] ... reveal a biphasic relationship"); it never compares
+    its model with that paper's data. elosegui2016's measurements are cell traction (Pa) and actin
+    retrograde flow (nm/s) of MEFs against gel Young's modulus (kPa) (Figs. 1a, 3d,e, 4-6, S2, S5), the
+    fibronectin-a5b1 bond lifetime against force (Fig. 3a), and adhesion lengths, YAP ratios, areas and
+    stainings. None is a quantity a model here gives on those conditions: (1) motor_force_velocity gives a
+    motor's velocity from its own load and stall force; no motor velocity against motor load is measured
+    there (actin flow is measured against substrate rigidity, the shape match with
+    elosegui2016/clutch_no_talin_sim being a relation between models for the job relating models).
+    (2) clutch_off_rate gives an off-rate of a generic slip bond with this paper's koff0 and Fb (Table I);
+    Fig. 3a measures a lifetime of a catch bond, a different quantity, and the off-rate is not fitted to it.
+    (3) fixed_point is in dimensionless units with a substrate spring constant k~s, not a gel modulus; at
+    the fixed point the motors are at stall so the actin flow is zero, and the substrate force
+    nm0 f~s - F~ does not depend on k~s, so it predicts neither the traction nor the flow curves against
+    rigidity, and no conversion from kPa to a spring constant or from force to traction stress (Pa) is
+    stated by either paper. (4) limit_cycle gives oscillation frequency and amplitude, which elosegui2016
+    does not measure. The biphasic trend of p. 8 is not quantified by this paper's model. In the other
+    direction there is nothing to test: this record has no measured datum (figures.md: no figure plots
+    measured data); see elosegui2016/q_xval_shen2025_none.
+  citation: {page: 8, printed_page: "014417-8", quote: "A majority of theoretical studies [16] focusing on force", where: text}

@@ -1,0 +1,21 @@
+id: dfn_network
+name: discrete fibre network with breakable cross-links contracted by a circular cell
+role: model
+stated: {page: 2, printed_page: "E4550", quote: "2D fiber networks representing electrospun matrices were created with randomly organized linear elastic fibers and breakable cross-links", where: "Materials and Methods, Discrete Fiber Network Model"}
+equation: >-
+  2D network of linear elastic beams (circular cross-section) cross-linked where closer than a threshold; a circular
+  void loaded by a uniform radial force raised in increments, outer boundary fixed; a cross-link is removed when its
+  transmitted strain energy exceeds a threshold; recruitment = number of fibres pulled into the cell area
+described_from: ref-14
+inputs:
+  Ef: {quantity: fiber_youngs_modulus, unit: MPa}
+  nu: {quantity: fiber_poisson_ratio, unit: dimensionless}
+  rf: {quantity: fiber_radius, unit: um}
+  q: {quantity: contraction_per_perimeter, unit: uN/um}
+outputs:
+  phi_ratio: {quantity: normalized_fiber_density, unit: dimensionless}
+runnable: false
+not_runnable_reason: >-
+  The paper does not give the network's size, fibre length, cross-linking distance, target pore size, the
+  cross-link strain-energy thresholds of the networks in Fig. 3B, the load increments or the solver, and
+  releases no code. A random network of this kind is also far too large to run within a build.

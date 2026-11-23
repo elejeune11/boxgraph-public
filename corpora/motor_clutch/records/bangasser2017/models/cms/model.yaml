@@ -1,0 +1,51 @@
+id: cms
+name: two-dimensional cell migration simulator (CMS) of motor-clutch modules on a central cell body (Eqs. 1-11, algorithm steps 1-12)
+role: model
+stated: {page: 7, printed_page: "7", quote: "The cell migration simulator is based on the motor–clutch model", where: "Methods, Migration simulator description, Simulator implementation, Simulation analysis (pp. 7-8)"}
+equation: >-
+  Gillespie SSA (Eqs. 10-11) over clutch binding (kon), clutch unbinding (Eq. 1), module creation
+  (Eq. 7) and capping (kcap); per module j: motor retraction vm,j (Eq. 2), polymerization vp (Eq. 3),
+  force balance Fj = κcell xcell,j = κc Σ xc,i = κs xs,j (Eq. 4); cell body clutches Fcell (Eq. 5);
+  Fcell + Σ Fj = 0 (Eq. 6) sets the cell body position; motors and clutches drawn from free pools
+  (Eqs. 8-9); module direction random in the plane; modules shorter than lmin destroyed. Outputs:
+  mean module flow, summed traction magnitude, aspect ratio of the cell shape, random motility
+  coefficient from the MSD (Eq. 12) after the first hour, at 15-min sampling.
+inputs:
+  Nm:       {quantity: n_motors_total, unit: dimensionless}
+  Nc:       {quantity: n_clutches_total, unit: dimensionless}
+  Atot:     {quantity: total_actin, unit: um}
+  vp_max:   {quantity: max_polymerization_velocity, unit: nm/s}
+  kmod_max: {quantity: max_module_birth_rate, unit: 1/s}
+  kcap:     {quantity: module_capping_rate, unit: 1/s}
+  lin:      {quantity: initial_module_length, unit: um}
+  lmin:     {quantity: min_module_length, unit: um}
+  kcell:    {quantity: cell_spring_constant, unit: pN/nm}
+  nc_cell:  {quantity: n_cell_body_clutches, unit: dimensionless}
+  nm_max:   {quantity: n_motors_module_max, unit: dimensionless}
+  Fm:       {quantity: motor_stall_force, unit: pN}
+  vm:       {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc_max:   {quantity: n_clutches_module_max, unit: dimensionless}
+  kon:      {quantity: clutch_on_rate, unit: 1/s}
+  koff:     {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  kc:       {quantity: clutch_stiffness, unit: pN/nm}
+  Fb:       {quantity: bond_rupture_force, unit: pN}
+  ks:       {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  v_flow:  {quantity: retrograde_flow_rate, unit: nm/s, description: "mean of the module flow rates (Fig. 1c)"}
+  F_trac:  {quantity: traction_force_magnitude, unit: pN, description: "sum of the force magnitudes on the modules and the cell body (Fig. 1d)"}
+  aspect:  {quantity: cell_aspect_ratio, unit: dimensionless, description: "Fig. 1e"}
+  mu:      {quantity: random_motility_coefficient, unit: um^2/min, description: "Eq. 12 (Fig. 1f)"}
+settings: {t_total_h: null, sample_interval_min: 15, discard_h: 1, seed: 1}
+stochastic: true
+from_words: true
+built_from: [off_rate_eq1, motor_velocity_eq2, polymerization_eq3, module_birth_eq7, module_motors_eq8, module_clutches_eq9, g_actin_pool, rmc_eq12]
+runnable: false
+not_runnable_reason: >-
+  Not run in this record. The simulated time per cell is not printed (only that the first hour is
+  discarded and that steady state is reached after about 100 min), and one call at the paper's
+  parameters (750-7,500 clutches stepped event by event for hours, 6-71 simulated cells per
+  condition, Supplementary Table 3) is far beyond the run budget of a build. The 2D geometry of the
+  force balance (reference positions, cell-spring direction, how a module's reference point
+  advances) is given only in words and in the schematic of Fig. 1b. The released MATLAB code is read
+  in its own record (cms_code); here the module rules are checked one by one and a single module
+  stands in for the whole cell (module_ssa, module_optimum).

@@ -1,0 +1,56 @@
+id: shen2025
+kind: article
+title: Factors influencing the stability of the motor-clutch model on compliant substrates under external load
+authors: [Beibei Shen, Yunxin Zhang]
+year: 2025
+venue: Physical Review E 111, 014417
+doi: 10.1103/PhysRevE.111.014417
+file: corpus/motor_clutch/2025_Shen.pdf
+page_range: [1, 15]
+pages: {1: "014417-1", 2: "014417-2", 3: "014417-3", 4: "014417-4", 5: "014417-5", 6: "014417-6", 7: "014417-7", 8: "014417-8", 9: "014417-9", 10: "014417-10", 11: "014417-11", 12: "014417-12", 13: "014417-13", 14: "014417-14", 15: "014417-15"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-21"}
+notes: >
+  PDF pp. 1-15 are the article (pp. 014417-1 to -15): model and nondimensionalisation pp. 2-4, fixed points
+  pp. 4-5 (Eqs. 9-17), linearisation and Eq. 20 p. 5, results pp. 5-12, appendix (Jacobian A1-A3) p. 14,
+  references pp. 14-15.
+  In scope: (1) the characteristic scales of Table I (l0, tau, v0, f; char_scales); (2) the dimensionless
+  parameters (nondim, nondim_stiffness; processing); (3) the stable-branch fixed point, Eqs. 9-15
+  (fixed_point); (4) the saddle-node point Nc,min, Eqs. 16-17 (saddle_node, with the load as the fraction
+  j/10 of nm0 f~s used by Fig. 12); (5) the linear stability by the printed Jacobian A3 and Table II, as the
+  Hopf (SS/US) and US/U boundaries in v~u at fixed Nc (stability_boundaries) and a variant with J55
+  corrected (stability_boundaries_corrected); (6) the determinant three ways: Eq. 20 (det_eq20), det of the
+  printed A3 (det_A3) and det of the Jacobian of Eq. 18 by finite differences (det_eq18); (7) the limit
+  cycle of Eq. 6 by ODE integration, frequency in Hz and amplitude of y~ (limit_cycle; Fig. 11).
+  Printed numbers with verdicts: l0, tau and v0 reproduce. f = 2.3033 "kB T/nm" does not: the definition
+  gives 0.5591 kB T/nm, and 2.3033 is f in pN with kB T = 4.12 pN nm (q_f_unit); the record uses that kB T
+  (kT_added, q_kT). The Fig. 6 caption's point (Nc, v~u) = (10, 1.7) "close to" the Hopf boundary is
+  compared with the record's v~u0(10) = 1.63 and reproduces at the printed precision (cmp_vu0_Nc10;
+  q_vu0_close).
+  Findings: A3 is the Jacobian of Eq. 18 except J55, printed -(Gamma/gamma) nc0 k~c - k~s instead of
+  -(Gamma/gamma)(nc0 k~c + k~s) (q_A3_J55). Eq. 20 equals det of A3 as printed (relation
+  rel_det_eq20_is_det_A3, verified numerically to 1e-14), so it lacks the factor Gamma/gamma of the true
+  determinant; rel_A3_is_jacobian_of_eq18 is refuted for gamma != Gamma. The diagrams with gamma = Gamma
+  (Fig. 2(a,c,e), Figs. 5, 6, 11-13) are unaffected; those with gamma != Gamma (Fig. 2(b,d,f), Fig. 7) may be:
+  at Nc = 10, ks = kc, gamma = 2 Gamma the Hopf boundary is 1.20 with the printed J55 and 1.14 with the
+  corrected one (run_hopf_Nc10_g2, run_hopf_corr_Nc10_g2).
+  Checks by the reader, not printed numbers: Nc,min at F = 0 is 0.98 with nc0 = 0.52 at the saddle node
+  (Fig. 12's first point; the N strip of Fig. 2(a) ends near Nc = 1); the eigenvalue scan of Fig. 2(a)
+  conditions gives S above SS, an S wedge for Nc of about 10 and more near v~u = 2.5, and US/U below
+  (as in Fig. 2(a)); the limit cycle at Nc = 5, v~u = 1 has a frequency near 1.6 Hz (Fig. 11(c)).
+  The statement that nc0 kc stays below 1 pN/nm (p. 8) holds trivially: nc0 < Nc <= 20 and 20 kc = 0.63 pN/nm.
+  Left out: all figure readings (Figs. 2, 5-13 plot the model results; left to the figure stage, see
+  q_figures_not_read); the parameter ranges of Table I for ks and gamma (ranges of powers of ten feed no
+  model); vb (only in the piecewise force-velocity relation that Eq. 6 drops, q_piecewise_dropped); Fig. 7
+  (it varies Gamma, which changes every scale); the qualitative arrows of Table III; Fig. 3, 4 trajectories.
+  Unstated inputs: kB T (kT_added), ks for Figs. 8-10 (q_ks_figs8to10), the limit-cycle numerics and
+  amplitude definition (q_limit_cycle_numerics, q_amplitude_def), and which tau converts to Hz (q_tau_used).
+  Figure reading (second pass, 2026-11-21): 93 calibrated code readings of Figs. 2, 5, 6, 8-13 (figures.yaml;
+  shared code figures/phase_lib.py; per-panel account in figures.md), with sweeps and reproduction comparisons
+  for Fig. 2 (Hopf and US/U boundaries, printed and corrected J55; new model stability_matched for the matched
+  substrate of Fig. 2(c,d)), Figs. 8-10 (fixed_point), Fig. 11(c,d) (limit_cycle; new limit_cycle_ptp for the
+  peak-to-peak amplitude), Fig. 12 (new saddle_locus) and Fig. 13(a) (new processing model load_of_fraction).
+  Findings: the gamma != Gamma diagrams follow the printed J55 (q_fig2_settles_J55); the Fig. 11(d) amplitude is
+  peak-to-peak (q_fig11_amplitude_ptp); Figs. 9-10 use ks = kc (q_fig9_ks_kc); Fig. 13(b) has fixed points at
+  A = 0 (q_fig13b_fixed_point); the printed amplitude law has a square root (q_amplitude_sqrt_printed).
+  Left out: Figs. 1 (drawing), 3, 4 (single trajectories at unstated points), 7 (one labelled interior y
+  tick, folded boundaries, Gamma sets all scales), 11(a,b) (heat maps).

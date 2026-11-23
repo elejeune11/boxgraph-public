@@ -1,0 +1,74 @@
+id: prahl2020
+kind: article
+title: Predicting Confined 1D Cell Migration from Parameters Calibrated to a 2D Motor-Clutch Model
+authors: [Louis S. Prahl, Maria R. Stanslaski, Pablo Vargas, Matthieu Piel, David J. Odde]
+year: 2020
+venue: Biophysical Journal 118, 1709-1720 (with Supporting Material)
+doi: 10.1016/j.bpj.2020.01.048
+file: corpus/motor_clutch/2020_Prahl.pdf
+page_range: [1, 31]
+pages: {1: "1709", 2: "1710", 3: "1711", 4: "1712", 5: "1713", 6: "1714", 7: "1715", 8: "1716", 9: "1717",
+        10: "1718", 11: "1719", 12: "1720", 14: "S1", 15: "S2", 16: "S3", 17: "S4", 18: "S5", 19: "S6",
+        20: "S7", 21: "S8", 22: "S9", 23: "S10", 24: "S11", 25: "S12", 26: "S13", 27: "S14", 28: "S15",
+        29: "S16", 30: "S17", 31: "S18"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-19"}
+notes: >
+  Scope. The paper's quantitative core is a stochastic 1D cell migration simulator (1D CMS, Supporting
+  Methods Eqns. S1-S8, Table S1) whose results (motility coefficient and drift velocity from fits of
+  Eq. 2 to simulated MSD) are compared with U251 glioma cells in PDMS microchannels. The 1D CMS is
+  recorded as a model as stated (cms_1d) but is not runnable here: its event algorithm, the allocation
+  of motors and clutches to new modules and the clutch/F-actin update rules are deferred to ref. S1
+  (Bangasser et al. 2017, record bangasser2017), the MATLAB code was not released with the paper, and
+  a single run (5-7 h of simulated time, 1000 motors, 750 clutches, kinetic Monte Carlo) is far beyond
+  the one-minute budget; 36-60 runs per condition are averaged. Its printed results (v_sim, mu_sim)
+  are recorded without a run and compared only with the measurements (validation), not reproduced.
+  The module-level rate laws the CMS is built from are recorded as runnable models: the slip bond
+  (Eqn. S1, related as same_as chan2008/off_rate_eq1, which the paper states by calling each module
+  an instance of the motor-clutch model of ref. S5 = Chan and Odde 2008), the motor force-velocity law
+  (Eqn. S2), the G-actin-limited polymerization speed (Eqn. S3) and nucleation rate (Eqn. S8). These
+  produce no printed number of their own. The MSD models Eq. 1 (PRW) and Eq. 2 (diffusion-drift) are
+  recorded as fit models; the trajectories they were fitted to are not published, so they have no runs.
+
+  What is checked. (i) The hydrodynamic-drag estimate of the Supplemental Notes: Eqn. S9 reproduces
+  dg = 0.21 pN s um^-3 from the printed inputs, and Eqn. S10 reproduces Fdrag = -6.5 pN only with
+  the printed velocity 0.51 um s^-1; the paper says this is the Fig. 3B velocity, which is printed as
+  0.51 um min^-1, and with that value Eqn. S10 gives about -0.11 pN (question q_drag_velocity_units).
+  (ii) Arithmetic and unit conversions the paper prints: channel cross-section 12 x 5 = 60 um^2;
+  0.51 um/min = 8.5 nm/s; 0.74 um/min = 12.3 nm/s; 18 h = 1080 min and log10(1080) = 3.03;
+  10^3.1 = 1258 min (close: 10^3.1 is 1259); the 10-fold reduction of nclutch to 75; the Table S1
+  constraints nmotor,module = 0.1 nmotor, nclutch,module = 0.1 nclutch and kon = 10 koff; ksub = 1000
+  pN/nm in the text against 10^3 in Table S1; the conversion of ~0.5 um/min to a tumour growth rate of
+  25 cm per year (close only: 0.5 um/min is 26.3 cm per year). (iii) Validation of the simulated
+  velocity and motility coefficient (psi_pol = 0.9) against the measured ones, as the paper itself sets
+  them side by side.
+
+  Parameter carry-over (task question). Every Table S1 value except the substrate stiffness and the new
+  polarity factor psi_pol equals the first (base) value of bangasser2017 Supplementary Table 2 (Nm 1,000;
+  Nc 750; Atot 100 um; vp 200 nm/s; kmod 1 /s; kcap 0.001 /s; lin 5 um; lmin 0.1 um; kcell 10,000 pN/nm;
+  nc,cell 10; nm* 100; Fm 2 pN; vm 120 nm/s; nc* 75; kon 1 /s; koff 0.1 /s; kc 0.8 pN/nm; Fb 2 pN).
+  The 2D CMS's substrate stiffness is variable; the 1D CMS fixes it at 10^3 pN/nm for PDMS (and tries
+  10^6 pN/nm, Fig. S3). Nothing in Table S1 is re-fitted to the channel data except psi_pol, which was
+  chosen by eye ("reasonably close fits", p. 10). This comparison is stated in words here and in
+  question q_params_vs_2d; it is not a recorded cross-record link because bangasser2017's record has no
+  data yet. The paper says its simulations were run in MATLAB; the later C++ 1D simulator
+  (cms1d_cpp_code) is not used here.
+
+  Figures (figure pass, 2026-11-19). The first reading job could not render figures (q_figures_unread);
+  a later pass read Figs. 2G, 3A-D, 4A-D, 5A-D, 6A-D, 7A-D, S1A-C, S3A-B, S4A-B and S5B-D with calibrated
+  code readings (figures.yaml, figures/, figures.md), as data of origin measured, predicted or fitted. The
+  base-parameter simulation in every figure reproduces the printed mu_sim and v_sim (one shared set of 60
+  runs, q_base_runs_shared); histogram totals and binned means agree with the printed n and means except
+  the S4A PRW speed (q_figs4a_mean); Eq. 2 with mean parameters falls short of the mean MSD of Fig. 2G
+  (q_fig2g_eq2_mean); and the simulated MSD lies below the measured one at long lags (q_fig2g_sim_vs_exp).
+  Fig. 2F stays unread (the two series merge; its legend swaps the caption's symbols, q_fig2f_legend), as
+  do the trajectories, individual MSD curves, schematics and micrographs. The simulated curves have no run
+  (the CMS is not runnable); the measured ones wait for a model that predicts them.
+  Left out (first reading). Also left out, as feeding no
+  model: the p-values (Table S2, figure annotations), device fabrication numbers, imaging settings,
+  drug concentrations as conditions only, cell counts, the PDMS and glass moduli (E = 1000 kPa, 10^7 kPa,
+  feed no stated formula; question q_modulus_to_spring), the alternative parameter values of the drug
+  simulations (kcap = 10^-2 s^-1, vactin,max = 120 nm/s, knuc,0 = 10 s^-1, nmotor = 100 and 500, nclutch =
+  8 to 250, ksub = 10^6 pN/nm: inputs of the unrunnable CMS whose outputs are only plotted), the
+  microtubule growth speed 165 +- 7.5 nm/s (since added by the figure pass, eb1_mean) and the
+  order-of-magnitude statements (~4 myosin motors, ~10-100 pN forces giving <1 nm deformations, 10^5
+  cells per port).

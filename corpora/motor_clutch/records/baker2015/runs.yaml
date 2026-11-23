@@ -1,0 +1,39 @@
+# Added in audit: the hydrogel doses implied by the Methods (intensity x polymerization time)
+- id: run_dose_gel_soft
+  model: uv_dose_exposure
+  inputs: {I: uv_intensity_gel, t: gel_time_soft}
+  settings: {}
+  outputs: {dose: dose_gel_soft_methods}
+- id: run_dose_gel_intermediate
+  model: uv_dose_exposure
+  inputs: {I: uv_intensity_gel, t: gel_time_intermediate}
+  settings: {}
+  outputs: {dose: dose_gel_intermediate_methods}
+- id: run_dose_gel_stiff
+  model: uv_dose_exposure
+  inputs: {I: uv_intensity_gel, t: gel_time_stiff}
+  settings: {}
+  outputs: {dose: dose_gel_stiff_methods}
+# Figure pass: the membrane equation run forward with the printed network moduli, at the depths of the
+# plotted indentation points (Supp. Fig. 2k)
+- id: run_membrane_s2k_soft
+  model: membrane_indentation
+  inputs: {E: network_soft, t: membrane_t, ro: membrane_ro, ri: membrane_ri, nu: membrane_nu}
+  sweep: {delta: figs2k_0_data}
+  outputs: {F: F_membrane_soft_s2k}
+  note: "soft = 0 mJ: Fig. 2c labels the soft fibre constructs 0 mJ, and Fig. 1d's 0 mJ bar is the 2.8 kPa network"
+- id: run_membrane_s2k_stiff
+  model: membrane_indentation
+  inputs: {E: network_stiff, t: membrane_t, ro: membrane_ro, ri: membrane_ri, nu: membrane_nu}
+  sweep: {delta: figs2k_6000_data}
+  outputs: {F: F_membrane_stiff_s2k}
+  note: "stiff = 6,000 mJ (Fig. 2c label; Fig. 1d's 6,000 mJ bar is the 55 kPa network)"
+# Moments of the diameter histograms (Supp. Figs 7 and 9)
+- {id: run_hist_s7_06, model: histogram_moments, inputs: {p: figs7_06_data}, outputs: {mean: hist_s7_06_mean, sd: hist_s7_06_sd}}
+- {id: run_hist_s7_05, model: histogram_moments, inputs: {p: figs7_05_data}, outputs: {mean: hist_s7_05_mean, sd: hist_s7_05_sd}}
+- {id: run_hist_s7_04, model: histogram_moments, inputs: {p: figs7_04_data}, outputs: {mean: hist_s7_04_mean, sd: hist_s7_04_sd}}
+- {id: run_hist_s7_03, model: histogram_moments, inputs: {p: figs7_03_data}, outputs: {mean: hist_s7_03_mean, sd: hist_s7_03_sd}}
+- {id: run_hist_s9_soft, model: histogram_moments, inputs: {p: figs9_soft_data}, outputs: {mean: hist_s9_soft_mean, sd: hist_s9_soft_sd}}
+- {id: run_hist_s9_stiff, model: histogram_moments, inputs: {p: figs9_stiff_data}, outputs: {mean: hist_s9_stiff_mean, sd: hist_s9_stiff_sd}}
+# The "threefold" proliferation of soft over stiff fibre networks (text p. 4), from the Fig. 3d bars
+- {id: run_prolif_ratio_fig3d, model: soft_stiff_ratio, inputs: {y: fig3d_fibre_data}, outputs: {ratio: prolif_ratio_fig3d}}

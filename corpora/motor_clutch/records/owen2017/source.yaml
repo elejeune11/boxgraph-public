@@ -1,0 +1,57 @@
+id: owen2017
+kind: article
+title: A cytoskeletal clutch mediates cellular force transmission in a soft, three-dimensional extracellular matrix
+authors: [Leanna M. Owen, Arjun S. Adhikari, Mohak Patel, Peter Grimmer, Natascha Leijnse, Min Cheol Kim, Jacob Notbohm, Christian Franck, Alexander R. Dunn]
+year: 2017
+venue: Molecular Biology of the Cell 28, 1959-1974 (with Supplemental Material)
+doi: 10.1091/mbc.E17-02-0102
+file: corpus/motor_clutch/2017_Owen.pdf
+page_range: [1, 43]
+pages: {1: "1959", 2: "1960", 3: "1961", 4: "1962", 5: "1963", 6: "1964", 7: "1965", 8: "1966",
+        9: "1967", 10: "1968", 11: "1969", 12: "1970", 13: "1971", 14: "1972", 15: "1973", 16: "1974",
+        18: "Supp. p. 1", 19: "Supp. p. 2", 20: "Supp. p. 3", 21: "Supp. p. 4", 22: "Supp. p. 5", 23: "Supp. p. 6",
+        24: "Supp. p. 7", 25: "Supp. p. 8", 26: "Supp. p. 9", 27: "Supp. p. 10", 28: "Supp. p. 11", 29: "Supp. p. 12",
+        30: "Supp. p. 13", 31: "Supp. p. 14", 32: "Supp. p. 15", 33: "Supp. p. 16", 34: "Supp. p. 17", 35: "Supp. p. 18",
+        36: "Supp. p. 19", 37: "Supp. p. 20", 38: "Supp. p. 21", 39: "Supp. p. 22", 40: "Supp. p. 23", 41: "Supp. p. 24",
+        42: "Supp. p. 25", 43: "Supp. p. 26"}
+reader: {kind: agent, name: boxgraph-reader, prompt_version: "reader-1", date: "2026-11-22"}
+notes: >
+  PDF pp. 1-16 are the article (pages 1959-1974); p. 17 is the Supplemental Material cover and pp. 18-43
+  its pages 1-26. In scope: the analytical clutch model of the Supplemental Discussion (eqns 3-14: models
+  clutch_velocity_eq13, clutch_velocity_eq14, off_rate_slip_eq6, off_rate_catch_eq7), the effective stiffness of a
+  continuous substrate and its inverse (continuum_stiffness, modulus_from_stiffness), the bulk modulus from the
+  shear modulus (youngs_from_shear), and the network elements' bending-to-stretching ratio
+  (bending_ratio_persistence, bending_ratio_rod, both from words). Also in scope as measured data: all of
+  Table 1 and the speeds of Table S1. The fibre-network point-load simulation (Fig. 6A-B, S16) is recorded as
+  not runnable (fiber_network_point_load, q_network_not_runnable): the network generation, domain, solver and
+  unit conversion are not printed and no code is released. Its "up to ~24 nN/um" node stiffness is kept as a datum
+  and converted to the printed "~50 kPa".
+  Findings. Eqn. 13 reproduces v = 1.7 nm/s (αc = -0.15) and 220 nm/s (αc = 0.6), but the 220 lies past the
+  pole at αc = 0.5 where Cb < 0 (q_slip_220_beyond_pole). The text attributes the numbers to eqn. 14, which
+  gives 1.4 nm/s (q_eq13_or_eq14). αc carries three different units (q_alpha_units). The
+  network ratio κ ≈ 2.4 × 10^-6 does not follow from its printed inputs (about 1.4 × 10^-9 with κb = kBT Lp), and it
+  is inconsistent in direction with the paper's own 2 × 10^-8 for softer fibres (q_kappa_main). The rod value
+  2 × 10^-5 matches using the radius for the diameter (q_kappa_rod). The 5 nN/um continuous-gel stiffness
+  reproduces with an added Poisson ratio of 0.5 (q_continuum_poisson). Validation of eqn. 13 against this
+  study's measured actin-adhesion relative speed (58 ± 3.1 nm/min, about 0.97 nm/s) is recorded beside the
+  paper's own range comparison (0-3 nm/s) (q_validation_mean_vs_range). The claim of no continuous rearward
+  flow rests on angle distributions only plotted (q_no_continuous_rearward_flow). Validating the corpus's 2D
+  clutch models against these 3D data needs added stiffness, motor and clutch inputs; such entries belong in
+  those models' records and are not made here (q_3d_validation_of_2d_models).
+  Relations: eqn. 13 reduces to eqn. 14 (kon -> oo, stated), eqn. 7 to eqn. 6 (kc -> 0, proposed), and
+  proposed same_as links to chan2008/off_rate_eq1, bangasser2013/catch_slip_eq9 and chan2008/ksub_eq13 (Owen's
+  πEr/2(1+η) is Chan's πEδ/(1+υ) with δ = r/2). There is no reduces_to to a 2D stochastic motor-clutch model:
+  see the comment in relations.yaml.
+  Figures (two later passes, see figures.md): every plotted panel with values has a calibrated reading, except the
+  rose inset of Fig. 3C (too faint) and columns 2-6 of Supp. Fig. 2 (unlabelled y axes with panel-specific limits,
+  q_figS2_unlabelled_columns). Fig. S17 reproduces eqn. 13; the steepest line of Fig. 6B is close to ~24 nN/um;
+  the binned means of Fig. 4A and S14E do not reproduce Table 1 (q_fig4a_hist_mean, q_spooling_hist_mean). The
+  rose plots (Fig. 3G, 4A, 4B, 5C, S11 per cell, S14D) are the data behind q_no_continuous_rearward_flow.
+  Left out: the strain and displacement processing (eqns 1-4 of Materials and Methods; their results are only
+  plotted). Supp. eqn. 2 (localization-error correction) is recorded but not run, since <d^2> and the voxel
+  size are not printed (q_localization_inputs). Also left out: the Table S1 displacements and time
+  resolutions; cell-migration counts (8 of 52 cells, 15 um/h, 20 of 43); the correlation lengths (~10 and
+  ~50 um); protrusion lengths (20-70 um) and the 14 um stretched zone; literature speeds quoted in the
+  Discussion; and fibrin gel preparation numbers. None of these feeds a model. Table 1 duplicates in the text are
+  checked as consistency, as are Table S1's measured τ = 10 min speeds against Table 1. Temperature for
+  kBT is added (310 K).

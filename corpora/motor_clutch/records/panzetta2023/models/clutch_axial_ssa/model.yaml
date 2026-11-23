@@ -1,0 +1,31 @@
+id: clutch_axial_ssa
+name: modified motor-clutch model with an orthogonal substrate spring under axial residual strain, Gillespie simulation
+role: model
+stated: {page: 3, printed_page: "3", quote: "has been solved using a Gillespie stochastic algorithm", where: "Eqs. 2-6, 10-12; Sec. 2.2"}
+equation: >-
+  dp_b,i/dt = (1 - p_b,i) kon - p_b,i k*off,i (Eq. 2); k*off,i = koff exp(Fc,i/Fb) (Eq. 3);
+  Fc,i = kc (xc,i - xs) (Eq. 4); sum_i Fc,i = Fs (Eq. 5);
+  Fs = ks^eps0 (sqrt(l'^2 + xs^2) - l) xs / sqrt(l'^2 + xs^2) + ks xs (Eq. 6);
+  vf = vu (1 - Fs/(nm Fm)) (Eq. 10); dxc,i/dt = (1 - p_b,i) dxs/dt + p_b,i vf (Eq. 11);
+  t_eng/diseng,i = -ln(random_i)/k_i (Eq. 12), the shortest event executed and time advanced by it
+inputs:
+  nc:   {quantity: clutch_number, unit: dimensionless}
+  nm:   {quantity: motor_number, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: clutch_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+  ke:   {quantity: orthogonal_spring_stiffness, unit: pN/nm}
+  l:    {quantity: orthogonal_spring_rest_length, unit: nm}
+  eps0: {quantity: residual_strain, unit: dimensionless}
+outputs:
+  v_retro:  {quantity: retrograde_flow_rate, unit: nm/s, description: "time average of vf over the run (the paper says 'average', not over what: q_average)"}
+  n_eng:    {quantity: engaged_clutch_number, unit: dimensionless, description: "time average of the number of engaged clutches"}
+  F_clutch: {quantity: clutch_force_total, unit: pN, description: "time average of the summed force of the engaged clutches"}
+  x_sub:    {quantity: substrate_position, unit: nm, description: "time average of xs"}
+  t_cycle:  {quantity: cycle_time, unit: s, description: "run time divided by the number of times the last engaged clutch let go"}
+settings: {n_events: 100000, seed: 1, average: time}
+stochastic: true

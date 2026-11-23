@@ -1,0 +1,17 @@
+# Port to Python (our code) of the loaded clutch off-rate, Cell1DPublish.cpp line 618 (module clutches)
+# and line 578 (cell-body clutches), the same expression. The code takes the magnitude of the 2-vector
+# clutch force (mag(force_vec)); in 1D that is |F|, so the port takes abs(F).
+id: offrate_port
+name: "the code's slip-bond off-rate of an engaged clutch (Cell1DPublish.cpp lines 578 and 618, Python port)"
+role: model
+stated: {file: Cell1DPublish.cpp, lines: "618", quote: "m->clutch_rate[i] = clutch_off_rate_ * exp(mag(force_vec) / clutch_rupture_force_);"}
+described_from: prahl2020
+equation: "clutch_rate = clutch_off_rate_ exp(|F| / clutch_rupture_force_)"
+inputs:
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  F:    {quantity: clutch_tension, unit: pN}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+outputs:
+  koff_i: {quantity: clutch_off_rate_loaded, unit: 1/s}
+settings: {}
+stochastic: false

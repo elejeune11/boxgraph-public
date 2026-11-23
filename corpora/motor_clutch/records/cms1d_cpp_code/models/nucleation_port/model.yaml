@@ -1,0 +1,16 @@
+# Port to Python (our code) of the module birth rate, Cell1DPublish.cpp line 628 (the same expression at
+# line 100, at initialization).
+id: nucleation_port
+name: "the code's module nucleation (birth) rate (Cell1DPublish.cpp lines 100 and 628, Python port)"
+role: model
+stated: {file: Cell1DPublish.cpp, lines: "628", quote: "module_birth_rate_ = std::pow((double(free_actin_) / double(total_actin_pool_)), 4)*module_birth_rate_0;"}
+described_from: prahl2020
+equation: "module_birth_rate_ = (free_actin_ / total_actin_pool_)^4 module_birth_rate_0"
+inputs:
+  knuc0:  {quantity: nucleation_rate_max, unit: 1/s}
+  AG:     {quantity: g_actin_pool_length, unit: nm}
+  Atotal: {quantity: total_actin_length, unit: nm}
+outputs:
+  knuc: {quantity: nucleation_rate, unit: 1/s}
+settings: {}
+stochastic: false

@@ -1,0 +1,20 @@
+id: mean_field_optimum
+name: optimum substrate stiffness and maximal traction of the mean-field model (SI Table 2 notes)
+role: model
+stated: {page: 21, quote: "with a maximum traction force for a substrate Young's modulus of", where: "SI Table 2 notes; Eqs. 3-4"}
+equation: "kappa_s^opt = argmax over kappa_s of nc Fb T*(F, tau, omega, kappa_s/nc kappa_c), T* the time average of Eqs. 3-4"
+inputs:
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches, unit: dimensionless}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+outputs:
+  ks_opt: {quantity: optimal_substrate_stiffness, unit: pN/nm}
+  T_max:  {quantity: traction_force, unit: pN}
+settings: {K_min: 0.0008, K_max: 0.005, n_points: 13, step: 1.0, h: 0.00125, cfl: 0.003, dt_max: 0.0006, dt_min: 1.0e-6, w_min: 1.0e-12, t_end_min: 5.0, load_times: 10.0, avg_from: 0.25}
+built_from: [mean_field]
+stochastic: false

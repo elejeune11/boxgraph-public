@@ -1,0 +1,16 @@
+id: cell_stiffness_eq11
+name: spatial profile of the cell spring stiffness (Eq 11)
+role: model
+stated: {page: 29, quote: "spatial variation in cell stiffness (kc(xc)) within the monolayer (Eq 11)", where: "Eq 11"}
+equation: "k_c(x_c) = gamma_k (omega_k + delta_k - 1/(sigma_k sqrt(2 pi)) e^(-1/2 ((x_c - mu_k)/sigma_k)^2))"
+inputs:
+  gamma: {quantity: cell_spring_stiffness, unit: nN/um, description: "gamma_k; the S2/S3 Tables print no unit: taken in the unit of the plotted k_c (Figs 8k, 9a)"}
+  omega: {quantity: stiffness_profile_offset, unit: dimensionless, description: "omega_k"}
+  delta: {quantity: profile_shift, unit: dimensionless, description: "delta_k"}
+  sigma: {quantity: profile_width, unit: dimensionless, description: "sigma_k, in nodes"}
+  mu: {quantity: cell_node_index, unit: dimensionless, description: "mu_k, the centre node (not stated)"}
+  x: {quantity: cell_node_index, unit: dimensionless, description: "x_c, the node"}
+outputs:
+  kc: {quantity: cell_spring_stiffness, unit: nN/um}
+settings: {}
+stochastic: false

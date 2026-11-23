@@ -1,0 +1,29 @@
+# ---- the code's one-tenth rule (lines 39-40) on the shell's pools and on the paper's high set -------
+- id: run_max_code
+  model: module_max_port
+  inputs: {mpool: mpool_code, cpool: cpool_code, fm: maxm_fraction_code, fc: maxc_fraction_code}
+  outputs: {maxm: maxm_code_low, maxc: maxc_code_low}
+  note: "the pools of cms2D_shell.m lines 5-6"
+- id: run_max_high
+  model: module_max_port
+  inputs: {mpool: Nm_high_b17, cpool: Nc_high_b17, fm: maxm_fraction_code, fc: maxc_fraction_code}
+  outputs: {maxm: maxm_code_high, maxc: maxc_code_high}
+  note: "the paper's high pools (Supplementary Table 2) put into the code's rule"
+
+# ---- a module's series stiffness with the code's Kcell and with the paper's κcell (q_kcell) --------
+- id: run_keff_code_low
+  model: keff_port
+  inputs: {Kcell: Kcell_code, n_eng: n_eng_full_low, Kc: Kc_code, Ksub: Ksub_code}
+  outputs: {Keff: keff_code_low}
+- id: run_keff_paper_low
+  model: keff_port
+  inputs: {Kcell: kcell_b17, n_eng: n_eng_full_low, Kc: Kc_code, Ksub: Ksub_code}
+  outputs: {Keff: keff_paper_low}
+- id: run_keff_code_high
+  model: keff_port
+  inputs: {Kcell: Kcell_code, n_eng: n_eng_full_high, Kc: Kc_code, Ksub: Ksub_code}
+  outputs: {Keff: keff_code_high}
+- id: run_keff_paper_high
+  model: keff_port
+  inputs: {Kcell: kcell_b17, n_eng: n_eng_full_high, Kc: Kc_code, Ksub: Ksub_code}
+  outputs: {Keff: keff_paper_high}

@@ -1,0 +1,17 @@
+id: clutch_velocity_eq13
+name: actin velocity relative to an adhesion in the pseudo-equilibrium clutch model (Supp. eqns 11-13)
+role: model
+stated: {page: 22, printed_page: "Supp. p. 5", quote: "We can now solve for v as an experimentally measureable property of the adhesion", where: "eqn. 13"}
+equation: "v = Ftot(kon + k0)/[κ(kon Ct − αc Ftot)] · [k0 + αc Ftot(kon + k0)/(kon Ct − αc Ftot)]; v = 0 when k0 ≤ −αc Ftot/Ct (condition stated with eqn. 14 to apply also to eqn. 13); Cb = (kon Ct − αc Ftot)/(kon + k0) (eqn. 11)"
+inputs:
+  Ftot:    {quantity: adhesion_total_force, unit: pN}
+  kon:     {quantity: clutch_on_rate, unit: 1/s}
+  k0:      {quantity: clutch_off_rate_zero_force, unit: 1/s}
+  kappa:   {quantity: adhesion_effective_stiffness, unit: pN/nm}
+  Ct:      {quantity: clutch_number_total, unit: dimensionless}
+  alpha_c: {quantity: clutch_force_sensitivity, unit: 1/pN/s}
+outputs:
+  v:  {quantity: actin_adhesion_relative_speed, unit: nm/s}
+  Cb: {quantity: clutch_number_bound, unit: dimensionless, description: "eqn. 11 as printed; it is negative when αc Ftot > kon Ct, where eqn. 13 has passed its pole"}
+settings: {}
+stochastic: false

@@ -1,0 +1,33 @@
+id: steady_linear
+name: steady state of the linear molecular-clutch model with local substrate springs (Eqs. 1, 4, 8-11)
+role: model
+stated: {page: 22, quote: "equation (8) was solved by finding the intersections of the graphs", where: "Eqs. 8-10"}
+equation: >
+  k's(E) = 4 pi r E / 9 (1); koff(F) = k0off exp(beta xt |F|) + k0'off exp(beta x't |F|) (4);
+  F(l) = k l if l <= ly, k ly otherwise, k = kc k's/(kc + k's) (5, 11);
+  pon(l) = k0on exp(-(1/v) int_0^l koff) / (v + k0on int_0^inf exp(-(1/v) int_0^l' koff) dl') (9);
+  Fc = Nc int_0^inf F(l) pon(l) dl = Nm Fst [1 - v/v0] = Fm, xs = Fc/ks (8); P = Fc/S (10)
+inputs:
+  E: {quantity: youngs_modulus, unit: Pa}
+  kon: {quantity: clutch_assembly_rate, unit: 1/s, description: "k0on"}
+  k0off: {quantity: zero_load_off_rate, unit: 1/s, description: "k0off, the term with xt"}
+  k0offp: {quantity: zero_load_off_rate, unit: 1/s, description: "k0'off, the term with x't"}
+  xt: {quantity: transition_distance, unit: nm}
+  xtp: {quantity: transition_distance, unit: nm, description: "x't"}
+  kT: {quantity: thermal_energy, unit: pN*nm, description: "1/beta"}
+  v0: {quantity: motor_free_speed, unit: nm/s}
+  Fst: {quantity: motor_stall_force, unit: pN}
+  sm: {quantity: myosin_density, unit: 1/um**2}
+  sc: {quantity: clutch_site_density, unit: 1/um**2}
+  kc: {quantity: clutch_spring_constant, unit: pN/nm}
+  r: {quantity: adhesion_site_size, unit: nm}
+  ly: {quantity: linear_limit_extension, unit: nm}
+  R: {quantity: adhesion_complex_size, unit: nm}
+  S: {quantity: adhesion_complex_area, unit: um**2}
+outputs:
+  P: {quantity: traction_stress, unit: Pa}
+  v: {quantity: actin_flow_speed, unit: nm/s}
+  n_on: {quantity: engaged_clutch_density, unit: 1/um**2, description: "sigma_c int pon dl"}
+  F1: {quantity: clutch_tension, unit: pN, description: "mean tension of an engaged clutch, Eq. E1"}
+  xs: {quantity: substrate_deformation, unit: nm, description: "Eq. 8 line 5 with ks = 4 pi R E / 9"}
+settings: {branch: strong, n_v: 600, n_l: 8000}

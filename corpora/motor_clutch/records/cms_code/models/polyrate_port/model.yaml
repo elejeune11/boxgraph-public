@@ -1,0 +1,18 @@
+# Port (our code) of cms2Dv1_0.m lines 207 and 371: the polymerization speed of an uncapped module.
+#   line 207: mc(i).poly=maxpoly*(1-(factin/totact))*dt   (distance added in one event)
+#   line 371: polyrate(r)=maxpoly*(1-(factin/totact))      (the recorded rate)
+# The port gives the rate (line 371); line 207 is the same rate times the event time. Capped modules
+# (state 1) do not advance (line 208), which the rate itself does not show.
+id: polyrate_port
+name: "polymerization speed from the free-actin fraction (cms2Dv1_0.m lines 207, 371, Python port)"
+role: model
+stated: {file: cms2Dv1_0.m, lines: "371", quote: "polyrate(r)=maxpoly*(1-(factin/totact));"}
+equation: "polyrate = maxpoly*(1-(factin/totact))"
+inputs:
+  maxpoly: {quantity: max_polymerization_velocity, unit: nm/s}
+  factin:  {quantity: f_actin_length, unit: nm}
+  totact:  {quantity: total_actin, unit: nm}
+outputs:
+  vp: {quantity: polymerization_velocity, unit: nm/s}
+settings: {}
+stochastic: false

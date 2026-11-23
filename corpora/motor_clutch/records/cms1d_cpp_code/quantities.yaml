@@ -1,0 +1,56 @@
+# Parameters of the 1D CMS as the C++ code holds them (Cell1D::InitFile and Cell1D::Cell1D).
+# Ids follow prahl2020's quantities where the thing measured is the same.
+- {id: n_motors_cell, name: number of myosin II motors per cell, dimension: dimensionless, description: "motor_pool_ (Prahl's nmotor)"}
+- {id: n_clutches_cell, name: number of clutches per cell, dimension: dimensionless, description: "clutch_pool_ (Prahl's nclutch)"}
+- {id: n_clutches_group_input, name: clutch number the code divides by the clutch pool to scale the clutch stiffness, dimension: dimensionless, description: "clutch_input; G_factor = clutch_input / clutch_pool_"}
+- {id: pool_divisor, name: divisor of the cell's pool giving the most motors or clutches one module may hold, dimension: dimensionless, description: "the 10.0 of int(motor_pool_/10.0)"}
+- {id: n_motors_module_max, name: maximum number of myosin II motors in one module, dimension: dimensionless, description: "max_module_motors_ (Prahl's nmotor,module)"}
+- {id: n_clutches_module_max, name: maximum number of clutches in one module, dimension: dimensionless, description: "max_module_clutches_ (Prahl's nclutch,module)"}
+- {id: n_motors_active, name: motors held by all existing modules, dimension: dimensionless, description: "active_motors_"}
+- {id: n_clutches_active, name: clutches held by all existing modules, dimension: dimensionless, description: "active_clutches_"}
+- {id: n_motors_new_module, name: motors given to a newly nucleated module, dimension: dimensionless, description: "nm in BirthNewModule"}
+- {id: n_clutches_new_module, name: clutches given to a newly nucleated module, dimension: dimensionless, description: "nc in BirthNewModule"}
+- {id: n_clutches_cell_body, name: number of clutches under the cell body, dimension: dimensionless, description: "n_clutches_cell (Prahl's nclutch,cell)"}
+- {id: n_modules_initial, name: number of modules at the start of a run, dimension: dimensionless, description: "n_modules_ in InitFile"}
+- {id: motor_stall_force, name: stall force of one myosin II motor, dimension: "[force]", description: "motor_stall_force_ (Prahl's Fmotor)"}
+- {id: unloaded_motor_velocity, name: unloaded myosin II sliding velocity on F-actin, dimension: "[length]/[time]", description: "v_unloaded_ (Prahl's vmotor)"}
+- {id: bond_rupture_force, name: characteristic slip-bond rupture force of a clutch, dimension: "[force]", description: "clutch_rupture_force_ (Prahl's Fbond)"}
+- {id: clutch_stiffness, name: spring constant of one clutch, dimension: "[force]/[length]", description: "clutch_k_ (Prahl's kclutch)"}
+- {id: clutch_on_rate, name: pseudo-first-order clutch binding rate, dimension: "1/[time]", description: "clutch_on_rate_ (Prahl's kon)"}
+- {id: clutch_off_rate_unloaded, name: unloaded clutch dissociation rate, dimension: "1/[time]", description: "clutch_off_rate_ (Prahl's koff)"}
+- {id: clutch_off_rate_loaded, name: dissociation rate of a clutch under tension, dimension: "1/[time]", description: "clutch_rate[i] of an engaged clutch"}
+- {id: clutch_tension, name: magnitude of the force on one clutch, dimension: "[force]", description: "mag(force_vec)"}
+- {id: substrate_stiffness, name: spring constant of the substrate under a module and under the cell body, dimension: "[force]/[length]", description: "ksub_cell (Prahl's ksub)"}
+- {id: cell_spring_stiffness, name: spring constant of the nucleo-cytoskeletal cell spring, dimension: "[force]/[length]", description: "cell_k (Prahl's kcell)"}
+- {id: capping_rate, name: first-order module capping rate, dimension: "1/[time]", description: "cap_rate_ (Prahl's kcap)"}
+- {id: nucleation_rate_max, name: basal (maximal) module nucleation rate, dimension: "1/[time]", description: "module_birth_rate_0 (Prahl's knuc,0)"}
+- {id: nucleation_rate, name: module nucleation rate at the current G-actin pool, dimension: "1/[time]", description: "module_birth_rate_"}
+- {id: actin_polymerization_velocity_max, name: maximal actin polymerization speed, dimension: "[length]/[time]", description: "maxpoly_ (Prahl's vactin,max)"}
+- {id: actin_polymerization_velocity, name: actin polymerization speed at the current G-actin pool, dimension: "[length]/[time]", description: "poly / dt in TransportAndPolymerize"}
+- {id: polymerization_factor, name: multiplier of the polymerization speed, dimension: dimensionless, description: "PolyFactor"}
+- {id: total_actin_length, name: "total actin available for protrusions, as a filament length", dimension: "[length]", description: "total_actin_pool_ (Prahl's Atotal)"}
+- {id: g_actin_pool_length, name: "soluble G-actin pool, as a filament length", dimension: "[length]", description: "free_actin_ (Prahl's AG)"}
+- {id: initial_module_length, name: initial F-actin length of a new module, dimension: "[length]", description: "length_ (Prahl's Lcell)"}
+- {id: minimum_module_length, name: F-actin length below which a module is removed, dimension: "[length]", description: "the 100 of mlen < 100 (Prahl's Lmin)"}
+- {id: polarity_parameter, name: "the code's polarity setting Polar, from -1 (all modules backward) to 1 (all forward)", dimension: dimensionless, description: "Polar; the probability of a forward module is (Polar+1)/2"}
+- {id: polarity_factor, name: probability that a new module points in the +x direction, dimension: dimensionless, description: "polar in BirthNewModule (Prahl's psi_pol)"}
+- {id: flow_coupling_ratio, name: fraction of the retrograde flow distance by which a module's substrate and reference positions and its length move back, dimension: dimensionless, description: "aflow_ratio"}
+- {id: option_switch, name: "an on/off switch of the code (1 on, 0 off)", dimension: dimensionless, description: "PolyVary"}
+- {id: motor_factor_gain, name: gain applied to the time-varying motor factor, dimension: dimensionless, description: "PolyPow: nmFactor = 1 + (factor - 1) PolyPow"}
+- {id: motor_factor_schedule, name: "time-varying factor of the motor number, as tabulated in the code", dimension: dimensionless, description: "factor_arr"}
+- {id: motor_number_factor, name: multiplier of a module's motor number in the force-velocity law, dimension: dimensionless, description: "nmFactor"}
+- {id: motor_factor_floor, name: least value the motor number factor may take, dimension: dimensionless, description: "the 0.1 of if (nmFactor < 0.1)"}
+- {id: n_motors_module, name: number of myosin II motors in a given module, dimension: dimensionless, description: "module->n_motors_"}
+- {id: module_force, name: force on a module (the cell-spring force), dimension: "[force]", description: "module->mforce_mag"}
+- {id: retrograde_flow_rate, name: F-actin retrograde flow speed in a module, dimension: "[length]/[time]", description: "module->filament_vel_"}
+- {id: simulated_time, name: simulated duration of a run, dimension: "[time]", description: "duration_"}
+- {id: cell_position, name: position of the cell body along the channel, dimension: "[length]", description: "cell_pos, after the jump filter (cell_pos_rec)"}
+- {id: discarded_time, name: initial simulated time left out of the analysis, dimension: "[time]", description: "analysis_time"}
+- {id: sampling_interval, name: interval at which the cell position is sampled for analysis, dimension: "[time]", description: "trunc_time"}
+- {id: recording_interval, name: interval at which the jump filter is applied to the cell position, dimension: "[time]", description: "RecordSecond step"}
+- {id: jump_threshold, name: displacement of the cell within one recording interval above which it is removed as a jump, dimension: "[length]", description: "the 1000 of mag(cell_pos - cell_pos_prev)>1000"}
+- {id: event_rate_cap, name: largest total event rate the time step is drawn from, dimension: "1/[time]", description: "if (k_sum>1e6) k_sum = 1e6"}
+- {id: rng_seed, name: seed of the random number generator, dimension: dimensionless, description: "randSeed"}
+- {id: force_balance_tolerance, name: residual force at which the force-balance solver stops, dimension: "[force]", description: "gsl_multiroot_test_residual tolerance"}
+- {id: force_balance_max_iterations, name: most iterations of the force-balance solver, dimension: dimensionless, description: "iter < 100"}
+- {id: time_hours, name: simulated time since the start of a run, dimension: "[time]", description: "time_arr, index of the motor factor schedule"}

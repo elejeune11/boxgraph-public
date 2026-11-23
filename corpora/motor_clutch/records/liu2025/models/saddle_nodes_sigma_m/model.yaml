@@ -1,0 +1,25 @@
+id: saddle_nodes_sigma_m
+name: myosin densities of the two saddle-node points of the linear clutch model at a given E (Fig. 5c)
+role: model
+stated: {page: 13, quote: "Close-up of a cross section of the bistability region indicated in a", where: "Fig. 5c,d"}
+equation: "saddle-node points of Eq. (8): sigma_m at the local extremes of s(v; E) = Fc(v)/(Nc... ) / (S Fst (1 - v/v0)), i.e. where Fc(v) and Fm(v) touch"
+from_words: true
+inputs:
+  E: {quantity: youngs_modulus, unit: Pa}
+  kon: {quantity: clutch_assembly_rate, unit: 1/s}
+  k0off: {quantity: zero_load_off_rate, unit: 1/s}
+  k0offp: {quantity: zero_load_off_rate, unit: 1/s}
+  xt: {quantity: transition_distance, unit: nm}
+  xtp: {quantity: transition_distance, unit: nm}
+  kT: {quantity: thermal_energy, unit: pN*nm}
+  v0: {quantity: motor_free_speed, unit: nm/s}
+  Fst: {quantity: motor_stall_force, unit: pN}
+  sc: {quantity: clutch_site_density, unit: 1/um**2}
+  kc: {quantity: clutch_spring_constant, unit: pN/nm}
+  r: {quantity: adhesion_site_size, unit: nm}
+  ly: {quantity: linear_limit_extension, unit: nm}
+outputs:
+  sm_upper: {quantity: myosin_density, unit: 1/um**2, description: "the larger saddle-node density (the 1st saddle-node point, red in Fig. 5c)"}
+  sm_lower: {quantity: myosin_density, unit: 1/um**2, description: "the smaller saddle-node density (the 2nd saddle-node point, blue in Fig. 5c)"}
+settings: {n_v: 3000, n_l: 8000}
+built_from: [steady_linear]

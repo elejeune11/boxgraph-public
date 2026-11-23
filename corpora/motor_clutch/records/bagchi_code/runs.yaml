@@ -1,0 +1,56 @@
+# ---- the drivers' Gaussian extremes (port of C lines 223-258) ---------------------------------------
+# As shipped, control version (C): 36 cell springs, s = ND_stdev_dc = 1, s1 = ND_stdev_tdl = 2.
+- id: run_ext_C
+  model: driver_profile_extremes
+  inputs: {n: cell_nodes_C, s: nd_stdev_dc_C, s1: nd_stdev_tdl_C}
+  outputs: {max_ND: maxND_C, min_ND: minND_C, max_ND1: maxND1_C, min_ND1: minND1_C}
+# C with the "//10" of line 219 for s (the S3 connected delta_eps needs it)
+- id: run_ext_C_s10
+  model: driver_profile_extremes
+  inputs: {n: cell_nodes_C, s: nd_stdev_dc_C_alt10, s1: nd_stdev_tdl_C}
+  outputs: {max_ND: maxND_C_s10, min_ND: minND_C_s10, max_ND1: maxND1_C_s10, min_ND1: minND1_C_s10}
+  note: "the commented value 10 of line 219 in place of 1"
+# C with its comments' disconnected values: s = 8 ("//8", line 219), s1 = 5 ("OG is 5", line 221)
+- id: run_ext_C_disc
+  model: driver_profile_extremes
+  inputs: {n: cell_nodes_C, s: nd_stdev_dc_C_alt8, s1: nd_stdev_tdl_C_og}
+  outputs: {max_ND: maxND_C_disc, min_ND: minND_C_disc, max_ND1: maxND1_C_disc, min_ND1: minND1_C_disc}
+  note: "the commented values of lines 219 and 221; the S3 disconnected column's sigma_eta = 8 and sigma_eps = 5"
+# As shipped, Durotaxis version (D): 4 cell springs, s = ND_stdev = 10, s1 = 5. H has the same values.
+- id: run_ext_D
+  model: driver_profile_extremes
+  inputs: {n: cell_nodes_D, s: nd_stdev_D, s1: nd_stdev_tdl_D}
+  outputs: {max_ND: maxND_D, min_ND: minND_D, max_ND1: maxND1_D, min_ND1: minND1_D}
+# D with the "// 36" of line 215
+- id: run_ext_D36
+  model: driver_profile_extremes
+  inputs: {n: cell_nodes_D_alt, s: nd_stdev_D, s1: nd_stdev_tdl_D}
+  outputs: {max_ND: maxND_D36, min_ND: minND_D36, max_ND1: maxND1_D36, min_ND1: minND1_D36}
+  note: "the commented 36 of line 215 in place of 4"
+
+# ---- the stiffness profile's extremes (reconstructed: SetVariableSpringConstant is not in the release) ---
+- id: run_kc_C
+  model: kc_profile_extremes
+  inputs: {n: cell_nodes_C, sigma: stdev_kcell_C}
+  outputs: {omega: omega_kc_C, delta: delta_kc_C}
+- id: run_kc_C1
+  model: kc_profile_extremes
+  inputs: {n: cell_nodes_C, sigma: stdev_kcell_C_alt}
+  outputs: {omega: omega_kc_C1, delta: delta_kc_C1}
+  note: "the commented 1 of line 209"
+- id: run_kc_D36
+  model: kc_profile_extremes
+  inputs: {n: cell_nodes_D_alt, sigma: stdev_kcell_D}
+  outputs: {omega: omega_kc_D36, delta: delta_kc_D36}
+  note: "D's stdev_cell_spring_constant = 10 (the S2 Table's sigma_k), with the commented 36 cell springs"
+
+# ---- the code's stiffnesses and dampings in the S1 Table's units (reconstructed: one factor each) --------
+- {id: run_map_kl, model: stiffness_unit_map, inputs: {x: collagen_k_C, x_ref: substrate_k_C, k_ref: ks_p}, outputs: {k: kl_mapped}}
+- {id: run_map_kcl, model: stiffness_unit_map, inputs: {x: cell_collagen_link_k_C, x_ref: substrate_k_C, k_ref: ks_p}, outputs: {k: kcl_mapped}}
+- {id: run_map_kls, model: stiffness_unit_map, inputs: {x: substrate_collagen_link_k_C, x_ref: substrate_k_C, k_ref: ks_p}, outputs: {k: kls_mapped}}
+- {id: run_map_kc_D, model: stiffness_unit_map, inputs: {x: cell_k_D, x_ref: substrate_k_C, k_ref: ks_p}, outputs: {k: kc_mapped_D}}
+- {id: run_map_kmax_D, model: stiffness_unit_map, inputs: {x: kmax_duro_D, x_ref: substrate_k_C, k_ref: ks_p}, outputs: {k: kmax_mapped_D}}
+- {id: run_map_kmin_H, model: stiffness_unit_map, inputs: {x: kmin_duro_H, x_ref: substrate_k_C, k_ref: ks_p}, outputs: {k: kmin_mapped_H}}
+- {id: run_map_eta_l, model: damping_unit_map, inputs: {x: collagen_damping_C, x_ref: substrate_damping_C, eta_ref: eta_s_p}, outputs: {eta: eta_l_mapped}}
+- {id: run_map_eta_c, model: damping_unit_map, inputs: {x: min_cell_damping_C, x_ref: substrate_damping_C, eta_ref: eta_s_p}, outputs: {eta: eta_c_mapped}}
+- {id: run_map_eta_c_disc, model: damping_unit_map, inputs: {x: min_cell_damping_C_alt, x_ref: substrate_damping_C, eta_ref: eta_s_p}, outputs: {eta: eta_c_mapped_disc}}

@@ -1,0 +1,16 @@
+id: cell_damping_eq12
+name: spatial profile of the cell damping constant (Eq 12)
+role: model
+stated: {page: 30, quote: "Thus, to capture 2-D contact inhibition in 1-D, the damping constant follows Eq 12", where: "Eq 12"}
+equation: "eta_c(x_c) = beta_eta + gamma_eta (1/(sigma_eta sqrt(2 pi)) e^(-1/2 ((x_c - mu_eta)/sigma_eta)^2) - delta_eta)"
+inputs:
+  beta: {quantity: cell_damping_constant, unit: nN*s/um, description: "beta_eta; the S2/S3 Tables print no unit: taken in the unit of the S1 Table cell damping (0.55 nN um-1 s) and of Fig 8l"}
+  gamma: {quantity: cell_damping_constant, unit: nN*s/um, description: "gamma_eta; same unit assumption"}
+  delta: {quantity: profile_shift, unit: dimensionless, description: "delta_eta"}
+  sigma: {quantity: profile_width, unit: dimensionless, description: "sigma_eta, in nodes"}
+  mu: {quantity: cell_node_index, unit: dimensionless, description: "mu_eta, the centre node (not stated)"}
+  x: {quantity: cell_node_index, unit: dimensionless, description: "x_c, the node"}
+outputs:
+  eta: {quantity: cell_damping_constant, unit: nN*s/um}
+settings: {}
+stochastic: false

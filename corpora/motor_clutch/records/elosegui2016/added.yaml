@@ -83,3 +83,21 @@
   basis: "The note converts k_sub to Young's modulus 'by assuming a given adhesion radius ra as described previously' (refs. SN-1, SN-2) without the formula. k_sub = (4π/9) E r_a (the elastic half-space under a circular adhesion, as in Ghibaudo et al. 2008) gives c = 1.396; it maps 1 pN/nm to about 0.42 kPa at r_a = 1700 nm, consistent with Andreu et al. 2021 calling 1 pN/nm a ~0.5 kPa gel taken from this paper"
   alternatives: ["3.1416"]
   stands_for: "k_sub = c E r_a"
+# ==== cross-validation against owen2017 (2026-11-22): the substrate modulus at a 3D fibrin adhesion ====
+# Used only by validations.yaml (val_relspeed_owen2017_*); no run of this record's own uses it.
+- id: E_owen_fibrin_added
+  quantity: substrate_rigidity
+  unit: kPa
+  printed: "0.27"
+  basis: >-
+    clutch_talin_sim takes the Young's modulus of a flat gel and turns it into k_sub = c E r_a (r_a = 1700 nm,
+    ksub_factor_added). owen2017's fibroblasts sit in 3D fibrin, for which neither paper gives the spring an
+    adhesion pulls against. The bulk gel modulus printed by owen2017 is used: "a shear modulus of 90 Pa
+    corresponds to a Young's modulus of" 270 Pa with Poisson ratio 0.5 (owen2017/E_270, Fig. S10 caption,
+    Supp. p. 17). This treats the fibrin around an adhesion as a continuous half-space, which owen2017 argues
+    it is not (node stiffness varies between nodes, Fig. 6B). Alternatives: the bulk moduli without and with
+    cells, "~200 and ~300 Pa" (owen2017 p. 8); and the moduli that, through this model's own c r_a, give
+    owen2017's clutch-model κ = 1 pN/nm (0.42 kPa) and fibre-network nodes of 2.4 and "up to ~24 nN/um"
+    (1.0 and 10.1 kPa; owen2017 p. 8, Fig. 6B).
+  alternatives: ["0.2", "0.3", "0.42", "1.0", "10.1"]
+  stands_for: "E of the substrate at an adhesion of a fibroblast in owen2017's 3D fibrin gel"

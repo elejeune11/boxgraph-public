@@ -1,0 +1,267 @@
+# mapping: b's input symbol -> expression in a's input symbols, numbers in each model's port units.
+# ---- within this paper ----
+- id: rel_eq13_to_eq14
+  kind: reduces_to
+  a: owen2017/clutch_velocity_eq13
+  b: owen2017/clutch_velocity_eq14
+  mapping: {Ftot: "Ftot", k0: "k0", kappa: "kappa", Ct: "Ct", alpha_c: "alpha_c"}
+  output_map: {v: v}
+  limit: {kon: "oo"}
+  regime: {Ftot: [100, 1000], kon: [0.5, 5], k0: [0.5, 2], kappa: [0.5, 5], Ct: [200, 500], alpha_c: [-0.15, 0.05]}
+  provenance: stated
+  citation: {page: 23, printed_page: "Supp. p. 6", quote: "causes Cb to approach the physically meaningful upper limit of Cb = Ct", where: "eqn. 14"}
+  assumptions:
+    - "the paper's limit Cb -> Ct is realized in eqn. 11 by kon -> oo (Cb = (kon Ct - αc Ftot)/(kon + k0) -> Ct); the paper reaches it by 'increasing Ftot', which for αc < 0 raises Cb but does not bound it by Ct"
+    - "both equations carry the stated condition v = 0 when k0 <= -αc Ftot/Ct"
+- id: rel_catch_to_slip
+  kind: reduces_to
+  a: owen2017/off_rate_catch_eq7
+  b: owen2017/off_rate_slip_eq6
+  mapping: {ks: "ks", F: "F", delta_s: "delta_s", kT: "kT"}
+  output_map: {koff: koff}
+  limit: {kc: "0"}
+  regime: {ks: [0.1, 2], kc: [0.1, 2], F: [0, 10], delta_s: [0.1, 1], delta_c: [0.1, 2], kT: [4.1, 4.3]}
+  tolerance: 1.0e-5
+  provenance: proposed
+  reason: >-
+    Eqn. 7 is eqn. 6 plus a catch term kc exp(-F δc β), introduced "Alternatively, if the interaction behaves
+    as a catch bond"; with no catch pathway (kc -> 0) it is the slip bond of eqn. 6.
+# ---- to other records (proposed: this paper does not say its equations are theirs) ----
+- id: rel_chan_off_rate
+  kind: same_as
+  a: chan2008/off_rate_eq1
+  b: owen2017/off_rate_slip_eq6
+  mapping: {ks: "koff", F: "Fclutch", delta_s: "4.1/Fb", kT: "4.1"}
+  output_map: {koff: koff_star}
+  regime: {koff: [0.01, 10], Fclutch: [0, 20], Fb: [1, 10]}
+  provenance: proposed
+  reason: >-
+    Both are the Bell slip-bond off-rate of one clutch under its own tension. Owen's eqn. 6, ks exp(F δs β), is
+    Chan and Odde's koff exp(Fclutch/Fb) with the characteristic force Fb = kBT/δs. Owen cites Chan and Odde
+    (2008) among the "earlier theoretical work" that inspired the model (p. 8).
+  assumptions:
+    - "kBT is fixed at 4.1 pN nm; only δs/kBT = 1/Fb enters"
+- id: rel_bangasser_catch_slip
+  kind: same_as
+  a: bangasser2013/catch_slip_eq9
+  b: owen2017/off_rate_catch_eq7
+  mapping: {ks: "koff", kc: "koffc", F: "F", delta_s: "4.1/Fb", delta_c: "4.1/Fc", kT: "4.1"}
+  output_map: {koff: koff_star}
+  regime: {F: [0, 20], koff: [0.01, 1], Fb: [1, 10], koffc: [0.01, 1], Fc: [1, 10]}
+  provenance: proposed
+  reason: >-
+    Both are a sum of a slip and a catch exponential: Owen's eqn. 7 ks exp(F δs β) + kc exp(-F δc β), and
+    Bangasser et al.'s Eq. 9 koff exp(F/Fb) + koff,c exp(-F/Fc), with Fb = kBT/δs and Fc = kBT/δc. Owen cites
+    Bangasser et al. (2013) for clutch models in which actin velocity is set by a force balance (p. 10), not for eqn. 7.
+  assumptions:
+    - "kBT is fixed at 4.1 pN nm; only the ratios δs/kBT and δc/kBT enter"
+- id: rel_chan_ksub
+  kind: same_as
+  a: chan2008/ksub_eq13
+  b: owen2017/continuum_stiffness
+  mapping: {E: "E", r: "2*L/1000", eta: "nu"}
+  output_map: {k: ksub}
+  regime: {E: [100, 100000], L: [100, 2000], nu: [0.3, 0.5]}
+  provenance: proposed
+  reason: >-
+    Owen's effective stiffness of a continuous gel loaded over a disc of radius r, πEr/2(1+η), is Chan and
+    Odde's substrate spring constant πEδ/(1+υ) with δ = r/2. Through this formula a single network node's
+    stiffness κ plays the part of the 2D substrate spring κsub, and Owen uses it that way (Supp. p. 3 and the
+    '~50 kPa' equivalent modulus of p. 8). Owen gives no citation for the formula.
+  assumptions:
+    - "Owen's r is in um and Chan's δ in nm; the outputs nN/um and pN/nm are the same unit"
+# No reduces_to between owen2017/clutch_velocity_eq13 and a 2D motor-clutch model (chan2008/motor_clutch,
+# bangasser2013/motor_clutch_ssa, bangasser2017/cms): Owen's model takes the total adhesion force Ftot as an
+# input. It has no motors and no motor force-velocity law, and it is a deterministic steady state with a
+# linearized off-rate (eqn. 10). The 2D models are stochastic, produce load-and-fail cycles, and set the force
+# from the motors and the substrate spring. No limit of their parameters gives eqn. 13's closed form, and
+# eqn. 13 has no parameters that recover their motor-limited flow. Both treat the substrate as one linear
+# spring (κ here, κsub there), so with κ = κsub the substrate element is the same (rel_chan_ksub covers the
+# 2D stiffness formula). Owen's κ is a local node stiffness from a fibre network, not one from the bulk modulus.
+# No relation to baker2015: Owen cites Baker et al. (2015) once, as an example of "ECM remodeling/ligand
+# clustering" (p. 10), and takes no model or value from it. Baker's models are processing steps
+# (membrane_indentation, uv_dose_exposure, soft_stiff_ratio, histogram_moments). None is a model Owen uses.
+# The only shared form is the mean of a binned histogram (baker2015/histogram_moments, owen2017/hist_mean_*),
+# which is too plain to mean anything, applied to different quantities.
+# No relation to cao2017 (Cao et al., PNAS, May 2017). Neither paper cites the other (checked both reference
+# lists and texts), so no relation is stated. None is proposed either:
+# - the shape match cao2017/coarse_grained_fa_ecm with modulus_from_stiffness (a modulus from a length and a
+#   stiffness) is spurious. Cao's is a not-runnable COMSOL shear-lag solution for the effective modulus of an FA
+#   band, integrin layer and ECM, with ten inputs and no closed form. Owen's inverts the disc-load formula
+#   kappa = pi E r/2(1+eta) for one network node. No mapping of Cao's inputs gives Owen's three.
+# - cao2017/keff_1d (the stiffness of the 1D shear-lag FA-ECM spring) and continuum_stiffness (a gel loaded over a
+#   disc) are both effective adhesion stiffnesses. But keff_1d has no modulus or radius input, and its limits
+#   (L -> 0, kp -> oo, L -> oo; see cao2017/relations.yaml) never give a pi E r/2(1+eta) half-space spring.
+# - Both 2D discrete fibre networks follow Abhilash et al. (2014) (Cao ref. 14; Owen p. 8, with Notbohm et al.
+#   2015a). Cao's dfn_network has breakable cross-links and a circular void under uniform radial contraction,
+#   and its output is fibre recruitment. Owen's fiber_network_point_load has a point load at one node and a
+#   pinned perimeter, and its output is that node's displacement. Both are not runnable, and their loads and
+#   outputs differ, so a common ancestor is not a testable relation between them.
+# Neither paper takes a value from the other. Cao's 140 MPa fibre modulus is from Baker et al. (2015) and Owen's
+# fibrin moduli are from Collet et al. (2005), so cited.yaml gets no link.
+# No relation to craig2015 (Craig, Stricker, Gardel and Mogilner, Phys. Biol. 2015). Owen does not cite it (checked
+# the reference list and text; the Gardel papers Owen cites are 2008 and 2010), so no relation is stated. None is
+# proposed either:
+# - the shape match craig2015/lamellipodial_width with fiber_network_point_load (a length from lengths and a
+#   pressure-like input) is spurious. Craig's is the scaling X ~ sqrt(2 eta h V0 / T-bar) of the lamellipodial width,
+#   from a viscous actin flow balanced by traction. Owen's is a not-runnable finite-element fibre network whose
+#   output is a node's displacement under a point force. No mapping of either model's inputs gives the other's.
+# - craig2015/hill_eq11 (V_LM = Vmax Ftot/(Fk + Ftot)) and clutch_velocity_eq13/eq14 (v against Ftot) both relate a
+#   speed to a total force, but they are different quantities and mechanisms. Craig's is the lamellar flow speed of
+#   a viscous network with frictional, flow-weakened adhesion, and its traction rises with flow. Owen's is the slip
+#   speed of actin relative to one adhesion of elastic clutches (κ, Ct, k0, αc), with a pole at αc Ftot = kon Ct.
+#   No limit makes either form the other. They share only a linear small-force regime (V ∝ Ftot), which is too
+#   plain to mean anything.
+# - craig2015/clutch_profile, clutch_peak and uniform_flow_eq10 are a dimensionless 1D continuum (viscous flow,
+#   myosin advection, adhesion density exp(-V/v*)). It has no substrate stiffness, so Owen's local effective
+#   stiffness κ has no counterpart in it.
+# Neither paper takes a value from the other, so neither cited.yaml gets a link.
+# No relation to gardel2008 (Gardel et al., JCB 2008). Owen cites it three times, never for a model: as one of the
+# observations behind the molecular clutch picture (p. 2, "Alexandrova et al., 2008; Gardel et al., 2008"), for the
+# 2D link between actomyosin structure and proximal traction (p. 3), and for actin speeds on glass "comparable" to
+# Owen's own (p. 9). None is proposed either:
+# - Gardel's only models (switch_speed_claim, switch_speed_by_condition) are a claim in words: traction is maximal at
+#   one threshold F-actin speed Vc = 8-10 nm/s (v_peak = v_c). Owen's clutch_velocity_eq13/eq14 give the actin speed
+#   relative to an adhesion from the total adhesion force. For alpha_c >= 0 that speed rises monotonically with Ftot
+#   up to the pole at alpha_c Ftot = kon Ct, so force against speed has no interior maximum. No input of Owen's maps
+#   to Vc, and no limit of eqn. 13 gives a biphasic switch.
+# - Gardel's quantities (traction stress in an FA, F-actin speed in the lamella of PtK1 cells on 2D gels) are not the
+#   ones Owen's 3D models predict (relative actin-adhesion speed, node stiffness, fibrin displacement).
+# Owen takes no number from Gardel: the p. 9 comparison of actin speeds quotes no value, so cited.yaml gets no link.
+# No relation to kong2009 (Kong et al., JCB 2009). Owen cites it twice, both on Supp. p. 6 (PDF p. 23), as a source of
+# the catch-bond force sensitivity αc = -0.15 ("based on the catch bond formed by integrins ... (Kong et al. 2009;
+# Chen et al. 2012)"), never for a model. None is proposed either:
+# - Kong's models are series_bonds (two bonds in series: 1/tau = 1/tau_1 + 1/tau_2) and survival_first_order
+#   (ln N = ln N0 - k t, a first-order survival plot). Neither is a force law, so neither maps onto Owen's off-rate
+#   laws (off_rate_slip_eq6, off_rate_catch_eq7) or the linearization koff = k0 + αc F (eqn. 10). Kong shows its
+#   catch-slip behaviour only as measured lifetimes against force; it fits no catch-slip formula. The comparison
+#   of Owen's eqn. 7 with Kong's lifetimes would be a validation against data, not a relation between models, and
+#   Owen prints no ks, kc, δs or δc to run it with (q_alpha_source in Owen's questions).
+# - Owen's steady-state bound-clutch balance (eqn. 11, inside clutch_velocity_eq13/eq14) has binding and unbinding.
+#   Kong's survival_first_order has unbinding only, from a fixed force-clamp population. The shared first-order
+#   decay is too plain to mean anything.
+# Value links: Owen's alpha_m015 (from_source: kong2009) has no counterpart in Kong. Kong prints no αc, no slope of
+# off-rate against force, and no -0.15 (checked the text). The value is Owen's own reading of Kong's and Chen's data,
+# so it stays unlinked and cited.yaml gets no line.
+# bangasser2013 (pair review): Owen cites Bangasser et al. (2013) once, on p. 10, for velocities "set by the balance
+# of cytoskeletally generated force and drag on actin generated by mechanical linkages to cellular adhesions". That
+# is a mechanism, not a statement about a model of either paper, so no relation is stated. The one proposed relation
+# is rel_bangasser_catch_slip above (Eq. 9 = eqn. 7, verified). No other is entered:
+# - catch_slip_eq9 -> off_rate_slip_eq6 (reduces_to, koffc -> 0) already follows from rel_bangasser_catch_slip with
+#   rel_catch_to_slip, and also from rel_catch_slip_to_chan_off_rate (bangasser2013) with rel_chan_off_rate.
+# - motor_clutch_ssa / optimal_stiffness against clutch_velocity_eq13/eq14: see the note on 2D motor-clutch models above.
+# - Bangasser's range_eq2, sensitivity_eq3, sr_eq4 and the scale_*_eq5 multipliers are processing steps of its
+#   sensitivity analysis. binding_time_eq10 and force_velocity_step5 have no counterpart in Owen.
+# Owen takes no number from Bangasser (no datum has from_source bangasser2013/ref-bangasser2013), and Bangasser
+# (2013) cannot cite Owen (2017), so neither cited.yaml gets a line.
+# No relation to bangasser2013b (Bangasser and Odde, Cell Mol Bioeng 2013; checked 2026-11-22). Owen does not cite it:
+# its only "Bangasser et al., 2013" (ref-bangasser2013, p. 10) is Bangasser, Rosenfeld and Odde, Biophys J 105, the
+# record bangasser2013 (the reference list prints no Bangasser and Odde paper). So no relation is stated. None is
+# proposed either:
+# - the shape match clutch_ensemble_cycle with clutch_velocity_eq13 (a velocity from a force, rates and a stiffness)
+#   does not make a testable relation. Eqn. 13 takes the total adhesion force Ftot as an input and returns the steady
+#   slip speed of actin relative to one adhesion, with the linearized off-rate k0 + αc F (eqn. 10). The ensemble ODEs
+#   (Eqs. 8-12, 19) have no force input: the force is an output of motors (nm, Fm, vu) loading a substrate spring, and
+#   the model has no steady state, only a load-and-fail cycle whose outputs are the cycle time and the cycle-mean
+#   flow. No expression in the ODEs' inputs gives Ftot or αc, so no mapping exists, and no limit of either model
+#   gives the other (see the note on 2D motor-clutch models above, which applies to the ensemble ODEs too).
+# - The bound-clutch balance is shared in form: Owen's eqn. 11, Cb = kon Ct/(kon + koff), is the steady state of
+#   Eq. 8, dPb/dt = (1 - Pb) kon - Pb <k*off>, with Pb = Cb/Ct. No model of either record outputs that steady state
+#   (in bangasser2013b it is a state inside the cycle ODEs), and a first-order binding balance is too plain to mean
+#   anything, so no helper model is added.
+# - clutch_offrate_eq5 (koff exp(Fc/Fb)) is Owen's off_rate_slip_eq6 with δs β = 1/Fb; that relation already follows
+#   from rel_chan_off_rate with bangasser2013b's rel_chan_offrate_same_as_eq5, so it is not entered again.
+# Neither paper takes a value from the other (no datum has from_source bangasser2013b), so neither cited.yaml gets a line.
+# chan2008 (pair review, 2026-11-22): the relations to Chan and Odde are rel_chan_off_rate and rel_chan_ksub above
+# (both proposed, both verified). Owen cites Chan and Odde (2008) four times, never saying that one of its equations
+# is one of Chan's. Those four are: "Inspired by earlier theoretical work (Schwarz et al., 2006; Chan and Odde, 2008;
+# ...)" for the analytical model (p. 8); fast actin speeds on soft substrates (p. 9); lamellar actin speeds on flat
+# surfaces "consistent with" small positive αc (Supp. p. 6, PDF p. 23); and "the maximal possible actin speed is
+# limited by the finite maximal rate of myosin contraction (Chan & Odde 2008), an effect not captured in this simple
+# model" (PDF p. 41). The last one states a difference, not a relation, and "inspired by" names no mapping. So no
+# relation is stated. Nothing else is proposed:
+# - the shape match chan2008/cerruti_force_eq11 with fiber_network_point_load (a length from lengths and a
+#   pressure-like modulus) is spurious. Chan's Eqs. 11-12 invert the Cerruti half-space solution: they take the
+#   displacements of two marker beads and give the point force T and the contact-bead distance δ. Owen's network is
+#   a not-runnable finite-element fibre network: a point force at one node goes in and that node's displacement comes
+#   out. The inputs (bead displacements and separation, against κ, fibre modulus, diameter and spacing) and the
+#   outputs do not correspond. The network's continuum counterpart is Chan's ksub_eq13, which rel_chan_ksub covers.
+# - modulus_from_stiffness inverts continuum_stiffness, so its link to ksub_eq13 follows from rel_chan_ksub. It is
+#   not a same_as and is not entered again. chan2008/force_velocity_eq3 (myosin force-velocity) has no counterpart,
+#   because Owen's model has no motors (p. 41). For chan2008/motor_clutch and motor_clutch_E against
+#   clutch_velocity_eq13/eq14, see the note on 2D motor-clutch models above.
+# Owen takes no number from Chan (no datum has from_source chan2008/ref-chan2008; the p. 9 and p. 23 comparisons of
+# actin speeds quote no value of Chan's). Chan (2008) cannot cite Owen (2017). So neither cited.yaml gets a line.
+# chaudhuri2015 (pair review, 2026-11-22): Owen cites Chaudhuri et al. (2015) once, on p. 10, as an example of
+# "ECM remodeling/ligand clustering (Baker et al., 2015; Chaudhuri et al., 2015)", one of the effects besides local
+# stiffness that "must also be considered". That is a mechanism, not a statement about a model of either paper, so no
+# relation is stated. None is entered as proposed either:
+# - the shape match chaudhuri2015/bell_off_rate with off_rate_catch_eq7 is real but already in the atlas by chains of
+#   verified relations: bell_off_rate is the same as chan2008/off_rate_eq1 (rel_chan_off_rate_same_as_bell_off_rate in
+#   chaudhuri2015), which is the same as off_rate_slip_eq6 (rel_chan_off_rate, with Frup = kBT/δs), and eqn. 7
+#   reduces to eqn. 6 at kc -> 0 (rel_catch_to_slip; also rel_catch_slip_to_bell_off_rate in chaudhuri2015 through
+#   bangasser2013/catch_slip_eq9). A direct same_as or reduces_to would repeat these, so it is not entered again.
+# - chaudhuri2015/clutch_springs_nolattice and lattice_spreading against clutch_velocity_eq13/eq14: see the note on 2D
+#   motor-clutch models above. Chaudhuri's models have motors (vu, Fstall) and give a spreading speed; Owen's take Ftot
+#   as an input, have no motors and give the actin speed relative to one adhesion.
+# - chaudhuri2015/retrograde_flow_eq1 (v_retrograde = vu (1 - ΣFclutch/Fstall)) is a myosin force-velocity law, which
+#   Owen's model does not have (PDF p. 41). chaudhuri2015/burgers_eq2 is a viscoelastic substrate element; Owen's
+#   substrate is an elastic node stiffness κ (continuum_stiffness, fiber_network_point_load), with no relaxation time,
+#   so the elastic limit of a Burgers element is only a spring, too plain to relate to κ's network origin.
+# Owen takes no number from Chaudhuri (no datum has from_source chaudhuri2015/ref-chaudhuri2015), and Chaudhuri (2015)
+# cannot cite Owen (2017), so neither cited.yaml gets a line.
+# elosegui2016 (pair review, 2026-11-22): Owen cites Elosegui-Artola et al. (2016) twice, never for a model. One citation is
+# for fast 5-20 um/min actin speeds "at the periphery of cells adhering to soft substrates" (p. 9). The other is for the
+# value κ = 1 pN nm-1 in the list of reasonable values for eqns 13-14 (Supp. p. 6, PDF p. 23). So no relation is stated.
+# None is proposed either:
+# - the shape match elosegui2016/clutch_no_talin_sim with clutch_velocity_eq13 (a velocity from a force, rates and a
+#   stiffness) gives no testable relation, for the reasons in the note on 2D motor-clutch models above. Elosegui's
+#   simulation is Chan and Odde's stochastic scheme (rel_chan_clutch_slip_limit in elosegui2016). Its force is an
+#   output of myosin motors (nm, Fm, vu) loading a substrate spring ksub = c E ra, and its actin_flow is a run-averaged
+#   retrograde flow. Eqn. 13 takes Ftot as an input, has no motors, and gives the steady slip speed of actin relative
+#   to one adhesion. No expression in Elosegui's inputs gives Ftot or the linear sensitivity αc, so no mapping exists.
+#   The same holds for clutch_talin_sim, which adds talin unfolding and integrin recruitment, with no counterpart here.
+# - Elosegui's catch-bond off-rate (koff_a e^(koff_b F) + koff_c e^(koff_d F) [+ koff_g term]) is a sum of exponentials
+#   like Owen's eqn. 7. It is a step inside the simulations, not a model of its own, so there is no model to relate
+#   off_rate_catch_eq7 to.
+# - talin_unfolding_time (1/k_unf with a slip-bond k_unf) and unfold_refold_crossing are about talin unfolding,
+#   not clutch release. The shared Bell exponential with off_rate_slip_eq6 is too plain to mean anything, and
+#   the outputs (a time, a crossing force) are not a rate. threshold_sensitivity has no counterpart.
+# Value link: kappa_1 -> elosegui2016/kc_table in cited.yaml. Elosegui's only clutch spring constant is 1 nN/nm, against
+# Owen's 1 pN/nm, so the build's cited-value check shows the 1000-fold difference. Owen's p. 9 actin speeds quote no
+# datum of Owen's own, and Elosegui (2016) cannot cite Owen (2017), so elosegui2016 gets no cited.yaml line.
+# mekhdjian2017 (pair review, 2026-11-22): Owen cites Mekhdjian et al. (2017) once, on p. 10, with Bangasser et al. (2013),
+# for actin velocities "set by the balance of cytoskeletally generated force and drag on actin generated by mechanical
+# linkages to cellular adhesions". That names a mechanism, not a model of either paper, so no relation is stated.
+# Mekhdjian (same year, same journal) never cites Owen. One relation is proposed below (rel_mekhdjian_modulus_eq5). Not entered:
+# - mekhdjian2017/bell_off_rate against off_rate_slip_eq6 / off_rate_catch_eq7 (the "same shape", rate from force and
+#   rate): real, but already in the atlas by chains of verified relations. bell_off_rate is chan2008/off_rate_eq1 with
+#   the signs turned positive (rel_chan_off_rate_same_as_clutch_off_rate in mekhdjian2017), off_rate_eq1 is eqn. 6 with
+#   Fb = kBT/δs (rel_chan_off_rate), and eqn. 7 reduces to eqn. 6 at kc -> 0 (rel_catch_to_slip). Mekhdjian uses only
+#   the slip bond (Supplement p. 24), so a direct relation would repeat these.
+# - motor_clutch_reinforced against clutch_velocity_eq13/eq14: see the note on 2D motor-clutch models above. Mekhdjian's
+#   simulation has motors, a substrate spring from Eq. 5 and clutch recruitment (kadd, nclutch,max); Owen's eqns 13-14
+#   take Ftot as an input, have no motors and a linearized off-rate. No mapping gives Ftot or αc from Mekhdjian's inputs.
+# - spread_area_pss, traction_optimum and total_force_product have no counterpart here.
+# Owen takes no number from Mekhdjian (no datum has from_source mekhdjian2017/ref-mekhdjian2017), and Mekhdjian takes
+# none from Owen, so neither cited.yaml gets a line. Validating Mekhdjian's clutch model against Owen's 3D speeds is
+# q_3d_validation_of_2d_models (it would need added stiffness, motor and clutch numbers).
+- id: rel_mekhdjian_modulus_eq5
+  kind: scales_as
+  a: mekhdjian2017/modulus_eq5
+  b: owen2017/modulus_from_stiffness
+  mapping: {k: "ksub", r: "r_adh/1000", eta: "0.5"}
+  output_map: {E: E}
+  regime: {ksub: [0.01, 100], r_adh: [100, 2000]}
+  provenance: proposed
+  reason: >-
+    Both papers turn a 1D spring at an adhesion into the Young's modulus of an equivalent continuous substrate
+    loaded over a circular contact of radius r. Mekhdjian's Eq. 5 (after Ghibaudo et al.) is E = 9κ/(4πr). Owen's
+    inverse of the Supplemental Discussion formula is E = 2(1+η)κ/(πr), used for the '~50 kPa' equivalent moduli of
+    network nodes (p. 8). Both are linear in κ/r and differ only in the prefactor: at η = 0.5 Owen's gives 4/3 of
+    Mekhdjian's E for the same κ and r. So a node stiffness from Owen's network maps to a 2D clutch-model substrate
+    modulus by either rule, up to that factor. Neither paper relates the two formulas.
+  assumptions:
+    - "η = 0.5 (incompressible), Owen's assumed gel Poisson ratio (data nu_gel); Mekhdjian's Eq. 5 has no Poisson ratio"
+    - "pN/nm and nN/um are the same unit; Mekhdjian's radius is in nm, Owen's in um; both outputs in kPa"
+    - "substrate_stiffness (Mekhdjian's κsubstrate) and node_effective_stiffness (Owen's κ) both stand for the spring the adhesion pulls against (a correspondence of quantities, not merged)"

@@ -1,0 +1,537 @@
+- id: q_nc_formula
+  kind: possible_error
+  about: [clutch_count, nc_si, nc_table1]
+  text: >-
+    SI legend B prints n_c ~ rho_c/(l_prot d_prot pi), which has units of 1/length^4, while legend A
+    (to which B refers) multiplies the motor density by the cylinder surface. The record computes
+    rho_c pi l_prot d_prot (= 487 with the printed 3.1 x 10^3 /um^2, 1 um, 50 nm); 470 is printed.
+    Likewise legend A gives 3.6 x 10^3 x pi x 1 x 0.05 = 565 against the printed 550.
+  citation: {page: 19, quote: "The number of clutches can be approximated as", where: "SI legend B"}
+- id: q_ks_exponent_ocr
+  kind: reading
+  about: [ks_hi_si]
+  text: >-
+    The text layer of SI p. 20 and p. 21 reads the upper stiffness as "3.5 x 10^7" pN/um; the page
+    images show 3.5 x 10^4, as Table 1 does, and 2 pi (500 nm)(100 kPa)/9 = 3.49 x 10^4 pN/um. The
+    image value is recorded.
+- id: q_kc_range
+  kind: unexplained_difference
+  about: [nc_table1]
+  text: >-
+    Table 1 prints the clutch stiffness range as [0.1 - 2] pN/nm, while SI legend D reports clutch
+    component stiffnesses within [0.2 - 2] pN/nm. Neither feeds a printed result; noted only.
+  citation: {page: 20, quote: "have been estimated in multiple", where: "SI legend D"}
+- id: q_mf_numerics
+  kind: numerics
+  about: [mean_field, mean_field_dimensional, mean_field_optimum]
+  text: >-
+    The paper solves Eqs. 3-4 by finite differences (upwind first derivative, trapezoidal integrals,
+    a Lorentzian of width 5 x 10^-3 for the delta function, forward-backward Euler), with grid,
+    domain, time step, run length and averaging window not stated. The record solves the same
+    equations by the method of characteristics (cohorts of clutches by binding position), which has
+    no numerical diffusion. Its settings (cohort spacing h, cfl, dt_max, dt_min, run length
+    load_times (1 + F/K omega), average over the last 75%) are this record's choices. Coarser
+    settings (cfl 0.05, h 0.02, dt_max 0.01) gave time averages off by up to 25% on soft substrates
+    for F = 1 (a different branch of load-and-fail cycles); the defaults agree with Fig. 1(B) and
+    change by under 1.5% on halving.
+  citation: {page: 46, quote: "We solve Eqs. (3-4) of the main text numerically for a range of parameter values", where: "SI, numerical solution"}
+- id: q_avg_window
+  kind: unstated_input
+  about: [mean_field]
+  text: >-
+    How the 'long time-averaged' traction is formed (run length, transient discarded) is not
+    stated. The record averages over the last 75% of a run of 10 substrate loading times.
+  citation: {page: 4, printed_page: "3372", quote: "we use an overline symbol acting on a variable to denote the long", where: text}
+- id: q_fig1b_rigid
+  kind: unexplained_difference
+  about: [T_fig1b_F10, rigid_high_motor]
+  text: >-
+    On stiff substrates the F = 10 line of Fig. 1(B) levels off at about T* = 0.11, while the
+    paper's own high-motor rigid limit (Eq. S57) for tau = 10, omega = 2000 gives 0.125 and this
+    record's mean-field solver gives 0.124 at K = 1-8. The stiff end (K >= 0.03) is not compared
+    by sweep because the solver needs many small steps there (minutes per point); the rigid limit is
+    covered by Eqs. S31-S36 and S55-S57 against Figs. 4 and 5.
+- id: q_fig1b_F10_drop
+  kind: unexplained_difference
+  about: [T_fig1b_F10, mean_field]
+  text: >-
+    For F = 10 the record's mean-field solution agrees with the Fig. 1(B) line at K = 1.2 x 10^-4,
+    10^-3 and 2 x 10^-3, but near the fall it differs: about 0.67 against the line's 0.64 at
+    K = 3 x 10^-3, and 0.30 against 0.34 at K = 10^-2. The fall is steep there, so the difference may
+    come from the discretisation (the paper's upwind scheme adds numerical diffusion) or from where
+    the time average starts; neither is stated.
+- id: q_eq6_vs_numerics
+  kind: unexplained_difference
+  about: [kopt_eq6, E_opt_s2]
+  text: >-
+    For the SI Table 2 parameter set, Eq. 6 (C2 = 0.4, C3 = 0.05) gives kappa_s^opt = 1.38 pN/nm,
+    i.e. E = 4.0 kPa with legend E, against the printed optimum of 2.7 kPa; the mean-field model
+    run here puts the optimum near 2.8 kPa. Eq. 6 is a scaling law with constants fitted to Fig. 2(F)
+    and S3 (F = 1, 2, 10; tau >= 0.5; omega >= 200), and this set (F = 1.38, tau = 1,
+    omega = 141) lies at the edge of that fit.
+- id: q_fig2f_symbols
+  kind: choice
+  about: [kopt_eq6_dimensionless, Kopt_fig2f_tau10]
+  text: >-
+    Fig. 2(F) and S3 show Eq. 6 against the numerical optima of the mean-field model (open symbols);
+    only Eq. 6's line is read and checked here. The symbols were not read (same colour as the line,
+    partly overlapping) and the mean-field optimum was not recomputed across omega (each optimum is a
+    scan of mean-field runs at omega up to 2000, minutes each). Whether Eq. 6 approximates the
+    mean-field optimum is tested only for the SI Table 2 set (cmp_E_opt_eq6_s2).
+- id: q_left_out_models
+  kind: choice
+  about: [mean_field]
+  text: >-
+    Not checked: the critical activity Eq. 5 / S20 (C1 = 0.4 fitted to the symbols of Fig. 2(C)),
+    the clutch-stiffness optimum (Fig. 3, kappa_c^opt about 3.3 pN/nm, printed as approximate), the
+    low-F asymptotes S43-S52 (dashed lines of Fig. 4), the optima F^opt and omega^opt of Fig. 5(A) and
+    the inset of 5(B), the reinforcement model Eq. 7 / S59-S73 (Figs. 6, S5, S6) and the catch-bond
+    model S86-S88 (Fig. S7).
+- id: q_rigid_root
+  kind: choice
+  about: [rigid_steady_state]
+  text: >-
+    Eq. S34 can have more than one admissible root v_e*; the paper does not say which is plotted.
+    The model takes the smallest (highest traction). In the compared ranges a single root was found.
+- id: q_stochastic_agreement
+  kind: overstated_claim
+  about: [mean_field]
+  text: >-
+    The paper states very good agreement between the mean-field and stochastic solutions in all
+    figures. The stochastic model's code and settings are not given, and its symbols are not read
+    here, so this claim is not tested by the record.
+  citation: {page: 4, printed_page: "3372", quote: "We find a very good agree", where: text}
+
+# ---- added in audit ----
+- id: q_stall_bistable
+  kind: unexplained_difference
+  about: [T_stall_F05, mean_field, rigid_steady_state, cmp_stall_F05_stiff]
+  text: >-
+    The paper states T* = F for F = 0.25 and F = 0.5 over a wide range of stiffness (p. 5; Fig. 1(B),
+    tau = 10, omega = 2000, the F = 0.5 line flat at 0.5 up to K = 10). This record's mean-field solver
+    gives T* = 0.50 at K = 10^-3 but 0.16 at K = 1 for F = 0.5. On a rigid substrate Eq. S34 has two
+    admissible roots for these parameters: v_e* = 3.5 (T* = 0.50, the stalled branch) and v_e* = 2716
+    (T* = 0.16, a slipping branch). Started from no bound clutches and free-flowing actin, the solver
+    reaches the slipping branch on stiff substrates; the paper's line follows the stalled one. Which
+    branch the time-dependent mean-field model reaches depends on the initial condition, which the
+    paper does not state (q_mf_initial). The claim holds for F = 0.25 at both stiffnesses.
+- id: q_mf_initial
+  kind: unstated_input
+  about: [mean_field, mean_field_dimensional, mean_field_optimum]
+  text: >-
+    The initial condition of Eqs. 3-4 (density of bound clutches and actin speed at t* = 0) is not
+    stated in the main text or in the SI's numerical method (p. 46-47). The record starts from no bound
+    clutches. Where the model is bistable (q_stall_bistable) the initial condition selects the branch.
+  citation: {page: 46, quote: "We solve Eqs. (3-4) of the main text numerically for a range of parameter values", where: "SI, numerical solution"}
+- id: q_eq5_vs_fig1b
+  kind: unexplained_difference
+  about: [critical_activity_eq5, C1_eq5, F05_fig1b]
+  text: >-
+    Eq. 5 with C1 = 0.4 gives F_c-i^crit = 0.36 at tau = 10 (run_eq5_tau10), so a protrusion with
+    F = 0.5, tau = 10 should be in the balanced regime, yet the paper presents F = 0.5 (tau = 10,
+    omega = 2000, Fig. 1(B)) as clutch-dominated with T* = F, and this record's mean-field solver also
+    stalls at F = 0.5, K = 10^-3. By eye the dashed line of Fig. 2(C) reaches about 0.27 at tau = 10
+    and 0.15 at tau = 1, i.e. C1 near 0.3, not 0.4; this is for the figure reading to check
+    (read the dashed line of Fig. 2(C) against critical_activity_eq5).
+  citation: {page: 7, printed_page: "3375", quote: "is a constant that we estimate by fitting", where: "Eq. 5"}
+- id: q_caption_c2_c3
+  kind: possible_error
+  about: [kopt_eq6, kopt_eq6_dimensionless, C2_eq6, C3_eq6]
+  text: >-
+    The Fig. 2 caption (p. 6) gives t*_rupt ~ (C2/F + 1/K omega)/(1 + 1/tau), while the SI (p. 28) writes
+    t_rupt with C3 in that place (C3 kappa_s vu/(koff nm Fm), i.e. C3 K omega/F inside the bracket) and
+    Eq. 6 has C3 multiplying tau/F; the caption's C2 appears to be C3. Equating the caption's
+    t*_bind ~ 1/(tau + 1) with t*_rupt gives K = (tau/omega)/(1 - C tau/F) with prefactor 1; the
+    prefactor C2 = 0.4 of Eq. 6 is a separate fit (S11). Also, SI p. 29 cites 'Figures 1F and S3' for
+    the agreement of Eq. S12; the panel is Fig. 2(F).
+  citation: {page: 6, printed_page: "3374", quote: "The dimensionless clutch binding timescales", where: "Fig. 2 caption"}
+- id: q_kcopt_inputs
+  kind: unstated_input
+  about: [mean_field]
+  text: >-
+    The optimum clutch stiffness kappa_c^opt ~ 3.3 pN/nm (p. 9) is stated for vu = 120 nm/s, Fb = 2 pN,
+    koff = 1/s, kon = 10/s; nm Fm, nc and kappa_s are not given there (Fig. 3 uses F = 1,
+    omega' = 200, K' = 0.01 or 1, which with these values imply other inputs). The value is printed as
+    approximate and is not recorded as a datum; left out as in q_left_out_models.
+  citation: {page: 9, printed_page: "3377", quote: "dicts that the optimum clutch stiffness is", where: text}
+
+# ---- second figure pass ----
+- id: q_fig2c_c1
+  kind: possible_error
+  about: [C1_eq5, critical_activity_eq5, Fcrit_fig2c_eq5_line, q_eq5_vs_fig1b]
+  text: >-
+    The dashed line of Fig. 2(C), which the caption calls the analytical solution (Eq. 5), reads
+    0.100, 0.181, 0.215, 0.234, 0.247, 0.255, 0.261, 0.266, 0.270, 0.272 at tau = 0.5, 1.5, ..., 9.5
+    (fig2c_eq5): C1 tau/(tau + 1) with C1 = 0.30 at every position, not the printed C1 = 0.4. The
+    solid symbols it was fitted to level off at 0.25 (omega = 200) and 0.27 (omega = 2000), also
+    consistent with C1 near 0.27-0.30. Either the printed 0.4 or the drawn line is wrong. With
+    C1 = 0.3, F_c-i^crit(tau = 10) = 0.27, so F = 0.5 is not clutch-dominated by Eq. 5 either and
+    the conflict of q_eq5_vs_fig1b remains.
+  citation: {page: 7, printed_page: "3375", quote: "is a constant that we estimate by fitting", where: "Eq. 5; Fig. 2(C)"}
+- id: q_fig3_meanfield
+  kind: choice
+  about: [T_fig3a_tau10, rigid_clutch_scan]
+  text: >-
+    The Fig. 3 / S4 curves are mean-field results over beta_c = 10^-2 to 10^2 with K = K'/beta_c and
+    omega = 200 beta_c. Only the stiff end (beta_c <= 0.15, K >= 6.7 for K' = 1) is compared, with
+    the rigid limit S31-S36; the K' = 0.01 curve of Fig. 3(A) is recorded but not run (each point a
+    mean-field solve at omega up to 2 x 10^4, minutes each). The optimum clutch stiffness of about
+    3.3 pN/nm (q_kcopt_inputs) rests on these curves and stays unchecked.
+- id: q_fig2f_eq6_offset
+  kind: unexplained_difference
+  about: [kopt_eq6_dimensionless, Kopt_fig2f_mf_tau10, Kopt_fig2f_st_tau10]
+  text: >-
+    For tau = 10, F = 2 the open squares of Fig. 2(F) (mean-field optimum) read 0.0147, 0.00727 and
+    0.00288 at omega = 404, 802 and 1998, and the solid circles (stochastic optimum) 0.0209 and 0.0102
+    at omega = 305 and 602; Eq. 6 with C2 = 0.4, C3 = 0.05 gives 0.0132, 0.00665, 0.00267, 0.0175 and
+    0.00886 there, 8-16% below every read symbol. The paper calls the agreement very good; the line
+    drawn in the same panel (fig2f_tau10) is Eq. 6 as printed, so the offset is between Eq. 6 and the
+    numerical optima, not a misdrawn line.
+  citation: {page: 8, printed_page: "3376", quote: "show that our theoretical expression is in very good agreement", where: "Fig. 2(F)"}
+- id: q_fig5a_fopt
+  kind: unexplained_difference
+  about: [rigid_optimum_activity, Fopt_fig5a_tau1, Fopt_fig5a_tau5, q_stall_bistable, q_rigid_root]
+  text: >-
+    F_opt taken as the maximum over F of the S31-S36 traction (smallest root of S34, the stalled
+    branch) agrees with Fig. 5(A) for tau = 10 and 20 at omega = 200 (0.936 against 0.934; 1.342
+    against 1.34), but for tau = 1 it stays near 0.22 for omega = 100-950 while the line falls from
+    0.21 to 0.089, and for tau = 5 it gives 0.62 at omega = 600-950 against the line's 0.53-0.49.
+    The maximum on the stalled branch sits at the fold where that root disappears; on the other
+    root (largest v_e*) it is much lower (tau = 1, omega = 800: 0.071; tau = 5: 0.34; tau = 10:
+    0.63), and the plotted values (0.10, 0.50, 0.77) lie between the two. The paper's F_opt comes from
+    its time-dependent mean-field runs; if those leave the stalled branch before its fold (the
+    bistability of q_stall_bistable, which widens with omega), their maximum lies below the fold.
+    How F_opt was found (grid in F, initial condition) is not stated.
+  citation: {page: 10, printed_page: "3378", quote: "Optimum myosin activity parameter for maximum traction force on rigid substrates", where: "Fig. 5(A)"}
+- id: q_figs1b_branch
+  kind: unexplained_difference
+  about: [nb_figs1b_F05, mean_field, q_stall_bistable, q_mf_initial]
+  text: >-
+    Fig. S1(B) draws the F = 0.5 bound fraction flat at 0.82-0.83 up to K = 10 (figs1b_F05), which is
+    the stalled branch of S34 on a rigid substrate (n_b* = 0.829 there; the other root gives 0.047).
+    This record's mean-field solver, started from no bound clutches, reached the slipping branch at
+    K = 1 for the traction (q_stall_bistable); cmp_figs1b_F05 tests the same for n_b* at K = 0.1-3. The figure
+    therefore confirms that the paper's mean-field runs stay on the stalled branch, which points to
+    an initial condition other than an empty clutch population (q_mf_initial).
+  citation: {page: 23, quote: "Solid lines are the numerical solution of the mean-field model", where: "Fig. S1(B)"}
+
+# ==== cross-record validation with bangasser2013 (2026-11-21): none added =======================
+- id: q_xval_bangasser2013_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field_dimensional, mean_field_optimum, kopt_eq6, mean_field]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2013's
+    measurements, although this paper cites it (ref. 10) for its parameter ranges (Table 1, p. 4) and
+    for the stalled and free-flowing regimes, never as data its models explain. bangasser2013 carries
+    four measured sets, all redrawn from other works: (1) Kong et al.'s integrin-fibronectin bond
+    lifetimes against clamped force (tau_kong_fig7c, Fig. 7C); (2) Chan and Odde's neuron retrograde
+    flow against substrate modulus (v_figS1b_measured, Fig. S1B); (3) cell migration normalized to
+    each cell type's maximum (migration_fig1a_*, Fig. 1A); (4) traction normalized the same way
+    (traction_fig1b_*, Fig. 1B). (1): clutch_off_rate_bell gives a loaded off rate, not a bond
+    lifetime, and is a slip law, whose rate only rises with force, while the measured lifetimes
+    first rise (a catch bond); this paper's catch-bond law (S86-S88) is not in the record
+    (q_left_out_models), and neither paper gives Bell parameters for the integrin-fibronectin bond.
+    (2): no model here outputs a retrograde flow; the mean-field models give traction, bound
+    fraction and optima. (3) and (4): no model gives a migration speed or a traction normalized to
+    a cell type's maximum; mean_field_dimensional gives an absolute traction in pN, with the generic
+    Table S2 values (p. 21), which the paper says are not cell-specific ("Cell-specific data should be
+    used to parameterize the model"). Turning it into a normalized curve would need cell-specific
+    parameters for neurons, T24 cells and BAEC that neither paper states, and the normalized points
+    alone do not quantify the absolute traction the model predicts. The shared shape of
+    clutch_off_rate_bell and bangasser2013/catch_slip_eq9 (rate from force and rate) is a relation
+    between models, not a validation. In the other direction: this paper prints no measurement
+    (figures.md: every plotted value is a model result), so no bangasser2013 model has anything here
+    to be validated against (bangasser2013/q_xval_alonsomatilla2023_none).
+  citation: {page: 21, quote: "Cell-specific data should be used to parameterize the model", where: "SI, notes to Table 2"}
+
+# ==== cross-record validation with bangasser2013b (2026-11-21): none added ======================
+- id: q_xval_bangasser2013b_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field, mean_field_dimensional, mean_field_optimum, kopt_eq6, rigid_steady_state]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2013b's
+    measurements. This paper cites bangasser2013b (ref. 17; SI ref. 16) as the model its mean-field
+    theory generalizes (p. 2), for parameter ranges (Table 1, p. 4), and for the stalled and
+    free-flowing regimes and the optimum condition (pp. 5, 7, 8). It never cites it as data its models
+    explain. bangasser2013b is itself a modelling paper. Its only measured data are the run times of
+    its software (fig6b_ode_cal, fig6b_mc1_cal, fig6b_mc100_cal, Fig. 6(b)), a computation time that no
+    model here outputs. Its other plotted values (time courses, flow and traction against stiffness,
+    cycle times) are ODE and Monte Carlo model results. Comparing this record's models with them would
+    relate models, for example by reducing mean_field to bangasser2013b/clutch_ensemble_timecourse with
+    linear clutches. It would not validate one. The shared shape of clutch_off_rate_bell and
+    bangasser2013b/clutch_ensemble_timecourse (rate from force and rate) is also a relation between
+    models. In the other direction, this paper prints no measurement (figures.md), so no bangasser2013b
+    model has anything here to be validated against (bangasser2013b/q_xval_alonsomatilla2023_none).
+  citation: {page: 2, quote: "mean-field theory is a generalization of the model by", where: text}
+
+# ==== cross-record validation with bangasser2017 (2026-11-21): none added =======================
+- id: q_xval_bangasser2017_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field_dimensional, mean_field_optimum, modulus_from_stiffness, kopt_eq6, rigid_steady_state]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against bangasser2017's
+    measurements. This paper cites bangasser2017 (ref. 12; SI ref. 18) as one of the reports that
+    traction and motility are biphasic in stiffness and that an optimum stiffness is "observed
+    experimentally (12,14)" (p. 2), as a biophysical migration model (p. 13), and for the stiffness to
+    modulus equivalence (SI p. 21). It never runs its models against that paper's data. bangasser2017's
+    measurements are U251 and ECFN retrograde flow rates (fig3c_*, fig4a_*, figs4c_bars), traction strain
+    energies and scaled strain energies (fig3e/3f/4b_*, figs4d-i_*), cell area, aspect ratio, random
+    motility coefficient and MSD (fig2c-e_*, fig4c-e_*, figs2e_*), and the approximate cell-type optimum
+    moduli (Eopt_ecfn_p3, Eopt_u251_p3, "~1" and "~100" kPa). None of these is an output of a model here.
+    The mean-field models give a traction force in pN (not a strain energy, which would need the
+    substrate displacement field), bound fraction and dimensionless clutch extension rate (not a
+    retrograde flow), and optima. No model gives cell area, shape or motility. The nearest output is
+    modulus_from_stiffness's optimal Young's modulus (2.7 kPa from the generic Table S2 values, p. 21).
+    But neither paper gives this model's parameters (nm, nc, Fm, vu, kon, koff, Fb, kc, d_s) for U251
+    or ECFN cells, and the paper says cell-specific data are needed. Also, the measured optima are
+    printed as approximate ("~"), so they get no verdict. Running the model would need a whole added
+    parameter set fitted to the cells, which would be a new analysis, not a test of this paper. The
+    shared shape of clutch_off_rate_bell and bangasser2017/off_rate_eq1 (a Bell slip law, rate from
+    force and rate) is a relation between models, not a validation; neither paper measures off rates.
+    In the other direction, this paper prints no measurement (figures.md: every plotted value is a
+    model result), so no bangasser2017 model has anything here to be validated against
+    (bangasser2017/q_xval_alonsomatilla2023_none).
+  citation: {page: 21, quote: "Cell-specific data should be used to parameterize the model", where: "SI, notes to Table 2"}
+# cross-record validation against bell1978 (2026-11-21): none added
+- id: q_xval_bell1978_none
+  kind: reading
+  about: [clutch_off_rate_bell, bell_rupture_force, mean_field]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of
+    bell1978 (its ref. 52). The paper cites it only for the form of the loaded clutch off rate:
+    "the clutch lifetime decreases exponentially by force according to Bell's law (52)" (p. 2, and
+    SI p. 21); it does not say its model explains or predicts any of Bell's data. bell1978 is a
+    theory paper whose only measured values are quoted from other works: the adhesive force between
+    cells, "~ 1" dyne per cell (force_adhesive, from Coman 1951, bell1978 ref-52), and the free-sugar
+    concentrations of an inhibition experiment (c_sugar_low, c_sugar_high, from bell1978 ref-49);
+    its Fig. 8 is a model curve (bell1978 figures.md). No model here outputs a cell-cell separation
+    force or a sugar concentration: the mean-field models give the steady traction of a motor-clutch
+    ensemble pulling on a substrate, which is not the force needed to pull two adhering cells apart,
+    and no parameters of this record are stated for Coman's cells; the value is also approximate
+    ("~") and would get no verdict. clutch_off_rate_bell has the same shape as
+    bell1978/loaded_reverse_rate (a rate from a force and a rate); that relates two models, left to
+    the job that relates models across papers, and gives no shared measured quantity, since neither
+    paper measures an off rate. In the other direction, see bell1978 q_xval_alonsomatilla2023_none.
+  citation: {page: 2, printed_page: "3370", quote: "force according to Bell’s law kload", where: "Materials and Methods, second paragraph"}
+
+# ==== cross-record validation with chan2008 (2026-11-21): none added ============================
+- id: q_xval_chan2008_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field, mean_field_dimensional, mean_field_optimum, modulus_from_stiffness, rigid_steady_state]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against chan2008's measurements.
+    This paper cites chan2008 (ref. 2) as the stochastic model its mean-field theory is checked
+    against (pp. 2, 4, 8), for parameter ranges (Fm, vu, kon, koff, rho_c; Table 1 p. 4, SI p. 19), for
+    load-and-fail dynamics, and once for data: the mean frequency of cascading clutch failures
+    "decreases with substrate compliance ... in agreement with Chan and Odde (2)" (p. 6, Fig. 2 D).
+    That is a trend agreement. chan2008 measures failure frequencies on 260, 730 and 1300 Pa gels
+    (chan2008/failures_figS5D), but no model here outputs a failure frequency: Fig. 2 D is a set of
+    time courses left out of this record (figures.md), and the dimensionless failure times of the
+    mean-field model would need neuron parameters (nm, nc, Fm, vu, kon, koff, Fb, kc) mapped onto
+    those gels, which the paper does not give. chan2008's other measurements are retrograde flow
+    rates against modulus (v_fig3d_exp_sem, v_fig3c_*, v_figS8C_*, the Fig. 3C histograms): no model
+    here outputs a dimensional retrograde flow (rigid_steady_state gives only the dimensionless
+    clutch extension rate, on a rigid substrate). The peak filopodial force 110 ± 25 pN (T_max_text)
+    is the largest force of a loading cycle; mean_field_dimensional gives the time-averaged traction,
+    a different quantity, and its printed range [59 - 145] pN (p. 21) is for the generic Table S2
+    values, not chan2008's neurons ("Cell-specific data should be used to parameterize the model").
+    The rest (bead displacement and step histograms, surface tension, contact distance, radial
+    deviation) are outputs of no model here. clutch_off_rate_bell and chan2008/off_rate_eq1 share a
+    shape (a Bell slip law, rate from force and rate): that relates two models, not a measurement;
+    neither paper measures an off rate. In the other direction, this paper prints no measurement
+    (figures.md: every plotted value is a model result), so no chan2008 model has anything here to be
+    validated against (chan2008/q_xval_alonsomatilla2023_none).
+  citation: {page: 6, quote: "agreement with Chan and Odde (2)", where: "text, on Fig. 2 D"}
+
+# ==== cross-record validation with cms_code (2026-11-21): none added ============================
+- id: q_xval_cms_code_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field, mean_field_dimensional, mean_field_optimum]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against cms_code, because
+    cms_code holds no measurement: it is the MATLAB cell migration simulator released with
+    bangasser2017 (this paper's ref. 12), and its data are all parameters (origin reported). This
+    paper cites bangasser2017 for experiments and as a migration model (pp. 2, 13; SI p. 21), but it
+    never mentions the released code or runs anything against the code's output. Those experiments
+    are bangasser2017's, already covered in q_xval_bangasser2017_none. clutch_off_rate_bell and
+    cms_code/off_rate_port have the same shape (k = koff exp(|Fc|/Fb), a rate from a force and a
+    rate). That is a relation between two models, left to the job that relates models across
+    papers. It is not a validation, since neither record measures an off rate. In the other
+    direction, this paper prints no measurement (figures.md: every plotted value is a model
+    result), so no cms_code model has anything here to be validated against
+    (cms_code/q_xval_alonsomatilla2023_none).
+  citation: {page: 2, printed_page: "3370", quote: "force according to Bell’s law kload", where: "Materials and Methods, second paragraph"}
+
+# ==== cross-record validation with elosegui2014 (2026-11-21): none added ========================
+- id: q_xval_elosegui2014_none
+  kind: unstated_model
+  about: [clutch_count, clutch_off_rate_bell, mean_field_dimensional, mean_field_optimum, modulus_from_stiffness, kopt_eq6]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against elosegui2014's
+    measurements. This paper cites elosegui2014 (ref. 13; SI ref. 3) in two places only. It names it as
+    one of the reports that traction forces are biphasic in substrate stiffness (p. 2), which is a
+    trend. It also says that paper "reported similar integrin densities on the membrane" of 500-2500
+    /um^2 (SI legend B, p. 19), beside the 3.1 x 10^3 /um^2 the record uses for n_c. That compares a
+    parameter value, not a model output: clutch_count takes the density as an input. It never runs a
+    model against elosegui2014's data. elosegui2014's measurements are cell tractions in Pa against gel
+    modulus (Figs. 1b, 1c, 4d, 4g, 4j), actin flow speeds in nm/s (Figs. 4e, 4h, 4k), adhesion integrin
+    densities in arbitrary units (Figs. 4f, 4i, 4l), membrane integrin densities (Fig. 2b) and their
+    fivefold ratio, SPR responses and fitted rates (Fig. 2a), bead detachment times and integrin
+    recruitment (Figs. 2c, 2e, 2g), and the 5 kPa traction peak of avb6-bound cells (p. 6). None of
+    these is an output of a model here. mean_field_dimensional gives the time-averaged force of one
+    protrusion in pN, not a cell-averaged traction stress in Pa (no cell area or adhesion layout maps one
+    onto the other), and no model gives a retrograde flow (rigid_steady_state gives only a dimensionless
+    extension rate on a rigid substrate) or an integrin density. The nearest output is
+    modulus_from_stiffness's optimal modulus, which could be set against the 5 kPa peak. But neither
+    paper gives this model's parameters (nm, nc, Fm, vu, kon, koff, Fb, kc, d_s) for myoepithelial cells
+    bound through avb6. elosegui2014's own clutch parameters are in its unreadable SI
+    (elosegui2014/q_si_unreadable), and its clutch has talin reinforcement and an FN-a5b1 catch bond.
+    This paper also says that "Cell-specific data should be used to parameterize the model". Fitting a
+    parameter set to those cells would be a new analysis, not a test of this paper. The SPR koff values
+    (koff_a5b1, koff_avb6) are not predicted either: clutch_off_rate_bell at zero force returns its
+    unloaded koff input, a generic Table 1 parameter. In the other direction, this paper prints no
+    measurement (figures.md), so no elosegui2014 model has anything here to be validated against
+    (elosegui2014/q_xval_alonsomatilla2023_none).
+  citation: {page: 19, quote: "Artola et al. reported similar integrin densities on the membrane", where: "SI legend B"}
+
+# ==== cross-record validation with elosegui2016 (2026-11-21): none added ========================
+- id: q_xval_elosegui2016_none
+  kind: unstated_model
+  about: [mean_field_dimensional, mean_field_optimum, modulus_from_stiffness, stiffness_from_modulus, kopt_eq6, clutch_off_rate_bell]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against elosegui2016's
+    measurements. This paper cites elosegui2016 (ref. 14) only for trends: some cells "deviate from the
+    biphasic force-rigidity relationship ... through force-mediated clutch reinforcement (14,28)", an
+    optimal stiffness "observed experimentally (12,14)" (p. 2), as a reason for adding reinforcement
+    (p. 10), and for an equivalent mean-field equation (SI p. 22). It never runs a model against that
+    paper's data. elosegui2016's measurements are MEF cell tractions in Pa against gel modulus (Figs. 1a,
+    3d, 4a, 4e, 5a, 5e, 6a-i; Supp. Figs. 2, 5a), actin flow speeds in nm/s (Fig. 3e), the 5 kPa threshold
+    rigidity at which control and talin-depleted forces diverge (threshold_measured_text), FN-avb3 bond
+    lifetimes (Fig. 3a), adhesion lengths, YAP ratios, integrin and pFAK densities, cell areas, pMLC ratios
+    and attachment fractions. None is an output of a model here run with stated inputs. (1) Traction:
+    mean_field_dimensional gives the time-averaged force of one protrusion in pN (traction_force), not a
+    cell-averaged traction stress in Pa (cell_traction); neither paper gives an area that maps one onto the
+    other for this model. It is also a slip-bond model without reinforcement, while the measured contrast
+    (control vs talin shRNA) is the reinforcement this record leaves out (Eq. 7 / S59-S73,
+    q_left_out_models), and its inputs (nm, nc, Fm, vu, kon, koff, Fb, kc, d_s) are generic Table S2 values,
+    not MEF values ("Cell-specific data should be used to parameterize the model", p. 21). Taking
+    elosegui2016's MEF parameters instead would not supply them: its clutch has a two-exponential catch
+    bond, not a Bell slip bond with one Fb and koff, and an adhesion radius rather than a focal adhesion
+    diameter for legend E. (2) Flow: no model here outputs a dimensional retrograde flow (rigid_steady_state
+    gives only a dimensionless extension rate, on a rigid substrate). (3) Threshold: the 5 kPa threshold is
+    where reinforcement switches on, a different quantity from the modulus that maximizes traction
+    (modulus_from_stiffness, optimal_youngs_modulus), and the 2.7 kPa optimum printed for that model is for
+    the generic Table S2 values. (4) Bond lifetimes: clutch_off_rate_bell is a slip law with generic parameters; the measured FN-avb3
+    lifetimes are not the clutch of this model and no Bell parameters are stated for them. The pairing of
+    modulus_from_stiffness with elosegui2016/clutch_no_talin_sim by shape (a pressure from a length and a
+    stiffness) is not a shared prediction: one converts a spring constant to a modulus, the other is a
+    stochastic clutch simulation giving a traction stress. In the other direction, this paper prints no
+    measurement (figures.md: every plotted value is a model result), so no elosegui2016 model has anything
+    here to be validated against (elosegui2016/q_xval_alonsomatilla2023_none).
+  citation: {page: 21, quote: "Cell-specific data should be used to parameterize the model", where: "SI, notes to Table 2"}
+- id: q_xval_gong2018_none
+  kind: choice
+  about: [mean_field, mean_field_dimensional, mean_field_optimum, rigid_steady_state, clutch_off_rate_bell]
+  text: >-
+    No validation against gong2018 is entered. This paper cites gong2018 (ref. 37) only as a previous
+    mean-field study on viscoelastic substrates; it does not say its model explains, fits or predicts
+    any gong2018 measurement. gong2018 measures cell spreading areas (Figs. 4D, 5D, 6D, S5A), spreading
+    speeds extracted from those areas with gong2018's own Rss = R0 + Vs tau_ss (Fig. S7) and gel
+    relaxation stiffness against time (Figs. 4B, 5B, S6A). The models here output a time-averaged
+    traction, a bound-clutch fraction, a clutch extension rate, optimal stiffnesses and a loaded off
+    rate; none gives a spreading area, a spreading speed (gong2018's Vs = Vp - Vf needs a polymerization
+    speed this model does not have) or a substrate relaxation, and this model's substrate is purely
+    elastic. clutch_off_rate_bell has the shape of gong2018/bell_off_rate, but neither paper measures a
+    loaded off rate, so it is a shared model, not a prediction of a measurement. In the other direction,
+    this paper prints no measurement (figures.md), so no gong2018 model has anything here to be
+    validated against (gong2018/q_xval_alonsomatilla2023_none).
+  citation: {page: 2, quote: "and in compliant linearly elastic (17) and viscoelastic (37)", where: text}
+
+# ==== cross-record validation with liu2025 (2026-11-21): none added =============================
+- id: q_xval_liu2025_none
+  kind: unstated_model
+  about: [mean_field_dimensional, mean_field_optimum, modulus_from_stiffness, clutch_off_rate_bell, bell_rupture_force, rigid_steady_state]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against liu2025's measurements;
+    liu2025 is later and this paper does not cite it. liu2025's measured data are, nearly all, redrawn MEF
+    tractions in Pa against gel modulus (P_*_data_fig2c, ed5a/ed5b, fig3a/3b, fig4c: elosegui2016 and its
+    ref. 21) and actin flows in nm/s (v_*_data_fig2d, fig4d, ed4b_exp), integrin-FN off rates against
+    force (koff_data_figS4, from elosegui2016), force-loading rates (rate_exp_fig4f), myosin-stack
+    densities (fig3e), talin extensions and their differences (fig4g, dx_folded, dx_vinculin) and an
+    average talin rod stiffness (k_talin_rod, a parameter). None is an output of a model here run on
+    stated inputs. (1) Traction: mean_field_dimensional gives the time-averaged force of one protrusion in
+    pN (traction_force), not a traction stress in Pa, with generic Table S2 values ("Cell-specific data
+    should be used to parameterize the model"); neither paper states this model's nm, nc, Fm, vu, kon,
+    koff, Fb, kc or an adhesion area for these MEFs. liu2025's own parameter sets (catch-slip Eq. 4, local
+    substrate deformation over a site of radius r) do not map onto a Bell slip clutch with one koff and Fb,
+    and fitting one would be a new analysis. The WT/KD contrast is reinforcement-dependent and the
+    reinforcement model (Eq. 7) is not in this record (q_left_out_models). (2) Flow: no model here outputs
+    a dimensional retrograde flow. (3) Off rates: clutch_off_rate_bell is a slip law, whose rate only
+    rises with force, with generic parameters; the measured FN-a5b1 rates are catch-slip and no Bell
+    parameters are stated for that bond. (4) Loading rates, stack densities, talin extensions: outputs of
+    no model here. The shared shape of bell_rupture_force and liu2025/fc_v_C10 is a relation between
+    models, not a shared measurement. In the other direction, this paper prints no measurement
+    (figures.md), so no liu2025 model has anything here to be validated against
+    (liu2025/q_xval_alonsomatilla2023_none).
+  citation: {page: 21, quote: "Cell-specific data should be used to parameterize the model", where: "SI, notes to Table 2"}
+- id: q_xval_odde_code_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field, mean_field_dimensional, mean_field_optimum, rigid_steady_state]
+  text: >-
+    No cross-validation with odde_code in either direction, because neither record holds a measurement.
+    odde_code is the Odde lab's MATLAB event-stepping simulator (motorclutch2_3.m, motorclutch1_1.m). Its
+    data.yaml holds only parameter values set in the code and model results copied from the papers' records
+    (origin reported or predicted), so no model here has anything there to be validated against. This
+    paper's plotted values are all model results (figures.md: "The paper has no measurements"), so
+    odde_code's ports have nothing here either (odde_code/q_xval_alonsomatilla2023_none). The shared shape
+    of clutch_off_rate_bell and odde_code/mc_event_port (a rate from a force and a rate) is a relation
+    between models, not a shared measurement. The paper's "agreement with Chan and Odde" (p. 6) compares
+    its model's failure frequency with Chan and Odde's simulations, not with code output or data in
+    odde_code.
+  citation: {page: 6, quote: "as shown in Fig. 2 D, and in agreement with Chan and Odde", where: text}
+# cross-record validation against shen2025 (2026-11-21): none added
+- id: q_xval_shen2025_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field, rigid_steady_state, 'shen2025/clutch_off_rate']
+  text: >-
+    (Cross-record validation.) No model of this record is validated against a measurement of shen2025, and
+    none of shen2025's models against one here, because neither record holds a measurement. shen2025's
+    data.yaml has no datum of origin measured, and its figures.md says "No figure in this paper plots
+    measured data ... Every plot is a model result" (phase diagrams, fixed points and limit cycles of its
+    own model). This paper's plotted values are all model results too (figures.md: "The paper has no
+    measurements"). Neither paper cites the other (this paper, of 2023, predates shen2025, and shen2025's
+    references do not include it), so neither says its model explains the other's results. The shared
+    shape of clutch_off_rate_bell and shen2025/clutch_off_rate (Bell's law, a loaded off rate from a force
+    and an unloaded rate) is a relation between models for the job relating models, not a shared
+    measurement; the reverse note is shen2025/q_xval_alonsomatilla2023_none.
+  citation: {page: 2, printed_page: "3370", quote: "force according to Bell’s law kload", where: text}
+
+# ==== cross-record validation with mekhdjian2017 (2026-11-22): none added ========================
+- id: q_xval_mekhdjian2017_none
+  kind: unstated_model
+  about: [clutch_off_rate_bell, mean_field_dimensional, mean_field_optimum, modulus_from_stiffness, kopt_eq6, dimensionless_groups]
+  text: >-
+    (Cross-record validation.) No model of this record is validated against mekhdjian2017's measurements.
+    This paper cites Mekhdjian et al. twice, for parameters only: as one source of the reinforcement
+    threshold range Fth = 5-10 pN (Table 1, ref. 51, p. 4) and for the substrate spring constant from the
+    Young's modulus, κs = 2π ds Es / 9 (SI legend E, ref. S11, p. 20; already a stated same_as relation,
+    rel_mekhdjian_eq5_same_modulus). It never runs its model against Mekhdjian's data or says that it
+    explains them. mekhdjian2017's measurements are cell-averaged traction stresses in Pa and total cell
+    forces in nN against PA-gel modulus (Figs. 5e, S5, 4b, 4d, S3c), spread areas, molecular-tension-sensor
+    forces per sensor and per cell (Fig. 6d, 6f), adhesion lifetimes, lengths and axial positions (Fig. 7),
+    3D invasion and constriction transit (Figs. 1d, 2, 9e-f), nuclear and cell stiffness (Fig. 3) and
+    patient and protein data (Figs. 9g-h, S8, S10). None is an output of a model here.
+    mean_field_dimensional gives the time-averaged force of one protrusion in pN, not a cell-averaged
+    stress in Pa or a whole-cell force in nN: turning it into either needs a contact area or a number of
+    protrusions per cell that this paper does not model (Mekhdjian's own Eq. 4 with its added radhesion
+    would make it Mekhdjian's model, not this one). No model gives a force per integrin (the MTS sensor
+    force), a spread area, an adhesion lifetime or an invasion measure. Mekhdjian prints no measured optimum
+    modulus (its '~10 kPa' is said of its simulated TGFβ cell, origin predicted), so
+    modulus_from_stiffness has no measurement to meet either, and setting it against the four-gel traction
+    bars would also need the clutch parameters of MCF10A cells, which only Mekhdjian's own simulations
+    supply (nm, nc chosen by that paper for these cells): borrowing them would test Mekhdjian's
+    parameter choice, not this paper, and would be a new analysis. clutch_off_rate_bell has the same shape as mekhdjian2017/bell_off_rate, but neither paper
+    measures a loaded off rate; the link is a model relation, not a shared measurement. In the other
+    direction, this paper prints no measurement (figures.md), so no mekhdjian2017 model has anything here
+    to be validated against (mekhdjian2017/q_xval_alonsomatilla2023_none).
+  citation: {page: 20, quote: "the equivalent substrate Young’s modulus E6 as", where: "SI legend E"}

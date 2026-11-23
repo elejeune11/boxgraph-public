@@ -1,0 +1,14 @@
+# The Gillespie simulation has no time step; its numerical settings are the number of events per nc
+# (printed, 100 k) and the nc grid (printed). The events are doubled on the stiff substrate.
+- {id: ref_events_stiff_0, run: run_opt_stiff_0, setting: n_events, factors: [1, 2], mode: multiply, output: nc_opt,
+   tolerance: "10%", tolerance_basis: "added: the printed increases that the optimum feeds range from 3% to 103%; a 10% shift of the optimum is the scale of the smallest differences the paper discusses between strain levels", tolerance_added: true}
+- {id: ref_events_sim_ax_nc400, run: run_sim_ax_nc400, setting: n_events, factors: [1, 2, 4], mode: multiply, output: v_retro,
+   tolerance: "2%", tolerance_basis: "added: about 1.5 nm/s of a flow near 75-80 nm/s, the size of the differences between the curves the paper compares in Figs. 4-5", tolerance_added: true}
+- {id: ref_events_sim_tr_nc400, run: run_sim_tr_nc400, setting: n_events, factors: [1, 2, 4], mode: multiply, output: v_retro,
+   tolerance: "2%", tolerance_basis: "added: as ref_events_sim_ax_nc400", tolerance_added: true}
+- {id: ref_events_fS3, run: run_fS3_solid, setting: n_events, factors: [1, 2], mode: multiply, output: v_retro,
+   tolerance: "2%", tolerance_basis: "added: as ref_events_sim_ax_nc400", tolerance_added: true}
+- {id: ref_events_f7a_e1, run: run_f7a_e1, setting: n_events, factors: [1, 2], mode: multiply, output: v_retro,
+   tolerance: "2%", tolerance_basis: "added: as ref_events_sim_ax_nc400", tolerance_added: true}
+- {id: ref_events_tr_1, run: run_opt_tr_1, setting: n_events, factors: [1, 2], mode: multiply, output: nc_opt,
+   tolerance: "10%", tolerance_basis: "added: as ref_events_stiff_0", tolerance_added: true}

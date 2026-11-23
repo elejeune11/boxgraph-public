@@ -1,0 +1,21 @@
+# Port (our code) of cms2Dv1_0.m line 315: a module's cell spring, engaged clutches and substrate in
+# series, used in the force balance (lines 321, 339, 441).
+#   mc(i).Keff=(1/Kcell+1/(sum(mc(i).cstate)*mc(i).Kc)+1/Ksub)^-1;
+# With no clutch engaged the code sets Keff = 0 (line 311); the port does the same for n_eng = 0.
+# The cell body's own Keff (line 303) leaves out Kcell: (1/(n Kc) + 1/Ksub)^-1, as the paper's Eq. 5.
+# The paper's Eq. 4 (Fj = κcell xcell,j = κc Σ xc,i = κs xs,j) implies this series form; it is run here
+# with the code's Kcell and with the paper's κcell (q_kcell).
+id: keff_port
+name: "series stiffness of one module's cell spring, engaged clutches and substrate (cms2Dv1_0.m line 315, Python port)"
+role: model
+stated: {file: cms2Dv1_0.m, lines: "315", quote: "mc(i).Keff=(1/Kcell+1/(sum(mc(i).cstate)*mc(i).Kc)+1/Ksub)^-1;"}
+equation: "Keff = (1/Kcell + 1/(n_eng Kc) + 1/Ksub)^-1; 0 if n_eng = 0"
+inputs:
+  Kcell: {quantity: cell_spring_constant, unit: pN/nm}
+  n_eng: {quantity: n_engaged_clutches, unit: dimensionless}
+  Kc:    {quantity: clutch_stiffness, unit: pN/nm}
+  Ksub:  {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  Keff: {quantity: module_effective_stiffness, unit: pN/nm}
+settings: {}
+stochastic: false

@@ -1,0 +1,298 @@
+# ==== cms2D_shell.m lines 5-30: the parameters passed to cms2Dv1_0 ==================================
+# cms2D_par_shell.m sets the same values on the same lines (5-30). Each is checked against
+# bangasser2017's Supplementary Table 2 (low set) through from_datum.
+- id: mpool_code
+  quantity: n_motors_total
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {file: cms2D_shell.m, lines: "5", quote: "mpool=1000; %total number of motors shared by modules"}
+  from_source: bangasser2017
+  from_datum: Nm_low
+- id: cpool_code
+  quantity: n_clutches_total
+  unit: dimensionless
+  origin: reported
+  printed: "750"
+  citation: {file: cms2D_shell.m, lines: "6", quote: "cpool=750; %total number of clutches shared by modules"}
+  from_source: bangasser2017
+  from_datum: Nc_low
+- id: totact_code
+  quantity: total_actin
+  unit: nm
+  origin: reported
+  printed: "1 x 10^5"
+  citation: {file: cms2D_shell.m, lines: "7", quote: "totact=10^5; %total available actin pool in polymerized length, nm"}
+  from_source: bangasser2017
+  from_datum: Atot
+  note: "the code writes 10^5, an exact value in MATLAB; written 1 x 10^5 so that it is not read as an order of magnitude"
+- id: maxpoly_code
+  quantity: max_polymerization_velocity
+  unit: nm/s
+  origin: reported
+  printed: "200"
+  citation: {file: cms2D_shell.m, lines: "8", quote: "maxpoly=200; %max polymerization rate in nm/s"}
+  from_source: bangasser2017
+  from_datum: vp_star
+- id: kmod0_code
+  quantity: max_module_birth_rate
+  unit: 1/s
+  origin: reported
+  printed: "1"
+  citation: {file: cms2D_shell.m, lines: "9", quote: "kmod0=1; %base module birth rate in 1/s"}
+  from_source: bangasser2017
+  from_datum: kmod_star
+- id: kcap_code
+  quantity: module_capping_rate
+  unit: 1/s
+  origin: reported
+  printed: "0.001"
+  citation: {file: cms2D_shell.m, lines: "10", quote: "kcap=0.001; %module capping rate in 1/s"}
+  from_source: bangasser2017
+  from_datum: kcap
+- id: lcell_code
+  quantity: initial_module_length
+  unit: nm
+  origin: reported
+  printed: "5000"
+  citation: {file: cms2D_shell.m, lines: "11", quote: "lcell=5000; %initial length of a module in nm"}
+  from_source: bangasser2017
+  from_datum: lin
+- id: lmin_code
+  quantity: min_module_length
+  unit: nm
+  origin: reported
+  printed: "100"
+  citation: {file: cms2D_shell.m, lines: "12", quote: "lmin=100; %minimum module length"}
+  from_source: bangasser2017
+  from_datum: lmin
+  note: "the comment gives no unit; nm as every other length of the code (lcell, totact) and the readme's '100 nm (0.1 µm)'"
+- id: Kcell_code
+  quantity: cell_spring_constant
+  unit: pN/nm
+  origin: reported
+  printed: "1000"
+  citation: {file: cms2D_shell.m, lines: "13", quote: "Kcell=1000; %cell spring constant in pN/nm"}
+  from_source: bangasser2017
+  from_datum: kcell
+  note: "Supplementary Table 2 prints 10,000 pN/nm, and so does the readme's Table 1; see q_kcell"
+- id: nc_cell_code
+  quantity: n_cell_body_clutches
+  unit: dimensionless
+  origin: reported
+  printed: "10"
+  citation: {file: cms2D_shell.m, lines: "14", quote: "nc=10; %total number of clutches in the cell body, independent of cpool"}
+  from_source: bangasser2017
+  from_datum: nccell_low
+- id: Fm_code
+  quantity: motor_stall_force
+  unit: pN
+  origin: reported
+  printed: "2"
+  citation: {file: cms2D_shell.m, lines: "16", quote: "Fm=2; %motor stall force in pN"}
+  from_source: bangasser2017
+  from_datum: Fm
+- id: vu_code
+  quantity: unloaded_motor_velocity
+  unit: nm/s
+  origin: reported
+  printed: "120"
+  citation: {file: cms2D_shell.m, lines: "17", quote: "vu=120; %unloaded motor velocity in nm/s"}
+  from_source: bangasser2017
+  from_datum: vm_star
+- id: kon_code
+  quantity: clutch_on_rate
+  unit: 1/s
+  origin: reported
+  printed: "1"
+  citation: {file: cms2D_shell.m, lines: "18", quote: "kon=1; %module clutch on rate constant in 1/s"}
+  from_source: bangasser2017
+  from_datum: kon
+  note: "the same kon is given to the cell-body clutches (cms2Dv1_0.m line 74)"
+- id: koff_code
+  quantity: clutch_off_rate_unloaded
+  unit: 1/s
+  origin: reported
+  printed: "0.1"
+  citation: {file: cms2D_shell.m, lines: "19", quote: "koff=0.1; %module clutch off rate constant in 1/s"}
+  from_source: bangasser2017
+  from_datum: koff_star
+- id: Kc_code
+  quantity: clutch_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "0.8"
+  citation: {file: cms2D_shell.m, lines: "20", quote: "Kc=0.8; %module clutch spring constant in pN/nm"}
+  from_source: bangasser2017
+  from_datum: kc
+- id: Fb_code
+  quantity: bond_rupture_force
+  unit: pN
+  origin: reported
+  printed: "2"
+  citation: {file: cms2D_shell.m, lines: "21", quote: "Fb=2; %Bond (module clutch) rupture force in pN"}
+  from_source: bangasser2017
+  from_datum: Fb
+- id: Ksub_code
+  quantity: substrate_stiffness
+  unit: pN/nm
+  origin: reported
+  printed: "100"
+  citation: {file: cms2D_shell.m, lines: "23", quote: "Ksub= 100; %Substrate spring constant in pN/nm"}
+  note: "Supplementary Table 2 prints 'Variable'; 100 pN/nm is one point of the Fig. 1 sweep (the readme gives 0.01-100 pN/nm)"
+- id: tint_code
+  quantity: output_interval
+  unit: s
+  origin: reported
+  printed: "1"
+  citation: {file: cms2D_shell.m, lines: "25", quote: "tint=1; %seconds, simulation output interval"}
+  note: "not printed in the paper; it also sets the jump cut-off of the analysis (1000*tint nm per interval)"
+- id: tanalysis_code
+  quantity: analysis_interval
+  unit: min
+  origin: reported
+  printed: "15"
+  citation: {file: cms2D_shell.m, lines: "26", quote: "tanalysis=15; %minutes, time interval for analysis"}
+  note: "the paper prints the same: 'simulation data at 15 min intervals' (bangasser2017 p. 7); no datum there to link"
+- id: texc_code
+  quantity: discarded_time
+  unit: min
+  origin: reported
+  printed: "60"
+  citation: {file: cms2D_shell.m, lines: "27", quote: "texc=60; %minutes, amount of time at beginning of simulation to exclude from analysis"}
+  note: "the paper prints the same: 'the first hour of each simulation were excluded' (bangasser2017 p. 7); no datum there to link"
+- id: durr_code
+  quantity: simulated_duration
+  unit: h
+  origin: reported
+  printed: "10"
+  citation: {file: cms2D_shell.m, lines: "28", quote: "durr=10; %hours, total duration of sim"}
+  note: "not printed in the paper (bangasser2017 q_sim_length); the readme gives 5-9 hrs; see q_durr"
+- id: cellnum_code
+  quantity: n_simulated_cells
+  unit: dimensionless
+  origin: reported
+  printed: "50"
+  citation: {file: cms2D_shell.m, lines: "29", quote: "cellnum = 50; %number of cells to run"}
+  note: "the paper's Supplementary Table 3 gives 6-71 simulated cells per condition; the readme 20-50"
+- id: nucr_code
+  quantity: nucleus_radius
+  unit: nm
+  origin: reported
+  printed: "10000"
+  citation: {file: cms2D_shell.m, lines: "30", quote: "nucr = 10000; %radius of the cell nucleus in nm"}
+  note: "the paper prints 'a 10 µm radius circle was centred at the cell body position' (bangasser2017 p. 7); no datum there to link"
+
+# ==== cms2Dv1_0.m: values set inside the simulator ==================================================
+- id: nummod_code
+  quantity: n_modules
+  unit: dimensionless
+  origin: reported
+  printed: "3"
+  citation: {file: cms2Dv1_0.m, lines: "38", quote: "nummod=3; %number of modules (cell protrusions)"}
+  from_source: bangasser2017
+  from_datum: n_init_modules
+- id: maxm_fraction_code
+  quantity: module_max_fraction
+  unit: dimensionless
+  origin: reported
+  printed: "0.1"
+  citation: {file: cms2Dv1_0.m, lines: "39", quote: "maxm=mpool*0.1; %maximum number of motors in a single module"}
+  note: "a rule fixed in the simulator, not a parameter of the shell; Supplementary Table 2 lists n*m as its own parameter (q_module_max_rule)"
+- id: maxc_fraction_code
+  quantity: module_max_fraction
+  unit: dimensionless
+  origin: reported
+  printed: "0.1"
+  citation: {file: cms2Dv1_0.m, lines: "40", quote: "maxc=cpool*0.1; %maximum number of clutches in a single module"}
+  note: "the paper states this one-tenth rule only for the clutch sweep of Supplementary Fig. 5E-H (q_module_max_rule)"
+- id: vf_newmodule_code
+  quantity: new_module_initial_flow
+  unit: nm/s
+  origin: reported
+  printed: "120"
+  citation: {file: cms2Dv1_0.m, lines: "264", quote: "mc(nummod).vf=120;"}
+  note: "a literal, not vu; overwritten at the next event before it is used for transport, so it can enter only the recorded mean flow of one sample (q_hardcoded_vf)"
+
+# ==== analyzeCMSoutputv1_0.m: constants of the analysis =============================================
+- id: jump_cutoff_code
+  quantity: jump_speed_cutoff
+  unit: nm/s
+  origin: reported
+  printed: "1000"
+  citation: {file: analyzeCMSoutputv1_0.m, lines: "23", quote: "jump_mask = celldisp>(1000*tint);"}
+  note: "1000 nm per tint seconds, i.e. 1000 nm/s at tint = 1 s; the paper prints 'large displacements in the simulated cell centre of 1 µm s-1 were removed' (bangasser2017 p. 7); no datum there to link"
+- id: pix_code
+  quantity: mask_pixel_size
+  unit: nm
+  origin: reported
+  printed: "65.2"
+  citation: {file: analyzeCMSoutputv1_0.m, lines: "84", quote: "pix = 65.2;"}
+  note: "not in the paper (q_shape_analysis)"
+- id: rmc_upper_code
+  quantity: rmc_fit_upper_bound
+  unit: um^2/min
+  origin: reported
+  printed: "1000"
+  citation: {file: analyzeCMSoutputv1_0.m, lines: "67-68", quote: "'Lower',0,'Upper',1000"}
+  note: "bounds of D in the fit of msd = 4 D t (um^2 against min, line 75 comment); not in the paper"
+
+# ==== values copied from the paper's record for the comparisons ======================================
+- id: Nm_high_b17
+  quantity: n_motors_total
+  unit: dimensionless
+  origin: reported
+  printed: "10000"
+  citation: {none: "copied from the paper's record bangasser2017 (Nm_high: Supplementary Table 2, PDF p. 12)"}
+  from_source: bangasser2017
+  from_datum: Nm_high
+  note: "the high set, which the code's shells do not hold; used to run the code's one-tenth rule"
+- id: Nc_high_b17
+  quantity: n_clutches_total
+  unit: dimensionless
+  origin: reported
+  printed: "7500"
+  citation: {none: "copied from the paper's record bangasser2017 (Nc_high: Supplementary Table 2, PDF p. 12)"}
+  from_source: bangasser2017
+  from_datum: Nc_high
+- id: nm_star_low_b17
+  quantity: n_motors_module_max
+  unit: dimensionless
+  origin: reported
+  printed: "100"
+  citation: {none: "copied from the paper's record bangasser2017 (nm_star_low: Supplementary Table 2, PDF p. 12)"}
+  from_source: bangasser2017
+  from_datum: nm_star_low
+- id: nm_star_high_b17
+  quantity: n_motors_module_max
+  unit: dimensionless
+  origin: reported
+  printed: "1000"
+  citation: {none: "copied from the paper's record bangasser2017 (nm_star_high: Supplementary Table 2, PDF p. 12)"}
+  from_source: bangasser2017
+  from_datum: nm_star_high
+- id: nc_star_low_b17
+  quantity: n_clutches_module_max
+  unit: dimensionless
+  origin: reported
+  printed: "75"
+  citation: {none: "copied from the paper's record bangasser2017 (nc_star_low: Supplementary Table 2, PDF p. 12)"}
+  from_source: bangasser2017
+  from_datum: nc_star_low
+- id: nc_star_high_b17
+  quantity: n_clutches_module_max
+  unit: dimensionless
+  origin: reported
+  printed: "750"
+  citation: {none: "copied from the paper's record bangasser2017 (nc_star_high: Supplementary Table 2, PDF p. 12)"}
+  from_source: bangasser2017
+  from_datum: nc_star_high
+- id: kcell_b17
+  quantity: cell_spring_constant
+  unit: pN/nm
+  origin: reported
+  printed: "10000"
+  citation: {none: "copied from the paper's record bangasser2017 (kcell: Supplementary Table 2, PDF p. 12)"}
+  from_source: bangasser2017
+  from_datum: kcell
+  note: "used to run the module's series stiffness with the paper's κcell beside the code's"

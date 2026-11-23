@@ -1,0 +1,57 @@
+- id: cmp_Lc_100
+  purpose: reproduction
+  computed: Lc_100_pred
+  printed: Lc_high_density
+  conditions_ok: "the run is made at 100 per um, the printed value's condition"
+- id: cmp_rst_E75
+  purpose: reproduction
+  computed: rst_E75_pred
+  printed: rst_fig5a_n0_E75_eye
+  conditions_ok: "the run uses the Fig. 4A curve for E_ECM = 7.5 kPa without recruitment, the condition of the Fig. 5A value"
+  note: depends on the added En (Table S1 gives a range) and on eye-read curves until the figures are digitized
+- id: cmp_rst_E125
+  purpose: reproduction
+  computed: rst_E125_pred
+  printed: rst_fig5a_n0_E125_eye
+  conditions_ok: "the run uses the Fig. 4A curve for E_ECM = 12.5 kPa without recruitment, the condition of the Fig. 5A value"
+- id: cmp_fig4a_fig4c
+  purpose: consistency
+  computed: Efa_fig4a_E75_eye_at4c
+  printed: Efa_fig4c_n0_eye
+  note: Fig. 4A (7.5 kPa) and Fig. 4C (n = 0, 7.5 kPa) are both the no-recruitment curve at E_ECM = 7.5 kPa
+# Fig. S7: the model's normalized FA size against baker2015's measurements (ref. 16)
+- {id: cmp_s7_gel_soft, purpose: validation, computed: nfa_model_gel_soft, printed: nfa_exp_gel_soft}
+- {id: cmp_s7_gel_stiff, purpose: validation, computed: nfa_model_gel_stiff, printed: nfa_exp_gel_stiff}
+- {id: cmp_s7_fib_soft, purpose: validation, computed: nfa_model_fib_soft, printed: nfa_exp_fib_soft}
+# Fig. S7's experimental bars against the Fig. 5D areas they are normalized from
+- {id: cmp_5d_s7_gel_soft, purpose: consistency, computed: nfa_gel_soft_from5d, printed: nfa_exp_gel_soft}
+- {id: cmp_5d_s7_gel_stiff, purpose: consistency, computed: nfa_gel_stiff_from5d, printed: nfa_exp_gel_stiff}
+- {id: cmp_5d_s7_fib_soft, purpose: consistency, computed: nfa_fib_soft_from5d, printed: nfa_exp_fib_soft}
+
+# ---- on the calibrated figure readings ----
+- id: cmp_fig4a_fig4c_calibrated
+  purpose: consistency
+  computed: Efa_fig4a_E75
+  printed: Efa_fig4c_n0
+  note: Fig. 4A (7.5 kPa) and Fig. 4C (n = 0, 7.5 kPa) are both the no-recruitment E*FA curve at E_ECM = 7.5 kPa; both read at the same FA sizes
+- id: cmp_rst_fig5a_calibrated
+  purpose: reproduction
+  computed: rst_vs_E_from_fig4a
+  printed: rst_fig5a_n0_at4a
+  conditions_ok: "the run uses the Fig. 4A curves for 7.5 and 12.5 kPa, which have no fibre recruitment, the condition (n = 0) of the Fig. 5A curve"
+  note: depends on the added En (Table S1 gives a range; alternatives 5 and 10 kPa) and on reading alpha and beta per Pa
+- id: cmp_Lc_curve_figS5E
+  purpose: reproduction
+  computed: Lc_curve_pred
+  printed: Lc_figS5E
+  note: the printed formula with kp, kc, ks fixed gives Lc proportional to 1/phi_i; scaled from the printed 0.436 um at 1 per um
+- id: cmp_figS7_model_vs_exp
+  purpose: validation
+  computed: nfa_model_figS7
+  printed: nfa_exp_figS7
+  note: "the model's bars against baker2015's measurements (ref. 16); bar 4 is 1 in both by the normalization and the fibrous soft contrast is partly set from the data (q_s7_inputs)"
+- id: cmp_fig5d_figS7_calibrated
+  purpose: consistency
+  computed: nfa_from_fig5d
+  printed: nfa_exp_figS7
+  note: Fig. S7's experimental bars should be Fig. 5D's areas over the stiff fibrous area, if both show the same measurements

@@ -332,3 +332,9 @@ def test_the_overview_text_can_put_a_notice_above_every_view(syn, tmp_path):
     assert '<a href="https://example.org/repo">check a record</a>' in strip
     assert page.index('class="notice"') < page.index('id="app"')
     assert '<div class="notice"' not in render_overview(syn, tmp_path / "b").read_text()
+
+
+def test_fmt_shows_a_missing_entry_in_a_computed_list():
+    """A computed list with a missing entry is shown with a dash, not a crash."""
+    from boxgraph.overview import _fmt
+    assert _fmt([1.0, None, 2.5]) == "[1, —, 2.5]"

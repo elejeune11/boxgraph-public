@@ -1,0 +1,33 @@
+id: module_ssa
+name: one motor-clutch module of the CMS on a fixed cell body, simulated by the direct Gillespie method (Eqs. 1, 2, 4, 10, 11)
+role: model
+stated: {page: 7, printed_page: "7", quote: "composed of j motor–clutch modules, each following rules as previously", where: "Methods: Eqs. 1, 2, 4, 10, 11 and algorithm steps 2-8, 11"}
+equation: >-
+  Direct SSA: t_event = -ln(URN1)/Σk (Eq. 10), event i chosen by URN2 (Eq. 11); free clutches bind at
+  kon, engaged clutches unbind at k*off exp(Fc,i/Fb) (Eq. 1) with Fc,i = κc (xc,i - xs); the F-actin
+  is retracted at vm = v*m (1 - κs xs/(nm Fm)) (Eq. 2) and engaged clutches advance by vm t_event;
+  module force balance κc Σ xc,i = κs xs (Eq. 4) sets xs after each event.
+inputs:
+  nm:   {quantity: n_motors_module_max, unit: dimensionless, description: "the stand-in module holds the module maximum n*m"}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+  vm:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  nc:   {quantity: n_clutches_module_max, unit: dimensionless, description: "the stand-in module holds the module maximum n*c"}
+  kon:  {quantity: clutch_on_rate, unit: 1/s}
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+  kc:   {quantity: clutch_stiffness, unit: pN/nm}
+  ks:   {quantity: substrate_stiffness, unit: pN/nm}
+outputs:
+  v_flow: {quantity: retrograde_flow_rate, unit: nm/s, description: "time average of vm over the run"}
+  F_trac: {quantity: traction_force_magnitude, unit: pN, description: "time average of κs xs over the run"}
+settings: {t_total: 500.0, seed: 1}
+stochastic: true
+from_words: true
+built_from: [off_rate_eq1, motor_velocity_eq2]
+reconstructed: >-
+  The paper's whole-cell simulator (model cms) is not run here (its simulated time is not printed and
+  its cost is far beyond a build). One module of it, with the module maxima n*m and n*c, a fixed cell
+  body, no polymerization or module turnover, and the cell spring left out (κcell = 10,000 pN/nm is
+  four orders stiffer than the clutches), stands in to test the paper's statement that the
+  whole-cell shift of the optimum is "consistent with the results for the simpler motor-clutch
+  model that only modelled one protrusion".

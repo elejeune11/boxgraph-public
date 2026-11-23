@@ -1,0 +1,19 @@
+id: force_velocity_eq3
+name: linear force-velocity relation of the motors against the substrate load (Eqs. 3-4)
+role: model
+stated: {page: 11, printed_page: "SOM p. 4", quote: "according to a linear force-velocity relation given by", where: "Eqs. 3-4"}
+equation: "vfilament = vu (1 - κsub xsub / Fstall) (Eq. 3); Fstall = nm Fm (Eq. 4)"
+# A helper model: Eqs. 3-4 as one step of chan2008/motor_clutch, written out so that prahl2020's statement that
+# its Eqn. S2 is the linear force-velocity relationship of this paper (prahl2020 Supporting Methods, ref. 5) can
+# be tested. Signs as printed: vu, Fm and xsub are negative in the paper's convention; the law is unchanged by
+# flipping all three.
+inputs:
+  vu:   {quantity: unloaded_motor_velocity, unit: nm/s}
+  ksub: {quantity: substrate_stiffness, unit: pN/nm}
+  xsub: {quantity: substrate_position, unit: nm}
+  nm:   {quantity: n_motors, unit: dimensionless}
+  Fm:   {quantity: motor_stall_force, unit: pN}
+outputs:
+  vfilament: {quantity: filament_velocity, unit: nm/s}
+settings: {}
+stochastic: false

@@ -1,0 +1,19 @@
+id: fc_v_eq9
+name: traction per clutch site at given actin flow, catch bond and capped linear spring (Eqs. 4, 6, 9, 11)
+role: model
+stated: {page: 22, quote: "can easily be obtained from equation (8) as a function of the retrograde actin flow", where: "Eq. 9"}
+equation: "Fc/Nc = int_0^inf F(l) pon(l) dl, pon from Eq. 9, koff from Eq. 4, F from Eq. 11"
+inputs:
+  v: {quantity: actin_flow_speed, unit: nm/s}
+  kon: {quantity: clutch_assembly_rate, unit: 1/s}
+  k0off: {quantity: zero_load_off_rate, unit: 1/s}
+  k0offp: {quantity: zero_load_off_rate, unit: 1/s}
+  xt: {quantity: transition_distance, unit: nm}
+  xtp: {quantity: transition_distance, unit: nm}
+  kT: {quantity: thermal_energy, unit: pN*nm}
+  k: {quantity: clutch_spring_constant, unit: pN/nm}
+  ly: {quantity: linear_limit_extension, unit: nm}
+outputs:
+  fc: {quantity: clutch_traction_per_site, unit: pN}
+settings: {n_l: 20000}
+built_from: [steady_linear]

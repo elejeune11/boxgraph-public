@@ -1,0 +1,64 @@
+# Eq. 4 at J = 0 and Eq. S2 with the Table S1 values
+- id: run_sigma_star
+  model: steady_stress_eq4
+  inputs: {dmu0: dmu0, dr: dr_segment}
+  outputs: {sigma_star: sigma_star_pred}
+- id: run_sigma_max
+  model: sigma_max_s2
+  inputs: {rho0: rho0, alpha: alpha_per_Pa, beta: beta_per_Pa}
+  outputs: {sigma_max: sigma_max_pred}
+- id: run_Efa_required
+  model: required_efa
+  inputs: {sigma_star: sigma_star_pred, En: En_mid, K: K_cyto, rho0: rho0, alpha: alpha_per_Pa, beta: beta_per_Pa}
+  outputs: {Efa_req: Efa_required_pred}
+# the stable size from the paper's own effective-modulus curves (Fig. 4A, n = 0), to set against Fig. 5A
+- id: run_rst_E75
+  model: stable_size_chain
+  inputs: {Efa: Efa_fig4a_E75_eye, En: En_mid, K: K_cyto, rho0: rho0, alpha: alpha_per_Pa, beta: beta_per_Pa, dmu0: dmu0, dr: dr_segment}
+  outputs: {r_st: rst_E75_pred}
+- id: run_rst_E125
+  model: stable_size_chain
+  inputs: {Efa: Efa_fig4a_E125_eye, En: En_mid, K: K_cyto, rho0: rho0, alpha: alpha_per_Pa, beta: beta_per_Pa, dmu0: dmu0, dr: dr_segment}
+  outputs: {r_st: rst_E125_pred}
+# the 1D shear lag length at 100 per um from its printed value at 1 per um
+- id: run_Lc_100
+  model: shear_lag_length
+  inputs: {Lc_ref: Lc_low_density, phi_ref: phi1d_low, phi: phi1d_high}
+  outputs: {Lc: Lc_100_pred}
+# Fig. 5D areas normalized by the stiff fibrous ECM, as Fig. S7's experimental bars
+- id: run_norm_gel_soft
+  model: normalize_fa_size
+  inputs: {A: fa_area_gel_soft, A_ref: fa_area_fib_stiff}
+  outputs: {ratio: nfa_gel_soft_from5d}
+- id: run_norm_gel_stiff
+  model: normalize_fa_size
+  inputs: {A: fa_area_gel_stiff, A_ref: fa_area_fib_stiff}
+  outputs: {ratio: nfa_gel_stiff_from5d}
+- id: run_norm_fib_soft
+  model: normalize_fa_size
+  inputs: {A: fa_area_fib_soft, A_ref: fa_area_fib_stiff}
+  outputs: {ratio: nfa_fib_soft_from5d}
+
+# ---- on the calibrated figure readings ----
+# Fig. 4A (calibrated) -> Fig. 5A: the stable size at 7.5 and 12.5 kPa, no recruitment
+- id: run_rst_fig4a_calibrated
+  model: stable_size_vs_modulus
+  inputs: {Efa_a: Efa_fig4a_E75, E_a: E_legend_fig4a_75, Efa_b: Efa_fig4a_E125, E_b: E_legend_fig4a_125,
+           En: En_mid, K: K_cyto, rho0: rho0, alpha: alpha_per_Pa, beta: beta_per_Pa, dmu0: dmu0, dr: dr_segment}
+  sweep: {E: rst_fig5a_n0_at4a}
+  outputs: {r_st: rst_vs_E_from_fig4a}
+  note: >-
+    the two curve inputs carry different ECM moduli (7.5 and 12.5 kPa) on purpose: at each swept E the model
+    uses the curve whose legend modulus equals E
+# Fig. S5E: Lc against ligand density from the printed Lc at 1 per um (Lc ~ 1/phi_i)
+- id: run_Lc_curve_figS5E
+  model: shear_lag_length
+  inputs: {Lc_ref: Lc_low_density, phi_ref: phi1d_low}
+  sweep: {phi: Lc_figS5E}
+  outputs: {Lc: Lc_curve_pred}
+# Fig. 5D areas (calibrated) normalized by the stiff fibrous ECM bar, as Fig. S7's experimental bars
+- id: run_norm_fig5d_calibrated
+  model: normalize_by_reference
+  inputs: {A: fa_area_fig5d}
+  settings: {reference_condition: 4}
+  outputs: {ratio: nfa_from_fig5d}

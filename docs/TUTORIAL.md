@@ -20,7 +20,7 @@ make check          # lint, tests and the test catalogue: should end with every 
 ## 2. Look at what is already there
 
 Each review is a corpus of its own in `corpora/<name>/`: `motor_clutch`
-(cell adhesion, sixteen sources) and `cardio` (models of the circulation).
+(cell adhesion, thirty-two sources) and `cardio` (models of the circulation).
 Its `records/` folder holds one folder per source: what each paper prints, its
 models in runnable form, and the comparisons between them. They validate
 without the papers themselves:

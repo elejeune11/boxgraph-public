@@ -1,0 +1,26 @@
+id: cusp_sigma_m
+name: myosin density at the cusp catastrophe of the linear clutch model (Fig. 5c,d)
+role: model
+stated: {page: 13, quote: "results in the appearance of two saddle-node bifurcation points", where: "Fig. 5d"}
+equation: "two saddle-node points of Eq. (8) (intersections of Fc(v) and Fm(v)) appear at the cusp as sigma_m is reduced"
+from_words: true
+inputs:
+  kon: {quantity: clutch_assembly_rate, unit: 1/s}
+  k0off: {quantity: zero_load_off_rate, unit: 1/s}
+  k0offp: {quantity: zero_load_off_rate, unit: 1/s}
+  xt: {quantity: transition_distance, unit: nm}
+  xtp: {quantity: transition_distance, unit: nm}
+  kT: {quantity: thermal_energy, unit: pN*nm}
+  v0: {quantity: motor_free_speed, unit: nm/s}
+  Fst: {quantity: motor_stall_force, unit: pN}
+  sc: {quantity: clutch_site_density, unit: 1/um**2}
+  kc: {quantity: clutch_spring_constant, unit: pN/nm}
+  r: {quantity: adhesion_site_size, unit: nm}
+  ly: {quantity: linear_limit_extension, unit: nm}
+  sm_fit: {quantity: myosin_density, unit: 1/um**2, description: "the fitted density, for the ratio"}
+outputs:
+  sm_cusp: {quantity: myosin_density, unit: 1/um**2}
+  E_cusp: {quantity: youngs_modulus, unit: Pa}
+  ratio: {quantity: myosin_density_ratio, unit: dimensionless, description: "sm_fit / sm_cusp"}
+settings: {n_v: 3000, n_l: 8000, E_min: 100, E_max: 1.0e9}
+built_from: [steady_linear]

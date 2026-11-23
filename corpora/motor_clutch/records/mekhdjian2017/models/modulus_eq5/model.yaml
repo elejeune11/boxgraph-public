@@ -1,0 +1,15 @@
+id: modulus_eq5
+name: effective Young's modulus of the substrate from its spring constant (Supplemental Eq. 5)
+role: processing
+stated: {page: 25, quote: "The effective Young's modulus is given by", where: "Supplemental Eq. 5"}
+equation: "Esubstrate = 9 κsubstrate / (4 π radhesion)"
+inputs:
+  ksub:  {quantity: substrate_stiffness, unit: pN/nm}
+  r_adh: {quantity: adhesion_radius, unit: nm}
+outputs:
+  E:     {quantity: substrate_modulus, unit: kPa}
+settings: {}
+stochastic: false
+# Helper model added by the relations job (alonsomatilla2023 + mekhdjian2017): Eq. 5 is used inside
+# motor_clutch_reinforced (solved for κsubstrate), and alonsomatilla2023 cites this paper (SI ref. S11) for
+# its own κs = 2π ds Es / 9, so the equation is entered on its own to relate the two.

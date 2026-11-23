@@ -1,0 +1,18 @@
+# Port (our code) of cms2Dv1_0.m lines 180-181 (module clutches) and 175 (cell-body clutches, the
+# same form with cell.koff, cell.Fb): Bell's law on the magnitude of the 2D clutch force.
+#   mc(i).Fc=mc(i).Kc*(repmat(mc(i).xsub-mc(i).xm,1,mc(i).nc)-mc(i).xc);
+#   ktemp(mc(i).ceng)=mc(i).koff.*exp((sum(mc(i).Fc(:,mc(i).ceng).^2).^0.5)./mc(i).Fb);
+# The input Fc is the clutch force vector's norm, (sum(Fc.^2)).^0.5, so it is never negative.
+id: off_rate_port
+name: "loaded clutch off-rate, Bell model on the 2D force magnitude (cms2Dv1_0.m lines 175, 181, Python port)"
+role: model
+stated: {file: cms2Dv1_0.m, lines: "181", quote: "off-rate increases with load according to Bell Model"}
+equation: "k = koff*exp(|Fc|/Fb)"
+inputs:
+  koff: {quantity: clutch_off_rate_unloaded, unit: 1/s}
+  Fc:   {quantity: clutch_force, unit: pN, description: "the norm of the clutch's 2D force"}
+  Fb:   {quantity: bond_rupture_force, unit: pN}
+outputs:
+  koff_i: {quantity: clutch_off_rate_loaded, unit: 1/s}
+settings: {}
+stochastic: false

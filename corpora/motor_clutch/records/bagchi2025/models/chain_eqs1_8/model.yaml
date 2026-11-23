@@ -1,0 +1,29 @@
+id: chain_eqs1_8
+name: one-dimensional cell-ligand-substrate chain with protrusion, clutch engagement and division (Eqs 1-8)
+role: model
+stated: {page: 27, quote: "Force balance at every cell node xc i reads (1)", where: "Eqs 1-8"}
+equation: "Fp + Fc-c + Fc-l + kc eps_c,i - kc eps_c,i+1 - eta_c dx_c,i/dt = 0 (1); Fc-c + kc eps_c,i-1 - kc eps_c,i = 0 (2); Fc-l + kc-l eps_c,i - kc-l eps_l,i = 0 (3); Fl-l - Fc-l + Fl-s + kl eps_l,i - kl eps_l,i+1 - eta_l dx_l,i/dt = 0 (4); Fl-l + kl eps_l,i-1 - kl eps_l,i = 0 (5); Fl-s + kl-s eps_c,i - kl-s eps_l,i = 0 (6); Fs-s - Fl-s + ks eps_s,i - ks eps_s,i+1 - eta_s dx_s,i/dt = 0 (7); Fs-s + ks eps_s,i-1 - ks eps_s,i = 0 (8)"
+inputs:
+  Fp: {quantity: protrusive_force, unit: nN}
+  kc: {quantity: cell_spring_stiffness, unit: nN/um}
+  eta_c: {quantity: cell_damping_constant, unit: nN*s/um}
+  kl: {quantity: ligand_spring_stiffness, unit: nN/um}
+  eta_l: {quantity: ligand_damping_constant, unit: nN*s/um}
+  ks: {quantity: substrate_spring_stiffness, unit: nN/um}
+  eta_s: {quantity: substrate_damping_constant, unit: nN*s/um}
+  kcl: {quantity: cell_ligand_stiffness, unit: nN/um}
+  kls: {quantity: ligand_substrate_stiffness, unit: nN/um}
+outputs:
+  t_rest: {quantity: rest_time, unit: min}
+  v_ratio: {quantity: speed_ratio_conn_disc, unit: dimensionless}
+  T_ratio: {quantity: traction_ratio_disc_conn, unit: dimensionless}
+settings: {}
+stochastic: false
+runnable: false
+not_runnable_reason: >
+  The paper gives the force balances and a six-step algorithm, but not the time step, the
+  number of cell, ligand and substrate nodes, the rest criterion that gates each protrusion,
+  how a strain enters a force (Eqs 1-8 multiply stiffnesses by strains, and Eqs 3 and 6 mix
+  cell and ligand strains across a link), the clutch rule beyond "attaches to the nearest
+  ligand node", nor how a divided cell spring is re-meshed. The authors' C++ code (Zenodo,
+  record bagchi_code) builds on the Chaste library and is not run here.

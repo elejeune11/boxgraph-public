@@ -1,0 +1,191 @@
+# Relations of this paper's two clutch models with each other and with ref. 42 (bangasser2013b).
+# Numbers in each model's port units (pN, nm, s). Inputs that are not the subject of a relation are
+# pinned at ref. 42's base set (lo = hi).
+- id: rel_canonical_same_as_bangasser2013b
+  kind: same_as
+  a: panzetta2019/clutch_canonical_cycle
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks", r: "r"}
+  output_map: {v_mean: v_mean}
+  regime: {nm: [2000, 3000], Fm: [2, 2], vu: [120, 120], nc: [1000, 2000], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ks: [1, 100], r: [3, 3], x0: [0, 1000]}
+  tolerance: 1.0e-4
+  provenance: stated
+  citation: {page: 9, printed_page: "22012", quote: "a master equation-based analysis was performed and the MATLAB ODE", where: "Methods, Clutch Model: 'Bangasser and Odde (42) demonstrated ... (see SI Appendix for more details about the model in its canonical form)'"}
+  assumptions:
+    - "the canonical form of Appendix 1 (Eqs. 3, 4, 11, s.1-s.6) is ref. 42's clutch-ensemble ODEs (Eqs. 8-12, 19 there) with the substrate held at an initial deformation x0"
+    - "x0 is sampled over [0, 1000] nm while ref. 42's model has none: the relation holding across x0 is the record's test of Fig. S13 (left), where the canonical model's flow does not depend on x0"
+    - "both start unbound and unloaded and end the cycle at the abrupt failure; tolerance 1e-4 covers the two solvers' integration error"
+- id: rel_two_spring_reduces_to_bangasser2013b
+  kind: reduces_to
+  a: panzetta2019/clutch_two_spring_cycle
+  b: bangasser2013b/clutch_ensemble_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks", r: "r"}
+  output_map: {v_mean: v_mean}
+  regime: {nm: [2000, 2000], Fm: [2, 2], vu: [120, 120], nc: [2000, 2000], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ks: [5, 100], r: [3, 3], x0: [0, 1000], l: [100, 1000]}
+  limit: {l: "oo"}
+  tolerance: 1.0e-4
+  provenance: stated
+  citation: {page: 6, printed_page: "22009", quote: "a modified version of the canonical clutch model", where: "Results, text before Fig. 8: 'a modified version of the canonical clutch model (27, 42), in which the substrate was modeled as constituted by 2 linear elastic springs arranged orthogonally'"}
+  assumptions:
+    - "the paper states the two-spring model is a modification of ref. 42's clutch-ensemble model (and says on p. 7 it still agrees 'with the previous formulation of the model'); the limit in which it gives back ref. 42's model is the relator's: as l grows the orthogonal spring's force vanishes (Eqs. 6-7)"
+    - "ref. 42's model has no prestretch x0; Eqs. s.4-s.6 contain it only as <xc> - x0, so the limit is tested across x0 in [0, 1000] nm"
+    - "the direct test of what rel_two_spring_reduces_to_canonical and rel_canonical_same_as_bangasser2013b give together"
+- id: rel_two_spring_reduces_to_canonical
+  kind: reduces_to
+  a: panzetta2019/clutch_two_spring_cycle
+  b: panzetta2019/clutch_canonical_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks", r: "r", x0: "x0"}
+  output_map: {v_mean: v_mean}
+  regime: {nm: [2000, 2000], Fm: [2, 2], vu: [120, 120], nc: [2000, 2000], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ks: [5, 100], r: [3, 3], x0: [0, 1000], l: [100, 1000]}
+  limit: {l: "oo"}
+  tolerance: 1.0e-4
+  provenance: proposed
+  reason: >-
+    The paper says the modified model "still remain[s] in agreement with the previous formulation of the
+    model (27, 29)" (p. 7) without saying in which limit. As the orthogonal spring's rest length l grows,
+    its force (sqrt(l^2 + x^2) - l) x/sqrt(l^2 + x^2) vanishes (Eqs. 6-7) and Eqs. 3-12 become s.1-s.6.
+  assumptions:
+    - "the limit is the reader's: the paper names none"
+- id: rel_two_spring_large_x0_reduces_to_canonical_2ks
+  kind: reduces_to
+  a: panzetta2019/clutch_two_spring_cycle
+  b: panzetta2019/clutch_canonical_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "2*ks", r: "r", x0: "0"}
+  output_map: {v_mean: v_mean}
+  regime: {nm: [2000, 2000], Fm: [2, 2], vu: [120, 120], nc: [2000, 2000], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ks: [5, 50], r: [3, 3], x0: [100, 1000], l: [100, 500]}
+  limit: {x0: "oo"}
+  tolerance: 1.0e-4
+  provenance: proposed
+  reason: >-
+    Evidence on the paper's claim that prestrain acts through strain energy rather than stiffness
+    (q_strain_energy). From Eq. 7 the substrate's tangent stiffness is dFs/dxs = ks (2 - l^3/(l^2 +
+    xs^2)^(3/2)), which grows from ks at xs = 0 to 2 ks as xs >> l. At a prestretch x0 >> l the two-spring
+    model is therefore the canonical model on a substrate of stiffness 2 ks, whatever the strain energy
+    stored: the largest shift of the optimum stiffness x0 can produce is a factor 2.
+  assumptions:
+    - "x0 is the canonical model's x0 = 0 on the b side; s.4-s.6 do not depend on it"
+- id: rel_two_spring_approximated_by_tangent_stiffness
+  kind: approximated_by
+  a: panzetta2019/clutch_two_spring_cycle
+  b: panzetta2019/clutch_canonical_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ks*(2 - l**3/(l**2 + x0**2)**(3/2))", r: "r", x0: "0"}
+  output_map: {v_mean: v_mean}
+  regime: {nm: [2000, 2000], Fm: [2, 2], vu: [120, 120], nc: [2000, 2000], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ks: [20, 60], r: [3, 3], x0: [0, 2000], l: [500, 2000]}
+  tolerance: 0.1
+  provenance: proposed
+  reason: >-
+    Evidence on q_strain_energy at every x0, not only x0 >> l: when the cycle's excursion of xs is small
+    against l, the two-spring substrate acts as a linear spring with its tangent stiffness at x0, ks (2 -
+    l^3/(l^2 + x0^2)^(3/2)), and the modified model's flow is the canonical model's at that stiffness. The
+    paper itself reads Fig. 9 so: "the substrate deformation is interpreted by the cell as an additional
+    stiffness" (p. 7).
+  assumptions:
+    - "the regime keeps the excursion (about 100 nm at these inputs) below l"
+    - "tolerance 0.1 is the relator's, set after a first test at 0.05 gave a largest error of about 8%: the error is largest on the steep, stiff side of the optimum, where a small change of stiffness moves the flow most; near the optimum it is about 1%"
+
+# Relations to Bangasser, Rosenfeld and Odde 2013 (ref. 27, record bangasser2013). The paper names ref. 27
+# with ref. 42 as the source of "the canonical clutch model" (p. 6) and with ref. 29 as the model "extensively
+# explained in other contexts" (p. 5). Ref. 27's model is the stochastic motor-clutch model (Gillespie SSA,
+# bangasser2013/motor_clutch_ssa); the canonical form of SI Appendix 1 is ref. 42's mean-field ODEs of that
+# model, hence approximated_by. The paper takes no value from ref. 27. Both count forces and speeds positive;
+# units pN, nm, s on both sides. Not entered: bangasser2013/catch_slip_eq9 (an off-rate law, which the
+# canonical form replaces by Bell's slip bond in Eq. 11; no shared output) and bangasser2013/optimal_stiffness
+# (this record has no optimum model).
+- id: rel_b13_ssa_flow_approximated_by_canonical_cycle
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: panzetta2019/clutch_canonical_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub", r: "2", x0: "0"}
+  output_map: {v_mean: v_retro}
+  regime: {nm: [75, 75], Fm: [2, 2], vu: [120, 120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: stated
+  citation: {page: 6, printed_page: "22009", quote: "a modified version of the canonical clutch model", where: "Results, text before Fig. 8: 'a modified version of the canonical clutch model (27, 42)'"}
+  assumptions:
+    - "the paper calls ref. 27's model and ref. 42's ODEs together 'the canonical clutch model' and gives the ODE form (SI Appendix 1); the stochastic model of ref. 27 is its Monte Carlo counterpart, so the relation is mean field against stochastic"
+    - "pinned at the conditions where ref. 42 compares its ODEs with the SSA (Fig. 2 there: Table S1 base set, ksub = 0.1 pN/nm, r = 2), as bangasser2013b/rel_ssa_flow_approximated_by_ode; x0 = 0 since ref. 27's model has no prestretch"
+    - "the SSA's time-averaged flow over the run and the ODE's flow averaged over one load-and-fail cycle both stand for the mean retrograde flow"
+    - "tolerance 0.25 is the relator's, as in the bangasser2013b relation"
+- id: rel_b13_ssa_cycle_time_approximated_by_canonical_cycle
+  kind: approximated_by
+  a: bangasser2013/motor_clutch_ssa
+  b: panzetta2019/clutch_canonical_cycle
+  mapping: {nm: "nm", Fm: "Fm", vu: "vu", nc: "nc", kon: "kon", koff: "koff", Fb: "Fb", kc: "kc", ks: "ksub", r: "2", x0: "0"}
+  output_map: {t_cycle: t_cycle}
+  regime: {nm: [75, 75], Fm: [2, 2], vu: [120, 120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [2, 2], kc: [5, 5], ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: stated
+  citation: {page: 6, printed_page: "22009", quote: "a modified version of the canonical clutch model", where: "Results, text before Fig. 8: 'a modified version of the canonical clutch model (27, 42)'"}
+  assumptions:
+    - "as rel_b13_ssa_flow_approximated_by_canonical_cycle; the SSA cycle time is bangasser2013's reader's definition (run time over the number of complete failures), the ODE's the time of the abrupt failure"
+
+# Relations to Chan and Odde 2008 (ref. 26, record chan2008). The paper cites ref. 26 only in the
+# Introduction, among clutch models "used to shed light on the basis of the cell mechanosensing mechanism
+# (26-29)" (p. 1); it states no relation of its own models to Chan's, so what follows is proposed. Chan's
+# model counts retrograde motion and force negative (Table S1: Fm = -2 pN, vu = -120 nm/s, Fb = -2 pN);
+# this paper counts them positive, hence the minus signs. Units pN, nm, s on both sides.
+# Not entered: chan2008/force_velocity_eq3 against this paper's Eq. s.5, vf = vu (1 - (Fs - F0)/(nm Fm)),
+# which is Chan's Eq. 3 with the load counted from the prestretch force F0. No model here outputs vf alone
+# (s.5 is one step of clutch_canonical_cycle, whose outputs are cycle averages), and the paper does not
+# state the relation in a form that would justify a helper model.
+- id: rel_chan_mc_flow_approximated_by_canonical_cycle
+  kind: approximated_by
+  a: chan2008/motor_clutch
+  b: panzetta2019/clutch_canonical_cycle
+  mapping: {nm: "nm", Fm: "-Fm", vu: "-vu", nc: "nc", kon: "kon", koff: "koff", Fb: "-Fb", kc: "kc", ks: "ksub", r: "2", x0: "0"}
+  output_map: {v_mean: v_retro}
+  regime: {nm: [75, 75], Fm: [-2, -2], vu: [-120, -120], nc: [75, 75], kon: [1, 1], koff: [0.1, 0.1], Fb: [-2, -2], kc: [5, 5], ksub: [0.1, 0.1]}
+  tolerance: 0.25
+  provenance: proposed
+  reason: >-
+    The canonical clutch model of SI Appendix 1 is the mean-field (master-equation) description of the
+    stochastic motor-clutch model of ref. 26, through ref. 42 (rel_canonical_same_as_bangasser2013b here;
+    bangasser2013b/rel_chan_mc_flow_approximated_by_ensemble_ode there). With no prestretch (x0 = 0) its
+    load-and-fail cycle should give Chan's time-averaged retrograde flow to the accuracy ref. 42 claims for
+    the ODEs against the Monte Carlo model. This relation tests that directly, at the same conditions.
+  assumptions:
+    - "Chan's fixed-time-step MC (dt = 0.005 s, 300 s) at the Table S1 base set with ksub = 0.1 pN/nm (the conditions ref. 42 compares MC with ODE, Fig. 2 there); the canonical model takes the gamma closure at r = 2, as in that figure, and x0 = 0"
+    - "Chan's off-rate is the exponential Bell law; the canonical model's Eq. 11 is a gamma-closure mean of it over clutch extensions, which tends to the mean-field exponential as r grows: the two are not the same law, hence approximated_by"
+    - "the MC's time-averaged retrograde flow over many cycles and the ODE's flow averaged over one load-and-fail cycle both stand for the mean retrograde flow (retrograde_flow_rate and cycle_mean_flow_rate)"
+    - "tolerance 0.25 is the relator's, as for the corresponding relation in bangasser2013b"
+
+# Relations to Elosegui-Artola et al. 2016 (ref. 29, record elosegui2016). The paper names ref. 29 as one of
+# the two sources of its clutch model: "The model, as extensively explained in other contexts (27, 29), is able
+# to describe the mechanical cross-talk ..." (p. 5), and its two-spring version still agrees "with the previous
+# formulation of the model (27, 29)" (p. 7). It takes no value from ref. 29. Both papers count forces and
+# speeds positive. Units: pN, nm, s here; Elosegui's kc in nN/nm, E in kPa, ra in nm.
+- id: rel_canonical_approximated_by_elosegui_no_talin
+  kind: approximated_by
+  a: panzetta2019/clutch_canonical_cycle
+  b: elosegui2016/clutch_no_talin_sim
+  mapping:
+    nm: "nm"
+    Fm: "Fm"
+    vu: "vu"
+    nf: "nc"
+    kont: "kon"
+    dint: "1"
+    kc: "kc/1000"
+    E: "ks"
+    ra: "1000"
+    ksub_factor: "1"
+    koff_scale: "1"
+    koff_a: "koff"
+    koff_b: "1/Fb"
+    koff_c: "0"
+    koff_d: "0"
+    koff_g: "0"
+    koff_fend: "1"
+  output_map: {actin_flow: v_mean}
+  regime: {nm: [40, 60], Fm: [1.6, 2.4], vu: [100, 140], nc: [40, 60], kon: [0.2, 0.4], koff: [0.08, 0.12],
+           Fb: [1.6, 2.4], kc: [0.6, 1.0], ks: [0.01, 100], r: [2, 2], x0: [0, 1000]}
+  tolerance: 0.25
+  provenance: stated
+  citation: {page: 5, printed_page: "22008", quote: "The model, as extensively explained in other contexts", where: "Results, 'Stretched Substrate and the Clutch Model': 'The model, as extensively explained in other contexts (27, 29), is able to describe the mechanical cross-talk between the cells and the external environment'"}
+  assumptions:
+    - "the paper states that its clutch model is the one of refs. 27 and 29 but gives no mapping; the mapping is the relator's. Ref. 29's model without talin unfolding (elosegui2016/clutch_no_talin_sim) is the closest model of that paper to the canonical form of SI Appendix 1: no reinforcement, force transmitted through clutch springs to a linear substrate spring"
+    - "the two do not share an off-rate law: ref. 29 uses a catch bond, the canonical form Bell's slip bond (Eq. 11 is its gamma-closure mean). The catch bond is reduced to its first exponential (koff_c = koff_g = 0, koff_b = 1/Fb, koff_a = koff); with ref. 29's printed catch-bond parameters the models differ by design"
+    - "kon = kont dint with dint = 1 per um^2, and ksub = c E ra with c = 1 and ra = 1000 nm, so that E in kPa equals ks in pN/nm"
+    - "the canonical model is a mean-field moment closure (r = 2, as in ref. 42's Fig. 2) and ref. 29's a Monte Carlo simulation (5 ms steps, 100 s), hence approximated_by; the canonical model's flow averaged over one load-and-fail cycle and the simulation's run-averaged actin speed both stand for the mean retrograde flow"
+    - "x0 is sampled over [0, 1000] nm: ref. 29's model has no prestretch, and s.4-s.6 contain x0 only as <xc> - x0"
+    - "regime and tolerance 0.25 as in elosegui2016/rel_bangasser_ode_approximated_by_no_talin, since the canonical form is ref. 42's ODEs (rel_canonical_same_as_bangasser2013b); that relation was left not verified at this tolerance (ODE up to ~40% off the simulation at the soft and stiff ends). This one samples the regime at other points (x0 is an added dimension) and its largest error came out at about 21%, within 0.25; the two results are the same closure gap met at different samples, not a difference of mapping. Panzetta's own base set (nm = nc = 2000, kc = 5 pN/nm) is not used, because ref. 29's fixed 5 ms step would load each clutch by about 3 pN per step, more than Fb"

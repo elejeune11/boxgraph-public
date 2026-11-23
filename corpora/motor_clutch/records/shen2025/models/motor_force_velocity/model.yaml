@@ -1,0 +1,17 @@
+# A helper model for the relation to chan2008, which this paper states for the force-velocity law alone
+# ("a piecewise linear force-velocity relationship [8,33]", p. 2); the same law sits inside Eq. 4 and every
+# model of the record built on it (there in dimensionless form).
+id: motor_force_velocity
+name: piecewise linear force-velocity relation of a myosin motor (p. 2, the vm(fl) of Eq. 4)
+role: model
+stated: {page: 2, printed_page: "014417-2", quote: "behavior is quantitatively captured through a piecewise linear", where: "vm(fl), after Eq. 1"}
+equation: "vm(fl) = vu for fl <= 0; vu (1 - fl/fs) for 0 < fl <= fs; vb for fl > fs"
+inputs:
+  vu: {quantity: unloaded_motor_velocity, unit: nm/s}
+  fl: {quantity: motor_load_force, unit: pN}
+  fs: {quantity: motor_stall_force, unit: pN}
+  vb: {quantity: motor_back_velocity, unit: nm/s}
+outputs:
+  vm: {quantity: motor_velocity, unit: nm/s}
+settings: {}
+stochastic: false

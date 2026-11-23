@@ -1,0 +1,72 @@
+# Measured speeds (Table 1). Each tracked object is its own quantity: speeds are magnitudes of 3D
+# velocity vectors, averaged over tracks (Materials and Methods, Statistics).
+- {id: actinin_speed, name: mean speed of EGFP-alpha-actinin-1 puncta on stress fibres in 3D, dimension: "[length]/[time]", description: "magnitude of the 3D lab-frame velocity of alpha-actinin-1 puncta (the actin cytoskeleton)"}
+- {id: paxillin_speed, name: mean speed of paxillin-labelled adhesion plaques in 3D, dimension: "[length]/[time]"}
+- {id: zyxin_speed, name: mean speed of zyxin-labelled adhesion plaques in 3D, dimension: "[length]/[time]"}
+- {id: fibrin_speed, name: mean speed of the fibrin matrix next to a tracked object (by FIDVC), dimension: "[length]/[time]"}
+- {id: actin_adhesion_relative_speed, name: speed of actin relative to the adhesion it is attached to, dimension: "[length]/[time]", description: "|v_zyx - v_actn| in Table 1 (stress-fibre elongation, 'spooling'); in the clutch model (Supp. eqns 12-14), v, the velocity of actin relative to the focal adhesion"}
+- {id: actin_adhesion_speed_difference, name: difference of the speeds of a zyxin plaque and its colocalized alpha-actinin-1 punctum, dimension: "[length]/[time]", description: "|v_zyx| - |v_actn|, a lower bound on the relative speed"}
+- {id: fibrin_paxillin_relative_speed, name: speed of a paxillin plaque relative to the fibrin next to it (slippage), dimension: "[length]/[time]", description: "v_fib - v_pax in Table 1"}
+- {id: velocity_lag_time, name: time between the two positions used to compute a velocity, dimension: "[time]", description: "the time resolution of tracks, tau"}
+- {id: particle_displacement_measured, name: mean measured displacement of a tracked punctum between two time points, dimension: "[length]"}
+- {id: particle_displacement_corrected, name: mean displacement of a tracked punctum corrected for localization error, dimension: "[length]", description: "s in Supp. eqn. 2"}
+- {id: particle_msd_measured, name: expectation of the squared measured displacement, dimension: "[length]**2", description: "<d^2> in Supp. eqn. 2"}
+- {id: localization_error_xy, name: localization error in the focal plane, dimension: "[length]", description: "sigma_xy"}
+- {id: localization_error_z, name: localization error along the optical axis, dimension: "[length]", description: "sigma_z"}
+# Analytical clutch model (Supplemental Discussion, eqns 3-14)
+- {id: adhesion_total_force, name: total force on one adhesion, dimension: "[force]", description: "Ftot"}
+- {id: clutch_number_total, name: total number of clutch connections in an adhesion, dimension: dimensionless, description: "Ct"}
+- {id: clutch_number_bound, name: number of bound clutches at steady state, dimension: dimensionless, description: "Cb"}
+- {id: clutch_on_rate, name: clutch binding rate, dimension: "1/[time]", description: "kon"}
+- {id: clutch_off_rate_zero_force, name: clutch release rate at zero load in the linearized off-rate, dimension: "1/[time]", description: "k0 = ks (slip) or ks + kc (catch)"}
+- {id: clutch_force_sensitivity, name: force sensitivity of the clutch off-rate, dimension: "1/[force]/[time]", description: "alpha_c in koff = k0 + alpha_c F; negative for a catch bond"}
+- {id: adhesion_effective_stiffness, name: effective stiffness of the spring a clutch pulls against, dimension: "[force]/[length]", description: "kappa: molecular linkages in series with the local ECM"}
+- {id: clutch_off_rate, name: clutch release rate under load, dimension: "1/[time]", description: "koff"}
+- {id: clutch_force, name: average force on one bound clutch, dimension: "[force]", description: "F = Ftot/Cb"}
+- {id: slip_off_rate_zero_force, name: zero-force off-rate of the slip pathway, dimension: "1/[time]", description: "ks"}
+- {id: catch_off_rate_zero_force, name: zero-force off-rate of the catch pathway, dimension: "1/[time]", description: "kc"}
+- {id: slip_distance, name: distance to the transition state of the slip pathway, dimension: "[length]", description: "delta_s"}
+- {id: catch_distance, name: distance to the transition state of the catch pathway, dimension: "[length]", description: "delta_c"}
+- {id: thermal_energy, name: thermal energy kBT, dimension: "[energy]", description: "1/beta"}
+# Effective stiffness of a continuous substrate, bulk moduli (Supplemental Discussion, Fig. S10)
+- {id: substrate_modulus, name: Young's modulus of a continuous elastic substrate or of the bulk fibrin gel, dimension: "[mass]/[length]/[time]**2"}
+- {id: shear_modulus, name: shear modulus of the bulk fibrin gel, dimension: "[mass]/[length]/[time]**2"}
+- {id: poisson_ratio, name: Poisson ratio of the gel, dimension: dimensionless}
+- {id: adhesion_radius, name: radius of the region over which an adhesion applies force, dimension: "[length]", description: "r, about the size of a focal adhesion"}
+# Fibre network (Materials and Methods, Fiber network simulations; Fig. 6A-B, S16)
+- {id: fiber_persistence_length, name: persistence length of a fibrin fibre, dimension: "[length]"}
+- {id: fiber_youngs_modulus, name: Young's modulus of a single fibrin fibre, dimension: "[mass]/[length]/[time]**2"}
+- {id: fiber_diameter, name: diameter of a fibrin fibre, dimension: "[length]"}
+- {id: crosslink_spacing, name: average distance between fibre cross-links, dimension: "[length]", description: "l"}
+- {id: fiber_length, name: typical length of a fibrin fibre between its ends, dimension: "[length]"}
+- {id: temperature, name: absolute temperature, dimension: "[temperature]"}
+- {id: bending_stretching_ratio, name: dimensionless ratio of fibre bending to stretching stiffness, dimension: dimensionless, description: "kappa = kappa_b/(kappa_s l^2) of the network elements"}
+- {id: point_load_force, name: point force applied to one node of the fibre network, dimension: "[force]"}
+- {id: point_load_displacement, name: displacement of the loaded node in the direction of the load, dimension: "[length]"}
+- {id: node_effective_stiffness, name: effective stiffness of one network node under a point load, dimension: "[force]/[length]", description: "force over displacement of the loaded node (secant)"}
+- {id: node_effective_modulus, name: Young's modulus of the continuous substrate that would give a node's effective stiffness, dimension: "[mass]/[length]/[time]**2"}
+# ---- added with the figure readings (second pass) ----
+- {id: strain_frequency, name: frequency of the oscillatory shear strain in parallel-plate rheology, dimension: "1/[time]"}
+- {id: storage_modulus, name: shear storage modulus G' of the bulk fibrin gel, dimension: "[mass]/[length]/[time]**2"}
+- {id: loss_modulus, name: shear loss modulus G'' of the bulk fibrin gel, dimension: "[mass]/[length]/[time]**2"}
+- {id: tracks_in_bin, name: number of tracks in one bin of a histogram or rose plot, dimension: dimensionless, description: "a count, or the count as a fraction of all tracks when the plot is normalized (Fig. 5B, S14C)"}
+- {id: distance_from_tip, name: distance along the protrusion axis from the protrusion tip, dimension: "[length]"}
+- {id: fibrin_displacement_magnitude, name: median magnitude of the fibrin displacement at the cell surface, dimension: "[length]", description: "|u| in Fig. 2D, relative to the relaxed reference"}
+- {id: fibrin_displacement_normal, name: median fibrin displacement normal to the cell surface, dimension: "[length]", description: "u.n; negative is inward"}
+- {id: fibrin_displacement_tangential, name: median magnitude of the fibrin displacement tangential to the cell surface, dimension: "[length]"}
+- {id: fibrin_displacement_parallel, name: median fibrin displacement along the protrusion axis, dimension: "[length]", description: "u.p, p pointing from the tip to the base"}
+- {id: protrusion_strain, name: median Lagrange strain of the matrix along the protrusion axis, dimension: dimensionless, description: "p.E.p"}
+- {id: paxillin_velocity_angle, name: mean angle between paxillin plaque velocity and the protrusion axis, dimension: dimensionless, description: "0 deg anterograde, 180 deg retrograde (Fig. 3G caption)"}
+- {id: actinin_velocity_angle, name: angle between an alpha-actinin-1 punctum's velocity and the protrusion axis, dimension: dimensionless}
+- {id: zyxin_velocity_angle, name: angle between a zyxin plaque's velocity and the protrusion axis, dimension: dimensionless}
+- {id: paxillin_actinin_velocity_angle, name: angle between the velocities of a paxillin plaque and its colocalized alpha-actinin-1 punctum, dimension: dimensionless}
+- {id: interpuncta_distance, name: distance between two alpha-actinin-1 puncta at the same time point, dimension: "[length]"}
+- {id: directional_correlation, name: median cosine of the angle between the velocities of two alpha-actinin-1 puncta, dimension: dimensionless}
+- {id: cumulative_fraction_pairs, name: fraction of puncta pairs closer than a given distance (empirical CDF), dimension: dimensionless}
+- {id: fractional_localization_error, name: fractional velocity localization error of one cell's tracks, dimension: dimensionless, description: "(<d> - s)/<d> at a lag time (Fig. S9B)"}
+# third pass (Supp. Fig. 2)
+- {id: lagrange_strain_surface, name: median Lagrange strain of the matrix at the cell surface, dimension: dimensionless, description: "the 'Lagrange strain' row of Supp. Fig. 2; the caption does not say which scalar of the tensor E is plotted"}
+- {id: shear_strain_surface, name: median shear strain of the matrix at the cell surface, dimension: dimensionless, description: "n.E.p (n normal to the cell surface, p the protrusion axis), Supp. Fig. 2 caption"}
+- {id: actinin_fibrin_velocity_angle, name: angle between the velocities of an alpha-actinin-1 punctum and the adjacent fibrin, dimension: dimensionless, description: "Fig. 4A rose inset; 0 deg parallel"}
+- {id: paxillin_track_velocity_angle, name: angle between a paxillin plaque's velocity and the protrusion axis, dimension: dimensionless, description: "one track; 0 deg anterograde, 180 deg retrograde (Fig. 3G rose inset)"}
+- {id: puncta_pair_count, name: number of pairs of alpha-actinin-1 puncta in a bin of distance and cos(angle) between their velocities, dimension: dimensionless, description: "Fig. 4E; rows of 0.1 in cos(theta)"}

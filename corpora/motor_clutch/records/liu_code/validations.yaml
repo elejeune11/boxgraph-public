@@ -1,0 +1,269 @@
+# ==== Cross-validation against liu2025's measurements, 2026-11-21 ===================================
+# The programs are liu2025's own fitting code, and every liu2025 measurement a port here outputs is one
+# the paper fitted the programs' parameters to: Fig. 2c,d (p. 5, 'Fitting of experimental data for cell
+# traction (c) and retrograde actin flow (d)'; p. 6 'Fitting experimental data ... to the steady-state
+# solution of the talin WT model') and Extended Data Fig. 5 (p. 70, 'by varying only the density of myosin
+# II motors'). So all are fit_quality: they test how well the code's own values (not Table T1's rounded
+# ones) fit the measured points, judged against liu2025's readings of them. What was not used: q_xval_liu2025_scope.
+
+# ---- linear KD set (Linear_KD_WT_model.m as written) --------------------------------------------------
+- id: val_fit_lkd_traction_liu2025_fig2c
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lkd, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_KD_data_fig2c'}
+  output: P
+  against: 'liu2025/P_KD_data_fig2c'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: >
+    The program's linear KD values were fitted to these tractions of MEF Talin 1 KO, Talin 2 shRNA cells:
+    liu2025 Fig. 2c (p. 5), 'Fitting of experimental data for cell traction (c) and retrograde actin flow (d)'
+    to the linear clutch model; the program types in the same elosegui2016 points to plot against (q_code_data).
+- id: val_fit_lkd_flow_liu2025_fig2d
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lkd, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/v_KD_data_fig2d'}
+  output: v
+  against: 'liu2025/v_KD_data_fig2d'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/actin_flow_speed': actin_flow_speed}
+  basis: "The linear KD values were fitted to these actin flows: liu2025 Fig. 2d (p. 5). A fit, not a test."
+- id: val_fit_lkd_traction_liu2025_ed5a_0uM
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lkd, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_KD_data_0uM_ed5a'}
+  output: P
+  against: 'liu2025/P_KD_data_0uM_ed5a'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: >
+    Untreated talin-depleted cells, fitted with the linear KD set at sigma_m = 71 um^-2 (the program's line 22):
+    liu2025 Extended Data Fig. 5a (p. 70), 'The data were fitted to the linear KD model'.
+- id: val_fit_lkd_traction_liu2025_ed5a_15uM
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_KD_bleb15_paper, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_KD_data_15uM_ed5a'}
+  output: P
+  against: 'liu2025/P_KD_data_15uM_ed5a'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: >
+    15 uM blebbistatin: the code's KD set with the sigma_m = 43 um^-2 fitted to these points 'by varying only
+    the density of myosin II motors' (liu2025 Extended Data Fig. 5a, p. 70). No program file sets 43.
+- id: val_fit_lkd_traction_liu2025_ed5a_50uM
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_KD_bleb50_paper, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_KD_data_50uM_ed5a'}
+  settings: {branch: strong}
+  output: P
+  against: 'liu2025/P_KD_data_50uM_ed5a'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: >
+    50 uM blebbistatin, sigma_m = 26 um^-2 fitted to these points (liu2025 Extended Data Fig. 5a, p. 70); the
+    model is bistable on rigid substrates here, and the strong (high-traction) branch is the one liu2025's own
+    fit check uses (liu2025/run_KD_data_50uM_ed5a). Which branch each point belongs to is open: q_xval_liu2025_branch.
+
+# ---- linear WT set (the trailing comments of Linear_KD_WT_model.m) -------------------------------------
+- id: val_fit_lwt_traction_liu2025_fig2c
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lwt, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_WT_data_fig2c'}
+  output: P
+  against: 'liu2025/P_WT_data_fig2c'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: >
+    The linear WT values (r = 0.75 nm and ly = 1000 nm as the comments set them; q_r_WT, q_wt_set_in_comments)
+    were fitted to these MEF WT tractions: liu2025 Fig. 2c (p. 5) and p. 6, 'could be fitted to a simplified
+    model in which the intracellular part of molecular clutches is represented by a linear spring'.
+- id: val_fit_lwt_flow_liu2025_fig2d
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lwt, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/v_WT_data_fig2d'}
+  output: v
+  against: 'liu2025/v_WT_data_fig2d'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/actin_flow_speed': actin_flow_speed}
+  basis: "The linear WT values were fitted to these MEF WT actin flows: liu2025 Fig. 2d (p. 5). A fit."
+- id: val_fit_lwt_traction_liu2025_ed5b_0uM
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lwt, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_WT_data_0uM_ed5b'}
+  output: P
+  against: 'liu2025/P_WT_data_0uM_ed5b'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: "Untreated MEF WT cells, fitted with the linear WT set at sigma_m = 85 um^-2: liu2025 Extended Data Fig. 5b (p. 70)."
+- id: val_fit_lwt_traction_liu2025_ed5b_15uM
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_WT_bleb15_paper, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_WT_data_15uM_ed5b'}
+  output: P
+  against: 'liu2025/P_WT_data_15uM_ed5b'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: "15 uM blebbistatin, sigma_m = 41 um^-2 fitted to these points 'by varying only the density of myosin II motors' (liu2025 Extended Data Fig. 5b, p. 70)."
+- id: val_fit_lwt_traction_liu2025_ed5b_50uM
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_WT_bleb50_paper, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'liu2025/P_WT_data_50uM_ed5b'}
+  output: P
+  against: 'liu2025/P_WT_data_50uM_ed5b'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: "50 uM blebbistatin, sigma_m = 24 um^-2 fitted to these points (liu2025 Extended Data Fig. 5b, p. 70)."
+
+# ---- talin WT model (talin_WT_model.m as written, alpha = 100) ----------------------------------------
+- id: val_fit_tw_traction_liu2025_fig2c
+  model: talin_wt_port
+  inputs: {a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_tw}
+  sweep: {E: 'liu2025/P_WT_data_fig2c'}
+  output: P
+  against: 'liu2025/P_WT_data_fig2c'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/traction_stress': traction_stress}
+  basis: >
+    The talin WT values were fitted to these MEF WT tractions: liu2025 p. 6, 'Fitting experimental data about
+    the mechanosensitive behaviour of mouse embryonic fibroblast (MEF) WT cells from ref. 13 to the
+    steady-state solution of the talin WT model (Fig. 2c,d)'. Run with the code's alpha = 100 (q_alpha).
+- id: val_fit_tw_flow_liu2025_fig2d
+  model: talin_wt_port
+  inputs: {a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_tw}
+  sweep: {E: 'liu2025/v_WT_data_fig2d'}
+  output: v
+  against: 'liu2025/v_WT_data_fig2d'
+  purpose: fit_quality
+  quantities: {'liu2025/youngs_modulus': youngs_modulus, 'liu2025/actin_flow_speed': actin_flow_speed}
+  basis: "The talin WT values were fitted to these MEF WT actin flows: liu2025 p. 6 and Fig. 2d (p. 5). A fit."
+
+# ==== Cross-validation against elosegui2016's measurements, 2026-11-21 =================================
+# liu2025's fitted data are elosegui2016's (ref. 13): Fig. 2c,d 'from refs. 13,21 collected for MEF WT cells
+# ... and MEF Talin 1 KO, Talin 2 shRNA cells' (liu2025 p. 5), Extended Data Fig. 5 'treated with different
+# concentrations of the myosin II inhibitor, blebbistatin [13]' (p. 70), and the programs type in points
+# 'from [Artola, Nat Cell Biol, 2016]' (q_code_data). So each entry is fit_quality, judged here against the
+# record's own readings of elosegui2016's figures. elosegui2016's 'control' cells (talin 1-/- MEFs expressing
+# talin 2) are liu2025's 'MEF WT', its 'talin 2 shRNA' cells liu2025's 'MEF Talin 1 KO, Talin 2 shRNA'.
+# Tractions are taken from Fig. 3d, the same points as Fig. 1a with fewer hidden markers (elosegui2016
+# figures.md). What was not used, and why: q_xval_elosegui2016_scope.
+
+# ---- linear KD set against talin 2 shRNA cells ---------------------------------------------------------
+- id: val_fit_lkd_traction_elosegui2016_fig3d
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lkd, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig3d_shrna_data'}
+  output: P
+  against: 'elosegui2016/fig3d_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  basis: >
+    The program's linear KD values were fitted to these tractions of talin 2 shRNA cells (10 ug/ml fibronectin):
+    liu2025 Fig. 2c (p. 5), 'Fitting of experimental data for cell traction (c) and retrograde actin flow (d)
+    from refs. 13,21', ref. 13 being elosegui2016. A fit, not a test.
+- id: val_fit_lkd_flow_elosegui2016_fig3e
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lkd, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig3e_shrna_data'}
+  output: v
+  against: 'elosegui2016/fig3e_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/actin_retrograde_flow': actin_flow_speed}
+  basis: >
+    The linear KD values were fitted to the actin flows of talin 2 shRNA cells: liu2025 Fig. 2d (p. 5), data
+    'from refs. 13,21'; elosegui2016 Fig. 3e holds these cells' flows. A fit.
+- id: val_fit_lkd_traction_elosegui2016_fig6h
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_KD_bleb15_paper, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig6h_shrna_data'}
+  output: P
+  against: 'elosegui2016/fig6h_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: >
+    The measurement is at 15 uM blebbistatin, a condition the model has no input for; liu2025 represents it by
+    the myosin density alone (sigma_m = 43 um^-2, Extended Data Fig. 5a, p. 70), which this run uses.
+  basis: >
+    Talin 2 shRNA cells at 15 uM blebbistatin, fitted 'by varying only the density of myosin II motors' to the
+    linear KD model (liu2025 Extended Data Fig. 5a, p. 70, data from ref. 13 = elosegui2016 Fig. 6h).
+- id: val_fit_lkd_traction_elosegui2016_fig6i
+  model: linear_port
+  inputs: {a_1: a1_lkd, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_KD_bleb50_paper, sigma_c: sc_lin, kc: kc_lkd, kon: kon_lkd, l_yield: ly_lkd, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig6i_shrna_data'}
+  settings: {branch: strong}
+  output: P
+  against: 'elosegui2016/fig6i_shrna_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: >
+    50 uM blebbistatin, represented in liu2025 by the fitted myosin density sigma_m = 26 um^-2 alone
+    (Extended Data Fig. 5a, p. 70).
+  basis: >
+    Talin 2 shRNA cells at 50 uM blebbistatin, sigma_m = 26 um^-2 fitted to these points (liu2025 Extended Data
+    Fig. 5a, p. 70). The measured rigidities (0.6-30 kPa) lie below the bistable range liu2025 plots (lower branch
+    from 2e5 Pa), so the strong branch is the steady state; q_xval_liu2025_branch.
+
+# ---- linear WT set against control cells -----------------------------------------------------------------
+- id: val_fit_lwt_traction_elosegui2016_fig3d
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lwt, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig3d_control_data'}
+  output: P
+  against: 'elosegui2016/fig3d_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  basis: >
+    The linear WT values (the trailing comments of Linear_KD_WT_model.m; q_wt_set_in_comments) were fitted to
+    these control-cell tractions: liu2025 p. 6, 'the experimental data from ref. 13 could be fitted to a
+    simplified model ... (the linear WT model)', and Fig. 2c (p. 5). A fit.
+- id: val_fit_lwt_flow_elosegui2016_fig3e
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_lwt, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig3e_control_data'}
+  output: v
+  against: 'elosegui2016/fig3e_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/actin_retrograde_flow': actin_flow_speed}
+  basis: "The linear WT values were fitted to the control-cell actin flows: liu2025 Fig. 2d (p. 5), data from refs. 13,21. A fit."
+- id: val_fit_lwt_traction_elosegui2016_fig6h
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_WT_bleb15_paper, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig6h_control_data'}
+  output: P
+  against: 'elosegui2016/fig6h_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: "15 uM blebbistatin, represented in liu2025 by the fitted myosin density sigma_m = 41 um^-2 alone (Extended Data Fig. 5b, p. 70)."
+  basis: "Control cells at 15 uM blebbistatin, sigma_m = 41 um^-2 fitted to these points 'by varying only the density of myosin II motors' (liu2025 Extended Data Fig. 5b, p. 70)."
+- id: val_fit_lwt_traction_elosegui2016_fig6i
+  model: linear_port
+  inputs: {a_1: a1_lwt, a_2: a2_lin, v0: v0_lin, Fst: Fst_lin, sigma_m: sm_WT_bleb50_paper, sigma_c: sc_lin, kc: kc_lwt, kon: kon_lwt, l_yield: ly_lwt, k_off_1: koff1_lin, k_off_2: koff2_lin, F_d_1: Fd1_lin, F_d_2: Fd2_lin}
+  sweep: {E: 'elosegui2016/fig6i_control_data'}
+  output: P
+  against: 'elosegui2016/fig6i_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  conditions_ok: "50 uM blebbistatin, represented in liu2025 by the fitted myosin density sigma_m = 24 um^-2 alone (Extended Data Fig. 5b, p. 70)."
+  basis: "Control cells at 50 uM blebbistatin, sigma_m = 24 um^-2 fitted to these points (liu2025 Extended Data Fig. 5b, p. 70)."
+
+# ---- talin WT model (talin_WT_model.m as written, alpha = 100) against control cells ---------------------
+- id: val_fit_tw_traction_elosegui2016_fig3d
+  model: talin_wt_port
+  inputs: {a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_tw}
+  sweep: {E: 'elosegui2016/fig3d_control_data'}
+  output: P
+  against: 'elosegui2016/fig3d_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/cell_traction': traction_stress}
+  basis: >
+    liu2025 p. 6: 'Fitting experimental data about the mechanosensitive behaviour of mouse embryonic fibroblast
+    (MEF) WT cells from ref. 13 to the steady-state solution of the talin WT model (Fig. 2c,d)'. Run with the
+    code's alpha = 100 (q_alpha). A fit.
+- id: val_fit_tw_flow_elosegui2016_fig3e
+  model: talin_wt_port
+  inputs: {a_1: a1_tw, a_2: a2_tw, v0: v0_tw, Fst: Fst_tw, sigma_m: sm_tw, sigma_c: sc_tw, kon: kon_tw, k_off_1: koff1_tw, k_off_2: koff2_tw, F_d_1: Fd1_tw, F_d_2: Fd2_tw, kB: kB_tw, T: T_tw, ku0: ku0_tw, kf0: kf0_tw, x_u: xu_tw, Lp: Lp_tw, L: L_tw, Ng: Ng_tw, N_integrin: Nint_tw, b: b_tw, alpha: alpha_tw}
+  sweep: {E: 'elosegui2016/fig3e_control_data'}
+  output: v
+  against: 'elosegui2016/fig3e_control_data'
+  purpose: fit_quality
+  quantities: {'elosegui2016/substrate_rigidity': youngs_modulus, 'elosegui2016/actin_retrograde_flow': actin_flow_speed}
+  basis: "The talin WT values were fitted to the control-cell actin flows of ref. 13: liu2025 p. 6 and Fig. 2d (p. 5). A fit."
